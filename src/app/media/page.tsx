@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { MEDIA_FEATURES } from "@/data/media";
 
 export const metadata = {
@@ -110,14 +111,33 @@ function MediaCard({ media }: { media: typeof MEDIA_FEATURES[number] }) {
       rel="noopener noreferrer"
       className="group flex flex-col rounded-2xl border border-border bg-surface overflow-hidden hover:border-primary/50 hover:shadow-glow-sm transition-all duration-300"
     >
-      {/* Thumbnail placeholder */}
-      <div className="aspect-video bg-gradient-to-br from-surface-elevated to-surface flex items-center justify-center">
-        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/20 text-primary group-hover:bg-primary group-hover:text-background transition-all duration-300">
-          <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M8 5v14l11-7z" />
-          </svg>
+      {/* Thumbnail */}
+      {media.thumbnailUrl ? (
+        <div className="relative aspect-video w-full overflow-hidden bg-surface-elevated">
+          <Image
+            src={media.thumbnailUrl}
+            alt={media.title}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-surface/80 via-transparent to-transparent" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-black/50 backdrop-blur text-background group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
+              <svg className="h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="aspect-video bg-gradient-to-br from-surface-elevated to-surface flex items-center justify-center">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/20 text-primary group-hover:bg-primary group-hover:text-background transition-all duration-300">
+            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </div>
+        </div>
+      )}
       <div className="p-5 flex-1 flex flex-col">
         <div className="flex items-center gap-2 mb-3">
           <span className="rounded-full bg-primary/10 px-3 py-1 text-caption font-medium text-primary">

@@ -33,6 +33,17 @@ export function SiteFooter() {
               Order-of-operations medicine for athletes and curious humans. Evidence-aware protocols that cut through noise.
             </p>
             <PlatformBadges variant="compact" className="mb-6" />
+            <a
+              href="https://anchor.fm/s/10e1b0328/podcast/rss"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-body-sm text-foreground-muted hover:text-foreground transition-colors duration-200"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z" />
+              </svg>
+              RSS Feed
+            </a>
           </div>
 
           {/* Links Column */}

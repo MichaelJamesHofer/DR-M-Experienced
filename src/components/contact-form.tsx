@@ -1,12 +1,23 @@
 'use client';
 
 import { FormEvent, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState('');
+
+  // Input validation and sanitization
+  function sanitizeInput(input: string, maxLength: number): string {
+    return input.trim().slice(0, maxLength);
+  }
+
+  function isValidEmail(email: string): boolean {
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    return emailRegex.test(email) && email.length <= 255;
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -19,14 +30,85 @@ export function ContactForm() {
       return;
     }
 
+    // Validate and sanitize inputs
+    const name = sanitizeInput((formData.get('name') as string) || '', 200);
+    const email = sanitizeInput((formData.get('email') as string) || '', 255);
+    const subject = sanitizeInput((formData.get('subject') as string) || '', 200);
+    const message = sanitizeInput((formData.get('message') as string) || '', 5000);
+
+    // Client-side validation
+    if (!name || !email || !subject || !message) {
+      setStatus('error');
+      setMessage('All fields are required.');
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      setStatus('error');
+      setMessage('Please enter a valid email address.');
+      return;
+    }
+
     setStatus('loading');
     setMessage('');
 
     try {
+      // Try Supabase first (preferred)
+      if (supabase) {
+        const { error } = await supabase
+          .from('contact_messages')
+          .insert({
+            name: name,
+            email: email.toLowerCase(),
+            subject: subject,
+            message: message,
+            // Don't set created_at - let database handle it
+          });
+
+        if (error) throw error;
+
+        setStatus('success');
+        setMessage('Thanks! We received your note.');
+        form.reset();
+        return;
+      }
+
+      // Fallback: Try Formspree
+      const formspreeId = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID;
+      
+      if (formspreeId) {
+        const response = await fetch(`https://formspree.io/f/${formspreeId}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            subject: subject,
+            message: message,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || 'Unable to send message');
+        }
+
+        setStatus('success');
+        setMessage('Thanks! We received your note.');
+        form.reset();
+        return;
+      }
+
+      // Last resort: try API route (won't work in static export)
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(Object.fromEntries(formData.entries())),
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          subject: subject,
+          message: message,
+        }),
       });
 
       if (!response.ok) throw new Error('Unable to send message');
@@ -34,9 +116,13 @@ export function ContactForm() {
       setStatus('success');
       setMessage('Thanks! We received your note.');
       form.reset();
-    } catch {
+    } catch (error) {
       setStatus('error');
-      setMessage('We could not send your message. Please try again later.');
+      setMessage(
+        error instanceof Error && error.message.includes('Supabase')
+          ? 'Please configure Supabase credentials in environment variables.'
+          : 'We could not send your message. Please try again later.'
+      );
     }
   }
 

@@ -10,8 +10,15 @@ const allTopics = Array.from(
 ).sort();
 
 export default function Home() {
-  const latestEpisode = EPISODES[0];
-  const featuredEpisodes = EPISODES.slice(0, 3);
+  // Sort episodes by publish date (most recent first)
+  const sortedEpisodes = [...EPISODES].sort((a, b) => {
+    const dateA = new Date(a.publishDate).getTime();
+    const dateB = new Date(b.publishDate).getTime();
+    return dateB - dateA; // Descending order (newest first)
+  });
+  
+  const latestEpisode = sortedEpisodes[0];
+  const featuredEpisodes = sortedEpisodes.slice(0, 3);
 
   return (
     <>
@@ -55,31 +62,93 @@ export default function Home() {
             {latestEpisode && (
               <Link
                 href={`/episodes/${latestEpisode.slug}`}
-                className="group w-full max-w-2xl rounded-2xl border border-border bg-surface/80 backdrop-blur p-6 hover:border-primary/50 hover:shadow-glow transition-all duration-300 animate-slide-up delay-300"
+                className="group w-full max-w-2xl rounded-2xl border border-border bg-surface/80 backdrop-blur overflow-hidden hover:border-primary/50 hover:shadow-glow transition-all duration-300 animate-slide-up delay-300"
               >
-                <div className="flex items-start gap-4">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-background transition-all duration-300">
-                    <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
+                {latestEpisode.thumbnailUrl ? (
+                  <div className="relative aspect-video w-full overflow-hidden">
+                    <Image
+                      src={latestEpisode.thumbnailUrl}
+                      alt={latestEpisode.title}
+                      fill
+                      className={`object-cover transition-transform duration-300 ${
+                        latestEpisode.references?.some((ref) => ref.comingSoon === true)
+                          ? "opacity-50"
+                          : "group-hover:scale-105"
+                      }`}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/50 to-transparent" />
+                    {latestEpisode.references?.some((ref) => ref.comingSoon === true) && (
+                      <div className="absolute inset-0 bg-gradient-to-t from-surface/90 via-surface/60 to-transparent" />
+                    )}
+                    <div className="absolute top-4 left-4">
+                      <p className="text-caption font-semibold uppercase tracking-wider text-background/90 mb-2">
+                        Latest Episode
+                      </p>
+                      <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/90 backdrop-blur text-heading font-bold text-background">
+                        {latestEpisode.number.toString().padStart(2, "0")}
+                      </span>
+                    </div>
+                    {latestEpisode.references?.some((ref) => ref.comingSoon === true) ? (
+                      <div className="absolute inset-0 flex items-center justify-center z-10">
+                        <div className="flex flex-col items-center gap-2 px-4">
+                          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/20 backdrop-blur-sm border-2 border-primary/30 text-primary">
+                            <svg className="h-7 w-7" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          </div>
+                          <p className="text-body font-semibold text-background drop-shadow-lg text-center">
+                            Video Coming Soon
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="absolute bottom-4 left-4 right-4">
+                          <h3 className="text-heading-lg font-bold text-background mb-2 drop-shadow-lg">
+                            {latestEpisode.title}
+                          </h3>
+                          <p className="text-body-sm text-background/90 line-clamp-2 drop-shadow">
+                            {latestEpisode.summary}
+                          </p>
+                        </div>
+                        {latestEpisode.durationMinutes && (
+                          <div className="absolute top-4 right-4 flex items-center gap-1.5 text-caption text-background bg-black/50 backdrop-blur rounded-full px-3 py-1.5">
+                            <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                            <span>{latestEpisode.durationMinutes} min</span>
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
-                  <div className="flex-1 text-left">
-                    <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-1">
-                      Latest Episode
-                    </p>
-                    <h3 className="text-heading font-semibold text-foreground group-hover:text-primary transition-colors duration-200">
-                      Ep. {latestEpisode.number}: {latestEpisode.title}
-                    </h3>
-                    <p className="text-body-sm text-foreground-muted mt-1 line-clamp-2">
-                      {latestEpisode.summary}
-                    </p>
+                ) : (
+                  <div className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-background transition-all duration-300">
+                        <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                      <div className="flex-1 text-left">
+                        <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-1">
+                          Latest Episode
+                        </p>
+                        <h3 className="text-heading font-semibold text-foreground group-hover:text-primary transition-colors duration-200">
+                          Ep. {latestEpisode.number}: {latestEpisode.title}
+                        </h3>
+                        <p className="text-body-sm text-foreground-muted mt-1 line-clamp-2">
+                          {latestEpisode.summary}
+                        </p>
+                      </div>
+                      <div className="hidden sm:flex items-center text-foreground-muted group-hover:text-primary transition-colors duration-200">
+                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                    </div>
                   </div>
-                  <div className="hidden sm:flex items-center text-foreground-muted group-hover:text-primary transition-colors duration-200">
-                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
+                )}
               </Link>
             )}
           </div>
@@ -141,34 +210,79 @@ export default function Home() {
             <Link
               key={episode.slug}
               href={`/episodes/${episode.slug}`}
-              className="group rounded-2xl border border-border bg-surface p-6 hover:border-primary/50 hover:shadow-glow-sm transition-all duration-300"
+              className="group rounded-2xl border border-border bg-surface overflow-hidden hover:border-primary/50 hover:shadow-glow-sm transition-all duration-300"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="flex items-center gap-3 mb-4">
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-body-sm font-bold text-primary">
-                  {episode.number.toString().padStart(2, "0")}
-                </span>
-                {episode.durationMinutes && (
-                  <span className="text-caption text-foreground-subtle">
-                    {episode.durationMinutes} min
+              {/* Thumbnail */}
+              {episode.thumbnailUrl ? (
+                <div className="relative aspect-video w-full overflow-hidden bg-surface-elevated">
+                  <Image
+                    src={episode.thumbnailUrl}
+                    alt={episode.title}
+                    fill
+                    className={`object-cover transition-transform duration-300 ${
+                      episode.references?.some((ref) => ref.comingSoon === true)
+                        ? "opacity-50"
+                        : "group-hover:scale-105"
+                    }`}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent" />
+                  {episode.references?.some((ref) => ref.comingSoon === true) && (
+                    <div className="absolute inset-0 bg-gradient-to-t from-surface/90 via-surface/50 to-transparent" />
+                  )}
+                  <div className="absolute top-3 left-3">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/90 backdrop-blur text-caption font-bold text-background">
+                      {episode.number.toString().padStart(2, "0")}
+                    </span>
+                  </div>
+                  {episode.references?.some((ref) => ref.comingSoon === true) ? (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="flex flex-col items-center gap-1.5 px-4">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 backdrop-blur-sm border-2 border-primary/30 text-primary">
+                          <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <p className="text-caption font-semibold text-background drop-shadow-lg text-center">
+                          Coming Soon
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    episode.durationMinutes && (
+                      <div className="absolute bottom-3 right-3 flex items-center gap-1.5 text-caption text-background bg-black/50 backdrop-blur rounded-full px-2.5 py-1">
+                        <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                        <span>{episode.durationMinutes} min</span>
+                      </div>
+                    )
+                  )}
+                </div>
+              ) : (
+                <div className="relative aspect-video w-full bg-gradient-to-br from-surface to-surface-elevated flex items-center justify-center">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-body-sm font-bold text-primary">
+                    {episode.number.toString().padStart(2, "0")}
                   </span>
-                )}
-              </div>
-              <h3 className="text-heading font-semibold text-foreground group-hover:text-primary transition-colors duration-200 mb-2">
-                {episode.title}
-              </h3>
-              <p className="text-body-sm text-foreground-muted line-clamp-2 mb-4">
-                {episode.summary}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {episode.topics.slice(0, 2).map((topic) => (
-                  <span
-                    key={topic}
-                    className="rounded-full bg-surface-elevated px-3 py-1 text-caption text-foreground-subtle"
-                  >
-                    {topic}
-                  </span>
-                ))}
+                </div>
+              )}
+              <div className="p-6">
+                <h3 className="text-heading font-semibold text-foreground group-hover:text-primary transition-colors duration-200 mb-2">
+                  {episode.title}
+                </h3>
+                <p className="text-body-sm text-foreground-muted line-clamp-2 mb-4">
+                  {episode.summary}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {episode.topics.slice(0, 2).map((topic) => (
+                    <span
+                      key={topic}
+                      className="rounded-full bg-surface-elevated px-3 py-1 text-caption text-foreground-subtle"
+                    >
+                      {topic}
+                    </span>
+                  ))}
+                </div>
               </div>
             </Link>
           ))}

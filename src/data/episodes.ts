@@ -1,6 +1,7 @@
 export type EpisodeReference = {
   label: string;
   url: string;
+  comingSoon?: boolean;
 };
 
 export type EpisodeSection = {
@@ -18,6 +19,8 @@ export type Episode = {
   topics: string[];
   audioUrl?: string;
   videoUrl?: string;
+  vimeoId?: string;
+  thumbnailUrl?: string;
   transcriptUrl?: string;
   references?: EpisodeReference[];
   checklist?: string[];
@@ -27,370 +30,150 @@ export type Episode = {
 
 export const EPISODES: Episode[] = [
   {
-    slug: "energy-audit-basics",
+    slug: "brain-fog-part-1",
     number: 1,
-    title: "Energy Audit: Fix The Fundamentals First",
-    publishDate: "2024-01-10",
-    durationMinutes: 48,
+    title: "Brain Fog - Part 1 – Is Your Brain in a Fog?",
+    publishDate: "2026-01-20",
+    durationMinutes: 17,
     summary:
-      "A practical decision tree for fatigue complaints—sleep timing, movement minimums, fuel targets, and when to consider labs.",
-    topics: ["fatigue", "sleep", "fundamentals"],
-    audioUrl: "https://example.com/audio/peak-01.mp3",
-    transcriptUrl: "https://example.com/transcripts/peak-01",
+      "Dr. David Musnick (Dr. M), board-certified in Internal Medicine and Sports Medicine with 35+ years in regenerative and functional medicine, dives straight into one of the most common complaints he sees: brain fog. Discover what brain fog really feels like—slow thinking, low mental energy, word-finding trouble, poor focus, memory slips—and why it's not normal at any age.",
+    topics: ["brain-fog", "brain-health", "functional-medicine"],
+    audioUrl: "https://anchor.fm/s/10e1b0328/podcast/play/114269977/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2026-0-20%2F416465462-44100-2-550a8bb9b34f.mp3",
+    vimeoId: "1156414707",
+    thumbnailUrl: "https://vumbnail.com/1156414707.jpg",
+    references: [
+      {
+        label: "Watch on Vimeo",
+        url: "https://vimeo.com/1156414707",
+      },
+      {
+        label: "Listen on Spotify",
+        url: "https://open.spotify.com/episode/7cAdb8GE4khC9EYKAjmYuc?si=WaXbSZb9RMOijYCs68s1nQ",
+      },
+      {
+        label: "Watch on YouTube",
+        url: "https://youtu.be/S9c0LsC7_nc",
+      },
+      {
+        label: "Watch on Rumble",
+        url: "https://rumble.com/v74kzcw-episode-1-brain-fog-part-1-is-your-brain-in-a-fog.html",
+      },
+    ],
     keyTakeaways: [
-      "Energy issues usually start with inconsistent behaviors, not exotic lab panels.",
-      "Anchor wake times before adding supplements.",
-      "Track fuel targets for two weeks before assuming hormonal issues.",
+      "Brain fog is not normal at any age and indicates underlying dysfunction.",
+      "Core mechanisms include brain inflammation, dysfunctional microglia, and neurotransmitter issues.",
+      "Ignoring brain fog can lead to headaches, chronic fatigue, and cognitive decline.",
+      "Root causes range from excitotoxins (MSG & aspartame) to infections, heavy metals, and EMFs.",
+      "Functional testing to find root causes is essential rather than masking symptoms.",
     ],
     checklist: [
-      "Audit sleep/wake consistency for 10 days.",
-      "Log total daily steps plus two deliberate strength sessions.",
-      "Hit protein minimum of 1.6 g/kg before adding adaptogens.",
-      "Order labs only if fundamentals are consistent and symptoms persist.",
+      "Eat organic, grass-fed, add parsley (for apigenin to calm microglia).",
+      "Prioritize 7.5+ hours of quality sleep.",
+      "Exercise daily to boost BDNF.",
+      "Reduce EMFs (WiFi off at night, phone away from head).",
+      "Avoid plastics and hidden toxins.",
     ],
     sections: [
       {
-        title: "Energy leaks start with rhythm",
+        title: "What is brain fog?",
         content: [
-          "Most fatigue consults still show a rolling wake time that swings by 60–90 minutes.",
-          "We run through alarm chaining and morning light exposure tactics to lock the circadian anchor.",
+          "Brain fog manifests as slow thinking, low mental energy, word-finding trouble, poor focus, and memory slips.",
+          "It's not normal at any age and indicates underlying dysfunction that needs attention.",
         ],
       },
       {
-        title: "Movement and fuel minimums",
+        title: "Core mechanisms",
         content: [
-          "Two resistance sessions plus a weekly vigour walk build the muscular engine that stabilizes glucose.",
-          "Protein graphs and grocery templates beat complicated macro calculators when compliance is the limiter.",
+          "Brain inflammation, dysfunctional microglia, and neurotransmitter issues are the primary mechanisms driving brain fog.",
+          "Understanding these mechanisms helps guide targeted interventions rather than symptom masking.",
+        ],
+      },
+      {
+        title: "Potential causes",
+        content: [
+          "Dr. M outlines a comprehensive list: excitotoxins (MSG & aspartame), poor oxygen delivery, concussions, gluten/autoimmunity, blood sugar swings, hormones, mold, infections (EBV, Lyme, long COVID), heavy metals, EMFs, medications, and more.",
+          "This wide range of causes underscores the importance of functional testing to identify root causes.",
+        ],
+      },
+      {
+        title: "First steps to fight back",
+        content: [
+          "Start with foundational interventions: eat organic, grass-fed foods, add parsley for apigenin to calm microglia.",
+          "Prioritize 7.5+ hours of quality sleep, exercise daily to boost BDNF, reduce EMFs (WiFi off at night, phone away from head), and avoid plastics and hidden toxins.",
         ],
       },
     ],
   },
   {
-    slug: "tendon-triage",
+    slug: "brain-fog-part-2",
     number: 2,
-    title: "Tendon Triage: Loading Before Needling",
-    publishDate: "2024-01-17",
-    durationMinutes: 52,
+    title: "Brain Fog Part 2 – Testing & Basic Solutions for Brain Fog",
+    publishDate: "2026-01-27",
+    durationMinutes: 20,
     summary:
-      "The order-of-operations for achy tendons—irritability screen, loading progressions, and when advanced tools add value.",
-    topics: ["tendon", "rehab"],
-    keyTakeaways: [
-      "Irritability dictates the starting load, not imaging.",
-      "Tendon care is about dose control more than modality shopping.",
-      "Expensive injectables belong after a legitimate loading sprint.",
+      "Dr. David Musnick (Dr. M) picks up where Part 1 left off and gets specific about which tests make sense for brain fog and which basics help almost everyone. He walks through key labs for inflammation, Epstein-Barr reactivation, mold/mycotoxins, and other blood markers—plus how to layer foundational brain-protective steps while root causes are being investigated.",
+    topics: ["brain-fog", "brain-health", "functional-medicine"],
+    audioUrl:
+      "https://open.spotify.com/episode/19Pct0ClX3j1EOwJ3ySVd7?si=M-QzbWkcSpq7ykUaqQY7UA",
+    thumbnailUrl: "https://img.youtube.com/vi/s740_XVTaAY/hqdefault.jpg",
+    references: [
+      {
+        label: "Listen on Spotify",
+        url: "https://open.spotify.com/episode/19Pct0ClX3j1EOwJ3ySVd7?si=M-QzbWkcSpq7ykUaqQY7UA",
+      },
+      {
+        label: "Watch on YouTube",
+        url: "https://youtu.be/s740_XVTaAY",
+      },
+      {
+        label: "Watch on Rumble",
+        url: "https://rumble.com/v74l0km-episode-brain-fog-part-2-testing-and-basic-solutions-for-brain-fog.html",
+      },
+      {
+        label: "Watch on Vimeo (Coming Soon)",
+        url: "#",
+        comingSoon: true,
+      },
     ],
-    checklist: [
-      "Score AM pain and 24-hour response for one week.",
-      "Start with isometric holds if pain >5/10 with mid-range work.",
-      "Progress to isotonic reps, then plyometrics as morning pain drops.",
+    keyTakeaways: [
+      "Brain fog reflects brain dysfunction with inflammation and slowed neurotransmission, not just being \"tired\" or \"off.\"",
+      "Episodes of brain fog lasting more than 15–20 minutes, especially with memory, focus, or speech issues, need proper evaluation.",
+      "High-titer Epstein-Barr virus reactivation and mold/mycotoxins are common hidden drivers of persistent brain fog.",
+      "Standard EBV testing is often insufficient—full panels and correct cutoffs are required to see reactivation.",
+      "Foundational steps like sleep, exercise, EMF reduction, and toxin avoidance protect the brain while deeper root-cause work is underway.",
     ],
     sections: [
       {
-        title: "Irritability screen",
+        title: "When brain fog is serious",
         content: [
-          "We flag sleep debt and sudden volume spikes before assuming structural failure.",
-          "Symptom diaries guide whether to start with isometrics or immediately load heavy slow resistance.",
+          "Brain fog is more serious when it comes with memory problems, poor focus, word-finding difficulty, or speech changes.",
+          "Episodes that last longer than 15–20 minutes—especially when frequent—warrant careful evaluation rather than simple reassurance.",
         ],
       },
       {
-        title: "Dose the rehab like training",
+        title: "Key testing for hidden drivers",
         content: [
-          "Three-stage loading (iso → isotonic → plyo) sets guardrails for athletes and clinicians.",
-          "We drop cost-aware notes on when imaging or injectables help.",
-        ],
-      },
-    ],
-  },
-  {
-    slug: "sleep-architecture",
-    number: 3,
-    title: "Sleep Architecture For Busy Humans",
-    publishDate: "2024-01-24",
-    durationMinutes: 45,
-    summary:
-      "A clear framework for protecting deep sleep without full tech stacks or supplement overload.",
-    topics: ["sleep", "recovery"],
-    keyTakeaways: [
-      "Bedtime routines support wake times, not the other way around.",
-      "Environment tweaks beat tracking gadgets for most people.",
-      "Reserve wearables for behavior experiments, not 24/7 judgment.",
-    ],
-    sections: [
-      {
-        title: "Anchor the wake side",
-        content: [
-          "Consistent wake timing sets the stage for easier bedtimes.",
-          "Light hygiene, caffeine rules, and evening boundaries matter more than supplements.",
+          "Systemic inflammation markers and full Epstein-Barr virus panels (including VCA IgG/IgM, EBNA, and Early Antigen) can uncover reactivation that standard tests miss.",
+          "Urine mycotoxin panels are appropriate when mold exposure is suspected, and homocysteine helps flag vascular stress on the brain.",
         ],
       },
       {
-        title: "Build recovery rituals",
+        title: "Imaging and when to escalate",
         content: [
-          "We share a 15-minute wind-down protocol that stacks breath work, mobility, and journaling.",
-        ],
-      },
-    ],
-  },
-  {
-    slug: "immune-load-mapping",
-    number: 4,
-    title: "Immune Load Mapping During Hard Seasons",
-    publishDate: "2024-01-31",
-    durationMinutes: 50,
-    summary:
-      "How to triage immune complaints during big training blocks without chasing every supplement on social media.",
-    topics: ["immune", "recovery"],
-    keyTakeaways: [
-      "Track sleep debt, travel, and training spikes before assuming immune dysfunction.",
-      "Adjust carbohydrate availability in-season before adding labs.",
-      "Reserve advanced testing for persistent patterns despite recovered load.",
-    ],
-    sections: [
-      {
-        title: "First three questions",
-        content: [
-          "What changed in the last 14 days, what loads stayed the same, and what stressors are new?",
-          "We collect that intel before recommending products.",
+          "Brain MRI is not usually the first test for brain fog, but becomes important with progressive cognitive change or neurological red flags.",
+          "Dr. M emphasizes matching the intensity of testing to symptom severity and pattern, not just ordering everything up front.",
         ],
       },
       {
-        title: "Cost-aware lab work",
+        title: "Universal basics while you test",
         content: [
-          "CBC with differential, ferritin, and CRP cover 80% of what most athletes need.",
-        ],
-      },
-    ],
-  },
-  {
-    slug: "brain-performance",
-    number: 5,
-    title: "Brain & Concussion Recovery Basics",
-    publishDate: "2024-02-07",
-    durationMinutes: 56,
-    summary:
-      "Decision-order guide for athletes navigating concussion symptoms and return-to-learn/play timelines.",
-    topics: ["brain", "recovery"],
-    keyTakeaways: [
-      "Set expectations for symptom windows to lower anxiety.",
-      "Match exertion levels to symptom thresholds daily.",
-      "Bring in neuro referral when symptoms plateau for 10–14 days.",
-    ],
-    sections: [
-      {
-        title: "Symptom buckets",
-        content: [
-          "We separate cognitive, vestibular, and mood clusters to target interventions.",
-        ],
-      },
-      {
-        title: "Return-to-play map",
-        content: [
-          "Simple exertion ladder plus school accommodations keep the athlete on script.",
-        ],
-      },
-    ],
-  },
-  {
-    slug: "lab-sequencing",
-    number: 6,
-    title: "Lab Sequencing Without Guess Panels",
-    publishDate: "2024-02-14",
-    durationMinutes: 44,
-    summary:
-      "When to order basic labs, when to escalate, and how to explain costs to athletes.",
-    topics: ["labs", "cost-aware"],
-    keyTakeaways: [
-      "Always tie labs to a decision you'll actually make.",
-      "Start with CBC/CMP/TSH/ferritin before specialty panels.",
-      "Explain the why + cost before printing requisitions.",
-    ],
-    sections: [
-      {
-        title: "Decision-first lab orders",
-        content: [
-          "We list the clinical questions that justify each panel so athletes understand the context.",
-        ],
-      },
-      {
-        title: "Escalate when necessary",
-        content: [
-          "Functional GI maps and hormone DUTCH testing have their place, just not for every complaint.",
-        ],
-      },
-    ],
-  },
-  {
-    slug: "nutrition-periodization",
-    number: 7,
-    title: "Nutrition Periodization For Busy Athletes",
-    publishDate: "2024-02-21",
-    durationMinutes: 42,
-    summary:
-      "Macro timing, grocery systems, and supplement sanity for athletes balancing real jobs.",
-    topics: ["nutrition", "performance"],
-    keyTakeaways: [
-      "Energy availability needs a weekly review, not a yearly reset.",
-      "Simplify with grocery templates and pre-built breakfasts.",
-      "Use supplements to close gaps, not to avoid cooking.",
-    ],
-    sections: [
-      {
-        title: "Phase the plate",
-        content: [
-          "We outline base, build, and taper meal frameworks with cost-aware swaps.",
-        ],
-      },
-      {
-        title: "Grocery tactics",
-        content: [
-          "Order-of-operations shopping plus quick prep templates keep people compliant.",
-        ],
-      },
-    ],
-  },
-  {
-    slug: "return-to-running",
-    number: 8,
-    title: "Return To Running After Layoffs",
-    publishDate: "2024-02-28",
-    durationMinutes: 47,
-    summary:
-      "Joint-friendly waypoints, progressions, and warning signs for athletes ramping up running volume again.",
-    topics: ["running", "rehab"],
-    keyTakeaways: [
-      "Walk-run intervals beat ego-driven long runs on week one.",
-      "Keep cadence cues ready for athletes with cranky tendons.",
-      "Respect 10% load bumps only after two quiet weeks.",
-    ],
-    sections: [
-      {
-        title: "Entry criteria",
-        content: [
-          "Pain <3/10 with walking and single-leg calf raises sets the floor.",
-        ],
-      },
-      {
-        title: "Progression guardrails",
-        content: [
-          "We map a six-week ladder with optional trail and track variations.",
-        ],
-      },
-    ],
-  },
-  {
-    slug: "recovery-stack-myths",
-    number: 9,
-    title: "Recovery Stack Myth Busting",
-    publishDate: "2024-03-06",
-    durationMinutes: 39,
-    summary:
-      "Sorting the helpful from the hype across cold plunges, PEMF, wearables, and peptides.",
-    topics: ["recovery", "tools"],
-    keyTakeaways: [
-      "Basics outperform gadgets until behaviors are consistent.",
-      "Budget the boring stuff (sleep, protein) before tech subscriptions.",
-      "Pair any tool with a hypothesis and exit date.",
-    ],
-    sections: [
-      {
-        title: "Behavior-first lens",
-        content: [
-          "We show how to triage requests for new tools by tying them to the athlete's constraints.",
-        ],
-      },
-      {
-        title: "When to say yes",
-        content: [
-          "If recovery scores drive actual decisions, tech can stay. If not, pause it.",
-        ],
-      },
-    ],
-  },
-  {
-    slug: "female-athlete-framework",
-    number: 10,
-    title: "Female Athlete Frameworks",
-    publishDate: "2024-03-13",
-    durationMinutes: 55,
-    summary:
-      "Cycle-aware training tweaks, RED-S screening, and talking through hormone therapies with clarity.",
-    topics: ["female-athlete", "performance"],
-    keyTakeaways: [
-      "We screen for RED-S anytime energy availability tanks.",
-      "Cycle tracking informs training volume and recovery windows.",
-      "Coordinate with the athlete's primary team when considering hormones.",
-    ],
-    sections: [
-      {
-        title: "Screening cues",
-        content: [
-          "Simple questionnaires catch missed periods, mood dips, and bone stress risk early.",
-        ],
-      },
-      {
-        title: "Programming tweaks",
-        content: [
-          "We offer a framework for adjusting intensity around high-symptom days without derailing training.",
-        ],
-      },
-    ],
-  },
-  {
-    slug: "travel-toolkit",
-    number: 11,
-    title: "Travel Toolkit For Athletes",
-    publishDate: "2024-03-20",
-    durationMinutes: 36,
-    summary:
-      "Sleep, digestion, and training guardrails when athletes bounce through time zones.",
-    topics: ["travel", "performance"],
-    keyTakeaways: [
-      "Reset the watch at takeoff and protect the first night of sleep.",
-      "Prioritize protein and hydration before new supplements.",
-      "Use micro circuits to maintain tissue capacity on the road.",
-    ],
-    sections: [
-      {
-        title: "Pre-trip protocols",
-        content: [
-          "We use simple checklists for flights, hydration, and med kits.",
-        ],
-      },
-      {
-        title: "On-the-road training",
-        content: [
-          "Five-movement micro circuits plus walk goals keep joints honest.",
-        ],
-      },
-    ],
-  },
-  {
-    slug: "performance-check-ins",
-    number: 12,
-    title: "Quarterly Performance Check-Ins",
-    publishDate: "2024-03-27",
-    durationMinutes: 40,
-    summary:
-      "A structured review template to reassess goals, symptoms, and next experiments.",
-    topics: ["strategy", "fundamentals"],
-    keyTakeaways: [
-      "Quarterly reviews beat annual resets because athletes actually remember the data.",
-      "Use the same form for self-audits and clinician visits.",
-      "Document experiments so you know what to stop.",
-    ],
-    sections: [
-      {
-        title: "Quarterly template",
-        content: [
-          "We outline four buckets: energy, performance, recovery, and mindset.",
-        ],
-      },
-      {
-        title: "Close the loop",
-        content: [
-          "Archive what worked, stop what didn't, and plan the next experiment.",
+          "While working up root causes, patients should still implement foundational brain-protective habits: 7.5+ hours of quality sleep, daily exercise to raise BDNF, and an organic/grass-fed diet.",
+          "Other carry-overs from Part 1—parsley for apigenin, EMF reduction like turning WiFi off at night, and avoiding plastics/excitotoxins—remain essential.",
         ],
       },
     ],
   },
 ];
+
+
+

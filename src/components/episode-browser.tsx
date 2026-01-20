@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Episode } from "@/data/episodes";
 
 type EpisodeBrowserProps = {
@@ -176,57 +177,118 @@ function EpisodeCard({ episode }: { episode: Episode }) {
   return (
     <Link
       href={`/episodes/${episode.slug}`}
-      className="group flex flex-col rounded-2xl border border-border bg-surface p-6 hover:border-primary/50 hover:shadow-glow-sm transition-all duration-300"
+      className="group flex flex-col rounded-2xl border border-border bg-surface overflow-hidden hover:border-primary/50 hover:shadow-glow-sm transition-all duration-300"
     >
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-body-sm font-bold text-primary group-hover:bg-primary group-hover:text-background transition-all duration-200">
-          {episode.number.toString().padStart(2, "0")}
-        </span>
-        <div className="flex items-center gap-3 text-caption text-foreground-subtle">
-          <span>{publishDate}</span>
-          {episode.durationMinutes && (
-            <>
-              <span>•</span>
-              <span>{episode.durationMinutes} min</span>
-            </>
+      {/* Thumbnail */}
+      {episode.thumbnailUrl && (
+        <div className="relative aspect-video w-full overflow-hidden bg-surface-elevated">
+          <Image
+            src={episode.thumbnailUrl}
+            alt={episode.title}
+            fill
+            className={`object-cover transition-transform duration-300 ${
+              episode.references?.some((ref) => ref.comingSoon === true)
+                ? "opacity-50"
+                : "group-hover:scale-105"
+            }`}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-surface/80 via-transparent to-transparent" />
+          {episode.references?.some((ref) => ref.comingSoon === true) && (
+            <div className="absolute inset-0 bg-gradient-to-t from-surface/90 via-surface/50 to-transparent" />
+          )}
+          <div className="absolute top-4 left-4">
+            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/90 backdrop-blur text-body-sm font-bold text-background">
+              {episode.number.toString().padStart(2, "0")}
+            </span>
+          </div>
+          {episode.references?.some((ref) => ref.comingSoon === true) ? (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="flex flex-col items-center gap-2 px-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 backdrop-blur-sm border-2 border-primary/30 text-primary">
+                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <p className="text-caption font-semibold text-background drop-shadow-lg text-center">
+                  Video Coming Soon
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="absolute bottom-4 right-4 flex items-center gap-2 text-caption text-background bg-black/50 backdrop-blur rounded-full px-3 py-1.5">
+              {episode.durationMinutes && (
+                <>
+                  <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                  <span>{episode.durationMinutes} min</span>
+                </>
+              )}
+            </div>
           )}
         </div>
-      </div>
+      )}
 
-      {/* Content */}
-      <h3 className="text-heading font-semibold text-foreground group-hover:text-primary transition-colors duration-200 mb-2">
-        {episode.title}
-      </h3>
-      <p className="text-body-sm text-foreground-muted line-clamp-2 mb-4 flex-1">
-        {episode.summary}
-      </p>
+      <div className="p-6 flex flex-col flex-1">
+        {/* Header - only show if no thumbnail */}
+        {!episode.thumbnailUrl && (
+          <div className="flex items-center justify-between mb-4">
+            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-body-sm font-bold text-primary group-hover:bg-primary group-hover:text-background transition-all duration-200">
+              {episode.number.toString().padStart(2, "0")}
+            </span>
+            <div className="flex items-center gap-3 text-caption text-foreground-subtle">
+              <span>{publishDate}</span>
+              {episode.durationMinutes && (
+                <>
+                  <span>•</span>
+                  <span>{episode.durationMinutes} min</span>
+                </>
+              )}
+            </div>
+          </div>
+        )}
 
-      {/* Topics */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        {episode.topics.map((topic) => (
-          <span
-            key={topic}
-            className="rounded-full bg-surface-elevated px-3 py-1 text-caption text-foreground-subtle"
-          >
-            {topic}
+        {/* Date for thumbnailed episodes */}
+        {episode.thumbnailUrl && (
+          <div className="mb-2">
+            <span className="text-caption text-foreground-subtle">{publishDate}</span>
+          </div>
+        )}
+
+        {/* Content */}
+        <h3 className="text-heading font-semibold text-foreground group-hover:text-primary transition-colors duration-200 mb-2">
+          {episode.title}
+        </h3>
+        <p className="text-body-sm text-foreground-muted line-clamp-2 mb-4 flex-1">
+          {episode.summary}
+        </p>
+
+        {/* Topics */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {episode.topics.map((topic) => (
+            <span
+              key={topic}
+              className="rounded-full bg-surface-elevated px-3 py-1 text-caption text-foreground-subtle"
+            >
+              {topic}
+            </span>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-between pt-4 border-t border-border">
+          <span className="text-body-sm font-medium text-primary group-hover:text-primary-hover transition-colors duration-200">
+            Listen & read notes
           </span>
-        ))}
-      </div>
-
-      {/* Footer */}
-      <div className="flex items-center justify-between pt-4 border-t border-border">
-        <span className="text-body-sm font-medium text-primary group-hover:text-primary-hover transition-colors duration-200">
-          Listen & read notes
-        </span>
-        <svg
-          className="h-4 w-4 text-foreground-muted group-hover:text-primary group-hover:translate-x-1 transition-all duration-200"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
+          <svg
+            className="h-4 w-4 text-foreground-muted group-hover:text-primary group-hover:translate-x-1 transition-all duration-200"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
       </div>
     </Link>
   );

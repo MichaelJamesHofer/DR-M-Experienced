@@ -1,8 +1,10 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { EPISODES } from "@/data/episodes";
 import { NewsletterCapture } from "@/components/newsletter-capture";
+import { VimeoPlayer } from "@/components/vimeo-player";
 
 const dateFormatter = new Intl.DateTimeFormat("en", {
   month: "long",
@@ -37,6 +39,8 @@ export default function EpisodeDetailPage({ params }: { params: { slug: string }
     (item) =>
       item.slug !== episode.slug && item.topics.some((topic) => episode.topics.includes(topic))
   ).slice(0, 3);
+
+  const hasComingSoonReference = episode.references?.some((ref) => ref.comingSoon === true);
 
   const currentIndex = EPISODES.findIndex((ep) => ep.slug === episode.slug);
   const prevEpisode = currentIndex < EPISODES.length - 1 ? EPISODES[currentIndex + 1] : null;
@@ -95,23 +99,109 @@ export default function EpisodeDetailPage({ params }: { params: { slug: string }
             </div>
           </header>
 
-          {/* Player Placeholder */}
+          {/* Video Player */}
           <div className="rounded-2xl border border-border bg-surface overflow-hidden">
-            <div className="aspect-video bg-gradient-to-br from-surface to-surface-elevated flex flex-col items-center justify-center gap-4">
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/20 text-primary">
-                <svg className="h-10 w-10" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
+            {episode.vimeoId ? (
+              <VimeoPlayer
+                videoId={episode.vimeoId}
+                title={episode.title}
+                className="w-full"
+              />
+            ) : (
+              <div className="aspect-video bg-gradient-to-br from-surface to-surface-elevated flex flex-col items-center justify-center gap-4 relative overflow-hidden">
+                {episode.thumbnailUrl ? (
+                  <>
+                    <Image
+                      src={episode.thumbnailUrl}
+                      alt={episode.title}
+                      fill
+                      className="object-cover opacity-50"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-surface/90 via-surface/50 to-transparent" />
+                    {hasComingSoonReference && (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-10">
+                        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/20 backdrop-blur-sm border-2 border-primary/30 text-primary">
+                          <svg className="h-10 w-10" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <div className="text-center px-4">
+                          <p className="text-body font-semibold text-foreground mb-1">
+                            Video Coming Soon
+                          </p>
+                          <p className="text-body-sm text-foreground-muted">
+                            Vimeo upload in progress
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/20 text-primary">
+                      <svg className="h-10 w-10" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                    <p className="text-body-sm text-foreground-muted">
+                      Episode player coming soon
+                    </p>
+                  </>
+                )}
               </div>
-              <p className="text-body-sm text-foreground-muted">
-                Episode player coming soon
-              </p>
-            </div>
+            )}
             {episode.audioUrl && (
               <div className="p-4 border-t border-border">
                 <audio controls className="w-full" src={episode.audioUrl}>
                   Your browser does not support audio.
                 </audio>
+              </div>
+            )}
+            {hasComingSoonReference && (
+              <div className="px-4 pb-4 pt-2 border-t border-border bg-surface">
+                <p className="text-body-xs text-foreground-subtle">
+                  Vimeo video for this episode is <span className="font-semibold">coming soon</span>.
+                </p>
+              </div>
+            )}
+            {episode.references && episode.references.length > 0 && (
+              <div className="p-4 border-t border-border bg-surface-elevated">
+                <p className="text-body-sm font-semibold text-foreground mb-3">
+                  Listen or watch on:
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {episode.references.map((ref, index) => {
+                    const isComingSoon = ref.comingSoon === true;
+                    if (isComingSoon) {
+                      return (
+                        <span
+                          key={index}
+                          className="inline-flex items-center gap-2 rounded-lg border border-dashed border-border bg-surface px-4 py-2 text-body-sm font-medium text-foreground-subtle cursor-not-allowed opacity-60"
+                          title="Coming soon"
+                        >
+                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          {ref.label}
+                        </span>
+                      );
+                    }
+                    return (
+                      <a
+                        key={index}
+                        href={ref.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-body-sm font-medium text-foreground-muted hover:border-primary hover:text-primary transition-all duration-200"
+                      >
+                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                        {ref.label}
+                      </a>
+                    );
+                  })}
+                </div>
               </div>
             )}
           </div>
