@@ -373,7 +373,7 @@ export default function Home() {
                   Educational content only
                 </p>
                 <p className="text-body-sm text-foreground-muted">
-                  Peak is a signal chain—Dr. Musnick&apos;s clinic notes translated into episodes 
+                  Dr. M&apos;s Experienced Functional and Sports Medicine is a signal chain—Dr. Musnick&apos;s clinic notes translated into episodes 
                   so athletes, clinicians, and curious humans can think clearly. This is not 
                   medical advice. Work with your own clinician for diagnosis and treatment.
                 </p>

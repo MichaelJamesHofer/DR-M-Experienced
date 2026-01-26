@@ -2,7 +2,7 @@ import { ContactForm } from "@/components/contact-form";
 
 export const metadata = {
   title: "Contact",
-  description: "Get in touch with the Peak Functional Medicine team for podcast feedback, business inquiries, or speaking engagements.",
+  description: "Get in touch with the Dr. M's Experienced Functional and Sports Medicine team for podcast feedback, business inquiries, or speaking engagements.",
 };
 
 const contactReasons = [

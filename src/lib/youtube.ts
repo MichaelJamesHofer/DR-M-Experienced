@@ -32,3 +32,4 @@ export function getYouTubeThumbnail(videoId: string, quality: 'default' | 'hq' |
   return `https://img.youtube.com/vi/${videoId}/${qualityMap[quality]}.jpg`;
 }
 
+

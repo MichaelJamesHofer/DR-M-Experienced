@@ -114,3 +114,4 @@ If you need to update existing policies, run `supabase-security-policies.sql` in
 - [x] Anonymous users can only INSERT
 - [x] No SELECT/UPDATE/DELETE for anonymous users
 
+

@@ -22,10 +22,10 @@ export function SiteFooter() {
               </span>
               <div>
                 <p className="text-caption font-semibold uppercase tracking-[0.2em] text-foreground-muted">
-                  Peak
+                  Dr. M&apos;s Experienced
                 </p>
                 <p className="text-body-sm font-semibold text-foreground">
-                  Functional Medicine
+                  Functional and Sports Medicine
                 </p>
               </div>
             </div>
@@ -75,7 +75,7 @@ export function SiteFooter() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-caption text-foreground-subtle">
-            © {new Date().getFullYear()} Peak Functional & Sports Medicine. Educational content only.
+            © {new Date().getFullYear()} Dr. M&apos;s Experienced Functional and Sports Medicine. Educational content only.
           </p>
           <p className="text-caption text-foreground-subtle">
             Not medical advice. See{" "}

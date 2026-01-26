@@ -20,17 +20,17 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL("https://peak.michaeljameshofer.com"),
   title: {
-    default: "Peak Functional & Sports Medicine",
-    template: "%s | Peak Functional Medicine",
+    default: "Dr. M's Experienced Functional and Sports Medicine",
+    template: "%s | Dr. M's Experienced Functional and Sports Medicine",
   },
   description:
     "Order-of-operations functional medicine for athletes and curious humans. Protocols, episodes, and frameworks with Dr. David Musnick.",
   openGraph: {
-    title: "Peak Functional & Sports Medicine",
+    title: "Dr. M's Experienced Functional and Sports Medicine",
     description:
       "Order-of-operations functional medicine. Protocols and frameworks that cut through the noise.",
     url: "https://peak.michaeljameshofer.com",
-    siteName: "Peak Functional Medicine",
+    siteName: "Dr. M's Experienced Functional and Sports Medicine",
     type: "website",
   },
   alternates: {

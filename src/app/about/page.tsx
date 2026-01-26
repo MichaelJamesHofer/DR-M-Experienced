@@ -427,7 +427,7 @@ export default function AboutPage() {
           <p className="text-body text-foreground-muted leading-relaxed">
             Mountain biking in Sedona, hiking Rainier, skiing, cooking, nature photography, and time 
             with friends and his daughter all keep him grounded. That blend of outdoor life plus 
-            constant learning informs the way he approaches every Peak episode and clinical decision tree.
+            constant learning informs the way he approaches every episode and clinical decision tree.
           </p>
         </div>
       </section>
@@ -437,7 +437,7 @@ export default function AboutPage() {
         <h2 className="text-heading font-semibold text-foreground mb-4">Educational Only</h2>
         <div className="space-y-3 text-body text-foreground-muted leading-relaxed">
           <p>
-            Peak Functional & Sports Medicine is an educational platform. This page summarizes 
+            Dr. M&apos;s Experienced Functional and Sports Medicine is an educational platform. This page summarizes 
             Dr. Musnick&apos;s background to provide context for the podcast and does not create 
             a doctor–patient relationship.
           </p>

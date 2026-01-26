@@ -71,3 +71,4 @@ CREATE POLICY "Deny anonymous contact access"
 -- 6. No SELECT/UPDATE/DELETE access for anonymous users
 -- 7. To view data, use Supabase Dashboard (authenticated) or create service role policies
 
+

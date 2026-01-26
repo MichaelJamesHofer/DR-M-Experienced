@@ -64,3 +64,4 @@ The PostHog provider is configured in `src/components/posthog-provider.tsx`. Cur
 
 To enable autocapture or change settings, edit `src/components/posthog-provider.tsx`.
 
+

@@ -1,4 +1,4 @@
--- Supabase Database Schema for Peak Medicine Forms
+-- Supabase Database Schema for Dr. M's Experienced Functional and Sports Medicine Forms
 -- Run this in your Supabase SQL Editor
 
 -- Newsletter Subscriptions Table

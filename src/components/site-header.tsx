@@ -25,10 +25,10 @@ export function SiteHeader() {
           </span>
           <div className="hidden sm:block">
             <p className="text-caption font-semibold uppercase tracking-[0.2em] text-foreground-muted">
-              Peak
+              Dr. M&apos;s Experienced
             </p>
             <p className="text-body-sm font-semibold text-foreground leading-tight">
-              Functional Medicine
+              Functional and Sports Medicine
             </p>
           </div>
         </Link>
