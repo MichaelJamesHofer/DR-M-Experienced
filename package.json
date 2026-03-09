@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "prebuild": "node scripts/sync-episodes.mjs",
+    "build": "npm run prebuild && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "sync-episodes": "node scripts/sync-episodes.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.90.1",

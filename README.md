@@ -29,6 +29,10 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+## Episodes (dynamic at build)
+
+Each build runs `sync-episodes.mjs`: it pulls **public** episode data from Vimeo, Spotify, and YouTube (app tokens / API keys only, no user login), merges by title/date, sorts by publish date, and writes `episodes-from-platforms.json`. New episodes on any platform show up on the next deploy. One template per episode, same layout and link order (Vimeo → Spotify → YouTube → Rumble). Optional notes/links: `src/data/episodes-enrichment.json` keyed by Vimeo (or Spotify/YouTube) ID.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.

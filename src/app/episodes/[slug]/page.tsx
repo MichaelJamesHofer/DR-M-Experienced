@@ -5,7 +5,6 @@ import Image from "next/image";
 import { EPISODES } from "@/data/episodes";
 import { NewsletterCapture } from "@/components/newsletter-capture";
 import { VimeoPlayer } from "@/components/vimeo-player";
-import { YouTubePlayer } from "@/components/youtube-player";
 
 const dateFormatter = new Intl.DateTimeFormat("en", {
   month: "long",
@@ -105,12 +104,6 @@ export default function EpisodeDetailPage({ params }: { params: { slug: string }
             {episode.vimeoId ? (
               <VimeoPlayer
                 videoId={episode.vimeoId}
-                title={episode.title}
-                className="w-full"
-              />
-            ) : episode.youtubeVideoId ? (
-              <YouTubePlayer
-                videoId={episode.youtubeVideoId}
                 title={episode.title}
                 className="w-full"
               />

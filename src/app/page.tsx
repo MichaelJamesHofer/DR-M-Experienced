@@ -19,7 +19,7 @@ export default function Home() {
   
   const latestEpisode = sortedEpisodes[0];
   const featuredEpisodes = sortedEpisodes.slice(0, 3);
-  const hasLatestVideo = latestEpisode && (latestEpisode.vimeoId || latestEpisode.youtubeVideoId);
+  const hasLatestVideo = latestEpisode?.vimeoId;
 
   return (
     <>

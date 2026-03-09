@@ -1,0 +1,56 @@
+{
+  "1156414707": {
+    "audioUrl": "https://anchor.fm/s/10e1b0328/podcast/play/114269977/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2026-0-20%2F416465462-44100-2-550a8bb9b34f.mp3",
+    "topics": ["brain-fog", "brain-health", "functional-medicine"],
+    "references": [
+      { "label": "Watch on Vimeo", "url": "https://vimeo.com/1156414707" },
+      { "label": "Listen on Spotify", "url": "https://open.spotify.com/episode/7cAdb8GE4khC9EYKAjmYuc?si=WaXbSZb9RMOijYCs68s1nQ" },
+      { "label": "Watch on YouTube", "url": "https://youtu.be/S9c0LsC7_nc" },
+      { "label": "Watch on Rumble", "url": "https://rumble.com/v74kzcw-episode-1-brain-fog-part-1-is-your-brain-in-a-fog.html" }
+    ],
+    "keyTakeaways": [
+      "Brain fog is not normal at any age and indicates underlying dysfunction.",
+      "Core mechanisms include brain inflammation, dysfunctional microglia, and neurotransmitter issues.",
+      "Ignoring brain fog can lead to headaches, chronic fatigue, and cognitive decline.",
+      "Root causes range from excitotoxins (MSG & aspartame) to infections, heavy metals, and EMFs.",
+      "Functional testing to find root causes is essential rather than masking symptoms."
+    ],
+    "checklist": [
+      "Eat organic, grass-fed, add parsley (for apigenin to calm microglia).",
+      "Prioritize 7.5+ hours of quality sleep.",
+      "Exercise daily to boost BDNF.",
+      "Reduce EMFs (WiFi off at night, phone away from head).",
+      "Avoid plastics and hidden toxins."
+    ],
+    "sections": [
+      { "title": "What is brain fog?", "content": ["Brain fog manifests as slow thinking, low mental energy, word-finding trouble, poor focus, and memory slips.", "It's not normal at any age and indicates underlying dysfunction that needs attention."] },
+      { "title": "Core mechanisms", "content": ["Brain inflammation, dysfunctional microglia, and neurotransmitter issues are the primary mechanisms driving brain fog.", "Understanding these mechanisms helps guide targeted interventions rather than symptom masking."] },
+      { "title": "Potential causes", "content": ["Dr. M outlines a comprehensive list: excitotoxins (MSG & aspartame), poor oxygen delivery, concussions, gluten/autoimmunity, blood sugar swings, hormones, mold, infections (EBV, Lyme, long COVID), heavy metals, EMFs, medications, and more.", "This wide range of causes underscores the importance of functional testing to identify root causes."] },
+      { "title": "First steps to fight back", "content": ["Start with foundational interventions: eat organic, grass-fed foods, add parsley for apigenin to calm microglia.", "Prioritize 7.5+ hours of quality sleep, exercise daily to boost BDNF, reduce EMFs (WiFi off at night, phone away from head), and avoid plastics and hidden toxins."] }
+    ]
+  },
+  "1096272441": {
+    "audioUrl": "https://open.spotify.com/episode/19Pct0ClX3j1EOwJ3ySVd7?si=M-QzbWkcSpq7ykUaqQY7UA",
+    "topics": ["brain-fog", "brain-health", "functional-medicine"],
+    "references": [
+      { "label": "Watch on Vimeo", "url": "https://vimeo.com/1096272441" },
+      { "label": "Listen on Spotify", "url": "https://open.spotify.com/episode/19Pct0ClX3j1EOwJ3ySVd7?si=M-QzbWkcSpq7ykUaqQY7UA" },
+      { "label": "Watch on YouTube", "url": "https://youtu.be/s740_XVTaAY" },
+      { "label": "Watch on Rumble", "url": "https://rumble.com/v74l0km-episode-brain-fog-part-2-testing-and-basic-solutions-for-brain-fog.html" }
+    ],
+    "keyTakeaways": [
+      "Brain fog reflects brain dysfunction with inflammation and slowed neurotransmission, not just being \"tired\" or \"off.\"",
+      "Episodes of brain fog lasting more than 15–20 minutes, especially with memory, focus, or speech issues, need proper evaluation.",
+      "High-titer Epstein-Barr virus reactivation and mold/mycotoxins are common hidden drivers of persistent brain fog.",
+      "Standard EBV testing is often insufficient—full panels and correct cutoffs are required to see reactivation.",
+      "Foundational steps like sleep, exercise, EMF reduction, and toxin avoidance protect the brain while deeper root-cause work is underway."
+    ],
+    "checklist": [],
+    "sections": [
+      { "title": "When brain fog is serious", "content": ["Brain fog is more serious when it comes with memory problems, poor focus, word-finding difficulty, or speech changes.", "Episodes that last longer than 15–20 minutes—especially when frequent—warrant careful evaluation rather than simple reassurance."] },
+      { "title": "Key testing for hidden drivers", "content": ["Systemic inflammation markers and full Epstein-Barr virus panels (including VCA IgG/IgM, EBNA, and Early Antigen) can uncover reactivation that standard tests miss.", "Urine mycotoxin panels are appropriate when mold exposure is suspected, and homocysteine helps flag vascular stress on the brain."] },
+      { "title": "Imaging and when to escalate", "content": ["Brain MRI is not usually the first test for brain fog, but becomes important with progressive cognitive change or neurological red flags.", "Dr. M emphasizes matching the intensity of testing to symptom severity and pattern, not just ordering everything up front."] },
+      { "title": "Universal basics while you test", "content": ["While working up root causes, patients should still implement foundational brain-protective habits: 7.5+ hours of quality sleep, daily exercise to raise BDNF, and an organic/grass-fed diet.", "Other carry-overs from Part 1—parsley for apigenin, EMF reduction like turning WiFi off at night, and avoiding plastics/excitotoxins—remain essential."] }
+    ]
+  }
+}

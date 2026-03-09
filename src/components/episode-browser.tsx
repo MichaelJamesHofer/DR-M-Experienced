@@ -173,7 +173,7 @@ function EpisodeCard({ episode }: { episode: Episode }) {
     year: "numeric",
   });
   const publishDate = dateFormatter.format(new Date(episode.publishDate));
-  const hasEmbeddableVideo = episode.vimeoId || episode.youtubeVideoId;
+  const hasEmbeddableVideo = !!episode.vimeoId;
 
   return (
     <Link
