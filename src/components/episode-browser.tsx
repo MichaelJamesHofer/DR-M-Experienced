@@ -173,6 +173,7 @@ function EpisodeCard({ episode }: { episode: Episode }) {
     year: "numeric",
   });
   const publishDate = dateFormatter.format(new Date(episode.publishDate));
+  const hasEmbeddableVideo = episode.vimeoId || episode.youtubeVideoId;
 
   return (
     <Link
@@ -187,13 +188,11 @@ function EpisodeCard({ episode }: { episode: Episode }) {
             alt={episode.title}
             fill
             className={`object-cover transition-transform duration-300 ${
-              episode.references?.some((ref) => ref.comingSoon === true)
-                ? "opacity-50"
-                : "group-hover:scale-105"
+              !hasEmbeddableVideo ? "opacity-50" : "group-hover:scale-105"
             }`}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-surface/80 via-transparent to-transparent" />
-          {episode.references?.some((ref) => ref.comingSoon === true) && (
+          {!hasEmbeddableVideo && (
             <div className="absolute inset-0 bg-gradient-to-t from-surface/90 via-surface/50 to-transparent" />
           )}
           <div className="absolute top-4 left-4">
@@ -201,7 +200,7 @@ function EpisodeCard({ episode }: { episode: Episode }) {
               {episode.number.toString().padStart(2, "0")}
             </span>
           </div>
-          {episode.references?.some((ref) => ref.comingSoon === true) ? (
+          {!hasEmbeddableVideo ? (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="flex flex-col items-center gap-2 px-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 backdrop-blur-sm border-2 border-primary/30 text-primary">

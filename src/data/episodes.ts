@@ -20,6 +20,7 @@ export type Episode = {
   audioUrl?: string;
   videoUrl?: string;
   vimeoId?: string;
+  youtubeVideoId?: string;
   thumbnailUrl?: string;
   transcriptUrl?: string;
   references?: EpisodeReference[];
@@ -115,6 +116,7 @@ export const EPISODES: Episode[] = [
     topics: ["brain-fog", "brain-health", "functional-medicine"],
     audioUrl:
       "https://open.spotify.com/episode/19Pct0ClX3j1EOwJ3ySVd7?si=M-QzbWkcSpq7ykUaqQY7UA",
+    youtubeVideoId: "s740_XVTaAY",
     thumbnailUrl: "https://img.youtube.com/vi/s740_XVTaAY/hqdefault.jpg",
     references: [
       {
@@ -174,6 +176,8 @@ export const EPISODES: Episode[] = [
     ],
   },
 ];
+
+
 
 
 

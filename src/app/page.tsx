@@ -19,6 +19,7 @@ export default function Home() {
   
   const latestEpisode = sortedEpisodes[0];
   const featuredEpisodes = sortedEpisodes.slice(0, 3);
+  const hasLatestVideo = latestEpisode && (latestEpisode.vimeoId || latestEpisode.youtubeVideoId);
 
   return (
     <>
@@ -71,13 +72,11 @@ export default function Home() {
                       alt={latestEpisode.title}
                       fill
                       className={`object-cover transition-transform duration-300 ${
-                        latestEpisode.references?.some((ref) => ref.comingSoon === true)
-                          ? "opacity-50"
-                          : "group-hover:scale-105"
+                        !hasLatestVideo ? "opacity-50" : "group-hover:scale-105"
                       }`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/50 to-transparent" />
-                    {latestEpisode.references?.some((ref) => ref.comingSoon === true) && (
+                    {!hasLatestVideo && (
                       <div className="absolute inset-0 bg-gradient-to-t from-surface/90 via-surface/60 to-transparent" />
                     )}
                     <div className="absolute top-4 left-4">
@@ -88,7 +87,7 @@ export default function Home() {
                         {latestEpisode.number.toString().padStart(2, "0")}
                       </span>
                     </div>
-                    {latestEpisode.references?.some((ref) => ref.comingSoon === true) ? (
+                    {!hasLatestVideo ? (
                       <div className="absolute inset-0 flex items-center justify-center z-10">
                         <div className="flex flex-col items-center gap-2 px-4">
                           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/20 backdrop-blur-sm border-2 border-primary/30 text-primary">
