@@ -23,6 +23,7 @@ export type Episode = {
   audioUrl?: string;
   videoUrl?: string;
   vimeoId?: string;
+  spotifyId?: string;
   thumbnailUrl?: string;
   transcriptUrl?: string;
   references?: EpisodeReference[];
@@ -97,6 +98,7 @@ function mergeEpisode(ep: PlatformEpisode): Episode {
     topics: en.topics ?? ["functional-medicine"],
     audioUrl: en.audioUrl,
     vimeoId: vimeoId || undefined,
+    spotifyId: ep.spotifyId ?? undefined,
     thumbnailUrl: ep.thumbnailUrl,
     references: buildReferences(ep, en),
     keyTakeaways: en.keyTakeaways ?? [],

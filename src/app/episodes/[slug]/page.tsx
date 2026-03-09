@@ -150,11 +150,24 @@ export default function EpisodeDetailPage({ params }: { params: { slug: string }
                 )}
               </div>
             )}
-            {episode.audioUrl && (
+            {(episode.audioUrl || episode.spotifyId) && (
               <div className="p-4 border-t border-border">
-                <audio controls className="w-full" src={episode.audioUrl}>
-                  Your browser does not support audio.
-                </audio>
+                {episode.audioUrl ? (
+                  <audio controls className="w-full" src={episode.audioUrl}>
+                    Your browser does not support audio.
+                  </audio>
+                ) : episode.spotifyId ? (
+                  <iframe
+                    title={`Listen: ${episode.title}`}
+                    src={`https://open.spotify.com/embed/episode/${episode.spotifyId}?utm_source=generator`}
+                    width="100%"
+                    height="232"
+                    allowFullScreen
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                    className="rounded-lg"
+                  />
+                ) : null}
               </div>
             )}
             {hasComingSoonReference && (
