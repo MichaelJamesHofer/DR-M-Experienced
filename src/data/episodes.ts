@@ -57,6 +57,17 @@ type Enrichment = {
 
 const enrichment = enrichmentMap as Record<string, Enrichment>;
 
+/** Removes a leading "Episode N:" / "Ep. N:" / "Episode N -" label from platform titles so we can format consistently. */
+function stripLeadingEpisodeLabel(title: string): string {
+  return title.replace(/^(?:Episode|Ep\.)\s*#?\d+\s*[:–-]\s*/i, "").trim();
+}
+
+/** Site-wide episode heading: "Episode #: Name" */
+export function episodeDisplayTitle(episode: { number: number; title: string }): string {
+  const name = stripLeadingEpisodeLabel(episode.title);
+  return `Episode ${episode.number}: ${name}`;
+}
+
 function getEnrichment(ep: PlatformEpisode): Enrichment {
   const vimeoId = ep.vimeoId ?? undefined;
   const spotifyId = ep.spotifyId ?? undefined;

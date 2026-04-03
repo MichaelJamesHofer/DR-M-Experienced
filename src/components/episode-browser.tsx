@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Episode } from "@/data/episodes";
+import { Episode, episodeDisplayTitle } from "@/data/episodes";
 
 type EpisodeBrowserProps = {
   episodes: Episode[];
@@ -60,7 +60,7 @@ export function EpisodeBrowser({ episodes, initialTopic = "all" }: EpisodeBrowse
   const filtered = episodes.filter((episode) => {
     const matchesTopic =
       topic === "all" || episode.topics.some((episodeTopic) => episodeTopic.toLowerCase() === topic);
-    const text = `${episode.title} ${episode.summary}`.toLowerCase();
+    const text = `${episodeDisplayTitle(episode)} ${episode.title} ${episode.summary}`.toLowerCase();
     const matchesQuery = text.includes(query.toLowerCase());
     return matchesTopic && matchesQuery;
   });
@@ -185,7 +185,7 @@ function EpisodeCard({ episode }: { episode: Episode }) {
         <div className="relative aspect-video w-full overflow-hidden bg-surface-elevated">
           <Image
             src={episode.thumbnailUrl}
-            alt={episode.title}
+            alt={episodeDisplayTitle(episode)}
             fill
             className={`object-cover transition-transform duration-300 ${
               !hasEmbeddableVideo ? "opacity-50" : "group-hover:scale-105"
@@ -256,7 +256,7 @@ function EpisodeCard({ episode }: { episode: Episode }) {
 
         {/* Content */}
         <h3 className="text-heading font-semibold text-foreground group-hover:text-primary transition-colors duration-200 mb-2">
-          {episode.title}
+          {episodeDisplayTitle(episode)}
         </h3>
         <p className="text-body-sm text-foreground-muted line-clamp-2 mb-4 flex-1">
           {episode.summary}

@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { EPISODES } from "@/data/episodes";
+import { EPISODES, episodeDisplayTitle } from "@/data/episodes";
 import { NewsletterCapture } from "@/components/newsletter-capture";
 import { VimeoPlayer } from "@/components/vimeo-player";
 
@@ -28,7 +28,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${episode.title} (Ep. ${episode.number})`,
+    title: episodeDisplayTitle(episode),
     description: episode.summary,
   };
 }
@@ -68,7 +68,7 @@ export default async function EpisodeDetailPage({
           Episodes
         </Link>
         <span>/</span>
-        <span className="text-foreground">Ep. {episode.number}</span>
+        <span className="text-foreground line-clamp-2">{episodeDisplayTitle(episode)}</span>
       </nav>
 
       <div className="grid gap-12 lg:grid-cols-3">
@@ -91,7 +91,7 @@ export default async function EpisodeDetailPage({
               </div>
             </div>
             <h1 className="text-display font-bold text-foreground mb-4">
-              {episode.title}
+              {episodeDisplayTitle(episode)}
             </h1>
             <p className="text-body-lg text-foreground-muted">
               {episode.summary}
@@ -114,7 +114,7 @@ export default async function EpisodeDetailPage({
             {episode.vimeoId ? (
               <VimeoPlayer
                 videoId={episode.vimeoId}
-                title={episode.title}
+                title={episodeDisplayTitle(episode)}
                 className="w-full"
               />
             ) : (
@@ -123,7 +123,7 @@ export default async function EpisodeDetailPage({
                   <>
                     <Image
                       src={episode.thumbnailUrl}
-                      alt={episode.title}
+                      alt={episodeDisplayTitle(episode)}
                       fill
                       className="object-cover opacity-50"
                     />
@@ -168,7 +168,7 @@ export default async function EpisodeDetailPage({
                   </audio>
                 ) : episode.spotifyId ? (
                   <iframe
-                    title={`Listen: ${episode.title}`}
+                    title={`Listen: ${episodeDisplayTitle(episode)}`}
                     src={`https://open.spotify.com/embed/episode/${episode.spotifyId}?utm_source=generator`}
                     width="100%"
                     height="232"
@@ -328,9 +328,9 @@ export default async function EpisodeDetailPage({
                 <svg className="h-5 w-5 group-hover:-translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
-                <div className="text-left">
+                <div className="text-left min-w-0">
                   <p className="text-caption text-foreground-subtle">Previous</p>
-                  <p className="text-body-sm font-medium">Ep. {prevEpisode.number}</p>
+                  <p className="text-body-sm font-medium line-clamp-2">{episodeDisplayTitle(prevEpisode)}</p>
                 </div>
               </Link>
             ) : (
@@ -341,9 +341,9 @@ export default async function EpisodeDetailPage({
                 href={`/episodes/${nextEpisode.slug}`}
                 className="group flex items-center gap-3 text-foreground-muted hover:text-foreground transition-colors duration-200"
               >
-                <div className="text-right">
+                <div className="text-right min-w-0">
                   <p className="text-caption text-foreground-subtle">Next</p>
-                  <p className="text-body-sm font-medium">Ep. {nextEpisode.number}</p>
+                  <p className="text-body-sm font-medium line-clamp-2">{episodeDisplayTitle(nextEpisode)}</p>
                 </div>
                 <svg className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -388,11 +388,8 @@ export default async function EpisodeDetailPage({
                     href={`/episodes/${ep.slug}`}
                     className="group block rounded-xl border border-border bg-surface p-4 hover:border-primary/50 transition-all duration-200"
                   >
-                    <p className="text-caption font-semibold text-primary mb-1">
-                      Ep. {ep.number}
-                    </p>
-                    <p className="text-body-sm font-medium text-foreground group-hover:text-primary transition-colors duration-200 line-clamp-2">
-                      {ep.title}
+                    <p className="text-body-sm font-medium text-foreground group-hover:text-primary transition-colors duration-200 line-clamp-3">
+                      {episodeDisplayTitle(ep)}
                     </p>
                   </Link>
                 ))}

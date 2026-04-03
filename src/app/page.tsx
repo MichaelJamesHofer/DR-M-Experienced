@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { EPISODES } from "@/data/episodes";
+import { EPISODES, episodeDisplayTitle } from "@/data/episodes";
 import { NewsletterCapture } from "@/components/newsletter-capture";
 import { PlatformBadges } from "@/components/platform-badges";
 
@@ -70,7 +70,7 @@ export default function Home() {
                   <div className="relative aspect-video w-full overflow-hidden">
                     <Image
                       src={latestEpisode.thumbnailUrl}
-                      alt={latestEpisode.title}
+                      alt={episodeDisplayTitle(latestEpisode)}
                       fill
                       className={`object-cover transition-transform duration-300 ${
                         !hasLatestVideo ? "opacity-50" : "group-hover:scale-105"
@@ -105,7 +105,7 @@ export default function Home() {
                       <>
                         <div className="absolute bottom-4 left-4 right-4">
                           <h3 className="text-heading-lg font-bold text-background mb-2 drop-shadow-lg">
-                            {latestEpisode.title}
+                            {episodeDisplayTitle(latestEpisode)}
                           </h3>
                           <p className="text-body-sm text-background/90 line-clamp-2 drop-shadow">
                             {latestEpisode.summary}
@@ -135,7 +135,7 @@ export default function Home() {
                           Latest Episode
                         </p>
                         <h3 className="text-heading font-semibold text-foreground group-hover:text-primary transition-colors duration-200">
-                          Ep. {latestEpisode.number}: {latestEpisode.title}
+                          {episodeDisplayTitle(latestEpisode)}
                         </h3>
                         <p className="text-body-sm text-foreground-muted mt-1 line-clamp-2">
                           {latestEpisode.summary}
@@ -218,7 +218,7 @@ export default function Home() {
                 <div className="relative aspect-video w-full overflow-hidden bg-surface-elevated">
                   <Image
                     src={episode.thumbnailUrl}
-                    alt={episode.title}
+                    alt={episodeDisplayTitle(episode)}
                     fill
                     className={`object-cover transition-transform duration-300 ${
                       episode.references?.some((ref) => ref.comingSoon === true)
@@ -268,7 +268,7 @@ export default function Home() {
               )}
               <div className="p-6">
                 <h3 className="text-heading font-semibold text-foreground group-hover:text-primary transition-colors duration-200 mb-2">
-                  {episode.title}
+                  {episodeDisplayTitle(episode)}
                 </h3>
                 <p className="text-body-sm text-foreground-muted line-clamp-2 mb-4">
                   {episode.summary}
