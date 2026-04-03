@@ -7,6 +7,13 @@ export const metadata = {
   description: "Browse all Dr. M's Experienced Functional and Sports Medicine episodes. Search by topic, skim summaries, and dive into detailed show notes.",
 };
 
+const episodesNewestFirst = [...EPISODES].sort((a, b) => {
+  const dateA = new Date(a.publishDate).getTime();
+  const dateB = new Date(b.publishDate).getTime();
+  if (dateB !== dateA) return dateB - dateA;
+  return b.number - a.number;
+});
+
 export default function EpisodesPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 lg:px-6 lg:py-16">
@@ -26,7 +33,7 @@ export default function EpisodesPage() {
 
       {/* Episode Browser */}
       <Suspense fallback={<EpisodeBrowserSkeleton />}>
-        <EpisodeBrowser episodes={EPISODES} />
+        <EpisodeBrowser episodes={episodesNewestFirst} />
       </Suspense>
     </div>
   );

@@ -74,5 +74,27 @@
       { "title": "Sleep maintenance and routine", "content": ["Covers sleep-onset vs maintenance issues, teenagers’ delayed sleep phase, and building habits that help you fall back asleep when you wake at night."] },
       { "title": "Light, stress, and natural supports", "content": ["Discusses blue-light strategies, evening habits, morning light and daytime exercise, and cautious use of melatonin and homeopathic options—with product discount links in the show’s pinned comment where applicable."] }
     ]
+  },
+  "1179956166": {
+    "audioUrl": "https://anchor.fm/s/10e1b0328/podcast/play/117921586/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2026-3-3%2F421362576-44100-2-9087d508e502c.mp3",
+    "topics": ["emf", "brain-health", "functional-medicine"],
+    "references": [
+      { "label": "Watch on Vimeo", "url": "https://vimeo.com/1179956166" },
+      { "label": "Listen on Spotify", "url": "https://open.spotify.com/episode/0aDVuIwrRlDKxEylMj2dyw?si=TH13bzEJTqWQ6LJUkIm9Cw" },
+      { "label": "Watch on YouTube", "url": "https://youtu.be/X8WChChyh9c" },
+      { "label": "Watch on Rumble", "url": "https://rumble.com/v780pxq-episode-4-emf.html" }
+    ],
+    "keyTakeaways": [
+      "RF (phones, WiFi, Bluetooth, 5G), EMF from appliances/EVs, and electrical fields from wiring can affect the blood-brain barrier and contribute to brain fog, headaches, insomnia, and inflammation.",
+      "Mitigation starts with wired peripherals, airplane mode or distance from the phone at night, Ethernet + WiFi off overnight, and turning off Bluetooth/WiFi when idle.",
+      "Cars—especially EVs and hybrids—benefit from EMF testing before purchase; smart meters can be opted out or shielded.",
+      "Meters (e.g. Safe and Sound II, Tri-Field) help you measure home, car, and workplace; shielding, clothing, and pro assessments may help sensitive individuals."
+    ],
+    "checklist": [],
+    "sections": [
+      { "title": "Types of electromagnetic exposure", "content": ["Dr. M outlines RF vs EMF vs electrical fields and where each shows up in daily life—from towers and earbuds to wiring and vehicles."] },
+      { "title": "Brain and barrier", "content": ["How fields may stress the blood-brain barrier, symptoms that can follow, and why protecting sleep and barrier integrity matters for long-term brain health."] },
+      { "title": "What to do today", "content": ["Practical reduction strategies: hardwiring, nighttime WiFi habits, meter-based assessment, smart-meter choices, and resources referenced in pinned comments and show notes."] }
+    ]
   }
 }

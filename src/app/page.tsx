@@ -14,7 +14,8 @@ export default function Home() {
   const sortedEpisodes = [...EPISODES].sort((a, b) => {
     const dateA = new Date(a.publishDate).getTime();
     const dateB = new Date(b.publishDate).getTime();
-    return dateB - dateA; // Descending order (newest first)
+    if (dateB !== dateA) return dateB - dateA;
+    return b.number - a.number; // Same day: higher episode number first
   });
   
   const latestEpisode = sortedEpisodes[0];

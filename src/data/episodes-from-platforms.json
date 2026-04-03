@@ -37,5 +37,18 @@
     "slug": "episode-3-insomnia",
     "number": 3,
     "thumbnailUrl": "https://vumbnail.com/1179740758.jpg"
+  },
+  {
+    "vimeoId": "1179956166",
+    "spotifyId": "0aDVuIwrRlDKxEylMj2dyw",
+    "spotifyUrl": "https://open.spotify.com/episode/0aDVuIwrRlDKxEylMj2dyw",
+    "youtubeId": "X8WChChyh9c",
+    "title": "Episode 4 - EMF",
+    "publishDate": "2026-04-03",
+    "durationMinutes": 19,
+    "summary": "Dr. Musnick explains how RF, EMF, and electrical fields affect the brain and blood-brain barrier—and practical steps to reduce exposure from phones, WiFi, Bluetooth, vehicles, and smart meters.",
+    "slug": "episode-4-emf",
+    "number": 4,
+    "thumbnailUrl": "https://vumbnail.com/1179956166.jpg"
   }
 ]
