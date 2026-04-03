@@ -3,7 +3,7 @@
     "vimeoId": "1156414707",
     "spotifyId": "7cAdb8GE4khC9EYKAjmYuc",
     "spotifyUrl": "https://open.spotify.com/episode/7cAdb8GE4khC9EYKAjmYuc",
-    "youtubeId": "S9c0LsC7_nc",
+    "youtubeId": "LXASEw-WFq8",
     "title": "Brain Fog - Part 1 – Is Your Brain in a Fog?",
     "publishDate": "2026-01-20",
     "durationMinutes": 17,
@@ -24,5 +24,18 @@
     "slug": "brain-fog-part-2",
     "number": 2,
     "thumbnailUrl": "https://vumbnail.com/1159441883.jpg"
+  },
+  {
+    "vimeoId": "1179740758",
+    "spotifyId": "07OHz4sfbefOORcNi9xaUK",
+    "spotifyUrl": "https://open.spotify.com/episode/07OHz4sfbefOORcNi9xaUK",
+    "youtubeId": "59r5XFynaDo",
+    "title": "Episode 3: Insomnia",
+    "publishDate": "2026-04-03",
+    "durationMinutes": 20,
+    "summary": "Dr. M breaks down insomnia and sleep: difficulty falling or staying asleep, types of insomnia, and why 7+ hours of quality sleep matters for reducing inflammation in your brain and body—plus practical tools for wind-down, caffeine timing, natural supports, and more.",
+    "slug": "episode-3-insomnia",
+    "number": 3,
+    "thumbnailUrl": "https://vumbnail.com/1179740758.jpg"
   }
 ]

@@ -5,7 +5,7 @@
     "references": [
       { "label": "Watch on Vimeo", "url": "https://vimeo.com/1156414707" },
       { "label": "Listen on Spotify", "url": "https://open.spotify.com/episode/7cAdb8GE4khC9EYKAjmYuc?si=WaXbSZb9RMOijYCs68s1nQ" },
-      { "label": "Watch on YouTube", "url": "https://youtu.be/S9c0LsC7_nc" },
+      { "label": "Watch on YouTube", "url": "https://www.youtube.com/watch?v=LXASEw-WFq8" },
       { "label": "Watch on Rumble", "url": "https://rumble.com/v74kzcw-episode-1-brain-fog-part-1-is-your-brain-in-a-fog.html" }
     ],
     "keyTakeaways": [
@@ -51,6 +51,28 @@
       { "title": "Key testing for hidden drivers", "content": ["Systemic inflammation markers and full Epstein-Barr virus panels (including VCA IgG/IgM, EBNA, and Early Antigen) can uncover reactivation that standard tests miss.", "Urine mycotoxin panels are appropriate when mold exposure is suspected, and homocysteine helps flag vascular stress on the brain."] },
       { "title": "Imaging and when to escalate", "content": ["Brain MRI is not usually the first test for brain fog, but becomes important with progressive cognitive change or neurological red flags.", "Dr. M emphasizes matching the intensity of testing to symptom severity and pattern, not just ordering everything up front."] },
       { "title": "Universal basics while you test", "content": ["While working up root causes, patients should still implement foundational brain-protective habits: 7.5+ hours of quality sleep, daily exercise to raise BDNF, and an organic/grass-fed diet.", "Other carry-overs from Part 1—parsley for apigenin, EMF reduction like turning WiFi off at night, and avoiding plastics/excitotoxins—remain essential."] }
+    ]
+  },
+  "1179740758": {
+    "audioUrl": "https://anchor.fm/s/10e1b0328/podcast/play/117879952/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2026-3-3%2F421308982-44100-2-82d5d3a22b087.mp3",
+    "topics": ["sleep", "insomnia", "functional-medicine"],
+    "references": [
+      { "label": "Watch on Vimeo", "url": "https://vimeo.com/1179740758" },
+      { "label": "Listen on Spotify", "url": "https://open.spotify.com/episode/07OHz4sfbefOORcNi9xaUK?si=LsWv5o7LR0mccsYnO8HFRQ" },
+      { "label": "Watch on YouTube", "url": "https://www.youtube.com/watch?v=59r5XFynaDo" },
+      { "label": "Watch on Rumble", "url": "https://rumble.com/v77zlls-episode-3-insomnia.html" }
+    ],
+    "keyTakeaways": [
+      "Insomnia includes trouble falling asleep, staying asleep, or not getting enough hours—7+ hours of quality sleep helps reduce brain and body inflammation.",
+      "Aim to fall asleep in under 20 minutes; consistent bedtime (often 9–10 PM for adults) supports full 90-minute sleep cycles.",
+      "Blue-light blocking, wind-down routines, caffeine timing, and stress tools (mind dump, EFT tapping) can materially improve sleep.",
+      "Natural supports may include properly timed melatonin and homeopathy; antihistamines and alcohol often disrupt sleep architecture."
+    ],
+    "checklist": [],
+    "sections": [
+      { "title": "What insomnia is", "content": ["Dr. M defines insomnia as difficulty falling asleep, staying asleep, or getting insufficient sleep, and explains why adequate sleep duration matters for inflammation and recovery."] },
+      { "title": "Sleep maintenance and routine", "content": ["Covers sleep-onset vs maintenance issues, teenagers’ delayed sleep phase, and building habits that help you fall back asleep when you wake at night."] },
+      { "title": "Light, stress, and natural supports", "content": ["Discusses blue-light strategies, evening habits, morning light and daytime exercise, and cautious use of melatonin and homeopathic options—with product discount links in the show’s pinned comment where applicable."] }
     ]
   }
 }

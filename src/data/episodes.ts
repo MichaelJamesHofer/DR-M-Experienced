@@ -61,10 +61,12 @@ function getEnrichment(ep: PlatformEpisode): Enrichment {
   const vimeoId = ep.vimeoId ?? undefined;
   const spotifyId = ep.spotifyId ?? undefined;
   const youtubeId = ep.youtubeId ?? undefined;
+  const slug = ep.slug ?? undefined;
   return (
     (vimeoId && enrichment[vimeoId]) ||
     (spotifyId && enrichment[spotifyId]) ||
     (youtubeId && enrichment[youtubeId]) ||
+    (slug && enrichment[slug]) ||
     ({} as Enrichment)
   );
 }
