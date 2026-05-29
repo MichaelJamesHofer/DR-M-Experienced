@@ -34,6 +34,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
       - name: Build static site
         env:
           GITHUB_PAGES: "true"
@@ -54,7 +57,7 @@ jobs:
         run: npm run build
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: out
 
