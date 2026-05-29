@@ -18,7 +18,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://peak.michaeljameshofer.com"),
+  metadataBase: new URL("https://drmexperienced.com"),
   title: {
     default: "Dr. M's Experienced Functional and Sports Medicine",
     template: "%s | Dr. M's Experienced Functional and Sports Medicine",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     title: "Dr. M's Experienced Functional and Sports Medicine",
     description:
       "Order-of-operations functional medicine. Protocols and frameworks that cut through the noise.",
-    url: "https://peak.michaeljameshofer.com",
+    url: "https://drmexperienced.com",
     siteName: "Dr. M's Experienced Functional and Sports Medicine",
     type: "website",
   },
