@@ -49,7 +49,7 @@ export const MEDIA_FEATURES: MediaFeature[] = [
     "YouTube",
     "Functional Medicine Foundations Live",
     "Video",
-    "Covers the cognitive checklists he uses with athletes and executives who want sharper recall, focus, and long-term protection.",
+    "Covers the cognitive checklists he uses with patients and professionals who want sharper recall, focus, and long-term protection.",
     "https://www.youtube.com/watch?v=_2bIACfd694"
   ),
   createMediaFeature(
@@ -121,7 +121,7 @@ export const MEDIA_FEATURES: MediaFeature[] = [
     "YouTube",
     "Dr. Kara Fitzgerald Podcast",
     "Video",
-    "Explains how his concussion framework scales from athletes to everyday brain-injury survivors and why sequence matters.",
+    "Explains how his concussion framework scales from acute injury to long-running brain-injury recovery and why sequence matters.",
     "https://www.youtube.com/watch?v=1aXndnysq3o"
   ),
   createMediaFeature(
@@ -137,7 +137,7 @@ export const MEDIA_FEATURES: MediaFeature[] = [
     "YouTube",
     "Frequency Specific Microcurrent Series",
     "Series",
-    "Curated playlist covering FSM fundamentals, including Dr. Musnick's explanations of how he integrates the tech into orthopedic and neuro care.",
+    "Curated playlist covering FSM fundamentals, including Dr. Musnick's explanations of how he integrates the tech into tissue, pain, and neurologic care.",
     "https://www.youtube.com/watch?v=Znqj_vldUz0&list=PLYvFL_gzSBvtu7LWnXx2TS0wGIUEYJbmE"
   ),
 ];
