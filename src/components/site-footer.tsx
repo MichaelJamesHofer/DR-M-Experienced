@@ -7,6 +7,7 @@ const footerLinks = [
   { href: "/affiliates", label: "Affiliates" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
+  { href: "/legal/copyright", label: "Copyright" },
   { href: "/legal/disclaimer", label: "Disclaimer" },
 ];
 
@@ -82,6 +83,10 @@ export function SiteFooter() {
             Not medical advice. See{" "}
             <Link href="/legal/disclaimer" className="text-foreground-muted hover:text-foreground transition-colors duration-200">
               disclaimer
+            </Link>
+            {" "}and{" "}
+            <Link href="/legal/copyright" className="text-foreground-muted hover:text-foreground transition-colors duration-200">
+              copyright notice
             </Link>
             .
           </p>
