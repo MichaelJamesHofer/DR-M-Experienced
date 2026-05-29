@@ -4,6 +4,7 @@ import {
   AFFILIATE_DISCLOSURE,
   AFFILIATE_PRODUCTS,
   AffiliateProduct,
+  affiliateDisplayName,
 } from "@/data/affiliates";
 import { EPISODES, episodeDisplayTitle } from "@/data/episodes";
 
@@ -67,7 +68,7 @@ export default function AffiliatesPage() {
                   </h2>
                 </div>
               </div>
-              <div className="grid gap-6 lg:grid-cols-2">
+              <div className="space-y-6">
                 {productsByCategory[category].map((product) => (
                   <ProductCard key={product.slug} product={product} />
                 ))}
@@ -109,9 +110,13 @@ function EmptyCatalog() {
 function ProductCard({ product }: { product: AffiliateProduct }) {
   const relatedEpisodes = getRelatedEpisodes(product);
   const productUrl = product.affiliateUrl ?? product.directUrl;
+  const companyName = affiliateDisplayName(product);
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-2xl border border-border bg-surface">
+    <article
+      id={product.slug}
+      className="scroll-mt-28 flex flex-col overflow-hidden rounded-2xl border border-border bg-surface"
+    >
       {product.imageUrl && (
         <div className="relative aspect-video bg-surface-elevated">
           <Image
@@ -124,13 +129,16 @@ function ProductCard({ product }: { product: AffiliateProduct }) {
         </div>
       )}
       <div className="flex flex-1 flex-col p-6">
-        <div className="mb-4">
+        <div className="mb-6 border-b border-border pb-5">
+          <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-2">
+            {product.category}
+          </p>
+          <h3 className="text-heading-lg font-bold text-foreground">{companyName}</h3>
           {product.brand && (
-            <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-1">
-              {product.brand}
+            <p className="mt-2 text-heading-sm font-semibold text-foreground-muted">
+              {product.name}
             </p>
           )}
-          <h3 className="text-heading font-semibold text-foreground">{product.name}</h3>
           <p className="mt-3 text-body-sm text-foreground-muted">{product.summary}</p>
         </div>
 
@@ -179,10 +187,15 @@ function ProductCard({ product }: { product: AffiliateProduct }) {
         )}
 
         <div className="mt-6 flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
-          {product.couponCode && (
-            <p className="text-body-sm text-foreground-muted">
-              Code: <span className="font-semibold text-foreground">{product.couponCode}</span>
-            </p>
+          {(product.couponCode || product.discountNote) && (
+            <div className="space-y-1 text-body-sm text-foreground-muted">
+              {product.couponCode && (
+                <p>
+                  Code: <span className="font-semibold text-foreground">{product.couponCode}</span>
+                </p>
+              )}
+              {product.discountNote && <p>{product.discountNote}</p>}
+            </div>
           )}
           {productUrl && (
             <a

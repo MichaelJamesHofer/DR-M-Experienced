@@ -3,6 +3,12 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { EPISODES, episodeDisplayTitle } from "@/data/episodes";
+import {
+  AFFILIATE_DISCLOSURE,
+  AffiliateProduct,
+  affiliateDisplayName,
+  affiliateProductsForEpisode,
+} from "@/data/affiliates";
 import { NewsletterCapture } from "@/components/newsletter-capture";
 import { VimeoPlayer } from "@/components/vimeo-player";
 
@@ -49,6 +55,7 @@ export default async function EpisodeDetailPage({
     (item) =>
       item.slug !== episode.slug && item.topics.some((topic) => episode.topics.includes(topic))
   ).slice(0, 3);
+  const relatedAffiliateProducts = affiliateProductsForEpisode(episode.slug);
 
   const hasComingSoonReference = episode.references?.some((ref) => ref.comingSoon === true);
 
@@ -301,6 +308,28 @@ export default async function EpisodeDetailPage({
             </section>
           )}
 
+          {/* Related Affiliate Products */}
+          {relatedAffiliateProducts.length > 0 && (
+            <section className="rounded-2xl border border-border bg-surface p-8">
+              <div className="mb-6">
+                <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-2">
+                  Affiliate guide
+                </p>
+                <h2 className="text-heading-lg font-bold text-foreground">
+                  Products referenced in this episode
+                </h2>
+                <p className="mt-3 text-body-sm text-foreground-muted">
+                  {AFFILIATE_DISCLOSURE}
+                </p>
+              </div>
+              <div className="space-y-4">
+                {relatedAffiliateProducts.map((product) => (
+                  <EpisodeAffiliateCard key={product.slug} product={product} />
+                ))}
+              </div>
+            </section>
+          )}
+
           {/* References */}
           {episode.references && episode.references.length > 0 && (
             <section className="rounded-2xl border border-border bg-surface p-8">
@@ -408,5 +437,77 @@ export default async function EpisodeDetailPage({
         </aside>
       </div>
     </div>
+  );
+}
+
+function EpisodeAffiliateCard({ product }: { product: AffiliateProduct }) {
+  const productUrl = product.affiliateUrl ?? product.directUrl;
+  const companyName = affiliateDisplayName(product);
+
+  return (
+    <article className="rounded-xl border border-border bg-background p-5">
+      <div className="mb-4">
+        <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-2">
+          {product.category}
+        </p>
+        <h3 className="text-heading font-semibold text-foreground">{companyName}</h3>
+        {product.brand && (
+          <p className="mt-1 text-body-sm font-semibold text-foreground-muted">
+            {product.name}
+          </p>
+        )}
+        <p className="mt-3 text-body-sm text-foreground-muted">{product.summary}</p>
+      </div>
+
+      {(product.tags?.length ?? 0) > 0 && (
+        <div className="mb-4 flex flex-wrap gap-2">
+          {product.tags!.map((tag) => (
+            <span
+              key={tag}
+              className="rounded-full bg-surface-elevated px-3 py-1 text-caption text-foreground-subtle"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <div className="flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
+        {(product.couponCode || product.discountNote) && (
+          <div className="space-y-1 text-body-sm text-foreground-muted">
+            {product.couponCode && (
+              <p>
+                Code: <span className="font-semibold text-foreground">{product.couponCode}</span>
+              </p>
+            )}
+            {product.discountNote && <p>{product.discountNote}</p>}
+          </div>
+        )}
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Link
+            href={`/affiliates#${product.slug}`}
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-surface px-4 py-2 text-body-sm font-semibold text-foreground-muted hover:border-primary hover:text-primary transition-all duration-200"
+          >
+            Guide notes
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+          {productUrl && (
+            <a
+              href={productUrl}
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2 text-body-sm font-semibold text-background hover:bg-primary-hover transition-all duration-200"
+            >
+              View product
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+          )}
+        </div>
+      </div>
+    </article>
   );
 }
