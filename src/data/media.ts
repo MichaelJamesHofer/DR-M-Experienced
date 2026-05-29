@@ -53,11 +53,11 @@ export const MEDIA_FEATURES: MediaFeature[] = [
     "https://www.youtube.com/watch?v=_2bIACfd694"
   ),
   createMediaFeature(
-    "Joints & Tendons Talk",
+    "Joints, Tendons, and Case Sequencing",
     "YouTube",
     "Functional Medicine Foundations Live",
     "Video",
-    "Explains tissue diagnostics, ultrasound insights, and regenerative sequencing for tendons, ligaments, and joint capsules.",
+    "Explains how tissue history, load, pain processing, and care-team context can be organized before deciding next steps.",
     "https://www.youtube.com/watch?v=nrXGbtoeuTE"
   ),
   createMediaFeature(
@@ -65,15 +65,15 @@ export const MEDIA_FEATURES: MediaFeature[] = [
     "YouTube",
     "Functional Medicine Foundations Podcast",
     "Podcast",
-    "Details how he layers nutrition, microcurrent, and regenerative tools so autoimmune athletes can keep training.",
+    "Details how he thinks about nutrition, immune triggers, recovery capacity, and sequencing in autoimmune cases.",
     "https://www.youtube.com/watch?v=20xhj9VAdjM"
   ),
   createMediaFeature(
-    "Episode 22: Tissues, Issues, PRP & More",
+    "Episode 22: Tissues and Issues",
     "YouTube",
     "Functional Medicine Foundations Podcast",
     "Podcast",
-    "A full PRP and regenerative medicine primer—tissue readiness, rehab phases, and when to say yes to procedures.",
+    "A conversation about tissue readiness, rehab phases, pain patterns, and the importance of context before procedures.",
     "https://www.youtube.com/watch?v=dxQAuHjZ8GU"
   ),
   createMediaFeature(
@@ -81,15 +81,15 @@ export const MEDIA_FEATURES: MediaFeature[] = [
     "YouTube",
     "Functional Medicine Foundations Podcast",
     "Podcast",
-    "Integrative OA strategy combining movement, nutrition, microcurrent, Prolotherapy, and Bone Marrow Aspirate from his Metabolic Orthopedics chapter.",
+    "Integrative OA strategy with movement, nutrition, microcurrent, case history, and clinical sequencing from his Metabolic Orthopedics work.",
     "https://www.youtube.com/watch?v=ad0ceCO9uq8"
   ),
   createMediaFeature(
-    "Episode 8: Scars and Prolotherapy",
+    "Episode 8: Scars and Mechanical History",
     "YouTube",
     "Functional Medicine Foundations Podcast",
     "Podcast",
-    "How scar tissue alters joint stability and how he sequences Prolotherapy plus neural therapies to restore mechanics.",
+    "How scar tissue and mechanical history can affect symptoms and why sequencing matters before choosing interventions.",
     "https://www.youtube.com/watch?v=tKXHwsX4kAk"
   ),
   createMediaFeature(
@@ -129,7 +129,7 @@ export const MEDIA_FEATURES: MediaFeature[] = [
     "YouTube",
     "Frequency Specific Microcurrent Podcast",
     "Podcast",
-    "Long-form conversation exploring regenerative medicine, functional neurology, and the experiments he runs personally.",
+    "Long-form conversation exploring functional neurology, complex care, and the personal experiments that inform his teaching.",
     "https://www.youtube.com/watch?v=EbU-ZPdshwM"
   ),
   createMediaFeature(

@@ -15,7 +15,7 @@ type NewsletterCaptureProps = {
 export function NewsletterCapture({
   variant = "inline",
   heading = "Get the protocols",
-  description = "Weekly insights on functional medicine, sports performance, and actionable health strategies. No spam, unsubscribe anytime.",
+  description = "Episode updates and functional medicine context. No spam, unsubscribe anytime.",
   className = "",
 }: NewsletterCaptureProps) {
   const [email, setEmail] = useState("");
@@ -227,6 +227,5 @@ export function NewsletterCapture({
     </div>
   );
 }
-
 
 

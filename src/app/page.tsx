@@ -3,6 +3,7 @@ import Image from "next/image";
 import { EPISODES, episodeDisplayTitle } from "@/data/episodes";
 import { NewsletterCapture } from "@/components/newsletter-capture";
 import { PlatformBadges } from "@/components/platform-badges";
+import { BLOG_POSTS } from "@/data/blog";
 
 // Get unique topics from episodes
 const allTopics = Array.from(
@@ -21,6 +22,7 @@ export default function Home() {
   const latestEpisode = sortedEpisodes[0];
   const featuredEpisodes = sortedEpisodes.slice(0, 3);
   const hasLatestVideo = latestEpisode?.vimeoId;
+  const featuredPosts = BLOG_POSTS.slice(0, 3);
 
   return (
     <>
@@ -43,21 +45,34 @@ export default function Home() {
 
             {/* Main Headline */}
             <h1 className="text-display-lg md:text-display-xl font-bold text-foreground max-w-4xl mb-6 animate-slide-up">
-              Dr. M&apos;s Experienced{" "}
-              <span className="text-gradient">Functional And Sports Medicine</span>
+              DrMExperienced{" "}
+              <span className="text-gradient">Podcast & Clinical Teaching</span>
             </h1>
 
             {/* Subheadline */}
             <p className="text-body-lg text-foreground-muted max-w-3xl mb-10 animate-slide-up delay-100">
-              David Musnick MD has 36 years of Sports Medicine, Regenerative Medicine and 28 years 
-              of Functional Medicine experience. He is a master clinician and teacher. In this Podcast 
-              he gets right to the point with highly practical information based on his experience 
-              and on the research. No fluff. No long and boring interviews.
+              Educational episodes and essays from David Musnick, MD, focused on functional medicine, 
+              concussion, memory, immune, autonomic, long COVID, and complex case sequencing. 
+              Consultation requests are routed through Peak Medicine.
             </p>
 
             {/* Platform Badges */}
             <div className="mb-12 animate-slide-up delay-200">
               <PlatformBadges variant="pill" />
+              <div className="mt-5 flex flex-wrap justify-center gap-3">
+                <Link
+                  href="/blog"
+                  className="rounded-full border border-border bg-surface px-5 py-2.5 text-body-sm font-semibold text-foreground-muted transition hover:border-primary hover:text-primary"
+                >
+                  Read blog
+                </Link>
+                <Link
+                  href="https://peakmedicine.com/contact"
+                  className="rounded-full bg-primary px-5 py-2.5 text-body-sm font-semibold text-background transition hover:bg-primary-hover"
+                >
+                  Peak consultations
+                </Link>
+              </div>
             </div>
 
             {/* Latest Episode Card */}
@@ -302,6 +317,34 @@ export default function Home() {
 
       {/* Newsletter Section */}
       <section className="mx-auto max-w-6xl px-4 py-16 lg:px-6">
+        <div className="mb-10">
+          <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-2">
+            Blog
+          </p>
+          <h2 className="text-heading-xl font-bold text-foreground">
+            Short essays for listeners
+          </h2>
+          <p className="mt-3 max-w-2xl text-body text-foreground-muted">
+            Concise written context for the major podcast lanes before listeners move into longer episodes or consultation questions.
+          </p>
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          {featuredPosts.map((post) => (
+            <Link
+              key={post.slug}
+              href={`/blog/${post.slug}`}
+              className="rounded-2xl border border-border bg-surface p-6 transition hover:-translate-y-1 hover:border-primary/50 hover:shadow-glow-sm"
+            >
+              <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-3">{post.category}</p>
+              <h3 className="text-heading font-semibold text-foreground mb-2">{post.title}</h3>
+              <p className="text-body-sm text-foreground-muted">{post.excerpt}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="mx-auto max-w-6xl px-4 py-16 lg:px-6">
         <div className="relative rounded-3xl border border-border bg-surface overflow-hidden">
           {/* Background glow */}
           <div className="absolute inset-0 bg-gradient-glow opacity-50" />
@@ -309,8 +352,8 @@ export default function Home() {
           <div className="relative px-6 py-16 sm:px-12 sm:py-20">
             <NewsletterCapture
               variant="hero"
-              heading="Get the protocols"
-              description="Weekly insights on functional medicine, sports performance, and actionable health strategies. No spam, unsubscribe anytime."
+              heading="Get the clinical teaching notes"
+              description="Episode updates and functional medicine context. No spam, unsubscribe anytime."
               className="mx-auto"
             />
           </div>
@@ -342,14 +385,14 @@ export default function Home() {
               </h2>
               <p className="text-body text-foreground-muted mb-6">
                 Board-certified in internal medicine, sports medicine, and integrative medicine. 
-                35+ years pioneering order-of-operations protocols for orthopedics, neurology, 
-                and functional medicine.
+                Decades of clinical experience inform his teaching on functional medicine, 
+                concussion, memory, immune patterns, autonomic dysfunction, and complex case sequencing.
               </p>
               <ul className="space-y-3 mb-8">
                 {[
                   "Faculty: IFM, Bastyr University, Andrews University, UW",
                   "Author: Integrative Neurology, Metabolic Orthopedics",
-                  "Pioneer: FSM protocols, integrative concussion rehab",
+                  "Teaching focus: functional medicine, concussion, memory, and complex case sequencing",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3 text-body-sm text-foreground-muted">
                     <svg className="h-5 w-5 shrink-0 text-primary mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -373,9 +416,8 @@ export default function Home() {
                   Educational content only
                 </p>
                 <p className="text-body-sm text-foreground-muted">
-                  Dr. M&apos;s Experienced Functional and Sports Medicine is a signal chain—Dr. Musnick&apos;s clinic notes translated into episodes 
-                  so athletes, clinicians, and curious humans can think clearly. This is not 
-                  medical advice. Work with your own clinician for diagnosis and treatment.
+                  DrMExperienced is educational content. Peak Medicine is the separate practice site for consultations, speaking, and medical-legal inquiries.
+                  This is not medical advice. Work with your own clinician for diagnosis and treatment.
                 </p>
               </div>
             </div>
