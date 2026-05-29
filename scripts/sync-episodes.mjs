@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Fetches episodes from Vimeo, Spotify, and YouTube, merges by title/date,
- * sorts by publish date (newest first), and writes episodes-from-platforms.json.
+ * sorts by publish date (oldest first), and writes episodes-from-platforms.json.
  * Run before build so the site uses the latest episodes in posting order.
  *
  * Env:
@@ -34,6 +34,11 @@ function slugFromTitle(title) {
 
 function normalizeTitle(s) {
   return (s || "").toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+function episodeNumberFromTitle(title) {
+  const match = (title || "").match(/^(?:Episode|Ep\.)\s*#?(\d+)\b/i);
+  return match ? Number(match[1]) : null;
 }
 
 // ---------- Vimeo ----------
@@ -250,16 +255,24 @@ function mergeAndSort(vimeoList, spotifyList, youtubeList) {
   for (const e of spotifyList) add(e, "spotify");
   for (const e of youtubeList) add(e, "youtube");
 
-  let list = Array.from(byKey.values());
+  const list = Array.from(byKey.values());
   list.sort((a, b) => {
     const dA = a.publishDate || "0000-00-00";
     const dB = b.publishDate || "0000-00-00";
-    return dB.localeCompare(dA);
+    if (dA !== dB) return dA.localeCompare(dB);
+
+    const nA = episodeNumberFromTitle(a.title);
+    const nB = episodeNumberFromTitle(b.title);
+    if (nA != null && nB != null && nA !== nB) return nA - nB;
+    if (nA != null && nB == null) return -1;
+    if (nA == null && nB != null) return 1;
+
+    return a.title.localeCompare(b.title);
   });
 
   return list.map((e, i) => ({
     ...e,
-    number: i + 1,
+    number: episodeNumberFromTitle(e.title) ?? i + 1,
     slug: slugFromTitle(e.title),
   }));
 }

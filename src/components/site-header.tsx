@@ -7,6 +7,7 @@ import { PlatformBadges } from "@/components/platform-badges";
 
 const navLinks = [
   { href: "/episodes", label: "Episodes" },
+  { href: "/affiliates", label: "Affiliates" },
   { href: "/media", label: "Media" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },

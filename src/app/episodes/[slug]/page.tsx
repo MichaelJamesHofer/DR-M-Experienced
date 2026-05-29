@@ -52,9 +52,18 @@ export default async function EpisodeDetailPage({
 
   const hasComingSoonReference = episode.references?.some((ref) => ref.comingSoon === true);
 
-  const currentIndex = EPISODES.findIndex((ep) => ep.slug === episode.slug);
-  const prevEpisode = currentIndex < EPISODES.length - 1 ? EPISODES[currentIndex + 1] : null;
-  const nextEpisode = currentIndex > 0 ? EPISODES[currentIndex - 1] : null;
+  const episodesChronological = [...EPISODES].sort((a, b) => {
+    const dateA = new Date(a.publishDate).getTime();
+    const dateB = new Date(b.publishDate).getTime();
+    if (dateA !== dateB) return dateA - dateB;
+    return a.number - b.number;
+  });
+  const currentIndex = episodesChronological.findIndex((ep) => ep.slug === episode.slug);
+  const prevEpisode = currentIndex > 0 ? episodesChronological[currentIndex - 1] : null;
+  const nextEpisode =
+    currentIndex >= 0 && currentIndex < episodesChronological.length - 1
+      ? episodesChronological[currentIndex + 1]
+      : null;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 lg:px-6 lg:py-16">
