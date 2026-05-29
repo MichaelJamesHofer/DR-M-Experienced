@@ -20,17 +20,17 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL("https://drmexperienced.com"),
   title: {
-    default: "DrMExperienced | David Musnick, MD",
-    template: "%s | DrMExperienced",
+    default: "Dr. M's Experienced Functional and Sports Medicine",
+    template: "%s | Dr. M's Experienced Functional and Sports Medicine",
   },
   description:
-    "Podcast episodes, clinical teaching, and practical functional medicine context from David Musnick, MD, with consultation inquiries routed to Peak Medicine.",
+    "Order-of-operations functional medicine for athletes and curious humans. Protocols, episodes, and frameworks with Dr. David Musnick.",
   openGraph: {
-    title: "DrMExperienced | David Musnick, MD",
+    title: "Dr. M's Experienced Functional and Sports Medicine",
     description:
-      "Podcast hub and educational resource for functional medicine, concussion, memory, immune, autonomic, and complex case topics.",
+      "Order-of-operations functional medicine. Protocols and frameworks that cut through the noise.",
     url: "https://drmexperienced.com",
-    siteName: "DrMExperienced",
+    siteName: "Dr. M's Experienced Functional and Sports Medicine",
     type: "website",
   },
   alternates: {

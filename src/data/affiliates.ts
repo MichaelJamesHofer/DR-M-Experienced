@@ -97,16 +97,16 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
   },
   {
     slug: "doctors-supplement-store",
-    name: "DrMExperienced Supplement Dispensary",
+    name: "Dr. M's Experienced Supplement Dispensary",
     brand: "Doctors Supplement Store",
     category: "Supplements",
     summary:
-      "A DSS supplement dispensary for the DrMExperienced audience, with a broad catalog of practitioner-focused supplement products.",
+      "A DSS supplement dispensary for the Dr. M's Experienced audience, with a broad catalog of practitioner-focused supplement products.",
     drmThoughts:
       "Dr. M flagged DSS as a way to give podcast listeners one place to research and purchase high-quality supplements connected to future show notes, webinars, and protocol discussions.",
     reasonsToLike: [
       "Broad supplement catalog rather than a single-product line.",
-      "Separate DrMExperienced dispensary URL keeps podcast-related supplement activity organized.",
+      "Separate Dr. M's Experienced dispensary URL keeps podcast-related supplement activity organized.",
       "Useful as a central destination when future episodes or webinars mention supplement categories.",
     ],
     usedFor: [

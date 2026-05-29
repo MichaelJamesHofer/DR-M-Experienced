@@ -49,15 +49,15 @@ export const MEDIA_FEATURES: MediaFeature[] = [
     "YouTube",
     "Functional Medicine Foundations Live",
     "Video",
-    "Covers the cognitive checklists he uses with patients and professionals who want sharper recall, focus, and long-term protection.",
+    "Covers the cognitive checklists he uses with athletes and executives who want sharper recall, focus, and long-term protection.",
     "https://www.youtube.com/watch?v=_2bIACfd694"
   ),
   createMediaFeature(
-    "Joints, Tendons, and Case Sequencing",
+    "Joints & Tendons Talk",
     "YouTube",
     "Functional Medicine Foundations Live",
     "Video",
-    "Explains how tissue history, load, pain processing, and care-team context can be organized before deciding next steps.",
+    "Explains tissue diagnostics, ultrasound insights, and regenerative sequencing for tendons, ligaments, and joint capsules.",
     "https://www.youtube.com/watch?v=nrXGbtoeuTE"
   ),
   createMediaFeature(
@@ -65,15 +65,15 @@ export const MEDIA_FEATURES: MediaFeature[] = [
     "YouTube",
     "Functional Medicine Foundations Podcast",
     "Podcast",
-    "Details how he thinks about nutrition, immune triggers, recovery capacity, and sequencing in autoimmune cases.",
+    "Details how he layers nutrition, microcurrent, and regenerative tools so autoimmune athletes can keep training.",
     "https://www.youtube.com/watch?v=20xhj9VAdjM"
   ),
   createMediaFeature(
-    "Episode 22: Tissues and Issues",
+    "Episode 22: Tissues, Issues, PRP & More",
     "YouTube",
     "Functional Medicine Foundations Podcast",
     "Podcast",
-    "A conversation about tissue readiness, rehab phases, pain patterns, and the importance of context before procedures.",
+    "A full PRP and regenerative medicine primer—tissue readiness, rehab phases, and when to say yes to procedures.",
     "https://www.youtube.com/watch?v=dxQAuHjZ8GU"
   ),
   createMediaFeature(
@@ -81,15 +81,15 @@ export const MEDIA_FEATURES: MediaFeature[] = [
     "YouTube",
     "Functional Medicine Foundations Podcast",
     "Podcast",
-    "Integrative OA strategy with movement, nutrition, microcurrent, case history, and clinical sequencing from his Metabolic Orthopedics work.",
+    "Integrative OA strategy combining movement, nutrition, microcurrent, Prolotherapy, and Bone Marrow Aspirate from his Metabolic Orthopedics chapter.",
     "https://www.youtube.com/watch?v=ad0ceCO9uq8"
   ),
   createMediaFeature(
-    "Episode 8: Scars and Mechanical History",
+    "Episode 8: Scars and Prolotherapy",
     "YouTube",
     "Functional Medicine Foundations Podcast",
     "Podcast",
-    "How scar tissue and mechanical history can affect symptoms and why sequencing matters before choosing interventions.",
+    "How scar tissue alters joint stability and how he sequences Prolotherapy plus neural therapies to restore mechanics.",
     "https://www.youtube.com/watch?v=tKXHwsX4kAk"
   ),
   createMediaFeature(
@@ -121,7 +121,7 @@ export const MEDIA_FEATURES: MediaFeature[] = [
     "YouTube",
     "Dr. Kara Fitzgerald Podcast",
     "Video",
-    "Explains how his concussion framework scales from acute injury to long-running brain-injury recovery and why sequence matters.",
+    "Explains how his concussion framework scales from athletes to everyday brain-injury survivors and why sequence matters.",
     "https://www.youtube.com/watch?v=1aXndnysq3o"
   ),
   createMediaFeature(
@@ -129,7 +129,7 @@ export const MEDIA_FEATURES: MediaFeature[] = [
     "YouTube",
     "Frequency Specific Microcurrent Podcast",
     "Podcast",
-    "Long-form conversation exploring functional neurology, complex care, and the personal experiments that inform his teaching.",
+    "Long-form conversation exploring regenerative medicine, functional neurology, and the experiments he runs personally.",
     "https://www.youtube.com/watch?v=EbU-ZPdshwM"
   ),
   createMediaFeature(
@@ -137,7 +137,7 @@ export const MEDIA_FEATURES: MediaFeature[] = [
     "YouTube",
     "Frequency Specific Microcurrent Series",
     "Series",
-    "Curated playlist covering FSM fundamentals, including Dr. Musnick's explanations of how he integrates the tech into tissue, pain, and neurologic care.",
+    "Curated playlist covering FSM fundamentals, including Dr. Musnick's explanations of how he integrates the tech into orthopedic and neuro care.",
     "https://www.youtube.com/watch?v=Znqj_vldUz0&list=PLYvFL_gzSBvtu7LWnXx2TS0wGIUEYJbmE"
   ),
 ];

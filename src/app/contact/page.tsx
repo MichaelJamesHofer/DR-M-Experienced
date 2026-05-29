@@ -1,23 +1,25 @@
-import Link from "next/link";
 import { ContactForm } from "@/components/contact-form";
 
 export const metadata = {
   title: "Contact",
-  description: "Contact DrMExperienced for podcast feedback, media, speaking, and teaching inquiries; use Peak Medicine for consultation requests.",
+  description: "Get in touch with the Dr. M's Experienced Functional and Sports Medicine team for podcast feedback, business inquiries, or speaking engagements.",
 };
 
 const contactReasons = [
   {
+    icon: "🎙️",
     title: "Podcast feedback",
-    description: "Episode ideas, guest suggestions, references, or general feedback for DrMExperienced.",
+    description: "Episode ideas, guest suggestions, or general feedback. We read every message.",
   },
   {
-    title: "Speaking or interview",
-    description: "Lectures, webinars, clinician teaching, podcast interviews, and media requests. Include audience, topic, format, and timeline.",
+    icon: "💼",
+    title: "Business & speaking",
+    description: "Consulting, course licensing, or speaking engagements. Include dates and scope.",
   },
   {
-    title: "Consultation request",
-    description: "Patient-facing consultations and medical-legal inquiries should start through Peak Medicine, the separate practice site.",
+    icon: "📝",
+    title: "Press & media",
+    description: "Interview requests, media features, or collaboration opportunities.",
   },
 ];
 
@@ -27,13 +29,14 @@ export default function ContactPage() {
       {/* Header */}
       <div className="mb-12">
         <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-2">
-          Contact
+          Get in touch
         </p>
         <h1 className="text-display font-bold text-foreground mb-4">
-          Route podcast and consultation questions correctly
+          Contact us
         </h1>
         <p className="text-body-lg text-foreground-muted max-w-2xl">
-          Use this page for podcast feedback, guest ideas, media requests, and speaking or teaching inquiries. Patient-specific consultation requests should start through Peak Medicine.
+          We can&apos;t provide personal medical advice through this form, but we
+          love hearing from listeners, partners, and event organizers.
         </p>
       </div>
 
@@ -45,6 +48,7 @@ export default function ContactPage() {
               key={reason.title}
               className="rounded-2xl border border-border bg-surface p-6"
             >
+              <span className="text-2xl mb-3 block">{reason.icon}</span>
               <h3 className="text-body font-semibold text-foreground mb-2">
                 {reason.title}
               </h3>
@@ -61,13 +65,6 @@ export default function ContactPage() {
             <ContactForm />
           </div>
         </div>
-      </div>
-      <div className="mt-8 rounded-2xl border border-border bg-surface p-6 text-body text-foreground-muted">
-        Looking for a consultation?{" "}
-        <Link href="https://peakmedicine.com/contact" className="font-semibold text-primary hover:underline">
-          Contact Peak Medicine
-        </Link>
-        .
       </div>
     </div>
   );

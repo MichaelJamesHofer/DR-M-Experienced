@@ -68,7 +68,7 @@ export function ContactForm() {
         if (error) throw error;
 
         setStatus('success');
-        setMessage('Thanks. We received your note. Consultation-specific requests should also be started through Peak Medicine.');
+        setMessage('Thanks! We received your note.');
         form.reset();
         return;
       }
@@ -94,7 +94,7 @@ export function ContactForm() {
         }
 
         setStatus('success');
-        setMessage('Thanks. We received your note. Consultation-specific requests should also be started through Peak Medicine.');
+        setMessage('Thanks! We received your note.');
         form.reset();
         return;
       }
@@ -114,7 +114,7 @@ export function ContactForm() {
       if (!response.ok) throw new Error('Unable to send message');
 
       setStatus('success');
-      setMessage('Thanks. We received your note. Consultation-specific requests should also be started through Peak Medicine.');
+      setMessage('Thanks! We received your note.');
       form.reset();
     } catch (error) {
       setStatus('error');
@@ -164,10 +164,9 @@ export function ContactForm() {
           defaultValue="podcast"
           className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200"
         >
-          <option value="podcast">Podcast feedback or topic request</option>
-          <option value="business">Speaking, teaching, or interview</option>
+          <option value="podcast">Podcast feedback</option>
+          <option value="business">Business / speaking</option>
           <option value="press">Press / media</option>
-          <option value="consultation">Consultation question for Peak Medicine</option>
           <option value="other">Other</option>
         </select>
       </div>
@@ -181,7 +180,7 @@ export function ContactForm() {
           rows={5}
           required
           className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 resize-none"
-          placeholder="Briefly describe the request. Do not include private medical records, urgent symptoms, or personal medical details."
+          placeholder="What can we help with?"
         />
       </div>
 
@@ -192,7 +191,7 @@ export function ContactForm() {
           className="mt-1 h-5 w-5 rounded border-border text-primary focus:ring-primary/30"
         />
         <span className="text-body-sm text-foreground-muted">
-          I understand this form is not for medical advice, diagnosis, emergencies, or private medical details. Consultation requests should go through Peak Medicine.
+          I understand this form is not for medical advice, diagnosis, or emergencies.
         </span>
       </label>
 

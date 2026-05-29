@@ -4,11 +4,9 @@ import { NewsletterCapture } from "@/components/newsletter-capture";
 
 const footerLinks = [
   { href: "/episodes", label: "Episodes" },
-  { href: "/blog", label: "Blog" },
   { href: "/affiliates", label: "Affiliates" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
-  { href: "https://peakmedicine.com/contact", label: "Peak Medicine consultations" },
   { href: "/legal/disclaimer", label: "Disclaimer" },
 ];
 
@@ -25,15 +23,15 @@ export function SiteFooter() {
               </span>
               <div>
                 <p className="text-caption font-semibold uppercase tracking-[0.2em] text-foreground-muted">
-                  DrMExperienced
+                  Dr. M&apos;s Experienced
                 </p>
                 <p className="text-body-sm font-semibold text-foreground">
-                  Podcast & clinical teaching
+                  Functional and Sports Medicine
                 </p>
               </div>
             </div>
             <p className="text-body-sm text-foreground-muted mb-6 max-w-xs">
-              Educational episodes and essays from David Musnick, MD. Consultations are handled through Peak Medicine.
+              Order-of-operations medicine for athletes and curious humans. Evidence-aware protocols that cut through noise.
             </p>
             <PlatformBadges variant="compact" className="mb-6" />
             <a
@@ -78,7 +76,7 @@ export function SiteFooter() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-caption text-foreground-subtle">
-            © {new Date().getFullYear()} DrMExperienced. Educational content only.
+            © {new Date().getFullYear()} Dr. M&apos;s Experienced Functional and Sports Medicine. Educational content only.
           </p>
           <p className="text-caption text-foreground-subtle">
             Not medical advice. See{" "}

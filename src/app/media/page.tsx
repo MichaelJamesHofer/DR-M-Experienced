@@ -4,7 +4,7 @@ import { MEDIA_FEATURES } from "@/data/media";
 
 export const metadata = {
   title: "Media & Features",
-  description: "Watch and listen to Dr. David Musnick's talks, interviews, and podcast appearances on functional medicine, concussion, memory, and complex case teaching.",
+  description: "Watch and listen to Dr. David Musnick's talks, interviews, and podcast appearances on functional medicine, sports medicine, and integrative health.",
 };
 
 // Group media by type
@@ -25,7 +25,7 @@ export default function MediaPage() {
         </h1>
         <p className="text-body-lg text-foreground-muted max-w-2xl">
           Explore Dr. Musnick&apos;s appearances across podcasts, video talks, and educational series 
-          covering functional medicine, concussion, memory, autonomic health, and complex case sequencing.
+          covering functional medicine, sports medicine, and integrative health.
         </p>
       </div>
 

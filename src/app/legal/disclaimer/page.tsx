@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Disclaimer",
-  description: "Legal disclaimer and boundaries for DrMExperienced educational content.",
+  description: "Legal disclaimer and boundaries for Dr. M's Experienced Functional and Sports Medicine educational content.",
 };
 
 const sections = [
@@ -8,8 +8,8 @@ const sections = [
     icon: "⚕️",
     title: "Medical disclaimer",
     items: [
-      "DrMExperienced publishes educational content only.",
-      "Listening, reading, or submitting a form does not create a doctor-patient relationship.",
+      "Dr. M's Experienced Functional and Sports Medicine publishes educational content only.",
+      "Listening, reading, or submitting a form does not create a doctor–patient relationship.",
       "Always consult your own licensed clinician before acting on concepts from our episodes or resources.",
     ],
   },
@@ -52,7 +52,7 @@ export default function DisclaimerPage() {
           Disclaimer & boundaries
         </h1>
         <p className="text-body-lg text-foreground-muted">
-          DrMExperienced is about clarity and trust. Please read the notes below to understand 
+          Dr. M&apos;s Experienced Functional and Sports Medicine is about clarity and trust. Please read the notes below to understand
           how we operate online.
         </p>
       </div>

@@ -7,7 +7,6 @@ import { PlatformBadges } from "@/components/platform-badges";
 
 const navLinks = [
   { href: "/episodes", label: "Episodes" },
-  { href: "/blog", label: "Blog" },
   { href: "/affiliates", label: "Affiliates" },
   { href: "/media", label: "Media" },
   { href: "/about", label: "About" },
@@ -27,10 +26,10 @@ export function SiteHeader() {
           </span>
           <div className="hidden sm:block">
             <p className="text-caption font-semibold uppercase tracking-[0.2em] text-foreground-muted">
-              DrMExperienced
+              Dr. M&apos;s Experienced
             </p>
             <p className="text-body-sm font-semibold text-foreground leading-tight">
-              Podcast & clinical teaching
+              Functional and Sports Medicine
             </p>
           </div>
         </Link>
@@ -50,12 +49,6 @@ export function SiteHeader() {
 
         {/* Desktop Actions */}
         <div className="hidden items-center gap-4 lg:flex">
-          <Link
-            href="https://peakmedicine.com/contact"
-            className="rounded-full bg-primary px-4 py-2 text-caption font-bold uppercase tracking-[0.16em] text-background transition hover:bg-primary-hover"
-          >
-            Consults
-          </Link>
           <PlatformBadges variant="compact" />
           <div className="h-5 w-px bg-border" />
           <ThemeToggle />
@@ -96,12 +89,6 @@ export function SiteHeader() {
             ))}
           </nav>
           <div className="flex items-center justify-between pt-4 border-t border-border">
-            <Link
-              href="https://peakmedicine.com/contact"
-              className="rounded-full bg-primary px-4 py-2 text-caption font-bold uppercase tracking-[0.16em] text-background"
-            >
-              Peak consults
-            </Link>
             <PlatformBadges variant="compact" />
             <ThemeToggle />
           </div>
