@@ -4,13 +4,13 @@ import { MEDIA_FEATURES } from "@/data/media";
 
 export const metadata = {
   title: "About Dr. David Musnick",
-  description: "Meet Dr. David Musnick, MD – board-certified internist, sports medicine physician, and integrative medicine specialist with 35+ years of experience.",
+  description: "Meet Dr. David Musnick, MD - board-certified in Internal Medicine and Sports Medicine, with deep Functional Medicine experience across 37+ years in patient care.",
 };
 
 const credentials = [
   { label: "Internal Medicine", org: "ABIM Board Certified" },
   { label: "Sports Medicine", org: "CAQ Certified" },
-  { label: "Integrative Medicine", org: "ABOIM Board Certified" },
+  { label: "Functional Medicine", org: "Certified Functional Medicine Practitioner" },
 ];
 
 const specialtyHighlights = [
@@ -19,7 +19,7 @@ const specialtyHighlights = [
   "Prolotherapy, scar treatments, and ultrasound-guided regenerative injections",
   "Genomics interpretation and personalized nutrition/supplement mapping",
   "Medical-legal orthopedic consultations and independent medical exams",
-  "Complex conditions: concussion/TBI, fatigue, cognitive impairment, IBS, SIBO, autoimmune illness, mold/biotoxin illness, EDS, hormone imbalances, chronic pain",
+  "Complex conditions: concussion/TBI, brain-based symptoms, fatigue, cognitive impairment, IBS, SIBO, autoimmune illness, arthritis, mold/biotoxin illness, EDS, hormone imbalances, chronic pain",
 ];
 
 const treatmentList = [
@@ -48,7 +48,7 @@ const sportsFocus = [
   {
     title: "Osteoarthritis (OA)",
     description:
-      "Unique integrative plans for knees, hips, neck, thumbs, low back, and ankles: exercise and posture updates, shoe-wear shifts, nutrition and homeopathy, microcurrent, Prolotherapy, non-surgical regenerative options, and Bone Marrow Aspirate. He authored the OA chapter in Metabolic Orthopedics.",
+      "Whole-person plans for knees, hips, neck, thumbs, low back, and ankles: exercise and posture updates, shoe-wear shifts, nutrition and homeopathy, microcurrent, Prolotherapy, non-surgical regenerative options, and Bone Marrow Aspirate. He authored the OA chapter in Metabolic Orthopedics.",
   },
   {
     title: "Ligament sprains & joint instability",
@@ -86,10 +86,10 @@ const functionalExpertise = [
   {
     title: "Brain & autonomic system",
     items: [
-      { label: "Concussion", detail: "Dr. Musnick created the world's first integrative concussion protocol based on brain pathophysiology—comprehensive assessments, therapeutic nutrition, supplements, exercise, EMF reduction, brain training, and FSM. He contributed a chapter to Integrative Neurology." },
+      { label: "Concussion", detail: "Dr. Musnick created a comprehensive concussion protocol based on brain pathophysiology: assessments, therapeutic nutrition, supplements, exercise, EMF reduction, brain training, and FSM. He contributed a chapter to Integrative Neurology." },
       { label: "Memory disorders", detail: "Full assessment and treatment programs for cognitive impairment, early dementia, and brain fog." },
       { label: "Other neurologic cases", detail: "ADD, Parkinson's disease, MS, peripheral and cranial neuropathy, limbic system dysfunction." },
-      { label: "POTS and dysautonomia", detail: "Integrative strategies for postural orthostatic tachycardia and EDS-related challenges." },
+      { label: "POTS and dysautonomia", detail: "Whole-person strategies for postural orthostatic tachycardia and EDS-related challenges." },
     ],
   },
   {
@@ -107,7 +107,7 @@ const functionalExpertise = [
       { label: "GI disorders", detail: "Complex SIBO and IBS cases with motility issues." },
       { label: "Fatty liver", detail: "Alcoholic and non-alcoholic: precise diagnostics, diet upgrades, phosphatidylcholine, leaky-gut repair, and FSM to decrease inflammation, swelling, and fibrosis." },
       { label: "Post-COVID & Long COVID", detail: "Addresses loss of taste and smell plus multi-organ sequelae with supplements, homeopathy, and microcurrent." },
-      { label: "Cardiovascular & lipids", detail: "Integrative options for patients avoiding statins." },
+      { label: "Cardiovascular & lipids", detail: "Functional medicine options for patients avoiding statins." },
       { label: "Energy & fatigue", detail: "Evaluates hormones, mitochondrial ATP/energy production, and lifestyle factors." },
       { label: "Oxalates", detail: "Low-oxalate nutrition coaching." },
       { label: "MCAS", detail: "Mast Cell Activation support backed by years of diagnostic and treatment experience." },
@@ -172,15 +172,19 @@ export default function AboutPage() {
               Dr. David Musnick, MD
             </h1>
             <p className="text-body-lg text-foreground-muted mb-6">
-              Board-certified internist (ABIM), sports medicine physician (CAQ), and integrative
-              medicine specialist (ABOIM) with 35+ years of orthopedic, neurologic, and functional
-              medicine innovation across the Pacific Northwest.
+              Board-certified in Internal Medicine (ABIM) and Sports Medicine (CAQ), with deep
+              Functional Medicine training and 37+ years in patient care across concussion,
+              brain-based symptoms and conditions, autoimmune conditions, fatigue, arthritis,
+              gastrointestinal symptoms and conditions, orthopedics, and sports medicine.
             </p>
             <div className="space-y-4 text-body text-foreground-muted mb-8">
               <p>
-                David Musnick, MD, has dedicated 35+ years to Sports Medicine and Internal Medicine
-                and 28 years to Functional Medicine. His career includes thousands of complex orthopedic
-                and neurologic cases, long-standing work at his Bellevue practice, and formal
+                David Musnick, MD, has dedicated 37+ years to patient care, with deep clinical work
+                in concussion, brain-based symptoms and conditions, autoimmune conditions, fatigue,
+                arthritis, and gastrointestinal symptoms and conditions, alongside his broader work
+                in Sports Medicine, Internal Medicine, Regenerative Medicine, and 28 years of
+                Functional Medicine. His career includes thousands of complex orthopedic and
+                neurologic cases, long-standing work at his Bellevue practice, and formal
                 collaborations with multidisciplinary teams in Seattle, Bellevue, and Idaho.
               </p>
               <p>
@@ -227,11 +231,11 @@ export default function AboutPage() {
                 </div>
                 <div className="flex justify-between">
                   <dt className="text-foreground-muted">Experience</dt>
-                  <dd className="text-foreground font-medium">35+ years</dd>
+                  <dd className="text-foreground font-medium">37+ years</dd>
                 </div>
                 <div className="flex justify-between">
                   <dt className="text-foreground-muted">Focus</dt>
-                  <dd className="text-foreground font-medium text-right">Integrative sports &<br />functional medicine</dd>
+                  <dd className="text-foreground font-medium text-right">Functional Medicine &<br />Sports Medicine</dd>
                 </div>
               </dl>
             </div>
