@@ -21,6 +21,19 @@ export function NewsletterCapture({
   const [email, setEmail] = useState("");
   const [website, setWebsite] = useState("");
   const [status, setStatus] = useState<Status>("idle");
+  const isLoading = status === "loading";
+  const isSubmitted = status === "success";
+  const isDisabled = isLoading || isSubmitted;
+  const feedbackMessage =
+    status === "success"
+      ? "Submitted. You are on the list."
+      : status === "error"
+        ? "Could not subscribe. Please try again."
+        : "";
+  const feedbackClassName =
+    status === "error"
+      ? "border-error/30 bg-error/10 text-error"
+      : "border-success/30 bg-success/10 text-success";
 
   // Email validation function
   function isValidEmail(email: string): boolean {
@@ -41,6 +54,7 @@ export function NewsletterCapture({
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (isDisabled) return;
 
     // Client-side validation
     const trimmedEmail = email.trim();
@@ -121,20 +135,24 @@ export function NewsletterCapture({
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
             required
-            disabled={status === "loading" || status === "success"}
+            disabled={isDisabled}
             className="flex-1 rounded-xl border border-border bg-surface px-5 py-4 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200"
           />
           <button
             type="submit"
-            disabled={status === "loading" || status === "success"}
+            disabled={isDisabled}
             className="rounded-xl bg-primary px-8 py-4 text-body font-semibold text-background hover:bg-primary-hover disabled:opacity-60 transition-all duration-200 shadow-glow-sm hover:shadow-glow"
           >
-            {status === "loading" ? "Subscribing..." : status === "success" ? "Subscribed ✓" : "Subscribe"}
+            {isLoading ? "Subscribing..." : isSubmitted ? "Submitted" : "Subscribe"}
           </button>
         </form>
-        {status === "error" && (
-          <p className="mt-3 text-sm text-error text-center">
-            Something went wrong. Please try again.
+        {feedbackMessage && (
+          <p
+            role="status"
+            aria-live="polite"
+            className={`mt-3 rounded-xl border px-4 py-3 text-center text-sm ${feedbackClassName}`}
+          >
+            {feedbackMessage}
           </p>
         )}
       </div>
@@ -167,19 +185,25 @@ export function NewsletterCapture({
             onChange={(e) => setEmail(e.target.value)}
             placeholder="your@email.com"
             required
-            disabled={status === "loading" || status === "success"}
+            disabled={isDisabled}
             className="flex-1 rounded-lg border border-border bg-surface px-4 py-2.5 text-body-sm text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none disabled:opacity-60 transition-all duration-200"
           />
           <button
             type="submit"
-            disabled={status === "loading" || status === "success"}
-            className="rounded-lg bg-primary px-5 py-2.5 text-body-sm font-semibold text-background hover:bg-primary-hover disabled:opacity-60 transition-all duration-200"
+            disabled={isDisabled}
+            className="min-w-[4rem] rounded-lg bg-primary px-5 py-2.5 text-body-sm font-semibold text-background hover:bg-primary-hover disabled:opacity-60 transition-all duration-200"
           >
-            {status === "success" ? "✓" : "→"}
+            {isLoading ? "..." : isSubmitted ? "Done" : "Go"}
           </button>
         </form>
-        {status === "error" && (
-          <p className="mt-2 text-caption text-error">Try again</p>
+        {feedbackMessage && (
+          <p
+            role="status"
+            aria-live="polite"
+            className={`mt-2 rounded-lg border px-3 py-2 text-caption ${feedbackClassName}`}
+          >
+            {feedbackMessage}
+          </p>
         )}
       </div>
     );
@@ -211,20 +235,24 @@ export function NewsletterCapture({
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email"
           required
-          disabled={status === "loading" || status === "success"}
+          disabled={isDisabled}
           className="w-full rounded-lg border border-border bg-surface-elevated px-4 py-3 text-body-sm text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200"
         />
         <button
           type="submit"
-          disabled={status === "loading" || status === "success"}
+          disabled={isDisabled}
           className="w-full rounded-lg bg-primary px-6 py-3 text-body-sm font-semibold text-background hover:bg-primary-hover disabled:opacity-60 transition-all duration-200"
         >
-          {status === "loading" ? "Subscribing..." : status === "success" ? "Subscribed ✓" : "Subscribe"}
+          {isLoading ? "Subscribing..." : isSubmitted ? "Submitted" : "Subscribe"}
         </button>
       </form>
-      {status === "error" && (
-        <p className="mt-2 text-caption text-error">
-          Something went wrong. Please try again.
+      {feedbackMessage && (
+        <p
+          role="status"
+          aria-live="polite"
+          className={`mt-3 rounded-lg border px-3 py-2 text-caption ${feedbackClassName}`}
+        >
+          {feedbackMessage}
         </p>
       )}
     </div>

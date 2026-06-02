@@ -10,6 +10,9 @@ const SUBJECTS = new Set(["podcast", "business", "press", "other"]);
 export function ContactForm() {
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState('');
+  const isLoading = status === 'loading';
+  const isSubmitted = status === 'success';
+  const isDisabled = isLoading || isSubmitted;
 
   // Input validation and sanitization
   function sanitizeInput(input: string, maxLength: number): string {
@@ -34,6 +37,8 @@ export function ContactForm() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (isDisabled) return;
+
     const form = event.currentTarget;
     const formData = new FormData(form);
 
@@ -47,18 +52,18 @@ export function ContactForm() {
     const name = sanitizeInput((formData.get('name') as string) || '', 200);
     const email = sanitizeInput((formData.get('email') as string) || '', 255);
     const subject = sanitizeInput((formData.get('subject') as string) || '', 200);
-    const message = sanitizeInput((formData.get('message') as string) || '', 5000);
+    const body = sanitizeInput((formData.get('message') as string) || '', 5000);
     const website = sanitizeInput((formData.get('website') as string) || '', 200);
 
     if (website) {
       setStatus('success');
-      setMessage('Thanks! We received your note.');
+      setMessage('Submitted. Thanks - your message was captured.');
       form.reset();
       return;
     }
 
     // Client-side validation
-    if (!name || !email || !subject || !message || !SUBJECTS.has(subject)) {
+    if (!name || !email || !subject || !body || !SUBJECTS.has(subject)) {
       setStatus('error');
       setMessage('All fields are required.');
       return;
@@ -82,14 +87,14 @@ export function ContactForm() {
         name,
         email: email.toLowerCase(),
         subject,
-        message,
+        message: body,
         ...getSubmissionMetadata(),
       });
 
       if (error) throw error;
 
       setStatus('success');
-      setMessage('Thanks! We received your note.');
+      setMessage('Submitted. Thanks - your message was captured.');
       form.reset();
     } catch (error) {
       setStatus('error');
@@ -116,7 +121,8 @@ export function ContactForm() {
             name="name"
             type="text"
             required
-            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200"
+            disabled={isDisabled}
+            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200"
             placeholder="Your name"
           />
         </div>
@@ -128,7 +134,8 @@ export function ContactForm() {
             name="email"
             type="email"
             required
-            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200"
+            disabled={isDisabled}
+            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200"
             placeholder="you@email.com"
           />
         </div>
@@ -141,7 +148,8 @@ export function ContactForm() {
         <select
           name="subject"
           defaultValue="podcast"
-          className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200"
+          disabled={isDisabled}
+          className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200"
         >
           <option value="podcast">Podcast feedback</option>
           <option value="business">Business / speaking</option>
@@ -158,7 +166,8 @@ export function ContactForm() {
           name="message"
           rows={5}
           required
-          className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 resize-none"
+          disabled={isDisabled}
+          className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200 resize-none"
           placeholder="What can we help with?"
         />
       </div>
@@ -167,23 +176,32 @@ export function ContactForm() {
         <input
           type="checkbox"
           name="consent"
-          className="mt-1 h-5 w-5 rounded border-border text-primary focus:ring-primary/30"
+          disabled={isDisabled}
+          className="mt-1 h-5 w-5 rounded border-border text-primary focus:ring-primary/30 disabled:opacity-60"
         />
         <span className="text-body-sm text-foreground-muted">
           I understand this form is not for medical advice, diagnosis, or emergencies.
         </span>
       </label>
 
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <button
           type="submit"
-          disabled={status === 'loading'}
+          disabled={isDisabled}
           className="rounded-xl bg-primary px-8 py-3 text-body font-semibold text-background hover:bg-primary-hover disabled:opacity-60 transition-all duration-200 shadow-glow-sm hover:shadow-glow"
         >
-          {status === 'loading' ? 'Sending...' : 'Send message'}
+          {isLoading ? 'Sending...' : isSubmitted ? 'Message submitted' : 'Send message'}
         </button>
         {message && (
-          <p className={`text-body-sm ${status === 'error' ? 'text-error' : 'text-success'}`}>
+          <p
+            role="status"
+            aria-live="polite"
+            className={`rounded-xl border px-4 py-3 text-body-sm ${
+              status === 'error'
+                ? 'border-error/30 bg-error/10 text-error'
+                : 'border-success/30 bg-success/10 text-success'
+            }`}
+          >
             {message}
           </p>
         )}
