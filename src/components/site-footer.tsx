@@ -32,7 +32,8 @@ export function SiteFooter() {
               </div>
             </div>
             <p className="text-body-sm text-foreground-muted mb-6 max-w-xs">
-              Order-of-operations medicine for athletes and curious humans. Evidence-aware protocols that cut through noise.
+              Short podcasts packed with practical information. Reels with practical health information for everyday life,
+              based on many years of clinical practice and research.
             </p>
             <PlatformBadges variant="compact" className="mb-6" />
             <a
