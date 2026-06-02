@@ -5,6 +5,8 @@ import { supabase } from "@/lib/supabase";
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
+const SUBJECTS = new Set(["podcast", "business", "press", "other"]);
+
 export function ContactForm() {
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState('');
@@ -17,6 +19,17 @@ export function ContactForm() {
   function isValidEmail(email: string): boolean {
     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
     return emailRegex.test(email) && email.length <= 255;
+  }
+
+  function getSubmissionMetadata() {
+    if (typeof window === "undefined") {
+      return { page_url: null, user_agent: null };
+    }
+
+    return {
+      page_url: window.location.href.slice(0, 1000),
+      user_agent: window.navigator.userAgent.slice(0, 500),
+    };
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -35,9 +48,17 @@ export function ContactForm() {
     const email = sanitizeInput((formData.get('email') as string) || '', 255);
     const subject = sanitizeInput((formData.get('subject') as string) || '', 200);
     const message = sanitizeInput((formData.get('message') as string) || '', 5000);
+    const website = sanitizeInput((formData.get('website') as string) || '', 200);
+
+    if (website) {
+      setStatus('success');
+      setMessage('Thanks! We received your note.');
+      form.reset();
+      return;
+    }
 
     // Client-side validation
-    if (!name || !email || !subject || !message) {
+    if (!name || !email || !subject || !message || !SUBJECTS.has(subject)) {
       setStatus('error');
       setMessage('All fields are required.');
       return;
@@ -53,81 +74,39 @@ export function ContactForm() {
     setMessage('');
 
     try {
-      // Try Supabase first (preferred)
-      if (supabase) {
-        const { error } = await supabase
-          .from('contact_messages')
-          .insert({
-            name: name,
-            email: email.toLowerCase(),
-            subject: subject,
-            message: message,
-            // Don't set created_at - let database handle it
-          });
-
-        if (error) throw error;
-
-        setStatus('success');
-        setMessage('Thanks! We received your note.');
-        form.reset();
-        return;
+      if (!supabase) {
+        throw new Error('Supabase is not configured');
       }
 
-      // Fallback: Try Formspree
-      const formspreeId = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID;
-      
-      if (formspreeId) {
-        const response = await fetch(`https://formspree.io/f/${formspreeId}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: name,
-            email: email,
-            subject: subject,
-            message: message,
-          }),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.error || 'Unable to send message');
-        }
-
-        setStatus('success');
-        setMessage('Thanks! We received your note.');
-        form.reset();
-        return;
-      }
-
-      // Last resort: try API route (won't work in static export)
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: name,
-          email: email,
-          subject: subject,
-          message: message,
-        }),
+      const { error } = await supabase.from('contact_messages').insert({
+        name,
+        email: email.toLowerCase(),
+        subject,
+        message,
+        ...getSubmissionMetadata(),
       });
 
-      if (!response.ok) throw new Error('Unable to send message');
+      if (error) throw error;
 
       setStatus('success');
       setMessage('Thanks! We received your note.');
       form.reset();
     } catch (error) {
       setStatus('error');
-      setMessage(
-        error instanceof Error && error.message.includes('Supabase')
-          ? 'Please configure Supabase credentials in environment variables.'
-          : 'We could not send your message. Please try again later.'
-      );
+      setMessage('We could not send your message. Please try again later.');
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        className="hidden"
+        aria-hidden="true"
+      />
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
           <label className="text-body-sm font-medium text-foreground mb-2 block">

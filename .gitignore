@@ -16,6 +16,28 @@
 # next.js
 /.next/
 /out/
+/_next/
+
+# generated static export files should be deployed from /out by GitHub Actions
+/404/
+/about/
+/affiliates/
+/contact/
+/episodes/
+/legal/
+/media/
+/images/
+/404.html
+/business-card-david-musnick.html
+/favicon.ico
+/file.svg
+/globe.svg
+/icon.svg
+/index.html
+/index.txt
+/next.svg
+/vercel.svg
+/window.svg
 
 # production
 /build
@@ -31,9 +53,13 @@ yarn-error.log*
 
 # env files (can opt-in for commiting if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
+
+# supabase local/link cache
+supabase/.temp/
 
 # typescript
 *.tsbuildinfo

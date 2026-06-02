@@ -33,8 +33,17 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 Each build runs `sync-episodes.mjs`: it pulls **public** episode data from Vimeo, Spotify, and YouTube (app tokens / API keys only, no user login), merges by title/date, sorts by publish date, and writes `episodes-from-platforms.json`. New episodes on any platform show up on the next deploy. One template per episode, same layout and link order (Vimeo → Spotify → YouTube → Rumble). Optional notes/links: `src/data/episodes-enrichment.json` keyed by Vimeo (or Spotify/YouTube) ID.
 
-## Deploy on Vercel
+## Contact and Subscribe Forms
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The contact and newsletter forms write directly to Supabase from the static site. Apply the migration in `supabase/migrations`, then configure these GitHub Actions secrets:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`
+
+The anon key is public by design. The SQL enables Row Level Security and only grants anonymous insert access, not read/update/delete access.
+
+## Deploy
+
+The site is statically exported and deployed by `.github/workflows/deploy.yml` to GitHub Pages. The workflow builds `out/` and publishes that artifact, so generated root HTML and `_next/` files are intentionally not committed.
+
+Production custom domain: `drmexperienced.com`.

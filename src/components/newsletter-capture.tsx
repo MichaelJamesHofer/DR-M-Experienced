@@ -19,12 +19,24 @@ export function NewsletterCapture({
   className = "",
 }: NewsletterCaptureProps) {
   const [email, setEmail] = useState("");
+  const [website, setWebsite] = useState("");
   const [status, setStatus] = useState<Status>("idle");
 
   // Email validation function
   function isValidEmail(email: string): boolean {
     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
     return emailRegex.test(email) && email.length <= 255;
+  }
+
+  function getSubmissionMetadata() {
+    if (typeof window === "undefined") {
+      return { page_url: null, user_agent: null };
+    }
+
+    return {
+      page_url: window.location.href.slice(0, 1000),
+      user_agent: window.navigator.userAgent.slice(0, 500),
+    };
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -45,75 +57,36 @@ export function NewsletterCapture({
     setStatus("loading");
 
     try {
-      // Try Supabase first (preferred)
-      if (supabase) {
-        const { error } = await supabase
-          .from('newsletter_subscriptions')
-          .insert({
-            email: trimmedEmail.toLowerCase(),
-            source: variant || 'unknown',
-            // Don't set created_at - let database handle it
-          });
-
-        if (error) {
-          // If duplicate email, treat as success (already subscribed)
-          if (error.code === '23505') { // Unique constraint violation
-            setStatus("success");
-            setEmail("");
-            return;
-          }
-          throw error;
-        }
-
+      if (website) {
         setStatus("success");
         setEmail("");
+        setWebsite("");
         return;
       }
 
-      // Fallback: Try third-party services
-      const convertKitApiKey = process.env.NEXT_PUBLIC_CONVERTKIT_API_KEY;
-      const convertKitFormId = process.env.NEXT_PUBLIC_CONVERTKIT_FORM_ID;
-      const beehiivApiKey = process.env.NEXT_PUBLIC_BEEHIIV_API_KEY;
-      const beehiivPubId = process.env.NEXT_PUBLIC_BEEHIIV_PUBLICATION_ID;
-
-      let response: Response;
-
-      if (convertKitApiKey && convertKitFormId) {
-        response = await fetch(`https://api.convertkit.com/v3/forms/${convertKitFormId}/subscribe`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            api_key: convertKitApiKey,
-            email: email,
-          }),
-        });
-      } else if (beehiivApiKey && beehiivPubId) {
-        response = await fetch(`https://api.beehiiv.com/v2/publications/${beehiivPubId}/subscriptions`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${beehiivApiKey}`,
-          },
-          body: JSON.stringify({
-            email: email,
-          }),
-        });
-      } else {
-        // Last resort: try API route (won't work in static export)
-        response = await fetch("/api/subscribe", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        });
+      if (!supabase) {
+        throw new Error("Supabase is not configured");
       }
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to subscribe');
+      const { error } = await supabase.from("newsletter_subscriptions").insert({
+        email: trimmedEmail.toLowerCase(),
+        source: variant || "unknown",
+        ...getSubmissionMetadata(),
+      });
+
+      if (error) {
+        if (error.code === "23505") {
+          setStatus("success");
+          setEmail("");
+          setWebsite("");
+          return;
+        }
+        throw error;
       }
 
       setStatus("success");
       setEmail("");
+      setWebsite("");
     } catch (error) {
       setStatus("error");
       console.error('Newsletter subscription error:', error);
@@ -132,6 +105,16 @@ export function NewsletterCapture({
           </p>
         </div>
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
+          <input
+            type="text"
+            name="website"
+            value={website}
+            onChange={(e) => setWebsite(e.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+            className="hidden"
+            aria-hidden="true"
+          />
           <input
             type="email"
             value={email}
@@ -169,6 +152,16 @@ export function NewsletterCapture({
         </p>
         <form onSubmit={handleSubmit} className="flex gap-2">
           <input
+            type="text"
+            name="website"
+            value={website}
+            onChange={(e) => setWebsite(e.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+            className="hidden"
+            aria-hidden="true"
+          />
+          <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -202,6 +195,16 @@ export function NewsletterCapture({
         {description}
       </p>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full">
+        <input
+          type="text"
+          name="website"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
+          className="hidden"
+          aria-hidden="true"
+        />
         <input
           type="email"
           value={email}
