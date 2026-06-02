@@ -69,8 +69,8 @@ export function SiteFooter() {
           <div>
             <NewsletterCapture
               variant="footer"
-              heading="Join the signal"
-              description="Weekly protocols, no fluff."
+              heading="Join the newsletter"
+              description="Practical health updates that reduce the noise."
             />
           </div>
         </div>
