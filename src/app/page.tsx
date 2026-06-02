@@ -341,7 +341,7 @@ export default function Home() {
                 Dr. David Musnick, MD
               </h2>
               <p className="text-body text-foreground-muted mb-6">
-                Board-certified in internal medicine, sports medicine, and integrative medicine.
+                Board-certified in Internal Medicine, Sports Medicine, and Functional Medicine.
                 35+ years pioneering order-of-operations protocols for orthopedics, neurology,
                 and functional medicine.
               </p>
