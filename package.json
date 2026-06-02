@@ -11,7 +11,6 @@
     "sync-episodes": "node scripts/sync-episodes.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.108.2",
     "next": "15.5.19",
     "posthog-js": "^1.331.0",
     "react": "18.2.0",

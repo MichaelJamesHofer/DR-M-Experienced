@@ -1,7 +1,7 @@
 'use client';
 
 import { FormEvent, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { submitFormSubmission } from "@/lib/form-submissions";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -78,25 +78,12 @@ export function NewsletterCapture({
         return;
       }
 
-      if (!supabase) {
-        throw new Error("Supabase is not configured");
-      }
-
-      const { error } = await supabase.from("newsletter_subscriptions").insert({
+      await submitFormSubmission({
+        type: "newsletter",
         email: trimmedEmail.toLowerCase(),
         source: variant || "unknown",
         ...getSubmissionMetadata(),
       });
-
-      if (error) {
-        if (error.code === "23505") {
-          setStatus("success");
-          setEmail("");
-          setWebsite("");
-          return;
-        }
-        throw error;
-      }
 
       setStatus("success");
       setEmail("");

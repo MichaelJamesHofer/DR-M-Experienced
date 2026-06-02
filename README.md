@@ -35,12 +35,11 @@ Each build runs `sync-episodes.mjs`: it pulls **public** episode data from Vimeo
 
 ## Contact and Subscribe Forms
 
-The contact and newsletter forms write directly to Supabase from the static site. Apply the migration in `supabase/migrations`, then configure these GitHub Actions secrets:
+The contact and newsletter forms post from the static site to a Supabase Edge Function at `/functions/v1/form-submit`. The function validates submissions, applies rate limits, and writes to private Supabase tables with server-side credentials. Apply the migrations in `supabase/migrations`, deploy the function in `supabase/functions/form-submit`, then configure this GitHub Actions secret:
 
 - `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`
 
-The anon key is public by design. The SQL enables Row Level Security and only grants anonymous insert access, not read/update/delete access.
+The static site does not need a Supabase anon key for form submission. Row Level Security remains enabled and public users do not receive table read, update, delete, or direct insert access.
 
 ## Deploy
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { FormEvent, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { submitFormSubmission } from "@/lib/form-submissions";
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
@@ -79,19 +79,15 @@ export function ContactForm() {
     setMessage('');
 
     try {
-      if (!supabase) {
-        throw new Error('Supabase is not configured');
-      }
-
-      const { error } = await supabase.from('contact_messages').insert({
+      await submitFormSubmission({
+        type: 'contact',
         name,
         email: email.toLowerCase(),
         subject,
         message: body,
+        consent: true,
         ...getSubmissionMetadata(),
       });
-
-      if (error) throw error;
 
       setStatus('success');
       setMessage('Submitted. Thanks - your message was captured.');

@@ -2,14 +2,15 @@
 
 ## Form Capture Security
 
-The site is statically exported and captures contact/newsletter submissions through Supabase. Public browser requests use an anon or publishable key only.
+The site is statically exported and captures contact/newsletter submissions through a Supabase Edge Function. Public browser requests post to the function; the function validates, rate-limits, and writes with server-side credentials.
 
 ## Supabase Controls
 
 - Row Level Security is enabled on `contact_messages`.
 - Row Level Security is enabled on `newsletter_subscriptions`.
-- Anonymous and authenticated users can only insert valid rows.
-- No public read, update, or delete policies are defined.
+- No public read, insert, update, or delete policies are defined after the Edge Function path is live.
+- Direct browser table access is blocked; the Edge Function is the receive-only path.
+- Private rate-limit counters store hashed keys, not raw IP addresses.
 - Database constraints enforce:
   - valid lower-case email format
   - maximum field lengths
@@ -30,10 +31,8 @@ The site is statically exported and captures contact/newsletter submissions thro
 Safe for client-side use:
 
 - `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`
 
-Do not add a Supabase service-role key to the frontend, GitHub Pages build output, or any `NEXT_PUBLIC_*` variable. Service-role access should remain limited to Supabase dashboard, CLI, or trusted administrative tooling.
+Do not add a Supabase anon key or service-role key to the frontend unless a future feature explicitly requires it. Service-role access must remain limited to Supabase Edge Functions, the Supabase dashboard, CLI, or trusted administrative tooling.
 
 ## Package Security
 
@@ -47,4 +46,4 @@ npm audit --omit=dev
 
 ## Monitoring
 
-Monitor Supabase for unusual insert volume, validation failures, and database growth. If spam becomes a problem, add Supabase-side rate limiting or route form submissions through a Supabase Edge Function with CAPTCHA/rate-limit checks.
+Monitor Supabase for unusual function invocation volume, validation failures, rate-limit hits, and database growth. If spam becomes a problem beyond the current rate limits, add CAPTCHA such as Cloudflare Turnstile in the Edge Function path.

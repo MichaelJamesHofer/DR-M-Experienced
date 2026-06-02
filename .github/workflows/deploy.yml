@@ -44,10 +44,8 @@ jobs:
           SPOTIFY_SHOW_ID: ${{ secrets.SPOTIFY_SHOW_ID }}
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           YOUTUBE_CHANNEL_USERNAME: ${{ secrets.YOUTUBE_CHANNEL_USERNAME }}
-          # Supabase (optional - forms will work if configured)
+          # Supabase form function endpoint.
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY }}
           # PostHog (optional - analytics will work if configured)
           NEXT_PUBLIC_POSTHOG_API_KEY: ${{ secrets.NEXT_PUBLIC_POSTHOG_API_KEY }}
           NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}

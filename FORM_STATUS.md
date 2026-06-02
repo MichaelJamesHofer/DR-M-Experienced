@@ -2,13 +2,14 @@
 
 ## Current Implementation
 
-The subscribe and contact forms are configured for a static GitHub Pages deployment. They use the Supabase browser client to insert submissions into hosted Postgres without any Next.js API routes or self-hosted server process.
+The subscribe and contact forms are configured for a static GitHub Pages deployment. They post to a Supabase Edge Function, which validates and rate-limits submissions before inserting into hosted Postgres. There are no Next.js API routes or self-hosted server processes.
 
 ## Data Capture
 
 ### Newsletter Subscriptions
 
 - Component: `src/components/newsletter-capture.tsx`
+- Submit endpoint: `supabase/functions/form-submit`
 - Table: `newsletter_subscriptions`
 - Captures:
   - `email`
@@ -22,6 +23,7 @@ Duplicate email submissions are treated as success so returning subscribers do n
 ### Contact Messages
 
 - Component: `src/components/contact-form.tsx`
+- Submit endpoint: `supabase/functions/form-submit`
 - Table: `contact_messages`
 - Captures:
   - `name`
@@ -40,25 +42,25 @@ Local development uses `.env.local`:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://tdbsuzciwotleualdcjf.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
 ```
 
-Production uses GitHub Actions repository secrets:
+Production uses this GitHub Actions repository secret:
 
 - `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`
 
 ## Database Status
 
-The migration in `supabase/migrations/20260617021000_create_form_capture_tables.sql` creates both tables and applies Row Level Security.
+The migrations in `supabase/migrations` create both tables, add private rate-limit counters, and apply Row Level Security.
 
 Security posture:
 
-- anonymous users can insert form submissions
+- anonymous users cannot directly insert form submissions into the tables
 - anonymous users cannot select captured submissions
 - anonymous users cannot update captured submissions
 - anonymous users cannot delete captured submissions
 - database constraints enforce field lengths, email format, and allowed contact subjects
+- the Edge Function handles duplicate newsletter emails as success
+- the Edge Function rate-limits by hashed client/source keys and email
 
 ## Verification Checklist
 
