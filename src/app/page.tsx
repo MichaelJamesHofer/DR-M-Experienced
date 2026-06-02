@@ -342,8 +342,9 @@ export default function Home() {
               </h2>
               <p className="text-body text-foreground-muted mb-6">
                 Board-certified in Internal Medicine, Sports Medicine, and Functional Medicine.
-                35+ years pioneering order-of-operations protocols for orthopedics, neurology,
-                and functional medicine.
+                37+ years in patient care, with deep dives into concussion, brain-based symptoms
+                and conditions, autoimmune conditions, fatigue, arthritis, and gastrointestinal
+                symptoms and conditions.
               </p>
               <ul className="space-y-3 mb-8">
                 {[
