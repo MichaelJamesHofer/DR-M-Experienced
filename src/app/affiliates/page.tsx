@@ -146,6 +146,8 @@ function ProductCard({ product }: { product: AffiliateProduct }) {
           <InfoBlock title="Dr. M's take" body={product.drmThoughts} />
           <BulletBlock title="Why he likes it" items={product.reasonsToLike} />
           <BulletBlock title="Could be used for" items={product.usedFor} />
+          <FeaturedProductsBlock items={product.featuredProducts ?? []} />
+          {product.cautionNote && <CautionBlock body={product.cautionNote} />}
         </div>
 
         {(product.tags?.length ?? 0) > 0 && (
@@ -187,7 +189,7 @@ function ProductCard({ product }: { product: AffiliateProduct }) {
         )}
 
         <div className="mt-6 flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
-          {(product.couponCode || product.discountNote) && (
+          {(product.couponCode || product.discountNote || product.purchaseNote) && (
             <div className="space-y-1 text-body-sm text-foreground-muted">
               {product.couponCode && (
                 <p>
@@ -195,6 +197,7 @@ function ProductCard({ product }: { product: AffiliateProduct }) {
                 </p>
               )}
               {product.discountNote && <p>{product.discountNote}</p>}
+              {product.purchaseNote && <p>{product.purchaseNote}</p>}
             </div>
           )}
           {productUrl && (
@@ -239,6 +242,35 @@ function BulletBlock({ title, items }: { title: string; items: string[] }) {
           </li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+function FeaturedProductsBlock({ items }: { items: string[] }) {
+  if (items.length === 0) return null;
+
+  return (
+    <div>
+      <p className="text-body-sm font-semibold text-foreground mb-2">Products Dr. M mentioned</p>
+      <div className="flex flex-wrap gap-2">
+        {items.map((item) => (
+          <span
+            key={item}
+            className="rounded-lg border border-border bg-background px-3 py-1.5 text-caption font-medium text-foreground-muted"
+          >
+            {item}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CautionBlock({ body }: { body: string }) {
+  return (
+    <div className="rounded-xl border border-warning/30 bg-warning/5 p-4">
+      <p className="text-body-sm font-semibold text-foreground mb-2">Clinical boundary</p>
+      <p className="text-body-sm text-foreground-muted">{body}</p>
     </div>
   );
 }

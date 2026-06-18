@@ -459,6 +459,39 @@ function EpisodeAffiliateCard({ product }: { product: AffiliateProduct }) {
         <p className="mt-3 text-body-sm text-foreground-muted">{product.summary}</p>
       </div>
 
+      {(product.featuredProducts?.length ?? 0) > 0 && (
+        <div className="mb-4">
+          <p className="text-body-sm font-semibold text-foreground mb-2">
+            Products Dr. M mentioned
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {product.featuredProducts!.slice(0, 8).map((item) => (
+              <span
+                key={item}
+                className="rounded-lg border border-border bg-surface px-3 py-1.5 text-caption font-medium text-foreground-muted"
+              >
+                {item}
+              </span>
+            ))}
+            {product.featuredProducts!.length > 8 && (
+              <Link
+                href={`/affiliates#${product.slug}`}
+                className="rounded-lg border border-border bg-surface px-3 py-1.5 text-caption font-semibold text-primary hover:border-primary transition-all duration-200"
+              >
+                +{product.featuredProducts!.length - 8} more
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
+
+      {product.cautionNote && (
+        <div className="mb-4 rounded-xl border border-warning/30 bg-warning/5 p-4">
+          <p className="text-body-sm font-semibold text-foreground mb-2">Clinical boundary</p>
+          <p className="text-body-sm text-foreground-muted">{product.cautionNote}</p>
+        </div>
+      )}
+
       {(product.tags?.length ?? 0) > 0 && (
         <div className="mb-4 flex flex-wrap gap-2">
           {product.tags!.map((tag) => (
@@ -473,7 +506,7 @@ function EpisodeAffiliateCard({ product }: { product: AffiliateProduct }) {
       )}
 
       <div className="flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
-        {(product.couponCode || product.discountNote) && (
+        {(product.couponCode || product.discountNote || product.purchaseNote) && (
           <div className="space-y-1 text-body-sm text-foreground-muted">
             {product.couponCode && (
               <p>
@@ -481,6 +514,7 @@ function EpisodeAffiliateCard({ product }: { product: AffiliateProduct }) {
               </p>
             )}
             {product.discountNote && <p>{product.discountNote}</p>}
+            {product.purchaseNote && <p>{product.purchaseNote}</p>}
           </div>
         )}
         <div className="flex flex-col gap-2 sm:flex-row">

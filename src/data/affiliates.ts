@@ -7,6 +7,9 @@ export type AffiliateProduct = {
   drmThoughts: string;
   reasonsToLike: string[];
   usedFor: string[];
+  featuredProducts?: string[];
+  purchaseNote?: string;
+  cautionNote?: string;
   affiliateUrl?: string;
   directUrl?: string;
   imageUrl?: string;
@@ -20,6 +23,33 @@ export const AFFILIATE_DISCLOSURE =
   "Some product links may be affiliate links. If you purchase through those links, Dr. M's Experienced may earn a commission at no additional cost to you. Product mentions are educational and are not medical advice.";
 
 export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
+  {
+    slug: "airestech",
+    name: "EMF and RF Protection Devices",
+    brand: "Airestech",
+    category: "EMF / RF Protection",
+    summary:
+      "Wearable, phone, and room-focused EMF/RF protection devices for listeners who want a practical way to reduce exposure in daily environments.",
+    drmThoughts:
+      "Dr. M started using an Airestech Zone after years of EMF/RF-related headaches at his Bellevue clinic. After trying shielding paint and even a Swiss Shield canopy, he found the Zone helped enough that he now wears it daily and travels with it.",
+    reasonsToLike: [
+      "Includes wearable options as well as room-level devices, so listeners can match the tool to the exposure setting.",
+      "Relevant for people following Dr. M's EMF/RF discussions and wanting a product source to research.",
+      "The current partner link and code are active through Airestech's partner program.",
+    ],
+    usedFor: [
+      "Wearable EMF/RF exposure support",
+      "Cell-phone exposure mitigation",
+      "Bedroom and hotel-room protection",
+      "Larger-room protection with the Zone Max",
+    ],
+    featuredProducts: ["Go", "Flex", "Zone", "Zone Max"],
+    affiliateUrl: "https://airestech.com/davidmusnick",
+    couponCode: "DRDMUSNICK",
+    discountNote: "Use code DRDMUSNICK for at least 25% savings.",
+    episodeSlugs: ["episode-4-emf"],
+    tags: ["emf", "rf", "wearable", "room-protection", "travel"],
+  },
   {
     slug: "block-blue-light",
     name: "Blue Light Blocking Glasses & Sleep Lighting",
@@ -71,6 +101,56 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     tags: ["emf", "shielding", "testing", "home-environment"],
   },
   {
+    slug: "desbio-dbscript",
+    name: "Homeopathic and Drainage Product Access",
+    brand: "DesBio / DBscript",
+    category: "Homeopathics & Supplements",
+    summary:
+      "A DBscript store for DesBio homeopathic and supplement products that Dr. M may reference for emotional support, drainage, detoxification, and functional-medicine conversations.",
+    drmThoughts:
+      "Dr. M describes DesBio as a leading source for homeopathic products used in areas such as anxiety, mood, motivation, drainage, detoxification, and chronic-infection protocols.",
+    reasonsToLike: [
+      "The direct DBscript link gives listeners one place to search for DesBio products Dr. M mentions.",
+      "The line includes broadly relevant emotional-support, drainage, detox, and brain-support formulas.",
+      "It can support future podcast follow-up without turning an episode page into a full treatment protocol.",
+    ],
+    usedFor: [
+      "Emotional-support product research",
+      "Drainage and detoxification conversations",
+      "Brain and nervous-system support topics",
+      "Clinician-guided chronic-infection protocol discussions",
+    ],
+    featuredProducts: [
+      "Esteem",
+      "Rage",
+      "Anxious",
+      "Motivation",
+      "Grief",
+      "Adrenal Support",
+      "Allergy Rescue",
+      "Appetite Control",
+      "Celergesic",
+      "Cerebromax",
+      "Comprehensive Homeopathic Detox Kit",
+      "Crave Control",
+      "Dizzy",
+      "Dynamic Brain",
+      "Ear Ring",
+      "Emotional Detox and Drainage",
+      "GLP Support",
+      "Headache",
+      "HeadSSR",
+      "Herx",
+      "Leaky Gut Formula",
+    ],
+    directUrl: "https://dbscript.com/?direct=DrMEx",
+    purchaseNote: "Open the DBscript link, then search for the product name.",
+    cautionNote:
+      "DesBio also makes products for chronic viral, bacterial, and tickborne-infection protocols. Dr. M does not recommend those generically; review them through a consult or your own clinician.",
+    episodeSlugs: ["brain-fog-part-1", "brain-fog-part-2"],
+    tags: ["homeopathics", "desbio", "detox", "drainage", "brain-health"],
+  },
+  {
     slug: "best365labs",
     name: "Methylene Blue & Brain/Energy Supplements",
     brand: "Best365Labs",
@@ -101,9 +181,9 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     brand: "Doctors Supplement Store",
     category: "Supplements",
     summary:
-      "A DSS supplement dispensary for the Dr. M's Experienced audience, with a broad catalog of practitioner-focused supplement products.",
+      "A DSS supplement dispensary for the Dr. M's Experienced audience, with thousands of high-quality practitioner-focused supplement products.",
     drmThoughts:
-      "Dr. M flagged DSS as a way to give podcast listeners one place to research and purchase high-quality supplements connected to future show notes, webinars, and protocol discussions.",
+      "Dr. M flagged DSS as a way to give podcast listeners one place to research and purchase high-quality supplements connected to future show notes, webinars, and protocol discussions while keeping podcast activity organized.",
     reasonsToLike: [
       "Broad supplement catalog rather than a single-product line.",
       "Separate Dr. M's Experienced dispensary URL keeps podcast-related supplement activity organized.",
@@ -116,6 +196,7 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
       "Centralized supplement ordering for listeners",
     ],
     directUrl: "https://dssorders.com/DrMExperienced",
+    purchaseNote: "This is the Dr. M's Experienced dispensary URL.",
     tags: ["supplements", "dispensary", "brain-health", "immune-support", "orthopedics"],
   },
   {
@@ -124,9 +205,9 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     brand: "Abeytu Naturals",
     category: "Supplements",
     summary:
-      "A supplement company Dr. M highlighted for products aimed at blood-health and red-cell function support.",
+      "A supplement company Dr. M highlighted for blood-health and red-cell function support.",
     drmThoughts:
-      "Dr. M's note on Abeytu Naturals was centered on blood health and red-cell function. It may fit conversations about oxygen delivery and whole-body function, but listeners should review supplement choices with their own clinician.",
+      "Dr. M's note on Abeytu Naturals was centered on helping clean the blood and improve red-cell function. It may fit conversations about oxygen delivery and whole-body function, but listeners should review supplement choices with their own clinician.",
     reasonsToLike: [
       "Connects to the broader functional-medicine lens of oxygen delivery, circulation, and cellular function.",
       "The public discount link gives listeners a straightforward way to find the line Dr. M referenced.",
@@ -141,6 +222,7 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     affiliateUrl: "https://abeytunaturals.com/discount/DRDAVID10",
     directUrl: "https://abeytunaturals.com/",
     couponCode: "DRDAVID10",
+    discountNote: "Use code DRDAVID10 for 10% off.",
     tags: ["blood-health", "red-cell-function", "circulation", "supplements"],
   },
 ];

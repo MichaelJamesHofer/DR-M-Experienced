@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "prebuild": "node scripts/sync-episodes.mjs",
-    "build": "npm run prebuild && next build",
+    "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx --max-warnings=0",
     "sync-episodes": "node scripts/sync-episodes.mjs"
   },
   "dependencies": {
