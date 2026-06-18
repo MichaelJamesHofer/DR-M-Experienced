@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -19,6 +19,7 @@ type EpisodeProductReference = {
 };
 
 type EpisodeSortKey = "newest" | "oldest" | "episode-number" | "title" | "product-linked";
+type EpisodeViewMode = "cards" | "list";
 
 export function EpisodeBrowser({
   episodes,
@@ -33,6 +34,9 @@ export function EpisodeBrowser({
   const [query, setQuery] = useState("");
   const [topic, setTopic] = useState(normalizedDefault);
   const [sortKey, setSortKey] = useState<EpisodeSortKey>("newest");
+  const [viewMode, setViewMode] = useState<EpisodeViewMode>("cards");
+  const [filterPanelOpen, setFilterPanelOpen] = useState(false);
+  const controlsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const paramTopic = (searchParams.get("topic") ?? normalizedDefault).toLowerCase();
@@ -105,16 +109,37 @@ export function EpisodeBrowser({
       .sort((a, b) => compareEpisodes(a, b, sortKey, affiliateProductsByEpisodeSlug));
   }, [affiliateProductsByEpisodeSlug, episodes, query, sortKey, topic]);
 
+  const activeFacetCount = topic === "all" ? 0 : 1;
+  const activeTopicLabel = topics.find((topicOption) => topicOption.value === topic)?.label;
+  const hasActiveFilters = query !== "" || topic !== "all";
+
+  const resetAll = () => {
+    setQuery("");
+    updateTopic("all");
+  };
+
+  const toggleFilterPanel = () => {
+    const shouldOpen = !filterPanelOpen;
+    setFilterPanelOpen(shouldOpen);
+    if (shouldOpen) {
+      window.setTimeout(() => {
+        controlsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 0);
+    }
+  };
+
   return (
-    <div className="space-y-8">
-      {/* Filters */}
-      <div className="rounded-2xl border border-border bg-surface p-6">
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-          <div>
+    <div className="min-w-0 space-y-8">
+      <div
+        ref={controlsRef}
+        className="min-w-0 overflow-hidden rounded-2xl border border-border bg-surface p-5 sm:p-6"
+      >
+        <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_auto_auto_auto] lg:items-end">
+          <div className="min-w-0">
             <label className="text-body-sm font-semibold text-foreground mb-2 block">
               Search episodes
             </label>
-            <div className="relative">
+            <div className="relative min-w-0">
               <svg
                 className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-foreground-subtle"
                 fill="none"
@@ -138,12 +163,31 @@ export function EpisodeBrowser({
             </div>
           </div>
 
-          <div>
+          <div className="hidden min-w-0 sm:block">
+            <p className="mb-2 text-body-sm font-semibold text-foreground">Filters</p>
+            <button
+              type="button"
+              onClick={toggleFilterPanel}
+              aria-expanded={filterPanelOpen}
+              className={`flex h-[50px] min-w-36 items-center justify-center gap-2 rounded-xl border px-4 text-body-sm font-semibold transition-all duration-200 ${
+                filterPanelOpen || activeFacetCount > 0
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border bg-background text-foreground-muted hover:border-primary/50 hover:text-foreground"
+              }`}
+            >
+              Refine
+              <span className="rounded-full bg-surface-elevated px-2 py-0.5 text-caption text-foreground-subtle">
+                {activeFacetCount}
+              </span>
+            </button>
+          </div>
+
+          <div className="hidden min-w-0 sm:block">
             <label className="text-body-sm font-semibold text-foreground mb-2 block">Sort</label>
             <select
               value={sortKey}
               onChange={(event) => setSortKey(event.target.value as EpisodeSortKey)}
-              className="h-[50px] min-w-52 rounded-xl border border-border bg-background px-4 text-body-sm font-medium text-foreground-muted transition-all duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="h-[50px] w-full min-w-0 rounded-xl border border-border bg-background px-4 text-body-sm font-medium text-foreground-muted transition-all duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 sm:min-w-52 lg:w-auto"
             >
               <option value="newest">Newest first</option>
               <option value="oldest">Oldest first</option>
@@ -152,76 +196,110 @@ export function EpisodeBrowser({
               <option value="product-linked">Most product-linked</option>
             </select>
           </div>
-        </div>
 
-        {/* Topic filters */}
-        <div className="mt-6 border-t border-border pt-5">
-          <p className="text-body-sm font-medium text-foreground mb-3">Filter by topic</p>
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => updateTopic("all")}
-              className={`rounded-full border px-4 py-2 text-body-sm font-medium transition-all duration-200 ${
-                topic === "all"
-                  ? "border-primary bg-primary/10 text-primary"
-                  : "border-border bg-background text-foreground-muted hover:border-primary/50 hover:text-foreground"
-              }`}
-            >
-              All topics
-              <span className="ml-2 rounded-full bg-surface-elevated px-2 py-0.5 text-caption text-foreground-subtle">
-                {episodes.length}
-              </span>
-            </button>
-            {topics.map((topicOption) => (
-              <button
-                key={topicOption.value}
-                type="button"
-                onClick={() => updateTopic(topicOption.value)}
-                className={`rounded-full border px-4 py-2 text-body-sm font-medium transition-all duration-200 ${
-                  topic === topicOption.value
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-border bg-background text-foreground-muted hover:border-primary/50 hover:text-foreground"
-                }`}
-              >
-                {topicOption.label}
-                <span className="ml-2 rounded-full bg-surface-elevated px-2 py-0.5 text-caption text-foreground-subtle">
-                  {topicCounts.get(topicOption.value) ?? 0}
-                </span>
-              </button>
-            ))}
+          <div className="hidden min-w-0 sm:block">
+            <p className="mb-2 text-body-sm font-semibold text-foreground">View</p>
+            <div className="grid h-[50px] min-w-0 grid-cols-2 rounded-xl border border-border bg-background p-1">
+              {(["cards", "list"] as EpisodeViewMode[]).map((mode) => (
+                <button
+                  key={mode}
+                  type="button"
+                  onClick={() => setViewMode(mode)}
+                  className={`rounded-lg px-4 text-body-sm font-semibold transition-all duration-200 ${
+                    viewMode === mode
+                      ? "bg-primary text-background"
+                      : "text-foreground-muted hover:text-foreground"
+                  }`}
+                >
+                  {mode === "cards" ? "Cards" : "List"}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
+
+        <MobileEpisodeCommandBar
+          activeFacetCount={activeFacetCount}
+          filterPanelOpen={filterPanelOpen}
+          onToggleFilters={toggleFilterPanel}
+          sortKey={sortKey}
+          onSortChange={setSortKey}
+          viewMode={viewMode}
+          onToggleView={() => setViewMode(viewMode === "cards" ? "list" : "cards")}
+        />
+
+        {(activeTopicLabel || filterPanelOpen) && (
+          <div className="mt-5 border-t border-border pt-5">
+            {activeTopicLabel && (
+              <div className="mb-4 flex flex-wrap items-center gap-2">
+                <span className="text-caption font-semibold uppercase tracking-wider text-foreground-subtle">
+                  Applied
+                </span>
+                <AppliedTopicChip label={activeTopicLabel} onRemove={() => updateTopic("all")} />
+                <button
+                  type="button"
+                  onClick={() => updateTopic("all")}
+                  className="rounded-full border border-border bg-background px-3 py-1.5 text-caption font-semibold text-foreground-subtle transition-all duration-200 hover:border-primary/50 hover:text-foreground"
+                >
+                  Clear topic
+                </button>
+              </div>
+            )}
+
+            {filterPanelOpen && (
+              <div className="rounded-2xl border border-border bg-background p-4 sm:p-5">
+                <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-body-sm font-semibold text-foreground">Refine episodes</p>
+                    <p className="text-body-sm text-foreground-muted">
+                      Narrow by topic without turning the page into a full tag wall.
+                    </p>
+                  </div>
+                  <p className="text-body-sm text-foreground-muted">
+                    {filtered.length} of {episodes.length} episodes
+                  </p>
+                </div>
+
+                <TopicSelect
+                  value={topic}
+                  allCount={episodes.length}
+                  options={topics.map((topicOption) => ({
+                    ...topicOption,
+                    count: topicCounts.get(topicOption.value) ?? 0,
+                  }))}
+                  onChange={updateTopic}
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* Results count */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-body-sm text-foreground-muted">
           {filtered.length} episode{filtered.length !== 1 ? "s" : ""}
-          {topic !== "all" && ` in "${topics.find((t) => t.value === topic)?.label}"`}
+          {topic !== "all" && ` in "${activeTopicLabel ?? topic}"`}
           {query && ` matching "${query}"`}
         </p>
-        {(query || topic !== "all") && (
+        {hasActiveFilters && (
           <button
             type="button"
-            onClick={() => {
-              setQuery("");
-              updateTopic("all");
-            }}
-            className="text-body-sm font-semibold text-primary hover:text-primary-hover transition-colors duration-200"
+            onClick={resetAll}
+            className="self-start text-body-sm font-semibold text-primary hover:text-primary-hover transition-colors duration-200 sm:self-auto"
           >
             Clear filters
           </button>
         )}
       </div>
 
-      {/* Episode grid */}
       {filtered.length > 0 ? (
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className={viewMode === "cards" ? "grid gap-6 md:grid-cols-2" : "space-y-5"}>
           {filtered.map((episode) => (
             <EpisodeCard
               key={episode.slug}
               episode={episode}
               relatedProducts={affiliateProductsByEpisodeSlug[episode.slug] ?? []}
+              variant={viewMode}
             />
           ))}
         </div>
@@ -230,10 +308,7 @@ export function EpisodeBrowser({
           <p className="text-body text-foreground-muted mb-2">No episodes match your criteria</p>
           <button
             type="button"
-            onClick={() => {
-              setQuery("");
-              updateTopic("all");
-            }}
+            onClick={resetAll}
             className="text-body-sm font-semibold text-primary hover:text-primary-hover transition-colors duration-200"
           >
             Clear filters
@@ -244,12 +319,119 @@ export function EpisodeBrowser({
   );
 }
 
+function TopicSelect({
+  value,
+  allCount,
+  options,
+  onChange,
+}: {
+  value: string;
+  allCount: number;
+  options: Array<{ value: string; label: string; count: number }>;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div>
+      <label className="mb-2 block text-body-sm font-semibold text-foreground">Topic</label>
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="h-[50px] w-full rounded-xl border border-border bg-surface px-4 text-body-sm font-medium text-foreground-muted transition-all duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+      >
+        <option value="all">All topics ({allCount})</option>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label} ({option.count})
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
+function AppliedTopicChip({
+  label,
+  onRemove,
+}: {
+  label: string;
+  onRemove: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onRemove}
+      className="inline-flex max-w-full items-center gap-2 rounded-full border border-primary bg-primary/10 px-3 py-1.5 text-caption font-semibold text-primary transition-all duration-200 hover:bg-primary/15"
+    >
+      <span className="min-w-0 truncate">{label}</span>
+      <span aria-hidden="true">x</span>
+    </button>
+  );
+}
+
+function MobileEpisodeCommandBar({
+  activeFacetCount,
+  filterPanelOpen,
+  onToggleFilters,
+  sortKey,
+  onSortChange,
+  viewMode,
+  onToggleView,
+}: {
+  activeFacetCount: number;
+  filterPanelOpen: boolean;
+  onToggleFilters: () => void;
+  sortKey: EpisodeSortKey;
+  onSortChange: (value: EpisodeSortKey) => void;
+  viewMode: EpisodeViewMode;
+  onToggleView: () => void;
+}) {
+  return (
+    <div className="mt-4 grid grid-cols-3 gap-2 rounded-2xl border border-border bg-background p-2 sm:hidden">
+      <button
+        type="button"
+        onClick={onToggleFilters}
+        aria-expanded={filterPanelOpen}
+        className={`rounded-xl px-2 py-3 text-caption font-bold transition-all duration-200 ${
+          filterPanelOpen || activeFacetCount > 0
+            ? "bg-primary text-background"
+            : "bg-surface text-foreground-muted"
+        }`}
+      >
+        Filters {activeFacetCount}
+      </button>
+      <label className="relative">
+        <span className="sr-only">Sort episodes</span>
+        <select
+          value={sortKey}
+          onChange={(event) => onSortChange(event.target.value as EpisodeSortKey)}
+          className="h-full w-full appearance-none rounded-xl border-0 bg-surface px-2 py-3 text-center text-caption font-bold text-foreground-muted focus:outline-none focus:ring-2 focus:ring-primary/30"
+        >
+          <option value="newest">Newest</option>
+          <option value="oldest">Oldest</option>
+          <option value="episode-number">Number</option>
+          <option value="title">Title</option>
+          <option value="product-linked">Products</option>
+        </select>
+      </label>
+      <button
+        type="button"
+        onClick={onToggleView}
+        className="rounded-xl bg-surface px-2 py-3 text-caption font-bold text-foreground-muted transition-all duration-200 hover:text-foreground"
+      >
+        {viewMode === "cards" ? "Cards" : "List"}
+      </button>
+    </div>
+  );
+}
+
 function EpisodeCard({
   episode,
   relatedProducts,
+  variant,
 }: {
   episode: Episode;
   relatedProducts: EpisodeProductReference[];
+  variant: EpisodeViewMode;
 }) {
   const dateFormatter = new Intl.DateTimeFormat("en", {
     month: "short",
@@ -262,11 +444,17 @@ function EpisodeCard({
   return (
     <Link
       href={`/episodes/${episode.slug}`}
-      className="group flex flex-col rounded-2xl border border-border bg-surface overflow-hidden hover:border-primary/50 hover:shadow-glow-sm transition-all duration-300"
+      className={`group flex flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-all duration-300 hover:border-primary/50 hover:shadow-glow-sm ${
+        variant === "list" ? "md:flex-row" : ""
+      }`}
     >
       {/* Thumbnail */}
       {episode.thumbnailUrl && (
-        <div className="relative aspect-video w-full overflow-hidden bg-surface-elevated">
+        <div
+          className={`relative aspect-video w-full overflow-hidden bg-surface-elevated ${
+            variant === "list" ? "md:min-h-64 md:w-72 md:shrink-0 md:aspect-auto" : ""
+          }`}
+        >
           <Image
             src={episode.thumbnailUrl}
             alt={episodeDisplayTitle(episode)}
