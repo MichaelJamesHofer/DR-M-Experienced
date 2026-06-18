@@ -1,5 +1,9 @@
 import { Suspense } from "react";
-import { EPISODES } from "@/data/episodes";
+import {
+  affiliateDisplayName,
+  affiliateProductsForEpisode,
+} from "@/data/affiliates";
+import { getContentCatalog } from "@/data/content-catalog";
 import { EpisodeBrowser } from "@/components/episode-browser";
 
 export const metadata = {
@@ -7,14 +11,26 @@ export const metadata = {
   description: "Browse all Dr. M's Experienced Functional and Sports Medicine episodes. Search by topic, skim summaries, and dive into detailed show notes.",
 };
 
-const episodesNewestFirst = [...EPISODES].sort((a, b) => {
-  const dateA = new Date(a.publishDate).getTime();
-  const dateB = new Date(b.publishDate).getTime();
-  if (dateB !== dateA) return dateB - dateA;
-  return b.number - a.number;
-});
+export default async function EpisodesPage() {
+  const { episodes, affiliateProducts } = await getContentCatalog();
+  const episodesNewestFirst = [...episodes].sort((a, b) => {
+    const dateA = new Date(a.publishDate).getTime();
+    const dateB = new Date(b.publishDate).getTime();
+    if (dateB !== dateA) return dateB - dateA;
+    return b.number - a.number;
+  });
 
-export default function EpisodesPage() {
+  const affiliateProductsByEpisodeSlug = Object.fromEntries(
+    episodesNewestFirst.map((episode) => [
+      episode.slug,
+      affiliateProductsForEpisode(episode, affiliateProducts).map((product) => ({
+        slug: product.slug,
+        displayName: affiliateDisplayName(product),
+        category: product.category,
+      })),
+    ])
+  );
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 lg:px-6 lg:py-16">
       {/* Header */}
@@ -33,7 +49,10 @@ export default function EpisodesPage() {
 
       {/* Episode Browser */}
       <Suspense fallback={<EpisodeBrowserSkeleton />}>
-        <EpisodeBrowser episodes={episodesNewestFirst} />
+        <EpisodeBrowser
+          episodes={episodesNewestFirst}
+          affiliateProductsByEpisodeSlug={affiliateProductsByEpisodeSlug}
+        />
       </Suspense>
     </div>
   );

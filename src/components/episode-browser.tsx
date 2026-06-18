@@ -9,9 +9,22 @@ import { Episode, episodeDisplayTitle } from "@/data/episodes";
 type EpisodeBrowserProps = {
   episodes: Episode[];
   initialTopic?: string;
+  affiliateProductsByEpisodeSlug?: Record<string, EpisodeProductReference[]>;
 };
 
-export function EpisodeBrowser({ episodes, initialTopic = "all" }: EpisodeBrowserProps) {
+type EpisodeProductReference = {
+  slug: string;
+  displayName: string;
+  category: string;
+};
+
+type EpisodeSortKey = "newest" | "oldest" | "episode-number" | "title" | "product-linked";
+
+export function EpisodeBrowser({
+  episodes,
+  initialTopic = "all",
+  affiliateProductsByEpisodeSlug = {},
+}: EpisodeBrowserProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -19,6 +32,7 @@ export function EpisodeBrowser({ episodes, initialTopic = "all" }: EpisodeBrowse
 
   const [query, setQuery] = useState("");
   const [topic, setTopic] = useState(normalizedDefault);
+  const [sortKey, setSortKey] = useState<EpisodeSortKey>("newest");
 
   useEffect(() => {
     const paramTopic = (searchParams.get("topic") ?? normalizedDefault).toLowerCase();
@@ -57,49 +71,91 @@ export function EpisodeBrowser({ episodes, initialTopic = "all" }: EpisodeBrowse
     [normalizedDefault, pathname, router, searchParams]
   );
 
-  const filtered = episodes.filter((episode) => {
-    const matchesTopic =
-      topic === "all" || episode.topics.some((episodeTopic) => episodeTopic.toLowerCase() === topic);
-    const text = `${episodeDisplayTitle(episode)} ${episode.title} ${episode.summary}`.toLowerCase();
-    const matchesQuery = text.includes(query.toLowerCase());
-    return matchesTopic && matchesQuery;
-  });
+  const topicCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    episodes.forEach((episode) => {
+      episode.topics.forEach((episodeTopic) => {
+        const value = episodeTopic.toLowerCase();
+        counts.set(value, (counts.get(value) ?? 0) + 1);
+      });
+    });
+    return counts;
+  }, [episodes]);
+
+  const filtered = useMemo(() => {
+    return episodes
+      .filter((episode) => {
+        const relatedProducts = affiliateProductsByEpisodeSlug[episode.slug] ?? [];
+        const matchesTopic =
+          topic === "all" ||
+          episode.topics.some((episodeTopic) => episodeTopic.toLowerCase() === topic);
+        const text = [
+          episodeDisplayTitle(episode),
+          episode.title,
+          episode.summary,
+          ...episode.topics,
+          ...relatedProducts.map((product) => product.displayName),
+          ...relatedProducts.map((product) => product.category),
+        ]
+          .join(" ")
+          .toLowerCase();
+        const matchesQuery = text.includes(query.toLowerCase());
+        return matchesTopic && matchesQuery;
+      })
+      .sort((a, b) => compareEpisodes(a, b, sortKey, affiliateProductsByEpisodeSlug));
+  }, [affiliateProductsByEpisodeSlug, episodes, query, sortKey, topic]);
 
   return (
     <div className="space-y-8">
       {/* Filters */}
       <div className="rounded-2xl border border-border bg-surface p-6">
-        {/* Search */}
-        <div className="mb-6">
-          <label className="text-body-sm font-medium text-foreground mb-2 block">
-            Search episodes
-          </label>
-          <div className="relative">
-            <svg
-              className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-foreground-subtle"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+          <div>
+            <label className="text-body-sm font-semibold text-foreground mb-2 block">
+              Search episodes
+            </label>
+            <div className="relative">
+              <svg
+                className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-foreground-subtle"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <input
+                type="search"
+                placeholder="Search titles, topics, summaries, or products..."
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                className="w-full rounded-xl border border-border bg-background pl-12 pr-4 py-3 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200"
               />
-            </svg>
-            <input
-              type="search"
-              placeholder="Search by title or summary..."
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              className="w-full rounded-xl border border-border bg-background pl-12 pr-4 py-3 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200"
-            />
+            </div>
+          </div>
+
+          <div>
+            <label className="text-body-sm font-semibold text-foreground mb-2 block">Sort</label>
+            <select
+              value={sortKey}
+              onChange={(event) => setSortKey(event.target.value as EpisodeSortKey)}
+              className="h-[50px] min-w-52 rounded-xl border border-border bg-background px-4 text-body-sm font-medium text-foreground-muted transition-all duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            >
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="episode-number">Episode number</option>
+              <option value="title">Title A-Z</option>
+              <option value="product-linked">Most product-linked</option>
+            </select>
           </div>
         </div>
 
         {/* Topic filters */}
-        <div>
+        <div className="mt-6 border-t border-border pt-5">
           <p className="text-body-sm font-medium text-foreground mb-3">Filter by topic</p>
           <div className="flex flex-wrap gap-2">
             <button
@@ -112,6 +168,9 @@ export function EpisodeBrowser({ episodes, initialTopic = "all" }: EpisodeBrowse
               }`}
             >
               All topics
+              <span className="ml-2 rounded-full bg-surface-elevated px-2 py-0.5 text-caption text-foreground-subtle">
+                {episodes.length}
+              </span>
             </button>
             {topics.map((topicOption) => (
               <button
@@ -125,6 +184,9 @@ export function EpisodeBrowser({ episodes, initialTopic = "all" }: EpisodeBrowse
                 }`}
               >
                 {topicOption.label}
+                <span className="ml-2 rounded-full bg-surface-elevated px-2 py-0.5 text-caption text-foreground-subtle">
+                  {topicCounts.get(topicOption.value) ?? 0}
+                </span>
               </button>
             ))}
           </div>
@@ -138,13 +200,29 @@ export function EpisodeBrowser({ episodes, initialTopic = "all" }: EpisodeBrowse
           {topic !== "all" && ` in "${topics.find((t) => t.value === topic)?.label}"`}
           {query && ` matching "${query}"`}
         </p>
+        {(query || topic !== "all") && (
+          <button
+            type="button"
+            onClick={() => {
+              setQuery("");
+              updateTopic("all");
+            }}
+            className="text-body-sm font-semibold text-primary hover:text-primary-hover transition-colors duration-200"
+          >
+            Clear filters
+          </button>
+        )}
       </div>
 
       {/* Episode grid */}
       {filtered.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2">
           {filtered.map((episode) => (
-            <EpisodeCard key={episode.slug} episode={episode} />
+            <EpisodeCard
+              key={episode.slug}
+              episode={episode}
+              relatedProducts={affiliateProductsByEpisodeSlug[episode.slug] ?? []}
+            />
           ))}
         </div>
       ) : (
@@ -166,7 +244,13 @@ export function EpisodeBrowser({ episodes, initialTopic = "all" }: EpisodeBrowse
   );
 }
 
-function EpisodeCard({ episode }: { episode: Episode }) {
+function EpisodeCard({
+  episode,
+  relatedProducts,
+}: {
+  episode: Episode;
+  relatedProducts: EpisodeProductReference[];
+}) {
   const dateFormatter = new Intl.DateTimeFormat("en", {
     month: "short",
     day: "numeric",
@@ -274,6 +358,29 @@ function EpisodeCard({ episode }: { episode: Episode }) {
           ))}
         </div>
 
+        {relatedProducts.length > 0 && (
+          <div className="mb-4 rounded-xl border border-border bg-background p-3">
+            <p className="mb-2 text-caption font-semibold uppercase tracking-wider text-primary">
+              Products mentioned
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {relatedProducts.slice(0, 3).map((product) => (
+                <span
+                  key={product.slug}
+                  className="rounded-full bg-surface-elevated px-3 py-1 text-caption text-foreground-subtle"
+                >
+                  {product.displayName}
+                </span>
+              ))}
+              {relatedProducts.length > 3 && (
+                <span className="rounded-full bg-surface-elevated px-3 py-1 text-caption text-foreground-subtle">
+                  +{relatedProducts.length - 3} more
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Footer */}
         <div className="flex items-center justify-between pt-4 border-t border-border">
           <span className="text-body-sm font-medium text-primary group-hover:text-primary-hover transition-colors duration-200">
@@ -291,4 +398,37 @@ function EpisodeCard({ episode }: { episode: Episode }) {
       </div>
     </Link>
   );
+}
+
+function compareEpisodes(
+  a: Episode,
+  b: Episode,
+  sortKey: EpisodeSortKey,
+  affiliateProductsByEpisodeSlug: Record<string, EpisodeProductReference[]>
+) {
+  if (sortKey === "oldest") {
+    const dateA = new Date(a.publishDate).getTime();
+    const dateB = new Date(b.publishDate).getTime();
+    if (dateA !== dateB) return dateA - dateB;
+    return a.number - b.number;
+  }
+
+  if (sortKey === "episode-number") {
+    return a.number - b.number;
+  }
+
+  if (sortKey === "title") {
+    return episodeDisplayTitle(a).localeCompare(episodeDisplayTitle(b));
+  }
+
+  if (sortKey === "product-linked") {
+    const countA = affiliateProductsByEpisodeSlug[a.slug]?.length ?? 0;
+    const countB = affiliateProductsByEpisodeSlug[b.slug]?.length ?? 0;
+    if (countA !== countB) return countB - countA;
+  }
+
+  const dateA = new Date(a.publishDate).getTime();
+  const dateB = new Date(b.publishDate).getTime();
+  if (dateA !== dateB) return dateB - dateA;
+  return b.number - a.number;
 }

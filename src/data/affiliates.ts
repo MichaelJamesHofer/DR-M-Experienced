@@ -1,7 +1,17 @@
+import type { Episode } from "./episodes";
+
+export type AffiliateCategory = {
+  slug: string;
+  label: string;
+  description: string;
+  displayOrder: number;
+};
+
 export type AffiliateProduct = {
   slug: string;
   name: string;
   brand?: string;
+  categorySlug: string;
   category: string;
   summary: string;
   drmThoughts: string;
@@ -16,17 +26,61 @@ export type AffiliateProduct = {
   couponCode?: string;
   discountNote?: string;
   episodeSlugs?: string[];
+  autoLinkTopicSlugs?: string[];
   tags?: string[];
+  sortOrder: number;
+  dateAdded: string;
+  lastReviewed: string;
+  sourceNote: string;
 };
 
 export const AFFILIATE_DISCLOSURE =
   "Some product links may be affiliate links. If you purchase through those links, Dr. M's Experienced may earn a commission at no additional cost to you. Product mentions are educational and are not medical advice.";
+
+export const AFFILIATE_CATEGORIES: AffiliateCategory[] = [
+  {
+    slug: "emf-rf-protection",
+    label: "EMF / RF Protection",
+    description:
+      "Wearable, room, testing, and shielding tools connected to Dr. M's EMF and environmental-exposure conversations.",
+    displayOrder: 10,
+  },
+  {
+    slug: "sleep-light-environment",
+    label: "Sleep & Light Environment",
+    description:
+      "Light-hygiene and circadian-support tools for sleep, insomnia, and evening routines.",
+    displayOrder: 20,
+  },
+  {
+    slug: "home-environment",
+    label: "Home Environment",
+    description:
+      "Assessment and mitigation resources for home, bedroom, work, and travel environments.",
+    displayOrder: 30,
+  },
+  {
+    slug: "homeopathics-supplements",
+    label: "Homeopathics & Supplements",
+    description:
+      "Homeopathic, drainage, detoxification, and supplement resources that need stronger clinical context.",
+    displayOrder: 40,
+  },
+  {
+    slug: "supplements",
+    label: "Supplements",
+    description:
+      "Supplement dispensaries and product lines connected to functional-medicine and episode follow-up topics.",
+    displayOrder: 50,
+  },
+];
 
 export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
   {
     slug: "airestech",
     name: "EMF and RF Protection Devices",
     brand: "Airestech",
+    categorySlug: "emf-rf-protection",
     category: "EMF / RF Protection",
     summary:
       "Wearable, phone, and room-focused EMF/RF protection devices for listeners who want a practical way to reduce exposure in daily environments.",
@@ -48,12 +102,18 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     couponCode: "DRDMUSNICK",
     discountNote: "Use code DRDMUSNICK for at least 25% savings.",
     episodeSlugs: ["episode-4-emf"],
+    autoLinkTopicSlugs: ["emf"],
     tags: ["emf", "rf", "wearable", "room-protection", "travel"],
+    sortOrder: 10,
+    dateAdded: "2026-06-17",
+    lastReviewed: "2026-06-17",
+    sourceNote: "David Musnick forwarded affiliate setup notes for Airestech.",
   },
   {
     slug: "block-blue-light",
     name: "Blue Light Blocking Glasses & Sleep Lighting",
     brand: "BlockBlueLight",
+    categorySlug: "sleep-light-environment",
     category: "Sleep & Light Environment",
     summary:
       "Blue-light blocking glasses, sleep-friendly reading lights, and home lighting products for reducing artificial light exposure in the evening.",
@@ -73,12 +133,18 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     affiliateUrl: "https://www.blockbluelight.com/?ref=drmexperienced",
     discountNote: "Listener discount is applied through the affiliate link.",
     episodeSlugs: ["episode-3-insomnia", "episode-4-emf"],
+    autoLinkTopicSlugs: ["sleep", "insomnia"],
     tags: ["sleep", "insomnia", "circadian-rhythm", "light-hygiene"],
+    sortOrder: 20,
+    dateAdded: "2026-06-17",
+    lastReviewed: "2026-06-17",
+    sourceNote: "Existing affiliate entry reviewed during affiliate catalog pass.",
   },
   {
     slug: "safe-living-technologies",
     name: "EMF Testing & Shielding Tools",
     brand: "Safe Living Technologies",
+    categorySlug: "home-environment",
     category: "Home Environment",
     summary:
       "EMF meters, testing resources, and shielding products for people who want a more concrete look at their home or work environment.",
@@ -98,12 +164,18 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     directUrl: "https://safelivingtechnologies.com/",
     couponCode: "DrMExperienced",
     episodeSlugs: ["episode-4-emf"],
+    autoLinkTopicSlugs: ["emf"],
     tags: ["emf", "shielding", "testing", "home-environment"],
+    sortOrder: 30,
+    dateAdded: "2026-06-17",
+    lastReviewed: "2026-06-17",
+    sourceNote: "Existing EMF resource reviewed against current episode context.",
   },
   {
     slug: "desbio-dbscript",
     name: "Homeopathic and Drainage Product Access",
     brand: "DesBio / DBscript",
+    categorySlug: "homeopathics-supplements",
     category: "Homeopathics & Supplements",
     summary:
       "A DBscript store for DesBio homeopathic and supplement products that Dr. M may reference for emotional support, drainage, detoxification, and functional-medicine conversations.",
@@ -148,12 +220,18 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     cautionNote:
       "DesBio also makes products for chronic viral, bacterial, and tickborne-infection protocols. Dr. M does not recommend those generically; review them through a consult or your own clinician.",
     episodeSlugs: ["brain-fog-part-1", "brain-fog-part-2"],
+    autoLinkTopicSlugs: ["brain-fog", "mood", "detox", "drainage", "chronic-infection"],
     tags: ["homeopathics", "desbio", "detox", "drainage", "brain-health"],
+    sortOrder: 40,
+    dateAdded: "2026-06-17",
+    lastReviewed: "2026-06-17",
+    sourceNote: "David Musnick forwarded DBscript setup and product-list notes.",
   },
   {
     slug: "best365labs",
     name: "Methylene Blue & Brain/Energy Supplements",
     brand: "Best365Labs",
+    categorySlug: "supplements",
     category: "Supplements",
     summary:
       "A supplement source Dr. M noted for methylene blue and other brain and energy related products.",
@@ -173,12 +251,18 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     directUrl: "https://best365labs.com/",
     couponCode: "DrME",
     episodeSlugs: ["brain-fog-part-1", "brain-fog-part-2"],
+    autoLinkTopicSlugs: ["brain-fog", "energy", "mitochondria"],
     tags: ["brain-health", "energy", "mitochondria", "supplements"],
+    sortOrder: 50,
+    dateAdded: "2026-06-17",
+    lastReviewed: "2026-06-17",
+    sourceNote: "Existing supplement resource reviewed during affiliate catalog pass.",
   },
   {
     slug: "doctors-supplement-store",
     name: "Dr. M's Experienced Supplement Dispensary",
     brand: "Doctors Supplement Store",
+    categorySlug: "supplements",
     category: "Supplements",
     summary:
       "A DSS supplement dispensary for the Dr. M's Experienced audience, with thousands of high-quality practitioner-focused supplement products.",
@@ -198,11 +282,16 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     directUrl: "https://dssorders.com/DrMExperienced",
     purchaseNote: "This is the Dr. M's Experienced dispensary URL.",
     tags: ["supplements", "dispensary", "brain-health", "immune-support", "orthopedics"],
+    sortOrder: 60,
+    dateAdded: "2026-06-17",
+    lastReviewed: "2026-06-17",
+    sourceNote: "David Musnick forwarded DSS dispensary URL and catalog notes.",
   },
   {
     slug: "abeytu-naturals",
     name: "Blood & Red Cell Support Supplements",
     brand: "Abeytu Naturals",
+    categorySlug: "supplements",
     category: "Supplements",
     summary:
       "A supplement company Dr. M highlighted for blood-health and red-cell function support.",
@@ -223,7 +312,12 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     directUrl: "https://abeytunaturals.com/",
     couponCode: "DRDAVID10",
     discountNote: "Use code DRDAVID10 for 10% off.",
+    autoLinkTopicSlugs: ["blood-health", "red-cell-function", "circulation"],
     tags: ["blood-health", "red-cell-function", "circulation", "supplements"],
+    sortOrder: 70,
+    dateAdded: "2026-06-17",
+    lastReviewed: "2026-06-17",
+    sourceNote: "David Musnick forwarded Abeytu discount and blood-health notes.",
   },
 ];
 
@@ -231,6 +325,35 @@ export function affiliateDisplayName(product: AffiliateProduct) {
   return product.brand ?? product.name;
 }
 
-export function affiliateProductsForEpisode(episodeSlug: string) {
-  return AFFILIATE_PRODUCTS.filter((product) => product.episodeSlugs?.includes(episodeSlug));
+export function affiliateCategoryForSlug(categorySlug: string) {
+  return AFFILIATE_CATEGORIES.find((category) => category.slug === categorySlug);
+}
+
+export function affiliateCategoryLabel(categorySlug: string) {
+  return affiliateCategoryForSlug(categorySlug)?.label ?? categorySlug;
+}
+
+export function normalizedTopicSlug(topic: string) {
+  return topic.trim().toLowerCase();
+}
+
+export function productMatchesEpisode(
+  product: AffiliateProduct,
+  episode: Pick<Episode, "slug" | "topics">
+) {
+  if (product.episodeSlugs?.includes(episode.slug)) {
+    return true;
+  }
+
+  const episodeTopics = new Set(episode.topics.map(normalizedTopicSlug));
+  return product.autoLinkTopicSlugs?.some((topic) => episodeTopics.has(normalizedTopicSlug(topic))) ?? false;
+}
+
+export function affiliateProductsForEpisode(
+  episode: Pick<Episode, "slug" | "topics">,
+  products: AffiliateProduct[] = AFFILIATE_PRODUCTS
+) {
+  return products.filter((product) => productMatchesEpisode(product, episode)).sort(
+    (a, b) => a.sortOrder - b.sortOrder
+  );
 }

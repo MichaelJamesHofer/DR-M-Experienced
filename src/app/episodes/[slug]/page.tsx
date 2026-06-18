@@ -2,13 +2,14 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { EPISODES, episodeDisplayTitle } from "@/data/episodes";
+import { episodeDisplayTitle } from "@/data/episodes";
 import {
   AFFILIATE_DISCLOSURE,
   AffiliateProduct,
   affiliateDisplayName,
   affiliateProductsForEpisode,
 } from "@/data/affiliates";
+import { getContentCatalog } from "@/data/content-catalog";
 import { NewsletterCapture } from "@/components/newsletter-capture";
 import { VimeoPlayer } from "@/components/vimeo-player";
 
@@ -18,8 +19,9 @@ const dateFormatter = new Intl.DateTimeFormat("en", {
   year: "numeric",
 });
 
-export function generateStaticParams() {
-  return EPISODES.map((episode) => ({ slug: episode.slug }));
+export async function generateStaticParams() {
+  const { episodes } = await getContentCatalog();
+  return episodes.map((episode) => ({ slug: episode.slug }));
 }
 
 export async function generateMetadata({
@@ -28,7 +30,8 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const episode = EPISODES.find((item) => item.slug === slug);
+  const { episodes } = await getContentCatalog();
+  const episode = episodes.find((item) => item.slug === slug);
   if (!episode) {
     return { title: "Episode not found" };
   }
@@ -45,21 +48,22 @@ export default async function EpisodeDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const episode = EPISODES.find((item) => item.slug === slug);
+  const { episodes, affiliateProducts } = await getContentCatalog();
+  const episode = episodes.find((item) => item.slug === slug);
   if (!episode) {
     notFound();
   }
 
   const publishDate = dateFormatter.format(new Date(episode.publishDate));
-  const related = EPISODES.filter(
+  const related = episodes.filter(
     (item) =>
       item.slug !== episode.slug && item.topics.some((topic) => episode.topics.includes(topic))
   ).slice(0, 3);
-  const relatedAffiliateProducts = affiliateProductsForEpisode(episode.slug);
+  const relatedAffiliateProducts = affiliateProductsForEpisode(episode, affiliateProducts);
 
   const hasComingSoonReference = episode.references?.some((ref) => ref.comingSoon === true);
 
-  const episodesChronological = [...EPISODES].sort((a, b) => {
+  const episodesChronological = [...episodes].sort((a, b) => {
     const dateA = new Date(a.publishDate).getTime();
     const dateB = new Date(b.publishDate).getTime();
     if (dateA !== dateB) return dateA - dateB;
