@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
   AffiliateCategory,
   AffiliateProduct,
@@ -26,6 +26,8 @@ export function AffiliateBrowser({ products, categories, episodes }: AffiliateBr
   const [topicSlug, setTopicSlug] = useState("all");
   const [sortKey, setSortKey] = useState<SortKey>("recommended");
   const [viewMode, setViewMode] = useState<ViewMode>("grouped");
+  const [filterPanelOpen, setFilterPanelOpen] = useState(false);
+  const controlsRef = useRef<HTMLDivElement>(null);
 
   const categoryMap = useMemo(
     () => new Map(categories.map((category) => [category.slug, category])),
@@ -110,11 +112,51 @@ export function AffiliateBrowser({ products, categories, episodes }: AffiliateBr
   }, [filteredProducts, sortedCategories]);
 
   const hasActiveFilters = query !== "" || categorySlug !== "all" || topicSlug !== "all";
+  const activeFacetCount =
+    (categorySlug === "all" ? 0 : 1) + (topicSlug === "all" ? 0 : 1);
+
+  const resetAll = () => {
+    setQuery("");
+    setCategorySlug("all");
+    setTopicSlug("all");
+  };
+
+  const toggleFilterPanel = () => {
+    const shouldOpen = !filterPanelOpen;
+    setFilterPanelOpen(shouldOpen);
+    if (shouldOpen) {
+      window.setTimeout(() => {
+        controlsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 0);
+    }
+  };
+
+  const activeFilterChips = [
+    ...(categorySlug !== "all"
+      ? [
+          {
+            label: categoryMap.get(categorySlug)?.label ?? readableLabel(categorySlug),
+            onRemove: () => setCategorySlug("all"),
+          },
+        ]
+      : []),
+    ...(topicSlug !== "all"
+      ? [
+          {
+            label: readableLabel(topicSlug),
+            onRemove: () => setTopicSlug("all"),
+          },
+        ]
+      : []),
+  ];
 
   return (
     <div className="min-w-0 space-y-8">
-      <section className="min-w-0 overflow-hidden rounded-2xl border border-border bg-surface p-5 sm:p-6">
-        <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_auto_auto] lg:items-end">
+      <section
+        ref={controlsRef}
+        className="min-w-0 overflow-hidden rounded-2xl border border-border bg-surface p-5 sm:p-6"
+      >
+        <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_auto_auto_auto] lg:items-end">
           <div className="min-w-0">
             <label className="mb-2 block text-body-sm font-semibold text-foreground">
               Search affiliate guide
@@ -143,7 +185,26 @@ export function AffiliateBrowser({ products, categories, episodes }: AffiliateBr
             </div>
           </div>
 
-          <div className="min-w-0">
+          <div className="hidden min-w-0 sm:block">
+            <p className="mb-2 text-body-sm font-semibold text-foreground">Filters</p>
+            <button
+              type="button"
+              onClick={toggleFilterPanel}
+              aria-expanded={filterPanelOpen}
+              className={`flex h-[50px] min-w-36 items-center justify-center gap-2 rounded-xl border px-4 text-body-sm font-semibold transition-all duration-200 ${
+                filterPanelOpen || activeFacetCount > 0
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border bg-background text-foreground-muted hover:border-primary/50 hover:text-foreground"
+              }`}
+            >
+              Refine
+              <span className="rounded-full bg-surface-elevated px-2 py-0.5 text-caption text-foreground-subtle">
+                {activeFacetCount}
+              </span>
+            </button>
+          </div>
+
+          <div className="hidden min-w-0 sm:block">
             <label className="mb-2 block text-body-sm font-semibold text-foreground">Sort</label>
             <select
               value={sortKey}
@@ -158,7 +219,7 @@ export function AffiliateBrowser({ products, categories, episodes }: AffiliateBr
             </select>
           </div>
 
-          <div className="min-w-0">
+          <div className="hidden min-w-0 sm:block">
             <p className="mb-2 text-body-sm font-semibold text-foreground">View</p>
             <div className="grid h-[50px] min-w-0 grid-cols-2 rounded-xl border border-border bg-background p-1">
               {(["grouped", "all"] as ViewMode[]).map((mode) => (
@@ -179,28 +240,83 @@ export function AffiliateBrowser({ products, categories, episodes }: AffiliateBr
           </div>
         </div>
 
-        <div className="mt-6 space-y-4 border-t border-border pt-5">
-          <FacetRow
-            label="Category"
-            allLabel="All categories"
-            activeValue={categorySlug}
-            allCount={products.length}
-            options={sortedCategories.map((category) => ({
-              value: category.slug,
-              label: category.label,
-              count: categoryCounts.get(category.slug) ?? 0,
-            }))}
-            onChange={setCategorySlug}
-          />
-          <FacetRow
-            label="Related topic"
-            allLabel="All topics"
-            activeValue={topicSlug}
-            allCount={products.length}
-            options={topicOptions}
-            onChange={setTopicSlug}
-          />
-        </div>
+        <MobileCommandBar
+          activeFacetCount={activeFacetCount}
+          filterPanelOpen={filterPanelOpen}
+          onToggleFilters={toggleFilterPanel}
+          sortKey={sortKey}
+          onSortChange={setSortKey}
+          viewMode={viewMode}
+          onToggleView={() => setViewMode(viewMode === "grouped" ? "all" : "grouped")}
+        />
+
+        {(activeFilterChips.length > 0 || filterPanelOpen) && (
+          <div className="mt-5 border-t border-border pt-5">
+            {activeFilterChips.length > 0 && (
+              <div className="mb-4 flex flex-wrap items-center gap-2">
+                <span className="text-caption font-semibold uppercase tracking-wider text-foreground-subtle">
+                  Applied
+                </span>
+                {activeFilterChips.map((chip) => (
+                  <AppliedFilterChip
+                    key={chip.label}
+                    label={chip.label}
+                    onRemove={chip.onRemove}
+                  />
+                ))}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCategorySlug("all");
+                    setTopicSlug("all");
+                  }}
+                  className="rounded-full border border-border bg-background px-3 py-1.5 text-caption font-semibold text-foreground-subtle transition-all duration-200 hover:border-primary/50 hover:text-foreground"
+                >
+                  Clear facets
+                </button>
+              </div>
+            )}
+
+            {filterPanelOpen && (
+              <div className="rounded-2xl border border-border bg-background p-4 sm:p-5">
+                <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-body-sm font-semibold text-foreground">Refine catalog</p>
+                    <p className="text-body-sm text-foreground-muted">
+                      Keep the result list stable while narrowing by category or episode topic.
+                    </p>
+                  </div>
+                  <p className="text-body-sm text-foreground-muted">
+                    {filteredProducts.length} of {products.length} resources
+                  </p>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <FilterSelect
+                    label="Category"
+                    value={categorySlug}
+                    allLabel="All categories"
+                    allCount={products.length}
+                    options={sortedCategories.map((category) => ({
+                      value: category.slug,
+                      label: category.label,
+                      count: categoryCounts.get(category.slug) ?? 0,
+                    }))}
+                    onChange={setCategorySlug}
+                  />
+                  <FilterSelect
+                    label="Related topic"
+                    value={topicSlug}
+                    allLabel="All topics"
+                    allCount={products.length}
+                    options={topicOptions}
+                    onChange={setTopicSlug}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </section>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -213,11 +329,7 @@ export function AffiliateBrowser({ products, categories, episodes }: AffiliateBr
         {hasActiveFilters && (
           <button
             type="button"
-            onClick={() => {
-              setQuery("");
-              setCategorySlug("all");
-              setTopicSlug("all");
-            }}
+            onClick={resetAll}
             className="self-start text-body-sm font-semibold text-primary transition-colors duration-200 hover:text-primary-hover sm:self-auto"
           >
             Clear filters
@@ -227,9 +339,7 @@ export function AffiliateBrowser({ products, categories, episodes }: AffiliateBr
 
       {filteredProducts.length === 0 ? (
         <EmptyAffiliateResults onClear={() => {
-          setQuery("");
-          setCategorySlug("all");
-          setTopicSlug("all");
+          resetAll();
         }} />
       ) : viewMode === "grouped" ? (
         <div className="space-y-14">
@@ -273,71 +383,114 @@ export function AffiliateBrowser({ products, categories, episodes }: AffiliateBr
   );
 }
 
-function FacetRow({
+function FilterSelect({
   label,
   allLabel,
-  activeValue,
+  value,
   allCount,
   options,
   onChange,
 }: {
   label: string;
   allLabel: string;
-  activeValue: string;
+  value: string;
   allCount: number;
   options: Array<{ value: string; label: string; count: number }>;
   onChange: (value: string) => void;
 }) {
   return (
     <div>
-      <p className="mb-2 text-body-sm font-semibold text-foreground">{label}</p>
-      <div className="flex flex-wrap gap-2">
-        <FacetButton
-          label={allLabel}
-          count={allCount}
-          active={activeValue === "all"}
-          onClick={() => onChange("all")}
-        />
+      <label className="mb-2 block text-body-sm font-semibold text-foreground">{label}</label>
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="h-[50px] w-full rounded-xl border border-border bg-surface px-4 text-body-sm font-medium text-foreground-muted transition-all duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+      >
+        <option value="all">
+          {allLabel} ({allCount})
+        </option>
         {options.map((option) => (
-          <FacetButton
-            key={option.value}
-            label={option.label}
-            count={option.count}
-            active={activeValue === option.value}
-            onClick={() => onChange(option.value)}
-          />
+          <option key={option.value} value={option.value}>
+            {option.label} ({option.count})
+          </option>
         ))}
-      </div>
+      </select>
     </div>
   );
 }
 
-function FacetButton({
+function AppliedFilterChip({
   label,
-  count,
-  active,
-  onClick,
+  onRemove,
 }: {
   label: string;
-  count: number;
-  active: boolean;
-  onClick: () => void;
+  onRemove: () => void;
 }) {
   return (
     <button
       type="button"
-      onClick={onClick}
-      className={`inline-flex max-w-full items-center gap-2 rounded-full border px-4 py-2 text-body-sm font-medium transition-all duration-200 ${
-        active
-          ? "border-primary bg-primary/10 text-primary"
-          : "border-border bg-background text-foreground-muted hover:border-primary/50 hover:text-foreground"
-      }`}
+      onClick={onRemove}
+      className="inline-flex max-w-full items-center gap-2 rounded-full border border-primary bg-primary/10 px-3 py-1.5 text-caption font-semibold text-primary transition-all duration-200 hover:bg-primary/15"
     >
       <span className="min-w-0 truncate">{label}</span>
-      <span className="rounded-full bg-surface-elevated px-2 py-0.5 text-caption text-foreground-subtle">
-        {count}
-      </span>
+      <span aria-hidden="true">x</span>
     </button>
+  );
+}
+
+function MobileCommandBar({
+  activeFacetCount,
+  filterPanelOpen,
+  onToggleFilters,
+  sortKey,
+  onSortChange,
+  viewMode,
+  onToggleView,
+}: {
+  activeFacetCount: number;
+  filterPanelOpen: boolean;
+  onToggleFilters: () => void;
+  sortKey: SortKey;
+  onSortChange: (value: SortKey) => void;
+  viewMode: ViewMode;
+  onToggleView: () => void;
+}) {
+  return (
+    <div className="mt-4 grid grid-cols-3 gap-2 rounded-2xl border border-border bg-background p-2 sm:hidden">
+      <button
+        type="button"
+        onClick={onToggleFilters}
+        aria-expanded={filterPanelOpen}
+        className={`rounded-xl px-2 py-3 text-caption font-bold transition-all duration-200 ${
+          filterPanelOpen || activeFacetCount > 0
+            ? "bg-primary text-background"
+            : "bg-background text-foreground-muted"
+        }`}
+      >
+        Filters {activeFacetCount}
+      </button>
+      <label className="relative">
+        <span className="sr-only">Sort affiliate resources</span>
+        <select
+          value={sortKey}
+          onChange={(event) => onSortChange(event.target.value as SortKey)}
+          className="h-full w-full appearance-none rounded-xl border-0 bg-background px-2 py-3 text-center text-caption font-bold text-foreground-muted focus:outline-none focus:ring-2 focus:ring-primary/30"
+        >
+          <option value="recommended">Recommended</option>
+          <option value="name">Name A-Z</option>
+          <option value="category">Category</option>
+          <option value="newest">Newest</option>
+          <option value="episode-count">Most linked</option>
+        </select>
+      </label>
+      <button
+        type="button"
+        onClick={onToggleView}
+        className="rounded-xl bg-background px-2 py-3 text-caption font-bold text-foreground-muted transition-all duration-200 hover:text-foreground"
+      >
+        {viewMode === "grouped" ? "Grouped" : "All"}
+      </button>
+    </div>
   );
 }
 
