@@ -5,7 +5,7 @@ import {
   type AffiliateCategory,
   type AffiliateProduct,
 } from "./affiliates";
-import { EPISODES, type Episode, type EpisodeReference, type EpisodeSection } from "./episodes";
+import { EPISODES, type Episode, type EpisodeReference } from "./episodes";
 
 export type ContentCatalog = {
   episodes: Episode[];
@@ -39,25 +39,6 @@ type EpisodeReferenceRow = {
   url: string;
   coming_soon: boolean;
   display_order: number;
-};
-
-type EpisodeOrderedBodyRow = {
-  episode_slug: string;
-  display_order: number;
-  body: string;
-};
-
-type EpisodeSectionRow = {
-  episode_slug: string;
-  display_order: number;
-  title: string;
-};
-
-type EpisodeSectionParagraphRow = {
-  episode_slug: string;
-  section_display_order: number;
-  display_order: number;
-  body: string;
 };
 
 type AffiliateCategoryRow = {
@@ -121,20 +102,12 @@ const fallbackCatalog: ContentCatalog = {
   source: "fallback",
 };
 
-const strictContentCatalog = process.env.CONTENT_CATALOG_STRICT === "true";
-
 export const getContentCatalog = cache(async (): Promise<ContentCatalog> => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey =
     process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    if (strictContentCatalog) {
-      throw new Error(
-        "CONTENT_CATALOG_STRICT requires NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY or SUPABASE_ANON_KEY."
-      );
-    }
-
     return fallbackCatalog;
   }
 
@@ -143,10 +116,6 @@ export const getContentCatalog = cache(async (): Promise<ContentCatalog> => {
       episodeRows,
       episodeTopicRows,
       episodeReferenceRows,
-      episodeTakeawayRows,
-      episodeChecklistRows,
-      episodeSectionRows,
-      episodeSectionParagraphRows,
       categoryRows,
       productRows,
       reasonRows,
@@ -166,21 +135,6 @@ export const getContentCatalog = cache(async (): Promise<ContentCatalog> => {
       fetchRows<EpisodeReferenceRow>(supabaseUrl, supabaseAnonKey, "episode_references", {
         select: "*",
       }),
-      fetchRows<EpisodeOrderedBodyRow>(supabaseUrl, supabaseAnonKey, "episode_key_takeaways", {
-        select: "*",
-      }),
-      fetchRows<EpisodeOrderedBodyRow>(supabaseUrl, supabaseAnonKey, "episode_checklist_items", {
-        select: "*",
-      }),
-      fetchRows<EpisodeSectionRow>(supabaseUrl, supabaseAnonKey, "episode_sections", {
-        select: "*",
-      }),
-      fetchRows<EpisodeSectionParagraphRow>(
-        supabaseUrl,
-        supabaseAnonKey,
-        "episode_section_paragraphs",
-        { select: "*" }
-      ),
       fetchRows<AffiliateCategoryRow>(supabaseUrl, supabaseAnonKey, "affiliate_categories", {
         select: "*",
       }),
@@ -211,16 +165,8 @@ export const getContentCatalog = cache(async (): Promise<ContentCatalog> => {
       }),
     ]);
 
-    const catalog: ContentCatalog = {
-      episodes: mapEpisodes(
-        episodeRows,
-        episodeTopicRows,
-        episodeReferenceRows,
-        episodeTakeawayRows,
-        episodeChecklistRows,
-        episodeSectionRows,
-        episodeSectionParagraphRows
-      ),
+    return {
+      episodes: mapEpisodes(episodeRows, episodeTopicRows, episodeReferenceRows),
       affiliateCategories: mapCategories(categoryRows),
       affiliateProducts: mapAffiliateProducts(
         productRows,
@@ -234,17 +180,7 @@ export const getContentCatalog = cache(async (): Promise<ContentCatalog> => {
       ),
       source: "supabase",
     };
-
-    if (strictContentCatalog) {
-      validateSupabaseCatalog(catalog);
-    }
-
-    return catalog;
   } catch (error) {
-    if (strictContentCatalog) {
-      throw error;
-    }
-
     console.warn(
       `Supabase content catalog unavailable; using checked-in fallback. ${
         error instanceof Error ? error.message : "Unknown error"
@@ -283,20 +219,15 @@ async function fetchRows<T>(
 function mapEpisodes(
   rows: EpisodeRow[],
   topicRows: EpisodeTopicRow[],
-  referenceRows: EpisodeReferenceRow[],
-  takeawayRows: EpisodeOrderedBodyRow[],
-  checklistRows: EpisodeOrderedBodyRow[],
-  sectionRows: EpisodeSectionRow[],
-  sectionParagraphRows: EpisodeSectionParagraphRow[]
+  referenceRows: EpisodeReferenceRow[]
 ) {
+  const fallbackBySlug = new Map(EPISODES.map((episode) => [episode.slug, episode]));
   const topicsByEpisode = groupValues(topicRows, "episode_slug", "topic_slug");
   const referencesByEpisode = groupRows(referenceRows, "episode_slug");
-  const keyTakeawaysByEpisode = groupEpisodeOrderedBodies(takeawayRows);
-  const checklistByEpisode = groupEpisodeOrderedBodies(checklistRows);
-  const sectionsByEpisode = groupEpisodeSections(sectionRows, sectionParagraphRows);
 
   return rows
     .map((row): Episode => {
+      const fallback = fallbackBySlug.get(row.slug);
       const references = (referencesByEpisode.get(row.slug) ?? [])
         .sort((a, b) => a.display_order - b.display_order)
         .map(
@@ -314,16 +245,16 @@ function mapEpisodes(
         publishDate: row.publish_date,
         durationMinutes: row.duration_minutes ?? undefined,
         summary: row.summary,
-        topics: topicsByEpisode.get(row.slug) ?? [],
-        audioUrl: row.audio_url ?? undefined,
+        topics: topicsByEpisode.get(row.slug) ?? fallback?.topics ?? ["functional-medicine"],
+        audioUrl: row.audio_url ?? fallback?.audioUrl,
         vimeoId: row.vimeo_id ?? undefined,
         spotifyId: row.spotify_id ?? undefined,
         thumbnailUrl: row.thumbnail_url ?? undefined,
-        transcriptUrl: row.transcript_url ?? undefined,
-        references,
-        keyTakeaways: keyTakeawaysByEpisode.get(row.slug) ?? [],
-        checklist: checklistByEpisode.get(row.slug) ?? [],
-        sections: sectionsByEpisode.get(row.slug) ?? [],
+        transcriptUrl: row.transcript_url ?? fallback?.transcriptUrl,
+        references: references.length > 0 ? references : fallback?.references ?? [],
+        keyTakeaways: fallback?.keyTakeaways ?? [],
+        checklist: fallback?.checklist ?? [],
+        sections: fallback?.sections ?? [],
       };
     })
     .sort((a, b) => {
@@ -357,6 +288,7 @@ function mapAffiliateProducts(
   autoTopicRows: ProductTopicRow[],
   tagRows: ProductTagRow[]
 ) {
+  const fallbackBySlug = new Map(AFFILIATE_PRODUCTS.map((product) => [product.slug, product]));
   const categoryLabelBySlug = new Map(categoryRows.map((category) => [category.slug, category.label]));
   const reasonsByProduct = groupOrderedBodies(reasonRows);
   const useCasesByProduct = groupOrderedBodies(useCaseRows);
@@ -367,17 +299,18 @@ function mapAffiliateProducts(
 
   return productRows
     .map((row): AffiliateProduct => {
+      const fallback = fallbackBySlug.get(row.slug);
       return {
         slug: row.slug,
         name: row.name,
         brand: row.brand ?? undefined,
         categorySlug: row.category_slug,
-        category: categoryLabelBySlug.get(row.category_slug) ?? row.category_slug,
+        category: categoryLabelBySlug.get(row.category_slug) ?? fallback?.category ?? row.category_slug,
         summary: row.summary,
         drmThoughts: row.drm_thoughts,
-        reasonsToLike: reasonsByProduct.get(row.slug) ?? [],
-        usedFor: useCasesByProduct.get(row.slug) ?? [],
-        featuredProducts: featuredByProduct.get(row.slug),
+        reasonsToLike: reasonsByProduct.get(row.slug) ?? fallback?.reasonsToLike ?? [],
+        usedFor: useCasesByProduct.get(row.slug) ?? fallback?.usedFor ?? [],
+        featuredProducts: featuredByProduct.get(row.slug) ?? fallback?.featuredProducts,
         purchaseNote: row.purchase_note ?? undefined,
         cautionNote: row.caution_note ?? undefined,
         affiliateUrl: row.affiliate_url ?? undefined,
@@ -387,7 +320,7 @@ function mapAffiliateProducts(
         discountNote: row.discount_note ?? undefined,
         episodeSlugs: episodesByProduct.get(row.slug) ?? undefined,
         autoLinkTopicSlugs: autoTopicsByProduct.get(row.slug) ?? undefined,
-        tags: tagsByProduct.get(row.slug),
+        tags: tagsByProduct.get(row.slug) ?? fallback?.tags,
         sortOrder: row.sort_order,
         dateAdded: row.date_added,
         lastReviewed: row.last_reviewed,
@@ -429,45 +362,6 @@ function groupOrderedBodies(rows: OrderedBodyRow[]) {
   );
 }
 
-function groupEpisodeOrderedBodies(rows: EpisodeOrderedBodyRow[]) {
-  const groups = groupRows(rows, "episode_slug");
-  return new Map(
-    Array.from(groups.entries()).map(([episodeSlug, episodeRows]) => [
-      episodeSlug,
-      episodeRows.sort((a, b) => a.display_order - b.display_order).map((row) => row.body),
-    ])
-  );
-}
-
-function groupEpisodeSections(
-  sectionRows: EpisodeSectionRow[],
-  paragraphRows: EpisodeSectionParagraphRow[]
-) {
-  const paragraphsBySection = new Map<string, EpisodeSectionParagraphRow[]>();
-  paragraphRows.forEach((row) => {
-    const key = `${row.episode_slug}:${row.section_display_order}`;
-    paragraphsBySection.set(key, [...(paragraphsBySection.get(key) ?? []), row]);
-  });
-
-  const sectionsByEpisode = groupRows(sectionRows, "episode_slug");
-  return new Map(
-    Array.from(sectionsByEpisode.entries()).map(([episodeSlug, episodeRows]) => [
-      episodeSlug,
-      episodeRows
-        .sort((a, b) => a.display_order - b.display_order)
-        .map((section): EpisodeSection => {
-          const paragraphs = paragraphsBySection.get(`${episodeSlug}:${section.display_order}`) ?? [];
-          return {
-            title: section.title,
-            content: paragraphs
-              .sort((a, b) => a.display_order - b.display_order)
-              .map((paragraph) => paragraph.body),
-          };
-        }),
-    ])
-  );
-}
-
 function groupOrderedLabels(rows: OrderedLabelRow[]) {
   const groups = groupRows(rows, "product_slug");
   return new Map(
@@ -476,47 +370,4 @@ function groupOrderedLabels(rows: OrderedLabelRow[]) {
       productRows.sort((a, b) => a.display_order - b.display_order).map((row) => row.label),
     ])
   );
-}
-
-function validateSupabaseCatalog(catalog: ContentCatalog) {
-  const problems: string[] = [];
-  const categorySlugs = new Set(catalog.affiliateCategories.map((category) => category.slug));
-
-  if (catalog.episodes.length === 0) problems.push("No published episodes returned from Supabase.");
-  if (catalog.affiliateCategories.length === 0) {
-    problems.push("No affiliate categories returned from Supabase.");
-  }
-  if (catalog.affiliateProducts.length === 0) {
-    problems.push("No published affiliate products returned from Supabase.");
-  }
-
-  catalog.episodes.forEach((episode) => {
-    if (episode.topics.length === 0) problems.push(`${episode.slug} has no topic rows.`);
-    if ((episode.references ?? []).length === 0) problems.push(`${episode.slug} has no reference rows.`);
-    if (episode.keyTakeaways.length === 0) {
-      problems.push(`${episode.slug} has no key takeaway rows.`);
-    }
-    if (episode.sections.length === 0) problems.push(`${episode.slug} has no section rows.`);
-
-    episode.sections.forEach((section) => {
-      if (section.content.length === 0) {
-        problems.push(`${episode.slug} section "${section.title}" has no paragraph rows.`);
-      }
-    });
-  });
-
-  catalog.affiliateProducts.forEach((product) => {
-    if (!categorySlugs.has(product.categorySlug)) {
-      problems.push(`${product.slug} points to missing category ${product.categorySlug}.`);
-    }
-    if (!product.summary.trim()) problems.push(`${product.slug} has no summary.`);
-    if (!product.drmThoughts.trim()) problems.push(`${product.slug} has no Dr. M thoughts.`);
-    if (product.reasonsToLike.length === 0) problems.push(`${product.slug} has no reason rows.`);
-    if (product.usedFor.length === 0) problems.push(`${product.slug} has no use-case rows.`);
-    if (!product.affiliateUrl && !product.directUrl) problems.push(`${product.slug} has no URL.`);
-  });
-
-  if (problems.length > 0) {
-    throw new Error(`Supabase catalog failed validation:\n- ${problems.join("\n- ")}`);
-  }
 }

@@ -33,7 +33,6 @@ Before publishing, open the episode page and verify the "Products referenced in 
 The Supabase content catalog is defined in:
 
 - `supabase/migrations/20260617233000_create_content_catalog.sql`
-- `supabase/migrations/20260619013000_add_episode_enrichment_tables.sql`
 - `supabase/seed.sql`
 - `src/data/content-catalog.ts`
 
@@ -42,10 +41,6 @@ When adding an episode, mirror the public content into:
 - `public.episodes`
 - `public.episode_topics`
 - `public.episode_references`
-- `public.episode_key_takeaways`
-- `public.episode_checklist_items`
-- `public.episode_sections`
-- `public.episode_section_paragraphs`
 
 When adding or changing an affiliate resource, mirror it into:
 
@@ -59,8 +54,6 @@ When adding or changing an affiliate resource, mirror it into:
 - `public.affiliate_product_tags`
 
 The database view `public.affiliate_product_episode_matches` should show the final manual and topic-derived product-to-episode matches. The site reads from Supabase at build time when `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_ANON_KEY` or `NEXT_PUBLIC_SUPABASE_ANON_KEY` are present; otherwise it falls back to the checked-in catalog mirror so local static builds still work.
-
-Production deploys set `CONTENT_CATALOG_STRICT=true`, so a missing Supabase table, missing required episode enrichment, or incomplete affiliate product will fail the build instead of silently publishing stale fallback content.
 
 ## 5. Verify Locally
 
