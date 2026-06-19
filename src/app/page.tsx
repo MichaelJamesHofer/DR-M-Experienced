@@ -1,21 +1,19 @@
 import Link from "next/link";
 import Image from "next/image";
-import { EPISODES, episodeDisplayTitle } from "@/data/episodes";
+import { getContentCatalog } from "@/data/content-catalog";
+import { episodeDisplayTitle } from "@/data/episodes";
 import { NewsletterCapture } from "@/components/newsletter-capture";
 import { PlatformBadges } from "@/components/platform-badges";
 
-// Get unique topics from episodes
-const allTopics = Array.from(
-  new Set(EPISODES.flatMap((ep) => ep.topics))
-).sort();
+export default async function Home() {
+  const { episodes } = await getContentCatalog();
 
-export default function Home() {
-  // Sort episodes by publish date (most recent first)
-  const sortedEpisodes = [...EPISODES].sort((a, b) => {
+  const allTopics = Array.from(new Set(episodes.flatMap((ep) => ep.topics))).sort();
+  const sortedEpisodes = [...episodes].sort((a, b) => {
     const dateA = new Date(a.publishDate).getTime();
     const dateB = new Date(b.publishDate).getTime();
     if (dateB !== dateA) return dateB - dateA;
-    return b.number - a.number; // Same day: higher episode number first
+    return b.number - a.number;
   });
 
   const latestEpisode = sortedEpisodes[0];
