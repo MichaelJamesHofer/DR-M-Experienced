@@ -160,92 +160,136 @@ const featuredMedia = MEDIA_FEATURES.slice(0, 4);
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 lg:px-6 lg:py-16">
-      {/* Hero Section */}
-      <section className="mb-16">
-        <div className="grid gap-10 lg:grid-cols-5 lg:gap-16 items-start">
-          <div className="lg:col-span-3">
-            <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-3">
+    <div className="mx-auto max-w-6xl px-4 py-10 lg:px-6 lg:py-14">
+      <section className="mb-14">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-12">
+          <div className="lg:pt-6">
+            <p className="mb-3 text-caption font-semibold uppercase tracking-wider text-primary">
               Meet the physician
             </p>
-            <h1 className="text-display font-bold text-foreground mb-6">
+            <h1 className="mb-6 max-w-3xl text-display font-bold text-foreground">
               Dr. David Musnick, MD
             </h1>
-            <p className="text-body-lg text-foreground-muted mb-6">
+            <p className="max-w-3xl text-body-lg text-foreground-muted">
               Board-certified in Internal Medicine (ABIM) and Sports Medicine (CAQ), with deep
               Functional Medicine training and 37+ years in patient care across concussion,
               brain-based symptoms and conditions, autoimmune conditions, fatigue, arthritis,
               gastrointestinal symptoms and conditions, orthopedics, and sports medicine.
             </p>
-            <div className="space-y-4 text-body text-foreground-muted mb-8">
-              <p>
-                David Musnick, MD, has dedicated 37+ years to patient care, with deep clinical work
-                in concussion, brain-based symptoms and conditions, autoimmune conditions, fatigue,
-                arthritis, and gastrointestinal symptoms and conditions, alongside his broader work
-                in Sports Medicine, Internal Medicine, Regenerative Medicine, and 28 years of
-                Functional Medicine. His career includes thousands of complex orthopedic and
-                neurologic cases, long-standing work at his Bellevue practice, and formal
-                collaborations with multidisciplinary teams in Seattle, Bellevue, and Idaho.
-              </p>
-              <p>
-                He developed detailed decision trees for joint, tendon, muscle, nerve, concussion,
-                and brain-related conditions, published in books such as <em>Metabolic Orthopedics</em> and{" "}
-                <em>Integrative Neurology</em>. He routinely lectures nationally on osteoarthritis,
-                cognitive decline, concussion, long COVID, and dysautonomia, and is frequently retained
-                for medical-legal orthopedic consultations and independent medical exams.
-              </p>
-              <p>
-                A Certified Functional Medicine practitioner for more than 25 years—and one of IFM&apos;s
-                earliest teachers—Dr. Musnick spent 33 years in Seattle before relocating to Idaho in 2022.
-              </p>
+
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link
+                href="#clinical-domains"
+                className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-body-sm font-bold text-background transition-colors duration-200 hover:bg-primary-hover"
+              >
+                Explore clinical focus
+              </Link>
+              <Link
+                href="#featured-media"
+                className="inline-flex items-center justify-center rounded-full border border-border px-5 py-3 text-body-sm font-bold text-foreground transition-colors duration-200 hover:border-primary hover:text-primary"
+              >
+                View media
+              </Link>
             </div>
-            {/* Credentials */}
-            <div className="flex flex-wrap gap-3">
+
+            <div className="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="rounded-xl border border-border bg-surface p-4">
+                <p className="text-heading-sm font-bold text-foreground">37+ years</p>
+                <p className="mt-1 text-caption text-foreground-muted">Patient care</p>
+              </div>
               {credentials.map((cred) => (
                 <div
                   key={cred.label}
-                  className="rounded-xl border border-border bg-surface px-4 py-3"
+                  className="rounded-xl border border-border bg-surface p-4"
                 >
-                  <p className="text-body-sm font-semibold text-foreground">{cred.label}</p>
-                  <p className="text-caption text-foreground-muted">{cred.org}</p>
+                  <p className="text-heading-sm font-bold text-foreground">{cred.label}</p>
+                  <p className="mt-1 text-caption text-foreground-muted">{cred.org}</p>
                 </div>
               ))}
             </div>
           </div>
-          <div className="lg:col-span-2">
-            <div className="rounded-2xl border border-border bg-surface p-6">
-              <div className="aspect-square rounded-xl overflow-hidden bg-gradient-to-br from-surface-elevated to-surface mb-6">
-                <Image
-                  src="/images/davidmusnicksketch.jpg"
-                  alt="Dr. David Musnick"
-                  width={400}
-                  height={400}
-                  className="w-full h-full object-cover"
-                  priority
-                />
+
+          <aside className="order-first lg:order-none">
+            <div className="rounded-2xl border border-border bg-surface p-4 lg:p-6">
+              <div className="flex gap-4 lg:block">
+                <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-surface-elevated to-surface lg:mb-6 lg:aspect-square lg:h-auto lg:w-full">
+                  <Image
+                    src="/images/davidmusnicksketch.jpg"
+                    alt="Dr. David Musnick"
+                    width={520}
+                    height={520}
+                    className="h-full w-full object-cover"
+                    priority
+                  />
+                </div>
+                <dl className="grid flex-1 gap-3 text-body-sm">
+                  <div className="grid gap-1">
+                    <dt className="text-foreground-muted">Location</dt>
+                    <dd className="font-medium text-foreground">Idaho (relocated 2022)</dd>
+                  </div>
+                  <div className="grid gap-1">
+                    <dt className="text-foreground-muted">Experience</dt>
+                    <dd className="font-medium text-foreground">37+ years</dd>
+                  </div>
+                  <div className="grid gap-1">
+                    <dt className="text-foreground-muted">Focus</dt>
+                    <dd className="font-medium text-foreground">
+                      Functional Medicine & Sports Medicine
+                    </dd>
+                  </div>
+                </dl>
               </div>
-              <dl className="space-y-3 text-body-sm">
-                <div className="flex justify-between">
-                  <dt className="text-foreground-muted">Location</dt>
-                  <dd className="text-foreground font-medium">Idaho (relocated 2022)</dd>
-                </div>
-                <div className="flex justify-between">
-                  <dt className="text-foreground-muted">Experience</dt>
-                  <dd className="text-foreground font-medium">37+ years</dd>
-                </div>
-                <div className="flex justify-between">
-                  <dt className="text-foreground-muted">Focus</dt>
-                  <dd className="text-foreground font-medium text-right">Functional Medicine &<br />Sports Medicine</dd>
-                </div>
-              </dl>
             </div>
-          </div>
+          </aside>
         </div>
       </section>
 
-      {/* Specialty Highlights */}
-      <section className="mb-16">
-        <h2 className="text-heading-xl font-bold text-foreground mb-6">Specialty domains at a glance</h2>
+      <section className="mb-16 border-t border-border pt-10 lg:grid lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-10">
+        <div>
+          <p className="mb-3 text-caption font-semibold uppercase tracking-wider text-primary">
+            Clinical biography
+          </p>
+          <h2 className="text-heading-xl font-bold text-foreground">
+            The background behind the episodes
+          </h2>
+        </div>
+        <div className="mt-6 space-y-5 text-body text-foreground-muted lg:mt-0">
+          <p>
+            David Musnick, MD, has dedicated 37+ years to patient care, with deep clinical work
+            in concussion, brain-based symptoms and conditions, autoimmune conditions, fatigue,
+            arthritis, and gastrointestinal symptoms and conditions, alongside his broader work
+            in Sports Medicine, Internal Medicine, Regenerative Medicine, and 28 years of
+            Functional Medicine. His career includes thousands of complex orthopedic and
+            neurologic cases, long-standing work at his Bellevue practice, and formal
+            collaborations with multidisciplinary teams in Seattle, Bellevue, and Idaho.
+          </p>
+          <p>
+            He developed detailed decision trees for joint, tendon, muscle, nerve, concussion,
+            and brain-related conditions, published in books such as <em>Metabolic Orthopedics</em> and{" "}
+            <em>Integrative Neurology</em>. He routinely lectures nationally on osteoarthritis,
+            cognitive decline, concussion, long COVID, and dysautonomia, and is frequently retained
+            for medical-legal orthopedic consultations and independent medical exams.
+          </p>
+          <p>
+            A Certified Functional Medicine practitioner for more than 25 years—and one of IFM&apos;s
+            earliest teachers—Dr. Musnick spent 33 years in Seattle before relocating to Idaho in 2022.
+          </p>
+        </div>
+      </section>
+
+      <section id="clinical-domains" className="mb-16 scroll-mt-28">
+        <div className="mb-6 max-w-3xl">
+          <p className="mb-3 text-caption font-semibold uppercase tracking-wider text-primary">
+            Clinical focus
+          </p>
+          <h2 className="mb-4 text-heading-xl font-bold text-foreground">
+            Specialty domains at a glance
+          </h2>
+          <p className="text-body text-foreground-muted">
+            A quick index of the clinical areas covered by Dr. Musnick&apos;s background, writing,
+            teaching, and educational episodes.
+          </p>
+        </div>
         <div className="grid gap-4 sm:grid-cols-2">
           {specialtyHighlights.map((item, index) => (
             <div
@@ -258,12 +302,18 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Treatments */}
       <section className="mb-16">
-        <h2 className="text-heading-xl font-bold text-foreground mb-4">Treatments Dr. Musnick administers</h2>
-        <p className="text-body text-foreground-muted mb-8">
-          Each plan blends hands-on diagnostics with precise therapeutic tools. Here are the modalities he personally delivers:
-        </p>
+        <div className="mb-8 max-w-3xl">
+          <p className="mb-3 text-caption font-semibold uppercase tracking-wider text-primary">
+            Treatment tools
+          </p>
+          <h2 className="mb-4 text-heading-xl font-bold text-foreground">
+            Treatments Dr. Musnick administers
+          </h2>
+          <p className="text-body text-foreground-muted">
+            Each plan blends hands-on diagnostics with precise therapeutic tools. Here are the modalities he personally delivers:
+          </p>
+        </div>
         <div className="rounded-2xl border border-border bg-surface p-6">
           <div className="grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
             {treatmentList.map((treatment, index) => (
@@ -275,15 +325,18 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Orthopedic & Sports Medicine */}
       <section className="mb-16">
-        <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-3">
-          Orthopedic & sports medicine
-        </p>
-        <h2 className="text-heading-xl font-bold text-foreground mb-4">Decision-order care for every tissue</h2>
-        <p className="text-body text-foreground-muted mb-8">
-          Every evaluation captures the involved tissues, neurologic tone, and pain-processing patterns before layering interventions.
-        </p>
+        <div className="mb-8 max-w-3xl">
+          <p className="mb-3 text-caption font-semibold uppercase tracking-wider text-primary">
+            Orthopedic & sports medicine
+          </p>
+          <h2 className="mb-4 text-heading-xl font-bold text-foreground">
+            Decision-order care for every tissue
+          </h2>
+          <p className="text-body text-foreground-muted">
+            Every evaluation captures the involved tissues, neurologic tone, and pain-processing patterns before layering interventions.
+          </p>
+        </div>
         <div className="grid gap-6 md:grid-cols-2">
           {sportsFocus.map((focus, index) => (
             <div key={index} className="rounded-2xl border border-border bg-surface p-6">
@@ -294,15 +347,18 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Functional Medicine Focus */}
       <section className="mb-16">
-        <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-3">
-          Functional medicine focus
-        </p>
-        <h2 className="text-heading-xl font-bold text-foreground mb-4">Systems Dr. Musnick evaluates in depth</h2>
-        <p className="text-body text-foreground-muted mb-8">
-          His functional immunology and neurology background lets him map how each system interacts with orthopedic complaints.
-        </p>
+        <div className="mb-8 max-w-3xl">
+          <p className="mb-3 text-caption font-semibold uppercase tracking-wider text-primary">
+            Functional medicine focus
+          </p>
+          <h2 className="mb-4 text-heading-xl font-bold text-foreground">
+            Systems Dr. Musnick evaluates in depth
+          </h2>
+          <p className="text-body text-foreground-muted">
+            His functional immunology and neurology background lets him map how each system interacts with orthopedic complaints.
+          </p>
+        </div>
         <div className="grid gap-6 lg:grid-cols-3">
           {functionalExpertise.map((area, index) => (
             <div key={index} className="rounded-2xl border border-border bg-surface p-6">
@@ -320,10 +376,20 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Publications & Lectures */}
       <section className="mb-16">
+        <div className="mb-8 max-w-3xl">
+          <p className="mb-3 text-caption font-semibold uppercase tracking-wider text-primary">
+            Evidence trail
+          </p>
+          <h2 className="mb-4 text-heading-xl font-bold text-foreground">
+            Publications, lectures, teaching, and training
+          </h2>
+          <p className="text-body text-foreground-muted">
+            The page keeps the full proof record visible, but groups it as a clinical evidence trail
+            instead of scattering it across unrelated sections.
+          </p>
+        </div>
         <div className="grid gap-8 lg:grid-cols-2">
-          {/* Publications */}
           <div className="rounded-2xl border border-border bg-surface p-8">
             <h2 className="text-heading-lg font-bold text-foreground mb-6">Selected publications</h2>
             <div className="divide-y divide-border">
@@ -336,7 +402,6 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* Lectures */}
           <div className="rounded-2xl border border-border bg-surface p-8">
             <h2 className="text-heading-lg font-bold text-foreground mb-6">Lectures & workshops</h2>
             <div className="divide-y divide-border">
@@ -352,13 +417,7 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Teaching & Training */}
-      <section className="mb-16">
-        <h2 className="text-heading-xl font-bold text-foreground mb-6">Teaching & ongoing training</h2>
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* Faculty Roles */}
+        <div className="mt-6 grid gap-6 lg:grid-cols-2">
           <div className="rounded-2xl border border-border bg-surface p-8">
             <h3 className="text-heading font-semibold text-foreground mb-5">Faculty positions</h3>
             <div className="divide-y divide-border">
@@ -374,7 +433,6 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* Recent CME */}
           <div className="rounded-2xl border border-border bg-surface p-8">
             <h3 className="text-heading font-semibold text-foreground mb-5">Recent continuing education</h3>
             <div className="flex flex-wrap gap-2">
@@ -391,8 +449,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Featured Media */}
-      <section className="mb-16">
+      <section id="featured-media" className="mb-16 scroll-mt-28">
         <div className="flex items-end justify-between mb-6">
           <h2 className="text-heading-xl font-bold text-foreground">Featured media</h2>
           <Link
@@ -424,7 +481,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Outside the Clinic */}
       <section className="mb-16">
         <h2 className="text-heading-xl font-bold text-foreground mb-6">Outside the clinic</h2>
         <div className="rounded-2xl border border-border bg-surface p-8">
@@ -436,7 +492,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Disclaimer */}
       <section className="rounded-2xl border border-dashed border-border bg-surface p-8">
         <h2 className="text-heading font-semibold text-foreground mb-4">Educational Only</h2>
         <div className="space-y-3 text-body text-foreground-muted leading-relaxed">
