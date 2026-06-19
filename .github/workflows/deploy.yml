@@ -46,6 +46,7 @@ jobs:
           YOUTUBE_CHANNEL_USERNAME: ${{ secrets.YOUTUBE_CHANNEL_USERNAME }}
           # Supabase form function endpoint.
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           # PostHog (optional - analytics will work if configured)
           NEXT_PUBLIC_POSTHOG_API_KEY: ${{ secrets.NEXT_PUBLIC_POSTHOG_API_KEY }}
           NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
