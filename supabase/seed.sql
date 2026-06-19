@@ -132,6 +132,82 @@ on conflict (episode_slug, url) do update set
   label = excluded.label,
   display_order = excluded.display_order;
 
+insert into public.episode_key_takeaways (episode_slug, display_order, body) values
+  ($$brain-fog-part-1$$, 10, $$Brain fog is not normal at any age and indicates underlying dysfunction.$$),
+  ($$brain-fog-part-1$$, 20, $$Core mechanisms include brain inflammation, dysfunctional microglia, and neurotransmitter issues.$$),
+  ($$brain-fog-part-1$$, 30, $$Ignoring brain fog can lead to headaches, chronic fatigue, and cognitive decline.$$),
+  ($$brain-fog-part-1$$, 40, $$Root causes range from excitotoxins (MSG & aspartame) to infections, heavy metals, and EMFs.$$),
+  ($$brain-fog-part-1$$, 50, $$Functional testing to find root causes is essential rather than masking symptoms.$$),
+  ($$brain-fog-part-2$$, 10, $$Brain fog reflects brain dysfunction with inflammation and slowed neurotransmission, not just being "tired" or "off."$$),
+  ($$brain-fog-part-2$$, 20, $$Episodes of brain fog lasting more than 15–20 minutes, especially with memory, focus, or speech issues, need proper evaluation.$$),
+  ($$brain-fog-part-2$$, 30, $$High-titer Epstein-Barr virus reactivation and mold/mycotoxins are common hidden drivers of persistent brain fog.$$),
+  ($$brain-fog-part-2$$, 40, $$Standard EBV testing is often insufficient—full panels and correct cutoffs are required to see reactivation.$$),
+  ($$brain-fog-part-2$$, 50, $$Foundational steps like sleep, exercise, EMF reduction, and toxin avoidance protect the brain while deeper root-cause work is underway.$$),
+  ($$episode-3-insomnia$$, 10, $$Insomnia includes trouble falling asleep, staying asleep, or not getting enough hours—7+ hours of quality sleep helps reduce brain and body inflammation.$$),
+  ($$episode-3-insomnia$$, 20, $$Aim to fall asleep in under 20 minutes; consistent bedtime (often 9–10 PM for adults) supports full 90-minute sleep cycles.$$),
+  ($$episode-3-insomnia$$, 30, $$Blue-light blocking, wind-down routines, caffeine timing, and stress tools (mind dump, EFT tapping) can materially improve sleep.$$),
+  ($$episode-3-insomnia$$, 40, $$Natural supports may include properly timed melatonin and homeopathy; antihistamines and alcohol often disrupt sleep architecture.$$),
+  ($$episode-4-emf$$, 10, $$RF (phones, WiFi, Bluetooth, 5G), EMF from appliances/EVs, and electrical fields from wiring can affect the blood-brain barrier and contribute to brain fog, headaches, insomnia, and inflammation.$$),
+  ($$episode-4-emf$$, 20, $$Mitigation starts with wired peripherals, airplane mode or distance from the phone at night, Ethernet + WiFi off overnight, and turning off Bluetooth/WiFi when idle.$$),
+  ($$episode-4-emf$$, 30, $$Cars—especially EVs and hybrids—benefit from EMF testing before purchase; smart meters can be opted out or shielded.$$),
+  ($$episode-4-emf$$, 40, $$Meters (e.g. Safe and Sound II, Tri-Field) help you measure home, car, and workplace; shielding, clothing, and pro assessments may help sensitive individuals.$$)
+on conflict (episode_slug, display_order) do update set body = excluded.body;
+
+insert into public.episode_checklist_items (episode_slug, display_order, body) values
+  ($$brain-fog-part-1$$, 10, $$Eat organic, grass-fed, add parsley (for apigenin to calm microglia).$$),
+  ($$brain-fog-part-1$$, 20, $$Prioritize 7.5+ hours of quality sleep.$$),
+  ($$brain-fog-part-1$$, 30, $$Exercise daily to boost BDNF.$$),
+  ($$brain-fog-part-1$$, 40, $$Reduce EMFs (WiFi off at night, phone away from head).$$),
+  ($$brain-fog-part-1$$, 50, $$Avoid plastics and hidden toxins.$$)
+on conflict (episode_slug, display_order) do update set body = excluded.body;
+
+insert into public.episode_sections (episode_slug, display_order, title) values
+  ($$brain-fog-part-1$$, 10, $$What is brain fog?$$),
+  ($$brain-fog-part-1$$, 20, $$Core mechanisms$$),
+  ($$brain-fog-part-1$$, 30, $$Potential causes$$),
+  ($$brain-fog-part-1$$, 40, $$First steps to fight back$$),
+  ($$brain-fog-part-2$$, 10, $$When brain fog is serious$$),
+  ($$brain-fog-part-2$$, 20, $$Key testing for hidden drivers$$),
+  ($$brain-fog-part-2$$, 30, $$Imaging and when to escalate$$),
+  ($$brain-fog-part-2$$, 40, $$Universal basics while you test$$),
+  ($$episode-3-insomnia$$, 10, $$What insomnia is$$),
+  ($$episode-3-insomnia$$, 20, $$Sleep maintenance and routine$$),
+  ($$episode-3-insomnia$$, 30, $$Light, stress, and natural supports$$),
+  ($$episode-4-emf$$, 10, $$Types of electromagnetic exposure$$),
+  ($$episode-4-emf$$, 20, $$Brain and barrier$$),
+  ($$episode-4-emf$$, 30, $$What to do today$$)
+on conflict (episode_slug, display_order) do update set title = excluded.title;
+
+insert into public.episode_section_paragraphs (
+  episode_slug,
+  section_display_order,
+  display_order,
+  body
+) values
+  ($$brain-fog-part-1$$, 10, 10, $$Brain fog manifests as slow thinking, low mental energy, word-finding trouble, poor focus, and memory slips.$$),
+  ($$brain-fog-part-1$$, 10, 20, $$It's not normal at any age and indicates underlying dysfunction that needs attention.$$),
+  ($$brain-fog-part-1$$, 20, 10, $$Brain inflammation, dysfunctional microglia, and neurotransmitter issues are the primary mechanisms driving brain fog.$$),
+  ($$brain-fog-part-1$$, 20, 20, $$Understanding these mechanisms helps guide targeted interventions rather than symptom masking.$$),
+  ($$brain-fog-part-1$$, 30, 10, $$Dr. M outlines a comprehensive list: excitotoxins (MSG & aspartame), poor oxygen delivery, concussions, gluten/autoimmunity, blood sugar swings, hormones, mold, infections (EBV, Lyme, long COVID), heavy metals, EMFs, medications, and more.$$),
+  ($$brain-fog-part-1$$, 30, 20, $$This wide range of causes underscores the importance of functional testing to identify root causes.$$),
+  ($$brain-fog-part-1$$, 40, 10, $$Start with foundational interventions: eat organic, grass-fed foods, add parsley for apigenin to calm microglia.$$),
+  ($$brain-fog-part-1$$, 40, 20, $$Prioritize 7.5+ hours of quality sleep, exercise daily to boost BDNF, reduce EMFs (WiFi off at night, phone away from head), and avoid plastics and hidden toxins.$$),
+  ($$brain-fog-part-2$$, 10, 10, $$Brain fog is more serious when it comes with memory problems, poor focus, word-finding difficulty, or speech changes.$$),
+  ($$brain-fog-part-2$$, 10, 20, $$Episodes that last longer than 15–20 minutes—especially when frequent—warrant careful evaluation rather than simple reassurance.$$),
+  ($$brain-fog-part-2$$, 20, 10, $$Systemic inflammation markers and full Epstein-Barr virus panels (including VCA IgG/IgM, EBNA, and Early Antigen) can uncover reactivation that standard tests miss.$$),
+  ($$brain-fog-part-2$$, 20, 20, $$Urine mycotoxin panels are appropriate when mold exposure is suspected, and homocysteine helps flag vascular stress on the brain.$$),
+  ($$brain-fog-part-2$$, 30, 10, $$Brain MRI is not usually the first test for brain fog, but becomes important with progressive cognitive change or neurological red flags.$$),
+  ($$brain-fog-part-2$$, 30, 20, $$Dr. M emphasizes matching the intensity of testing to symptom severity and pattern, not just ordering everything up front.$$),
+  ($$brain-fog-part-2$$, 40, 10, $$While working up root causes, patients should still implement foundational brain-protective habits: 7.5+ hours of quality sleep, daily exercise to raise BDNF, and an organic/grass-fed diet.$$),
+  ($$brain-fog-part-2$$, 40, 20, $$Other carry-overs from Part 1—parsley for apigenin, EMF reduction like turning WiFi off at night, and avoiding plastics/excitotoxins—remain essential.$$),
+  ($$episode-3-insomnia$$, 10, 10, $$Dr. M defines insomnia as difficulty falling asleep, staying asleep, or getting insufficient sleep, and explains why adequate sleep duration matters for inflammation and recovery.$$),
+  ($$episode-3-insomnia$$, 20, 10, $$Covers sleep-onset vs maintenance issues, teenagers’ delayed sleep phase, and building habits that help you fall back asleep when you wake at night.$$),
+  ($$episode-3-insomnia$$, 30, 10, $$Discusses blue-light strategies, evening habits, morning light and daytime exercise, and cautious use of melatonin and homeopathic options—with product discount links in the show’s pinned comment where applicable.$$),
+  ($$episode-4-emf$$, 10, 10, $$Dr. M outlines RF vs EMF vs electrical fields and where each shows up in daily life—from towers and earbuds to wiring and vehicles.$$),
+  ($$episode-4-emf$$, 20, 10, $$How fields may stress the blood-brain barrier, symptoms that can follow, and why protecting sleep and barrier integrity matters for long-term brain health.$$),
+  ($$episode-4-emf$$, 30, 10, $$Practical reduction strategies: hardwiring, nighttime WiFi habits, meter-based assessment, smart-meter choices, and resources referenced in pinned comments and show notes.$$)
+on conflict (episode_slug, section_display_order, display_order) do update set body = excluded.body;
+
 insert into public.affiliate_categories (slug, label, description, display_order) values
   ('emf-rf-protection', 'EMF / RF Protection', $$Wearable, room, testing, and shielding tools connected to Dr. M's EMF and environmental-exposure conversations.$$, 10),
   ('sleep-light-environment', 'Sleep & Light Environment', $$Light-hygiene and circadian-support tools for sleep, insomnia, and evening routines.$$, 20),
