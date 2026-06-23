@@ -6,7 +6,7 @@ import { NewsletterCapture } from "@/components/newsletter-capture";
 import { PlatformBadges } from "@/components/platform-badges";
 
 export default async function Home() {
-  const { episodes } = await getContentCatalog();
+  const { episodes, blogPosts } = await getContentCatalog();
 
   const allTopics = Array.from(new Set(episodes.flatMap((ep) => ep.topics))).sort();
   const sortedEpisodes = [...episodes].sort((a, b) => {
@@ -18,6 +18,7 @@ export default async function Home() {
 
   const latestEpisode = sortedEpisodes[0];
   const featuredEpisodes = sortedEpisodes.slice(0, 3);
+  const latestBlogPosts = blogPosts.slice(0, 2);
   const hasLatestVideo = latestEpisode?.vimeoId;
 
   return (
@@ -179,6 +180,42 @@ export default async function Home() {
               {topic}
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* Learning Formats */}
+      <section className="mx-auto max-w-6xl px-4 py-16 lg:px-6">
+        <div className="mb-10">
+          <p className="mb-2 text-caption font-semibold uppercase tracking-wider text-primary">
+            Choose the format
+          </p>
+          <h2 className="text-heading-xl font-bold text-foreground">
+            Listen, read, then apply
+          </h2>
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          <FormatCard
+            href="/episodes"
+            eyebrow="Podcast"
+            title="Episodes"
+            body="Short practical audio and video notes with summaries, references, and order-of-operations takeaways."
+          />
+          <FormatCard
+            href="/blogs"
+            eyebrow="Long-form"
+            title="Blogs"
+            body={
+              latestBlogPosts.length > 0
+                ? `Read ${latestBlogPosts.length} current note${latestBlogPosts.length === 1 ? "" : "s"} and the longer context behind recurring topics.`
+                : "A home for long-form explainers, episode expansions, and clinic-style frameworks as posts are published."
+            }
+          />
+          <FormatCard
+            href="/affiliates"
+            eyebrow="Resources"
+            title="Affiliate guide"
+            body="Products, tools, and resource notes connected back to topics and episodes when there is a clear reason."
+          />
         </div>
       </section>
 
@@ -382,5 +419,43 @@ export default async function Home() {
         </div>
       </section>
     </>
+  );
+}
+
+function FormatCard({
+  href,
+  eyebrow,
+  title,
+  body,
+}: {
+  href: string;
+  eyebrow: string;
+  title: string;
+  body: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="group flex min-h-56 flex-col rounded-2xl border border-border bg-surface p-6 transition-all duration-300 hover:border-primary/50 hover:shadow-glow-sm"
+    >
+      <p className="mb-3 text-caption font-semibold uppercase tracking-wider text-primary">
+        {eyebrow}
+      </p>
+      <h3 className="mb-3 text-heading-lg font-bold text-foreground transition-colors duration-200 group-hover:text-primary">
+        {title}
+      </h3>
+      <p className="flex-1 text-body-sm text-foreground-muted">{body}</p>
+      <div className="mt-5 flex items-center justify-between border-t border-border pt-4">
+        <span className="text-body-sm font-semibold text-primary">Open</span>
+        <svg
+          className="h-4 w-4 text-foreground-muted transition-all duration-200 group-hover:translate-x-1 group-hover:text-primary"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+      </div>
+    </Link>
   );
 }

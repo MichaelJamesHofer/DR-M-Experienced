@@ -29,6 +29,16 @@ Affiliate catalog:
 - `public.affiliate_product_tags`
 - `public.affiliate_product_episode_matches`
 
+Blog catalog:
+
+- `public.blog_posts`
+- `public.blog_post_topics`
+- `public.blog_post_sections`
+- `public.blog_post_section_paragraphs`
+- `public.blog_post_references`
+- `public.blog_post_related_episodes`
+- `public.blog_post_related_affiliate_products`
+
 ## Build-Time Contract
 
 The site reads Supabase during `next build` when `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are configured.
@@ -39,8 +49,11 @@ Production deploys set `CONTENT_CATALOG_STRICT=true`. In strict mode, the build 
 - topic, reference, key-takeaway, and section rows for every episode
 - paragraph rows for every section
 - category, summary, Dr. M thoughts, reason, use-case, and URL data for every product
+- topic and section data for every published blog post
 
 Local builds without Supabase env vars still use the checked-in fallback catalog.
+
+Blog tables are optional until the blog migration is run. If the blog tables do not exist yet, the site renders the blog library empty rather than blocking the existing episode and affiliate catalog.
 
 ## Local Verification Against Production Supabase
 
@@ -67,8 +80,9 @@ Only push to `main` after the verifier passes, the strict build passes, and the 
 2. Add or update episode rows in Supabase.
 3. Add episode topics, references, takeaways, checklist items, sections, and section paragraphs.
 4. Add or update affiliate rows and product-to-episode links.
-5. Run `npm run lint`, `npx tsc --noEmit`, and `npm run build`.
-6. Push to `main` and verify the GitHub Pages deploy.
+5. Add or update blog rows when a long-form note is ready.
+6. Run `npm run lint`, `npx tsc --noEmit`, and `npm run build`.
+7. Push to `main` and verify the GitHub Pages deploy.
 
 ## Near-Term Admin Approach
 

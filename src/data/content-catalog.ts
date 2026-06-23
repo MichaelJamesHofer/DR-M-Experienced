@@ -5,12 +5,14 @@ import {
   type AffiliateCategory,
   type AffiliateProduct,
 } from "./affiliates";
+import { BLOG_POSTS, type BlogPost, type BlogReference, type BlogSection } from "./blogs";
 import { EPISODES, type Episode, type EpisodeReference, type EpisodeSection } from "./episodes";
 
 export type ContentCatalog = {
   episodes: Episode[];
   affiliateCategories: AffiliateCategory[];
   affiliateProducts: AffiliateProduct[];
+  blogPosts: BlogPost[];
   source: "supabase" | "fallback";
 };
 
@@ -114,10 +116,61 @@ type ProductTagRow = {
   tag_slug: string;
 };
 
+type BlogPostRow = {
+  slug: string;
+  title: string;
+  subtitle: string | null;
+  excerpt: string;
+  author_name: string;
+  publish_date: string;
+  updated_date: string | null;
+  reading_minutes: number | null;
+  hero_image_url: string | null;
+  meta_description: string | null;
+};
+
+type BlogTopicRow = {
+  blog_slug: string;
+  topic_slug: string;
+};
+
+type BlogSectionRow = {
+  blog_slug: string;
+  display_order: number;
+  title: string;
+};
+
+type BlogSectionParagraphRow = {
+  blog_slug: string;
+  section_display_order: number;
+  display_order: number;
+  body: string;
+};
+
+type BlogReferenceRow = {
+  blog_slug: string;
+  label: string;
+  url: string;
+  display_order: number;
+};
+
+type BlogRelatedEpisodeRow = {
+  blog_slug: string;
+  episode_slug: string;
+  display_order: number;
+};
+
+type BlogRelatedAffiliateProductRow = {
+  blog_slug: string;
+  product_slug: string;
+  display_order: number;
+};
+
 const fallbackCatalog: ContentCatalog = {
   episodes: EPISODES,
   affiliateCategories: AFFILIATE_CATEGORIES,
   affiliateProducts: AFFILIATE_PRODUCTS,
+  blogPosts: BLOG_POSTS,
   source: "fallback",
 };
 
@@ -157,6 +210,13 @@ export const getContentCatalog = cache(async (): Promise<ContentCatalog> => {
       episodeLinkRows,
       autoTopicRows,
       tagRows,
+      blogRows,
+      blogTopicRows,
+      blogSectionRows,
+      blogSectionParagraphRows,
+      blogReferenceRows,
+      blogRelatedEpisodeRows,
+      blogRelatedProductRows,
     ] = await Promise.all([
       fetchRows<EpisodeRow>(supabaseUrl, supabaseAnonKey, "episodes", {
         select: "*",
@@ -211,6 +271,37 @@ export const getContentCatalog = cache(async (): Promise<ContentCatalog> => {
       fetchRows<ProductTagRow>(supabaseUrl, supabaseAnonKey, "affiliate_product_tags", {
         select: "*",
       }),
+      fetchOptionalRows<BlogPostRow>(supabaseUrl, supabaseAnonKey, "blog_posts", {
+        select: "*",
+        status: "eq.published",
+      }),
+      fetchOptionalRows<BlogTopicRow>(supabaseUrl, supabaseAnonKey, "blog_post_topics", {
+        select: "*",
+      }),
+      fetchOptionalRows<BlogSectionRow>(supabaseUrl, supabaseAnonKey, "blog_post_sections", {
+        select: "*",
+      }),
+      fetchOptionalRows<BlogSectionParagraphRow>(
+        supabaseUrl,
+        supabaseAnonKey,
+        "blog_post_section_paragraphs",
+        { select: "*" }
+      ),
+      fetchOptionalRows<BlogReferenceRow>(supabaseUrl, supabaseAnonKey, "blog_post_references", {
+        select: "*",
+      }),
+      fetchOptionalRows<BlogRelatedEpisodeRow>(
+        supabaseUrl,
+        supabaseAnonKey,
+        "blog_post_related_episodes",
+        { select: "*" }
+      ),
+      fetchOptionalRows<BlogRelatedAffiliateProductRow>(
+        supabaseUrl,
+        supabaseAnonKey,
+        "blog_post_related_affiliate_products",
+        { select: "*" }
+      ),
     ]);
 
     const catalog: ContentCatalog = {
@@ -234,6 +325,15 @@ export const getContentCatalog = cache(async (): Promise<ContentCatalog> => {
         autoTopicRows,
         tagRows
       ),
+      blogPosts: mapBlogPosts(
+        blogRows,
+        blogTopicRows,
+        blogSectionRows,
+        blogSectionParagraphRows,
+        blogReferenceRows,
+        blogRelatedEpisodeRows,
+        blogRelatedProductRows
+      ),
       source: "supabase",
     };
 
@@ -256,6 +356,16 @@ export const getContentCatalog = cache(async (): Promise<ContentCatalog> => {
   }
 });
 
+class FetchRowsError extends Error {
+  status: number;
+
+  constructor(table: string, status: number, body: string) {
+    super(`${table} returned ${status}${body ? `: ${body}` : ""}`);
+    this.name = "FetchRowsError";
+    this.status = status;
+  }
+}
+
 async function fetchRows<T>(
   supabaseUrl: string,
   supabaseAnonKey: string,
@@ -276,10 +386,28 @@ async function fetchRows<T>(
   });
 
   if (!response.ok) {
-    throw new Error(`${table} returned ${response.status}`);
+    const body = await response.text().catch(() => "");
+    throw new FetchRowsError(table, response.status, body);
   }
 
   return response.json() as Promise<T[]>;
+}
+
+async function fetchOptionalRows<T>(
+  supabaseUrl: string,
+  supabaseAnonKey: string,
+  table: string,
+  params: Record<string, string>
+): Promise<T[]> {
+  try {
+    return await fetchRows<T>(supabaseUrl, supabaseAnonKey, table, params);
+  } catch (error) {
+    if (error instanceof FetchRowsError && error.status === 404) {
+      return [];
+    }
+
+    throw error;
+  }
 }
 
 function mapEpisodes(
@@ -399,6 +527,56 @@ function mapAffiliateProducts(
     .sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
+function mapBlogPosts(
+  blogRows: BlogPostRow[],
+  topicRows: BlogTopicRow[],
+  sectionRows: BlogSectionRow[],
+  sectionParagraphRows: BlogSectionParagraphRow[],
+  referenceRows: BlogReferenceRow[],
+  relatedEpisodeRows: BlogRelatedEpisodeRow[],
+  relatedProductRows: BlogRelatedAffiliateProductRow[]
+) {
+  const topicsByBlog = groupValues(topicRows, "blog_slug", "topic_slug");
+  const sectionsByBlog = groupBlogSections(sectionRows, sectionParagraphRows);
+  const referencesByBlog = groupRows(referenceRows, "blog_slug");
+  const episodesByBlog = groupBlogOrderedValues(relatedEpisodeRows, "episode_slug");
+  const productsByBlog = groupBlogOrderedValues(relatedProductRows, "product_slug");
+
+  return blogRows
+    .map(
+      (row): BlogPost => ({
+        slug: row.slug,
+        title: row.title,
+        subtitle: row.subtitle ?? undefined,
+        excerpt: row.excerpt,
+        authorName: row.author_name,
+        publishDate: row.publish_date,
+        updatedDate: row.updated_date ?? undefined,
+        readingMinutes: row.reading_minutes ?? undefined,
+        heroImageUrl: row.hero_image_url ?? undefined,
+        metaDescription: row.meta_description ?? undefined,
+        topics: topicsByBlog.get(row.slug) ?? [],
+        sections: sectionsByBlog.get(row.slug) ?? [],
+        references: (referencesByBlog.get(row.slug) ?? [])
+          .sort((a, b) => a.display_order - b.display_order)
+          .map(
+            (reference): BlogReference => ({
+              label: reference.label,
+              url: reference.url,
+            })
+          ),
+        relatedEpisodeSlugs: episodesByBlog.get(row.slug) ?? [],
+        relatedAffiliateProductSlugs: productsByBlog.get(row.slug) ?? [],
+      })
+    )
+    .sort((a, b) => {
+      const dateA = new Date(a.publishDate).getTime();
+      const dateB = new Date(b.publishDate).getTime();
+      if (dateA !== dateB) return dateB - dateA;
+      return a.title.localeCompare(b.title);
+    });
+}
+
 function groupRows<T extends Record<K, string>, K extends keyof T>(rows: T[], key: K) {
   const groups = new Map<string, T[]>();
   rows.forEach((row) => {
@@ -470,6 +648,45 @@ function groupEpisodeSections(
   );
 }
 
+function groupBlogSections(sectionRows: BlogSectionRow[], paragraphRows: BlogSectionParagraphRow[]) {
+  const paragraphsBySection = new Map<string, BlogSectionParagraphRow[]>();
+  paragraphRows.forEach((row) => {
+    const key = `${row.blog_slug}:${row.section_display_order}`;
+    paragraphsBySection.set(key, [...(paragraphsBySection.get(key) ?? []), row]);
+  });
+
+  const sectionsByBlog = groupRows(sectionRows, "blog_slug");
+  return new Map(
+    Array.from(sectionsByBlog.entries()).map(([blogSlug, blogRows]) => [
+      blogSlug,
+      blogRows
+        .sort((a, b) => a.display_order - b.display_order)
+        .map((section): BlogSection => {
+          const paragraphs = paragraphsBySection.get(`${blogSlug}:${section.display_order}`) ?? [];
+          return {
+            title: section.title,
+            content: paragraphs
+              .sort((a, b) => a.display_order - b.display_order)
+              .map((paragraph) => paragraph.body),
+          };
+        }),
+    ])
+  );
+}
+
+function groupBlogOrderedValues<
+  T extends { blog_slug: string; display_order: number } & Record<ValueKey, string>,
+  ValueKey extends keyof T,
+>(rows: T[], valueKey: ValueKey) {
+  const groups = groupRows(rows, "blog_slug");
+  return new Map(
+    Array.from(groups.entries()).map(([blogSlug, blogRows]) => [
+      blogSlug,
+      blogRows.sort((a, b) => a.display_order - b.display_order).map((row) => row[valueKey]),
+    ])
+  );
+}
+
 function groupOrderedLabels(rows: OrderedLabelRow[]) {
   const groups = groupRows(rows, "product_slug");
   return new Map(
@@ -483,6 +700,8 @@ function groupOrderedLabels(rows: OrderedLabelRow[]) {
 function validateSupabaseCatalog(catalog: ContentCatalog) {
   const problems: string[] = [];
   const categorySlugs = new Set(catalog.affiliateCategories.map((category) => category.slug));
+  const episodeSlugs = new Set(catalog.episodes.map((episode) => episode.slug));
+  const productSlugs = new Set(catalog.affiliateProducts.map((product) => product.slug));
 
   if (catalog.episodes.length === 0) problems.push("No published episodes returned from Supabase.");
   if (catalog.affiliateCategories.length === 0) {
@@ -516,6 +735,30 @@ function validateSupabaseCatalog(catalog: ContentCatalog) {
     if (product.reasonsToLike.length === 0) problems.push(`${product.slug} has no reason rows.`);
     if (product.usedFor.length === 0) problems.push(`${product.slug} has no use-case rows.`);
     if (!product.affiliateUrl && !product.directUrl) problems.push(`${product.slug} has no URL.`);
+  });
+
+  catalog.blogPosts.forEach((post) => {
+    if (!post.excerpt.trim()) problems.push(`${post.slug} has no excerpt.`);
+    if (post.topics.length === 0) problems.push(`${post.slug} has no topic rows.`);
+    if (post.sections.length === 0) problems.push(`${post.slug} has no section rows.`);
+
+    post.sections.forEach((section) => {
+      if (section.content.length === 0) {
+        problems.push(`${post.slug} section "${section.title}" has no paragraph rows.`);
+      }
+    });
+
+    post.relatedEpisodeSlugs?.forEach((episodeSlug) => {
+      if (!episodeSlugs.has(episodeSlug)) {
+        problems.push(`${post.slug} points to missing episode ${episodeSlug}.`);
+      }
+    });
+
+    post.relatedAffiliateProductSlugs?.forEach((productSlug) => {
+      if (!productSlugs.has(productSlug)) {
+        problems.push(`${post.slug} points to missing affiliate product ${productSlug}.`);
+      }
+    });
   });
 
   if (problems.length > 0) {

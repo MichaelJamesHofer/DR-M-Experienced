@@ -48,7 +48,7 @@ export default async function EpisodeDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const { episodes, affiliateProducts } = await getContentCatalog();
+  const { episodes, affiliateProducts, blogPosts } = await getContentCatalog();
   const episode = episodes.find((item) => item.slug === slug);
   if (!episode) {
     notFound();
@@ -60,6 +60,9 @@ export default async function EpisodeDetailPage({
       item.slug !== episode.slug && item.topics.some((topic) => episode.topics.includes(topic))
   ).slice(0, 3);
   const relatedAffiliateProducts = affiliateProductsForEpisode(episode, affiliateProducts);
+  const relatedBlogPosts = blogPosts
+    .filter((post) => post.relatedEpisodeSlugs?.includes(episode.slug))
+    .slice(0, 3);
 
   const hasComingSoonReference = episode.references?.some((ref) => ref.comingSoon === true);
 
@@ -432,6 +435,28 @@ export default async function EpisodeDetailPage({
                   >
                     <p className="text-body-sm font-medium text-foreground group-hover:text-primary transition-colors duration-200 line-clamp-3">
                       {episodeDisplayTitle(ep)}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Related Blog Posts */}
+          {relatedBlogPosts.length > 0 && (
+            <div>
+              <h3 className="text-heading font-semibold text-foreground mb-4">
+                Related blog notes
+              </h3>
+              <div className="space-y-3">
+                {relatedBlogPosts.map((post) => (
+                  <Link
+                    key={post.slug}
+                    href={`/blogs/${post.slug}`}
+                    className="group block rounded-xl border border-border bg-surface p-4 hover:border-primary/50 transition-all duration-200"
+                  >
+                    <p className="text-body-sm font-medium text-foreground group-hover:text-primary transition-colors duration-200 line-clamp-3">
+                      {post.title}
                     </p>
                   </Link>
                 ))}

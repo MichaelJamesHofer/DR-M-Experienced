@@ -41,6 +41,16 @@ const requiredTables = [
   "affiliate_product_tags",
 ];
 
+const optionalTables = [
+  "blog_posts",
+  "blog_post_topics",
+  "blog_post_sections",
+  "blog_post_section_paragraphs",
+  "blog_post_references",
+  "blog_post_related_episodes",
+  "blog_post_related_affiliate_products",
+];
+
 const problems = [];
 const counts = new Map();
 
@@ -56,6 +66,21 @@ const tables = Object.fromEntries(
     })
   )
 );
+
+for (const table of optionalTables) {
+  const rows = await fetchOptionalRows(table, { select: "*", limit: "10000" }).catch((error) => {
+    problems.push(`${table}: ${error.message}`);
+    return [];
+  });
+
+  if (rows === null) {
+    counts.set(`${table}[optional]`, "not migrated");
+    tables[table] = [];
+  } else {
+    counts.set(table, rows.length);
+    tables[table] = rows;
+  }
+}
 
 const publishedEpisodes = await fetchRows("episodes", {
   select: "*",
@@ -75,8 +100,23 @@ const publishedProducts = await fetchRows("affiliate_products", {
   return [];
 });
 
+const publishedBlogPosts =
+  counts.get("blog_posts[optional]") === "not migrated"
+    ? []
+    : await fetchOptionalRows("blog_posts", {
+        select: "*",
+        status: "eq.published",
+        limit: "10000",
+      }).catch((error) => {
+        problems.push(`blog_posts published query: ${error.message}`);
+        return [];
+      });
+
 counts.set("episodes[published]", publishedEpisodes.length);
 counts.set("affiliate_products[published]", publishedProducts.length);
+if (counts.get("blog_posts[optional]") !== "not migrated") {
+  counts.set("blog_posts[published]", publishedBlogPosts?.length ?? 0);
+}
 
 const topicSlugsByEpisode = groupValues(tables.episode_topics, "episode_slug", "topic_slug");
 const referencesByEpisode = groupRows(tables.episode_references, "episode_slug");
@@ -90,6 +130,24 @@ const paragraphsBySection = groupRows(
 const categorySlugs = new Set(tables.affiliate_categories.map((category) => category.slug));
 const reasonsByProduct = groupRows(tables.affiliate_product_reasons, "product_slug");
 const useCasesByProduct = groupRows(tables.affiliate_product_use_cases, "product_slug");
+const blogTopicsByPost = groupValues(tables.blog_post_topics, "blog_slug", "topic_slug");
+const blogSectionsByPost = groupRows(tables.blog_post_sections, "blog_slug");
+const blogParagraphsBySection = groupRows(
+  tables.blog_post_section_paragraphs,
+  (row) => `${row.blog_slug}:${row.section_display_order}`
+);
+const relatedEpisodesByPost = groupValues(
+  tables.blog_post_related_episodes,
+  "blog_slug",
+  "episode_slug"
+);
+const relatedProductsByPost = groupValues(
+  tables.blog_post_related_affiliate_products,
+  "blog_slug",
+  "product_slug"
+);
+const episodeSlugs = new Set(publishedEpisodes.map((episode) => episode.slug));
+const productSlugs = new Set(publishedProducts.map((product) => product.slug));
 
 if (publishedEpisodes.length === 0) problems.push("No published episodes returned.");
 if (publishedProducts.length === 0) problems.push("No published affiliate products returned.");
@@ -131,6 +189,37 @@ for (const product of publishedProducts) {
   }
 }
 
+for (const post of publishedBlogPosts ?? []) {
+  const slug = post.slug;
+  const topics = blogTopicsByPost.get(slug) ?? [];
+  const sections = blogSectionsByPost.get(slug) ?? [];
+  const relatedEpisodes = relatedEpisodesByPost.get(slug) ?? [];
+  const relatedProducts = relatedProductsByPost.get(slug) ?? [];
+
+  if (!String(post.excerpt ?? "").trim()) problems.push(`${slug}: missing excerpt.`);
+  if (topics.length === 0) problems.push(`${slug}: missing blog_post_topics rows.`);
+  if (sections.length === 0) problems.push(`${slug}: missing blog_post_sections rows.`);
+
+  for (const section of sections) {
+    const paragraphs = blogParagraphsBySection.get(`${slug}:${section.display_order}`) ?? [];
+    if (paragraphs.length === 0) {
+      problems.push(`${slug}: blog section "${section.title}" has no paragraph rows.`);
+    }
+  }
+
+  for (const episodeSlug of relatedEpisodes) {
+    if (!episodeSlugs.has(episodeSlug)) {
+      problems.push(`${slug}: related episode ${episodeSlug} is missing or not published.`);
+    }
+  }
+
+  for (const productSlug of relatedProducts) {
+    if (!productSlugs.has(productSlug)) {
+      problems.push(`${slug}: related product ${productSlug} is missing or not published.`);
+    }
+  }
+}
+
 console.log("Catalog table counts:");
 for (const [table, count] of counts.entries()) {
   console.log(`- ${table}: ${count}`);
@@ -154,6 +243,30 @@ async function fetchRows(table, params) {
       Authorization: `Bearer ${supabaseCatalogKey}`,
     },
   });
+
+  if (!response.ok) {
+    throw new Error(`returned ${response.status}`);
+  }
+
+  return response.json();
+}
+
+async function fetchOptionalRows(table, params) {
+  const url = new URL(`/rest/v1/${table}`, supabaseUrl);
+  for (const [key, value] of Object.entries(params)) {
+    url.searchParams.set(key, value);
+  }
+
+  const response = await fetch(url, {
+    headers: {
+      apikey: supabaseCatalogKey,
+      Authorization: `Bearer ${supabaseCatalogKey}`,
+    },
+  });
+
+  if (response.status === 404) {
+    return null;
+  }
 
   if (!response.ok) {
     throw new Error(`returned ${response.status}`);

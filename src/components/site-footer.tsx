@@ -4,6 +4,7 @@ import { NewsletterCapture } from "@/components/newsletter-capture";
 
 const footerLinks = [
   { href: "/episodes", label: "Episodes" },
+  { href: "/blogs", label: "Blogs" },
   { href: "/affiliates", label: "Affiliates" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
