@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx --max-warnings=0",
-    "sync-episodes": "node scripts/sync-episodes.mjs"
+    "sync-episodes": "node scripts/sync-episodes.mjs",
+    "verify:catalog": "node scripts/verify-content-catalog.mjs"
   },
   "dependencies": {
     "next": "15.5.19",

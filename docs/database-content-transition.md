@@ -42,6 +42,25 @@ Production deploys set `CONTENT_CATALOG_STRICT=true`. In strict mode, the build 
 
 Local builds without Supabase env vars still use the checked-in fallback catalog.
 
+## Local Verification Against Production Supabase
+
+Before this branch is pushed to `main`, create an ignored `.env.local` with the production catalog read credentials:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://tdbsuzciwotleualdcjf.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+```
+
+Then run:
+
+```bash
+npm run verify:catalog
+CONTENT_CATALOG_STRICT=true npm run build
+npm run dev -- -H 0.0.0.0 -p 3000
+```
+
+Only push to `main` after the verifier passes, the strict build passes, and the local site has been manually checked against the production database content.
+
 ## Publishing Flow
 
 1. Sync platform metadata with `npm run sync-episodes`.
