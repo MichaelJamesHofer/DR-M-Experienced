@@ -1,0 +1,968 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Affiliate Filter UI Options</title>
+    <style>
+      :root {
+        --bg: #0a0f1a;
+        --surface: #111827;
+        --surface-2: #162033;
+        --surface-3: #1e293b;
+        --line: rgba(148, 163, 184, 0.18);
+        --line-strong: rgba(148, 163, 184, 0.32);
+        --text: #f1f5f9;
+        --muted: #94a3b8;
+        --subtle: #64748b;
+        --primary: #22d3ee;
+        --primary-2: #06b6d4;
+        --accent: #f59e0b;
+        --radius: 16px;
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        line-height: 1.5;
+      }
+
+      html,
+      body {
+        overflow-x: hidden;
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .page {
+        margin: 0 auto;
+        max-width: 1220px;
+        padding: 40px 20px 64px;
+      }
+
+      .hero {
+        display: grid;
+        gap: 18px;
+        margin-bottom: 28px;
+      }
+
+      .eyebrow,
+      .label {
+        color: var(--primary);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: clamp(32px, 5vw, 56px);
+        line-height: 1.08;
+      }
+
+      .hero p {
+        max-width: 760px;
+        color: var(--muted);
+        font-size: 18px;
+      }
+
+      .option-nav {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        margin: 0 -20px 34px;
+        border-block: 1px solid var(--line);
+        background: rgba(10, 15, 26, 0.88);
+        backdrop-filter: blur(14px);
+      }
+
+      .option-nav-inner {
+        display: flex;
+        gap: 8px;
+        margin: 0 auto;
+        max-width: min(1220px, 100vw);
+        overflow-x: auto;
+        padding: 12px 20px;
+        scrollbar-width: none;
+      }
+
+      .option-nav-inner::-webkit-scrollbar {
+        display: none;
+      }
+
+      .option-tab {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--surface);
+        color: var(--muted);
+        min-width: max-content;
+        padding: 10px 14px;
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .option-tab.active {
+        border-color: var(--primary);
+        background: rgba(34, 211, 238, 0.12);
+        color: var(--primary);
+      }
+
+      .option {
+        display: none;
+      }
+
+      .option.active {
+        display: block;
+      }
+
+      .option-heading {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .option-heading h2 {
+        font-size: 28px;
+        line-height: 1.2;
+      }
+
+      .option-heading p {
+        max-width: 840px;
+        color: var(--muted);
+      }
+
+      .preview-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 390px;
+        gap: 22px;
+        align-items: start;
+      }
+
+      .browser {
+        max-width: 100%;
+        min-width: 0;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: #08101d;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+      }
+
+      .browser-bar {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        border-bottom: 1px solid var(--line);
+        background: #0d1523;
+        padding: 12px 14px;
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: var(--surface-3);
+      }
+
+      .desktop-stage {
+        min-width: 0;
+        min-height: 780px;
+        overflow: hidden;
+        padding: 24px;
+      }
+
+      .mobile-frame {
+        overflow: hidden;
+        border: 1px solid var(--line-strong);
+        border-radius: 32px;
+        background: #08101d;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+      }
+
+      .mobile-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--line);
+        padding: 14px 16px;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 40px;
+        height: 40px;
+        place-items: center;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: #0a0f1a;
+        font-weight: 900;
+      }
+
+      .hamburger {
+        color: var(--muted);
+        font-size: 22px;
+      }
+
+      .mobile-stage {
+        height: 760px;
+        overflow: hidden;
+        padding: 18px 16px;
+      }
+
+      .topline {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .search {
+        position: relative;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .search input {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #090f1c;
+        color: var(--text);
+        padding: 13px 14px 13px 42px;
+      }
+
+      .search span {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        color: var(--subtle);
+        transform: translateY(-50%);
+      }
+
+      .selectish,
+      .buttonish {
+        display: inline-flex;
+        min-width: 0;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        background: #090f1c;
+        color: var(--muted);
+        padding: 12px 14px;
+        font-size: 13px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .primary-button {
+        border-color: var(--primary);
+        background: var(--primary);
+        color: #07101c;
+      }
+
+      .chip-row {
+        display: flex;
+        gap: 8px;
+        overflow: hidden;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-width: max-content;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: #090f1c;
+        color: var(--muted);
+        padding: 8px 11px;
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .chip.active {
+        border-color: var(--primary);
+        background: rgba(34, 211, 238, 0.12);
+        color: var(--primary);
+      }
+
+      .count {
+        display: inline-grid;
+        width: 22px;
+        height: 22px;
+        place-items: center;
+        border-radius: 999px;
+        background: var(--surface-3);
+        color: var(--muted);
+        font-size: 11px;
+      }
+
+      .result-meta {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .catalog-section {
+        display: grid;
+        gap: 14px;
+        margin-top: 26px;
+      }
+
+      .catalog-section h3 {
+        font-size: 32px;
+        line-height: 1.15;
+      }
+
+      .catalog-section p {
+        color: var(--muted);
+      }
+
+      .product-card {
+        display: grid;
+        gap: 12px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+        padding: 18px;
+      }
+
+      .product-card h4 {
+        margin: 0;
+        font-size: 22px;
+        line-height: 1.2;
+      }
+
+      .small-grid {
+        display: grid;
+        gap: 10px;
+      }
+
+      .note-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .mobile-title {
+        display: grid;
+        gap: 8px;
+        margin-bottom: 18px;
+      }
+
+      .mobile-title h3 {
+        font-size: 28px;
+        line-height: 1.08;
+      }
+
+      .mobile-title p {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .bottom-bar {
+        position: absolute;
+        right: 14px;
+        bottom: 14px;
+        left: 14px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: rgba(9, 15, 28, 0.94);
+        padding: 8px;
+        backdrop-filter: blur(14px);
+      }
+
+      .bottom-bar button {
+        border: 0;
+        border-radius: 12px;
+        background: transparent;
+        color: var(--muted);
+        padding: 10px 6px;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .bottom-bar button:first-child {
+        background: var(--primary);
+        color: #07101c;
+      }
+
+      .relative {
+        position: relative;
+      }
+
+      .filter-drawer {
+        display: grid;
+        gap: 16px;
+        min-width: 0;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: var(--surface);
+        padding: 18px;
+      }
+
+      .filter-group {
+        display: grid;
+        gap: 10px;
+      }
+
+      .filter-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-top: 1px solid var(--line);
+        padding-top: 13px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .rail-layout {
+        display: grid;
+        grid-template-columns: 260px minmax(0, 1fr);
+        gap: 22px;
+        min-width: 0;
+      }
+
+      .rail {
+        position: sticky;
+        top: 72px;
+        display: grid;
+        gap: 14px;
+        align-self: start;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: var(--surface);
+        padding: 16px;
+      }
+
+      .rail details {
+        border-top: 1px solid var(--line);
+        padding-top: 12px;
+      }
+
+      .rail summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--text);
+        cursor: pointer;
+        font-weight: 800;
+        list-style: none;
+      }
+
+      .rail-list {
+        display: grid;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .rail-list label {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .rail-list input {
+        accent-color: var(--primary);
+      }
+
+      .results-toolbar {
+        display: flex;
+        gap: 12px;
+        min-width: 0;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+      }
+
+      .view-tabs {
+        display: flex;
+        gap: 6px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #090f1c;
+        padding: 4px;
+      }
+
+      .view-tabs button {
+        border: 0;
+        border-radius: 10px;
+        background: transparent;
+        color: var(--muted);
+        padding: 9px 12px;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .view-tabs button.active {
+        background: var(--primary);
+        color: #07101c;
+      }
+
+      .preset-tabs {
+        display: flex;
+        gap: 8px;
+        overflow: hidden;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 12px;
+      }
+
+      .preset-tabs button {
+        min-width: max-content;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: transparent;
+        color: var(--muted);
+        padding: 9px 13px;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .preset-tabs button.active {
+        border-color: var(--primary);
+        background: var(--primary);
+        color: #07101c;
+      }
+
+      .sort-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .sort-strip button {
+        min-height: 52px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #090f1c;
+        color: var(--muted);
+        padding: 9px;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .sort-strip button.active {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+
+      .mobile-sheet {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: grid;
+        gap: 14px;
+        border: 1px solid var(--line-strong);
+        border-radius: 24px 24px 0 0;
+        background: rgba(17, 24, 39, 0.98);
+        padding: 18px;
+        box-shadow: 0 -30px 70px rgba(0, 0, 0, 0.45);
+      }
+
+      .sheet-handle {
+        justify-self: center;
+        width: 42px;
+        height: 4px;
+        border-radius: 999px;
+        background: var(--surface-3);
+      }
+
+      .sheet-grid {
+        display: grid;
+        gap: 9px;
+      }
+
+      .sheet-grid button {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #090f1c;
+        color: var(--muted);
+        padding: 12px;
+        text-align: left;
+      }
+
+      .caption {
+        color: var(--subtle);
+        font-size: 12px;
+      }
+
+      @media (max-width: 980px) {
+        .preview-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .desktop-stage {
+          min-height: auto;
+        }
+
+        .mobile-frame {
+          max-width: 430px;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .page {
+          padding-inline: 16px;
+        }
+
+        .desktop-stage {
+          padding: 16px;
+        }
+
+        .topline,
+        .results-toolbar {
+          align-items: stretch;
+          flex-direction: column;
+        }
+
+        .rail-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .rail {
+          position: static;
+        }
+
+        .sort-strip {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .catalog-section h3 {
+          font-size: 26px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <p class="eyebrow">Affiliate filter UX options</p>
+        <h1>Controlled catalog browsing without the drifting filter wall</h1>
+        <p>
+          Three visual directions using the current Dr. M dark aesthetic, but with stronger
+          containment, fewer always-visible controls, and clearer sort scope.
+        </p>
+      </section>
+
+      <nav class="option-nav" aria-label="Prototype options">
+        <div class="option-nav-inner">
+          <button class="option-tab active" data-option="command">Option 1: Command Bar</button>
+          <button class="option-tab" data-option="rail">Option 2: Filter Rail</button>
+          <button class="option-tab" data-option="views">Option 3: Saved Views</button>
+        </div>
+      </nav>
+
+      <section class="option active" id="option-command">
+        <div class="option-heading">
+          <p class="label">Option 1</p>
+          <h2>Command Bar + Progressive Filter Drawer</h2>
+          <p>
+            Best for a small affiliate catalog that will grow. Search, sort, and view mode stay in a
+            single fixed command area. Facets are hidden behind one explicit Filters control, with a
+            short applied-filter summary instead of a live wall of pills.
+          </p>
+        </div>
+        <div class="preview-grid">
+          <div class="browser">
+            <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            <div class="desktop-stage">
+              <div class="topline">
+                <div class="search"><span>⌕</span><input value="" placeholder="Search products, codes, topics..." /></div>
+                <button class="buttonish">Filters <span class="count">2</span></button>
+                <button class="selectish">Sort: Recommended ▾</button>
+                <button class="selectish">Grouped ▾</button>
+              </div>
+              <div style="margin-top: 14px;" class="chip-row">
+                <span class="chip active">EMF / RF Protection ×</span>
+                <span class="chip active">Episode-linked first ×</span>
+                <span class="chip">Clear all</span>
+              </div>
+              <div class="filter-drawer" style="margin-top: 18px;">
+                <div class="filter-group">
+                  <div class="topline"><strong>Refine catalog</strong><span class="caption">7 resources</span></div>
+                  <div class="sort-strip">
+                    <button class="active">Recommended</button>
+                    <button>Most Mentioned</button>
+                    <button>Newest</button>
+                    <button>A-Z</button>
+                  </div>
+                </div>
+                <div class="filter-row"><strong>Category</strong><span>EMF / RF Protection ▾</span></div>
+                <div class="filter-row"><strong>Related topic</strong><span>EMF ▾</span></div>
+                <div class="filter-row"><strong>Episode links</strong><span>Any mentioned product ▾</span></div>
+              </div>
+              <p class="result-meta" style="margin-top: 18px;">Showing 1 resource in EMF / RF Protection</p>
+              <section class="catalog-section">
+                <p class="label">1 resource</p>
+                <h3>EMF / RF Protection</h3>
+                <p>Wearable, room, testing, and shielding tools tied to Dr. M’s EMF conversations.</p>
+                <article class="product-card">
+                  <p class="label">EMF / RF Protection</p>
+                  <h4>Airestech</h4>
+                  <p>EMF and RF protection devices with related episode links and verified code.</p>
+                  <div class="note-row"><span class="count">1</span><span>Referenced in Episode 4: EMF</span></div>
+                </article>
+              </section>
+            </div>
+          </div>
+
+          <div class="mobile-frame relative">
+            <div class="mobile-top"><span class="brand-mark">▲</span><span class="hamburger">≡</span></div>
+            <div class="mobile-stage">
+              <div class="mobile-title">
+                <p class="eyebrow">Affiliate guide</p>
+                <h3>Products Dr. M references</h3>
+                <p>Search and refine without scrolling past every filter value.</p>
+              </div>
+              <div class="small-grid">
+                <div class="search"><span>⌕</span><input placeholder="Search catalog..." /></div>
+                <div class="chip-row"><span class="chip active">EMF ×</span><span class="chip">1 result</span></div>
+                <article class="product-card">
+                  <p class="label">EMF / RF Protection</p>
+                  <h4>Airestech</h4>
+                  <p>Referenced in Episode 4: EMF.</p>
+                </article>
+              </div>
+            </div>
+            <div class="bottom-bar">
+              <button>Filters 2</button>
+              <button>Sort</button>
+              <button>View</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="option" id="option-rail">
+        <div class="option-heading">
+          <p class="label">Option 2</p>
+          <h2>Left Filter Rail + Centered Results</h2>
+          <p>
+            Best if we want a “clinical reference catalog” feel. Desktop gets a stable rail with
+            accordions and no horizontal chip flow. Mobile collapses the rail into a bottom sheet so
+            result cards stay centered and readable.
+          </p>
+        </div>
+        <div class="preview-grid">
+          <div class="browser">
+            <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            <div class="desktop-stage">
+              <div class="rail-layout">
+                <aside class="rail">
+                  <div>
+                    <p class="label">Catalog controls</p>
+                    <h3 style="font-size: 22px; margin-top: 4px;">Refine</h3>
+                  </div>
+                  <div class="search"><span>⌕</span><input placeholder="Search..." /></div>
+                  <details open>
+                    <summary>Sort <span>Recommended</span></summary>
+                    <div class="rail-list">
+                      <label><input checked type="radio" name="sort2" /> Recommended</label>
+                      <label><input type="radio" name="sort2" /> Most episode-linked</label>
+                      <label><input type="radio" name="sort2" /> Recently added</label>
+                    </div>
+                  </details>
+                  <details open>
+                    <summary>Category <span>1</span></summary>
+                    <div class="rail-list">
+                      <label><input checked type="checkbox" /> EMF / RF Protection</label>
+                      <label><input type="checkbox" /> Sleep & Light</label>
+                      <label><input type="checkbox" /> Supplements</label>
+                    </div>
+                  </details>
+                  <details>
+                    <summary>Related Topic <span>0</span></summary>
+                  </details>
+                  <button class="buttonish primary-button">Apply filters</button>
+                </aside>
+                <div>
+                  <div class="results-toolbar">
+                    <p class="result-meta">1 of 7 resources</p>
+                    <div class="view-tabs"><button class="active">Grouped</button><button>Cards</button><button>Dense</button></div>
+                  </div>
+                  <section class="catalog-section">
+                    <p class="label">Category</p>
+                    <h3>EMF / RF Protection</h3>
+                    <article class="product-card">
+                      <p class="label">Verified affiliate</p>
+                      <h4>Airestech</h4>
+                      <p>The product card owns the detail. The rail owns the controls.</p>
+                      <div class="note-row"><span class="count">4</span><span>Featured products mentioned</span></div>
+                    </article>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mobile-frame relative">
+            <div class="mobile-top"><span class="brand-mark">▲</span><span class="hamburger">≡</span></div>
+            <div class="mobile-stage">
+              <div class="mobile-title">
+                <p class="eyebrow">Affiliate guide</p>
+                <h3>EMF / RF Protection</h3>
+                <p>Controls open as a sheet; results stay stable behind it.</p>
+              </div>
+              <article class="product-card">
+                <p class="label">Verified affiliate</p>
+                <h4>Airestech</h4>
+                <p>Episode-linked EMF/RF protection resource.</p>
+              </article>
+            </div>
+            <div class="mobile-sheet">
+              <span class="sheet-handle"></span>
+              <strong>Refine catalog</strong>
+              <div class="sheet-grid">
+                <button>Sort: Recommended</button>
+                <button>Category: EMF / RF Protection</button>
+                <button>Topic: Any</button>
+              </div>
+              <button class="buttonish primary-button">Show 1 resource</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="option" id="option-views">
+        <div class="option-heading">
+          <p class="label">Option 3</p>
+          <h2>Saved Views + Sort Strip</h2>
+          <p>
+            Best if the audience mostly browses by known intent. A small set of curated views
+            replaces raw facet exposure. Sorting becomes a visible, bounded strip inside each view,
+            with advanced filters available but not dominant.
+          </p>
+        </div>
+        <div class="preview-grid">
+          <div class="browser">
+            <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            <div class="desktop-stage">
+              <div class="preset-tabs">
+                <button class="active">All resources</button>
+                <button>EMF stack</button>
+                <button>Sleep setup</button>
+                <button>Brain fog support</button>
+                <button>Supplements</button>
+              </div>
+              <div style="margin-top: 18px;" class="topline">
+                <div class="search"><span>⌕</span><input placeholder="Search within this view..." /></div>
+                <button class="buttonish">Advanced filters</button>
+              </div>
+              <div style="margin-top: 16px;" class="sort-strip">
+                <button class="active">Recommended</button>
+                <button>Episode-linked</button>
+                <button>Newest</button>
+                <button>A-Z</button>
+              </div>
+              <section class="catalog-section">
+                <p class="label">Curated view</p>
+                <h3>EMF stack</h3>
+                <p>A focused view can include cross-category resources without exposing raw taxonomy.</p>
+                <article class="product-card">
+                  <p class="label">Primary resource</p>
+                  <h4>Airestech</h4>
+                  <p>Recommended first because it is directly tied to the EMF episode and current code.</p>
+                </article>
+                <article class="product-card">
+                  <p class="label">Measure first</p>
+                  <h4>Safe Living Technologies</h4>
+                  <p>Testing and shielding tools surfaced as a supporting EMF resource.</p>
+                </article>
+              </section>
+            </div>
+          </div>
+
+          <div class="mobile-frame relative">
+            <div class="mobile-top"><span class="brand-mark">▲</span><span class="hamburger">≡</span></div>
+            <div class="mobile-stage">
+              <div class="mobile-title">
+                <p class="eyebrow">Affiliate guide</p>
+                <h3>Choose a view</h3>
+                <p>Preset intent first, filter only when needed.</p>
+              </div>
+              <div class="preset-tabs" style="overflow: hidden;">
+                <button class="active">EMF stack</button><button>Sleep</button><button>Brain fog</button>
+              </div>
+              <div style="margin-top: 14px;" class="sort-strip">
+                <button class="active">Recommended</button><button>Episode-linked</button>
+              </div>
+              <article style="margin-top: 18px;" class="product-card">
+                <p class="label">Primary resource</p>
+                <h4>Airestech</h4>
+                <p>Directly connected to Episode 4: EMF.</p>
+              </article>
+            </div>
+            <div class="bottom-bar">
+              <button>Views</button>
+              <button>Sort</button>
+              <button>More</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const tabs = document.querySelectorAll(".option-tab");
+      const options = {
+        command: document.querySelector("#option-command"),
+        rail: document.querySelector("#option-rail"),
+        views: document.querySelector("#option-views"),
+      };
+
+      function activateOption(name) {
+        const next = options[name] ? name : "command";
+        tabs.forEach((item) => {
+          item.classList.toggle("active", item.dataset.option === next);
+        });
+        Object.entries(options).forEach(([key, option]) => {
+          option.classList.toggle("active", key === next);
+        });
+      }
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          tabs.forEach((item) => item.classList.remove("active"));
+          Object.values(options).forEach((option) => option.classList.remove("active"));
+          tab.classList.add("active");
+          options[tab.dataset.option].classList.add("active");
+        });
+      });
+
+      activateOption(new URLSearchParams(window.location.search).get("option"));
+    </script>
+  </body>
+</html>
