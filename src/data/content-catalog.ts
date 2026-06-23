@@ -126,12 +126,14 @@ const strictContentCatalog = process.env.CONTENT_CATALOG_STRICT === "true";
 export const getContentCatalog = cache(async (): Promise<ContentCatalog> => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey =
-    process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    process.env.SUPABASE_CATALOG_KEY ||
+    process.env.SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseAnonKey) {
     if (strictContentCatalog) {
       throw new Error(
-        "CONTENT_CATALOG_STRICT requires NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY or SUPABASE_ANON_KEY."
+        "CONTENT_CATALOG_STRICT requires NEXT_PUBLIC_SUPABASE_URL plus SUPABASE_CATALOG_KEY, SUPABASE_ANON_KEY, or NEXT_PUBLIC_SUPABASE_ANON_KEY."
       );
     }
 

@@ -11,12 +11,15 @@ loadEnvFile(path.join(ROOT, ".env"));
 loadEnvFile(path.join(ROOT, ".env.local"));
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseCatalogKey =
+  process.env.SUPABASE_CATALOG_KEY ||
+  process.env.SUPABASE_ANON_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
+if (!supabaseUrl || !supabaseCatalogKey) {
   fail([
     "Missing Supabase catalog env vars.",
-    "Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local, then rerun npm run verify:catalog.",
+    "Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_CATALOG_KEY in .env.local, then rerun npm run verify:catalog.",
   ]);
 }
 
@@ -147,8 +150,8 @@ async function fetchRows(table, params) {
 
   const response = await fetch(url, {
     headers: {
-      apikey: supabaseAnonKey,
-      Authorization: `Bearer ${supabaseAnonKey}`,
+      apikey: supabaseCatalogKey,
+      Authorization: `Bearer ${supabaseCatalogKey}`,
     },
   });
 

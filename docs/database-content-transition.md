@@ -48,7 +48,7 @@ Before this branch is pushed to `main`, create an ignored `.env.local` with the 
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://tdbsuzciwotleualdcjf.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+SUPABASE_CATALOG_KEY=...
 ```
 
 Then run:
