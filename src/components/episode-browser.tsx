@@ -437,6 +437,7 @@ function EpisodeCard({
     month: "short",
     day: "numeric",
     year: "numeric",
+    timeZone: "UTC",
   });
   const publishDate = dateFormatter.format(new Date(episode.publishDate));
   const hasEmbeddableVideo = !!episode.vimeoId;

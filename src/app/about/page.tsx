@@ -1,10 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MEDIA_FEATURES } from "@/data/media";
+import { physicianProfileExperience, physicianProfileYears } from "@/data/physician-profile";
 
 export const metadata = {
   title: "About Dr. David Musnick",
-  description: "Meet Dr. David Musnick, MD - board-certified in Internal Medicine and Sports Medicine, with deep Functional Medicine experience across 37+ years in patient care.",
+  description: `Meet Dr. David Musnick, MD - board-certified in Internal Medicine and Sports Medicine, with deep Functional Medicine experience across ${physicianProfileExperience.patientCare} in patient care.`,
 };
 
 const credentials = [
@@ -62,8 +63,7 @@ const sportsFocus = [
   },
   {
     title: "Neck & cervical spine",
-    description:
-      "Evaluates cervical pain for joint hypermobility and destabilizing scars. Offers numerous options—including more than 26 years of neck Prolotherapy experience—to rebuild integrity.",
+    description: `Evaluates cervical pain for joint hypermobility and destabilizing scars. Offers numerous options—including ${physicianProfileExperience.neckProlotherapy} of neck Prolotherapy experience—to rebuild integrity.`,
   },
   {
     title: "Muscle pain, spasm, and trigger points",
@@ -140,7 +140,7 @@ const lectures = [
 
 const facultyTraining = [
   { role: "Teaching Faculty", org: "Institute for Functional Medicine" },
-  { role: "Sports & Orthopedic Medicine Faculty", org: "Bastyr University", duration: "16 years" },
+  { role: "Sports & Orthopedic Medicine Faculty", org: "Bastyr University", duration: physicianProfileExperience.bastyrFaculty },
   { role: "Professor, Department of Physical Therapy", org: "Andrews University" },
   { role: "Faculty", org: "UW Department of Sports Medicine & Orthopedics and Department of Rehabilitation" },
 ];
@@ -172,7 +172,7 @@ export default function AboutPage() {
             </h1>
             <p className="max-w-3xl text-body-lg text-foreground-muted">
               Board-certified in Internal Medicine (ABIM) and Sports Medicine (CAQ), with deep
-              Functional Medicine training and 37+ years in patient care across concussion,
+              Functional Medicine training and {physicianProfileExperience.patientCare} in patient care across concussion,
               brain-based symptoms and conditions, autoimmune conditions, fatigue, arthritis,
               gastrointestinal symptoms and conditions, orthopedics, and sports medicine.
             </p>
@@ -194,7 +194,7 @@ export default function AboutPage() {
 
             <div className="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               <div className="rounded-xl border border-border bg-surface p-4">
-                <p className="text-heading-sm font-bold text-foreground">37+ years</p>
+                <p className="text-heading-sm font-bold text-foreground">{physicianProfileExperience.patientCare}</p>
                 <p className="mt-1 text-caption text-foreground-muted">Patient care</p>
               </div>
               {credentials.map((cred) => (
@@ -225,11 +225,11 @@ export default function AboutPage() {
                 <dl className="grid flex-1 gap-3 text-body-sm">
                   <div className="grid gap-1">
                     <dt className="text-foreground-muted">Location</dt>
-                    <dd className="font-medium text-foreground">Idaho (relocated 2022)</dd>
+                    <dd className="font-medium text-foreground">Idaho (relocated {physicianProfileYears.idahoRelocation})</dd>
                   </div>
                   <div className="grid gap-1">
                     <dt className="text-foreground-muted">Experience</dt>
-                    <dd className="font-medium text-foreground">37+ years</dd>
+                    <dd className="font-medium text-foreground">{physicianProfileExperience.patientCare}</dd>
                   </div>
                   <div className="grid gap-1">
                     <dt className="text-foreground-muted">Focus</dt>
@@ -255,10 +255,10 @@ export default function AboutPage() {
         </div>
         <div className="mt-6 space-y-5 text-body text-foreground-muted lg:mt-0">
           <p>
-            David Musnick, MD, has dedicated 37+ years to patient care, with deep clinical work
+            David Musnick, MD, has dedicated {physicianProfileExperience.patientCare} to patient care, with deep clinical work
             in concussion, brain-based symptoms and conditions, autoimmune conditions, fatigue,
             arthritis, and gastrointestinal symptoms and conditions, alongside his broader work
-            in Sports Medicine, Internal Medicine, Regenerative Medicine, and 28 years of
+            in Sports Medicine, Internal Medicine, Regenerative Medicine, and {physicianProfileExperience.functionalMedicine} of
             Functional Medicine. His career includes thousands of complex orthopedic and
             neurologic cases, long-standing work at his Bellevue practice, and formal
             collaborations with multidisciplinary teams in Seattle, Bellevue, and Idaho.
@@ -271,8 +271,8 @@ export default function AboutPage() {
             for medical-legal orthopedic consultations and independent medical exams.
           </p>
           <p>
-            A Certified Functional Medicine practitioner for more than 25 years—and one of IFM&apos;s
-            earliest teachers—Dr. Musnick spent 33 years in Seattle before relocating to Idaho in 2022.
+            A Certified Functional Medicine practitioner for {physicianProfileExperience.certifiedFunctionalMedicine}—and one of IFM&apos;s
+            earliest teachers—Dr. Musnick spent {physicianProfileExperience.seattlePractice} in Seattle before relocating to Idaho in {physicianProfileYears.idahoRelocation}.
           </p>
         </div>
       </section>

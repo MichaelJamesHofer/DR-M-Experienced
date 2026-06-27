@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getContentCatalog } from "@/data/content-catalog";
 import { episodeDisplayTitle } from "@/data/episodes";
+import { physicianProfileExperience } from "@/data/physician-profile";
 import { NewsletterCapture } from "@/components/newsletter-capture";
 import { PlatformBadges } from "@/components/platform-badges";
 
@@ -48,10 +49,12 @@ export default async function Home() {
 
             {/* Subheadline */}
             <p className="text-body-lg text-foreground-muted max-w-3xl mb-10 animate-slide-up delay-100">
-              David Musnick MD has 36 years of Sports Medicine, Regenerative Medicine and 28 years
-              of Functional Medicine experience. He is a master clinician and teacher. In this Podcast
-              he gets right to the point with highly practical information based on his experience
-              and on the research. No fluff. No long and boring interviews.
+              David Musnick MD has dedicated {physicianProfileExperience.patientCare} to patient care,
+              with deep clinical work in Sports Medicine, Internal Medicine, Regenerative Medicine,
+              and {physicianProfileExperience.functionalMedicine} of Functional Medicine. He is a
+              master clinician and teacher. In this Podcast he gets right to the point with highly
+              practical information based on his experience and on the research. No fluff. No long
+              and boring interviews.
             </p>
 
             {/* Platform Badges */}
@@ -344,7 +347,7 @@ export default async function Home() {
           <div className="relative px-6 py-16 sm:px-12 sm:py-20">
             <NewsletterCapture
               variant="hero"
-              heading="Get the protocols"
+              heading="Get the latest"
               description="Weekly insights on functional medicine, sports performance, and actionable health strategies. No spam, unsubscribe anytime."
               className="mx-auto"
             />
@@ -377,9 +380,9 @@ export default async function Home() {
               </h2>
               <p className="text-body text-foreground-muted mb-6">
                 Board-certified in Internal Medicine, Sports Medicine, and Functional Medicine.
-                37+ years in patient care, with deep dives into concussion, brain-based symptoms
-                and conditions, autoimmune conditions, fatigue, arthritis, and gastrointestinal
-                symptoms and conditions.
+                {physicianProfileExperience.patientCare} in patient care, with deep dives into
+                concussion, brain-based symptoms and conditions, autoimmune conditions, fatigue,
+                arthritis, and gastrointestinal symptoms and conditions.
               </p>
               <ul className="space-y-3 mb-8">
                 {[

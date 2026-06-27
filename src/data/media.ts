@@ -4,7 +4,7 @@ export type MediaFeature = {
   title: string;
   platform: string;
   show: string;
-  type: "Video" | "Podcast" | "Series";
+  type: "Video" | "Podcast" | "Series" | "Recipe" | "Short";
   summary: string;
   url: string;
   thumbnailUrl?: string;
@@ -16,12 +16,13 @@ function createMediaFeature(
   title: string,
   platform: string,
   show: string,
-  type: "Video" | "Podcast" | "Series",
+  type: MediaFeature["type"],
   summary: string,
-  url: string
+  url: string,
+  thumbnailUrlOverride?: string
 ): MediaFeature {
   const videoId = platform === "YouTube" ? extractYouTubeVideoId(url) : null;
-  const thumbnailUrl = videoId ? getYouTubeThumbnail(videoId) : undefined;
+  const thumbnailUrl = thumbnailUrlOverride ?? (videoId ? getYouTubeThumbnail(videoId) : undefined);
 
   return {
     title,
@@ -36,6 +37,15 @@ function createMediaFeature(
 }
 
 export const MEDIA_FEATURES: MediaFeature[] = [
+  createMediaFeature(
+    "World's Best Pesto",
+    "Vimeo",
+    "Dr. M's Experienced Recipes",
+    "Recipe",
+    "Short recipe clip for Dr. Musnick's pesto, kept separate from numbered podcast episodes while it is not part of the main episode catalog.",
+    "https://vimeo.com/1204939542",
+    "https://i.vimeocdn.com/video/2173399447-b0a98a9b4538e75d46d22cc36239a86d5253c185c37fd43b652ffa3e581db17f-d_590x332?region=us"
+  ),
   createMediaFeature(
     "Autoimmunity Talk",
     "YouTube",

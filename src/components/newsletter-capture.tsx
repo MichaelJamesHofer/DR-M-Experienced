@@ -14,7 +14,7 @@ type NewsletterCaptureProps = {
 
 export function NewsletterCapture({
   variant = "inline",
-  heading = "Get the protocols",
+  heading = "Get the latest",
   description = "Weekly insights on functional medicine, sports performance, and actionable health strategies. No spam, unsubscribe anytime.",
   className = "",
 }: NewsletterCaptureProps) {

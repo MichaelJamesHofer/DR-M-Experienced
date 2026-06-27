@@ -13,6 +13,13 @@ insert into public.content_topics (slug, label) values
   ('chronic-infection', 'chronic-infection'),
   ('energy', 'energy'),
   ('mitochondria', 'mitochondria'),
+  ('fatigue', 'fatigue'),
+  ('mitochondrial-health', 'mitochondrial-health'),
+  ('concussion', 'concussion'),
+  ('traumatic-brain-injury', 'traumatic-brain-injury'),
+  ('neuroinflammation', 'neuroinflammation'),
+  ('blood-brain-barrier', 'blood-brain-barrier'),
+  ('brain-autoimmunity', 'brain-autoimmunity'),
   ('blood-health', 'blood-health'),
   ('red-cell-function', 'red-cell-function'),
   ('circulation', 'circulation')
@@ -73,7 +80,7 @@ insert into public.episodes (
   (
     'episode-4-emf',
     4,
-    $$EMF$$,
+    $$Electro.Magnetic.Frequencies$$,
     '2026-04-03',
     19,
     $$Dr. Musnick explains how RF, EMF, and electrical fields affect the brain and blood-brain barrier-and practical steps to reduce exposure from phones, WiFi, Bluetooth, vehicles, and smart meters.$$,
@@ -82,6 +89,45 @@ insert into public.episodes (
     '0aDVuIwrRlDKxEylMj2dyw',
     'X8WChChyh9c',
     'https://vumbnail.com/1179956166.jpg'
+  ),
+  (
+    'episode-5-energy',
+    5,
+    $$Energy$$,
+    '2026-06-26',
+    31,
+    $$Dr. M takes a functional-medicine look at energy, fatigue, and mitochondrial health, including sleep, inflammation, viral reactivation, infections, mold, heavy metals, hormones, organ stress, and practical supports for ATP production.$$,
+    'https://anchor.fm/s/10e1b0328/podcast/play/122043282/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2026-5-26%2F426898712-44100-2-c5449a97f5849.mp3',
+    '1204939658',
+    '6fQAClcR4AAuueHjBNlrJC',
+    'JyBK6KtOo_k',
+    'https://vumbnail.com/1204939658.jpg'
+  ),
+  (
+    'episode-6-concussion-and-pathophysiology',
+    6,
+    $$Concussion and Pathophysiology$$,
+    '2026-06-26',
+    20,
+    $$Dr. Musnick explains concussion and traumatic brain injury mechanisms, from neural shearing, excitotoxicity, neuroinflammation, oxidative stress, hypoxia, and blood-brain barrier disruption to persistent symptoms and recovery pathways.$$,
+    'https://anchor.fm/s/10e1b0328/podcast/play/122043520/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2026-5-26%2F426898995-44100-2-cec8a1642ebff.mp3',
+    '1204939692',
+    '7MbKWgPZN40KEyN5j123JC',
+    'odNrtPEuong',
+    'https://vumbnail.com/1204939692.jpg'
+  ),
+  (
+    'episode-7-the-brain-on-fire',
+    7,
+    $$The Brain on Fire$$,
+    '2026-06-26',
+    21,
+    $$Dr. Musnick continues the brain-injury series with a focused look at the inflamed brain, including concussion, traumatic brain injury, neuroinflammation, oxidative stress, blood-brain barrier disruption, brain autoimmunity, hormone and mitochondrial effects, and persistent symptoms.$$,
+    'https://anchor.fm/s/10e1b0328/podcast/play/122048195/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2026-5-27%2F426905640-44100-2-7853f297ffd2e.mp3',
+    '1205004739',
+    '5QJlHSE6JhP3ymSCNzbWxv',
+    '3IVDJqwT2yY',
+    'https://vumbnail.com/1205004739.jpg'
   )
 on conflict (slug) do update set
   episode_number = excluded.episode_number,
@@ -108,7 +154,24 @@ insert into public.episode_topics (episode_slug, topic_slug) values
   ('episode-3-insomnia', 'functional-medicine'),
   ('episode-4-emf', 'emf'),
   ('episode-4-emf', 'brain-health'),
-  ('episode-4-emf', 'functional-medicine')
+  ('episode-4-emf', 'functional-medicine'),
+  ('episode-5-energy', 'energy'),
+  ('episode-5-energy', 'mitochondria'),
+  ('episode-5-energy', 'fatigue'),
+  ('episode-5-energy', 'mitochondrial-health'),
+  ('episode-5-energy', 'functional-medicine'),
+  ('episode-6-concussion-and-pathophysiology', 'concussion'),
+  ('episode-6-concussion-and-pathophysiology', 'traumatic-brain-injury'),
+  ('episode-6-concussion-and-pathophysiology', 'brain-health'),
+  ('episode-6-concussion-and-pathophysiology', 'neuroinflammation'),
+  ('episode-6-concussion-and-pathophysiology', 'functional-medicine'),
+  ('episode-7-the-brain-on-fire', 'concussion'),
+  ('episode-7-the-brain-on-fire', 'traumatic-brain-injury'),
+  ('episode-7-the-brain-on-fire', 'brain-health'),
+  ('episode-7-the-brain-on-fire', 'neuroinflammation'),
+  ('episode-7-the-brain-on-fire', 'blood-brain-barrier'),
+  ('episode-7-the-brain-on-fire', 'brain-autoimmunity'),
+  ('episode-7-the-brain-on-fire', 'functional-medicine')
 on conflict (episode_slug, topic_slug) do nothing;
 
 insert into public.episode_references (episode_slug, label, url, display_order) values
@@ -127,7 +190,19 @@ insert into public.episode_references (episode_slug, label, url, display_order) 
   ('episode-4-emf', 'Watch on Vimeo', 'https://vimeo.com/1179956166', 10),
   ('episode-4-emf', 'Listen on Spotify', 'https://open.spotify.com/episode/0aDVuIwrRlDKxEylMj2dyw?si=TH13bzEJTqWQ6LJUkIm9Cw', 20),
   ('episode-4-emf', 'Watch on YouTube', 'https://youtu.be/X8WChChyh9c', 30),
-  ('episode-4-emf', 'Watch on Rumble', 'https://rumble.com/v780pxq-episode-4-emf.html', 40)
+  ('episode-4-emf', 'Watch on Rumble', 'https://rumble.com/v780pxq-episode-4-emf.html', 40),
+  ('episode-5-energy', 'Watch on Vimeo', 'https://vimeo.com/1204939658', 10),
+  ('episode-5-energy', 'Listen on Spotify', 'https://open.spotify.com/episode/6fQAClcR4AAuueHjBNlrJC', 20),
+  ('episode-5-energy', 'Watch on YouTube', 'https://www.youtube.com/watch?v=JyBK6KtOo_k', 30),
+  ('episode-5-energy', 'Watch on Rumble', 'https://rumble.com/v7bvj32-episode-5-electro.magnetic.frequencies.html', 40),
+  ('episode-6-concussion-and-pathophysiology', 'Watch on Vimeo', 'https://vimeo.com/1204939692', 10),
+  ('episode-6-concussion-and-pathophysiology', 'Listen on Spotify', 'https://open.spotify.com/episode/7MbKWgPZN40KEyN5j123JC', 20),
+  ('episode-6-concussion-and-pathophysiology', 'Watch on YouTube', 'https://www.youtube.com/watch?v=odNrtPEuong', 30),
+  ('episode-6-concussion-and-pathophysiology', 'Watch on Rumble', 'https://rumble.com/v7bvk8i-episode-6-concussion-and-pathophysiology.html', 40),
+  ('episode-7-the-brain-on-fire', 'Watch on Vimeo', 'https://vimeo.com/1205004739', 10),
+  ('episode-7-the-brain-on-fire', 'Listen on Spotify', 'https://open.spotify.com/episode/5QJlHSE6JhP3ymSCNzbWxv', 20),
+  ('episode-7-the-brain-on-fire', 'Watch on YouTube', 'https://www.youtube.com/watch?v=3IVDJqwT2yY', 30),
+  ('episode-7-the-brain-on-fire', 'Watch on Rumble', 'https://rumble.com/v7bvtu4-episode-7-the-brain-on-fire.html', 40)
 on conflict (episode_slug, url) do update set
   label = excluded.label,
   display_order = excluded.display_order;
@@ -150,7 +225,22 @@ insert into public.episode_key_takeaways (episode_slug, display_order, body) val
   ($$episode-4-emf$$, 10, $$RF (phones, WiFi, Bluetooth, 5G), EMF from appliances/EVs, and electrical fields from wiring can affect the blood-brain barrier and contribute to brain fog, headaches, insomnia, and inflammation.$$),
   ($$episode-4-emf$$, 20, $$Mitigation starts with wired peripherals, airplane mode or distance from the phone at night, Ethernet + WiFi off overnight, and turning off Bluetooth/WiFi when idle.$$),
   ($$episode-4-emf$$, 30, $$Cars—especially EVs and hybrids—benefit from EMF testing before purchase; smart meters can be opted out or shielded.$$),
-  ($$episode-4-emf$$, 40, $$Meters (e.g. Safe and Sound II, Tri-Field) help you measure home, car, and workplace; shielding, clothing, and pro assessments may help sensitive individuals.$$)
+  ($$episode-4-emf$$, 40, $$Meters (e.g. Safe and Sound II, Tri-Field) help you measure home, car, and workplace; shielding, clothing, and pro assessments may help sensitive individuals.$$),
+  ($$episode-5-energy$$, 10, $$Low energy is often more complex than being tired; sleep, sleep apnea, inflammation, infections, mold, heavy metals, hormones, and organ stress can all contribute.$$),
+  ($$episode-5-energy$$, 20, $$Mitochondrial function and ATP production are central to daily vitality, resilience, and recovery.$$),
+  ($$episode-5-energy$$, 30, $$Energy work starts with root-cause investigation instead of assuming a single supplement or stimulant will solve fatigue.$$),
+  ($$episode-5-energy$$, 40, $$Foundational support can include grounding, better sleep, methylated B vitamins, magnesium, zinc, copper, CoQ10, NAD support, PQQ, and methylene blue when appropriate.$$),
+  ($$episode-5-energy$$, 50, $$Supplement and testing decisions should be personalized with a clinician, especially when fatigue is persistent or complex.$$),
+  ($$episode-6-concussion-and-pathophysiology$$, 10, $$Concussion care should go beyond simply ruling out a brain bleed and telling someone to rest.$$),
+  ($$episode-6-concussion-and-pathophysiology$$, 20, $$Brain injury mechanisms can include structural injury, neural shearing, excitotoxicity, neuroinflammation, oxidative stress, hypoxia, and blood-brain barrier disruption.$$),
+  ($$episode-6-concussion-and-pathophysiology$$, 30, $$Persistent symptoms may involve brain autoimmunity, hormone and pituitary effects, vagus nerve dysfunction, mitochondrial dysfunction, protein folding abnormalities, and gut microbiome changes.$$),
+  ($$episode-6-concussion-and-pathophysiology$$, 40, $$Brain fog, headache, dizziness, emotional instability, fatigue, sleepiness, and brain-based fatigue can persist even when the person did not directly hit their head.$$),
+  ($$episode-6-concussion-and-pathophysiology$$, 50, $$The episode lays the mechanism foundation for future concussion recovery conversations and does not replace individualized medical evaluation.$$),
+  ($$episode-7-the-brain-on-fire$$, 10, $$The brain-on-fire frame centers on neuroinflammation and the downstream effects of concussion or traumatic brain injury.$$),
+  ($$episode-7-the-brain-on-fire$$, 20, $$Brain injury can involve structural injury, neural shearing, excitotoxicity, oxidative stress, hypoxia, and blood-brain barrier disruption.$$),
+  ($$episode-7-the-brain-on-fire$$, 30, $$Persistent symptoms may be driven by brain autoimmunity, hormone and pituitary effects, vagus nerve dysfunction, mitochondrial dysfunction, and gut-brain changes.$$),
+  ($$episode-7-the-brain-on-fire$$, 40, $$Brain fog, headache, dizziness, emotional instability, fatigue, sleepiness, and brain-based fatigue can continue even when there was no direct head impact.$$),
+  ($$episode-7-the-brain-on-fire$$, 50, $$This episode reinforces the need for personalized evaluation and recovery planning after concussion or head injury.$$)
 on conflict (episode_slug, display_order) do update set body = excluded.body;
 
 insert into public.episode_checklist_items (episode_slug, display_order, body) values
@@ -158,7 +248,11 @@ insert into public.episode_checklist_items (episode_slug, display_order, body) v
   ($$brain-fog-part-1$$, 20, $$Prioritize 7.5+ hours of quality sleep.$$),
   ($$brain-fog-part-1$$, 30, $$Exercise daily to boost BDNF.$$),
   ($$brain-fog-part-1$$, 40, $$Reduce EMFs (WiFi off at night, phone away from head).$$),
-  ($$brain-fog-part-1$$, 50, $$Avoid plastics and hidden toxins.$$)
+  ($$brain-fog-part-1$$, 50, $$Avoid plastics and hidden toxins.$$),
+  ($$episode-5-energy$$, 10, $$Start with sleep quality and screen for sleep apnea when fatigue persists.$$),
+  ($$episode-5-energy$$, 20, $$Look for inflammatory, infectious, mold, heavy-metal, hormone, thyroid, adrenal, liver, kidney, and mitochondrial contributors.$$),
+  ($$episode-5-energy$$, 30, $$Support ATP production with clinician-guided nutrition and supplement choices.$$),
+  ($$episode-5-energy$$, 40, $$Use grounding, sleep improvement, and mitochondrial support as part of a broader root-cause plan.$$)
 on conflict (episode_slug, display_order) do update set body = excluded.body;
 
 insert into public.episode_sections (episode_slug, display_order, title) values
@@ -175,7 +269,18 @@ insert into public.episode_sections (episode_slug, display_order, title) values
   ($$episode-3-insomnia$$, 30, $$Light, stress, and natural supports$$),
   ($$episode-4-emf$$, 10, $$Types of electromagnetic exposure$$),
   ($$episode-4-emf$$, 20, $$Brain and barrier$$),
-  ($$episode-4-emf$$, 30, $$What to do today$$)
+  ($$episode-4-emf$$, 30, $$What to do today$$),
+  ($$episode-5-energy$$, 10, $$Why fatigue is usually multi-factorial$$),
+  ($$episode-5-energy$$, 20, $$Mitochondria and ATP$$),
+  ($$episode-5-energy$$, 30, $$Support tools discussed$$),
+  ($$episode-6-concussion-and-pathophysiology$$, 10, $$Why concussion needs more than rest$$),
+  ($$episode-6-concussion-and-pathophysiology$$, 20, $$What happens in the brain$$),
+  ($$episode-6-concussion-and-pathophysiology$$, 30, $$Symptoms that can persist$$),
+  ($$episode-6-concussion-and-pathophysiology$$, 40, $$Foundation for recovery discussions$$),
+  ($$episode-7-the-brain-on-fire$$, 10, $$The inflamed brain$$),
+  ($$episode-7-the-brain-on-fire$$, 20, $$Mechanisms after injury$$),
+  ($$episode-7-the-brain-on-fire$$, 30, $$Symptoms and patterns$$),
+  ($$episode-7-the-brain-on-fire$$, 40, $$Use medical context$$)
 on conflict (episode_slug, display_order) do update set title = excluded.title;
 
 insert into public.episode_section_paragraphs (
@@ -205,7 +310,27 @@ insert into public.episode_section_paragraphs (
   ($$episode-3-insomnia$$, 30, 10, $$Discusses blue-light strategies, evening habits, morning light and daytime exercise, and cautious use of melatonin and homeopathic options—with product discount links in the show’s pinned comment where applicable.$$),
   ($$episode-4-emf$$, 10, 10, $$Dr. M outlines RF vs EMF vs electrical fields and where each shows up in daily life—from towers and earbuds to wiring and vehicles.$$),
   ($$episode-4-emf$$, 20, 10, $$How fields may stress the blood-brain barrier, symptoms that can follow, and why protecting sleep and barrier integrity matters for long-term brain health.$$),
-  ($$episode-4-emf$$, 30, 10, $$Practical reduction strategies: hardwiring, nighttime WiFi habits, meter-based assessment, smart-meter choices, and resources referenced in pinned comments and show notes.$$)
+  ($$episode-4-emf$$, 30, 10, $$Practical reduction strategies: hardwiring, nighttime WiFi habits, meter-based assessment, smart-meter choices, and resources referenced in pinned comments and show notes.$$),
+  ($$episode-5-energy$$, 10, 10, $$Dr. M frames fatigue as a systems problem rather than a simple willpower or caffeine issue.$$),
+  ($$episode-5-energy$$, 10, 20, $$Potential contributors include poor sleep, sleep apnea, inflammation, viral reactivation, Lyme and co-infections, mold exposure, heavy metals, hormone imbalance, adrenal and thyroid function, liver and kidney stress, and mitochondrial dysfunction.$$),
+  ($$episode-5-energy$$, 20, 10, $$The episode connects daily energy to mitochondrial function and ATP production.$$),
+  ($$episode-5-energy$$, 20, 20, $$Dr. M discusses why mitochondrial support can matter for vitality, resilience, and recovery, especially when fatigue has more than one driver.$$),
+  ($$episode-5-energy$$, 30, 10, $$Practical support areas include grounding, improving sleep, methylated B vitamins, magnesium, zinc, copper, CoQ10, NAD support, PQQ, and methylene blue.$$),
+  ($$episode-5-energy$$, 30, 20, $$These are presented as educational options to evaluate in a personalized medical context, not one-size-fits-all treatment instructions.$$),
+  ($$episode-6-concussion-and-pathophysiology$$, 10, 10, $$Dr. M explains why concussion evaluation should not stop at ruling out bleeding or major structural danger.$$),
+  ($$episode-6-concussion-and-pathophysiology$$, 10, 20, $$The episode focuses on the functional medicine mechanisms that can keep symptoms active after a head injury.$$),
+  ($$episode-6-concussion-and-pathophysiology$$, 20, 10, $$Mechanisms discussed include neural shearing, excitotoxicity, neuroinflammation, oxidative stress, hypoxia, blood-brain barrier disruption, brain autoimmunity, hormone dysfunction, pituitary involvement, vagus nerve dysfunction, mitochondrial dysfunction, protein folding abnormalities, neurogenesis, synaptogenesis, and gut microbiome changes.$$),
+  ($$episode-6-concussion-and-pathophysiology$$, 30, 10, $$Dr. M connects the mechanisms to symptoms such as brain fog, headache, dizziness, emotional instability, fatigue, sleepiness, and brain-based fatigue.$$),
+  ($$episode-6-concussion-and-pathophysiology$$, 30, 20, $$He also notes that concussion-like injury can occur even when someone does not directly hit their head.$$),
+  ($$episode-6-concussion-and-pathophysiology$$, 40, 10, $$This episode sets up later conversations on how to address concussion recovery pathways.$$),
+  ($$episode-6-concussion-and-pathophysiology$$, 40, 20, $$Listeners are reminded to use personalized medical care for diagnosis, treatment, testing, supplements, and return-to-play decisions after head injury.$$),
+  ($$episode-7-the-brain-on-fire$$, 10, 10, $$Dr. M frames the post-injury brain as a system that can remain activated and inflamed after concussion or traumatic brain injury.$$),
+  ($$episode-7-the-brain-on-fire$$, 10, 20, $$The episode connects the brain-on-fire idea to neuroinflammation, oxidative stress, and the blood-brain barrier.$$),
+  ($$episode-7-the-brain-on-fire$$, 20, 10, $$Mechanisms discussed include structural injury, neural shearing, excitotoxicity, hypoxia, blood-brain barrier disruption, brain autoimmunity, hormone dysfunction, pituitary involvement, vagus nerve dysfunction, mitochondrial dysfunction, protein folding abnormalities, neurogenesis, synaptogenesis, and gut microbiome changes.$$),
+  ($$episode-7-the-brain-on-fire$$, 30, 10, $$Dr. M connects these pathways to persistent symptoms such as brain fog, headache, dizziness, emotional instability, fatigue, sleepiness, and brain-based fatigue.$$),
+  ($$episode-7-the-brain-on-fire$$, 30, 20, $$He also emphasizes that concussion-like injury can occur without a direct blow to the head.$$),
+  ($$episode-7-the-brain-on-fire$$, 40, 10, $$The episode is educational and should not be used as a stand-alone protocol for diagnosis, treatment, testing, supplements, or return-to-play decisions.$$),
+  ($$episode-7-the-brain-on-fire$$, 40, 20, $$Listeners are directed toward individualized medical evaluation after concussion or head injury.$$)
 on conflict (episode_slug, section_display_order, display_order) do update set body = excluded.body;
 
 insert into public.affiliate_categories (slug, label, description, display_order) values

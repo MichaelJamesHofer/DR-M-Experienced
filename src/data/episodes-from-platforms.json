@@ -43,12 +43,51 @@
     "spotifyId": "0aDVuIwrRlDKxEylMj2dyw",
     "spotifyUrl": "https://open.spotify.com/episode/0aDVuIwrRlDKxEylMj2dyw",
     "youtubeId": "X8WChChyh9c",
-    "title": "EMF",
+    "title": "Electro.Magnetic.Frequencies",
     "publishDate": "2026-04-03",
     "durationMinutes": 19,
     "summary": "Dr. Musnick explains how RF, EMF, and electrical fields affect the brain and blood-brain barrier—and practical steps to reduce exposure from phones, WiFi, Bluetooth, vehicles, and smart meters.",
     "slug": "episode-4-emf",
     "number": 4,
     "thumbnailUrl": "https://vumbnail.com/1179956166.jpg"
+  },
+  {
+    "vimeoId": "1204939658",
+    "spotifyId": "6fQAClcR4AAuueHjBNlrJC",
+    "spotifyUrl": "https://open.spotify.com/episode/6fQAClcR4AAuueHjBNlrJC",
+    "youtubeId": "JyBK6KtOo_k",
+    "title": "Energy",
+    "publishDate": "2026-06-26",
+    "durationMinutes": 31,
+    "summary": "Dr. M takes a functional-medicine look at energy, fatigue, and mitochondrial health, including sleep, inflammation, viral reactivation, infections, mold, heavy metals, hormones, organ stress, and practical supports for ATP production.",
+    "slug": "episode-5-energy",
+    "number": 5,
+    "thumbnailUrl": "https://vumbnail.com/1204939658.jpg"
+  },
+  {
+    "vimeoId": "1204939692",
+    "spotifyId": "7MbKWgPZN40KEyN5j123JC",
+    "spotifyUrl": "https://open.spotify.com/episode/7MbKWgPZN40KEyN5j123JC",
+    "youtubeId": "odNrtPEuong",
+    "title": "Concussion and Pathophysiology",
+    "publishDate": "2026-06-26",
+    "durationMinutes": 20,
+    "summary": "Dr. Musnick explains concussion and traumatic brain injury mechanisms, from neural shearing, excitotoxicity, neuroinflammation, oxidative stress, hypoxia, and blood-brain barrier disruption to persistent symptoms and recovery pathways.",
+    "slug": "episode-6-concussion-and-pathophysiology",
+    "number": 6,
+    "thumbnailUrl": "https://vumbnail.com/1204939692.jpg"
+  },
+  {
+    "vimeoId": "1205004739",
+    "spotifyId": "5QJlHSE6JhP3ymSCNzbWxv",
+    "spotifyUrl": "https://open.spotify.com/episode/5QJlHSE6JhP3ymSCNzbWxv",
+    "youtubeId": "3IVDJqwT2yY",
+    "title": "The Brain on Fire",
+    "publishDate": "2026-06-26",
+    "durationMinutes": 21,
+    "summary": "Dr. Musnick continues the brain-injury series with a focused look at the inflamed brain, including concussion, traumatic brain injury, neuroinflammation, oxidative stress, blood-brain barrier disruption, brain autoimmunity, hormone and mitochondrial effects, and persistent symptoms.",
+    "slug": "episode-7-the-brain-on-fire",
+    "number": 7,
+    "thumbnailUrl": "https://vumbnail.com/1205004739.jpg"
   }
 ]

@@ -4,10 +4,11 @@ import { MEDIA_FEATURES } from "@/data/media";
 
 export const metadata = {
   title: "Media & Features",
-  description: "Watch and listen to Dr. David Musnick's talks, interviews, and podcast appearances on functional medicine, sports medicine, and integrative health.",
+  description: "Watch and listen to Dr. David Musnick's talks, interviews, podcast appearances, short clips, and recipe media.",
 };
 
 // Group media by type
+const shortRecipeMedia = MEDIA_FEATURES.filter((m) => m.type === "Short" || m.type === "Recipe");
 const videoMedia = MEDIA_FEATURES.filter((m) => m.type === "Video");
 const podcastMedia = MEDIA_FEATURES.filter((m) => m.type === "Podcast");
 const seriesMedia = MEDIA_FEATURES.filter((m) => m.type === "Series");
@@ -24,10 +25,27 @@ export default function MediaPage() {
           Talks, interviews & series
         </h1>
         <p className="text-body-lg text-foreground-muted max-w-2xl">
-          Explore Dr. Musnick&apos;s appearances across podcasts, video talks, and educational series 
-          covering functional medicine, sports medicine, and integrative health.
+          Explore Dr. Musnick&apos;s appearances across short clips, recipe media, podcasts, video talks,
+          and educational series covering functional medicine, sports medicine, and integrative health.
         </p>
       </div>
+
+      {/* Shorts & Recipes */}
+      {shortRecipeMedia.length > 0 && (
+        <section className="mb-16">
+          <h2 className="text-heading-lg font-bold text-foreground mb-6 flex items-center gap-3">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-caption font-bold text-primary">
+              SR
+            </span>
+            Shorts & recipes
+          </h2>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {shortRecipeMedia.map((media) => (
+              <MediaCard key={media.url} media={media} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Video Talks */}
       {videoMedia.length > 0 && (
@@ -158,7 +176,7 @@ function MediaCard({ media }: { media: typeof MEDIA_FEATURES[number] }) {
         </p>
         <div className="mt-4 pt-4 border-t border-border flex items-center justify-between">
           <span className="text-body-sm font-medium text-primary group-hover:text-primary-hover transition-colors duration-200">
-            Watch / Listen
+            {media.type === "Podcast" ? "Listen" : "Watch"}
           </span>
           <svg
             className="h-4 w-4 text-foreground-muted group-hover:text-primary group-hover:translate-x-1 transition-all duration-200"
