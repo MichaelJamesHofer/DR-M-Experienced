@@ -175,6 +175,8 @@ const fallbackCatalog: ContentCatalog = {
 };
 
 const strictContentCatalog = process.env.CONTENT_CATALOG_STRICT === "true";
+const POSTGREST_PAGE_SIZE = 1000;
+const MAX_CATALOG_ROWS_PER_TABLE = 100_000;
 
 export const getContentCatalog = cache(async (): Promise<ContentCatalog> => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -377,20 +379,31 @@ async function fetchRows<T>(
     url.searchParams.set(key, value);
   });
 
-  const response = await fetch(url, {
-    headers: {
-      apikey: supabaseAnonKey,
-      Authorization: `Bearer ${supabaseAnonKey}`,
-    },
-    cache: "force-cache",
-  });
+  const rows: T[] = [];
+  while (rows.length < MAX_CATALOG_ROWS_PER_TABLE) {
+    const from = rows.length;
+    const to = from + POSTGREST_PAGE_SIZE - 1;
+    const response = await fetch(url, {
+      headers: {
+        apikey: supabaseAnonKey,
+        Authorization: `Bearer ${supabaseAnonKey}`,
+        Range: `${from}-${to}`,
+        "Range-Unit": "items",
+      },
+      cache: "force-cache",
+    });
 
-  if (!response.ok) {
-    const body = await response.text().catch(() => "");
-    throw new FetchRowsError(table, response.status, body);
+    if (!response.ok) {
+      const body = await response.text().catch(() => "");
+      throw new FetchRowsError(table, response.status, body);
+    }
+
+    const page = (await response.json()) as T[];
+    rows.push(...page);
+    if (page.length < POSTGREST_PAGE_SIZE) return rows;
   }
 
-  return response.json() as Promise<T[]>;
+  throw new Error(`${table} exceeded the ${MAX_CATALOG_ROWS_PER_TABLE}-row build limit.`);
 }
 
 async function fetchOptionalRows<T>(
@@ -719,6 +732,18 @@ function validateSupabaseCatalog(catalog: ContentCatalog) {
     }
     if (episode.sections.length === 0) problems.push(`${episode.slug} has no section rows.`);
 
+    const availablePlatforms = new Set(
+      (episode.references ?? [])
+        .filter((reference) => !reference.comingSoon)
+        .map((reference) => episodePlatformForUrl(reference.url))
+        .filter((platform): platform is string => Boolean(platform))
+    );
+    for (const platform of ["Vimeo", "Spotify", "YouTube", "Rumble"]) {
+      if (!availablePlatforms.has(platform)) {
+        problems.push(`${episode.slug} is missing a published ${platform} reference.`);
+      }
+    }
+
     episode.sections.forEach((section) => {
       if (section.content.length === 0) {
         problems.push(`${episode.slug} section "${section.title}" has no paragraph rows.`);
@@ -764,4 +789,24 @@ function validateSupabaseCatalog(catalog: ContentCatalog) {
   if (problems.length > 0) {
     throw new Error(`Supabase catalog failed validation:\n- ${problems.join("\n- ")}`);
   }
+}
+
+function episodePlatformForUrl(value: string): string | null {
+  try {
+    const hostname = new URL(value).hostname.toLowerCase();
+    if (hostname === "vimeo.com" || hostname.endsWith(".vimeo.com")) return "Vimeo";
+    if (hostname === "open.spotify.com") return "Spotify";
+    if (
+      hostname === "youtu.be" ||
+      hostname === "youtube.com" ||
+      hostname.endsWith(".youtube.com")
+    ) {
+      return "YouTube";
+    }
+    if (hostname === "rumble.com" || hostname.endsWith(".rumble.com")) return "Rumble";
+  } catch {
+    return null;
+  }
+
+  return null;
 }

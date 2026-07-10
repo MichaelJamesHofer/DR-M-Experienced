@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
+const POSTGREST_PAGE_SIZE = 1000;
 
 loadEnvFile(path.join(ROOT, ".env"));
 loadEnvFile(path.join(ROOT, ".env.local"));
@@ -165,6 +166,18 @@ for (const episode of publishedEpisodes) {
   if (takeaways.length === 0) problems.push(`${slug}: missing episode_key_takeaways rows.`);
   if (sections.length === 0) problems.push(`${slug}: missing episode_sections rows.`);
 
+  const availablePlatforms = new Set(
+    references
+      .filter((reference) => !reference.coming_soon)
+      .map((reference) => episodePlatformForUrl(reference.url))
+      .filter(Boolean)
+  );
+  for (const platform of ["Vimeo", "Spotify", "YouTube", "Rumble"]) {
+    if (!availablePlatforms.has(platform)) {
+      problems.push(`${slug}: missing published ${platform} reference.`);
+    }
+  }
+
   for (const section of sections) {
     const paragraphs = paragraphsBySection.get(`${slug}:${section.display_order}`) ?? [];
     if (paragraphs.length === 0) {
@@ -232,47 +245,61 @@ if (problems.length > 0) {
 console.log("Catalog verification passed.");
 
 async function fetchRows(table, params) {
-  const url = new URL(`/rest/v1/${table}`, supabaseUrl);
-  for (const [key, value] of Object.entries(params)) {
-    url.searchParams.set(key, value);
-  }
-
-  const response = await fetch(url, {
-    headers: {
-      apikey: supabaseCatalogKey,
-      Authorization: `Bearer ${supabaseCatalogKey}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`returned ${response.status}`);
-  }
-
-  return response.json();
+  return fetchPaginatedRows(table, params, false);
 }
 
 async function fetchOptionalRows(table, params) {
+  return fetchPaginatedRows(table, params, true);
+}
+
+async function fetchPaginatedRows(table, params, optional) {
+  const requestedLimit = Math.max(1, Number(params.limit ?? 10_000));
   const url = new URL(`/rest/v1/${table}`, supabaseUrl);
   for (const [key, value] of Object.entries(params)) {
-    url.searchParams.set(key, value);
+    if (key !== "limit") url.searchParams.set(key, value);
   }
 
-  const response = await fetch(url, {
-    headers: {
-      apikey: supabaseCatalogKey,
-      Authorization: `Bearer ${supabaseCatalogKey}`,
-    },
-  });
+  const rows = [];
+  while (rows.length < requestedLimit) {
+    const pageSize = Math.min(POSTGREST_PAGE_SIZE, requestedLimit - rows.length);
+    const response = await fetch(url, {
+      headers: {
+        apikey: supabaseCatalogKey,
+        Authorization: `Bearer ${supabaseCatalogKey}`,
+        Range: `${rows.length}-${rows.length + pageSize - 1}`,
+        "Range-Unit": "items",
+      },
+    });
 
-  if (response.status === 404) {
+    if (optional && response.status === 404) return null;
+    if (!response.ok) throw new Error(`returned ${response.status}`);
+
+    const page = await response.json();
+    rows.push(...page);
+    if (page.length < pageSize) break;
+  }
+
+  return rows;
+}
+
+function episodePlatformForUrl(value) {
+  try {
+    const hostname = new URL(value).hostname.toLowerCase();
+    if (hostname === "vimeo.com" || hostname.endsWith(".vimeo.com")) return "Vimeo";
+    if (hostname === "open.spotify.com") return "Spotify";
+    if (
+      hostname === "youtu.be" ||
+      hostname === "youtube.com" ||
+      hostname.endsWith(".youtube.com")
+    ) {
+      return "YouTube";
+    }
+    if (hostname === "rumble.com" || hostname.endsWith(".rumble.com")) return "Rumble";
+  } catch {
     return null;
   }
 
-  if (!response.ok) {
-    throw new Error(`returned ${response.status}`);
-  }
-
-  return response.json();
+  return null;
 }
 
 function groupRows(rows, key) {
