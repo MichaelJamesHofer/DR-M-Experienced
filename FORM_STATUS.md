@@ -60,13 +60,18 @@ Security posture:
 - anonymous users cannot delete captured submissions
 - database constraints enforce field lengths, email format, and allowed contact subjects
 - the Edge Function handles duplicate newsletter emails as success
-- the Edge Function rate-limits by hashed client/source keys and email
+- the Edge Function fully validates requests before incrementing hashed IP/email rate-limit counters
+- rate-limit records older than eight days are pruned during normal form traffic
+- request bodies are read through a strict byte limit, including chunked requests
 
 ## Verification Checklist
 
 - `npm run lint`
-- `npm run build`
-- `npm audit --omit=dev`
+- `npm run typecheck`
+- `npm audit --audit-level=high`
+- `npm run test:database-security`
+- Deno check, lint, and tests from `README.md`
+- `CONTENT_CATALOG_STRICT=true npm run build`
 - production deployment completes
 - live contact form shows success after submission
 - live subscribe form shows success after submission

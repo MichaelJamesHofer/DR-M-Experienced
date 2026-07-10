@@ -1,66 +1,41 @@
 # New Episode Publishing Process
 
-Use this checklist after the post-ready episode has been encoded and the platform URLs are known.
+Use this checklist after an episode is posted and its platform URLs are known.
 
-## 1. Sync Platform Metadata
+## 1. Confirm Platform Metadata
 
-1. Run `npm run sync-episodes`.
-2. Confirm the new episode appears in `src/data/episodes-from-platforms.json`.
-3. Verify the slug, episode number, publish date, duration, Vimeo ID, Spotify ID, YouTube ID, and thumbnail URL.
+Collect and verify:
 
-## 2. Add Editorial Enrichment
+- episode number, title, publication date, duration, summary, and thumbnail
+- Vimeo ID and URL
+- Spotify ID and URL
+- YouTube ID and URL
+- Rumble URL
 
-Update `src/data/episodes-enrichment.json` with:
+`npm run sync-episodes` can be used as a metadata aid, but it does not update Supabase or publish the website.
 
-- `topics`: use specific topic slugs. Avoid generic tags when a specific tag exists.
-- `references`: Vimeo, Spotify, YouTube, Rumble, or other canonical references.
-- `audioUrl`: podcast audio URL when available.
-- `keyTakeaways`: concise episode takeaways.
-- `checklist`: only when the episode has a natural ordered action list.
-- `sections`: show-note sections that help a listener scan the episode.
+## 2. Add The Episode To Supabase
 
-## 3. Check Automatic Affiliate Matching
+Create or update the parent row in `public.episodes`, then add its related rows:
 
-Affiliate resources are matched to episodes in two ways:
-
-- Manual links: rows in `public.affiliate_product_episode_links`.
-- Automatic links: rows in `public.affiliate_product_auto_topics` matching `public.episode_topics`.
-
-Before publishing, open the episode page and verify the "Products referenced in this episode" section. If a product appears only because the topic match is too broad, tighten the episode topic row or the product auto-topic row. If a product is episode-specific, add an explicit manual link row.
-
-## 4. Update Database Seed When Content Changes
-
-The Supabase content catalog is defined in:
-
-- `supabase/migrations/20260617233000_create_content_catalog.sql`
-- `supabase/migrations/20260619013000_add_episode_enrichment_tables.sql`
-- `supabase/seed.sql`
-- `src/data/content-catalog.ts`
-
-When adding an episode, mirror the public content into:
-
-- `public.episodes`
 - `public.episode_topics`
 - `public.episode_references`
 - `public.episode_key_takeaways`
-- `public.episode_checklist_items`
+- `public.episode_checklist_items`, when an ordered checklist is useful
 - `public.episode_sections`
 - `public.episode_section_paragraphs`
 
-When adding or changing an affiliate resource, mirror it into:
+Keep the episode in `draft` until all four platform references and the editorial sections are complete. Public RLS policies hide both draft parent rows and their child content.
 
-- `public.affiliate_categories`
-- `public.affiliate_products`
-- `public.affiliate_product_reasons`
-- `public.affiliate_product_use_cases`
-- `public.affiliate_product_featured_items`
-- `public.affiliate_product_episode_links`
-- `public.affiliate_product_auto_topics`
-- `public.affiliate_product_tags`
+## 3. Verify Related Products And Blogs
 
-The database view `public.affiliate_product_episode_matches` should show the final manual and topic-derived product-to-episode matches. The site reads from Supabase at build time when `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_ANON_KEY` or `NEXT_PUBLIC_SUPABASE_ANON_KEY` are present; otherwise it falls back to the checked-in catalog mirror so local static builds still work.
+Affiliate resources can be linked manually through `public.affiliate_product_episode_links` or by topic through `public.affiliate_product_auto_topics`. Review the resulting product cards on the episode page and remove broad or inaccurate matches.
 
-Production deploys set `CONTENT_CATALOG_STRICT=true`, so a missing Supabase table, missing required episode enrichment, or incomplete affiliate product will fail the build instead of silently publishing stale fallback content.
+Add blog relationships only when the episode is genuinely relevant to the post.
+
+## 4. Maintain Recovery Data
+
+When the editorial change is final, mirror durable content into `supabase/seed.sql` and the checked-in fallback data. These mirrors support local recovery; Supabase remains the production source of truth.
 
 ## 5. Verify Locally
 
@@ -68,26 +43,15 @@ Run:
 
 ```bash
 npm run lint
-npx tsc --noEmit
-npm audit --audit-level=moderate
-npm run build
+npm run typecheck
+npm audit --audit-level=high
+npm run verify:catalog
+npm run test:database-security
+CONTENT_CATALOG_STRICT=true npm run build
 ```
 
-Then review:
+Review the homepage, episode detail page, episodes library, related products, related blogs, previous/next navigation, and mobile layout. Confirm all four platform links open the intended episode.
 
-- `/episodes/`
-- `/episodes/[new-episode-slug]/`
-- `/affiliates/`
+## 6. Publish
 
-Check search, topic filters, category filters, sort controls, product links, affiliate disclosure, and mobile layout.
-
-## 6. Commit Checkpoints
-
-Use small rollback points:
-
-1. `checkpoint: sync episode metadata`
-2. `checkpoint: enrich episode notes`
-3. `checkpoint: update affiliate links`
-4. `checkpoint: verify episode publish`
-
-Keep generated, raw, or email-extraction artifacts on the Desktop unless they are intentionally part of the site source.
+Set the Supabase episode status to `published`, rerun the local checks, then deploy the verified commit through `main`. Confirm the GitHub Pages workflow and live episode URL before announcing the episode.

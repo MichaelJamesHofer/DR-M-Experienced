@@ -27,9 +27,10 @@ Do not use a service-role key in the frontend, GitHub Pages build output, or any
 
 ## Database Setup
 
-The project is linked to Supabase CLI. Apply migrations with:
+Link the local checkout to the production project once, then apply migrations:
 
 ```bash
+npx supabase link --project-ref tdbsuzciwotleualdcjf
 npx supabase db push --linked
 ```
 
@@ -47,18 +48,22 @@ The migrations:
 Deploy the hosted receive endpoint:
 
 ```bash
-npx supabase functions deploy form-submit --no-verify-jwt --use-api
+npx supabase functions deploy form-submit --use-api
 ```
+
+`supabase/config.toml` declares this receive-only function public with
+`verify_jwt = false`; validation, origin checks, and rate limiting are enforced
+inside the handler.
 
 Set `FORM_RATE_LIMIT_SECRET` as a Supabase function secret. Supabase provides the project URL and service key to the Edge Function runtime; they must not be exposed to the static site.
 
 ## Verification
 
-1. Run `npm run lint`.
-2. Run `npm run build`.
-3. Deploy through GitHub Pages.
-4. Submit the live contact form.
-5. Submit a live newsletter signup.
+1. Run `npm run lint` and `npm run typecheck`.
+2. Run `npm run test:database-security` and the Deno checks from `README.md`.
+3. Run `CONTENT_CATALOG_STRICT=true npm run build`.
+4. Deploy through GitHub Pages.
+5. Submit the live contact form and newsletter signup.
 6. Confirm rows appear in Supabase Table Editor.
 
 Anonymous users should not be able to read or directly insert captured rows through the Supabase REST API.
