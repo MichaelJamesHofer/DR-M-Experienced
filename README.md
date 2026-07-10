@@ -1,48 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dr. M's Experienced
 
-## Getting Started
+Static Next.js site for Dr. M's Experienced Functional and Sports Medicine. Production content is read from Supabase during the build and exported to GitHub Pages at `drmexperienced.com`.
 
-First, run the development server:
+## Local Development
+
+Create an ignored `.env.local` with the catalog credentials described in `docs/database-content-transition.md`, then run:
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The site is available at `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Content Publishing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Supabase is the production source of truth for episodes, blogs, affiliate resources, and their related content. `npm run sync-episodes` is an optional metadata aid; it does not publish content or run automatically during a build.
 
-## Learn More
+Production builds use `CONTENT_CATALOG_STRICT=true` and fail when required catalog content is incomplete. Published episodes must include active Vimeo, Spotify, YouTube, and Rumble references.
 
-To learn more about Next.js, take a look at the following resources:
+See:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `docs/new-episode-process.md`
+- `docs/blog-content-system.md`
+- `docs/database-content-transition.md`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Forms
 
-## Episodes (dynamic at build)
+The contact and newsletter forms post to `supabase/functions/form-submit`. The public browser cannot write directly to the form tables. The Edge Function validates complete payloads, rate-limits accepted submissions, and writes with server-side credentials.
 
-Each build runs `sync-episodes.mjs`: it pulls **public** episode data from Vimeo, Spotify, and YouTube (app tokens / API keys only, no user login), merges by title/date, sorts by publish date, and writes `episodes-from-platforms.json`. New episodes on any platform show up on the next deploy. One template per episode, same layout and link order (Vimeo → Spotify → YouTube → Rumble). Optional notes/links: `src/data/episodes-enrichment.json` keyed by Vimeo (or Spotify/YouTube) ID.
+See `FORM_SETUP.md` and `SECURITY.md` for deployment and security details.
 
-## Contact and Subscribe Forms
+## Verification
 
-The contact and newsletter forms post from the static site to a Supabase Edge Function at `/functions/v1/form-submit`. The function validates submissions, applies rate limits, and writes to private Supabase tables with server-side credentials. Apply the migrations in `supabase/migrations`, deploy the function in `supabase/functions/form-submit`, then configure this GitHub Actions secret:
+Run these checks before deployment:
 
-- `NEXT_PUBLIC_SUPABASE_URL`
+```bash
+npm run lint
+npm run typecheck
+npm audit --audit-level=high
+npm run verify:catalog
+npm run test:database-security
+npx --yes deno@2.9.2 check --config supabase/functions/deno.json --lock supabase/functions/deno.lock supabase/functions/form-submit/index.ts
+npx --yes deno@2.9.2 lint --config supabase/functions/deno.json supabase/functions/form-submit src/lib/analytics-privacy.ts src/lib/analytics-privacy_test.ts
+npx --yes deno@2.9.2 test --config supabase/functions/deno.json --lock supabase/functions/deno.lock supabase/functions/form-submit src/lib/analytics-privacy_test.ts
+CONTENT_CATALOG_STRICT=true npm run build
+```
 
-The static site does not need a Supabase anon key for form submission. Row Level Security remains enabled and public users do not receive table read, update, delete, or direct insert access.
+## Deployment
 
-## Deploy
-
-The site is statically exported and deployed by `.github/workflows/deploy.yml` to GitHub Pages. The workflow builds `out/` and publishes that artifact, so generated root HTML and `_next/` files are intentionally not committed.
-
-Production custom domain: `drmexperienced.com`.
+`.github/workflows/deploy.yml` builds and publishes `out/` after a push to `main`. The workflow uses pinned actions, scoped job permissions, Node 24, Deno checks, database security tests, catalog verification, and a strict static build.

@@ -41,7 +41,7 @@ Blog catalog:
 
 ## Build-Time Contract
 
-The site reads Supabase during `next build` when `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are configured.
+The site reads Supabase during `next build` when `NEXT_PUBLIC_SUPABASE_URL` and one of `SUPABASE_CATALOG_KEY`, `SUPABASE_ANON_KEY`, or `NEXT_PUBLIC_SUPABASE_ANON_KEY` are configured. Server-only catalog keys are preferred for trusted local verification and are never included in the static artifact.
 
 Production deploys set `CONTENT_CATALOG_STRICT=true`. In strict mode, the build fails if Supabase is unavailable or if required catalog rows are missing:
 
@@ -76,12 +76,12 @@ Only push to `main` after the verifier passes, the strict build passes, and the 
 
 ## Publishing Flow
 
-1. Sync platform metadata with `npm run sync-episodes`.
+1. Optionally inspect platform metadata with `npm run sync-episodes`.
 2. Add or update episode rows in Supabase.
 3. Add episode topics, references, takeaways, checklist items, sections, and section paragraphs.
 4. Add or update affiliate rows and product-to-episode links.
 5. Add or update blog rows when a long-form note is ready.
-6. Run `npm run lint`, `npx tsc --noEmit`, and `npm run build`.
+6. Run `npm run lint`, `npm run typecheck`, `npm run verify:catalog`, `npm run test:database-security`, and `npm run build`.
 7. Push to `main` and verify the GitHub Pages deploy.
 
 ## Near-Term Admin Approach
