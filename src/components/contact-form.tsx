@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 import { submitFormSubmission } from "@/lib/form-submissions";
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
@@ -110,12 +111,14 @@ export function ContactForm() {
       />
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
-          <label className="text-body-sm font-medium text-foreground mb-2 block">
+          <label htmlFor="contact-name" className="text-body-sm font-medium text-foreground mb-2 block">
             Name
           </label>
           <input
             name="name"
+            id="contact-name"
             type="text"
+            autoComplete="name"
             required
             disabled={isDisabled}
             className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200"
@@ -123,12 +126,14 @@ export function ContactForm() {
           />
         </div>
         <div>
-          <label className="text-body-sm font-medium text-foreground mb-2 block">
+          <label htmlFor="contact-email" className="text-body-sm font-medium text-foreground mb-2 block">
             Email
           </label>
           <input
             name="email"
+            id="contact-email"
             type="email"
+            autoComplete="email"
             required
             disabled={isDisabled}
             className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200"
@@ -138,12 +143,14 @@ export function ContactForm() {
       </div>
 
       <div>
-        <label className="text-body-sm font-medium text-foreground mb-2 block">
+        <label htmlFor="contact-subject" className="text-body-sm font-medium text-foreground mb-2 block">
           Subject
         </label>
         <select
           name="subject"
+          id="contact-subject"
           defaultValue="podcast"
+          required
           disabled={isDisabled}
           className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200"
         >
@@ -155,11 +162,12 @@ export function ContactForm() {
       </div>
 
       <div>
-        <label className="text-body-sm font-medium text-foreground mb-2 block">
+        <label htmlFor="contact-message" className="text-body-sm font-medium text-foreground mb-2 block">
           Message
         </label>
         <textarea
           name="message"
+          id="contact-message"
           rows={5}
           required
           disabled={isDisabled}
@@ -172,6 +180,7 @@ export function ContactForm() {
         <input
           type="checkbox"
           name="consent"
+          required
           disabled={isDisabled}
           className="mt-1 h-5 w-5 rounded border-border text-primary focus:ring-primary/30 disabled:opacity-60"
         />
@@ -179,6 +188,14 @@ export function ContactForm() {
           I understand this form is not for medical advice, diagnosis, or emergencies.
         </span>
       </label>
+
+      <p className="text-caption text-foreground-subtle">
+        Submitted information is handled as described in the{" "}
+        <Link href="/legal/privacy" className="font-semibold text-foreground-muted underline underline-offset-2">
+          privacy notice
+        </Link>
+        .
+      </p>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <button

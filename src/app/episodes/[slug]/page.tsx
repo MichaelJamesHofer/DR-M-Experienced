@@ -37,9 +37,32 @@ export async function generateMetadata({
     return { title: "Episode not found" };
   }
 
+  const title = episodeDisplayTitle(episode);
+  const canonicalPath = `/episodes/${episode.slug}/`;
+  const images = episode.thumbnailUrl
+    ? [{ url: episode.thumbnailUrl, alt: title }]
+    : undefined;
+
   return {
-    title: episodeDisplayTitle(episode),
+    title,
     description: episode.summary,
+    alternates: {
+      canonical: canonicalPath,
+    },
+    openGraph: {
+      title,
+      description: episode.summary,
+      url: canonicalPath,
+      type: "article",
+      publishedTime: `${episode.publishDate}T00:00:00Z`,
+      images,
+    },
+    twitter: {
+      card: images ? "summary_large_image" : "summary",
+      title,
+      description: episode.summary,
+      images: images?.map((image) => image.url),
+    },
   };
 }
 
@@ -139,6 +162,7 @@ export default async function EpisodeDetailPage({
               <VimeoPlayer
                 videoId={episode.vimeoId}
                 title={episodeDisplayTitle(episode)}
+                thumbnailUrl={episode.thumbnailUrl}
                 className="w-full"
               />
             ) : (
@@ -187,7 +211,7 @@ export default async function EpisodeDetailPage({
             {(episode.audioUrl || episode.spotifyId) && (
               <div className="p-4 border-t border-border">
                 {episode.audioUrl ? (
-                  <audio controls className="w-full" src={episode.audioUrl}>
+                  <audio controls preload="none" className="w-full" src={episode.audioUrl}>
                     Your browser does not support audio.
                   </audio>
                 ) : episode.spotifyId ? (

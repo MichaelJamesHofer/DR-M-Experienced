@@ -54,9 +54,34 @@ export async function generateMetadata({
     return { title: "Blog not found" };
   }
 
+  const description = post.metaDescription ?? post.excerpt;
+  const canonicalPath = `/blogs/${post.slug}/`;
+  const images = post.heroImageUrl
+    ? [{ url: post.heroImageUrl, alt: post.title }]
+    : undefined;
+
   return {
     title: post.title,
-    description: post.metaDescription ?? post.excerpt,
+    description,
+    alternates: {
+      canonical: canonicalPath,
+    },
+    openGraph: {
+      title: post.title,
+      description,
+      url: canonicalPath,
+      type: "article",
+      publishedTime: `${post.publishDate}T00:00:00Z`,
+      modifiedTime: `${post.updatedDate ?? post.publishDate}T00:00:00Z`,
+      authors: [post.authorName],
+      images,
+    },
+    twitter: {
+      card: images ? "summary_large_image" : "summary",
+      title: post.title,
+      description,
+      images: images?.map((image) => image.url),
+    },
   };
 }
 

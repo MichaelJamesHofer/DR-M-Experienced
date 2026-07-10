@@ -1,64 +1,51 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import Image from 'next/image';
+import { useState } from 'react';
 
 type VimeoPlayerProps = {
   videoId: string;
   title?: string;
+  thumbnailUrl?: string;
   className?: string;
 };
 
-export function VimeoPlayer({ videoId, title, className = '' }: VimeoPlayerProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    // Create the iframe
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479`;
-    iframe.frameBorder = '0';
-    iframe.allow = 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share';
-    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
-    iframe.style.position = 'absolute';
-    iframe.style.top = '0';
-    iframe.style.left = '0';
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    if (title) {
-      iframe.title = title;
-    }
-
-    // Clear container and add iframe (safe - we control the iframe source)
-    // Using removeChild for better security than innerHTML
-    while (containerRef.current.firstChild) {
-      containerRef.current.removeChild(containerRef.current.firstChild);
-    }
-    containerRef.current.appendChild(iframe);
-
-    // Load Vimeo player script
-    const script = document.createElement('script');
-    script.src = 'https://player.vimeo.com/api/player.js';
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      // Cleanup script on unmount
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
-    };
-  }, [videoId, title]);
+export function VimeoPlayer({
+  videoId,
+  title = 'Episode video',
+  thumbnailUrl,
+  className = '',
+}: VimeoPlayerProps) {
+  const [shouldLoad, setShouldLoad] = useState(false);
+  const previewImage = thumbnailUrl || `https://vumbnail.com/${videoId}.jpg`;
 
   return (
-    <div
-      ref={containerRef}
-      className={className}
-      style={{
-        padding: '56.25% 0 0 0',
-        position: 'relative',
-      }}
-    />
+    <div className={`relative aspect-video overflow-hidden bg-surface-elevated ${className}`}>
+      {shouldLoad ? (
+        <iframe
+          src={`https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0&badge=0&dnt=1`}
+          title={title}
+          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+          allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
+          className="absolute inset-0 h-full w-full border-0"
+        />
+      ) : (
+        <button
+          type="button"
+          onClick={() => setShouldLoad(true)}
+          className="group absolute inset-0 flex h-full w-full items-center justify-center bg-surface text-background"
+          aria-label={`Play ${title}`}
+        >
+          <Image src={previewImage} alt="" fill sizes="(max-width: 1024px) 100vw, 720px" className="object-cover" />
+          <span className="absolute inset-0 bg-black/35 transition-colors duration-200 group-hover:bg-black/25" />
+          <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-primary text-background shadow-lg transition-transform duration-200 group-hover:scale-105">
+            <svg aria-hidden="true" className="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </span>
+        </button>
+      )}
+    </div>
   );
 }
-

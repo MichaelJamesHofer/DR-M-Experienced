@@ -8,6 +8,7 @@ const footerLinks = [
   { href: "/affiliates", label: "Affiliates" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
+  { href: "/legal/privacy", label: "Privacy" },
   { href: "/legal/copyright", label: "Copyright" },
   { href: "/legal/disclaimer", label: "Disclaimer" },
 ];
@@ -52,7 +53,7 @@ export function SiteFooter() {
 
           {/* Links Column */}
           <div>
-            <h4 className="text-body-sm font-semibold text-foreground mb-4">Navigation</h4>
+            <p className="text-body-sm font-semibold text-foreground mb-4">Navigation</p>
             <nav className="flex flex-col gap-3">
               {footerLinks.map((link) => (
                 <Link
@@ -83,11 +84,15 @@ export function SiteFooter() {
           </p>
           <p className="text-caption text-foreground-subtle">
             Not medical advice. See{" "}
-            <Link href="/legal/disclaimer" className="text-foreground-muted hover:text-foreground transition-colors duration-200">
+            <Link href="/legal/disclaimer" className="text-foreground-muted underline underline-offset-2 hover:text-foreground transition-colors duration-200">
               disclaimer
             </Link>
-            {" "}and{" "}
-            <Link href="/legal/copyright" className="text-foreground-muted hover:text-foreground transition-colors duration-200">
+            {", "}
+            <Link href="/legal/privacy" className="text-foreground-muted underline underline-offset-2 hover:text-foreground transition-colors duration-200">
+              privacy notice
+            </Link>
+            {", and "}
+            <Link href="/legal/copyright" className="text-foreground-muted underline underline-offset-2 hover:text-foreground transition-colors duration-200">
               copyright notice
             </Link>
             .
