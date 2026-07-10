@@ -1,6 +1,7 @@
 'use client';
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useId, useState } from "react";
+import Link from "next/link";
 import { submitFormSubmission } from "@/lib/form-submissions";
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -15,12 +16,13 @@ type NewsletterCaptureProps = {
 export function NewsletterCapture({
   variant = "inline",
   heading = "Get the latest",
-  description = "Weekly insights on functional medicine, sports performance, and actionable health strategies. No spam, unsubscribe anytime.",
+  description = "Weekly insights on functional medicine, sports performance, and actionable health strategies. No spam. Unsubscribe through the contact page.",
   className = "",
 }: NewsletterCaptureProps) {
   const [email, setEmail] = useState("");
   const [website, setWebsite] = useState("");
   const [status, setStatus] = useState<Status>("idle");
+  const emailId = useId();
   const isLoading = status === "loading";
   const isSubmitted = status === "success";
   const isDisabled = isLoading || isSubmitted;
@@ -98,9 +100,9 @@ export function NewsletterCapture({
     return (
       <div className={`w-full max-w-xl ${className}`}>
         <div className="text-center mb-6">
-          <h3 className="text-heading-lg font-semibold text-foreground mb-2">
+          <h2 className="text-heading-lg font-semibold text-foreground mb-2">
             {heading}
-          </h3>
+          </h2>
           <p className="text-body text-foreground-muted">
             {description}
           </p>
@@ -116,8 +118,12 @@ export function NewsletterCapture({
             className="hidden"
             aria-hidden="true"
           />
+          <label htmlFor={emailId} className="sr-only">Email address</label>
           <input
+            id={emailId}
+            name="email"
             type="email"
+            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
@@ -142,6 +148,7 @@ export function NewsletterCapture({
             {feedbackMessage}
           </p>
         )}
+        <PrivacyLink />
       </div>
     );
   }
@@ -149,9 +156,9 @@ export function NewsletterCapture({
   if (variant === "footer") {
     return (
       <div className={className}>
-        <h4 className="text-body font-semibold text-foreground mb-2">
+        <p className="text-body font-semibold text-foreground mb-2">
           {heading}
-        </h4>
+        </p>
         <p className="text-body-sm text-foreground-muted mb-4">
           {description}
         </p>
@@ -166,8 +173,12 @@ export function NewsletterCapture({
             className="hidden"
             aria-hidden="true"
           />
+          <label htmlFor={emailId} className="sr-only">Email address</label>
           <input
+            id={emailId}
+            name="email"
             type="email"
+            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="your@email.com"
@@ -192,6 +203,7 @@ export function NewsletterCapture({
             {feedbackMessage}
           </p>
         )}
+        <PrivacyLink compact />
       </div>
     );
   }
@@ -199,9 +211,9 @@ export function NewsletterCapture({
   // Default inline variant
   return (
     <div className={`rounded-2xl border border-border bg-surface p-6 ${className}`}>
-      <h4 className="text-heading font-semibold text-foreground mb-2">
+      <h2 className="text-heading font-semibold text-foreground mb-2">
         {heading}
-      </h4>
+      </h2>
       <p className="text-body-sm text-foreground-muted mb-4">
         {description}
       </p>
@@ -216,8 +228,12 @@ export function NewsletterCapture({
           className="hidden"
           aria-hidden="true"
         />
+        <label htmlFor={emailId} className="sr-only">Email address</label>
         <input
+          id={emailId}
+          name="email"
           type="email"
+          autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email"
@@ -242,6 +258,19 @@ export function NewsletterCapture({
           {feedbackMessage}
         </p>
       )}
+      <PrivacyLink />
     </div>
+  );
+}
+
+function PrivacyLink({ compact = false }: { compact?: boolean }) {
+  return (
+    <p className={`${compact ? "mt-2" : "mt-3"} text-caption text-foreground-subtle`}>
+      See the{" "}
+      <Link href="/legal/privacy" className="font-semibold text-foreground-muted underline underline-offset-2">
+        privacy notice
+      </Link>
+      .
+    </p>
   );
 }

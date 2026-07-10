@@ -49,9 +49,9 @@ export default function ContactPage() {
               className="rounded-2xl border border-border bg-surface p-6"
             >
               <span className="text-2xl mb-3 block">{reason.icon}</span>
-              <h3 className="text-body font-semibold text-foreground mb-2">
+              <h2 className="text-body font-semibold text-foreground mb-2">
                 {reason.title}
-              </h3>
+              </h2>
               <p className="text-body-sm text-foreground-muted">
                 {reason.description}
               </p>

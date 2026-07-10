@@ -53,7 +53,12 @@
   --color-surface-elevated: #f1f5f9;
   --color-foreground: #0f172a;
   --color-foreground-muted: #475569;
-  --color-foreground-subtle: #64748b;
+  --color-foreground-subtle: #475569;
+  --color-primary: #0e7490;
+  --color-primary-hover: #155e75;
+  --color-success: #047857;
+  --color-warning: #b45309;
+  --color-error: #b91c1c;
   --color-border: rgba(15, 23, 42, 0.1);
   --color-border-strong: rgba(15, 23, 42, 0.2);
   --header-bg: rgba(255, 255, 255, 0.85);
@@ -193,3 +198,18 @@ button {
 .delay-300 { animation-delay: 300ms; }
 .delay-400 { animation-delay: 400ms; }
 .delay-500 { animation-delay: 500ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

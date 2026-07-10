@@ -1,96 +1,96 @@
 'use client';
 
-import { useEffect, Suspense, useState } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
-import posthog from 'posthog-js';
+import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import type { CaptureResult, PostHog } from 'posthog-js';
+import { sanitizeAnalyticsProperties } from '@/lib/analytics-privacy';
 
-function PostHogTracker() {
+type PostHogClient = Pick<PostHog, 'capture'>;
+
+function sanitizeAnalyticsEvent(event: CaptureResult | null): CaptureResult | null {
+  if (!event) return null;
+
+  return {
+    ...event,
+    properties: sanitizeAnalyticsProperties(event.properties),
+    $set: event.$set ? sanitizeAnalyticsProperties(event.$set) : undefined,
+    $set_once: event.$set_once
+      ? sanitizeAnalyticsProperties(event.$set_once)
+      : undefined,
+  };
+}
+
+function PostHogTracker({ client }: { client: PostHogClient }) {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
-    // Track pageviews on route changes
-    // This component only renders after PostHog is initialized
     if (pathname && typeof window !== 'undefined') {
       try {
-        let url = window.origin + pathname;
-        if (searchParams && searchParams.toString()) {
-          url = url + '?' + searchParams.toString();
-        }
-        posthog.capture('$pageview', {
-          $current_url: url,
+        client.capture('$pageview', {
+          $current_url: window.origin + pathname,
         });
       } catch (error) {
-        console.error('PostHog capture error:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('PostHog capture error:', error);
+        }
       }
     }
-  }, [pathname, searchParams]);
+  }, [client, pathname]);
 
   return null;
 }
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [client, setClient] = useState<PostHogClient | null>(null);
 
   useEffect(() => {
-    // Initialize PostHog
-    // Note: For client-side use, must be NEXT_PUBLIC_POSTHOG_API_KEY
     const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_API_KEY;
     const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com';
+    if (!posthogKey || typeof window === 'undefined') return;
 
-    if (!posthogKey) {
-      console.warn('PostHog API key not configured. Analytics will not work.');
-      return;
-    }
+    let active = true;
+    void import('posthog-js')
+      .then(({ default: posthog }) => {
+        if (!active) return;
+        if (posthog.__loaded) {
+          setClient(posthog);
+          return;
+        }
 
-    if (typeof window !== 'undefined') {
-      // Check if PostHog is already initialized
-      const isAlreadyLoaded = (posthog as any).__loaded || typeof (posthog as any).capture === 'function';
-      
-      if (isAlreadyLoaded) {
-        setIsInitialized(true);
-        return;
-      }
-
-      try {
         posthog.init(posthogKey, {
           api_host: posthogHost,
-          loaded: (posthog) => {
-            setIsInitialized(true);
-            // Capture initial pageview
-            if (typeof window !== 'undefined') {
-              posthog.capture('$pageview', {
-                $current_url: window.location.href,
-              });
-            }
-            if (process.env.NODE_ENV === 'development') {
-              posthog.debug();
-              console.log('PostHog initialized successfully');
-            }
+          loaded: (initializedClient) => {
+            if (active) setClient(initializedClient);
           },
-          // Disable autocapture for privacy (you can enable if needed)
           autocapture: false,
-          // Capture pageviews manually
           capture_pageview: false,
+          capture_performance: false,
+          disable_session_recording: true,
+          disable_surveys: true,
+          disable_web_experiments: true,
+          disable_external_dependency_loading: true,
+          person_profiles: 'never',
+          persistence: 'memory',
+          respect_dnt: true,
+          advanced_disable_flags: true,
+          before_send: sanitizeAnalyticsEvent,
         });
-      } catch (error) {
-        console.error('PostHog initialization error:', error);
-        setIsInitialized(false);
-      }
-    }
+      })
+      .catch((error) => {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('PostHog initialization error:', error);
+        }
+      });
 
-    // No cleanup needed - PostHog persists across route changes
+    return () => {
+      active = false;
+    };
   }, []);
 
   return (
     <>
       {children}
-      {isInitialized && (
-        <Suspense fallback={null}>
-          <PostHogTracker />
-        </Suspense>
-      )}
+      {client && <PostHogTracker client={client} />}
     </>
   );
 }
-

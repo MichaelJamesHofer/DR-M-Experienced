@@ -42,13 +42,13 @@ export default async function Home() {
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-display-lg md:text-display-xl font-bold text-foreground max-w-4xl mb-6 animate-slide-up">
+            <h1 className="text-display-lg md:text-display-xl font-bold text-foreground max-w-4xl mb-6">
               Dr. M&apos;s Experienced{" "}
               <span className="text-gradient">Functional And Sports Medicine</span>
             </h1>
 
             {/* Subheadline */}
-            <p className="text-body-lg text-foreground-muted max-w-3xl mb-10 animate-slide-up delay-100">
+            <p className="text-body-lg text-foreground-muted max-w-3xl mb-10">
               David Musnick MD has dedicated {physicianProfileExperience.patientCare} to patient care,
               with deep clinical work in Sports Medicine, Internal Medicine, Regenerative Medicine,
               and {physicianProfileExperience.functionalMedicine} of Functional Medicine. He is a
@@ -58,7 +58,7 @@ export default async function Home() {
             </p>
 
             {/* Platform Badges */}
-            <div className="mb-12 animate-slide-up delay-200">
+            <div className="mb-12">
               <PlatformBadges variant="pill" />
             </div>
 
@@ -66,7 +66,7 @@ export default async function Home() {
             {latestEpisode && (
               <Link
                 href={`/episodes/${latestEpisode.slug}`}
-                className="group w-full max-w-2xl rounded-2xl border border-border bg-surface/80 backdrop-blur overflow-hidden hover:border-primary/50 hover:shadow-glow transition-all duration-300 animate-slide-up delay-300"
+                className="group w-full max-w-2xl rounded-2xl border border-border bg-surface/80 backdrop-blur overflow-hidden hover:border-primary/50 hover:shadow-glow transition-all duration-300"
               >
                 {latestEpisode.thumbnailUrl ? (
                   <div className="relative aspect-video w-full overflow-hidden">
@@ -106,9 +106,9 @@ export default async function Home() {
                     ) : (
                       <>
                         <div className="absolute bottom-4 left-4 right-4">
-                          <h3 className="text-heading-lg font-bold text-background mb-2 drop-shadow-lg">
+                          <h2 className="text-heading-lg font-bold text-background mb-2 drop-shadow-lg">
                             {episodeDisplayTitle(latestEpisode)}
-                          </h3>
+                          </h2>
                           <p className="text-body-sm text-background/90 line-clamp-2 drop-shadow">
                             {latestEpisode.summary}
                           </p>

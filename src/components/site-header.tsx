@@ -61,6 +61,8 @@ export function SiteHeader() {
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="flex h-10 w-10 items-center justify-center rounded-lg text-foreground-muted hover:bg-surface hover:text-foreground transition-colors duration-200 lg:hidden"
           aria-label="Toggle menu"
+          aria-expanded={mobileMenuOpen}
+          aria-controls="mobile-navigation"
         >
           {mobileMenuOpen ? (
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -76,7 +78,7 @@ export function SiteHeader() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="border-t border-border bg-surface px-4 py-6 lg:hidden animate-fade-in">
+        <div id="mobile-navigation" className="border-t border-border bg-surface px-4 py-6 lg:hidden animate-fade-in">
           <nav className="flex flex-col gap-4 mb-6">
             {navLinks.map((link) => (
               <Link
