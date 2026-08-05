@@ -7,6 +7,7 @@ import path from "node:path";
 import { promisify } from "node:util";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
+import { htmlDescriptionToPlainText, youtubeDescriptionFromHtml } from "./catalog.mjs";
 
 const execFileAsync = promisify(execFile);
 
@@ -22,6 +23,7 @@ export const PLATFORM_IDS = [
 
 const ASSET_KEYS = ["fullVideo", "podcastAudio", "instagramReel", "thumbnail", "captions"];
 const VIDEO_TARGETS = new Set(["youtube", "vimeo", "rumble"]);
+const PLAIN_DESCRIPTION_TARGETS = new Set(["youtube", "vimeo", "rumble"]);
 const DIRECT_COPY_KEYS = new Set(["instagram", "rumble", "youtube", "vimeo"]);
 const DIRECT_RELEASE_TARGETS = new Set(["spotify", "youtube", "vimeo", "instagram", "rumble"]);
 const RELEASE_CHOICE_KEYS = [
@@ -85,6 +87,10 @@ export function publisherHome(env = process.env) {
 export function configHome(env = process.env) {
   const configRoot = env.XDG_CONFIG_HOME || path.join(os.homedir(), ".config");
   return path.join(configRoot, "drm-publisher");
+}
+
+export function hostingMigrationIsActive(migration, pendingMigration) {
+  return Boolean(migration) && migration.decision?.active !== false && pendingMigration?.active !== false;
 }
 
 function sortedValue(value) {
@@ -161,7 +167,7 @@ function schemaErrorMessage(error) {
 }
 
 const RFC3339_WITH_TIMEZONE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
-const EPISODE_TITLE_PREFIX = /^Episode\s+(\d+)\s*:/i;
+const LEGACY_EPISODE_TITLE_PREFIX = /^(?:Episode|Ep\.?)\s*#?\s*\d+\b/i;
 
 export function validateManifest(manifest) {
   const errors = [];
@@ -175,13 +181,8 @@ export function validateManifest(manifest) {
     errors.push(...validateEpisodeSchema.errors.map(schemaErrorMessage));
   }
 
-  if (Number.isInteger(manifest.episodeNumber) && typeof manifest.title === "string") {
-    const titleEpisodeNumber = manifest.title.match(EPISODE_TITLE_PREFIX);
-    if (!titleEpisodeNumber) {
-      errors.push(`title must begin with "Episode ${manifest.episodeNumber}:".`);
-    } else if (Number(titleEpisodeNumber[1]) !== manifest.episodeNumber) {
-      errors.push("title episode number must match episodeNumber.");
-    }
+  if (typeof manifest.title === "string" && LEGACY_EPISODE_TITLE_PREFIX.test(manifest.title.trimStart())) {
+    errors.push("title must omit the leading episode number; use episodeNumber for structured ordering.");
   }
 
   if (
@@ -259,6 +260,9 @@ export function validateManifest(manifest) {
     for (const key of Object.keys(manifest.copy)) {
       if (!DIRECT_COPY_KEYS.has(key)) errors.push(`copy.${key} is not a supported destination override.`);
     }
+  }
+  if (Array.isArray(manifest.targets) && manifest.targets.includes("instagram") && typeof manifest.copy?.instagram !== "string") {
+    warnings.push("Instagram is selected but copy.instagram is not supplied; no caption will be generated automatically.");
   }
 
   return { errors: [...new Set(errors)], warnings: [...new Set(warnings)] };
@@ -463,6 +467,29 @@ export function mediaWarnings(assetRecords, manifest) {
   return validateMediaAssets(assetRecords, manifest).warnings;
 }
 
+export function resolveDestinationCopy(manifest, platformId) {
+  const override = manifest.copy?.[platformId];
+  if (typeof override === "string") {
+    return { approvedCopy: override, copySource: `copy.${platformId}` };
+  }
+  if (platformId === "youtube") {
+    return {
+      approvedCopy: youtubeDescriptionFromHtml(manifest.description),
+      copySource: "description (deterministic YouTube-safe plain-text projection)",
+    };
+  }
+  if (PLAIN_DESCRIPTION_TARGETS.has(platformId)) {
+    return {
+      approvedCopy: htmlDescriptionToPlainText(manifest.description),
+      copySource: "description (deterministic plain-text projection)",
+    };
+  }
+  if (platformId === "instagram") {
+    return { approvedCopy: null, copySource: "not provided" };
+  }
+  return { approvedCopy: manifest.description, copySource: "description" };
+}
+
 export function buildTargetPlan(platformConfig, manifest, assetRecords, targetErrors = {}) {
   return manifest.targets.map((platformId) => {
     const platform = platformConfig.platforms[platformId];
@@ -483,6 +510,7 @@ export function buildTargetPlan(platformConfig, manifest, assetRecords, targetEr
           : preferredAsset;
     const asset = assetKey ? assetRecords[assetKey] || null : null;
     const validationIssues = targetErrors[platformId] || [];
+    const destinationCopy = resolveDestinationCopy(manifest, platformId);
     let readiness = "ready_for_account_setup";
 
     if (platform.source === "rss" || platform.mode === "rss_fanout") {
@@ -523,18 +551,22 @@ export function buildTargetPlan(platformConfig, manifest, assetRecords, targetEr
       releasePlan,
       unresolvedReleaseChoices: unresolvedChoices,
       validationIssues,
-      copySource: manifest.copy?.[platformId] ? `copy.${platformId}` : "description",
+      ...destinationCopy,
       channelUrl: platform.channelUrl,
       notes: platform.notes,
     };
   });
 }
 
-export function buildApprovalSnapshot({ platformConfig, manifest, assets, targets, warnings }) {
+export function buildApprovalSnapshot({ platformConfig, manifest, assets, targets, warnings, catalogBinding }) {
+  if (!isPlainObject(catalogBinding)) {
+    throw new TypeError("A master catalog binding is required for every approval snapshot.");
+  }
   return {
-    schemaVersion: 3,
+    schemaVersion: 4,
     brand: platformConfig.brand,
     rssFeed: platformConfig.rssFeed,
+    catalogBinding,
     manifest,
     assets,
     targets,
@@ -582,6 +614,16 @@ function fencedText(value, language = "text") {
 
 export function renderApprovalPacket(packet) {
   const manifest = packet.snapshot.manifest;
+  const catalogBinding = packet.snapshot.catalogBinding;
+  const catalogLines = catalogBinding
+    ? [
+        `- Revision: ${catalogBinding.revision}`,
+        `- Catalog SHA-256: \`${catalogBinding.catalogHash}\``,
+        `- Episode: ${catalogBinding.episodeNumber}`,
+        `- Episode SHA-256: \`${catalogBinding.episodeHash}\``,
+        "",
+      ]
+    : [];
   const assetLines = ASSET_KEYS
     .filter((key) => packet.snapshot.assets[key])
     .map((key) => {
@@ -612,7 +654,7 @@ export function renderApprovalPacket(packet) {
     ? packet.snapshot.warnings.map((warning) => fencedText(warning))
     : ["- None."];
   const copyBlocks = packet.snapshot.targets.map((target) => {
-    const copy = manifest.copy?.[target.id] ?? manifest.description;
+    const copy = target.approvedCopy == null ? "No destination copy supplied." : target.approvedCopy;
     return `### ${target.label}\n\n${fencedText(copy)}`;
   });
   const confirmation = `approve ${packet.id} ${packet.approvalHash}`;
@@ -631,6 +673,7 @@ export function renderApprovalPacket(packet) {
     `- ${flags}`,
     `- Canonical RSS: ${packet.snapshot.rssFeed || "not set"}`,
     "",
+    ...(catalogLines.length ? ["## Master catalog binding", "", ...catalogLines] : []),
     "## Assets",
     "",
     "| Role | Size | Duration | SHA-256 | Path |",
@@ -696,8 +739,31 @@ export function packetIntegrityProblems(packet, expectedJobId) {
   if (!isPlainObject(packet)) return ["Stored packet must be a JSON object."];
   if (packet.id !== expectedJobId) problems.push("Stored packet job id does not match its directory.");
   if (!isPlainObject(packet.snapshot)) problems.push("Stored packet snapshot is missing or invalid.");
-  if (isPlainObject(packet.snapshot) && packet.snapshot.schemaVersion !== 3) {
+  if (isPlainObject(packet.snapshot) && packet.snapshot.schemaVersion !== 4) {
     problems.push("Stored packet snapshot schema version is unsupported.");
+  }
+  if (isPlainObject(packet.snapshot)) {
+    const binding = packet.snapshot.catalogBinding;
+    if (!isPlainObject(binding)) {
+      problems.push("Stored packet master catalog binding is missing or invalid.");
+    } else {
+      if (!Number.isInteger(binding.revision) || binding.revision < 1) {
+        problems.push("Stored packet master catalog revision is invalid.");
+      }
+      if (typeof binding.catalogHash !== "string" || !/^[a-f0-9]{64}$/.test(binding.catalogHash)) {
+        problems.push("Stored packet master catalog hash is invalid.");
+      }
+      if (typeof binding.episodeHash !== "string" || !/^[a-f0-9]{64}$/.test(binding.episodeHash)) {
+        problems.push("Stored packet master episode hash is invalid.");
+      }
+      if (
+        !Number.isInteger(binding.episodeNumber) ||
+        binding.episodeNumber < 1 ||
+        binding.episodeNumber !== packet.snapshot.manifest?.episodeNumber
+      ) {
+        problems.push("Stored packet master episode number is invalid or does not match the manifest.");
+      }
+    }
   }
   if (typeof packet.approvalHash !== "string" || !/^[a-f0-9]{64}$/.test(packet.approvalHash)) {
     problems.push("Stored packet approval hash is missing or invalid.");

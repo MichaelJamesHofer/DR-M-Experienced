@@ -8,17 +8,16 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  finalizeResolvedEpisodes,
+  loadEpisodeRegistry,
+  resolveEpisodeIdentity,
+  slugFromTitle,
+} from "./episode-identity.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const token = process.env.VIMEO_ACCESS_TOKEN;
 const outPath = path.join(__dirname, "..", "src", "data", "episodes-from-vimeo.json");
-
-function slugFromTitle(title) {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
 
 async function fetchAllVideos() {
   const videos = [];
@@ -57,27 +56,38 @@ async function fetchAllVideos() {
   return videos;
 }
 
-function buildEpisodeList(videos) {
-  return videos.map((v, index) => {
+export function buildEpisodeList(videos, registry = loadEpisodeRegistry()) {
+  const resolved = videos.map((v) => {
     const uri = v.uri || "";
     const vimeoId = uri.replace(/^\/videos\//, "") || null;
     const name = v.name || "Untitled";
     const description = (v.description || "").trim();
     const duration = v.duration != null ? Math.round(Number(v.duration) / 60) : undefined;
     const created = v.created_time || null;
-    const slug = slugFromTitle(name);
-
-    return {
+    const candidate = {
       vimeoId,
-      slug,
-      number: index + 1,
       title: name,
       publishDate: created ? created.slice(0, 10) : "",
-      durationMinutes: duration || undefined,
-      summary: description || name,
-      thumbnailUrl: vimeoId ? `https://vumbnail.com/${vimeoId}.jpg` : undefined,
+    };
+    const identity = resolveEpisodeIdentity(registry, candidate);
+
+    return {
+      identity,
+      episode: {
+        vimeoId: identity?.vimeoId || vimeoId,
+        slug: identity?.slug || slugFromTitle(name),
+        title: identity?.title || name,
+        publishDate: identity?.publishDate || candidate.publishDate,
+        durationMinutes: duration || identity?.durationMinutes || undefined,
+        summary: identity?.summary || description || name,
+        thumbnailUrl: identity?.thumbnailUrl || (vimeoId
+          ? `https://vumbnail.com/${vimeoId}.jpg`
+          : undefined),
+      },
     };
   });
+
+  return finalizeResolvedEpisodes(resolved, registry);
 }
 
 async function main() {
@@ -100,7 +110,10 @@ async function main() {
   console.log(`Synced ${episodes.length} episode(s) from Vimeo to ${outPath}`);
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}

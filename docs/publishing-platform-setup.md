@@ -8,10 +8,10 @@ The local publisher uses official upload interfaces where they exist, RSS fan-ou
 
 | Destination | Delivery path | Current setup state |
 |---|---|---|
-| RSS.com | Pending supported host import | Import request accepted; awaiting the specialist email; empty manually-created show remains untouched and is not canonical |
-| Spotify for Creators | Current audio host plus separate video upload after migration | Existing show `7GGLljxmO0G3FLjPy8vfcw` has seven episodes; no redirect authorized |
+| RSS.com | Intended post-cutover podcast host | Fresh supported self-service import awaits email confirmation. Empty old-slug show has exact branding but remains noncanonical; no redirect is authorized |
+| Spotify for Creators | Current canonical source plus Spotify video | Existing show `7GGLljxmO0G3FLjPy8vfcw` has exact metadata, approved titles, structured numbers 1-7, and seven unchanged GUIDs; preserve it through cutover |
 | Apple Podcasts | Episode audio from Spotify's canonical RSS | Claimed show `1870433419` points to the correct Anchor feed; five episodes are Available, three internal episode records are Draft, and separate no-feed Draft show `1896845422` also exists |
-| Amazon Music and Audible | Future episode audio from the imported RSS.com feed | Signed-in dashboard has zero claimed shows and no defensible public listing was found; add or claim only after the imported feed is ready |
+| Amazon Music and Audible | Episode audio from the final canonical RSS | Signed-in dashboard has zero claimed shows; hold submission until RSS.com cutover, then submit once |
 | YouTube | OAuth 2 plus resumable Data API upload | Channel `UCFA1nVv4lKMBlx81gjMAOFQ` exists; upload OAuth and API audit required |
 | Vimeo | Vimeo API tus upload | User `253415660` exists; app upload access and token required |
 | Instagram | Professional-account API with resumable local upload | Profile exists; account type, app, permissions, and an authenticated publishing ID remain required |
@@ -23,12 +23,19 @@ The canonical short profile description is `Dr. M Experienced, with Dr. David Mu
 
 | Profile | Current public name state |
 |---|---|
-| Spotify and Apple | Intentionally retain the old feed title and description until the RSS.com import and cutover pass validation; Apple feed refresh was requested on August 5 |
-| Amazon | No claimed show exists in the signed-in account; defer enrollment until the imported RSS.com feed exists |
+| Spotify and Apple | The Anchor source is clean and verified. Spotify is canonical. Preserve Apple show `1870433419`, point it at the same feed, and refresh it rather than creating a replacement |
+| Amazon | No claimed show exists in the signed-in account; hold until cutover and submit the final RSS.com feed once |
 | YouTube | Canonical description is published; display name remains `Dr. M Experienced` because the manager-role name save did not persist |
 | Instagram | Display name is exact and the bio is the canonical description; handle `@drmexperienced` is unchanged |
 | Vimeo | Display name is `Dr. M Experienced, David Musnick`, the closest form allowed by Vimeo's 32-character limit; the short bio is canonical, the long About begins with it, and slug `drmexperienced` is unchanged |
 | Rumble | Channel title is exact and About uses the canonical description; channel name and account username remain `drmexperienced` |
+
+The seven existing YouTube, Vimeo, and Rumble videos use the catalog's approved
+unnumbered titles and deterministic descriptions as of August 5, 2026. YouTube
+uses a safe plain-text projection that spells out comparison operators because
+Studio rejects angle brackets. Vimeo stores list items as native rich-text
+bullets, so its public oEmbed text is compared semantically rather than byte for
+byte.
 
 Run `drm-publish doctor` for the current local readiness report. It checks tools, RSS metadata, credential-file presence, and stable destination IDs without printing credential values.
 
@@ -42,20 +49,37 @@ Format validation is not account verification. Before a future API adapter can u
 
 The pinned local Chrome bridge uses an isolated data directory at `~/.local/share/drm-publisher/chrome-profile`, never the normal Chrome profile. For initial sign-in, run `drm-browser login`; this opens all eight publishing dashboards without a debugging endpoint. Close that window normally after sign-in. For an attended automation session, run `drm-browser open`, then connect to one named platform such as `drm-browser connect rss`. The bridge blocks Gmail and every other publishing origin for that connection. Disconnect before switching platforms and always finish with `drm-browser close`, which verifies that Chrome and the loopback endpoint are gone. Do not copy cookies or other authentication data between profiles, and keep Gmail and unrelated sites out of the isolated profile.
 
-## Rebrand sequence
+## Rebrand And Directory Sequence
 
-The source code now uses `Dr. M Experienced, with Dr. David Musnick`, but the remote podcast feed and platform profiles are separate systems.
+The source code now uses `Dr. M Experienced, with Dr. David Musnick`, but the
+remote feed and profiles are separate systems. Spotify for Creators/Anchor stays
+canonical while the supported RSS.com import and parity checks are completed.
 
-The audio host migration must preserve the existing show identity before the remote rebrand. Follow `docs/rss-com-migration.md`: import into RSS.com, verify episode and GUID parity, obtain explicit redirect approval, and confirm the existing directory IDs. Only after that convergence is stable should RSS.com become the metadata source and publish the new title downstream.
+1. Completed: Spotify for Creators has the exact title and description with no
+   `RSSVERIFY` suffix.
+2. Completed: all seven approved unnumbered public titles, structured episode
+   numbers 1-7, and original GUIDs are verified in the Anchor feed.
+3. Completed: the clean Anchor feed was independently verified before any
+   downstream cutover.
+4. In Apple Podcasts Connect, open existing show `1870433419`, confirm the exact
+   Anchor RSS URL, save if necessary, and request one feed refresh. Do not add a
+   replacement show.
+5. Inspect the separate no-feed Draft show `1896845422` and the manual Draft
+   episode records. Archive only records with no unique content, channel, or
+   subscription setup, and only where Apple offers a reversible archive control.
+6. After verified cutover, submit the final RSS.com feed once to Amazon, complete
+   ownership verification, and record the stable show ID and public URL.
+7. YouTube, Vimeo, and Rumble metadata cleanup is complete. Reconcile Instagram
+   captions where needed, then update title-bearing artwork. Do not rename stable
+   handles or IDs merely to match display text.
+8. Verify every public profile and the website before announcing convergence.
 
-1. Complete and validate the supported RSS.com import without redirecting the live feed.
-2. Redirect only after every migration gate passes and the exact redirect has fresh explicit approval.
-3. Rebrand the podcast at RSS.com, then wait for Apple Podcasts and Spotify to refresh the same existing listings. Add or claim Amazon with that imported feed because the signed-in Amazon account currently has no show.
-4. Rename the YouTube, Vimeo, Instagram, and Rumble display names separately.
-5. Update title-bearing channel artwork separately. Do not rename stable handles or IDs merely to match display text.
-6. Verify every public profile and the website before announcing the new name.
-
-Apple requires special handling during this sequence. Podcasts Connect currently lists Available show `1870433419` and a no-feed Draft show `1896845422` with the same title. The Available show contains five Available episodes plus Draft records for episodes 1, 2, and a duplicate episode 4. A feed refresh was requested on August 5, 2026. Do not publish, archive, or delete those drafts until the refresh settles and RSS.com or Apple support confirms which records should survive.
+Apple's current discrepancy is cleanup work, not a reason to recreate the show.
+Podcasts Connect lists public show `1870433419`, a separate no-feed Draft show
+`1896845422`, and manual Draft episode records. Preserve the public listing and
+its followers/history. If self-service refresh does not converge, leave Apple
+unused and the public identity intact while the source feed and draft state are
+re-audited; do not create a second public listing.
 
 ## Instagram media delivery
 

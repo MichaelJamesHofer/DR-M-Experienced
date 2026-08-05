@@ -1,0 +1,308 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://drmexperienced.com/schemas/publishing-master-catalog.json",
+  "title": "Dr. M publishing master catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "revision",
+    "updatedAt",
+    "show",
+    "assetRegistry",
+    "episodes"
+  ],
+  "properties": {
+    "$schema": { "const": "./master-catalog.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "revision": { "type": "integer", "minimum": 1 },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "show": { "$ref": "#/$defs/show" },
+    "assetRegistry": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "$ref": "#/$defs/logicalId" },
+      "additionalProperties": { "$ref": "#/$defs/asset" }
+    },
+    "episodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/episode" }
+    }
+  },
+  "$defs": {
+    "nonBlank": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "logicalId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "nullableLogicalId": {
+      "type": ["string", "null"],
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "show": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["names", "profileCopy", "canonicalPodcastFeed", "artworkRefs"],
+      "properties": {
+        "names": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["full", "short", "host", "hostLine"],
+          "properties": {
+            "full": { "const": "Dr. M Experienced, with Dr. David Musnick" },
+            "short": { "const": "Dr. M Experienced" },
+            "host": { "const": "Dr. David Musnick" },
+            "hostLine": { "const": "with Dr. David Musnick" }
+          }
+        },
+        "profileCopy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["short", "long"],
+          "properties": {
+            "short": {
+              "const": "Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine."
+            },
+            "long": {
+              "type": "string",
+              "minLength": 180,
+              "maxLength": 2000,
+              "pattern": "\\S"
+            }
+          }
+        },
+        "canonicalPodcastFeed": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["provider", "url"],
+          "properties": {
+            "provider": { "enum": ["spotify_for_creators_anchor", "rss_com"] },
+            "url": { "type": "string", "format": "uri", "pattern": "^https://" }
+          }
+        },
+        "artworkRefs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "logoHorizontal",
+            "logoStacked",
+            "logoMark",
+            "avatar",
+            "podcastCover",
+            "youtubeBanner",
+            "openGraph"
+          ],
+          "properties": {
+            "logoHorizontal": { "$ref": "#/$defs/logicalId" },
+            "logoStacked": { "$ref": "#/$defs/logicalId" },
+            "logoMark": { "$ref": "#/$defs/logicalId" },
+            "avatar": { "$ref": "#/$defs/logicalId" },
+            "podcastCover": { "$ref": "#/$defs/logicalId" },
+            "youtubeBanner": { "$ref": "#/$defs/logicalId" },
+            "openGraph": { "$ref": "#/$defs/logicalId" }
+          }
+        }
+      }
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "role", "uri", "sha256", "sizeBytes", "mediaType", "status"],
+      "properties": {
+        "kind": { "enum": ["audio", "image", "video", "text"] },
+        "role": { "$ref": "#/$defs/nonBlank" },
+        "uri": {
+          "type": "string",
+          "pattern": "^dropbox:[^/\\\\][^\\\\]*$"
+        },
+        "sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "sizeBytes": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "mediaType": {
+          "type": ["string", "null"],
+          "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]+/[a-z0-9][a-z0-9!#$&^_.+-]+$"
+        },
+        "status": { "enum": ["unmounted", "verified"] },
+        "publishedUrl": {
+          "type": ["string", "null"],
+          "format": "uri"
+        }
+      }
+    },
+    "episode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "publicationState",
+        "number",
+        "slug",
+        "rssGuid",
+        "title",
+        "description",
+        "websiteSummary",
+        "durationMinutes",
+        "publishDate",
+        "feedPublishedAt",
+        "contentFlags",
+        "assetRefs",
+        "aliases",
+        "destinations"
+      ],
+      "properties": {
+        "publicationState": { "enum": ["draft", "published"] },
+        "number": { "type": "integer", "minimum": 1 },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "rssGuid": { "type": ["string", "null"], "format": "uuid" },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "^(?!(?:Episode|Ep\\.?)\\s*#?\\s*[0-9]+\\b).*\\S.*$"
+        },
+        "description": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["format", "full"],
+          "properties": {
+            "format": { "const": "html" },
+            "full": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000,
+              "pattern": "\\S"
+            }
+          }
+        },
+        "websiteSummary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "\\S"
+        },
+        "durationMinutes": {
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "publishDate": { "type": ["string", "null"], "format": "date" },
+        "feedPublishedAt": { "type": ["string", "null"], "format": "date-time" },
+        "contentFlags": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["explicit", "madeForKids", "containsSyntheticMedia", "paidPromotion"],
+          "properties": {
+            "explicit": { "type": "boolean" },
+            "madeForKids": { "type": ["boolean", "null"] },
+            "containsSyntheticMedia": { "type": ["boolean", "null"] },
+            "paidPromotion": { "type": ["boolean", "null"] }
+          }
+        },
+        "assetRefs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["fullVideo", "podcastAudio", "thumbnail", "captions", "instagramReel"],
+          "properties": {
+            "fullVideo": { "$ref": "#/$defs/nullableLogicalId" },
+            "podcastAudio": { "$ref": "#/$defs/nullableLogicalId" },
+            "thumbnail": { "$ref": "#/$defs/nullableLogicalId" },
+            "captions": { "$ref": "#/$defs/nullableLogicalId" },
+            "instagramReel": { "$ref": "#/$defs/nullableLogicalId" }
+          }
+        },
+        "aliases": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["titles", "slugs"],
+          "properties": {
+            "titles": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/$defs/nonBlank" }
+            },
+            "slugs": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              }
+            }
+          }
+        },
+        "destinations": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["spotify", "youtube", "vimeo", "rumble"],
+          "properties": {
+            "spotify": { "oneOf": [{ "$ref": "#/$defs/spotifyIdentity" }, { "type": "null" }] },
+            "youtube": { "oneOf": [{ "$ref": "#/$defs/youtubeIdentity" }, { "type": "null" }] },
+            "vimeo": { "oneOf": [{ "$ref": "#/$defs/vimeoIdentity" }, { "type": "null" }] },
+            "rumble": { "oneOf": [{ "$ref": "#/$defs/rumbleIdentity" }, { "type": "null" }] }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "publicationState": { "const": "published" } },
+            "required": ["publicationState"]
+          },
+          "then": {
+            "properties": {
+              "rssGuid": { "type": "string", "format": "uuid" },
+              "durationMinutes": { "type": "integer", "minimum": 1 },
+              "publishDate": { "type": "string", "format": "date" },
+              "feedPublishedAt": { "type": "string", "format": "date-time" }
+            }
+          }
+        }
+      ]
+    },
+    "destinationIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "url"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "format": "uri", "pattern": "^https://" }
+      }
+    },
+    "spotifyIdentity": {
+      "allOf": [
+        { "$ref": "#/$defs/destinationIdentity" },
+        { "type": "object", "properties": { "id": { "type": "string", "pattern": "^[A-Za-z0-9]{22}$" } } }
+      ]
+    },
+    "youtubeIdentity": {
+      "allOf": [
+        { "$ref": "#/$defs/destinationIdentity" },
+        { "type": "object", "properties": { "id": { "type": "string", "pattern": "^[A-Za-z0-9_-]{11}$" } } }
+      ]
+    },
+    "vimeoIdentity": {
+      "allOf": [
+        { "$ref": "#/$defs/destinationIdentity" },
+        { "type": "object", "properties": { "id": { "type": "string", "pattern": "^[0-9]+$" } } }
+      ]
+    },
+    "rumbleIdentity": {
+      "allOf": [
+        { "$ref": "#/$defs/destinationIdentity" },
+        { "type": "object", "properties": { "id": { "type": "string", "pattern": "^v[a-z0-9]+$" } } }
+      ]
+    }
+  }
+}

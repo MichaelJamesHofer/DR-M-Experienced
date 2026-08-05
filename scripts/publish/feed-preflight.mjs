@@ -98,6 +98,26 @@ function comparableDate(value) {
   return Number.isNaN(milliseconds) ? value : new Date(milliseconds).toISOString();
 }
 
+function comparableDescription(value) {
+  if (value == null) return null;
+  const entities = {
+    amp: "&",
+    apos: "'",
+    gt: ">",
+    lt: "<",
+    nbsp: " ",
+    quot: '"',
+  };
+  return String(value)
+    .replace(/<br\s*\/?\s*>/gi, " ")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&#x([0-9a-f]+);/gi, (_, digits) => String.fromCodePoint(Number.parseInt(digits, 16)))
+    .replace(/&#([0-9]+);/g, (_, digits) => String.fromCodePoint(Number.parseInt(digits, 10)))
+    .replace(/&(amp|apos|gt|lt|nbsp|quot);/gi, (_, name) => entities[name.toLowerCase()])
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function parseRssItem(item) {
   const guid = textValue(childByLocalName(item, "guid")) ?? textValue(childByLocalName(item, "id"));
   const title = textValue(childByLocalName(item, "title"));
@@ -232,7 +252,9 @@ export function comparePodcastFeeds(source, candidate) {
   }
 
   for (const field of ["title", "description", "language", "author", "explicit", "podcastType", "artworkPresent"]) {
-    if (source[field] !== candidate[field]) showMetadataMismatches.push(field);
+    const sourceValue = field === "description" ? comparableDescription(source[field]) : source[field];
+    const candidateValue = field === "description" ? comparableDescription(candidate[field]) : candidate[field];
+    if (sourceValue !== candidateValue) showMetadataMismatches.push(field);
   }
   if (showMetadataMismatches.length) {
     issues.push({ code: "show_metadata", message: "Show-level metadata differs." });
@@ -265,7 +287,9 @@ export function comparePodcastFeeds(source, candidate) {
     sharedGuidCount += 1;
     const fields = [];
     if (sourceEpisode.title !== candidateEpisode.title) fields.push("title");
-    if (sourceEpisode.description !== candidateEpisode.description) fields.push("description");
+    if (comparableDescription(sourceEpisode.description) !== comparableDescription(candidateEpisode.description)) {
+      fields.push("description");
+    }
     if (sourceEpisode.comparablePubDate !== candidateEpisode.comparablePubDate) fields.push("pubDate");
     if (sourceEpisode.comparableDuration !== candidateEpisode.comparableDuration) fields.push("duration");
     if (sourceEpisode.explicit !== candidateEpisode.explicit) fields.push("explicit");

@@ -2,7 +2,7 @@
   "$schema": "./episode.schema.json",
   "episodeNumber": 8,
   "slug": "example-episode",
-  "title": "Episode 8: Replace with the approved episode title",
+  "title": "Replace with the approved episode title",
   "description": "Replace with the approved long description and show notes. Include the educational-content disclaimer where appropriate.",
   "publishAt": "2026-08-15T09:00:00-06:00",
   "explicit": false,

@@ -28,6 +28,7 @@ Production builds use `CONTENT_CATALOG_STRICT=true` and fail when required catal
 
 See:
 
+- `docs/operations-manual.md` (start here for the whole ecosystem and break/fix procedures)
 - `docs/new-episode-process.md`
 - `docs/publishing-platform-setup.md`
 - `publishing/README.md`

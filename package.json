@@ -6,13 +6,16 @@
     "node": ">=20.9.0"
   },
   "scripts": {
+    "predev": "node scripts/generate-site-brand.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/generate-site-brand.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx --max-warnings=0",
     "typecheck": "tsc --noEmit",
     "test:database-security": "bash scripts/test-database-security.sh",
-    "test:publisher": "node --test scripts/publish/publisher.test.mjs scripts/publish/feed-preflight.test.mjs",
+    "test:publisher": "node --test scripts/publish/publisher.test.mjs scripts/publish/feed-preflight.test.mjs scripts/publish/catalog.test.mjs scripts/sync-episodes.test.mjs",
+    "generate:site-brand": "node scripts/generate-site-brand.mjs",
     "publish:doctor": "/home/otto/.local/bin/drm-publish doctor",
     "publish:feed-preflight": "node scripts/publish/feed-preflight.mjs",
     "publish:prepare": "/home/otto/.local/bin/drm-publish prepare",
