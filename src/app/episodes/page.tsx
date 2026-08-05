@@ -8,7 +8,7 @@ import { EpisodeBrowser } from "@/components/episode-browser";
 
 export const metadata = {
   title: "Episodes",
-  description: "Browse all Dr. M's Experienced Functional and Sports Medicine episodes. Search by topic, skim summaries, and dive into detailed show notes.",
+  description: "Browse all Dr. M Experienced, with Dr. David Musnick episodes. Search by topic, skim summaries, and dive into detailed show notes.",
 };
 
 export default async function EpisodesPage() {

@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { PostHogProvider } from "@/components/posthog-provider";
+import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/site-brand";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -20,17 +21,15 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL("https://drmexperienced.com"),
   title: {
-    default: "Dr. M's Experienced Functional and Sports Medicine",
-    template: "%s | Dr. M's Experienced Functional and Sports Medicine",
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "Order-of-operations functional medicine for athletes and curious humans. Protocols, episodes, and frameworks with Dr. David Musnick.",
+  description: SITE_DESCRIPTION,
   openGraph: {
-    title: "Dr. M's Experienced Functional and Sports Medicine",
-    description:
-      "Order-of-operations functional medicine. Protocols and frameworks that cut through the noise.",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
     url: "https://drmexperienced.com",
-    siteName: "Dr. M's Experienced Functional and Sports Medicine",
+    siteName: SITE_NAME,
     type: "website",
   },
   alternates: {

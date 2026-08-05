@@ -1,14 +1,16 @@
+import { SITE_NAME } from "@/lib/site-brand";
+
 export const metadata = {
   title: "Copyright Notice",
-  description: "Copyright notice and permissions policy for Dr. M's Experienced Functional and Sports Medicine.",
+  description: "Copyright notice and permissions policy for Dr. M Experienced, with Dr. David Musnick.",
 };
 
 const sections = [
   {
     title: "What is protected",
     items: [
-      "Episodes, show notes, articles, page copy, graphics, downloads, audio, video, and other original materials published by Dr. M's Experienced Functional and Sports Medicine are protected by copyright unless otherwise noted.",
-      "The Dr. M's Experienced name, presentation, and site materials may not be copied, mirrored, republished, sold, or used to imply endorsement without written permission.",
+      "Episodes, show notes, articles, page copy, graphics, downloads, audio, video, and other original materials published by Dr. M Experienced, with Dr. David Musnick are protected by copyright unless otherwise noted.",
+      "The Dr. M Experienced name, presentation, and site materials may not be copied, mirrored, republished, sold, or used to imply endorsement without written permission.",
     ],
   },
   {
@@ -30,7 +32,7 @@ const sections = [
     title: "Third-party materials",
     items: [
       "Product names, trademarks, platform logos, embedded media, and third-party materials belong to their respective owners.",
-      "Affiliate links and product references do not transfer ownership of third-party marks or materials to Dr. M's Experienced Functional and Sports Medicine.",
+      "Affiliate links and product references do not transfer ownership of third-party marks or materials to Dr. M Experienced, with Dr. David Musnick.",
     ],
   },
 ];
@@ -48,7 +50,7 @@ export default function CopyrightPage() {
           Copyright notice
         </h1>
         <p className="text-body-lg text-foreground-muted">
-          Copyright {currentYear} Dr. M&apos;s Experienced Functional and Sports Medicine. All rights reserved.
+          Copyright {currentYear} {SITE_NAME}. All rights reserved.
         </p>
       </div>
 
@@ -57,7 +59,7 @@ export default function CopyrightPage() {
           Short notice
         </h2>
         <p className="text-body text-foreground-muted">
-          Copyright {currentYear} Dr. M&apos;s Experienced. All rights reserved.
+          Copyright {currentYear} {SITE_NAME}. All rights reserved.
         </p>
       </div>
 

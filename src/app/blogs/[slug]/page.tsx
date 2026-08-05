@@ -42,7 +42,7 @@ export async function generateMetadata({
   if (!post && slug === BLOG_EMPTY_STATIC_SLUG) {
     return {
       title: "Blogs coming soon",
-      description: "The Dr. M's Experienced blog library is ready for published posts.",
+      description: "The Dr. M Experienced blog library is ready for published posts.",
       robots: {
         index: false,
         follow: false,

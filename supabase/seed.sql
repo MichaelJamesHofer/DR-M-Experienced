@@ -1,4 +1,4 @@
--- Seed the current Dr. M's Experienced public content catalog.
+-- Seed the current Dr. M Experienced public content catalog.
 
 insert into public.content_topics (slug, label) values
   ('brain-fog', 'brain-fog'),
@@ -456,10 +456,10 @@ insert into public.affiliate_products (
     'doctors-supplement-store',
     'supplements',
     'Doctors Supplement Store',
-    $$Dr. M's Experienced Supplement Dispensary$$,
-    $$A DSS supplement dispensary for the Dr. M's Experienced audience, with thousands of high-quality practitioner-focused supplement products.$$,
+    $$Dr. M Experienced Supplement Dispensary$$,
+    $$A DSS supplement dispensary for the Dr. M Experienced audience, with thousands of high-quality practitioner-focused supplement products.$$,
     $$Dr. M flagged DSS as a way to give podcast listeners one place to research and purchase high-quality supplements connected to future show notes, webinars, and protocol discussions while keeping podcast activity organized.$$,
-    $$This is the Dr. M's Experienced dispensary URL.$$,
+    $$This is the Dr. M Experienced dispensary URL.$$,
     null,
     null,
     'https://dssorders.com/DrMExperienced',
@@ -520,9 +520,9 @@ insert into public.affiliate_product_reasons (product_slug, display_order, body)
   ('desbio-dbscript', 30, $$It can support future podcast follow-up without turning an episode page into a full treatment protocol.$$),
   ('best365labs', 10, $$Relevant to the brain fog and energy conversations already covered on the show.$$),
   ('best365labs', 20, $$Gives listeners one named source to research when methylene blue or mitochondrial-support topics come up.$$),
-  ('best365labs', 30, $$Includes a public listener code for the Dr. M's Experienced audience.$$),
+  ('best365labs', 30, $$Includes a public listener code for the Dr. M Experienced audience.$$),
   ('doctors-supplement-store', 10, $$Broad supplement catalog rather than a single-product line.$$),
-  ('doctors-supplement-store', 20, $$Separate Dr. M's Experienced dispensary URL keeps podcast-related supplement activity organized.$$),
+  ('doctors-supplement-store', 20, $$Separate Dr. M Experienced dispensary URL keeps podcast-related supplement activity organized.$$),
   ('doctors-supplement-store', 30, $$Useful as a central destination when future episodes or webinars mention supplement categories.$$),
   ('abeytu-naturals', 10, $$Connects to the broader functional-medicine lens of oxygen delivery, circulation, and cellular function.$$),
   ('abeytu-naturals', 20, $$The public discount link gives listeners a straightforward way to find the line Dr. M referenced.$$),

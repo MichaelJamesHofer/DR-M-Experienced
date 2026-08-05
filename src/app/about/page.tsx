@@ -496,7 +496,7 @@ export default function AboutPage() {
         <h2 className="text-heading font-semibold text-foreground mb-4">Educational Only</h2>
         <div className="space-y-3 text-body text-foreground-muted leading-relaxed">
           <p>
-            Dr. M&apos;s Experienced Functional and Sports Medicine is an educational platform. This page summarizes
+            Dr. M Experienced, with Dr. David Musnick is an educational platform. This page summarizes
             Dr. Musnick&apos;s background to provide context for the podcast and does not create
             a doctor–patient relationship.
           </p>
