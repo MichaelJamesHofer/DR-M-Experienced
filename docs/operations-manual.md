@@ -22,7 +22,6 @@ sed -n '1,240p' publishing/hosting-migration.json
 sed -n '1,260p' publishing/platforms.json
 /home/otto/.local/bin/drm-publish doctor
 /home/otto/.local/bin/drm-browser status
-/home/otto/.local/bin/drm-publish migration-check
 ```
 
 For GitHub, run as the desktop user, not merely with Otto's `HOME` on a root
@@ -40,13 +39,20 @@ runuser -u otto -- env \
 Interpretation on August 5, 2026:
 
 - Anchor source: HTTP 200, exact new show title, seven episodes, seven original
-  GUIDs, description still ends in `RSSVERIFY`.
-- Intended RSS.com feed at the approved `dr-m-experienced` slug: not provisioned
-  yet.
-- Manually created old-slug RSS.com feed: HTTP 200 but empty and old-branded.
-- Migration check: expected to fail. Do not redirect.
+  GUIDs, exact canonical description, structured episode numbers 1-7, and all
+  seven approved public titles. `RSSVERIFY` is absent. The clean source feed was
+  independently verified at `2026-08-05T21:04:36Z`.
+- Spotify for Creators/Anchor remains canonical during migration.
+- RSS.com migration: active pre-cutover. The supported self-service import was
+  requested at `2026-08-05T21:17:39Z` and awaits project-email confirmation.
+  The empty old-slug show has exact branding but remains noncanonical. Do not
+  populate it manually, distribute it, or redirect Anchor.
 - Apple public show: preserve ID `1870433419`; Episodes 3-7 are public, Episodes
   1-2 are missing from the public catalog.
+- YouTube, Vimeo, and Rumble: all seven public titles and descriptions were
+  reconciled to the catalog and verified on August 5, 2026. Vimeo represents
+  catalog lists as rich-text bullets; YouTube replaces forbidden angle brackets
+  with equivalent comparison words.
 - Local publishing browser: normally stopped when not in active use.
 - GitHub connector: authenticated with admin/push access to this repository.
   Otto's local `gh` credential currently needs attended reauthentication; use
@@ -58,12 +64,14 @@ Interpretation on August 5, 2026:
 | Subject | Authority |
 |---|---|
 | Operating rules | `AGENTS.md` |
-| Host migration gates and Apple discrepancy | `publishing/hosting-migration.json` |
-| Stable destination IDs and current routing | `publishing/platforms.json` |
-| Planned seven-episode title batch | `publishing/episode-title-migration.json` |
+| Active host-migration evidence and Apple discrepancy | `publishing/hosting-migration.json` |
+| Shared show and episode distribution metadata | `publishing/master-catalog.json` |
+| Stable account/show/channel IDs and current routing | `publishing/platforms.json` |
+| Approved seven-episode title-transition evidence | `publishing/episode-title-migration.json` |
 | Episode approval schema | `publishing/episode.schema.json` |
-| Visual asset brief and manifest | `publishing/brand/` |
-| Production website content | Supabase project `tdbsuzciwotleualdcjf` |
+| Visual briefs and templates | `publishing/brand/` |
+| Binary masters | Project-scoped Dropbox folder mapped by `~/.config/drm-publisher/sources.json` |
+| Production website-only editorial content | Supabase project `tdbsuzciwotleualdcjf` |
 | Website source and deployment | This repository and GitHub Actions |
 | Private jobs and feed evidence | `~/.local/state/drm-publisher/` |
 | Credentials | `~/.config/drm-publisher/` and platform-managed browser storage |
@@ -71,6 +79,50 @@ Interpretation on August 5, 2026:
 
 No token, password, recovery code, cookie, or service-role key belongs in this
 repository or in an episode manifest.
+
+### Master Catalog And Dropbox Boundary
+
+`publishing/master-catalog.json`, validated by
+`publishing/master-catalog.schema.json`, is the master for metadata shared across
+destinations. It owns canonical show names and profile copy, the current feed
+binding, artwork references, episode numbers/slugs/titles/descriptions/durations, content
+flags, logical asset references, RSS identities, aliases, and verified
+episode-level remote IDs and URLs. The title-migration file and generated
+website recovery files are evidence/projections, not parallel authorities.
+The small website brand projection at `src/data/site-brand.generated.json` is
+regenerated from the master before `dev` and `build`; catalog tests reject drift.
+
+Supabase remains authoritative for website-only editorial fields such as topics,
+references, takeaways, checklists, long-form sections, affiliate/blog
+relationships, and website publication state. Where Supabase repeats an episode
+number, slug, title, or destination ID, it is a verified projection of the
+master catalog and must not drift.
+
+Dropbox holds binary masters only. Configure the direct path to this project's
+synced folder in the local, ignored file below; do not map the user's whole
+Dropbox or commit the machine-specific path:
+
+```json
+{
+  "schemaVersion": 1,
+  "roots": {
+    "dropbox": "/absolute/path/to/the/synced/Dr-M-project-folder"
+  }
+}
+```
+
+The default path is `~/.config/drm-publisher/sources.json`; a controlled test or
+recovery session may override it with `DRM_PUBLISH_SOURCES_CONFIG`. Catalog
+entries use project-relative logical references such as
+`dropbox:episodes/008-topic/master-video.mp4`. Absolute references, `..`, and
+symlink escapes outside the configured root are invalid.
+
+An asset is not verified merely because a Dropbox entry or local placeholder
+exists. It must be fully local and readable, and the catalog must contain its
+measured SHA-256 and byte size before `status` becomes `verified`. Changing the
+binary invalidates the fingerprint and every approval packet based on it. On
+this workstation, leave the root unconfigured and assets `unmounted` until the
+project folder is actually synced and its direct path is confirmed.
 
 ## 3. Brand Contract
 
@@ -100,13 +152,13 @@ Keep `episodeNumber` as structured data for internal order, the website, the
 approval manifest, and RSS `<itunes:episode>`. The number may appear as a small
 visual indexing element on artwork, but not as `Episode N:` in the public title.
 
-This transition is approved in principle but not yet implemented. The current
-schema and publisher require titles to begin with `Episode N:`. Change the
-schema, tests, seven Supabase titles, fallback data, RSS.com episode titles, and
-the direct video/social destinations in one controlled batch after RSS.com is
-stable. Apple, Spotify audio, and Amazon should inherit the same titles from the
-feed. Preserve every GUID and remote content ID. The exact seven-row identity,
-issue, and proposed-title crosswalk is `publishing/episode-title-migration.json`.
+The seven replacement titles and maintenance window are approved. The local
+publisher and website must accept unnumbered public titles while continuing to
+require `episodeNumber`. Apply the Spotify/Anchor titles and structured episode
+numbers first, then let Apple and Amazon ingest the clean feed and reconcile the
+direct video/social destinations in the same maintenance campaign. Preserve
+every GUID and remote content ID. The exact identity, issue, and approved-title
+crosswalk is `publishing/episode-title-migration.json`.
 
 ## 4. Ecosystem Map
 
@@ -114,10 +166,13 @@ The intended flow is:
 
 ```text
 DaVinci Resolve exports
-  -> local episode manifest and integrity packet
+  -> project-scoped Dropbox binary folder
+  -> repository master catalog
+  -> catalog-bound episode manifest and integrity packet
   -> attended draft/private uploads
-      -> RSS.com audio feed -> Spotify audio, Apple, Amazon
-      -> Spotify video (separate creator upload)
+      -> current: Spotify for Creators/Anchor -> canonical RSS -> Apple
+      -> after gated cutover: RSS.com -> Spotify audio, Apple, Amazon
+      -> Spotify video through Spotify for Creators
       -> YouTube full video
       -> Vimeo full video
       -> Rumble full video
@@ -128,9 +183,10 @@ DaVinci Resolve exports
   -> drmexperienced.com
 ```
 
-Until cutover, Spotify for Creators/Anchor remains the podcast host and its feed
-fans out to Apple. Amazon has not yet been claimed. After cutover, RSS.com owns
-audio; Spotify video remains a separate upload.
+Spotify for Creators/Anchor remains canonical until the supported RSS.com import
+preserves all source GUIDs and media and an exact redirect receives separate
+approval. After cutover, RSS.com owns podcast audio distribution; Spotify video
+remains a separate creator upload.
 
 The current publisher prepares and fingerprints files, validates decisions, and
 creates a review packet. It does not yet provide unattended uploads, remote
@@ -145,16 +201,16 @@ have been tested against draft/private items.
 | Website | `https://drmexperienced.com` | Static Next.js export from Supabase through GitHub Pages |
 | GitHub | `MichaelJamesHofer/DR-M-Experienced` | Public repo; `main` deploys production |
 | Supabase | project `tdbsuzciwotleualdcjf` | Production content catalog and form receiver |
-| RSS.com | approved slug `dr-m-experienced` | Import verification completed; support reply sent; awaiting imported feed |
-| Spotify | show `7GGLljxmO0G3FLjPy8vfcw` | Current Anchor host; audio RSS plus separate video upload |
+| RSS.com | approved target slug `dr-m-experienced` | Supported import confirmation pending; empty old-slug show has corrected branding but is noncanonical |
+| Spotify | show `7GGLljxmO0G3FLjPy8vfcw` | Current Anchor source/canonical feed plus Spotify video; preserve through cutover |
 | Apple | public show `1870433419` | Existing claimed show; preserve it; currently five public episodes |
 | Apple Connect | `cfab5caf-554e-4ebe-a28c-2e4748147b82` | Internal identity of the public show |
-| Apple duplicate Draft | public-style ID `1896845422`, internal `949adc0b-c62f-410c-962d-17563cf3b07a` | Nonpublic, no feed; inspect, then archive only after recovery |
-| Amazon | no ID yet | Signed-in account has zero claimed shows; add after feed validation |
-| YouTube | channel `UCFA1nVv4lKMBlx81gjMAOFQ`, uploads playlist `UUFA1nVv4lKMBlx81gjMAOFQ` | Direct full-video destination; API auth/audit incomplete |
-| Vimeo | user `253415660` | Direct full-video destination; upload token incomplete |
+| Apple duplicate Draft | public-style ID `1896845422`, internal `949adc0b-c62f-410c-962d-17563cf3b07a` | Nonpublic, no feed; inspect and archive only if reversible and no unique setup exists |
+| Amazon | no ID yet | Signed-in account has zero claimed shows; hold until cutover, then submit the final canonical RSS.com feed once |
+| YouTube | channel `UCFA1nVv4lKMBlx81gjMAOFQ`, uploads playlist `UUFA1nVv4lKMBlx81gjMAOFQ` | Seven titles/descriptions verified; API auth/audit incomplete |
+| Vimeo | user `253415660` | Seven titles/descriptions verified; upload token incomplete |
 | Instagram | `@drmexperienced` | Reel destination; stable publishing account ID/API auth incomplete |
-| Rumble | account `282015440`, channel `7820170` | Attended browser upload; no supported creator VOD API confirmed |
+| Rumble | account `282015440`, channel `7820170` | Seven titles/descriptions verified; attended browser upload remains required |
 
 Mutable profile URLs are stored in `publishing/platforms.json`; they are not a
 substitute for stable IDs. Unknown IDs remain `null` until authenticated evidence
@@ -188,7 +244,6 @@ terms, or reuse credentials elsewhere.
 
 ```bash
 /home/otto/.local/bin/drm-publish doctor
-/home/otto/.local/bin/drm-publish migration-check [--verify-media] [--snapshot]
 /home/otto/.local/bin/drm-publish prepare /absolute/path/to/episode.json
 /home/otto/.local/bin/drm-publish show <job-id>
 /home/otto/.local/bin/drm-publish approve <job-id> \
@@ -197,9 +252,14 @@ terms, or reuse credentials elsewhere.
 /home/otto/.local/bin/drm-publish status <job-id>
 ```
 
+Use `migration-check [--verify-media] [--snapshot]` after the active supported
+import produces a candidate feed; it is not part of routine episode publishing,
+and a failed gate blocks cutover.
+
 Jobs live under `~/.local/state/drm-publisher/jobs/`. `prepare` is local-only.
 The approval hash covers normalized copy, decisions, file paths, media metadata,
-and SHA-256 fingerprints. Any changed input invalidates approval.
+SHA-256 fingerprints, and the selected master-catalog revision/binding. Any
+changed input or catalog/manifest drift invalidates approval.
 
 ### Isolated Browser
 
@@ -272,20 +332,33 @@ Otto edits in DaVinci Resolve and provides, as applicable:
 - explicit-content, made-for-kids, synthetic-media, and paid-promotion facts
 - desired release date/time and destination decisions
 
-Keep these files outside the repository until approved derivatives are created.
-Start from `publishing/episode.example.json` and use absolute paths.
+Keep these files outside the repository in the project-scoped Dropbox tree until
+approved derivatives are created. Register them with portable `dropbox:` asset
+references in `publishing/master-catalog.json`; absolute local paths belong only
+in the private resolved job data, never in the catalog.
 
 ### Preparation And Review
 
 1. Check `gates.publishingFreezeActive` in
    `publishing/hosting-migration.json`. Stop if true.
-2. Run `drm-publish doctor`.
-3. Create the manifest with all target-specific release choices.
-4. Run `prepare`, then `show`.
-5. Review copy, fingerprints, visibility, schedule, licensing, monetization,
+2. Add the next contiguous episode and its logical assets to
+   `publishing/master-catalog.json` with `publicationState: "draft"`. Leave
+   unassigned RSS dates/GUID and destination identities null; do not invent
+   them. A draft's episode number is never reused.
+3. Fully sync each upload asset, record its SHA-256 and byte size, and mark it
+   verified only after those values match the local file.
+4. Increment the catalog revision/date, then run `drm-publish doctor` and the
+   publisher tests.
+5. Create the private manifest from `publishing/episode.example.json`. Copy
+   catalog-owned values exactly and add all target-specific release choices.
+6. Run `prepare`, then `show`; stop and correct any catalog/manifest drift.
+   When the Dropbox root is configured, preparation also enforces logical path
+   resolution and any verified catalog SHA-256/size. Otherwise it emits a
+   visible path-verification warning.
+7. Review copy, fingerprints, visibility, schedule, licensing, monetization,
    audience, disclosure, and warnings.
-6. Record local approval only with the displayed hash and exact phrase.
-7. Obtain separate approval to upload the exact packet to each destination.
+8. Record local approval only with the displayed hash and exact phrase.
+9. Obtain separate approval to upload the exact packet to each destination.
 
 ### Upload And Release
 
@@ -317,35 +390,37 @@ After Spotify, Vimeo, YouTube, and Rumble references are verified:
 
 ### RSS.com
 
-- Before cutover: use only the supported import. Leave the empty old-slug show
-  untouched unless support gives an exact instruction.
-- After cutover: upload podcast audio and canonical show/episode metadata here.
-- Do not assume the Free plan provides a supported publishing API. Use attended
-  browser uploads until an official API entitlement is deliberately adopted.
-- Do not remove `RSSVERIFY` until RSS.com confirms ownership verification and
-  the imported feed exists. After removal, verify the feed and downstream copy.
+- Complete only the supported import flow; do not manually recreate episodes.
+- Keep the empty old-slug show noncanonical while import confirmation is pending.
+- Claim `dr-m-experienced` if the supported flow offers the approved slug.
+- Run structural and media parity checks before requesting redirect approval.
+- Free-plan directory convenience does not replace the repository master catalog
+  or provide a supported publishing API.
 
 ### Spotify
 
-- Before cutover: Spotify for Creators/Anchor is the audio host.
-- Cutover: use Spotify's redirect control only after the exact RSS.com feed
-  passes every gate and the redirect has fresh approval.
-- After cutover: audio arrives from RSS.com; upload Spotify video separately.
+- Spotify for Creators/Anchor remains canonical until gated cutover.
+- Its canonical short description, seven approved public titles, and structured
+  episode numbers 1-7 are published and verified in the RSS feed.
+- Before cutover, upload approved podcast audio here. After cutover, audio comes
+  from RSS.com; continue Spotify video through the existing creator account.
 - Preserve show ID `7GGLljxmO0G3FLjPy8vfcw`.
 
 ### Apple Podcasts
 
 - Never upload normal RSS episodes separately.
 - Preserve public show `1870433419` and its existing listing URL.
-- Use Refresh Feed after a validated redirect. Change the feed URL on the
-  existing show only if the redirect is unavailable or Apple support directs it.
+- Preserve the existing show and refresh it against Anchor while import is in
+  progress. After cutover, update the same show to the final RSS.com feed.
+- Inspect and archive only nonpublic/manual Draft records that contain no unique
+  content or subscription configuration and have a reversible archive control.
 - Never fix missing episodes by creating new GUIDs or a replacement show.
 
 ### Amazon Music And Audible
 
-- There is no current claimed show. After RSS.com is healthy, submit/claim the
-  exact imported feed once, complete ownership verification, record the stable
-  ID and public URL, and verify the oldest/newest episodes.
+- There is no current claimed show. Hold submission until cutover, then submit
+  the final canonical RSS.com feed once, complete ownership verification, record
+  the stable ID/public URL, and verify the oldest/newest episodes.
 
 ### YouTube
 
@@ -356,12 +431,18 @@ After Spotify, Vimeo, YouTube, and Rumble references are verified:
 - Until configured, use the attended creator dashboard. Review made-for-kids,
   altered/synthetic content, paid promotion, notifications, schedule, license,
   and visibility before release.
+- Current seven titles and descriptions are verified. The deterministic
+  YouTube projection writes comparison operators as words because Studio rejects
+  angle brackets in descriptions.
 
 ### Vimeo
 
 - Direct full-video upload to user `253415660`.
 - An official API token with upload/edit scopes is still needed for automation.
 - Current Vimeo display name is shortened to fit the platform limit.
+- Current seven titles and descriptions are verified. Vimeo may render catalog
+  hyphen lists as native rich-text bullets; compare persisted editor structure
+  and normalized public text rather than raw oEmbed punctuation.
 
 ### Instagram
 
@@ -378,48 +459,35 @@ After Spotify, Vimeo, YouTube, and Rumble references are verified:
 - Preserve channel `7820170`.
 - Treat license, monetization, distribution rights, and public/unlisted state as
   explicit release decisions. No supported public creator VOD API is confirmed.
+- Current seven titles and descriptions are verified; the existing episode 5
+  URL slug remains misleading but must be preserved with the same video ID.
 
-## 10. RSS.com Migration Runbook
+## 10. Active RSS.com Migration
 
-The detailed gate is `docs/rss-com-migration.md`. The safe sequence is:
+`docs/rss-com-migration.md` is the focused migration runbook. The supported
+self-service import request is active and awaiting confirmation through the
+project email. Until that confirmation produces an imported candidate feed:
 
-1. Keep Anchor active and canonical.
-2. Wait for RSS.com to provision the approved `dr-m-experienced` feed.
-3. Freeze episode publishing when import work begins.
-4. Run structural validation, then media validation with a private snapshot:
-
-   ```bash
-   /home/otto/.local/bin/drm-publish migration-check
-   /home/otto/.local/bin/drm-publish migration-check --verify-media --snapshot
-   ```
-
-5. Require exactly seven items, the exact seven original GUIDs, unique playable
-   enclosures, matching dates/durations/numbers/flags, and corrected show copy.
-6. Enter the existing Spotify and Apple listing URLs in RSS.com Distribution.
-   Do not auto-submit an imported show as a new directory listing.
-7. Back up media and analytics; verify Apple's Add Show by URL preview.
-8. Obtain fresh approval for the exact permanent redirect.
-9. Redirect Anchor through Spotify for Creators and verify one HTTP 301 hop with
-   no loop.
-10. Confirm the same Spotify and Apple IDs; refresh the existing Apple feed.
-11. Claim Amazon once using the new feed.
-12. Keep the old Spotify account and redirect active for at least 90 days.
-13. Update `publishing/platforms.json`, website RSS metadata/footer, and publisher
-   code. The current publisher still models Spotify as the canonical host and
-   hardwires Apple/Amazon to depend on it; cutover is not complete until that
-   config/schema/test transition ships.
-
-There is no clean rollback after a permanent 301 is widely cached. A failed gate
-means do not redirect, not “redirect and see what happens.”
+1. Keep the clean Anchor feed active and canonical.
+2. Leave the corrected but empty old-slug RSS.com show noncanonical; do not
+   recreate the seven episodes manually or distribute that empty feed.
+3. Do not redirect Anchor, update Apple to RSS.com, or submit Amazon.
+4. Claim the approved `dr-m-experienced` slug only if the supported import flow
+   offers it.
+5. After a candidate exists, run structural and media parity checks against all
+   seven source GUIDs, metadata, and playable enclosures.
+6. Request separate approval for the exact permanent feed URL and redirect only
+   after every gate passes. There is no clean rollback after a 301 is widely
+   cached.
 
 ## 11. Apple Recovery Runbook
 
 ### Decision
 
 Do **not** delete, reset, archive, or recreate public Apple show `1870433419`.
-Apple's supported host migration preserves followers, play state, analytics,
-ratings, and the stable listing when the feed and GUIDs are preserved. A new
-show would risk losing those assets and creating a duplicate.
+The existing listing is the identity to repair, even if Apple is not currently
+being promoted or used. A new show would risk losing history and creating a
+duplicate.
 
 ### Current Defect
 
@@ -429,69 +497,70 @@ show would risk losing those assets and creating a duplicate.
 - Podcasts Connect contains three internal Draft episode records.
 - Separate Draft show `1896845422` is nonpublic and has no RSS feed.
 
-### Before RSS.com Cutover
+### Self-Service Repair
 
 1. Leave `1870433419` Published and Anchor active.
-2. Leave `RSSVERIFY` until RSS.com confirms verification.
-3. Do not use RSS.com's Apple auto-submit action.
-4. Record Apple status, Last Refresh, analytics, and public episode count.
-5. Inspect the three Draft episode records and duplicate Draft show for unique
-   audio, channel, or subscription configuration. Do not archive yet.
-6. If more than 24 hours have passed after Refresh Feed and Episodes 1-2 remain
-   absent, contact Apple Support and request a recrawl of the existing show and
-   source feed. Include these missing GUIDs:
+2. Clean the Anchor description, seven titles, and structured episode numbers;
+   verify seven unique original GUIDs and working enclosures in the public feed.
+3. Record Apple status, RSS URL, Last Refresh, analytics, and public episode
+   count before changing anything.
+4. In Podcasts Connect, open existing `1870433419`. Confirm it uses
+   `https://anchor.fm/s/10e1b0328/podcast/rss`; update and save that field only if
+   it differs.
+5. Request one Refresh Feed and allow normal propagation time. Do not submit the
+   URL as a new show.
+6. Confirm the same Apple ID shows the canonical name/description, seven
+   episodes, and working oldest/newest playback. The two historically missing
+   GUIDs are:
 
    - `1e40e02b-b217-477c-9cc3-4271cb304c23`
    - `c9b853b6-a828-4012-9998-217919ff9163`
-
-### Cutover And Verification
-
-1. Validate RSS.com parity and record the existing Apple listing in RSS.com.
-2. Redirect the old feed; verify the HTTP chain.
-3. Open existing `1870433419` in Podcasts Connect and choose Refresh Feed.
-4. Confirm the same Apple ID now shows seven episodes, new title/description/art,
-   and working playback.
-5. Remove `RSSVERIFY` only after RSS.com confirmation, then refresh and verify.
-6. Only after the public show is healthy, archive the duplicate Draft show if its
-   inspection found no unique content or subscription setup. Archive is
-   reversible; deletion is not the recovery plan.
+7. Inspect the three manual Draft episode records and separate Draft show
+   `1896845422` for unique audio, channel, subscription, or analytics setup.
+8. After `1870433419` is healthy, archive only nonpublic records that are proven
+   redundant and only when Apple presents a reversible archive control. If an
+   episode has no archive option, leave it rather than deleting it.
 
 ### Failure Branches
 
-- Still five episodes after 24 hours: Apple Support recrawl, not resubmission.
-- Duplicate public episodes: stop publishing and compare GUIDs; make RSS.com
-  restore the originals.
+- Still five episodes after refresh: recheck the public Anchor feed, the RSS URL,
+  Availability, Last Refresh, and Draft conflicts. Leave Apple unused while
+  diagnosing; do not resubmit or create a replacement.
+- Duplicate public episodes: stop and compare GUIDs and Draft records. Repair the
+  existing listing without republishing episodes under new GUIDs.
 - Show disappears: check Availability/status and restore the existing show; do
   not submit a new one.
-- Redirect fails: keep the old feed live and repair the redirect before posting
-  at RSS.com.
-- Old feed accidentally removed: edit the RSS URL on the existing Apple show if
-  available and contact Spotify and Apple Support immediately.
+- Feed URL is wrong: edit the RSS URL on the existing show to the exact Anchor
+  feed, save, refresh once, and verify the same show ID.
 
 Official references are listed at the end of this manual.
 
 ## 12. Coordinated Episode Title Transition
 
-Do this only after host migration and seven-episode directory parity are stable.
+The source and long-form video portions of this transition are complete.
+Continue directory, Instagram, and artwork convergence without changing GUIDs
+or remote content IDs.
 
 1. Export a crosswalk containing episode number, GUID, current title, approved
    new title, and every remote content ID.
-2. Review `publishing/episode-title-migration.json` and approve all seven new
-   public titles before changing any platform.
-3. Ensure RSS.com has structured episode numbers 1-7. The current Anchor feed
-   carries this field only for Episodes 1-3, so visible numbers cannot be removed
-   safely until Episodes 4-7 receive their structured numbers.
+2. Use the seven approved titles in `publishing/episode-title-migration.json`.
+3. In Spotify for Creators, set structured episode numbers 1-7. Completed and
+   verified in the canonical feed on August 5, 2026.
 4. Update publisher schema/tests to allow public titles without the prefix while
    retaining required `episodeNumber`.
-5. Update RSS.com titles without changing GUID, enclosure, date, or episode
-   number metadata.
+5. Update the Anchor-hosted public titles without changing GUID, enclosure,
+   publication date, or structured episode-number metadata.
 6. Update Supabase and checked-in recovery data in the same maintenance window.
    Change `episodeDisplayTitle` so the website does not re-add the prefix.
-7. Update direct video titles on Spotify video, YouTube, Vimeo, and Rumble.
+7. Update direct video titles and descriptions on YouTube, Vimeo, and Rumble.
+   Completed on August 5, 2026: YouTube and Vimeo public readback and Rumble's
+   authenticated post-save readback match the catalog. Existing video IDs, URLs,
+   visibility, licensing, and monetization settings were preserved.
 8. Update Instagram captions only where the old numbered title is presented as
    the primary title; do not erase engagement history merely for cosmetic copy.
 9. Replace title-bearing thumbnails using the new asset templates.
-10. Refresh Apple and verify Apple/Spotify/Amazon propagation.
+10. After RSS.com cutover, update existing Apple show `1870433419`, then submit
+    the final feed once to Amazon and verify Apple/Spotify/Amazon propagation.
 11. Run a cross-platform audit and keep the crosswalk as evidence.
 
 Do not try to make the internet change atomically. Make the source changes in a
@@ -509,7 +578,7 @@ splash gate or one universal splash image.
 |---|---|---|
 | Master logo | Vector plus transparent PNG | Wordmark, stacked lockup, standalone mark |
 | Social avatar | 1200 x 1200 master | Real approved headshot, circle-safe |
-| Podcast show cover | 3000 x 3000 JPG, RGB | RSS.com, Apple, Spotify, Amazon |
+| Podcast show cover | 3000 x 3000 JPG, RGB | Spotify/Anchor, Apple, Amazon |
 | Long-video thumbnail | 3840 x 2160 master; 1920 x 1080 derivative | YouTube, Vimeo, Rumble, website |
 | Reel cover | 1080 x 1920 master with center-safe focal area | Instagram |
 | Website share image | 1200 x 630 | Open Graph/social links |
@@ -545,10 +614,13 @@ splash gate or one universal splash image.
 - Episode thumbnails come from remote Vimeo fallback URLs. Sync scripts and
   Supabase recovery data must be changed so approved local art is not overwritten.
 
-Store approved masters and an asset manifest under `publishing/brand/` before
-remote replacement. Use a new podcast-cover filename after migration so Apple
-notices the artwork update. Either provide unique 3000 x 3000 episode art or
-omit it; do not blindly repeat the show cover for every episode.
+Store approved binary masters in the project-scoped Dropbox tree, register them
+in `publishing/master-catalog.json`, and verify their hashes before remote
+replacement. Keep only briefs, templates, and small intentional repository
+assets under `publishing/brand/`. Use a new podcast-cover filename/URL at the
+canonical host so Apple notices the artwork update. Either provide unique 3000 x
+3000 episode art or omit it; do not blindly repeat the show cover for every
+episode.
 
 ## 14. Website, Supabase, And Deployment
 
@@ -606,26 +678,30 @@ receive direct write access to contact/newsletter tables.
 6. Repair the smallest reversible layer and verify independently.
 7. Update this manual/state before resuming.
 
-### RSS Import Or Feed Parity Fails
+### RSS.com Contacts Or Provisions A Feed
 
-- Keep Anchor canonical; do not redirect.
-- Check HTTP status, item count, exact GUID set, duplicate GUIDs, enclosures,
-  metadata, byte ranges, oldest/newest playback, and redirect chain.
-- If the old-slug RSS.com feed is still empty, wait for supported import/support.
-- Send RSS.com the comparison evidence; never populate the empty show manually.
+- Keep Anchor canonical; do not redirect or publish into the RSS.com show.
+- Record the confirmation/reply and candidate feed in
+  `publishing/hosting-migration.json` without changing directory settings.
+- Continue the active import runbook: verify HTTP status, exact GUID set,
+  enclosures, metadata, byte ranges, oldest/newest playback, and the proposed
+  redirect chain before requesting cutover approval.
 
 ### Apple Missing Or Duplicate Episodes
 
 - Preserve public show ID and GUIDs.
-- Refresh once, wait up to 24 hours, then ask Apple Support to recrawl.
+- Verify the clean Anchor feed and exact RSS URL, then refresh the existing show
+  once and allow normal propagation time.
 - Compare feed GUIDs before touching Draft records.
-- Do not submit a new show, delete the live show, or republish with new GUIDs.
+- Inspect and archive only safe, redundant nonpublic/manual Drafts using a
+  reversible control. Do not submit a new show, delete the live show, or
+  republish with new GUIDs.
 
 ### Spotify/Apple/Amazon Metadata Is Stale
 
 - Verify the canonical feed first.
 - Record feed value, directory value, and Last Refresh/check time.
-- Allow documented propagation time, then refresh/support the existing listing.
+- Allow documented propagation time, then refresh the existing listing.
 - Do not hand-edit downstream copy into a second source of truth when RSS owns it.
 
 ### Upload Times Out Or Looks Duplicated
@@ -707,7 +783,7 @@ Chrome.
 - Verify dimensions, RGB/JPG requirements, filename/URL, and feed `<itunes:image>`.
 - Use a new filename/URL for show-cover replacement.
 - Check circular and 64-pixel previews plus 16:9/9:16 safe areas.
-- Wait for platform cache propagation, then use supported refresh/support.
+- Wait for platform cache propagation, then use the supported refresh control.
 - Change sync precedence before updating website art so fallback URLs cannot undo it.
 
 ### Compromised Account Or Credential
@@ -742,16 +818,20 @@ installer is a priority before machine replacement.
 Every episode:
 
 - run doctor and verify account IDs
+- register shared metadata and logical assets in the master catalog before
+  `prepare`
+- verify each exact binary by SHA-256 and byte size
 - prepare/fingerprint exact assets
 - reconcile every remote upload before release
 - verify public playback/copy/thumbnail on every destination
 - update Supabase, recovery mirrors, and the site
 
-Weekly while migrating:
+Weekly during directory cleanup:
 
-- run migration preflight
-- check RSS.com support and feed availability
+- verify the canonical Anchor title, description, item count, GUIDs, and
+  structured episode numbers
 - compare Apple public episode count and Last Refresh
+- verify Amazon claim/submission state until its stable ID is recorded
 - check browser/keyring session health without exposing secrets
 
 Monthly:
@@ -771,10 +851,14 @@ Quarterly:
 
 ## 17. Current Limitations And Roadmap
 
-1. Finish supported RSS.com import and guarded cutover.
-2. Recover Apple's missing Episodes 1-2 without replacing the show.
-3. Update publisher configuration/schema/tests for RSS.com as audio host.
-4. Implement the coordinated no-number title batch.
+1. Complete the supported RSS.com import, parity checks, approved slug, and
+   separately approved redirect without changing GUIDs.
+2. Recover Apple's missing Episodes 1-2 in existing show `1870433419`, then
+   update that same show during cutover.
+3. Submit the final canonical RSS.com feed once to Amazon and record its stable
+   ID/URL.
+4. Reconcile Instagram captions that use old numbered titles; the Anchor,
+   website, YouTube, Vimeo, and Rumble batch is complete.
 5. Produce and approve the logo, show cover, avatar, thumbnail, Reel, banner, OG,
    sting, and end-screen system.
 6. Prevent sync scripts from overwriting approved custom artwork.
@@ -784,6 +868,9 @@ Quarterly:
 9. Version and test workstation-wrapper installation/recovery.
 10. Build a small authenticated Supabase editorial/import tool after the release
     workflow is stable.
+11. Configure the project-scoped Dropbox root, replace unmounted placeholder
+    asset records with measured hashes/sizes, and complete independent path
+    binding for production episode jobs.
 
 ## 18. Official References
 
@@ -807,6 +894,13 @@ Quarterly:
 
 ## 19. Change Log
 
+- August 5, 2026: temporarily parked RSS.com and made Spotify/Anchor canonical,
+  approved removal of `RSSVERIFY` and the seven-title batch, and changed
+  Apple/Amazon procedures to preserve the existing listings.
+- August 5, 2026: owner reconfirmed the RSS.com migration; corrected the empty
+  show's name/description and submitted a fresh supported self-service import.
+  Anchor stays canonical and Amazon stays empty until the import/cutover gates
+  pass.
 - August 5, 2026: created the ecosystem manual; recorded current migration,
   account, Apple recovery, direct-management, browser/keyring, title-transition,
   visual-system, website, and incident procedures; corrected private migration

@@ -1,11 +1,11 @@
 {
-  "brand": "Dr. M Experienced, with Dr. David Musnick",
-  "brandDescription": "Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine.",
-  "rssFeed": "https://anchor.fm/s/10e1b0328/podcast/rss",
   "pendingHostingMigration": {
+    "active": true,
     "target": "rss.com",
     "stateFile": "publishing/hosting-migration.json",
-    "cutoverReady": false
+    "status": "self_service_import_confirmation_pending",
+    "cutoverReady": false,
+    "resumeRequiresExplicitApproval": false
   },
   "podcastDistribution": {
     "canonicalHost": "spotify",

@@ -1,7 +1,13 @@
 {
   "schemaVersion": 1,
   "migrationId": "spotify-to-rss-com-2026-08",
-  "status": "ownership_verification_submitted_awaiting_import",
+  "status": "self_service_import_confirmation_pending",
+  "decision": {
+    "active": true,
+    "decidedAt": "2026-08-05T21:17:39Z",
+    "reason": "The owner reconfirmed the RSS.com migration. RSS.com now exposes a supported self-service import flow, so migration work resumed without authorizing a redirect or directory submission.",
+    "resumeRequiresExplicitApproval": false
+  },
   "source": {
     "provider": "spotify_for_creators",
     "feedUrl": "https://anchor.fm/s/10e1b0328/podcast/rss",
@@ -16,22 +22,46 @@
       "e4bde82f-54e6-43a2-a50a-4044f9cdbe8e",
       "1e40e02b-b217-477c-9cc3-4271cb304c23",
       "c9b853b6-a828-4012-9998-217919ff9163"
-    ]
+    ],
+    "lastVerifiedAt": "2026-08-05T21:44:37Z",
+    "lastVerifiedSha256": "1a5bc72c191152d10a9f55548a9690045ab2e93856cd886c4a05073b281dde8c",
+    "verification": {
+      "exactTitle": true,
+      "exactDescription": true,
+      "verificationTokenPresent": false,
+      "episodeCount": 7,
+      "uniqueGuidCount": 7,
+      "guidSetMatchesBaseline": true,
+      "structuredEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7],
+      "legacyTitleCount": 0
+    }
   },
   "destination": {
     "provider": "rss.com",
     "candidateFeedUrl": "https://media.rss.com/dr-m-s-experienced-functional-and-sports-medicine/feed.xml",
-    "candidateStatus": "manually_created_empty_show_requires_rss_com_review",
+    "candidateStatus": "empty_show_brand_corrected_import_confirmation_pending",
+    "candidateMetadataCorrectedAt": "2026-08-05T21:17:39Z",
+    "candidateMetadataVerifiedAt": "2026-08-05T21:44:37Z",
+    "candidateFeedSha256": "ad5fbf254588ec7f41b1f0d2b09e8226071cabd9bf2e9208794515ee580ba447",
+    "candidateMetadataVerified": {
+      "titleMatches": true,
+      "descriptionMatches": true,
+      "episodeCount": 0
+    },
     "proposedPermanentSlug": "dr-m-experienced",
     "proposedPermanentFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
     "permanentSlugApproved": true,
     "permanentSlugApprovedAt": "2026-08-05T06:09:16Z",
     "permanentFeedUrlApproved": false,
-    "importRequestSubmittedAt": "2026-08-05T04:32:55Z",
+    "importRequestSubmittedAt": "2026-08-05T21:17:39Z",
+    "importMethod": "supported_self_service_switch_flow",
+    "importConfirmationStatus": "email_confirmation_pending",
+    "importConfirmationLastCheckedAt": "2026-08-05T21:44:37Z",
     "ownershipVerification": {
       "token": "RSSVERIFY",
       "publicSourceFeedObserved": true,
       "publicSourceFeedObservedAt": "2026-08-05T17:22:25Z",
+      "removedFromSourceFeedAt": "2026-08-05T21:04:36Z",
       "specialistEmailReplyStatus": "user_confirmed_sent",
       "specialistEmailReplyRecordedAt": "2026-08-05T17:22:25Z"
     }

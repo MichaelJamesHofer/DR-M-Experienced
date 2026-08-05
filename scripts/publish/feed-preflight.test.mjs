@@ -101,6 +101,28 @@ test("structural comparison accepts equivalent dates and duration formats while 
   assert.equal(comparePodcastFeeds(source, candidate).ok, true);
 });
 
+test("description comparison ignores host-only HTML wrappers and entity serialization", () => {
+  const source = parsePodcastFeed(
+    feedXml({
+      description: "A practical show & useful conversations.",
+      episodes: [{ ...sourceEpisodes[0], description: "First point & second point." }],
+    })
+  );
+  const candidate = parsePodcastFeed(
+    feedXml({
+      description: "<p>A practical show &amp; useful conversations.</p>",
+      episodes: [
+        {
+          ...sourceEpisodes[0],
+          description: "<p>First <strong>point</strong> &amp; second point.</p>",
+        },
+      ],
+    })
+  );
+
+  assert.equal(comparePodcastFeeds(source, candidate).ok, true);
+});
+
 test("comparison fails on counts, duplicate or changed GUIDs, and per-GUID metadata changes", () => {
   const source = parsePodcastFeed(feedXml({ episodes: sourceEpisodes }));
   const candidate = parsePodcastFeed(

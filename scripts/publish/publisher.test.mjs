@@ -5,6 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { catalogHash, episodeHash, loadCatalog } from "./catalog.mjs";
 import {
   approvalRecordProblems,
   buildApprovalSnapshot,
@@ -13,9 +14,11 @@ import {
   hashFile,
   hashSnapshot,
   hashText,
+  hostingMigrationIsActive,
   normalizeManifest,
   packetIntegrityProblems,
   renderApprovalPacket,
+  resolveDestinationCopy,
   reviewDocumentProblems,
   validateMediaAssets,
   validateManifest,
@@ -52,7 +55,7 @@ function validManifest() {
   return {
     episodeNumber: 8,
     slug: "episode-8",
-    title: "Episode 8: Test",
+    title: "Test",
     description: "Approved description",
     publishAt: null,
     explicit: false,
@@ -107,7 +110,7 @@ function validApprovalPacket() {
   const manifest = {
     ...validManifest(),
     episodeNumber: 47,
-    title: "Episode 47: Test",
+    title: "Test",
     category: "Health & Fitness",
     publishAt: "2026-08-15T15:00:00.000Z",
     copy: { youtube: "Approved YouTube copy" },
@@ -127,6 +130,12 @@ function validApprovalPacket() {
     assets,
     targets,
     warnings: validation.warnings,
+    catalogBinding: {
+      revision: 1,
+      catalogHash: "c".repeat(64),
+      episodeNumber: manifest.episodeNumber,
+      episodeHash: "d".repeat(64),
+    },
   });
   return {
     id: "episode-8-20260804t120000z",
@@ -168,21 +177,23 @@ test("manifest validation enforces approval flags and known targets", () => {
   assert.ok(result.errors.some((error) => error.includes("Unknown target")));
 });
 
-test("manifest validation requires matching episode numbers in the title", () => {
+test("manifest validation keeps episode numbers structured and rejects legacy title prefixes", () => {
   const missingNumber = validManifest();
   delete missingNumber.episodeNumber;
-  let result = validateManifest(missingNumber);
+  const result = validateManifest(missingNumber);
   assert.ok(result.errors.some((error) => error.includes("episodeNumber")), result.errors.join("\n"));
 
-  const missingPrefix = validManifest();
-  missingPrefix.title = "Test";
-  result = validateManifest(missingPrefix);
-  assert.ok(result.errors.some((error) => error.includes('title must begin with "Episode 8:"')), result.errors.join("\n"));
+  assert.deepEqual(validateManifest(validManifest()).errors, []);
 
-  const mismatched = validManifest();
-  mismatched.title = "Episode 9: Test";
-  result = validateManifest(mismatched);
-  assert.ok(result.errors.some((error) => error.includes("must match episodeNumber")), result.errors.join("\n"));
+  for (const title of ["Episode 8: Test", "Episode 9 - Test", "Ep. #8: Test"]) {
+    const legacyTitle = validManifest();
+    legacyTitle.title = title;
+    const legacyResult = validateManifest(legacyTitle);
+    assert.ok(
+      legacyResult.errors.some((error) => error.includes("must omit the leading episode number")),
+      `${title} was accepted`
+    );
+  }
 });
 
 test("manifest validation rejects fields and values excluded by the JSON schema", () => {
@@ -346,6 +357,72 @@ test("target plans bind stable destination IDs and every release control", () =>
   assert.notEqual(hashSnapshot(plan), hashSnapshot(changedRelease));
 });
 
+test("direct video copy defaults to plain text, preserves overrides, and never generates an Instagram caption", () => {
+  const manifest = {
+    ...validManifest(),
+    description: "<p>Master <strong>description</strong> &amp; details.</p><ul><li>First</li></ul>",
+    copy: { vimeo: "Exact Vimeo override", instagram: "Exact Reel caption" },
+  };
+
+  assert.deepEqual(resolveDestinationCopy(manifest, "youtube"), {
+    approvedCopy: "Master description & details.\n\n- First",
+    copySource: "description (deterministic YouTube-safe plain-text projection)",
+  });
+  assert.deepEqual(resolveDestinationCopy(manifest, "rumble"), {
+    approvedCopy: "Master description & details.\n\n- First",
+    copySource: "description (deterministic plain-text projection)",
+  });
+  assert.deepEqual(resolveDestinationCopy(manifest, "vimeo"), {
+    approvedCopy: "Exact Vimeo override",
+    copySource: "copy.vimeo",
+  });
+  const plan = buildTargetPlan(
+    validPlatformConfig(),
+    {
+      ...manifest,
+      releasePlan: {
+        youtube: resolvedReleasePlan("youtube"),
+        vimeo: resolvedReleasePlan("vimeo"),
+        rumble: resolvedReleasePlan("rumble"),
+      },
+      targets: ["youtube", "vimeo", "rumble"],
+    },
+    { fullVideo: { sha256: "b".repeat(64) } }
+  );
+  assert.deepEqual(
+    plan.map(({ id, approvedCopy, copySource }) => ({ id, approvedCopy, copySource })),
+    [
+      {
+        id: "youtube",
+        approvedCopy: "Master description & details.\n\n- First",
+        copySource: "description (deterministic YouTube-safe plain-text projection)",
+      },
+      { id: "vimeo", approvedCopy: "Exact Vimeo override", copySource: "copy.vimeo" },
+      {
+        id: "rumble",
+        approvedCopy: "Master description & details.\n\n- First",
+        copySource: "description (deterministic plain-text projection)",
+      },
+    ]
+  );
+  assert.deepEqual(resolveDestinationCopy(manifest, "instagram"), {
+    approvedCopy: "Exact Reel caption",
+    copySource: "copy.instagram",
+  });
+
+  delete manifest.copy.instagram;
+  assert.deepEqual(resolveDestinationCopy(manifest, "instagram"), {
+    approvedCopy: null,
+    copySource: "not provided",
+  });
+  const validation = validateManifest({
+    ...manifest,
+    releasePlan: { instagram: resolvedReleasePlan("instagram") },
+    targets: ["instagram"],
+  });
+  assert.ok(validation.warnings.some((warning) => warning.includes("no caption will be generated")));
+});
+
 test("target planning blocks missing IDs and unresolved release choices", () => {
   const manifest = {
     ...validManifest(),
@@ -457,6 +534,13 @@ test("approval rendering is deterministic and includes every publishing field", 
   assert.match(rendered, /youtube/);
   assert.match(rendered, /unchanged/);
   assert.match(rendered, /disabled/);
+  assert.match(rendered, /Master catalog binding/);
+  assert.match(rendered, new RegExp("c{64}"));
+  assert.match(rendered, new RegExp("d{64}"));
+
+  const changedBinding = structuredClone(packet.snapshot);
+  changedBinding.catalogBinding.episodeHash = "e".repeat(64);
+  assert.notEqual(hashSnapshot(packet.snapshot), hashSnapshot(changedBinding));
 });
 
 test("packet and review integrity helpers detect stale or tampered state", () => {
@@ -476,6 +560,16 @@ test("packet and review integrity helpers detect stale or tampered state", () =>
   unsupportedPacket.snapshot.schemaVersion = 99;
   unsupportedPacket.approvalHash = hashSnapshot(unsupportedPacket.snapshot);
   assert.ok(packetIntegrityProblems(unsupportedPacket, packet.id).some((problem) => problem.includes("schema version")));
+
+  const invalidBinding = structuredClone(packet);
+  invalidBinding.snapshot.catalogBinding.episodeNumber += 1;
+  invalidBinding.approvalHash = hashSnapshot(invalidBinding.snapshot);
+  assert.ok(packetIntegrityProblems(invalidBinding, packet.id).some((problem) => problem.includes("master episode number")));
+
+  const missingBinding = structuredClone(packet);
+  delete missingBinding.snapshot.catalogBinding;
+  missingBinding.approvalHash = hashSnapshot(missingBinding.snapshot);
+  assert.ok(packetIntegrityProblems(missingBinding, packet.id).some((problem) => problem.includes("binding is missing")));
 });
 
 test("approval records remain bound to the packet and exact reviewed document", () => {
@@ -542,6 +636,43 @@ test("private writers provide atomic exclusive creation under contention", async
   );
 });
 
+test("hosting migration gate requires both migration records to remain active", () => {
+  assert.equal(hostingMigrationIsActive({ decision: { active: true } }, { active: true }), true);
+  assert.equal(hostingMigrationIsActive({ decision: { active: false } }, { active: true }), false);
+  assert.equal(hostingMigrationIsActive({ decision: { active: true } }, { active: false }), false);
+  assert.equal(hostingMigrationIsActive(null, { active: true }), false);
+});
+
+test("CLI prepare rejects episodes missing from or drifting from the master catalog before inspecting media", async () => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "drm-publisher-catalog-bind-test-"));
+  const cliPath = fileURLToPath(new URL("./cli.mjs", import.meta.url));
+  const examplePath = fileURLToPath(new URL("../../publishing/episode.example.json", import.meta.url));
+  const example = JSON.parse(await fs.readFile(examplePath, "utf8"));
+  const runCli = (manifestPath) =>
+    spawnSync(process.execPath, [cliPath, "prepare", manifestPath], {
+      encoding: "utf8",
+      env: { ...process.env, DRM_PUBLISH_HOME: path.join(directory, "state"), HOME: directory },
+    });
+
+  try {
+    const unregisteredPath = path.join(directory, "unregistered.json");
+    await fs.writeFile(unregisteredPath, `${JSON.stringify(example, null, 2)}\n`);
+    const unregistered = runCli(unregisteredPath);
+    assert.equal(unregistered.status, 1);
+    assert.match(unregistered.stderr, /is not in publishing\/master-catalog\.json/);
+    assert.doesNotMatch(unregistered.stdout, /Inspecting/);
+
+    const driftedPath = path.join(directory, "drifted.json");
+    await fs.writeFile(driftedPath, `${JSON.stringify({ ...example, episodeNumber: 1 }, null, 2)}\n`);
+    const drifted = runCli(driftedPath);
+    assert.equal(drifted.status, 1);
+    assert.match(drifted.stderr, /Manifest differs from the master catalog/);
+    assert.doesNotMatch(drifted.stdout, /Inspecting/);
+  } finally {
+    await fs.rm(directory, { recursive: true, force: true });
+  }
+});
+
 test("CLI fails closed on review tampering, bad confirmation, and stale assets", async () => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "drm-publisher-cli-test-"));
   const state = path.join(directory, "state");
@@ -557,6 +688,21 @@ test("CLI fails closed on review tampering, bad confirmation, and stale assets",
     await fs.writeFile(assetPath, "approved asset", { mode: 0o600 });
     const stats = await fs.stat(assetPath);
     const packet = validApprovalPacket();
+    const catalog = await loadCatalog();
+    const catalogEpisode = catalog.episodes[0];
+    Object.assign(packet.snapshot.manifest, {
+      episodeNumber: catalogEpisode.number,
+      slug: catalogEpisode.slug,
+      title: catalogEpisode.title,
+      description: catalogEpisode.description.full,
+      explicit: catalogEpisode.contentFlags.explicit,
+    });
+    packet.snapshot.catalogBinding = {
+      revision: catalog.revision,
+      catalogHash: catalogHash(catalog),
+      episodeNumber: catalogEpisode.number,
+      episodeHash: episodeHash(catalogEpisode),
+    };
     packet.snapshot.assets.fullVideo.path = assetPath;
     packet.snapshot.assets.fullVideo.sizeBytes = stats.size;
     packet.snapshot.assets.fullVideo.sha256 = await hashFile(assetPath);
@@ -572,6 +718,18 @@ test("CLI fails closed on review tampering, bad confirmation, and stale assets",
     const shown = runCli("show", packet.id);
     assert.equal(shown.status, 0, shown.stderr);
     assert.equal(shown.stdout, reviewDocument);
+
+    const staleCatalogPacket = structuredClone(packet);
+    staleCatalogPacket.snapshot.catalogBinding.catalogHash = "0".repeat(64);
+    staleCatalogPacket.approvalHash = hashSnapshot(staleCatalogPacket.snapshot);
+    const staleCatalogReview = renderApprovalPacket(staleCatalogPacket);
+    await fs.writeFile(path.join(jobDirectory, "packet.json"), `${JSON.stringify(staleCatalogPacket, null, 2)}\n`, { mode: 0o600 });
+    await fs.writeFile(path.join(jobDirectory, "approval.md"), staleCatalogReview, { mode: 0o600 });
+    const staleCatalog = runCli("show", packet.id);
+    assert.equal(staleCatalog.status, 1);
+    assert.match(staleCatalog.stderr, /master catalog binding is stale/i);
+    await fs.writeFile(path.join(jobDirectory, "packet.json"), `${JSON.stringify(packet, null, 2)}\n`, { mode: 0o600 });
+    await fs.writeFile(path.join(jobDirectory, "approval.md"), reviewDocument, { mode: 0o600 });
 
     for (const readiness of ["destination_id_required", "destination_id_invalid", "release_choices_required"]) {
       const blockedPacket = structuredClone(packet);

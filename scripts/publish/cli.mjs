@@ -5,7 +5,18 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { runPreflight } from "./feed-preflight.mjs";
+import { parsePodcastFeed, runPreflight } from "./feed-preflight.mjs";
+import {
+  catalogAssetBindingProblems,
+  catalogHash,
+  comparePublishedCatalogFeed,
+  episodeHash,
+  findEpisode,
+  loadCatalog,
+  manifestCatalogProblems,
+  resolveCatalogAsset,
+  sourcesConfigPath,
+} from "./catalog.mjs";
 import {
   approvalRecordProblems,
   buildApprovalSnapshot,
@@ -13,6 +24,7 @@ import {
   configHome,
   hashText,
   hashSnapshot,
+  hostingMigrationIsActive,
   inspectAsset,
   invalidDestinationIds,
   missingDestinationIds,
@@ -47,6 +59,17 @@ function usage() {
 
 async function readJson(filePath) {
   return JSON.parse(await fs.readFile(filePath, "utf8"));
+}
+
+async function loadPlatformConfig(catalog = null) {
+  const master = catalog ?? (await loadCatalog());
+  const routing = await readJson(platformConfigPath);
+  return {
+    ...routing,
+    brand: master.show.names.full,
+    brandDescription: master.show.profileCopy.short,
+    rssFeed: master.show.canonicalPodcastFeed.url,
+  };
 }
 
 function timestampId() {
@@ -91,7 +114,25 @@ async function prepare(manifestArgument) {
     throw new Error(`Manifest validation failed:\n- ${initialValidation.errors.join("\n- ")}`);
   }
 
-  const platformConfig = await readJson(platformConfigPath);
+  const catalog = await loadCatalog();
+  const catalogEpisode = findEpisode(catalog, sourceManifest.episodeNumber);
+  if (!catalogEpisode) {
+    throw new Error(
+      `Episode ${sourceManifest.episodeNumber} is not in publishing/master-catalog.json. Add its approved metadata there before preparing a publishing job.`
+    );
+  }
+  const catalogProblems = manifestCatalogProblems(sourceManifest, catalogEpisode);
+  if (catalogProblems.length) {
+    throw new Error(`Manifest differs from the master catalog:\n- ${catalogProblems.join("\n- ")}`);
+  }
+  const catalogBinding = {
+    revision: catalog.revision,
+    catalogHash: catalogHash(catalog),
+    episodeNumber: catalogEpisode.number,
+    episodeHash: episodeHash(catalogEpisode),
+  };
+
+  const platformConfig = await loadPlatformConfig(catalog);
   const { id, directory } = await createUniqueJobDirectory(sourceManifest.slug);
   let completed = false;
   try {
@@ -108,10 +149,54 @@ async function prepare(manifestArgument) {
       assets[key] = await inspectAsset(filePath, key);
     }
 
+    const catalogAssetValidation = catalogAssetBindingProblems(catalog, catalogEpisode, assets);
+    if (catalogAssetValidation.errors.length) {
+      throw new Error(`Media differs from the master catalog:\n- ${catalogAssetValidation.errors.join("\n- ")}`);
+    }
+
+    const catalogPathWarnings = [];
+    const sourceConfig = sourcesConfigPath();
+    if (await exists(sourceConfig)) {
+      const pathProblems = [];
+      for (const [role, inspected] of Object.entries(assets)) {
+        if (!inspected) continue;
+        const assetId = catalogEpisode.assetRefs?.[role];
+        if (!assetId) continue;
+        const [expectedPath, actualPath] = await Promise.all([
+          resolveCatalogAsset(catalog, assetId, { configPath: sourceConfig }),
+          fs.realpath(inspected.path),
+        ]);
+        if (expectedPath !== actualPath) {
+          pathProblems.push(`${role} path does not resolve to master catalog asset ${assetId}.`);
+        }
+      }
+      if (pathProblems.length) {
+        throw new Error(`Media paths differ from the master catalog:\n- ${pathProblems.join("\n- ")}`);
+      }
+    } else if (Object.values(assets).some(Boolean)) {
+      catalogPathWarnings.push(
+        `Dropbox project root is not configured at ${sourceConfig}; catalog asset paths cannot be independently resolved on this workstation.`
+      );
+    }
+
     const mediaValidation = validateMediaAssets(assets, normalizedManifest);
-    const warnings = [...new Set([...initialValidation.warnings, ...mediaValidation.warnings])];
+    const warnings = [
+      ...new Set([
+        ...initialValidation.warnings,
+        ...catalogAssetValidation.warnings,
+        ...catalogPathWarnings,
+        ...mediaValidation.warnings,
+      ]),
+    ];
     const targets = buildTargetPlan(platformConfig, normalizedManifest, assets, mediaValidation.targetErrors);
-    const snapshot = buildApprovalSnapshot({ platformConfig, manifest: normalizedManifest, assets, targets, warnings });
+    const snapshot = buildApprovalSnapshot({
+      platformConfig,
+      manifest: normalizedManifest,
+      assets,
+      targets,
+      warnings,
+      catalogBinding,
+    });
     const packet = {
       id,
       status: "prepared",
@@ -144,6 +229,32 @@ async function loadVerifiedJob(jobId) {
   const reviewProblems = reviewDocumentProblems(packet, storedReview);
   if (reviewProblems.length) {
     throw new Error(`Stored review integrity check failed:\n- ${reviewProblems.join("\n- ")}`);
+  }
+
+  const catalog = await loadCatalog();
+  const binding = packet.snapshot.catalogBinding;
+  const catalogProblems = [];
+  if (binding.revision !== catalog.revision) {
+    catalogProblems.push(`catalog revision changed from ${binding.revision} to ${catalog.revision}`);
+  }
+  if (binding.catalogHash !== catalogHash(catalog)) {
+    catalogProblems.push("catalog SHA-256 no longer matches");
+  }
+  const catalogEpisode = findEpisode(catalog, binding.episodeNumber);
+  if (!catalogEpisode) {
+    catalogProblems.push(`episode ${binding.episodeNumber} is no longer present`);
+  } else {
+    if (binding.episodeHash !== episodeHash(catalogEpisode)) {
+      catalogProblems.push(`episode ${binding.episodeNumber} SHA-256 no longer matches`);
+    }
+    catalogProblems.push(...manifestCatalogProblems(packet.snapshot.manifest, catalogEpisode));
+  }
+  if (catalogProblems.length) {
+    throw new Error(
+      `Stored packet master catalog binding is stale; prepare a new job:\n- ${[
+        ...new Set(catalogProblems),
+      ].join("\n- ")}`
+    );
   }
 
   return {
@@ -278,6 +389,14 @@ async function migrationCheck(args) {
   if (unknown.length) throw new Error(`Unknown migration-check option: ${unknown[0]}`);
 
   const migration = await readJson(hostingMigrationPath);
+  const platformConfig = await loadPlatformConfig();
+  if (!hostingMigrationIsActive(migration, platformConfig.pendingHostingMigration)) {
+    process.stdout.write(
+      `Hosting migration is parked. Anchor remains canonical at ${platformConfig.rssFeed}.\n` +
+        `No feed preflight was run; resuming the migration requires explicit approval.\n`
+    );
+    return;
+  }
   const source = migration.source?.feedUrl;
   const candidate = migration.destination?.candidateFeedUrl;
   if (!source || !candidate) throw new Error("Hosting migration source and candidate feed URLs are required.");
@@ -301,7 +420,8 @@ async function migrationCheck(args) {
 }
 
 async function doctor() {
-  const platformConfig = await readJson(platformConfigPath);
+  const catalog = await loadCatalog();
+  const platformConfig = await loadPlatformConfig(catalog);
   let hostingMigration = null;
   try {
     hostingMigration = await readJson(hostingMigrationPath);
@@ -315,6 +435,30 @@ async function doctor() {
     ffmpeg: executableStatus("ffmpeg"),
     ffprobe: executableStatus("ffprobe"),
   };
+  let catalogStatus = {
+    valid: false,
+    revision: null,
+    episodeCount: 0,
+    hash: null,
+    verifiedAssetCount: 0,
+    assetCount: 0,
+    sourcesConfigured: await exists(sourcesConfigPath()),
+    error: null,
+  };
+  try {
+    const assets = Object.values(catalog.assetRegistry || {});
+    catalogStatus = {
+      ...catalogStatus,
+      valid: true,
+      revision: catalog.revision,
+      episodeCount: catalog.episodes.length,
+      hash: catalogHash(catalog),
+      verifiedAssetCount: assets.filter((asset) => asset.status === "verified").length,
+      assetCount: assets.length,
+    };
+  } catch (error) {
+    catalogStatus.error = error.message;
+  }
   const setup = {
     youtubeClient: await exists(path.join(credentials, "youtube", "client_secret.json")),
     youtubeToken: await exists(path.join(credentials, "youtube", "token.json")),
@@ -329,18 +473,58 @@ async function doctor() {
   const invalidIdentities = Object.fromEntries(
     Object.entries(platformConfig.platforms).map(([id, platform]) => [id, invalidDestinationIds(id, platform)])
   );
+  const hostingMigrationActive = hostingMigrationIsActive(
+    hostingMigration,
+    platformConfig.pendingHostingMigration
+  );
 
-  let rss = { reachable: false, title: null };
+  let rss = {
+    reachable: false,
+    title: null,
+    descriptionMatches: false,
+    verificationTokenPresent: false,
+    episodeCount: 0,
+    uniqueGuidCount: 0,
+    structuredEpisodeNumbers: [],
+    legacyTitleCount: 0,
+    expectedEpisodeCount: catalog.episodes.filter((episode) => episode.publicationState === "published").length,
+    catalogGuidSetMatches: false,
+    catalogTitlesMatch: false,
+    catalogEpisodeNumbersMatch: false,
+    catalogMatches: false,
+  };
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000);
     const response = await fetch(platformConfig.rssFeed, { signal: controller.signal });
     clearTimeout(timeout);
     const body = await response.text();
-    const title = body.match(/<channel>[\s\S]*?<title>(?:<!\[CDATA\[)?([^<\]]+)/i)?.[1]?.trim() || null;
-    rss = { reachable: response.ok, title };
+    const feed = parsePodcastFeed(body);
+    const catalogComparison = comparePublishedCatalogFeed(catalog, feed);
+    const guidCount = new Set(feed.episodes.map((episode) => episode.guid).filter(Boolean)).size;
+    const structuredEpisodeNumbers = feed.episodes
+      .map((episode) => (episode.episodeNumber == null ? null : Number(episode.episodeNumber)))
+      .filter((episodeNumber) => Number.isInteger(episodeNumber) && episodeNumber > 0)
+      .sort((left, right) => left - right);
+    rss = {
+      reachable: response.ok,
+      title: feed.title,
+      descriptionMatches: feed.description === platformConfig.brandDescription,
+      verificationTokenPresent: feed.description?.includes("RSSVERIFY") ?? false,
+      episodeCount: feed.episodes.length,
+      uniqueGuidCount: guidCount,
+      structuredEpisodeNumbers,
+      legacyTitleCount: feed.episodes.filter((episode) =>
+        /^(?:Episode|Ep\.?)\s*#?\s*\d+\b/i.test(episode.title ?? "")
+      ).length,
+      expectedEpisodeCount: catalogComparison.expectedEpisodeCount,
+      catalogGuidSetMatches: catalogComparison.guidSetMatches && catalogComparison.uniqueGuids,
+      catalogTitlesMatch: catalogComparison.titleMatches,
+      catalogEpisodeNumbersMatch: catalogComparison.structuredNumbersMatch,
+      catalogMatches: catalogComparison.ok,
+    };
   } catch {
-    rss = { reachable: false, title: null };
+    rss.reachable = false;
   }
 
   process.stdout.write(`Dr. M publisher doctor\n`);
@@ -348,9 +532,33 @@ async function doctor() {
   process.stdout.write(`Credentials: ${credentials} (values are never displayed)\n\n`);
   process.stdout.write(`Core tools\n`);
   for (const [name, ready] of Object.entries(core)) process.stdout.write(`- ${name}: ${ready ? "ready" : "missing"}\n`);
-  process.stdout.write(`\nCanonical RSS\n- reachable: ${rss.reachable ? "yes" : "no"}\n- current title: ${rss.title || "unavailable"}\n- desired title: ${platformConfig.brand}\n`);
+  process.stdout.write(
+    `\nMaster catalog\n` +
+      `- valid: ${catalogStatus.valid ? "yes" : "no"}\n` +
+      `- revision / episodes: ${catalogStatus.revision ?? "unavailable"} / ${catalogStatus.episodeCount}\n` +
+      `- hash: ${catalogStatus.hash || "unavailable"}\n` +
+      `- verified assets: ${catalogStatus.verifiedAssetCount} / ${catalogStatus.assetCount}\n` +
+      `- Dropbox project root configured: ${catalogStatus.sourcesConfigured ? "yes" : "no"}\n`
+  );
+  if (catalogStatus.error) process.stdout.write(`- catalog error: ${catalogStatus.error}\n`);
+  process.stdout.write(
+    `\nCanonical RSS\n` +
+      `- reachable: ${rss.reachable ? "yes" : "no"}\n` +
+      `- current title: ${rss.title || "unavailable"}\n` +
+      `- desired title: ${platformConfig.brand}\n` +
+      `- canonical description: ${rss.descriptionMatches ? "yes" : "no"}\n` +
+      `- RSSVERIFY present: ${rss.verificationTokenPresent ? "yes" : "no"}\n` +
+      `- expected published episodes: ${rss.expectedEpisodeCount}\n` +
+      `- episodes / unique GUIDs: ${rss.episodeCount} / ${rss.uniqueGuidCount}\n` +
+      `- structured episode numbers: ${rss.structuredEpisodeNumbers.join(", ") || "none"}\n` +
+      `- legacy numbered titles: ${rss.legacyTitleCount}\n` +
+      `- catalog GUID set: ${rss.catalogGuidSetMatches ? "exact" : "mismatch"}\n` +
+      `- catalog titles: ${rss.catalogTitlesMatch ? "exact" : "mismatch"}\n` +
+      `- catalog episode numbers: ${rss.catalogEpisodeNumbersMatch ? "exact" : "mismatch"}\n`
+  );
   if (hostingMigration) {
     process.stdout.write(`\nHosting migration\n`);
+    process.stdout.write(`- active: ${hostingMigrationActive ? "yes" : "no"}\n`);
     process.stdout.write(`- target: ${hostingMigration.destination.provider}\n`);
     process.stdout.write(`- status: ${hostingMigration.status}\n`);
     process.stdout.write(`- candidate: ${hostingMigration.destination.candidateStatus}\n`);
@@ -374,14 +582,28 @@ async function doctor() {
   }
   process.stdout.write(`- Spotify creator upload: manual browser step\n- Rumble VOD upload: manual browser step\n`);
 
-  if (hostingMigration && !platformConfig.pendingHostingMigration?.cutoverReady) {
+  if (hostingMigrationActive && !platformConfig.pendingHostingMigration?.cutoverReady) {
     process.stdout.write(
       `\nAction: complete and validate the supported RSS.com import. Keep the Anchor feed canonical and do not redirect or rename the remote show yet.\n`
     );
   } else if (rss.title && rss.title !== platformConfig.brand) {
     process.stdout.write(`\nAction: rename the show at the verified canonical host so the title can fan out to podcast directories.\n`);
+  } else if (
+    !rss.descriptionMatches ||
+    rss.verificationTokenPresent ||
+    !rss.catalogMatches
+  ) {
+    process.stdout.write(
+      `\nAction: finish the approved Spotify metadata batch, then rerun doctor before refreshing Apple or submitting Amazon.\n`
+    );
   }
-  if (Object.values(core).some((ready) => !ready)) process.exitCode = 2;
+  const rssHealthy =
+    rss.reachable &&
+    rss.title === platformConfig.brand &&
+    rss.descriptionMatches &&
+    !rss.verificationTokenPresent &&
+    rss.catalogMatches;
+  if (Object.values(core).some((ready) => !ready) || !rssHealthy) process.exitCode = 2;
 }
 
 async function main() {

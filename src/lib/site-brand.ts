@@ -1,5 +1,6 @@
-export const SITE_NAME = "Dr. M Experienced, with Dr. David Musnick";
-export const SITE_SHORT_NAME = "Dr. M Experienced";
-export const SITE_HOST_LINE = "with Dr. David Musnick";
-export const SITE_DESCRIPTION =
-  "Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine.";
+import siteBrand from "@/data/site-brand.generated.json";
+
+export const SITE_NAME = siteBrand.name;
+export const SITE_SHORT_NAME = siteBrand.shortName;
+export const SITE_HOST_LINE = siteBrand.hostLine;
+export const SITE_DESCRIPTION = siteBrand.description;

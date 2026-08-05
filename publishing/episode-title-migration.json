@@ -1,7 +1,12 @@
 {
   "schemaVersion": 1,
-  "status": "planned_after_rss_and_apple_stabilize",
+  "status": "source_and_long_form_video_platforms_complete_awaiting_directories_instagram_and_artwork",
   "auditedAt": "2026-08-05",
+  "approvedAt": "2026-08-05",
+  "spotifyBatchCompletedAt": "2026-08-05T21:04:36Z",
+  "canonicalRssVerifiedAt": "2026-08-05T21:04:36Z",
+  "longFormVideoBatchCompletedAt": "2026-08-05T22:54:33Z",
+  "canonicalHost": "spotify_for_creators_anchor",
   "policy": {
     "publicTitleFormat": "Primary topic - practical tagline",
     "visibleEpisodeNumberPrefix": false,
@@ -11,19 +16,50 @@
     "preserveUrlsAndSlugsWhenImmutable": true
   },
   "gates": {
-    "rssComCutoverStable": false,
+    "anchorCanonicalHostConfirmed": true,
     "appleHasSevenPublicEpisodes": false,
-    "allProposedTitlesApproved": false,
-    "rssStructuredEpisodeNumbersOneThroughSeven": false,
-    "publisherSupportsUnnumberedPublicTitles": false,
+    "allProposedTitlesApproved": true,
+    "spotifySourceBatchComplete": true,
+    "canonicalRssMetadataVerified": true,
+    "rssStructuredEpisodeNumbersOneThroughSeven": true,
+    "rssGuidIdentityPreserved": true,
+    "publisherSupportsUnnumberedPublicTitles": true,
+    "websiteCatalogTitlesUpdated": true,
+    "directVideoTitlesUpdated": true,
+    "directVideoDescriptionsUpdated": true,
+    "directVideoPersistenceReadbackVerified": true,
     "replacementArtworkReady": false,
-    "maintenanceWindowApproved": false
+    "maintenanceWindowApproved": true
+  },
+  "directPlatformEvidence": {
+    "youtube": {
+      "verifiedAt": "2026-08-05T22:54:33Z",
+      "titleMatchCount": 7,
+      "descriptionMatchCount": 7,
+      "readback": "public watch-page shortDescription",
+      "projection": "deterministic YouTube-safe plain text; angle brackets are written as comparison words"
+    },
+    "vimeo": {
+      "verifiedAt": "2026-08-05T22:54:33Z",
+      "titleMatchCount": 7,
+      "descriptionMatchCount": 7,
+      "readback": "persisted editor plus public oEmbed semantic comparison",
+      "projection": "deterministic plain text represented with Vimeo rich-text lists where applicable"
+    },
+    "rumble": {
+      "verifiedAt": "2026-08-05T22:54:33Z",
+      "titleMatchCount": 7,
+      "descriptionMatchCount": 7,
+      "readback": "authenticated content list after reload",
+      "projection": "deterministic plain text"
+    }
   },
   "episodes": [
     {
       "episodeNumber": 1,
       "guid": "c9b853b6-a828-4012-9998-217919ff9163",
-      "currentRssTitle": "Episode 1: Brain Fog - Part 1 – Is Your Brain in a Fog?",
+      "previousRssTitle": "Episode 1: Brain Fog - Part 1 – Is Your Brain in a Fog?",
+      "currentRssTitle": "Brain Fog, Part 1 - Is Your Brain in a Fog?",
       "proposedPublicTitle": "Brain Fog, Part 1 - Is Your Brain in a Fog?",
       "rssStructuredEpisodeNumberPresent": true,
       "remoteIds": {
@@ -32,14 +68,13 @@
         "vimeo": "1156414707",
         "rumbleUrl": "https://rumble.com/v74kzcw-episode-1-brain-fog-part-1-is-your-brain-in-a-fog.html"
       },
-      "knownIssues": [
-        "YouTube public title has a stray trailing 1."
-      ]
+      "knownIssues": []
     },
     {
       "episodeNumber": 2,
       "guid": "1e40e02b-b217-477c-9cc3-4271cb304c23",
-      "currentRssTitle": "Episode: Brain Fog Part 2 – Testing & Basic Solutions for Brain Fog",
+      "previousRssTitle": "Episode: Brain Fog Part 2 – Testing & Basic Solutions for Brain Fog",
+      "currentRssTitle": "Brain Fog, Part 2 - Testing and Basic Solutions",
       "proposedPublicTitle": "Brain Fog, Part 2 - Testing and Basic Solutions",
       "rssStructuredEpisodeNumberPresent": true,
       "remoteIds": {
@@ -48,15 +83,13 @@
         "vimeo": "1159441883",
         "rumbleUrl": "https://rumble.com/v74l0km-episode-brain-fog-part-2-testing-and-basic-solutions-for-brain-fog.html"
       },
-      "knownIssues": [
-        "RSS and Rumble visible titles omit the episode number while YouTube and Vimeo include it.",
-        "The legacy Vimeo fallback previously referenced unrelated video 1096272441; the local recovery file was corrected to 1159441883."
-      ]
+      "knownIssues": []
     },
     {
       "episodeNumber": 3,
       "guid": "e4bde82f-54e6-43a2-a50a-4044f9cdbe8e",
-      "currentRssTitle": "Episode 3: Insomnia",
+      "previousRssTitle": "Episode 3: Insomnia",
+      "currentRssTitle": "Insomnia - Causes and Practical Sleep Strategies",
       "proposedPublicTitle": "Insomnia - Causes and Practical Sleep Strategies",
       "rssStructuredEpisodeNumberPresent": true,
       "remoteIds": {
@@ -70,26 +103,25 @@
     {
       "episodeNumber": 4,
       "guid": "9579ff89-9e16-40db-b84a-00cee25c604a",
-      "currentRssTitle": "Episode 4: Electro.Magnetic.Freqencies",
+      "previousRssTitle": "Episode 4: Electro.Magnetic.Freqencies",
+      "currentRssTitle": "Electromagnetic Frequencies (EMF) - Practical Ways to Reduce Exposure",
       "proposedPublicTitle": "Electromagnetic Frequencies (EMF) - Practical Ways to Reduce Exposure",
-      "rssStructuredEpisodeNumberPresent": false,
+      "rssStructuredEpisodeNumberPresent": true,
       "remoteIds": {
         "spotify": "0aDVuIwrRlDKxEylMj2dyw",
         "youtube": "X8WChChyh9c",
         "vimeo": "1179956166",
         "rumbleUrl": "https://rumble.com/v780pxq-episode-4-emf.html"
       },
-      "knownIssues": [
-        "RSS/Spotify title misspells Frequencies and uses dotted wording; YouTube, Vimeo, and Rumble use cleaner variants.",
-        "RSS lacks structured episode number 4."
-      ]
+      "knownIssues": []
     },
     {
       "episodeNumber": 5,
       "guid": "e9f7596f-0333-49ca-8946-bc11e96b2091",
-      "currentRssTitle": "Episode 5: Energy",
+      "previousRssTitle": "Episode 5: Energy",
+      "currentRssTitle": "Energy - Understanding Fatigue and Mitochondrial Health",
       "proposedPublicTitle": "Energy - Understanding Fatigue and Mitochondrial Health",
-      "rssStructuredEpisodeNumberPresent": false,
+      "rssStructuredEpisodeNumberPresent": true,
       "remoteIds": {
         "spotify": "6fQAClcR4AAuueHjBNlrJC",
         "youtube": "JyBK6KtOo_k",
@@ -97,42 +129,38 @@
         "rumbleUrl": "https://rumble.com/v7bvj32-episode-5-electro.magnetic.frequencies.html"
       },
       "knownIssues": [
-        "Rumble title is Energy but its immutable-looking URL slug incorrectly mentions electromagnetic frequencies; preserve the existing video/URL.",
-        "RSS lacks structured episode number 5."
+        "Rumble's current title matches the approved title, but its immutable-looking URL slug incorrectly mentions electromagnetic frequencies; preserve the existing video/URL."
       ]
     },
     {
       "episodeNumber": 6,
       "guid": "13a0565e-582c-4969-a57d-9700b7babbe4",
-      "currentRssTitle": "Episode 6: Concussion and Pathophysiology",
+      "previousRssTitle": "Episode 6: Concussion and Pathophysiology",
+      "currentRssTitle": "Concussion - What Happens in the Brain",
       "proposedPublicTitle": "Concussion - What Happens in the Brain",
-      "rssStructuredEpisodeNumberPresent": false,
+      "rssStructuredEpisodeNumberPresent": true,
       "remoteIds": {
         "spotify": "7MbKWgPZN40KEyN5j123JC",
         "youtube": "odNrtPEuong",
         "vimeo": "1204939692",
         "rumbleUrl": "https://rumble.com/v7bvk8i-episode-6-concussion-and-pathophysiology.html"
       },
-      "knownIssues": [
-        "RSS lacks structured episode number 6."
-      ]
+      "knownIssues": []
     },
     {
       "episodeNumber": 7,
       "guid": "4a0b3903-b7d1-4ced-967b-079df4004a4e",
-      "currentRssTitle": "Episode 7: The Brain on Fire",
+      "previousRssTitle": "Episode 7: The Brain on Fire",
+      "currentRssTitle": "The Brain on Fire - Neuroinflammation After Concussion",
       "proposedPublicTitle": "The Brain on Fire - Neuroinflammation After Concussion",
-      "rssStructuredEpisodeNumberPresent": false,
+      "rssStructuredEpisodeNumberPresent": true,
       "remoteIds": {
         "spotify": "5QJlHSE6JhP3ymSCNzbWxv",
         "youtube": "3IVDJqwT2yY",
         "vimeo": "1205004739",
         "rumbleUrl": "https://rumble.com/v7bvtu4-episode-7-the-brain-on-fire.html"
       },
-      "knownIssues": [
-        "YouTube public title contains inconsistent double spacing after the colon.",
-        "RSS lacks structured episode number 7."
-      ]
+      "knownIssues": []
     }
   ]
 }

@@ -55,8 +55,9 @@ exports are committed or hosted deliberately.
 4. Approve one direction and freeze its colors, type, clear space, and mark.
 5. Record each master/export path and SHA-256 in `asset-manifest.json`.
 6. Replace website icons/OG image and direct-channel avatars/banners.
-7. After the RSS.com migration is healthy, publish the podcast cover under a
-   new filename/URL and verify Apple, Spotify, and Amazon propagation.
+7. Publish the approved podcast cover through the canonical Spotify/Anchor show
+   under a new filename/URL, then verify Spotify and Apple propagation. Verify
+   Amazon after its one-time Anchor-feed submission.
 8. Replace the seven title-bearing thumbnails during the coordinated episode
    title transition.
 

@@ -1,0 +1,659 @@
+{
+  "$schema": "./master-catalog.schema.json",
+  "schemaVersion": 1,
+  "revision": 1,
+  "updatedAt": "2026-08-05T21:44:37Z",
+  "show": {
+    "names": {
+      "full": "Dr. M Experienced, with Dr. David Musnick",
+      "short": "Dr. M Experienced",
+      "host": "Dr. David Musnick",
+      "hostLine": "with Dr. David Musnick"
+    },
+    "profileCopy": {
+      "short": "Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine.",
+      "long": "Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine. Dr. Musnick is board-certified in Internal Medicine and Sports Medicine and brings more than 35 years of patient-care experience to focused conversations about brain health, concussion, sleep, fatigue, inflammation, recovery, and whole-person medicine. Episodes are educational and are not a substitute for individualized medical advice, diagnosis, or treatment."
+    },
+    "canonicalPodcastFeed": {
+      "provider": "spotify_for_creators_anchor",
+      "url": "https://anchor.fm/s/10e1b0328/podcast/rss"
+    },
+    "artworkRefs": {
+      "logoHorizontal": "show-logo-horizontal",
+      "logoStacked": "show-logo-stacked",
+      "logoMark": "show-logo-mark",
+      "avatar": "show-avatar",
+      "podcastCover": "show-podcast-cover",
+      "youtubeBanner": "show-youtube-banner",
+      "openGraph": "show-open-graph"
+    }
+  },
+  "assetRegistry": {
+    "show-logo-horizontal": {
+      "kind": "image",
+      "role": "logoHorizontal",
+      "uri": "dropbox:brand/masters/logo-horizontal.svg",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "image/svg+xml",
+      "status": "unmounted"
+    },
+    "show-logo-stacked": {
+      "kind": "image",
+      "role": "logoStacked",
+      "uri": "dropbox:brand/masters/logo-stacked.svg",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "image/svg+xml",
+      "status": "unmounted"
+    },
+    "show-logo-mark": {
+      "kind": "image",
+      "role": "logoMark",
+      "uri": "dropbox:brand/masters/logo-mark.svg",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "image/svg+xml",
+      "status": "unmounted"
+    },
+    "show-avatar": {
+      "kind": "image",
+      "role": "avatar",
+      "uri": "dropbox:brand/masters/avatar.png",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "image/png",
+      "status": "unmounted"
+    },
+    "show-podcast-cover": {
+      "kind": "image",
+      "role": "podcastCover",
+      "uri": "dropbox:brand/masters/podcast-cover-3000x3000.jpg",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "image/jpeg",
+      "status": "unmounted",
+      "publishedUrl": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_nologo/45216186/45216186-1769396345604-3df8bad120212.jpg"
+    },
+    "show-youtube-banner": {
+      "kind": "image",
+      "role": "youtubeBanner",
+      "uri": "dropbox:brand/masters/youtube-banner-2560x1440.png",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "image/png",
+      "status": "unmounted"
+    },
+    "show-open-graph": {
+      "kind": "image",
+      "role": "openGraph",
+      "uri": "dropbox:brand/masters/open-graph-1200x630.jpg",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "image/jpeg",
+      "status": "unmounted"
+    },
+    "episode-001-master-video": {
+      "kind": "video",
+      "role": "fullVideo",
+      "uri": "dropbox:episodes/001-brain-fog-part-1/master-video.mp4",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "video/mp4",
+      "status": "unmounted"
+    },
+    "episode-001-podcast-audio": {
+      "kind": "audio",
+      "role": "podcastAudio",
+      "uri": "dropbox:episodes/001-brain-fog-part-1/podcast-audio.wav",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "audio/wav",
+      "status": "unmounted"
+    },
+    "episode-001-thumbnail": {
+      "kind": "image",
+      "role": "thumbnail",
+      "uri": "dropbox:episodes/001-brain-fog-part-1/thumbnail-master.png",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "image/png",
+      "status": "unmounted",
+      "publishedUrl": "https://vumbnail.com/1156414707.jpg"
+    },
+    "episode-002-master-video": {
+      "kind": "video",
+      "role": "fullVideo",
+      "uri": "dropbox:episodes/002-brain-fog-part-2/master-video.mp4",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "video/mp4",
+      "status": "unmounted"
+    },
+    "episode-002-podcast-audio": {
+      "kind": "audio",
+      "role": "podcastAudio",
+      "uri": "dropbox:episodes/002-brain-fog-part-2/podcast-audio.wav",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "audio/wav",
+      "status": "unmounted"
+    },
+    "episode-002-thumbnail": {
+      "kind": "image",
+      "role": "thumbnail",
+      "uri": "dropbox:episodes/002-brain-fog-part-2/thumbnail-master.png",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "image/png",
+      "status": "unmounted",
+      "publishedUrl": "https://vumbnail.com/1159441883.jpg"
+    },
+    "episode-003-master-video": {
+      "kind": "video",
+      "role": "fullVideo",
+      "uri": "dropbox:episodes/003-episode-3-insomnia/master-video.mp4",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "video/mp4",
+      "status": "unmounted"
+    },
+    "episode-003-podcast-audio": {
+      "kind": "audio",
+      "role": "podcastAudio",
+      "uri": "dropbox:episodes/003-episode-3-insomnia/podcast-audio.wav",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "audio/wav",
+      "status": "unmounted"
+    },
+    "episode-003-thumbnail": {
+      "kind": "image",
+      "role": "thumbnail",
+      "uri": "dropbox:episodes/003-episode-3-insomnia/thumbnail-master.png",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "image/png",
+      "status": "unmounted",
+      "publishedUrl": "https://vumbnail.com/1179740758.jpg"
+    },
+    "episode-004-master-video": {
+      "kind": "video",
+      "role": "fullVideo",
+      "uri": "dropbox:episodes/004-episode-4-emf/master-video.mp4",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "video/mp4",
+      "status": "unmounted"
+    },
+    "episode-004-podcast-audio": {
+      "kind": "audio",
+      "role": "podcastAudio",
+      "uri": "dropbox:episodes/004-episode-4-emf/podcast-audio.wav",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "audio/wav",
+      "status": "unmounted"
+    },
+    "episode-004-thumbnail": {
+      "kind": "image",
+      "role": "thumbnail",
+      "uri": "dropbox:episodes/004-episode-4-emf/thumbnail-master.png",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "image/png",
+      "status": "unmounted",
+      "publishedUrl": "https://vumbnail.com/1179956166.jpg"
+    },
+    "episode-005-master-video": {
+      "kind": "video",
+      "role": "fullVideo",
+      "uri": "dropbox:episodes/005-episode-5-energy/master-video.mp4",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "video/mp4",
+      "status": "unmounted"
+    },
+    "episode-005-podcast-audio": {
+      "kind": "audio",
+      "role": "podcastAudio",
+      "uri": "dropbox:episodes/005-episode-5-energy/podcast-audio.wav",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "audio/wav",
+      "status": "unmounted"
+    },
+    "episode-005-thumbnail": {
+      "kind": "image",
+      "role": "thumbnail",
+      "uri": "dropbox:episodes/005-episode-5-energy/thumbnail-master.png",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "image/png",
+      "status": "unmounted",
+      "publishedUrl": "https://vumbnail.com/1204939658.jpg"
+    },
+    "episode-006-master-video": {
+      "kind": "video",
+      "role": "fullVideo",
+      "uri": "dropbox:episodes/006-episode-6-concussion-and-pathophysiology/master-video.mp4",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "video/mp4",
+      "status": "unmounted"
+    },
+    "episode-006-podcast-audio": {
+      "kind": "audio",
+      "role": "podcastAudio",
+      "uri": "dropbox:episodes/006-episode-6-concussion-and-pathophysiology/podcast-audio.wav",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "audio/wav",
+      "status": "unmounted"
+    },
+    "episode-006-thumbnail": {
+      "kind": "image",
+      "role": "thumbnail",
+      "uri": "dropbox:episodes/006-episode-6-concussion-and-pathophysiology/thumbnail-master.png",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "image/png",
+      "status": "unmounted",
+      "publishedUrl": "https://vumbnail.com/1204939692.jpg"
+    },
+    "episode-007-master-video": {
+      "kind": "video",
+      "role": "fullVideo",
+      "uri": "dropbox:episodes/007-episode-7-the-brain-on-fire/master-video.mp4",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "video/mp4",
+      "status": "unmounted"
+    },
+    "episode-007-podcast-audio": {
+      "kind": "audio",
+      "role": "podcastAudio",
+      "uri": "dropbox:episodes/007-episode-7-the-brain-on-fire/podcast-audio.wav",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "audio/wav",
+      "status": "unmounted"
+    },
+    "episode-007-thumbnail": {
+      "kind": "image",
+      "role": "thumbnail",
+      "uri": "dropbox:episodes/007-episode-7-the-brain-on-fire/thumbnail-master.png",
+      "sha256": null,
+      "sizeBytes": null,
+      "mediaType": "image/png",
+      "status": "unmounted",
+      "publishedUrl": "https://vumbnail.com/1205004739.jpg"
+    }
+  },
+  "episodes": [
+    {
+      "publicationState": "published",
+      "number": 1,
+      "slug": "brain-fog-part-1",
+      "rssGuid": "c9b853b6-a828-4012-9998-217919ff9163",
+      "title": "Brain Fog, Part 1 - Is Your Brain in a Fog?",
+      "description": {
+        "format": "html",
+        "full": "<p>Dr. David Musnick (Dr. M), board-certified in Internal Medicine and Sports Medicine with 35+ years in regenerative and functional medicine, dives straight into one of the most common complaints he sees: brain fog.</p><p>Discover what brain fog really feels like—slow thinking, low mental energy, word-finding trouble, poor focus, memory slips—and why it’s <strong>not normal</strong> at any age. Learn the core mechanisms (brain inflammation, dysfunctional microglia, neurotransmitter issues) and why ignoring it can lead to headaches, chronic fatigue, cognitive decline, and more.</p><p>Dr. M outlines a long but eye-opening list of potential causes: excitotoxins (MSG &amp; aspartame), poor oxygen delivery, concussions, gluten/autoimmunity, blood sugar swings, hormones, mold, infections (EBV, Lyme, long COVID), heavy metals, EMFs, medications, and more.</p><p>Get practical first steps to fight back:</p><ul><li>Eat organic, grass-fed, add parsley (for apigenin to calm microglia)</li><li>Prioritize 7.5+ hours of quality sleep</li><li>Exercise daily to boost BDNF</li><li>Reduce EMFs (WiFi off at night, phone away from head)</li><li>Avoid plastics and hidden toxins</li></ul><p>He stresses finding root causes with functional testing rather than masking symptoms. Perfect for anyone feeling mentally sluggish—whether post-viral, stressed, or just “not sharp.”</p><p>Part 2 (coming soon) covers advanced evaluation and targeted treatments.</p><p>Short, direct, mechanism-focused. Subscribe for more no-fluff insights on brain, gut, immune, and regenerative health from FMI Center for Optimal Health.</p><p>#BrainFog #FunctionalMedicine #BrainHealth #CognitiveHealth</p><p></p>"
+      },
+      "websiteSummary": "Dr. David Musnick (Dr. M), board-certified in Internal Medicine and Sports Medicine with 35+ years in regenerative and functional medicine, dives straight into one of the most common complaints he sees: brain fog.",
+      "durationMinutes": 17,
+      "publishDate": "2026-01-20",
+      "feedPublishedAt": "2026-01-20T08:40:52.000Z",
+      "contentFlags": {
+        "explicit": false,
+        "madeForKids": null,
+        "containsSyntheticMedia": null,
+        "paidPromotion": null
+      },
+      "assetRefs": {
+        "fullVideo": "episode-001-master-video",
+        "podcastAudio": "episode-001-podcast-audio",
+        "thumbnail": "episode-001-thumbnail",
+        "captions": null,
+        "instagramReel": null
+      },
+      "aliases": {
+        "titles": [
+          "Episode 1: Brain Fog - Part 1 – Is Your Brain in a Fog?"
+        ],
+        "slugs": []
+      },
+      "destinations": {
+        "spotify": {
+          "id": "7cAdb8GE4khC9EYKAjmYuc",
+          "url": "https://open.spotify.com/episode/7cAdb8GE4khC9EYKAjmYuc"
+        },
+        "youtube": {
+          "id": "LXASEw-WFq8",
+          "url": "https://www.youtube.com/watch?v=LXASEw-WFq8"
+        },
+        "vimeo": {
+          "id": "1156414707",
+          "url": "https://vimeo.com/1156414707"
+        },
+        "rumble": {
+          "id": "v74kzcw",
+          "url": "https://rumble.com/v74kzcw-episode-1-brain-fog-part-1-is-your-brain-in-a-fog.html"
+        }
+      }
+    },
+    {
+      "publicationState": "published",
+      "number": 2,
+      "slug": "brain-fog-part-2",
+      "rssGuid": "1e40e02b-b217-477c-9cc3-4271cb304c23",
+      "title": "Brain Fog, Part 2 - Testing and Basic Solutions",
+      "description": {
+        "format": "html",
+        "full": "<p>Dr. David Musnick M.D. (Dr. M), board-certified in Internal Medicine &amp; Sports Medicine, picks up right where Brain Fog Part 1 left off in this ~20-minute solo episode.</p><p>Quick recap: Brain fog = brain dysfunction with inflammation, slowed neurotransmission, and that classic “slow, foggy, not sharp” feeling. Simple/occasional fog is concerning; when it comes with memory issues, poor focus, word-finding trouble, or speech problems, it’s much more serious. Episodes &gt;15–20 minutes (vs. fleeting) warrant extra attention. Part 1 covered a broad list of triggers: brain inflammation, food allergies, EMFs, heavy metals, Lyme/co-infections, viruses, brain autoimmunity, and beyond.</p><p>Part 2 answers: Which tests make sense? And what foundational steps help almost everyone?</p><p><strong>Recommended Tests</strong></p><ul><li><strong>Inflammation markers</strong> (systemic inflammation often fuels brain inflammation &amp; fog):</li><li><strong>Epstein-Barr reactivation</strong> (common hidden driver of brain fog &amp; “brain fatigue” where mental tasks drain you quickly):Full panel required (not basic EBV test):• VCA IgG &amp; IgM• EBNA• Early Antigen (EA)Any marker ≥8× upper normal limit signals reactivation—needs functional treatment (no standard antiviral drug exists).</li><li><strong>Mold/mycotoxins</strong> (if exposure suspected): Urine mycotoxin panel (e.g., Mosaic Diagnostics, RealTime Labs, others).</li><li><strong>Other blood clues</strong>: Homocysteine (elevated harms brain vessels).</li><li><strong>Imaging</strong>: Brain MRI not typically first-line unless severe/progressive cognitive changes or neurological red flags.</li></ul><p>Dr. M emphasizes: Pinpoint and treat root causes (e.g., reactivated viruses, mold, infections) with a knowledgeable functional medicine or functional neurology provider. Cause-specific care is key—general “brain fog fixes” alone won’t cut it if Lyme, EBV, or mycotoxins are driving it.</p><p><strong>Universal Basics to Start Today</strong>While hunting the root cause, layer in these brain-protective steps (many from Part 1): prioritize 7.5+ hours quality sleep, daily exercise to raise BDNF, organic/grass-fed foods, parsley (apigenin to calm microglia), EMF reduction (WiFi off at night), avoid plastics/excitotoxins, and more.</p><p>Direct, practical, mechanism-focused—no long intros or filler. Perfect if you’re dealing with persistent mental cloudiness, post-viral fatigue, or just want sharper thinking.</p><p>Part 3 or future episodes may cover targeted treatments for big culprits like Epstein-Barr.</p><p>Subscribe for concise, experience-based insights on brain, immune, gut, and regenerative health from FMI Center for Optimal Health in Eagle, Idaho.</p><p>#BrainFog #FunctionalMedicine #EpsteinBarr #Mycotoxins #BrainHealth</p>"
+      },
+      "websiteSummary": "Dr. David Musnick (Dr. M) picks up where Part 1 left off and gets specific about which tests make sense for brain fog and which basics help almost everyone.",
+      "durationMinutes": 20,
+      "publishDate": "2026-01-27",
+      "feedPublishedAt": "2026-01-20T09:39:45.000Z",
+      "contentFlags": {
+        "explicit": false,
+        "madeForKids": null,
+        "containsSyntheticMedia": null,
+        "paidPromotion": null
+      },
+      "assetRefs": {
+        "fullVideo": "episode-002-master-video",
+        "podcastAudio": "episode-002-podcast-audio",
+        "thumbnail": "episode-002-thumbnail",
+        "captions": null,
+        "instagramReel": null
+      },
+      "aliases": {
+        "titles": [
+          "Episode: Brain Fog Part 2 – Testing & Basic Solutions for Brain Fog"
+        ],
+        "slugs": []
+      },
+      "destinations": {
+        "spotify": {
+          "id": "19Pct0ClX3j1EOwJ3ySVd7",
+          "url": "https://open.spotify.com/episode/19Pct0ClX3j1EOwJ3ySVd7"
+        },
+        "youtube": {
+          "id": "s740_XVTaAY",
+          "url": "https://www.youtube.com/watch?v=s740_XVTaAY"
+        },
+        "vimeo": {
+          "id": "1159441883",
+          "url": "https://vimeo.com/1159441883"
+        },
+        "rumble": {
+          "id": "v74l0km",
+          "url": "https://rumble.com/v74l0km-episode-brain-fog-part-2-testing-and-basic-solutions-for-brain-fog.html"
+        }
+      }
+    },
+    {
+      "publicationState": "published",
+      "number": 3,
+      "slug": "episode-3-insomnia",
+      "rssGuid": "e4bde82f-54e6-43a2-a50a-4044f9cdbe8e",
+      "title": "Insomnia - Causes and Practical Sleep Strategies",
+      "description": {
+        "format": "html",
+        "full": "<p>🚨 Episode 3: Insomnia &amp; Sleep Problems – Expert Advice from Dr. David Musnick (Dr. M)In this 20-minute episode, Dr. M breaks down everything you need to know about insomnia and sleep.</p><p>He explains what insomnia really is (difficulty falling asleep, staying asleep, or not getting enough hours), the different types, and why getting at least 7+ hours of quality sleep is essential for reducing inflammation in your brain and body.</p><p>You’ll learn: How long it should take to fall asleep (under 20 minutes) and what to do if it doesn’t..Sleep maintenance problems and how to get back to sleep quickly</p><p>The importance of consistent bedtime (ideal 9–10 PM for adults), full 90-minute sleep cycles, and why adults need a bedtime too</p><p>Teenagers’ delayed sleep phase and how to fix it</p><p>Blue-light blocking glasses, reading strategies, and creating the perfect wind-down routine</p><p>Caffeine timing, chocolate, stress management (mind dump + EFT tapping), and evening habits</p><p>Natural supports: properly timed melatonin (Herbatonin), homeopathy (Cofea Cruda, DesBio Perfect Sleep, Anxious, PTS Stress, etc.)</p><p>Why antihistamines and alcohol disrupt sleep, plus morning light exposure and daytime exercise tips</p><p>Whether you struggle to fall asleep, wake up in the middle of the night, or just want to feel truly rested, this episode gives you practical, natural tools you can start using tonight.🔗 </p><p>Discount links &amp; codes for recommended products (Block Blue Light glasses, Tapping Solution app, DesBio homeopathics, and Herbatonin) are in the pinned comment below!👍</p><p> Like if this helped, drop a comment with your biggest sleep struggle, and subscribe for more episodes on functional, experienced, and sports medicine.</p><p><br /></p><p>#Insomnia #BetterSleep #SleepTips #NaturalSleepRemedies #FunctionalMedicine #DrM #SportsMedicine</p>"
+      },
+      "websiteSummary": "Dr. M breaks down insomnia and sleep: difficulty falling or staying asleep, types of insomnia, and why 7+ hours of quality sleep matters for reducing inflammation in your brain and body—plus practical tools for wind-down, caffeine timing, natural supports, and more.",
+      "durationMinutes": 20,
+      "publishDate": "2026-04-03",
+      "feedPublishedAt": "2026-04-03T00:26:26.000Z",
+      "contentFlags": {
+        "explicit": false,
+        "madeForKids": null,
+        "containsSyntheticMedia": null,
+        "paidPromotion": null
+      },
+      "assetRefs": {
+        "fullVideo": "episode-003-master-video",
+        "podcastAudio": "episode-003-podcast-audio",
+        "thumbnail": "episode-003-thumbnail",
+        "captions": null,
+        "instagramReel": null
+      },
+      "aliases": {
+        "titles": [
+          "Episode 3: Insomnia"
+        ],
+        "slugs": []
+      },
+      "destinations": {
+        "spotify": {
+          "id": "07OHz4sfbefOORcNi9xaUK",
+          "url": "https://open.spotify.com/episode/07OHz4sfbefOORcNi9xaUK"
+        },
+        "youtube": {
+          "id": "59r5XFynaDo",
+          "url": "https://www.youtube.com/watch?v=59r5XFynaDo"
+        },
+        "vimeo": {
+          "id": "1179740758",
+          "url": "https://vimeo.com/1179740758"
+        },
+        "rumble": {
+          "id": "v77zlls",
+          "url": "https://rumble.com/v77zlls-episode-3-insomnia.html"
+        }
+      }
+    },
+    {
+      "publicationState": "published",
+      "number": 4,
+      "slug": "episode-4-emf",
+      "rssGuid": "9579ff89-9e16-40db-b84a-00cee25c604a",
+      "title": "Electromagnetic Frequencies (EMF) - Practical Ways to Reduce Exposure",
+      "description": {
+        "format": "html",
+        "full": "<p>🛡️ <strong>Protect Your Brain from EMF, WiFi &amp; 5G Exposure | Practical Tips from Dr. David Musnick MD</strong></p><p>In Episode 4 of Dr. M Experienced, with Dr. David Musnick, board-certified Sports &amp; Functional Medicine physician Dr. David Musnick reveals how everyday electromagnetic fields are silently affecting your brain and body — and what you can do about it right now.</p><p>You’ll learn the 3 main types of exposure on the electromagnetic spectrum:</p><ul><li><strong>Radio Frequency (RF)</strong> – the most common and damaging (cell phones, WiFi, Bluetooth, 5G towers, wireless earbuds)</li><li><strong>Electromagnetic Fields (EMF)</strong> – from appliances, EVs, hybrids, and plugged-in devices</li><li><strong>Electrical Fields</strong> – from home wiring</li></ul><p>Dr. Musnick explains how these fields can disrupt the <strong>blood-brain barrier</strong>, leading to brain fog, headaches, migraines, inflammation, insomnia, and even increased risk of autoimmunity. He also connects poor sleep to a “leaky brain” and why protecting this barrier is critical for long-term brain health.</p><p><strong>Actionable Mitigation Strategies Covered:</strong></p><ul><li>Switch to wired keyboards, mice &amp; air-tube headsets instead of Bluetooth</li><li>Put your phone in airplane mode (or keep it 10+ feet away) while sleeping</li><li>Hardwire your home with Ethernet and turn WiFi off at night (“friends don’t let friends sleep with WiFi”)</li><li>Turn Bluetooth &amp; WiFi off on phones/iPads when not in use</li><li>Test cars (especially electric &amp; hybrid vehicles) with a meter before buying</li><li>Opt out of smart meters or shield them</li><li>Use accurate meters like the Safe and Sound II and Tri-Field meter to measure your home, car, and workplace</li><li>Consider shielded clothing, Airs Tech scalar devices, or professional home assessments if you’re sensitive</li></ul><p>Whether you’re experiencing unexplained headaches, fatigue, or brain fog — or you simply want to safeguard your family in our wireless world — this short, practical episode gives you the tools to reduce exposure starting today.</p><p>📌 <strong>Resources &amp; Links</strong> (meters, shielding products, smart meter guards, Airs Tech, etc.) are in the pinned comment and show notes.</p><p>✅ Like if this was helpful✅ Comment: What’s one change you’re going to make?✅ Subscribe for more no-fluff functional medicine &amp; sports medicine episodes every week!</p><p>#EMF #EMFProtection #5G #WiFi #Bluetooth #BloodBrainBarrier #SmartMeter #FunctionalMedicine #BrainHealth #HealthTips #ElectromagneticFields</p><p></p>"
+      },
+      "websiteSummary": "Dr. Musnick explains how RF, EMF, and electrical fields affect the brain and blood-brain barrier—and practical steps to reduce exposure from phones, WiFi, Bluetooth, vehicles, and smart meters.",
+      "durationMinutes": 19,
+      "publishDate": "2026-04-03",
+      "feedPublishedAt": "2026-04-03T18:45:40.000Z",
+      "contentFlags": {
+        "explicit": false,
+        "madeForKids": null,
+        "containsSyntheticMedia": null,
+        "paidPromotion": null
+      },
+      "assetRefs": {
+        "fullVideo": "episode-004-master-video",
+        "podcastAudio": "episode-004-podcast-audio",
+        "thumbnail": "episode-004-thumbnail",
+        "captions": null,
+        "instagramReel": null
+      },
+      "aliases": {
+        "titles": [
+          "Episode 4: Electro.Magnetic.Freqencies"
+        ],
+        "slugs": []
+      },
+      "destinations": {
+        "spotify": {
+          "id": "0aDVuIwrRlDKxEylMj2dyw",
+          "url": "https://open.spotify.com/episode/0aDVuIwrRlDKxEylMj2dyw"
+        },
+        "youtube": {
+          "id": "X8WChChyh9c",
+          "url": "https://www.youtube.com/watch?v=X8WChChyh9c"
+        },
+        "vimeo": {
+          "id": "1179956166",
+          "url": "https://vimeo.com/1179956166"
+        },
+        "rumble": {
+          "id": "v780pxq",
+          "url": "https://rumble.com/v780pxq-episode-4-emf.html"
+        }
+      }
+    },
+    {
+      "publicationState": "published",
+      "number": 5,
+      "slug": "episode-5-energy",
+      "rssGuid": "e9f7596f-0333-49ca-8946-bc11e96b2091",
+      "title": "Energy - Understanding Fatigue and Mitochondrial Health",
+      "description": {
+        "format": "html",
+        "full": "<p>In this episode of <strong>Dr. M Experienced, with Dr. David Musnick</strong>, Dr. M takes a deep dive into <strong>energy, fatigue, and mitochondrial health</strong>. He explains why fatigue is often more complex than “just being tired,” exploring possible contributors such as poor sleep, sleep apnea, inflammation, viral reactivation, Lyme and co-infections, mold exposure, heavy metals, hormone imbalances, adrenal and thyroid function, liver and kidney stress, and mitochondrial dysfunction.</p><p>Dr. M also discusses practical ways to support energy production, including grounding, improving sleep, supporting ATP production, methylated B vitamins, magnesium, zinc, copper, CoQ10, NAD support, PQQ, and methylene blue. This episode is packed with functional medicine insights for anyone looking to better understand the many factors that can affect daily energy, vitality, and resilience.</p><p>This episode is for educational purposes only and is not a substitute for personalized medical care. Always consult your own healthcare provider before making changes to your health plan, testing, or supplements.</p>"
+      },
+      "websiteSummary": "Dr. M takes a functional-medicine look at energy, fatigue, and mitochondrial health, including sleep, inflammation, viral reactivation, infections, mold, heavy metals, hormones, organ stress, and practical supports for ATP production.",
+      "durationMinutes": 31,
+      "publishDate": "2026-06-26",
+      "feedPublishedAt": "2026-06-26T21:24:11.000Z",
+      "contentFlags": {
+        "explicit": false,
+        "madeForKids": null,
+        "containsSyntheticMedia": null,
+        "paidPromotion": null
+      },
+      "assetRefs": {
+        "fullVideo": "episode-005-master-video",
+        "podcastAudio": "episode-005-podcast-audio",
+        "thumbnail": "episode-005-thumbnail",
+        "captions": null,
+        "instagramReel": null
+      },
+      "aliases": {
+        "titles": [
+          "Episode 5: Energy"
+        ],
+        "slugs": []
+      },
+      "destinations": {
+        "spotify": {
+          "id": "6fQAClcR4AAuueHjBNlrJC",
+          "url": "https://open.spotify.com/episode/6fQAClcR4AAuueHjBNlrJC"
+        },
+        "youtube": {
+          "id": "JyBK6KtOo_k",
+          "url": "https://www.youtube.com/watch?v=JyBK6KtOo_k"
+        },
+        "vimeo": {
+          "id": "1204939658",
+          "url": "https://vimeo.com/1204939658"
+        },
+        "rumble": {
+          "id": "v7bvj32",
+          "url": "https://rumble.com/v7bvj32-episode-5-electro.magnetic.frequencies.html"
+        }
+      }
+    },
+    {
+      "publicationState": "published",
+      "number": 6,
+      "slug": "episode-6-concussion-and-pathophysiology",
+      "rssGuid": "13a0565e-582c-4969-a57d-9700b7babbe4",
+      "title": "Concussion - What Happens in the Brain",
+      "description": {
+        "format": "html",
+        "full": "<p></p><p>In this episode of <strong>Dr. M Experienced, with Dr. David Musnick</strong>, Dr. David Musnick takes a deep dive into <strong>concussion, traumatic brain injury, and the functional medicine mechanisms behind brain injury recovery</strong>. Drawing on decades of experience in sports medicine and functional medicine, Dr. M explains why concussion care should go beyond simply ruling out a brain bleed and telling someone to rest.</p><p>This episode explores what actually happens in the brain after a concussion, including structural injury, neural shearing, excitotoxicity, neuroinflammation, oxidative stress, hypoxia, blood-brain barrier disruption, brain autoimmunity, hormone dysfunction, pituitary involvement, vagus nerve dysfunction, mitochondrial dysfunction, protein folding abnormalities, neurogenesis, synaptogenesis, and gut microbiome changes.</p><p>Dr. M also discusses why symptoms such as brain fog, headache, dizziness, emotional instability, fatigue, sleepiness, and brain-based fatigue can persist after a head injury — even when the person never directly hit their head. This episode sets the foundation for future conversations on how to address the pathways involved in concussion recovery.</p><p>This episode is for educational purposes only and is not a substitute for personalized medical care. Always consult your own healthcare provider for diagnosis, treatment, testing, supplements, or return-to-play decisions after a concussion or head injury.</p><p></p>"
+      },
+      "websiteSummary": "Dr. Musnick explains concussion and traumatic brain injury mechanisms, from neural shearing, excitotoxicity, neuroinflammation, oxidative stress, hypoxia, and blood-brain barrier disruption to persistent symptoms and recovery pathways.",
+      "durationMinutes": 20,
+      "publishDate": "2026-06-26",
+      "feedPublishedAt": "2026-06-26T21:32:08.000Z",
+      "contentFlags": {
+        "explicit": false,
+        "madeForKids": null,
+        "containsSyntheticMedia": null,
+        "paidPromotion": null
+      },
+      "assetRefs": {
+        "fullVideo": "episode-006-master-video",
+        "podcastAudio": "episode-006-podcast-audio",
+        "thumbnail": "episode-006-thumbnail",
+        "captions": null,
+        "instagramReel": null
+      },
+      "aliases": {
+        "titles": [
+          "Episode 6: Concussion and Pathophysiology"
+        ],
+        "slugs": []
+      },
+      "destinations": {
+        "spotify": {
+          "id": "7MbKWgPZN40KEyN5j123JC",
+          "url": "https://open.spotify.com/episode/7MbKWgPZN40KEyN5j123JC"
+        },
+        "youtube": {
+          "id": "odNrtPEuong",
+          "url": "https://www.youtube.com/watch?v=odNrtPEuong"
+        },
+        "vimeo": {
+          "id": "1204939692",
+          "url": "https://vimeo.com/1204939692"
+        },
+        "rumble": {
+          "id": "v7bvk8i",
+          "url": "https://rumble.com/v7bvk8i-episode-6-concussion-and-pathophysiology.html"
+        }
+      }
+    },
+    {
+      "publicationState": "published",
+      "number": 7,
+      "slug": "episode-7-the-brain-on-fire",
+      "rssGuid": "4a0b3903-b7d1-4ced-967b-079df4004a4e",
+      "title": "The Brain on Fire - Neuroinflammation After Concussion",
+      "description": {
+        "format": "html",
+        "full": "<p>In this episode of <strong>Dr. M Experienced, with Dr. David Musnick</strong>, Dr. David Musnick takes a deep dive into <strong>concussion, traumatic brain injury, and the functional medicine mechanisms behind brain injury recovery</strong>. Drawing on decades of experience in sports medicine and functional medicine, Dr. M explains why concussion care should go beyond simply ruling out a brain bleed and telling someone to rest.</p><p>This episode explores what actually happens in the brain after a concussion, including structural injury, neural shearing, excitotoxicity, neuroinflammation, oxidative stress, hypoxia, blood-brain barrier disruption, brain autoimmunity, hormone dysfunction, pituitary involvement, vagus nerve dysfunction, mitochondrial dysfunction, protein folding abnormalities, neurogenesis, synaptogenesis, and gut microbiome changes.</p><p>Dr. M also discusses why symptoms such as brain fog, headache, dizziness, emotional instability, fatigue, sleepiness, and brain-based fatigue can persist after a head injury — even when the person never directly hit their head. This episode sets the foundation for future conversations on how to address the pathways involved in concussion recovery.</p><p>This episode is for educational purposes only and is not a substitute for personalized medical care. Always consult your own healthcare provider for diagnosis, treatment, testing, supplements, or return-to-play decisions after a concussion or head injury.</p>"
+      },
+      "websiteSummary": "Dr. Musnick continues the brain-injury series with a focused look at the inflamed brain, including concussion, traumatic brain injury, neuroinflammation, oxidative stress, blood-brain barrier disruption, brain autoimmunity, hormone and mitochondrial effects, and persistent symptoms.",
+      "durationMinutes": 21,
+      "publishDate": "2026-06-26",
+      "feedPublishedAt": "2026-06-27T00:58:08.000Z",
+      "contentFlags": {
+        "explicit": false,
+        "madeForKids": null,
+        "containsSyntheticMedia": null,
+        "paidPromotion": null
+      },
+      "assetRefs": {
+        "fullVideo": "episode-007-master-video",
+        "podcastAudio": "episode-007-podcast-audio",
+        "thumbnail": "episode-007-thumbnail",
+        "captions": null,
+        "instagramReel": null
+      },
+      "aliases": {
+        "titles": [
+          "Episode 7: The Brain on Fire"
+        ],
+        "slugs": []
+      },
+      "destinations": {
+        "spotify": {
+          "id": "5QJlHSE6JhP3ymSCNzbWxv",
+          "url": "https://open.spotify.com/episode/5QJlHSE6JhP3ymSCNzbWxv"
+        },
+        "youtube": {
+          "id": "3IVDJqwT2yY",
+          "url": "https://www.youtube.com/watch?v=3IVDJqwT2yY"
+        },
+        "vimeo": {
+          "id": "1205004739",
+          "url": "https://vimeo.com/1205004739"
+        },
+        "rumble": {
+          "id": "v7bvtu4",
+          "url": "https://rumble.com/v7bvtu4-episode-7-the-brain-on-fire.html"
+        }
+      }
+    }
+  ]
+}

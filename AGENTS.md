@@ -21,11 +21,12 @@ cd /home/otto/DR-M-Experienced
 git status --short --branch
 /home/otto/.local/bin/drm-publish doctor
 /home/otto/.local/bin/drm-browser status
-/home/otto/.local/bin/drm-publish migration-check
 ```
 
-`migration-check` returning exit code 2 is expected while the RSS.com import is
-incomplete. Read the result; never treat an existing but empty feed as ready.
+The RSS.com migration is active but pre-cutover. The supported self-service
+import is awaiting email confirmation. Anchor remains canonical until the
+imported feed passes `migration-check` and the exact redirect receives separate
+approval.
 
 ## Operating Role
 
@@ -53,15 +54,27 @@ incomplete. Read the result; never treat an existing but empty feed as ready.
 - Do not delete or reset the live Apple show. The separate nonpublic Draft show
   `1896845422` is handled only after the live show is healthy and its contents
   have been inspected.
-- The Anchor feed remains canonical until the RSS.com feed contains all seven
-  original GUIDs, media and metadata pass validation, and the exact redirect has
-  fresh approval.
-- Never change podcast GUIDs during the host migration or title cleanup.
-- Public episode titles will eventually omit `Episode N`, but the number remains
-  structured internal/RSS metadata. Apply that transition as one coordinated
-  batch after the RSS.com migration is stable; do not rename episodes piecemeal.
-- Supabase is the production content authority for the website. Checked-in data
-  is a recovery mirror.
+- Spotify for Creators/Anchor remains canonical during the active RSS.com
+  import. Do not populate the empty RSS.com show manually or redirect Anchor
+  until an imported feed preserves all seven GUIDs, titles, numbers, metadata,
+  and playable enclosures and the exact redirect receives separate approval.
+- The Anchor source is clean: exact title and description, no `RSSVERIFY`, seven
+  original GUIDs, structured numbers 1-7, and approved public titles.
+- Never change podcast GUIDs during metadata, title, or directory cleanup.
+- Public episode titles omit `Episode N`; the number remains required structured
+  internal/RSS metadata. Apply the approved seven-title transition as one
+  coordinated batch and preserve every remote content ID.
+- Apple must continue to use public show `1870433419`. Repair and refresh that
+  listing in place, then update the existing show during cutover; never create a
+  replacement. Archive only inspected, redundant nonpublic/manual drafts.
+- Hold Amazon until the RSS.com destination feed and cutover are verified, then
+  submit the final canonical feed once.
+- `publishing/master-catalog.json` is the distribution metadata authority.
+  Supabase remains the production authority for website-only editorial content;
+  overlapping identity/title fields are verified projections of the master.
+- Dropbox is binary storage, not metadata authority. Configure only a
+  project-scoped synced root outside git, use portable logical references, and
+  verify hashes before preparation or upload.
 - Work on a branch, preserve unrelated changes, require passing CI, and verify
   the live website after deployment.
 

@@ -3,6 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadCatalog } from "./publish/catalog.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -54,6 +55,10 @@ const optionalTables = [
 
 const problems = [];
 const counts = new Map();
+const masterCatalog = await loadCatalog().catch((error) => {
+  fail([`Master catalog validation failed: ${error.message}`]);
+});
+const masterEpisodesBySlug = new Map(masterCatalog.episodes.map((episode) => [episode.slug, episode]));
 
 const tables = Object.fromEntries(
   await Promise.all(
@@ -156,10 +161,36 @@ if (tables.affiliate_categories.length === 0) problems.push("No affiliate catego
 
 for (const episode of publishedEpisodes) {
   const slug = episode.slug;
+  const masterEpisode = masterEpisodesBySlug.get(slug);
   const topics = topicSlugsByEpisode.get(slug) ?? [];
   const references = referencesByEpisode.get(slug) ?? [];
   const takeaways = takeawaysByEpisode.get(slug) ?? [];
   const sections = sectionsByEpisode.get(slug) ?? [];
+
+  if (!masterEpisode) {
+    problems.push(`${slug}: published Supabase episode is missing from the master catalog.`);
+  } else {
+    if (masterEpisode.publicationState !== "published") {
+      problems.push(`${slug}: published Supabase episode is not marked published in the master catalog.`);
+    }
+    for (const [field, actual, expected] of [
+      ["episode_number", episode.episode_number, masterEpisode.number],
+      ["title", episode.title, masterEpisode.title],
+      ["publish_date", episode.publish_date, masterEpisode.publishDate],
+      ["summary", episode.summary, masterEpisode.websiteSummary],
+      ["vimeo_id", episode.vimeo_id, masterEpisode.destinations.vimeo?.id ?? null],
+      ["spotify_id", episode.spotify_id, masterEpisode.destinations.spotify?.id ?? null],
+      ["youtube_id", episode.youtube_id, masterEpisode.destinations.youtube?.id ?? null],
+    ]) {
+      if (actual !== expected) {
+        problems.push(`${slug}: Supabase ${field} does not match the master catalog.`);
+      }
+    }
+    const thumbnail = masterCatalog.assetRegistry[masterEpisode.assetRefs.thumbnail];
+    if (thumbnail?.publishedUrl && episode.thumbnail_url !== thumbnail.publishedUrl) {
+      problems.push(`${slug}: Supabase thumbnail_url does not match the master catalog asset.`);
+    }
+  }
 
   if (topics.length === 0) problems.push(`${slug}: missing episode_topics rows.`);
   if (references.length === 0) problems.push(`${slug}: missing episode_references rows.`);
@@ -178,11 +209,30 @@ for (const episode of publishedEpisodes) {
     }
   }
 
+  if (masterEpisode) {
+    for (const [platform, destination] of Object.entries(masterEpisode.destinations)) {
+      if (!destination) continue;
+      const matchingReference = references.find(
+        (reference) => !reference.coming_soon && episodePlatformForUrl(reference.url)?.toLowerCase() === platform
+      );
+      if (matchingReference && matchingReference.url !== destination.url) {
+        problems.push(`${slug}: published ${platform} reference does not match the master catalog URL.`);
+      }
+    }
+  }
+
   for (const section of sections) {
     const paragraphs = paragraphsBySection.get(`${slug}:${section.display_order}`) ?? [];
     if (paragraphs.length === 0) {
       problems.push(`${slug}: section "${section.title}" has no paragraph rows.`);
     }
+  }
+}
+
+const publishedEpisodeSlugs = new Set(publishedEpisodes.map((episode) => episode.slug));
+for (const episode of masterCatalog.episodes) {
+  if (episode.publicationState === "published" && !publishedEpisodeSlugs.has(episode.slug)) {
+    problems.push(`${episode.slug}: published master-catalog episode is missing from published Supabase rows.`);
   }
 }
 
