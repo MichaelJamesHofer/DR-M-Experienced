@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://drmexperienced.com/schemas/publishing-episode.json",
+  "title": "Dr. M episode publishing manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "episodeNumber",
+    "slug",
+    "title",
+    "description",
+    "explicit",
+    "madeForKids",
+    "containsSyntheticMedia",
+    "paidPromotion",
+    "tags",
+    "assets",
+    "releasePlan",
+    "targets"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "episodeNumber": { "type": "integer", "minimum": 1 },
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 100, "pattern": "\\S" },
+    "description": { "type": "string", "minLength": 1, "maxLength": 5000, "pattern": "\\S" },
+    "publishAt": { "type": ["string", "null"], "format": "date-time" },
+    "explicit": { "type": "boolean" },
+    "madeForKids": { "type": "boolean" },
+    "containsSyntheticMedia": { "type": "boolean" },
+    "paidPromotion": { "type": "boolean" },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "pattern": "\\S" },
+      "uniqueItems": true
+    },
+    "category": { "type": ["string", "null"], "minLength": 1, "pattern": "\\S" },
+    "assets": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fullVideo": { "type": ["string", "null"], "minLength": 1, "pattern": "\\S" },
+        "podcastAudio": { "type": ["string", "null"], "minLength": 1, "pattern": "\\S" },
+        "instagramReel": { "type": ["string", "null"], "minLength": 1, "pattern": "\\S" },
+        "thumbnail": { "type": ["string", "null"], "minLength": 1, "pattern": "\\S" },
+        "captions": { "type": ["string", "null"], "minLength": 1, "pattern": "\\S" }
+      }
+    },
+    "copy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "instagram": { "type": ["string", "null"], "minLength": 1 },
+        "rumble": { "type": ["string", "null"], "minLength": 1 },
+        "youtube": { "type": ["string", "null"], "minLength": 1 },
+        "vimeo": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "releasePlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "spotify": { "$ref": "#/$defs/releaseTarget" },
+        "youtube": { "$ref": "#/$defs/releaseTarget" },
+        "vimeo": { "$ref": "#/$defs/releaseTarget" },
+        "instagram": { "$ref": "#/$defs/releaseTarget" },
+        "rumble": { "$ref": "#/$defs/releaseTarget" }
+      }
+    },
+    "targets": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": ["spotify", "apple", "amazon", "youtube", "vimeo", "instagram", "rumble"]
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "type": "object",
+        "properties": {
+          "targets": { "type": "array", "contains": { "enum": ["youtube", "vimeo", "rumble"] } }
+        }
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "assets": {
+            "type": "object",
+            "required": ["fullVideo"],
+            "properties": { "fullVideo": { "type": "string" } }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": { "targets": { "type": "array", "contains": { "const": "spotify" } } }
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "assets": {
+            "type": "object",
+            "anyOf": [
+              { "type": "object", "required": ["fullVideo"], "properties": { "fullVideo": { "type": "string" } } },
+              { "type": "object", "required": ["podcastAudio"], "properties": { "podcastAudio": { "type": "string" } } }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "properties": { "targets": { "type": "array", "contains": { "enum": ["apple", "amazon"] } } } },
+      "then": { "type": "object", "properties": { "targets": { "type": "array", "contains": { "const": "spotify" } } } }
+    }
+  ],
+  "$defs": {
+    "releaseTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "releaseMode",
+        "initialVisibility",
+        "finalVisibility",
+        "license",
+        "monetization",
+        "notifications"
+      ],
+      "properties": {
+        "releaseMode": { "enum": ["hold", "publish_now", "scheduled"] },
+        "initialVisibility": { "type": "string", "minLength": 1, "maxLength": 100, "pattern": "\\S" },
+        "finalVisibility": { "type": "string", "minLength": 1, "maxLength": 100, "pattern": "\\S" },
+        "license": { "type": "string", "minLength": 1, "maxLength": 200, "pattern": "\\S" },
+        "monetization": { "enum": ["enabled", "disabled", "unchanged", "not_applicable", "not_selected"] },
+        "notifications": { "enum": ["enabled", "disabled", "not_applicable", "not_selected"] }
+      }
+    }
+  }
+}

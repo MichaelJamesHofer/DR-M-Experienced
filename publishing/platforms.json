@@ -1,0 +1,112 @@
+{
+  "brand": "Dr. M Experienced, with Dr. David Musnick",
+  "brandDescription": "Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine.",
+  "rssFeed": "https://anchor.fm/s/10e1b0328/podcast/rss",
+  "pendingHostingMigration": {
+    "target": "rss.com",
+    "stateFile": "publishing/hosting-migration.json",
+    "cutoverReady": false
+  },
+  "podcastDistribution": {
+    "canonicalHost": "spotify",
+    "hostAssets": [
+      "fullVideo",
+      "podcastAudio"
+    ],
+    "rssDownstream": [
+      "apple",
+      "amazon"
+    ]
+  },
+  "platforms": {
+    "spotify": {
+      "label": "Spotify for Creators",
+      "mode": "manual_host_upload",
+      "channelUrl": "https://open.spotify.com/show/7GGLljxmO0G3FLjPy8vfcw",
+      "destinationIds": {
+        "accountId": null,
+        "containerId": "7GGLljxmO0G3FLjPy8vfcw"
+      },
+      "requiredDestinationIds": ["containerId"],
+      "asset": "fullVideo",
+      "fallbackAsset": "podcastAudio",
+      "rssRole": "canonical_host",
+      "notes": "Upload the approved full video to the current Spotify-hosted show; Spotify makes the episode audio available through the canonical RSS feed. Use podcastAudio only as the fallback for an audio-only episode. Spotify does not expose a public creator episode-upload API."
+    },
+    "apple": {
+      "label": "Apple Podcasts",
+      "mode": "rss_fanout",
+      "channelUrl": "https://podcasts.apple.com/us/podcast/dr-ms-experienced-functional-and-sports-medicine/id1870433419",
+      "destinationIds": {
+        "accountId": null,
+        "containerId": "1870433419"
+      },
+      "requiredDestinationIds": ["containerId"],
+      "source": "rss",
+      "dependsOn": "spotify",
+      "notes": "Do not upload the episode separately. Apple receives the approved podcast audio from Spotify's canonical RSS feed."
+    },
+    "amazon": {
+      "label": "Amazon Music and Audible",
+      "mode": "rss_fanout",
+      "channelUrl": null,
+      "destinationIds": {
+        "accountId": null,
+        "containerId": null
+      },
+      "requiredDestinationIds": ["containerId"],
+      "source": "rss",
+      "dependsOn": "spotify",
+      "notes": "Do not upload the episode separately. One-time RSS submission and ownership verification are still required before Amazon can receive the approved podcast audio from Spotify's canonical feed."
+    },
+    "youtube": {
+      "label": "YouTube",
+      "mode": "api_after_auth_and_audit",
+      "channelUrl": "https://www.youtube.com/channel/UCFA1nVv4lKMBlx81gjMAOFQ",
+      "destinationIds": {
+        "accountId": "UCFA1nVv4lKMBlx81gjMAOFQ",
+        "containerId": "UUFA1nVv4lKMBlx81gjMAOFQ"
+      },
+      "requiredDestinationIds": ["accountId", "containerId"],
+      "asset": "fullVideo",
+      "notes": "Use OAuth and resumable upload. New API projects keep uploads private until YouTube completes its separate compliance audit."
+    },
+    "vimeo": {
+      "label": "Vimeo",
+      "mode": "api_after_auth",
+      "channelUrl": "https://vimeo.com/drmexperienced",
+      "destinationIds": {
+        "accountId": "253415660",
+        "containerId": null
+      },
+      "requiredDestinationIds": ["accountId"],
+      "asset": "fullVideo",
+      "notes": "Use the official Vimeo API with upload and edit scopes after app upload access is enabled."
+    },
+    "instagram": {
+      "label": "Instagram",
+      "mode": "local_resumable_api_after_auth",
+      "channelUrl": "https://www.instagram.com/drmexperienced/",
+      "destinationIds": {
+        "accountId": null,
+        "containerId": null
+      },
+      "requiredDestinationIds": ["accountId"],
+      "asset": "instagramReel",
+      "fallbackMode": "temporary_public_media_staging",
+      "notes": "Prefer Meta's resumable upload from the approved local Reel. Use short-lived public media staging only when resumable upload is unavailable, then remove the staged object after Meta finishes processing."
+    },
+    "rumble": {
+      "label": "Rumble",
+      "mode": "manual_browser",
+      "channelUrl": "https://rumble.com/c/c-7820170",
+      "destinationIds": {
+        "accountId": "282015440",
+        "containerId": "7820170"
+      },
+      "requiredDestinationIds": ["containerId"],
+      "asset": "fullVideo",
+      "notes": "No documented public creator VOD-upload API is available. Keep final license, visibility, and monetization choices in an approved browser handoff."
+    }
+  }
+}

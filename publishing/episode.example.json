@@ -1,0 +1,82 @@
+{
+  "$schema": "./episode.schema.json",
+  "episodeNumber": 8,
+  "slug": "example-episode",
+  "title": "Episode 8: Replace with the approved episode title",
+  "description": "Replace with the approved long description and show notes. Include the educational-content disclaimer where appropriate.",
+  "publishAt": "2026-08-15T09:00:00-06:00",
+  "explicit": false,
+  "madeForKids": false,
+  "containsSyntheticMedia": false,
+  "paidPromotion": false,
+  "tags": [
+    "functional medicine",
+    "sports medicine",
+    "Dr. David Musnick"
+  ],
+  "category": "Health & Fitness",
+  "assets": {
+    "fullVideo": "/absolute/path/to/episode-08-master.mp4",
+    "podcastAudio": null,
+    "instagramReel": "/absolute/path/to/episode-08-reel.mp4",
+    "thumbnail": "/absolute/path/to/episode-08-thumbnail.jpg",
+    "captions": "/absolute/path/to/episode-08-captions.srt"
+  },
+  "copy": {
+    "instagram": "Replace with the approved Reel caption.",
+    "rumble": null,
+    "youtube": null,
+    "vimeo": null
+  },
+  "releasePlan": {
+    "spotify": {
+      "releaseMode": "hold",
+      "initialVisibility": "not_selected",
+      "finalVisibility": "not_selected",
+      "license": "not_selected",
+      "monetization": "not_selected",
+      "notifications": "not_selected"
+    },
+    "youtube": {
+      "releaseMode": "hold",
+      "initialVisibility": "not_selected",
+      "finalVisibility": "not_selected",
+      "license": "not_selected",
+      "monetization": "not_selected",
+      "notifications": "not_selected"
+    },
+    "vimeo": {
+      "releaseMode": "hold",
+      "initialVisibility": "not_selected",
+      "finalVisibility": "not_selected",
+      "license": "not_selected",
+      "monetization": "not_selected",
+      "notifications": "not_selected"
+    },
+    "instagram": {
+      "releaseMode": "hold",
+      "initialVisibility": "not_selected",
+      "finalVisibility": "not_selected",
+      "license": "not_selected",
+      "monetization": "not_selected",
+      "notifications": "not_selected"
+    },
+    "rumble": {
+      "releaseMode": "hold",
+      "initialVisibility": "not_selected",
+      "finalVisibility": "not_selected",
+      "license": "not_selected",
+      "monetization": "not_selected",
+      "notifications": "not_selected"
+    }
+  },
+  "targets": [
+    "spotify",
+    "apple",
+    "amazon",
+    "youtube",
+    "vimeo",
+    "instagram",
+    "rumble"
+  ]
+}
