@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "migrationId": "spotify-to-rss-com-2026-08",
-  "status": "import_request_submitted_awaiting_specialist_email",
+  "status": "ownership_verification_submitted_awaiting_import",
   "source": {
     "provider": "spotify_for_creators",
     "feedUrl": "https://anchor.fm/s/10e1b0328/podcast/rss",
@@ -27,7 +27,14 @@
     "permanentSlugApproved": true,
     "permanentSlugApprovedAt": "2026-08-05T06:09:16Z",
     "permanentFeedUrlApproved": false,
-    "importRequestSubmittedAt": "2026-08-05T04:32:55Z"
+    "importRequestSubmittedAt": "2026-08-05T04:32:55Z",
+    "ownershipVerification": {
+      "token": "RSSVERIFY",
+      "publicSourceFeedObserved": true,
+      "publicSourceFeedObservedAt": "2026-08-05T17:22:25Z",
+      "specialistEmailReplyStatus": "user_confirmed_sent",
+      "specialistEmailReplyRecordedAt": "2026-08-05T17:22:25Z"
+    }
   },
   "targetMetadata": {
     "title": "Dr. M Experienced, with Dr. David Musnick",
