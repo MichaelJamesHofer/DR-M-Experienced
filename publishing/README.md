@@ -2,7 +2,12 @@
 
 This workspace turns one approved episode manifest into a repeatable seven-destination publishing plan. Preparing a job is local-only: it reads media, runs `ffprobe`, calculates SHA-256 fingerprints, and writes an integrity-checked review packet. It never logs in or uploads.
 
-See `docs/publishing-platform-setup.md` for the account inventory and `docs/rss-com-migration.md` for the guarded audio-host migration.
+Start with `docs/operations-manual.md` for the complete ecosystem and recovery procedures. See `docs/publishing-platform-setup.md` for the account inventory and `docs/rss-com-migration.md` for the guarded audio-host migration.
+
+The planned cross-platform removal of visible `Episode N:` title prefixes is
+recorded in `publishing/episode-title-migration.json`. Do not apply it piecemeal;
+the RSS.com cutover, Apple recovery, structured episode numbers 1-7, and all
+title approvals must be complete first.
 
 ## Commands
 
@@ -59,7 +64,7 @@ Browser access is not a release authorization. Default automation behavior is to
 
 1. Follow `docs/rss-com-migration.md` to import and validate the existing show. Do not redirect, delete the empty RSS.com show, or create new directory listings during preparation.
 2. Confirm the existing Apple Podcasts listing is claimed in Apple Podcasts Connect and resolve the preexisting episode-count discrepancy.
-3. Identify or claim the existing Amazon listing and record its stable show ID and URL without creating a duplicate listing.
+3. After the imported feed is validated, add or claim it once in Amazon and record the new stable show ID and URL. The signed-in Amazon account currently has no claimed show and no defensible existing public listing.
 4. Create a Google OAuth desktop client, enable YouTube Data API v3, and complete YouTube's upload compliance audit before public API uploads.
 5. Create or confirm a Vimeo API app with upload access and an own-account token carrying `upload` and `edit` scopes.
 6. Confirm Instagram is a professional account, create the Meta app, authorize content-publishing permissions, and configure resumable local upload. Configure temporary public staging only as a fallback.

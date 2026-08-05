@@ -74,12 +74,12 @@ Based on analysis of top-tier health content creators (Huberman Lab, Peter Attia
 ---
 
 ## Remaining Optional Enhancements
-- [ ] Add actual YouTube/Spotify/Apple links when ready
+- [x] Add actual YouTube/Spotify/Apple links
 - [ ] Add timestamps to episode data when audio is recorded
 - [ ] Add episode video embeds when YouTube channel is set up
 - [ ] Performance audit (lighthouse)
 - [ ] Add Open Graph images for social sharing
-- [ ] Consider adding RSS feed for podcast directories
+- [x] Add the current canonical RSS feed; switch it only after the guarded RSS.com cutover
 
 ## Current Status: COMPLETE ✅
 Build passes, all pages functional, dark-first design implemented.

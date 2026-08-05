@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "status": "draft",
+  "approvedAt": null,
+  "approvedBy": null,
+  "rightsConfirmed": false,
+  "assets": {
+    "logoHorizontal": [],
+    "logoStacked": [],
+    "logoMark": [],
+    "avatar": [],
+    "podcastCover": [],
+    "thumbnail16x9Template": [],
+    "reelCoverTemplate": [],
+    "youtubeBanner": [],
+    "openGraph": [],
+    "introSting": [],
+    "endScreen": [],
+    "verticalClose": []
+  },
+  "notes": "Each approved entry should record a relative path, media type, dimensions or duration, and SHA-256. Do not record credentials or private source-photo locations."
+}

@@ -8,7 +8,7 @@ The machine-readable migration record is `publishing/hosting-migration.json`. It
 
 - The source Anchor feed is live with seven episodes and seven unique GUIDs.
 - An empty show was manually created at RSS.com before the supported import was started. RSS.com explicitly tells importers not to create the show manually. Do not publish into, distribute, rename, or delete that empty show; tell the RSS.com import specialist about it and follow their instructions.
-- RSS.com confirmed receipt of the supported import request on August 5, 2026. The migration is waiting for the import specialist's email instructions.
+- RSS.com confirmed receipt of the supported import request on August 5, 2026. RSS.com then requested `RSSVERIFY`; the token is publicly visible in the Anchor description, and Otto replied to support confirming it. The migration is awaiting the imported show or the specialist's next response.
 - The claimed Apple listing `1870433419` points to the correct Anchor feed but has a pre-migration catalog discrepancy: five Available episodes and Draft records for episodes 1 and 2 plus a duplicate episode 4. A separate no-feed Draft show has Apple show ID `1896845422`. A feed refresh was requested on August 5, 2026; do not publish or delete drafts while it is processing.
 - The signed-in Amazon Music for Podcasters dashboard has zero claimed shows, and the public audit found no defensible existing listing. Treat Amazon as a new claim or submission only after the imported RSS.com feed is ready.
 - The permanent slug `dr-m-experienced` was approved on August 5, 2026. RSS.com still needs to confirm or provision the corresponding feed URL; the URL and redirect remain unapproved until then.
@@ -23,10 +23,11 @@ Use the Free plan and an attended browser upload for audio. RSS.com will fan tha
 ## Phase 1: Import Without Cutover
 
 1. **Complete:** The source feed was submitted through RSS.com's supported Switch to RSS workflow, and RSS.com confirmed receipt at `2026-08-05T04:32:55Z`.
-2. Stop for reCAPTCHA, email verification, plan selection, payment, or terms. The permanent slug is approved, but verify the exact generated feed URL before accepting it or using it for a redirect.
-3. Tell the import specialist that the account already contains an empty manually-created show. Do not delete it unless RSS.com support confirms the exact recovery path.
-4. If RSS.com requests `RSSVERIFY` in the source description, obtain explicit approval before changing the live show metadata.
-5. Freeze new episode publication when RSS.com begins the import. Keep the source show and account active.
+2. **Complete:** The `RSSVERIFY` ownership token was added to the source description, publicly observed, and confirmed to support at `2026-08-05T17:22:25Z`.
+3. Await the imported show or the specialist's next response. Stop for reCAPTCHA, email verification, plan selection, payment, or terms. The permanent slug is approved, but verify the exact generated feed URL before accepting it or using it for a redirect.
+4. Tell the import specialist that the account already contains an empty manually-created show. Do not delete it unless RSS.com support confirms the exact recovery path.
+5. Leave `RSSVERIFY` in place until RSS.com confirms verification. After the imported feed is healthy, remove it from the RSS.com description and verify downstream propagation.
+6. Freeze new episode publication when RSS.com begins the import. Keep the source show and account active.
 
 ### Import specialist handoff
 
@@ -78,7 +79,7 @@ The Spotify redirect is a permanent external action and requires fresh explicit 
 
 ## Phase 4: Rebrand And Automate
 
-After directory convergence is stable, set the RSS.com title to `Dr. M Experienced, with Dr. David Musnick` and the description to `Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine.` Verify both fields on Apple, Spotify, and Amazon. Keep YouTube, Vimeo, Instagram, and Rumble as separate video destinations.
+The imported RSS.com show must use the title `Dr. M Experienced, with Dr. David Musnick` and the description `Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine.` After RSS.com confirms ownership, remove the temporary `RSSVERIFY` suffix at RSS.com and verify the clean description on Apple, Spotify, and Amazon. Keep YouTube, Vimeo, Instagram, and Rumble as separate video destinations.
 
 RSS.com's beta API is not included with the Free plan and is currently documented for Max. Confirm the entitlement and renewal price with RSS.com before choosing or paying for a future plan. Plan selection, payment, API key creation, uploads, and publishing remain separate attended approvals. A dedicated API credential must be stored owner-only outside the repository; browser cookies must never be exported as an API credential.
 
