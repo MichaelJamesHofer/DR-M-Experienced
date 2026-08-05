@@ -10,7 +10,7 @@
  *   SPOTIFY_CLIENT_SECRET - Spotify app client secret
  *   SPOTIFY_SHOW_ID     - Spotify show ID (from show URL; default: Dr. M show)
  *   YOUTUBE_API_KEY     - YouTube Data API v3 key
- *   YOUTUBE_CHANNEL_USERNAME - Channel handle e.g. drmexperienced (optional; used to find uploads)
+ *   YOUTUBE_CHANNEL_ID  - Stable YouTube channel ID (optional; defaults to the Dr. M channel)
  */
 
 import fs from "node:fs";
@@ -23,7 +23,7 @@ const OUT_PATH = path.join(DATA_DIR, "episodes-from-platforms.json");
 const FALLBACK_PATH = path.join(DATA_DIR, "episodes-from-vimeo.json");
 
 const SPOTIFY_SHOW_ID = process.env.SPOTIFY_SHOW_ID || "7GGLljxmO0G3FLjPy8vfcw";
-const YOUTUBE_CHANNEL = process.env.YOUTUBE_CHANNEL_USERNAME || "drmexperienced";
+const YOUTUBE_CHANNEL_ID = process.env.YOUTUBE_CHANNEL_ID || "UCFA1nVv4lKMBlx81gjMAOFQ";
 
 function slugFromTitle(title) {
   return (title || "")
@@ -148,7 +148,7 @@ async function fetchSpotify() {
 async function getYouTubeUploadsPlaylistId(apiKey) {
   const url = new URL("https://www.googleapis.com/youtube/v3/channels");
   url.searchParams.set("part", "contentDetails");
-  url.searchParams.set("forUsername", YOUTUBE_CHANNEL);
+  url.searchParams.set("id", YOUTUBE_CHANNEL_ID);
   url.searchParams.set("key", apiKey);
   const res = await fetch(url.toString());
   if (!res.ok) return null;
@@ -163,7 +163,7 @@ async function fetchYouTube() {
 
   const playlistId = await getYouTubeUploadsPlaylistId(apiKey);
   if (!playlistId) {
-    console.warn("YouTube: could not get uploads playlist for", YOUTUBE_CHANNEL);
+    console.warn("YouTube: could not get uploads playlist for", YOUTUBE_CHANNEL_ID);
     return [];
   }
 

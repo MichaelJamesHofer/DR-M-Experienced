@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "migrationId": "spotify-to-rss-com-2026-08",
+  "status": "import_request_submitted_awaiting_specialist_email",
+  "source": {
+    "provider": "spotify_for_creators",
+    "feedUrl": "https://anchor.fm/s/10e1b0328/podcast/rss",
+    "baselineCapturedAt": "2026-08-05T04:08:00Z",
+    "baselineSha256": "d6c3d76f7872e73c33939a0d6c7dc3fc78628e778a2ccfd06aed6124f44fc97b",
+    "expectedEpisodeCount": 7,
+    "expectedGuids": [
+      "4a0b3903-b7d1-4ced-967b-079df4004a4e",
+      "13a0565e-582c-4969-a57d-9700b7babbe4",
+      "e9f7596f-0333-49ca-8946-bc11e96b2091",
+      "9579ff89-9e16-40db-b84a-00cee25c604a",
+      "e4bde82f-54e6-43a2-a50a-4044f9cdbe8e",
+      "1e40e02b-b217-477c-9cc3-4271cb304c23",
+      "c9b853b6-a828-4012-9998-217919ff9163"
+    ]
+  },
+  "destination": {
+    "provider": "rss.com",
+    "candidateFeedUrl": "https://media.rss.com/dr-m-s-experienced-functional-and-sports-medicine/feed.xml",
+    "candidateStatus": "manually_created_empty_show_requires_rss_com_review",
+    "proposedPermanentSlug": "dr-m-experienced",
+    "proposedPermanentFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+    "permanentSlugApproved": true,
+    "permanentSlugApprovedAt": "2026-08-05T06:09:16Z",
+    "permanentFeedUrlApproved": false,
+    "importRequestSubmittedAt": "2026-08-05T04:32:55Z"
+  },
+  "targetMetadata": {
+    "title": "Dr. M Experienced, with Dr. David Musnick",
+    "description": "Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine."
+  },
+  "existingListings": {
+    "spotify": {
+      "showId": "7GGLljxmO0G3FLjPy8vfcw",
+      "verifiedAfterCutover": false
+    },
+    "apple": {
+      "showId": "1870433419",
+      "podcastsConnectClaimed": true,
+      "podcastsConnectShowId": "cfab5caf-554e-4ebe-a28c-2e4748147b82",
+      "currentFeedUrl": "https://anchor.fm/s/10e1b0328/podcast/rss",
+      "availableEpisodeCount": 5,
+      "draftEpisodeCount": 3,
+      "duplicateDraftShowPresent": true,
+      "duplicateDraftShowId": "949adc0b-c62f-410c-962d-17563cf3b07a",
+      "duplicateDraftAppleShowId": "1896845422",
+      "duplicateDraftHasRssFeed": false,
+      "feedRefreshRequestedAt": "2026-08-05T05:03:28Z",
+      "preexistingEpisodeCountDiscrepancyRequiresReview": true,
+      "verifiedAfterCutover": false
+    },
+    "amazon": {
+      "showId": null,
+      "existingListingRequiresIdentification": false,
+      "publicListingFound": false,
+      "currentAccountClaimedShowCount": 0,
+      "absenceReviewedAt": "2026-08-05T04:58:04Z",
+      "verifiedAfterCutover": false
+    }
+  },
+  "gates": {
+    "publishingFreezeActive": false,
+    "rssComImportComplete": false,
+    "episodeCountMatches": false,
+    "guidSetMatches": false,
+    "episodeMetadataMatches": false,
+    "mediaVerified": false,
+    "existingDirectoryLinksRecorded": false,
+    "monetizationAndSubscriptionsReviewed": false,
+    "redirectAuthorized": false,
+    "redirectVerified": false
+  }
+}
