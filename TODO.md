@@ -1,4 +1,4 @@
-# Peak Functional & Sports Medicine - Complete Site Overhaul
+# Dr. M Experienced, with Dr. David Musnick - Complete Site Overhaul
 
 ## Design Philosophy
 Based on analysis of top-tier health content creators (Huberman Lab, Peter Attia's The Drive, Found My Fitness, Dr. Mark Hyman):

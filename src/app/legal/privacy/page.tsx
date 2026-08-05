@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Privacy notice",
-  description: "How Dr. M's Experienced handles form submissions, analytics, and embedded media.",
+  description: "How Dr. M Experienced, with Dr. David Musnick handles form submissions, analytics, and embedded media.",
   alternates: {
     canonical: "/legal/privacy/",
   },

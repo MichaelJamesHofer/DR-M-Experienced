@@ -5,6 +5,7 @@ import { episodeDisplayTitle } from "@/data/episodes";
 import { physicianProfileExperience } from "@/data/physician-profile";
 import { NewsletterCapture } from "@/components/newsletter-capture";
 import { PlatformBadges } from "@/components/platform-badges";
+import { SITE_HOST_LINE, SITE_NAME, SITE_SHORT_NAME } from "@/lib/site-brand";
 
 export default async function Home() {
   const { episodes, blogPosts } = await getContentCatalog();
@@ -37,14 +38,14 @@ export default async function Home() {
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/50 backdrop-blur px-4 py-2 mb-8 animate-fade-in">
               <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
               <span className="text-caption font-medium text-foreground-muted">
-                Now streaming on all platforms
+                Watch and listen on your preferred platform
               </span>
             </div>
 
             {/* Main Headline */}
             <h1 className="text-display-lg md:text-display-xl font-bold text-foreground max-w-4xl mb-6">
-              Dr. M&apos;s Experienced{" "}
-              <span className="text-gradient">Functional And Sports Medicine</span>
+              {SITE_SHORT_NAME},{" "}
+              <span className="text-gradient">{SITE_HOST_LINE}</span>
             </h1>
 
             {/* Subheadline */}
@@ -379,8 +380,8 @@ export default async function Home() {
                 Dr. David Musnick, MD
               </h2>
               <p className="text-body text-foreground-muted mb-6">
-                Board-certified in Internal Medicine, Sports Medicine, and Functional Medicine.
-                {physicianProfileExperience.patientCare} in patient care, with deep dives into
+                Board-certified in Internal Medicine (ABIM) and Sports Medicine (CAQ), with deep
+                Functional Medicine training. {physicianProfileExperience.patientCare} in patient care, with deep dives into
                 concussion, brain-based symptoms and conditions, autoimmune conditions, fatigue,
                 arthritis, and gastrointestinal symptoms and conditions.
               </p>
@@ -412,7 +413,7 @@ export default async function Home() {
                   Educational content only
                 </p>
                 <p className="text-body-sm text-foreground-muted">
-                  Dr. M&apos;s Experienced Functional and Sports Medicine is a signal chain—Dr. Musnick&apos;s clinic notes translated into episodes
+                  {SITE_NAME} is a signal chain—Dr. Musnick&apos;s clinic notes translated into episodes
                   so athletes, clinicians, and curious humans can think clearly. This is not
                   medical advice. Work with your own clinician for diagnosis and treatment.
                 </p>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { PlatformBadges } from "@/components/platform-badges";
+import { SITE_HOST_LINE, SITE_SHORT_NAME } from "@/lib/site-brand";
 
 const navLinks = [
   { href: "/episodes", label: "Episodes" },
@@ -27,10 +28,10 @@ export function SiteHeader() {
           </span>
           <div className="hidden sm:block">
             <p className="text-caption font-semibold uppercase tracking-[0.2em] text-foreground-muted">
-              Dr. M&apos;s Experienced
+              {SITE_SHORT_NAME},
             </p>
             <p className="text-body-sm font-semibold text-foreground leading-tight">
-              Functional and Sports Medicine
+              {SITE_HOST_LINE}
             </p>
           </div>
         </Link>

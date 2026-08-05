@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { PlatformBadges } from "@/components/platform-badges";
 import { NewsletterCapture } from "@/components/newsletter-capture";
+import { SITE_DESCRIPTION, SITE_HOST_LINE, SITE_NAME, SITE_SHORT_NAME } from "@/lib/site-brand";
 
 const footerLinks = [
   { href: "/episodes", label: "Episodes" },
@@ -26,16 +27,15 @@ export function SiteFooter() {
               </span>
               <div>
                 <p className="text-caption font-semibold uppercase tracking-[0.2em] text-foreground-muted">
-                  Dr. M&apos;s Experienced
+                  {SITE_SHORT_NAME},
                 </p>
                 <p className="text-body-sm font-semibold text-foreground">
-                  Functional and Sports Medicine
+                  {SITE_HOST_LINE}
                 </p>
               </div>
             </div>
             <p className="text-body-sm text-foreground-muted mb-6 max-w-xs">
-              Short podcasts packed with practical information. Reels with practical health information for everyday life,
-              based on many years of clinical practice and research.
+              {SITE_DESCRIPTION}
             </p>
             <PlatformBadges variant="compact" className="mb-6" />
             <a
@@ -80,7 +80,7 @@ export function SiteFooter() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-caption text-foreground-subtle">
-            © {new Date().getFullYear()} Dr. M&apos;s Experienced Functional and Sports Medicine. Educational content only.
+            © {new Date().getFullYear()} {SITE_NAME}. Educational content only.
           </p>
           <p className="text-caption text-foreground-subtle">
             Not medical advice. See{" "}

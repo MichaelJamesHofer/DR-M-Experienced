@@ -35,7 +35,7 @@ export type AffiliateProduct = {
 };
 
 export const AFFILIATE_DISCLOSURE =
-  "Some product links may be affiliate links. If you purchase through those links, Dr. M's Experienced may earn a commission at no additional cost to you. Product mentions are educational and are not medical advice.";
+  "Some product links may be affiliate links. If you purchase through those links, Dr. M Experienced may earn a commission at no additional cost to you. Product mentions are educational and are not medical advice.";
 
 export const AFFILIATE_CATEGORIES: AffiliateCategory[] = [
   {
@@ -240,7 +240,7 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     reasonsToLike: [
       "Relevant to the brain fog and energy conversations already covered on the show.",
       "Gives listeners one named source to research when methylene blue or mitochondrial-support topics come up.",
-      "Includes a public listener code for the Dr. M's Experienced audience.",
+      "Includes a public listener code for the Dr. M Experienced audience.",
     ],
     usedFor: [
       "Brain-support supplement research",
@@ -260,17 +260,17 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
   },
   {
     slug: "doctors-supplement-store",
-    name: "Dr. M's Experienced Supplement Dispensary",
+    name: "Dr. M Experienced Supplement Dispensary",
     brand: "Doctors Supplement Store",
     categorySlug: "supplements",
     category: "Supplements",
     summary:
-      "A DSS supplement dispensary for the Dr. M's Experienced audience, with thousands of high-quality practitioner-focused supplement products.",
+      "A DSS supplement dispensary for the Dr. M Experienced audience, with thousands of high-quality practitioner-focused supplement products.",
     drmThoughts:
       "Dr. M flagged DSS as a way to give podcast listeners one place to research and purchase high-quality supplements connected to future show notes, webinars, and protocol discussions while keeping podcast activity organized.",
     reasonsToLike: [
       "Broad supplement catalog rather than a single-product line.",
-      "Separate Dr. M's Experienced dispensary URL keeps podcast-related supplement activity organized.",
+      "Separate Dr. M Experienced dispensary URL keeps podcast-related supplement activity organized.",
       "Useful as a central destination when future episodes or webinars mention supplement categories.",
     ],
     usedFor: [
@@ -280,7 +280,7 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
       "Centralized supplement ordering for listeners",
     ],
     directUrl: "https://dssorders.com/DrMExperienced",
-    purchaseNote: "This is the Dr. M's Experienced dispensary URL.",
+    purchaseNote: "This is the Dr. M Experienced dispensary URL.",
     tags: ["supplements", "dispensary", "brain-health", "immune-support", "orthopedics"],
     sortOrder: 60,
     dateAdded: "2026-06-17",

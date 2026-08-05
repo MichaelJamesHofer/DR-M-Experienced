@@ -40,7 +40,7 @@ export const MEDIA_FEATURES: MediaFeature[] = [
   createMediaFeature(
     "World's Best Pesto",
     "Vimeo",
-    "Dr. M's Experienced Recipes",
+    "Dr. M Experienced Recipes",
     "Recipe",
     "Short recipe clip for Dr. Musnick's pesto, kept separate from numbered podcast episodes while it is not part of the main episode catalog.",
     "https://vimeo.com/1204939542",
