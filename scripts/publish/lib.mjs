@@ -29,6 +29,11 @@ const VIDEO_TARGETS = new Set(["youtube", "vimeo", "rumble"]);
 const PLAIN_DESCRIPTION_TARGETS = new Set(["youtube", "vimeo", "rumble"]);
 const DIRECT_COPY_KEYS = new Set(["instagram", "rumble", "youtube", "vimeo"]);
 const DIRECT_RELEASE_TARGETS = new Set(["rss.com", "spotify", "youtube", "vimeo", "instagram", "rumble"]);
+const APPROVED_AUDIO_LOUDNESS = {
+  minimumIntegratedLufs: -17,
+  maximumIntegratedLufs: -15,
+  maximumTruePeakDbtp: -1,
+};
 const RELEASE_CHOICE_KEYS = [
   "initialVisibility",
   "finalVisibility",
@@ -324,17 +329,57 @@ export async function probeFile(filePath) {
   return summarizeProbe(JSON.parse(stdout));
 }
 
+function finiteLoudnessValue(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+export async function measureLoudness(filePath) {
+  const { stderr } = await execFileAsync(
+    "ffmpeg",
+    [
+      "-hide_banner",
+      "-nostdin",
+      "-i",
+      filePath,
+      "-map",
+      "0:a:0",
+      "-af",
+      "loudnorm=I=-16:TP=-1:LRA=11:print_format=json",
+      "-f",
+      "null",
+      "-",
+    ],
+    { maxBuffer: 16 * 1024 * 1024 }
+  );
+  const match = stderr.match(/\{\s*"input_i"[\s\S]*?\}/);
+  if (!match) throw new Error(`ffmpeg did not return a loudness report for ${filePath}`);
+  const report = JSON.parse(match[0]);
+  return {
+    integratedLufs: finiteLoudnessValue(report.input_i),
+    truePeakDbtp: finiteLoudnessValue(report.input_tp),
+    loudnessRangeLu: finiteLoudnessValue(report.input_lra),
+    thresholdLufs: finiteLoudnessValue(report.input_thresh),
+    measuredWith: "ffmpeg loudnorm full-file analysis",
+  };
+}
+
 export async function inspectAsset(filePath, key) {
   const stats = await fs.stat(filePath);
   if (!stats.isFile()) throw new Error(`${key} is not a regular file: ${filePath}`);
   const shouldProbe = key !== "captions";
+  const media = shouldProbe ? await probeFile(filePath) : null;
+  const shouldMeasureLoudness =
+    ["podcastAudio", "fullVideo"].includes(key) &&
+    media?.streams?.some((stream) => stream.type === "audio");
   return {
     key,
     path: filePath,
     sizeBytes: stats.size,
     modifiedMs: Math.trunc(stats.mtimeMs),
     sha256: await hashFile(filePath),
-    media: shouldProbe ? await probeFile(filePath) : null,
+    media,
+    loudness: shouldMeasureLoudness ? await measureLoudness(filePath) : null,
   };
 }
 
@@ -378,6 +423,30 @@ function audioStream(asset) {
   return asset?.media?.streams?.find((stream) => stream.type === "audio") || null;
 }
 
+function validateApprovedLoudness(asset, target, label, block) {
+  const integrated = asset?.loudness?.integratedLufs;
+  const truePeak = asset?.loudness?.truePeakDbtp;
+  if (!Number.isFinite(integrated) || !Number.isFinite(truePeak)) {
+    block(target, `${label} is missing a valid full-file loudness measurement.`);
+    return;
+  }
+  if (
+    integrated < APPROVED_AUDIO_LOUDNESS.minimumIntegratedLufs ||
+    integrated > APPROVED_AUDIO_LOUDNESS.maximumIntegratedLufs
+  ) {
+    block(
+      target,
+      `${label} integrated loudness ${integrated.toFixed(2)} LUFS is outside the approved -17 to -15 LUFS range.`
+    );
+  }
+  if (truePeak > APPROVED_AUDIO_LOUDNESS.maximumTruePeakDbtp) {
+    block(
+      target,
+      `${label} true peak ${truePeak.toFixed(2)} dBTP exceeds the approved -1 dBTP maximum.`
+    );
+  }
+}
+
 export function validateMediaAssets(assetRecords, manifest) {
   const warnings = [];
   const targetErrors = Object.fromEntries(PLATFORM_IDS.map((id) => [id, []]));
@@ -398,6 +467,9 @@ export function validateMediaAssets(assetRecords, manifest) {
       if (selected.has(target) && !video) block(target, "fullVideo has no video stream.");
     }
     if (selected.has("spotify") && !audio) block("spotify", "fullVideo has no audio stream.");
+    if (selected.has("spotify") && audio) {
+      validateApprovedLoudness(fullVideo, "spotify", "fullVideo audio", block);
+    }
 
     if (selected.has("youtube")) {
       if (fullVideo.sizeBytes > 256 * 1024 ** 3) block("youtube", "fullVideo exceeds YouTube's 256 GB limit.");
@@ -424,8 +496,9 @@ export function validateMediaAssets(assetRecords, manifest) {
     }
   }
 
-  if (selected.has("rss.com") && podcastAudio && !audioStream(podcastAudio)) {
-    block("rss.com", "podcastAudio has no audio stream.");
+  if (selected.has("rss.com") && podcastAudio) {
+    if (!audioStream(podcastAudio)) block("rss.com", "podcastAudio has no audio stream.");
+    else validateApprovedLoudness(podcastAudio, "rss.com", "podcastAudio", block);
   }
 
   if (selected.has("instagram")) {

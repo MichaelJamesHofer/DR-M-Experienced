@@ -9,6 +9,8 @@ recorded in `publishing/episode-title-migration.json`. The RSS.com, website,
 YouTube, Vimeo, and Rumble batch is complete. Keep `episodeNumber` required in
 the manifest and RSS metadata, preserve every GUID and remote content ID, and
 use the evidence file to finish Apple, Instagram, Amazon, and artwork propagation.
+The post-cutover audit found all seven Spotify episodes audio-only; restore
+video against those existing episode IDs after corrected masters pass review.
 
 ## Master catalog and binary assets
 
@@ -102,6 +104,17 @@ Every direct destination needs a `releasePlan` entry. The example deliberately u
 
 `prepare` creates a job under `~/.local/state/drm-publisher/jobs/`. RSS.com receives `podcastAudio`. After that episode appears in Spotify through RSS, an approved `fullVideo` may replace its audio on Spotify only; audio-only episodes need no direct Spotify upload. The approval hash covers the normalized manifest, platform plan, media paths, media metadata, and media SHA-256 values. `approve` rejects a hash mismatch, a changed review document, any changed source asset, or a missing exact confirmation phrase.
 
+The baseline loudness audit is recorded in
+`publishing/audio-replacement-audit.json`. All seven current RSS enclosures are
+under level. `prepare` now performs a full-file `ffmpeg loudnorm` measurement and
+blocks RSS.com podcast audio or Spotify replacement video outside `-17` through
+`-15` LUFS or above `-1 dBTP`. Before replacing an episode, also compare the
+corrected file's duration/sync to the current master.
+Replace audio on the existing RSS.com episode while preserving its GUID, title,
+episode number, publication date, description, and art. If RSS.com assigns a new
+enclosure URL, update the matching catalog and Supabase projection only after a
+public feed readback. Corrected Spotify video must contain the corrected audio.
+
 When the Dropbox project root is configured, `prepare` also requires each media
 path to resolve to the episode's catalog asset. A catalog asset marked
 `verified` must match the inspected SHA-256 and byte size. On this workstation
@@ -112,8 +125,8 @@ claiming independent Dropbox path verification.
 ## Distribution model
 
 - The supported RSS.com import is complete at `https://media.rss.com/dr-m-experienced/feed.xml`; all seven GUIDs, media files, and artwork assets passed parity. Preserve every imported identity.
-- The legacy Anchor URL now returns one HTTP 301 hop to RSS.com. Preserve that redirect and Spotify show `7GGLljxmO0G3FLjPy8vfcw` for RSS audio ingestion, optional video replacement, analytics, and continuity.
-- Apple show `1870433419` is configured directly to RSS.com with exact metadata, but still exposes five Available episodes and has three Draft records to inspect. Submit the RSS.com feed once to Amazon and never create duplicate directory listings.
+- The legacy Anchor URL now returns one HTTP 301 hop to RSS.com. Preserve that redirect and Spotify show `7GGLljxmO0G3FLjPy8vfcw` for RSS audio ingestion, video replacement, analytics, and continuity. All seven public Spotify episodes are currently audio-only; there is no account-wide video switch, so use each existing episode's `Upload video` action after its corrected master is approved.
+- Apple show `1870433419` is configured directly to RSS.com with exact metadata, but still exposes five Available episodes. The duplicate show and stale manual Episode 4 Draft are archived; RSS Episodes 1-2 remain `DRAFTING`/`HIDDEN`. A reprocessing request was submitted to Apple support on August 6, 2026 and is awaiting response. Submit the RSS.com feed once to Amazon and never create duplicate directory listings.
 - Production Supabase has the exact seven catalog-projected RSS.com audio URLs; the guarded migration and catalog readback passed.
 - YouTube, Vimeo, and Instagram have official API routes, but each needs account authorization and platform-specific setup.
 - Instagram should use resumable upload from the approved local Reel. A short-lived public staging URL is fallback-only and must be removed after Meta finishes processing.
@@ -153,9 +166,11 @@ Browser access is not a release authorization. Default automation behavior is to
    confirms all seven titles and descriptions match deterministic catalog
    projections as of August 5, 2026.
 3. Completed: the supported RSS.com import passed exact GUID, metadata, media, artwork, and edge-audio validation, and the Anchor redirect returns the expected 301.
-4. Apple show `1870433419` is configured directly to RSS.com. Repair its five-Available/three-Draft discrepancy in place; do not replace the show or delete uninspected drafts.
+4. Apple show `1870433419` is configured directly to RSS.com. Duplicate cleanup and one feed refresh are complete; the support request for RSS Episodes 1-2 was submitted on August 6 and is awaiting response. Do not replace the show or recreate episodes.
 5. Submit the canonical RSS.com feed once to Amazon and record the stable show ID and URL.
 6. Create a Google OAuth desktop client, enable YouTube Data API v3, and complete YouTube's upload compliance audit before public API uploads.
 7. Create or confirm a Vimeo API app with upload access and an own-account token carrying `upload` and `edit` scopes.
 8. Confirm Instagram is a professional account, create the Meta app, authorize content-publishing permissions, and configure resumable local upload. Configure temporary public staging only as a fallback.
 9. Keep Rumble and Spotify browser sessions local. Do not export cookies or passwords into this repository.
+10. Replace the seven quiet RSS audio masters in place, then restore corrected
+    video to the seven existing Spotify episode identities without duplicates.

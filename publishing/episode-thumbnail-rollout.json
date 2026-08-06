@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "rolloutId": "episode-thumbnails-2026-08-05",
-  "status": "rss_com_canonical_artwork_verified_downstream_convergence_pending",
+  "status": "rss_com_canonical_artwork_verified_platform_remediation_pending",
   "recordedAt": "2026-08-06T03:32:40Z",
   "authorization": "Project owner approved the episode artwork and requested a comprehensive platform thumbnail update.",
   "catalog": {
@@ -40,13 +40,15 @@
       "verification": "Saved in the authenticated editor and read back from the public creator listing/CDN after cache propagation."
     },
     "spotifyVideo": {
-      "status": "live_verified",
+      "status": "historical_live_verified_currently_audio_only",
       "updatedCount": 7,
       "variant": "16x9",
       "showId": "7GGLljxmO0G3FLjPy8vfcw",
       "verification": "Saved in Spotify for Creators and read back from Spotify's episode editor image sources.",
-      "postCutoverAuditStatus": "persistence_and_replacement_audit_required",
-      "postCutoverAuditComplete": false
+      "postCutoverAuditStatus": "audio_only_video_restoration_required",
+      "postCutoverAuditComplete": true,
+      "postCutoverAuditDate": "2026-08-06",
+      "currentPublicVideoEpisodeCount": 0
     },
     "spotifyEpisodeArt": {
       "status": "live_and_rss_verified",
@@ -69,8 +71,11 @@
       "availableEpisodeCount": 5,
       "publicSevenEpisodeConvergenceVerified": false,
       "draftEpisodeNumbers": [1, 2],
-      "staleDuplicateDraftEpisodeNumbers": [4],
-      "verification": "The existing Apple show directly targets the RSS.com feed and its metadata is exact. Only five episodes are Available; Draft Episodes 1 and 2 plus a stale duplicate Draft Episode 4 still require reconciliation, so seven-episode public convergence is not claimed."
+      "staleDuplicateDraftEpisodeNumbers": [],
+      "duplicateCleanupComplete": true,
+      "supportRequestSubmitted": true,
+      "supportRequestSubmittedDate": "2026-08-06",
+      "verification": "The existing Apple show directly targets the RSS.com feed and its metadata is exact. The duplicate show and stale manual Episode 4 Draft were archived. Only five episodes are Available; RSS Episodes 1 and 2 remain Draft while Apple support reviews the submitted reprocessing request, so seven-episode public convergence is not claimed."
     },
     "rssCom": {
       "status": "canonical_feed_artwork_parity_verified_post_cutover",
@@ -79,7 +84,8 @@
       "verifiedAt": "2026-08-06T18:02:24Z",
       "updatedCount": 7,
       "finalFeedSha256": "a4b8b14724ecd2af81901555a1f601feb4d9901d6ffd0001b329196e0c2f69d1",
-      "verification": "The redirect-resolved canonical feed has seven items, exact target metadata, no RSSVERIFY, no season metadata, no legacy description references, and byte-identical episode and show artwork parity."
+      "publicLandingPageVerificationTokenPresent": true,
+      "verification": "The redirect-resolved canonical feed has seven items, exact target metadata, no RSSVERIFY, no season metadata, no legacy description references, and byte-identical episode and show artwork parity. RSS.com's separate public landing-page metadata still contains a cached RSSVERIFY token and needs follow-up."
     },
     "amazon": {
       "status": "ready_for_one_time_claim_not_claimed",
@@ -339,8 +345,9 @@
   ],
   "knownUnresolvedMetadataDrift": [
     "The show-level podcast cover remains the prior DRM EXPERIENCED design; this rollout changes episode artwork only.",
-    "Apple directly targets the canonical RSS.com feed with exact metadata but still has only five Available episodes, Draft Episodes 1 and 2, and a stale duplicate Draft Episode 4.",
-    "Spotify video persistence and any replacement need remain subject to an explicit post-cutover audit.",
+    "Apple directly targets the canonical RSS.com feed with exact metadata but still has only five Available episodes; the duplicate records are archived and support is reviewing RSS Episodes 1 and 2.",
+    "Spotify's seven prior video attachments are not present after cutover; all seven episodes are currently audio-only and need video restored against their existing episode IDs.",
+    "RSS.com's XML feed and dashboard metadata are exact, but the separate public landing-page metadata still contains a cached RSSVERIFY token.",
     "Amazon is ready for a one-time canonical-feed claim but has not been claimed."
   ]
 }

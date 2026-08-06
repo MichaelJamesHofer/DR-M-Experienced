@@ -30,6 +30,12 @@ directly to RSS.com. Apple draft/public-count cleanup, Amazon's one-time claim,
 and directory cache convergence are downstream work, not reasons to recreate a
 show or switch the canonical host.
 
+The Apple reprocessing request for RSS Episodes 1-2 was submitted on August 6,
+2026 and is awaiting response. The post-cutover public audit found every Spotify
+episode audio-only. Restore video only against the existing seven episode IDs
+after corrected masters pass the loudness and sync checks in
+`publishing/audio-replacement-audit.json`.
+
 ## Operating Role
 
 - When requested, directly help manage profile metadata, show settings, drafts,
@@ -53,9 +59,9 @@ show or switch the canonical host.
 
 - Preserve Apple public show ID `1870433419` and Spotify show ID
   `7GGLljxmO0G3FLjPy8vfcw`. Do not create replacement listings.
-- Do not delete or reset the live Apple show. The separate nonpublic Draft show
-  `1896845422` is handled only after the live show is healthy and its contents
-  have been inspected.
+- Do not delete or reset the live Apple show. The inspected, nonpublic Draft
+  show `1896845422` was archived on August 6, 2026; do not restore or recreate it
+  unless new evidence shows that it contained unique configuration.
 - The imported RSS.com feed is
   `https://media.rss.com/dr-m-experienced/feed.xml`. It preserves all seven
   GUIDs, titles, episode numbers, dates, playable byte-identical enclosures, and
@@ -76,8 +82,16 @@ show or switch the canonical host.
 - Apple must continue to use public show `1870433419`, which was configured
   directly to RSS.com on August 6, 2026 at approximately 18:29 UTC. Its title
   and description are exact and contain no `RSSVERIFY`, but only five episodes
-  are Available; Episodes 1 and 2 and a stale duplicate Episode 4 remain Draft.
-  Repair that listing in place and archive only inspected, redundant drafts.
+  are Available. The duplicate show and stale manual Episode 4 Draft were
+  archived after inspection; RSS Episodes 1 and 2 remain `DRAFTING` and `HIDDEN`
+  despite valid source items and audio. Repair that listing in place through
+  the submitted Apple support request; do not recreate or manually upload those
+  episodes.
+- The seven current RSS audio enclosures measure between `-30.99` and `-28.42`
+  LUFS. Treat every corrected render as a new binary: hash and fully decode it,
+  require `-17` through `-15` LUFS and true peak no higher than `-1 dBTP`, then
+  replace the existing RSS.com episode audio without changing its GUID or other
+  identity fields.
 - Amazon has no claimed show yet. Submit the canonical RSS.com feed once,
   complete the required owner attestations manually, and record the resulting
   stable show ID and URL. Never submit the legacy Anchor URL.

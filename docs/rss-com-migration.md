@@ -8,8 +8,10 @@ the canonical feed has exact copy, no `RSSVERIFY`, and no season tags.
 
 Apple show `1870433419` was configured directly to the RSS.com feed at
 approximately 18:29 UTC on August 6. Its authenticated title and description are
-exact and token-free, but five episodes are Available and Draft Episodes 1-2
-plus a stale duplicate Episode 4 still require downstream cleanup.
+exact and token-free. The duplicate Draft show and stale manual Episode 4 Draft
+were archived, but only five episodes are Available. RSS Episodes 1-2 remain
+`DRAFTING`/`HIDDEN` after one feed refresh. A reprocessing request was submitted
+to Apple support on August 6, 2026 and is awaiting response.
 
 The machine-readable record is `publishing/hosting-migration.json`. Private raw
 feed snapshots belong under `~/.local/state/drm-publisher/migrations/`, never in
@@ -23,8 +25,9 @@ the repository.
 - Publish podcast audio to RSS.com. After Spotify ingests an RSS episode, use
   Spotify for Creators only to replace that existing episode with approved video
   when applicable; do not upload duplicate or fallback audio episodes.
-- Preserve Apple show `1870433419` and repair its Draft/Available discrepancy in
-  place without submitting a replacement show.
+- Preserve Apple show `1870433419` while Apple processes the submitted support
+  request for its two valid but `DRAFTING`/`HIDDEN` RSS records. Do not submit a
+  replacement show.
 - Submit the canonical RSS.com feed once to Amazon, complete owner verification,
   and record its stable listing ID and URL.
 - Monitor directory caches and Podcast Index convergence without changing the
@@ -48,8 +51,8 @@ destinations regardless of host.
   That evidence describes the earlier attempt only; the later supported import
   successfully provisioned the current canonical `dr-m-experienced` feed.
 - Apple public show `1870433419` already pointed at the Anchor feed. A separate
-  no-feed Draft show `1896845422` and manual Draft episode records were also
-  present.
+  no-feed Draft show `1896845422` and a stale manual Episode 4 Draft were present
+  and were archived on August 6, 2026.
 - The signed-in Amazon dashboard had zero claimed shows and the public audit
   found no defensible existing Amazon listing.
 
@@ -118,12 +121,15 @@ reverse the established redirect as a first response.
 4. Keep the old Spotify account and redirect active for at least 90 days. A
    cached client may briefly return the old feed body while the 301 propagates;
    verify with no-cache requests before treating that as redirect failure.
-5. Pending: repair Apple's five-Available/three-Draft discrepancy in place.
+5. Pending Apple support response: resolve RSS Episodes 1-2, which remain
+   `DRAFTING`/`HIDDEN` after duplicate cleanup and one feed refresh. The public
+   listing still has five Available episodes.
 6. Pending: submit and claim the RSS.com feed once in Amazon without creating a
    duplicate listing.
-7. Pending: verify existing Spotify video persistence. For new video episodes,
-   let RSS create the Spotify episode first, then replace that episode's audio
-   with video in Spotify for Creators.
+7. Pending remediation: the public audit found all seven Spotify episodes
+   audio-only. For existing and new video episodes, let RSS own the episode
+   identity, then use that episode's `Upload video` action in Spotify for
+   Creators. There is no show-wide video toggle and no duplicate should be made.
 
 ## Official References
 

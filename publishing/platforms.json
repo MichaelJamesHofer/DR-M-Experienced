@@ -14,11 +14,30 @@
       {
         "code": "apple_episode_convergence_pending",
         "showId": "1870433419",
-        "dashboardEpisodeCount": 8,
+        "dashboardShowCount": 1,
+        "dashboardEpisodeCount": 7,
         "availableEpisodeCount": 5,
-        "draftEpisodeCount": 3,
+        "draftEpisodeCount": 2,
         "publicLookupTrackCount": 5,
+        "duplicateCleanupCompleted": true,
+        "supportEscalationRequired": true,
+        "supportRequestSubmitted": true,
+        "supportRequestSubmittedDate": "2026-08-06",
         "deletionAuthorized": false
+      },
+      {
+        "code": "spotify_video_restoration_required",
+        "showId": "7GGLljxmO0G3FLjPy8vfcw",
+        "episodeCount": 7,
+        "publicVideoEpisodeCount": 0,
+        "auditedAt": "2026-08-06"
+      },
+      {
+        "code": "rss_com_public_landing_page_cache_drift",
+        "feedMetadataExact": true,
+        "dashboardMetadataExact": true,
+        "publicLandingPageVerificationTokenPresent": true,
+        "auditedAt": "2026-08-06"
       },
       {
         "code": "podcast_index_redirect_crawl_pending",
@@ -76,7 +95,10 @@
       "requiredDestinationIds": ["containerId"],
       "asset": "fullVideo",
       "rssRole": "direct_media_destination",
-      "notes": "Wait for RSS.com audio to create the episode in the existing Spotify show. For an approved video release, replace that exact ingested episode with fullVideo in Spotify for Creators. Audio-only releases need no separate Spotify action; never create a duplicate episode. Spotify does not expose a public creator episode-upload API."
+      "currentVideoState": "audio_only_restoration_required",
+      "currentVideoEpisodeCount": 0,
+      "videoStateAuditedAt": "2026-08-06",
+      "notes": "There is no account-wide video switch. Wait for RSS.com audio to create the episode in the existing Spotify show, then use that exact episode's Upload video action with the approved fullVideo. All seven episodes are currently audio-only after the host cutover and need restoration against their existing Spotify episode IDs. Never create a duplicate episode. Spotify does not expose a public creator episode-upload API for this workflow."
     },
     "apple": {
       "label": "Apple Podcasts",
@@ -89,7 +111,7 @@
       "requiredDestinationIds": ["containerId"],
       "source": "rss",
       "dependsOn": "rss.com",
-      "notes": "Do not upload the episode separately. Apple receives the approved podcast audio and item-level episode artwork from RSS.com's canonical feed. Preserve show ID 1870433419 and verify that listing after each host publication."
+      "notes": "Do not upload the episode separately. Apple receives the approved podcast audio and item-level episode artwork from RSS.com's canonical feed. Preserve show ID 1870433419. The duplicate Draft show and stale manual Episode 4 Draft were archived on August 6, 2026; RSS Episodes 1-2 remain DRAFTING/HIDDEN even though their feed items and audio are valid, so resolution requires Apple support rather than manual publication or recreation."
     },
     "amazon": {
       "label": "Amazon Music and Audible",

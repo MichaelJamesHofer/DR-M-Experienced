@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "auditId": "canonical-audio-loudness-2026-08-06",
+  "auditedAt": "2026-08-06",
+  "status": "awaiting_corrected_audio_and_video_masters",
+  "canonicalFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+  "measurement": {
+    "tool": "ffmpeg loudnorm full-file analysis",
+    "audioStream": "0:a:0",
+    "targetIntegratedLufs": -16,
+    "integratedToleranceLufs": 1,
+    "maximumTruePeakDbtp": -1,
+    "acceptanceIntegratedRangeLufs": [-17, -15]
+  },
+  "protectedIdentityFields": [
+    "RSS GUID",
+    "episode number",
+    "publication date",
+    "episode title",
+    "episode artwork",
+    "Spotify episode ID",
+    "YouTube video ID",
+    "Vimeo video ID",
+    "Rumble video ID"
+  ],
+  "episodes": [
+    {
+      "number": 1,
+      "title": "Brain Fog, Part 1 - Is Your Brain in a Fog?",
+      "rssGuid": "c9b853b6-a828-4012-9998-217919ff9163",
+      "inputIntegratedLufs": -28.75,
+      "inputTruePeakDbtp": -7.5,
+      "replacementRecommended": true
+    },
+    {
+      "number": 2,
+      "title": "Brain Fog, Part 2 - Testing and Basic Solutions",
+      "rssGuid": "1e40e02b-b217-477c-9cc3-4271cb304c23",
+      "inputIntegratedLufs": -28.42,
+      "inputTruePeakDbtp": -6.62,
+      "replacementRecommended": true
+    },
+    {
+      "number": 3,
+      "title": "Insomnia - Causes and Practical Sleep Strategies",
+      "rssGuid": "e4bde82f-54e6-43a2-a50a-4044f9cdbe8e",
+      "inputIntegratedLufs": -28.46,
+      "inputTruePeakDbtp": -5.42,
+      "replacementRecommended": true
+    },
+    {
+      "number": 4,
+      "title": "Electromagnetic Frequencies (EMF) - Practical Ways to Reduce Exposure",
+      "rssGuid": "9579ff89-9e16-40db-b84a-00cee25c604a",
+      "inputIntegratedLufs": -29.25,
+      "inputTruePeakDbtp": -8.6,
+      "replacementRecommended": true
+    },
+    {
+      "number": 5,
+      "title": "Energy - Understanding Fatigue and Mitochondrial Health",
+      "rssGuid": "e9f7596f-0333-49ca-8946-bc11e96b2091",
+      "inputIntegratedLufs": -28.99,
+      "inputTruePeakDbtp": -8.28,
+      "replacementRecommended": true
+    },
+    {
+      "number": 6,
+      "title": "Concussion - What Happens in the Brain",
+      "rssGuid": "13a0565e-582c-4969-a57d-9700b7babbe4",
+      "inputIntegratedLufs": -30.99,
+      "inputTruePeakDbtp": -8.79,
+      "replacementRecommended": true
+    },
+    {
+      "number": 7,
+      "title": "The Brain on Fire - Neuroinflammation After Concussion",
+      "rssGuid": "4a0b3903-b7d1-4ced-967b-079df4004a4e",
+      "inputIntegratedLufs": -30.7,
+      "inputTruePeakDbtp": -7.39,
+      "replacementRecommended": true
+    }
+  ],
+  "replacementPolicy": {
+    "replaceExistingRssEpisode": true,
+    "deleteOrRecreateRssEpisode": false,
+    "preserveGuid": true,
+    "requireFullDecode": true,
+    "requireSha256": true,
+    "requireDurationAndSyncCheck": true,
+    "requireExactFileApprovalBeforePublicSave": true,
+    "spotifyVideoUsesCorrectedFullVideo": true,
+    "updateSupabaseWhenEnclosureUrlChanges": true,
+    "verifyFeedAndRemoteIdsAfterReplacement": true
+  },
+  "platformNotes": {
+    "rssCom": "Replace audio on the existing episode and preserve its identity.",
+    "apple": "Receives corrected audio through RSS; never upload a separate episode.",
+    "amazon": "Receives corrected audio through RSS after the one-time show claim.",
+    "spotifyAudio": "Receives corrected audio through RSS while the episode remains audio-only.",
+    "spotifyVideo": "Upload a corrected full video to the existing RSS-ingested Spotify episode; there is no account-wide video toggle.",
+    "vimeo": "Prefer an in-place video version replacement when available.",
+    "youtube": "Uploaded media cannot be replaced in place; any corrected upload requires an explicit new-ID decision.",
+    "rumble": "Do not assume media replacement is available; inspect the existing item before deciding whether a new upload is necessary.",
+    "instagram": "Existing Reels are outside RSS fan-out and require a separate repost decision if affected."
+  }
+}

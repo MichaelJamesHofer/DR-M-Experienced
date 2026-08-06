@@ -152,6 +152,10 @@
       "partnerProgramActive": false,
       "publicDescriptionVerificationTokenPresent": false,
       "episodeCount": 7,
+      "publicVideoEpisodeCount": 0,
+      "videoStateAuditedAt": "2026-08-06",
+      "videoState": "audio_only_after_host_cutover",
+      "videoRestorationRequired": true,
       "monetizationReviewedAt": "2026-08-06T16:49:00Z",
       "redirectUiReadyAt": "2026-08-06T16:49:00Z",
       "verifiedAfterCutover": true,
@@ -172,36 +176,65 @@
       "availableEpisodeCount": 5,
       "publicDescriptionVerificationTokenPresent": false,
       "publicLookupLegacyMetadataPresent": false,
-      "draftEpisodeCount": 3,
-      "dashboardAllEpisodesCount": 8,
+      "draftEpisodeCount": 2,
+      "dashboardAllEpisodesCount": 7,
+      "dashboardShowCount": 1,
       "dashboardDrafts": [
         {
           "episodeNumber": 1,
-          "status": "draft"
+          "status": "draft",
+          "source": "rss",
+          "appleCatalogState": "DRAFTING",
+          "availability": "HIDDEN"
         },
         {
           "episodeNumber": 2,
-          "status": "draft"
-        },
-        {
-          "episodeNumber": 4,
           "status": "draft",
-          "staleDuplicate": true
+          "source": "rss",
+          "appleCatalogState": "DRAFTING",
+          "availability": "HIDDEN"
         }
       ],
       "draftDeletionAuthorized": false,
-      "duplicateDraftShowPresent": true,
+      "duplicateDraftShowPresent": false,
       "duplicateDraftShowId": "949adc0b-c62f-410c-962d-17563cf3b07a",
       "duplicateDraftAppleShowId": "1896845422",
       "duplicateDraftHasRssFeed": false,
+      "duplicateDraftShowArchivedDate": "2026-08-06",
+      "archivedManualEpisodes": [
+        {
+          "episodeNumber": 4,
+          "appleEpisodeId": "1000759096366",
+          "internalEpisodeId": "fc3cdd48-13c5-4122-b464-b62376765410",
+          "source": "manual_subscriber_episode",
+          "priorStatus": "draft",
+          "archivedDate": "2026-08-06"
+        }
+      ],
       "feedRefreshRequestedAt": "2026-08-06T03:32:40Z",
       "feedRefreshReason": "Seven unique approved episode-art URLs became available in the canonical feed; Podcasts Connect accepted one refresh request on the existing show.",
+      "postCleanupFeedRefreshRequestCount": 1,
+      "postCleanupFeedRefreshRequestedDate": "2026-08-06",
+      "postCleanupFeedRefreshReason": "Requested once on the existing show after the redundant Draft show and manual Episode 4 Draft were archived.",
+      "remainingDraftDiagnosis": {
+        "episodeNumbers": [1, 2],
+        "sourceRssItemsActive": true,
+        "sourceAudioValid": true,
+        "adminBlockPresent": false,
+        "appleCatalogState": "DRAFTING",
+        "availability": "HIDDEN",
+        "manualPublishAvailable": false,
+        "supportEscalationRequired": true,
+        "supportRequestSubmitted": true,
+        "supportRequestSubmittedDate": "2026-08-06",
+        "supportRequestStatus": "submitted_awaiting_response"
+      },
       "episodeArtworkPropagationVerified": false,
       "preexistingEpisodeCountDiscrepancyRequiresReview": true,
       "publicLookupTrackCount": 5,
-      "episodeConvergenceStatus": "pending",
+      "episodeConvergenceStatus": "support_request_submitted_awaiting_response",
       "verifiedAfterCutover": true,
-      "verifiedAfterCutoverAt": "2026-08-06T18:31:00Z"
+      "verifiedAfterCutoverAt": "2026-08-06T20:26:34Z"
     },
     "podcastIndex": {
       "newRssComFeedId": "7982906",
@@ -230,11 +263,31 @@
       {
         "code": "apple_episode_convergence_pending",
         "showId": "1870433419",
-        "dashboardAllEpisodesCount": 8,
+        "dashboardShowCount": 1,
+        "dashboardAllEpisodesCount": 7,
         "dashboardAvailableEpisodeCount": 5,
-        "dashboardDraftEpisodeCount": 3,
+        "dashboardDraftEpisodeCount": 2,
         "publicLookupTrackCount": 5,
+        "duplicateCleanupCompleted": true,
+        "supportEscalationRequired": true,
+        "supportRequestSubmitted": true,
+        "supportRequestSubmittedDate": "2026-08-06",
         "deletionAuthorized": false
+      },
+      {
+        "code": "spotify_video_restoration_required",
+        "showId": "7GGLljxmO0G3FLjPy8vfcw",
+        "episodeCount": 7,
+        "publicVideoEpisodeCount": 0,
+        "auditedAt": "2026-08-06",
+        "restoreAgainstExistingEpisodeIds": true
+      },
+      {
+        "code": "rss_com_public_landing_page_cache_drift",
+        "feedMetadataExact": true,
+        "dashboardMetadataExact": true,
+        "publicLandingPageVerificationTokenPresent": true,
+        "auditedAt": "2026-08-06"
       },
       {
         "code": "podcast_index_redirect_crawl_pending",
@@ -244,7 +297,12 @@
     ]
   },
   "productionWebsiteProjection": {
-    "status": "verified",
+    "status": "public_deployment_outage",
+    "staticProjectionVerified": true,
+    "publicUrlAvailable": false,
+    "publicHttpStatus": 404,
+    "outageProvider": "github_pages",
+    "deploymentRetryQueuedAt": "2026-08-06T21:23:35Z",
     "guardedSupabaseMigrationApplied": true,
     "migrationFile": "supabase/migrations/20260806164500_repoint_episode_audio_to_rss_com.sql",
     "catalogVerificationCommand": "npm run verify:catalog",

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "status": "rss_com_cutover_complete_directory_and_spotify_video_audits_pending",
-  "auditedAt": "2026-08-05",
+  "status": "rss_com_cutover_complete_platform_remediation_pending",
+  "auditedAt": "2026-08-06",
   "approvedAt": "2026-08-05",
   "spotifyBatchCompletedAt": "2026-08-05T21:04:36Z",
   "canonicalRssVerifiedAt": "2026-08-06T03:32:22Z",
@@ -36,7 +36,8 @@
     "directVideoTitlesUpdated": true,
     "directVideoDescriptionsUpdated": true,
     "directVideoPersistenceReadbackVerified": true,
-    "spotifyPostCutoverVideoPersistenceAndReplacementAuditComplete": false,
+    "spotifyPostCutoverVideoPersistenceAndReplacementAuditComplete": true,
+    "spotifyVideoRestorationComplete": false,
     "replacementArtworkReady": true,
     "directPlatformArtworkUpdated": true,
     "podcastEpisodeArtworkUpdated": true,
@@ -73,8 +74,12 @@
   "downstreamState": {
     "spotifyVideo": {
       "showId": "7GGLljxmO0G3FLjPy8vfcw",
-      "status": "post_cutover_persistence_and_replacement_audit_required",
-      "auditComplete": false
+      "status": "post_cutover_audio_only_video_restoration_required",
+      "auditComplete": true,
+      "auditedAt": "2026-08-06",
+      "episodeCount": 7,
+      "publicVideoEpisodeCount": 0,
+      "restoreAgainstExistingEpisodeIds": true
     },
     "apple": {
       "showId": "1870433419",
@@ -83,7 +88,10 @@
       "availableEpisodeCount": 5,
       "publicSevenEpisodeConvergenceVerified": false,
       "draftEpisodeNumbers": [1, 2],
-      "staleDuplicateDraftEpisodeNumbers": [4]
+      "staleDuplicateDraftEpisodeNumbers": [],
+      "duplicateCleanupComplete": true,
+      "supportRequestSubmitted": true,
+      "supportRequestSubmittedDate": "2026-08-06"
     },
     "amazon": {
       "status": "ready_for_one_time_claim_not_claimed",

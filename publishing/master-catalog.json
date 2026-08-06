@@ -1,8 +1,8 @@
 {
   "$schema": "./master-catalog.schema.json",
   "schemaVersion": 1,
-  "revision": 4,
-  "updatedAt": "2026-08-06T17:51:02Z",
+  "revision": 5,
+  "updatedAt": "2026-08-06T21:27:21Z",
   "show": {
     "names": {
       "full": "Dr. M Experienced, with Dr. David Musnick",
@@ -73,7 +73,7 @@
       "sizeBytes": null,
       "mediaType": "image/jpeg",
       "status": "unmounted",
-      "publishedUrl": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_nologo/45216186/45216186-1769396345604-3df8bad120212.jpg"
+      "publishedUrl": "https://media.rss.com/dr-m-experienced/podcast_cover.jpg"
     },
     "show-youtube-banner": {
       "kind": "image",
