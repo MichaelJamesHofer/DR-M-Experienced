@@ -1,11 +1,12 @@
 {
   "schemaVersion": 1,
-  "status": "website-approved",
+  "status": "website-and-platform-approved",
   "approvedAt": "2026-08-06T02:13:59Z",
   "approvedBy": "project owner",
   "rightsConfirmed": true,
+  "platformRolloutRecordedAt": "2026-08-06T03:32:40Z",
   "generation": {
-    "method": "OpenAI built-in image generation, one generation per episode, followed by a centered 1600 x 900 WebP export",
+    "method": "OpenAI built-in image generation, one generation per episode, followed by centered website and 16:9 JPEG exports plus purpose-built square recompositions for podcast episode art",
     "sharedDirection": "Premium cinematic 3D scientific editorial illustration on deep charcoal, with cyan structure and restrained amber emphasis. Keep the focal subject central and leave dark edge space for responsive website overlays.",
     "excluded": "Embedded text, numbers, logos, watermarks, identifiable people, fake clinical scans, gore, treatment promises, and purple-dominant palettes"
   },
@@ -88,5 +89,130 @@
       "sha256": "7175f4ae5db187728df185d0e78e6bb6380b3d8a6e06b6b4c7e2e92f943654d3"
     }
   ],
-  "notes": "These clean, text-free derivatives are approved for the website. Direct-channel thumbnails may need platform-specific text and safe-area variants before replacement. Generated originals remain outside the repository in the local Codex image output store."
+  "platformExports": {
+    "16x9": {
+      "uses": [
+        "youtube",
+        "vimeo",
+        "rumble",
+        "spotify-video"
+      ],
+      "mediaType": "image/jpeg",
+      "width": 1920,
+      "height": 1080,
+      "assets": [
+        {
+          "episodeNumber": 1,
+          "episodeSlug": "brain-fog-part-1",
+          "path": "publishing/brand/exports/episode-thumbnails/16x9/brain-fog-part-1.jpg",
+          "sizeBytes": 227511,
+          "sha256": "b091d52d514dc00725e52d3760117b431e063ed1220c2b328613a200caa88416"
+        },
+        {
+          "episodeNumber": 2,
+          "episodeSlug": "brain-fog-part-2",
+          "path": "publishing/brand/exports/episode-thumbnails/16x9/brain-fog-part-2.jpg",
+          "sizeBytes": 252981,
+          "sha256": "04f743a5d2f06028a31407e62f5da2c21f450ce4c4ee2165c1a6ef94f24a1677"
+        },
+        {
+          "episodeNumber": 3,
+          "episodeSlug": "episode-3-insomnia",
+          "path": "publishing/brand/exports/episode-thumbnails/16x9/insomnia.jpg",
+          "sizeBytes": 155490,
+          "sha256": "6e09d43daf671d65d81f8fd403f9c693d073c4edaf99c759f01e46da27d2de4b"
+        },
+        {
+          "episodeNumber": 4,
+          "episodeSlug": "episode-4-emf",
+          "path": "publishing/brand/exports/episode-thumbnails/16x9/emf.jpg",
+          "sizeBytes": 110860,
+          "sha256": "af56bcf291e595d9b80ce262b2f9d9199d7ce01ceba44829371163cb3b88721d"
+        },
+        {
+          "episodeNumber": 5,
+          "episodeSlug": "episode-5-energy",
+          "path": "publishing/brand/exports/episode-thumbnails/16x9/energy-mitochondria.jpg",
+          "sizeBytes": 235198,
+          "sha256": "0efbc07a236a563590381682f21439bfb310444418793a3ff4d51522da46cb6f"
+        },
+        {
+          "episodeNumber": 6,
+          "episodeSlug": "episode-6-concussion-and-pathophysiology",
+          "path": "publishing/brand/exports/episode-thumbnails/16x9/concussion-mechanics.jpg",
+          "sizeBytes": 219940,
+          "sha256": "ba187ddfaa2f3fc705f4e3193aa262f68fea595e0ae025ec54f5f9cd96e3c301"
+        },
+        {
+          "episodeNumber": 7,
+          "episodeSlug": "episode-7-the-brain-on-fire",
+          "path": "publishing/brand/exports/episode-thumbnails/16x9/brain-neuroinflammation.jpg",
+          "sizeBytes": 235673,
+          "sha256": "094cad3194a2fa8ada3019eed943f8585fb2a466cc737eb919fc0158c6a25781"
+        }
+      ]
+    },
+    "1x1": {
+      "uses": [
+        "spotify-episode-art",
+        "apple-rss",
+        "future-rss-directories"
+      ],
+      "mediaType": "image/jpeg",
+      "width": 3000,
+      "height": 3000,
+      "assets": [
+        {
+          "episodeNumber": 1,
+          "episodeSlug": "brain-fog-part-1",
+          "path": "publishing/brand/exports/episode-thumbnails/1x1/brain-fog-part-1.jpg",
+          "sizeBytes": 771611,
+          "sha256": "e6d9f829008883036cf8b5b89db9f869d14a0f241011d6e76978c6d57457bc86"
+        },
+        {
+          "episodeNumber": 2,
+          "episodeSlug": "brain-fog-part-2",
+          "path": "publishing/brand/exports/episode-thumbnails/1x1/brain-fog-part-2.jpg",
+          "sizeBytes": 908458,
+          "sha256": "c3e0776883d383d7b5b9de4caf644baf5561d3a9d5a9c443bd50266b57dac339"
+        },
+        {
+          "episodeNumber": 3,
+          "episodeSlug": "episode-3-insomnia",
+          "path": "publishing/brand/exports/episode-thumbnails/1x1/insomnia.jpg",
+          "sizeBytes": 621268,
+          "sha256": "bc740dbd29e60953c1a453f14ba6074e1f3172da73cb1cf35366ae535103c218"
+        },
+        {
+          "episodeNumber": 4,
+          "episodeSlug": "episode-4-emf",
+          "path": "publishing/brand/exports/episode-thumbnails/1x1/emf.jpg",
+          "sizeBytes": 434985,
+          "sha256": "d700d278ea034a4ec3dc8aa80733184fabf98b33c3b63ddbbdd860c9f2a9c18c"
+        },
+        {
+          "episodeNumber": 5,
+          "episodeSlug": "episode-5-energy",
+          "path": "publishing/brand/exports/episode-thumbnails/1x1/energy-mitochondria.jpg",
+          "sizeBytes": 794057,
+          "sha256": "759bc5d4295338a18a3bf339fb4e5fbc291de2a1877553c5aa22eb66d2fb1394"
+        },
+        {
+          "episodeNumber": 6,
+          "episodeSlug": "episode-6-concussion-and-pathophysiology",
+          "path": "publishing/brand/exports/episode-thumbnails/1x1/concussion-mechanics.jpg",
+          "sizeBytes": 728073,
+          "sha256": "8230372b363775bb8dbb3f05609532521be1ecbc4960d38fd4363dd8698f7948"
+        },
+        {
+          "episodeNumber": 7,
+          "episodeSlug": "episode-7-the-brain-on-fire",
+          "path": "publishing/brand/exports/episode-thumbnails/1x1/brain-neuroinflammation.jpg",
+          "sizeBytes": 834998,
+          "sha256": "c19ed5130b7b0a2fe8551fb4472308c8ea73fb57c19352e8dd10341fa2067f37"
+        }
+      ]
+    }
+  },
+  "notes": "The clean, text-free website, 16:9, and square derivatives are approved. The 16:9 set is live on YouTube, Vimeo, Rumble, and Spotify video; the square set is live in Spotify and its canonical RSS item artwork. Apple refresh is requested and may still be propagating. RSS.com, Amazon, and existing Instagram covers remain outside this completed direct rollout. Generated originals remain outside the repository in the local Codex image output store."
 }

@@ -1,0 +1,303 @@
+{
+  "schemaVersion": 1,
+  "rolloutId": "episode-thumbnails-2026-08-05",
+  "status": "direct_platforms_complete_apple_refresh_pending",
+  "recordedAt": "2026-08-06T03:32:40Z",
+  "authorization": "Project owner approved the episode artwork and requested a comprehensive platform thumbnail update.",
+  "catalog": {
+    "revision": 2,
+    "publisherHash": "92897c80d706d72851d9ce07ad46b5bf57098481f4eb71b953052b5bb0fca909",
+    "fileSha256": "81256745c841815de10976e2fc049e2992f2c4423a44fed2c1ce4be607f707b9",
+    "source": "publishing/master-catalog.json"
+  },
+  "assetManifest": "publishing/brand/asset-manifest.json",
+  "protectedFields": [
+    "episode title",
+    "RSS GUID",
+    "remote content ID",
+    "visibility",
+    "audience setting",
+    "licensing setting",
+    "monetization setting"
+  ],
+  "platforms": {
+    "youtube": {
+      "status": "live_verified",
+      "updatedCount": 7,
+      "variant": "16x9",
+      "verification": "Saved in the authenticated editor and read back from the public thumbnail CDN."
+    },
+    "vimeo": {
+      "status": "live_verified",
+      "updatedCount": 7,
+      "variant": "16x9",
+      "verification": "Saved in the authenticated editor and read back from public oEmbed/CDN images."
+    },
+    "rumble": {
+      "status": "live_verified",
+      "updatedCount": 7,
+      "variant": "16x9",
+      "verification": "Saved in the authenticated editor and read back from the public creator listing/CDN after cache propagation."
+    },
+    "spotifyVideo": {
+      "status": "live_verified",
+      "updatedCount": 7,
+      "variant": "16x9",
+      "showId": "7GGLljxmO0G3FLjPy8vfcw",
+      "verification": "Saved in Spotify for Creators and read back from Spotify's episode editor image sources."
+    },
+    "spotifyEpisodeArt": {
+      "status": "live_and_rss_verified",
+      "updatedCount": 7,
+      "variant": "1x1",
+      "showId": "7GGLljxmO0G3FLjPy8vfcw",
+      "rssVerifiedAt": "2026-08-06T03:32:22Z",
+      "rssLastBuildDate": "Thu, 06 Aug 2026 03:29:45 GMT",
+      "verification": "Seven unique 3000 x 3000 item-level itunes:image URLs returned HTTP 200 and matched the approved square assets after Spotify JPEG recompression."
+    },
+    "apple": {
+      "status": "feed_refresh_requested_propagation_pending",
+      "variant": "1x1-via-rss",
+      "showId": "1870433419",
+      "podcastsConnectShowId": "cfab5caf-554e-4ebe-a28c-2e4748147b82",
+      "feedUrl": "https://anchor.fm/s/10e1b0328/podcast/rss",
+      "refreshRecordedAt": "2026-08-06T03:32:40Z",
+      "verification": "Podcasts Connect accepted one Refresh request on the existing Available show. Public directory propagation has not yet been verified."
+    },
+    "rssCom": {
+      "status": "not_updated_import_pending",
+      "variant": "none",
+      "reason": "The candidate show still has zero imported episodes and is not canonical. Do not duplicate episodes or redirect the Anchor feed."
+    },
+    "amazon": {
+      "status": "not_applicable_no_listing",
+      "variant": "future-rss",
+      "reason": "No show is claimed in the project account. Submit only the final canonical feed after the gated RSS.com cutover."
+    },
+    "instagram": {
+      "status": "existing_covers_unchanged",
+      "variant": "future-reel-cover",
+      "reason": "The documented post-publication workflow does not support replacing existing Reel covers. Existing posts were preserved rather than deleted and reposted."
+    }
+  },
+  "canonicalRssEvidence": {
+    "url": "https://anchor.fm/s/10e1b0328/podcast/rss",
+    "verifiedAt": "2026-08-06T03:32:22Z",
+    "sha256AtVerification": "87e836bcdd5272ec468ba39676da7c5d1e9cf8cb8f59c988ff362747cc973910",
+    "episodeCount": 7,
+    "uniqueGuidCount": 7,
+    "uniqueEpisodeArtworkCount": 7,
+    "structuredEpisodeNumbers": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  "episodes": [
+    {
+      "episodeNumber": 1,
+      "slug": "brain-fog-part-1",
+      "title": "Brain Fog, Part 1 - Is Your Brain in a Fog?",
+      "guid": "c9b853b6-a828-4012-9998-217919ff9163",
+      "assets": {
+        "16x9": {
+          "path": "publishing/brand/exports/episode-thumbnails/16x9/brain-fog-part-1.jpg",
+          "sha256": "b091d52d514dc00725e52d3760117b431e063ed1220c2b328613a200caa88416"
+        },
+        "1x1": {
+          "path": "publishing/brand/exports/episode-thumbnails/1x1/brain-fog-part-1.jpg",
+          "sha256": "e6d9f829008883036cf8b5b89db9f869d14a0f241011d6e76978c6d57457bc86"
+        }
+      },
+      "remoteIds": {
+        "spotify": "7cAdb8GE4khC9EYKAjmYuc",
+        "youtube": "LXASEw-WFq8",
+        "vimeo": "1156414707",
+        "rumble": "v74kzcw"
+      },
+      "rssArtwork": {
+        "url": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/45216186/45216186-1785986217144-c5eb148c29409.jpg",
+        "width": 3000,
+        "height": 3000,
+        "sha256": "97fce908ddf14ed6b3ddadb465a1f244a96c7be09ea43029c915a9fb3663c1db"
+      }
+    },
+    {
+      "episodeNumber": 2,
+      "slug": "brain-fog-part-2",
+      "title": "Brain Fog, Part 2 - Testing and Basic Solutions",
+      "guid": "1e40e02b-b217-477c-9cc3-4271cb304c23",
+      "assets": {
+        "16x9": {
+          "path": "publishing/brand/exports/episode-thumbnails/16x9/brain-fog-part-2.jpg",
+          "sha256": "04f743a5d2f06028a31407e62f5da2c21f450ce4c4ee2165c1a6ef94f24a1677"
+        },
+        "1x1": {
+          "path": "publishing/brand/exports/episode-thumbnails/1x1/brain-fog-part-2.jpg",
+          "sha256": "c3e0776883d383d7b5b9de4caf644baf5561d3a9d5a9c443bd50266b57dac339"
+        }
+      },
+      "remoteIds": {
+        "spotify": "19Pct0ClX3j1EOwJ3ySVd7",
+        "youtube": "s740_XVTaAY",
+        "vimeo": "1159441883",
+        "rumble": "v74l0km"
+      },
+      "rssArtwork": {
+        "url": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/45216186/45216186-1785986456927-b5c6dc7f1605c.jpg",
+        "width": 3000,
+        "height": 3000,
+        "sha256": "8f530a1ed226a2a2b89f447fcf3f6e9068dcc7e3d1b5baf9fa683e2f2b9f42a3"
+      }
+    },
+    {
+      "episodeNumber": 3,
+      "slug": "episode-3-insomnia",
+      "title": "Insomnia - Causes and Practical Sleep Strategies",
+      "guid": "e4bde82f-54e6-43a2-a50a-4044f9cdbe8e",
+      "assets": {
+        "16x9": {
+          "path": "publishing/brand/exports/episode-thumbnails/16x9/insomnia.jpg",
+          "sha256": "6e09d43daf671d65d81f8fd403f9c693d073c4edaf99c759f01e46da27d2de4b"
+        },
+        "1x1": {
+          "path": "publishing/brand/exports/episode-thumbnails/1x1/insomnia.jpg",
+          "sha256": "bc740dbd29e60953c1a453f14ba6074e1f3172da73cb1cf35366ae535103c218"
+        }
+      },
+      "remoteIds": {
+        "spotify": "07OHz4sfbefOORcNi9xaUK",
+        "youtube": "59r5XFynaDo",
+        "vimeo": "1179740758",
+        "rumble": "v77zlls"
+      },
+      "rssArtwork": {
+        "url": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/45216186/45216186-1785986656342-51780a29c3f4d.jpg",
+        "width": 3000,
+        "height": 3000,
+        "sha256": "ff035e5643b719775c15271a0b92cad0f6cd95926e3832083f3a33944beb11a2"
+      }
+    },
+    {
+      "episodeNumber": 4,
+      "slug": "episode-4-emf",
+      "title": "Electromagnetic Frequencies (EMF) - Practical Ways to Reduce Exposure",
+      "guid": "9579ff89-9e16-40db-b84a-00cee25c604a",
+      "assets": {
+        "16x9": {
+          "path": "publishing/brand/exports/episode-thumbnails/16x9/emf.jpg",
+          "sha256": "af56bcf291e595d9b80ce262b2f9d9199d7ce01ceba44829371163cb3b88721d"
+        },
+        "1x1": {
+          "path": "publishing/brand/exports/episode-thumbnails/1x1/emf.jpg",
+          "sha256": "d700d278ea034a4ec3dc8aa80733184fabf98b33c3b63ddbbdd860c9f2a9c18c"
+        }
+      },
+      "remoteIds": {
+        "spotify": "0aDVuIwrRlDKxEylMj2dyw",
+        "youtube": "X8WChChyh9c",
+        "vimeo": "1179956166",
+        "rumble": "v780pxq"
+      },
+      "rssArtwork": {
+        "url": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/45216186/45216186-1785986688272-f0ff16446b3ab.jpg",
+        "width": 3000,
+        "height": 3000,
+        "sha256": "5192ab536240dbd7e5e08ead6715f055d5ec100720c3ae2a819cdb24d05d2fd2"
+      }
+    },
+    {
+      "episodeNumber": 5,
+      "slug": "episode-5-energy",
+      "title": "Energy - Understanding Fatigue and Mitochondrial Health",
+      "guid": "e9f7596f-0333-49ca-8946-bc11e96b2091",
+      "assets": {
+        "16x9": {
+          "path": "publishing/brand/exports/episode-thumbnails/16x9/energy-mitochondria.jpg",
+          "sha256": "0efbc07a236a563590381682f21439bfb310444418793a3ff4d51522da46cb6f"
+        },
+        "1x1": {
+          "path": "publishing/brand/exports/episode-thumbnails/1x1/energy-mitochondria.jpg",
+          "sha256": "759bc5d4295338a18a3bf339fb4e5fbc291de2a1877553c5aa22eb66d2fb1394"
+        }
+      },
+      "remoteIds": {
+        "spotify": "6fQAClcR4AAuueHjBNlrJC",
+        "youtube": "JyBK6KtOo_k",
+        "vimeo": "1204939658",
+        "rumble": "v7bvj32"
+      },
+      "rssArtwork": {
+        "url": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/45216186/45216186-1785986720680-a6b9c47aeb86b.jpg",
+        "width": 3000,
+        "height": 3000,
+        "sha256": "02399979f8ce5ce6f57287dba26c65b8e883458bef3ff3c1d21db105c7a16c59"
+      }
+    },
+    {
+      "episodeNumber": 6,
+      "slug": "episode-6-concussion-and-pathophysiology",
+      "title": "Concussion - What Happens in the Brain",
+      "guid": "13a0565e-582c-4969-a57d-9700b7babbe4",
+      "assets": {
+        "16x9": {
+          "path": "publishing/brand/exports/episode-thumbnails/16x9/concussion-mechanics.jpg",
+          "sha256": "ba187ddfaa2f3fc705f4e3193aa262f68fea595e0ae025ec54f5f9cd96e3c301"
+        },
+        "1x1": {
+          "path": "publishing/brand/exports/episode-thumbnails/1x1/concussion-mechanics.jpg",
+          "sha256": "8230372b363775bb8dbb3f05609532521be1ecbc4960d38fd4363dd8698f7948"
+        }
+      },
+      "remoteIds": {
+        "spotify": "7MbKWgPZN40KEyN5j123JC",
+        "youtube": "odNrtPEuong",
+        "vimeo": "1204939692",
+        "rumble": "v7bvk8i"
+      },
+      "rssArtwork": {
+        "url": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/45216186/45216186-1785986824642-a6b0d3f1feb6b.jpg",
+        "width": 3000,
+        "height": 3000,
+        "sha256": "2b921fcf86316d3fabdbbbc86928734fe52f4f127daf5ae6218596b753830696"
+      }
+    },
+    {
+      "episodeNumber": 7,
+      "slug": "episode-7-the-brain-on-fire",
+      "title": "The Brain on Fire - Neuroinflammation After Concussion",
+      "guid": "4a0b3903-b7d1-4ced-967b-079df4004a4e",
+      "assets": {
+        "16x9": {
+          "path": "publishing/brand/exports/episode-thumbnails/16x9/brain-neuroinflammation.jpg",
+          "sha256": "094cad3194a2fa8ada3019eed943f8585fb2a466cc737eb919fc0158c6a25781"
+        },
+        "1x1": {
+          "path": "publishing/brand/exports/episode-thumbnails/1x1/brain-neuroinflammation.jpg",
+          "sha256": "c19ed5130b7b0a2fe8551fb4472308c8ea73fb57c19352e8dd10341fa2067f37"
+        }
+      },
+      "remoteIds": {
+        "spotify": "5QJlHSE6JhP3ymSCNzbWxv",
+        "youtube": "3IVDJqwT2yY",
+        "vimeo": "1205004739",
+        "rumble": "v7bvtu4"
+      },
+      "rssArtwork": {
+        "url": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/45216186/45216186-1785986855672-489d6c10e6989.jpg",
+        "width": 3000,
+        "height": 3000,
+        "sha256": "100f60380e35a6df44e0addfcdba1345d4f4b1e3b10c522a1cb0fd11aa3791bd"
+      }
+    }
+  ],
+  "knownUnresolvedMetadataDrift": [
+    "The canonical show description and itunes:summary currently end with RSSVERIFY.",
+    "Episode 4, 5, 6, and 7 descriptions still contain retired show-name variants.",
+    "The show-level podcast cover remains the prior DRM EXPERIENCED design; this rollout changes episode artwork only."
+  ]
+}

@@ -1,11 +1,12 @@
 {
   "schemaVersion": 1,
-  "status": "source_and_long_form_video_platforms_complete_awaiting_directories_instagram_and_artwork",
+  "status": "source_direct_video_and_episode_art_complete_awaiting_directory_propagation_and_instagram",
   "auditedAt": "2026-08-05",
   "approvedAt": "2026-08-05",
   "spotifyBatchCompletedAt": "2026-08-05T21:04:36Z",
-  "canonicalRssVerifiedAt": "2026-08-05T21:04:36Z",
+  "canonicalRssVerifiedAt": "2026-08-06T03:32:22Z",
   "longFormVideoBatchCompletedAt": "2026-08-05T22:54:33Z",
+  "episodeArtworkBatchRecordedAt": "2026-08-06T03:32:40Z",
   "canonicalHost": "spotify_for_creators_anchor",
   "policy": {
     "publicTitleFormat": "Primary topic - practical tagline",
@@ -20,7 +21,9 @@
     "appleHasSevenPublicEpisodes": false,
     "allProposedTitlesApproved": true,
     "spotifySourceBatchComplete": true,
-    "canonicalRssMetadataVerified": true,
+    "canonicalRssMetadataVerified": false,
+    "canonicalRssIdentityAndTitlesVerified": true,
+    "canonicalRssDescriptionCurrentlyExact": false,
     "rssStructuredEpisodeNumbersOneThroughSeven": true,
     "rssGuidIdentityPreserved": true,
     "publisherSupportsUnnumberedPublicTitles": true,
@@ -28,7 +31,11 @@
     "directVideoTitlesUpdated": true,
     "directVideoDescriptionsUpdated": true,
     "directVideoPersistenceReadbackVerified": true,
-    "replacementArtworkReady": false,
+    "replacementArtworkReady": true,
+    "directPlatformArtworkUpdated": true,
+    "podcastEpisodeArtworkUpdated": true,
+    "canonicalRssEpisodeArtworkVerified": true,
+    "appleEpisodeArtworkPropagationVerified": false,
     "maintenanceWindowApproved": true
   },
   "directPlatformEvidence": {
@@ -53,6 +60,20 @@
       "readback": "authenticated content list after reload",
       "projection": "deterministic plain text"
     }
+  },
+  "artworkEvidence": {
+    "receipt": "publishing/episode-thumbnail-rollout.json",
+    "directPlatforms": [
+      "youtube",
+      "vimeo",
+      "rumble",
+      "spotify-video"
+    ],
+    "directPlatformUpdatedCount": 7,
+    "spotifyEpisodeArtUpdatedCount": 7,
+    "canonicalRssUniqueEpisodeArtworkCount": 7,
+    "appleFeedRefreshRequested": true,
+    "unresolvedDescriptionDrift": "RSSVERIFY is appended to the show description, and Episodes 4-7 contain retired show-name variants."
   },
   "episodes": [
     {

@@ -9,8 +9,8 @@ The local publisher uses official upload interfaces where they exist, RSS fan-ou
 | Destination | Delivery path | Current setup state |
 |---|---|---|
 | RSS.com | Intended post-cutover podcast host | Fresh supported self-service import awaits email confirmation. Empty old-slug show has exact branding but remains noncanonical; no redirect is authorized |
-| Spotify for Creators | Current canonical source plus Spotify video | Existing show `7GGLljxmO0G3FLjPy8vfcw` has exact metadata, approved titles, structured numbers 1-7, and seven unchanged GUIDs; preserve it through cutover |
-| Apple Podcasts | Episode audio from Spotify's canonical RSS | Claimed show `1870433419` points to the correct Anchor feed; five episodes are Available, three internal episode records are Draft, and separate no-feed Draft show `1896845422` also exists |
+| Spotify for Creators | Current canonical source plus Spotify video | Existing show `7GGLljxmO0G3FLjPy8vfcw` has approved titles, structured numbers 1-7, seven unchanged GUIDs, seven video thumbnails, and seven square episode-art images; `RSSVERIFY` currently makes the show description drift from the catalog |
+| Apple Podcasts | Episode audio and art from Spotify's canonical RSS | Claimed show `1870433419` points to the correct Anchor feed; five episodes are Available, three internal episode records are Draft, and separate no-feed Draft show `1896845422` also exists; one refresh was accepted after the artwork update |
 | Amazon Music and Audible | Episode audio from the final canonical RSS | Signed-in dashboard has zero claimed shows; hold submission until RSS.com cutover, then submit once |
 | YouTube | OAuth 2 plus resumable Data API upload | Channel `UCFA1nVv4lKMBlx81gjMAOFQ` exists; upload OAuth and API audit required |
 | Vimeo | Vimeo API tus upload | User `253415660` exists; app upload access and token required |
@@ -23,7 +23,7 @@ The canonical short profile description is `Dr. M Experienced, with Dr. David Mu
 
 | Profile | Current public name state |
 |---|---|
-| Spotify and Apple | The Anchor source is clean and verified. Spotify is canonical. Preserve Apple show `1870433419`, point it at the same feed, and refresh it rather than creating a replacement |
+| Spotify and Apple | The Anchor title, seven GUIDs, episode numbers, titles, and item artwork are verified. `RSSVERIFY` is appended to the description and must be removed for exact catalog parity. Spotify is canonical; preserve Apple show `1870433419` and refresh it rather than creating a replacement |
 | Amazon | No claimed show exists in the signed-in account; hold until cutover and submit the final RSS.com feed once |
 | YouTube | Canonical description is published; display name remains `Dr. M Experienced` because the manager-role name save did not persist |
 | Instagram | Display name is exact and the bio is the canonical description; handle `@drmexperienced` is unchanged |
@@ -31,11 +31,14 @@ The canonical short profile description is `Dr. M Experienced, with Dr. David Mu
 | Rumble | Channel title is exact and About uses the canonical description; channel name and account username remain `drmexperienced` |
 
 The seven existing YouTube, Vimeo, and Rumble videos use the catalog's approved
-unnumbered titles and deterministic descriptions as of August 5, 2026. YouTube
-uses a safe plain-text projection that spells out comparison operators because
-Studio rejects angle brackets. Vimeo stores list items as native rich-text
-bullets, so its public oEmbed text is compared semantically rather than byte for
-byte.
+unnumbered titles, deterministic descriptions, and approved topic thumbnails as
+of August 5, 2026. Spotify video and Spotify episode art also use the seven
+approved images, and the canonical RSS exposes seven unique 3000 x 3000 item
+images. YouTube uses a safe plain-text projection that spells out comparison
+operators because Studio rejects angle brackets. Vimeo stores list items as
+native rich-text bullets, so its public oEmbed text is compared semantically
+rather than byte for byte. Exact assets, remote IDs, and verification state are
+recorded in `publishing/episode-thumbnail-rollout.json`.
 
 Run `drm-publish doctor` for the current local readiness report. It checks tools, RSS metadata, credential-file presence, and stable destination IDs without printing credential values.
 
@@ -55,24 +58,27 @@ The source code now uses `Dr. M Experienced, with Dr. David Musnick`, but the
 remote feed and profiles are separate systems. Spotify for Creators/Anchor stays
 canonical while the supported RSS.com import and parity checks are completed.
 
-1. Completed: Spotify for Creators has the exact title and description with no
-   `RSSVERIFY` suffix.
+1. Pending correction: Spotify for Creators has the exact title, but
+   `RSSVERIFY` is appended to the show description and RSS summary. Remove only
+   the token, then verify the catalog description byte for byte.
 2. Completed: all seven approved unnumbered public titles, structured episode
    numbers 1-7, and original GUIDs are verified in the Anchor feed.
 3. Completed: the clean Anchor feed was independently verified before any
    downstream cutover.
-4. In Apple Podcasts Connect, open existing show `1870433419`, confirm the exact
-   Anchor RSS URL, save if necessary, and request one feed refresh. Do not add a
-   replacement show.
+4. Completed for the current artwork change: existing Apple show `1870433419`
+   points to the exact Anchor RSS URL and accepted one feed refresh on August 5,
+   2026. Verify episode artwork and the existing Draft discrepancy after normal
+   propagation. Do not add a replacement show.
 5. Inspect the separate no-feed Draft show `1896845422` and the manual Draft
    episode records. Archive only records with no unique content, channel, or
    subscription setup, and only where Apple offers a reversible archive control.
 6. After verified cutover, submit the final RSS.com feed once to Amazon, complete
    ownership verification, and record the stable show ID and public URL.
-7. YouTube, Vimeo, and Rumble metadata cleanup is complete. Reconcile Instagram
-   captions where needed, then update their title-bearing artwork from approved
-   platform variants. The website already uses clean episode-specific art. Do
-   not rename stable handles or IDs merely to match display text.
+7. YouTube, Vimeo, Rumble, Spotify video, Spotify episode art, and canonical RSS
+   episode-art updates are complete. Reconcile Instagram captions where needed
+   and use approved covers for future Reels; preserve existing posts because the
+   documented post-publication flow does not replace Reel covers. Do not rename
+   stable handles or IDs merely to match display text.
 8. Verify every public profile and the website before announcing convergence.
 
 Apple's current discrepancy is cleanup work, not a reason to recreate the show.
@@ -92,17 +98,24 @@ If resumable upload is unavailable for the configured account or API flow, stage
 
 - Apple Podcasts RSS requirements: <https://podcasters.apple.com/support/823-podcast-requirements>
 - Apple Podcasts metadata updates: <https://podcasters.apple.com/support/832-podcast-metadata>
+- Apple Podcasts episode art: <https://podcasters.apple.com/support/5516-episode-art-template>
 - Spotify show claiming: <https://support.spotify.com/us/creators/article/claiming-your-podcast-on-spotify-for-creators/>
 - Spotify platform update timing: <https://support.spotify.com/us/creators/article/new-episodes-or-podcast-updates-not-appearing-on-listening-platforms/>
+- Spotify episode cover art: <https://support.spotify.com/us/creators/article/uploading-cover-art/>
+- Spotify video thumbnails: <https://support.spotify.com/us/creators/article/thumbnails/>
 - Amazon podcast RSS submission: <https://podcasters.amazon.com/submit-rss>
 - Amazon podcaster FAQ: <https://podcasters.amazon.com/frequently-asked-questions>
 - YouTube video upload endpoint: <https://developers.google.com/youtube/v3/docs/videos/insert>
 - YouTube authentication: <https://developers.google.com/youtube/v3/guides/authentication>
 - YouTube API audit process: <https://developers.google.com/youtube/v3/guides/quota_and_compliance_audits>
+- YouTube video thumbnails: <https://support.google.com/youtube/answer/72431>
 - Instagram content publishing: <https://developers.facebook.com/documentation/instagram-platform/content-publishing>
+- Instagram Reel covers: <https://www.facebook.com/help/instagram/1038071743007909>
 - Vimeo video uploads: <https://developer.vimeo.com/api/upload/videos>
 - Vimeo authentication: <https://developer.vimeo.com/api/authentication>
+- Vimeo video thumbnails: <https://help.vimeo.com/hc/en-us/articles/12426471350289-How-to-change-the-thumbnail-image-for-my-video>
 - Rumble upload and editing: <https://rumble.support/help/upload-and-edit-content>
+- Rumble video thumbnails: <https://rumble.support/help/changing-a-thumbnail>
 - Rumble licensing choices: <https://rumble.support/help/a-simple-explanation-of-the-differences-between-licensing-options>
 
 ## Safety boundary
