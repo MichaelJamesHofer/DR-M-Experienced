@@ -49,7 +49,7 @@ insert into public.episodes (
     '1156414707',
     '7cAdb8GE4khC9EYKAjmYuc',
     'LXASEw-WFq8',
-    'https://vumbnail.com/1156414707.jpg'
+    'https://drmexperienced.com/images/episodes/brain-fog-part-1.webp'
   ),
   (
     'brain-fog-part-2',
@@ -62,7 +62,7 @@ insert into public.episodes (
     '1159441883',
     '19Pct0ClX3j1EOwJ3ySVd7',
     's740_XVTaAY',
-    'https://vumbnail.com/1159441883.jpg'
+    'https://drmexperienced.com/images/episodes/brain-fog-part-2.webp'
   ),
   (
     'episode-3-insomnia',
@@ -75,7 +75,7 @@ insert into public.episodes (
     '1179740758',
     '07OHz4sfbefOORcNi9xaUK',
     '59r5XFynaDo',
-    'https://vumbnail.com/1179740758.jpg'
+    'https://drmexperienced.com/images/episodes/insomnia.webp'
   ),
   (
     'episode-4-emf',
@@ -88,7 +88,7 @@ insert into public.episodes (
     '1179956166',
     '0aDVuIwrRlDKxEylMj2dyw',
     'X8WChChyh9c',
-    'https://vumbnail.com/1179956166.jpg'
+    'https://drmexperienced.com/images/episodes/emf.webp'
   ),
   (
     'episode-5-energy',
@@ -101,7 +101,7 @@ insert into public.episodes (
     '1204939658',
     '6fQAClcR4AAuueHjBNlrJC',
     'JyBK6KtOo_k',
-    'https://vumbnail.com/1204939658.jpg'
+    'https://drmexperienced.com/images/episodes/energy-mitochondria.webp'
   ),
   (
     'episode-6-concussion-and-pathophysiology',
@@ -114,7 +114,7 @@ insert into public.episodes (
     '1204939692',
     '7MbKWgPZN40KEyN5j123JC',
     'odNrtPEuong',
-    'https://vumbnail.com/1204939692.jpg'
+    'https://drmexperienced.com/images/episodes/concussion-mechanics.webp'
   ),
   (
     'episode-7-the-brain-on-fire',
@@ -127,7 +127,7 @@ insert into public.episodes (
     '1205004739',
     '5QJlHSE6JhP3ymSCNzbWxv',
     '3IVDJqwT2yY',
-    'https://vumbnail.com/1205004739.jpg'
+    'https://drmexperienced.com/images/episodes/brain-neuroinflammation.webp'
   )
 on conflict (slug) do update set
   episode_number = excluded.episode_number,

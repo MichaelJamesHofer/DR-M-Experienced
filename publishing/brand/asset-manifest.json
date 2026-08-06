@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "status": "website-approved",
+  "approvedAt": "2026-08-06T02:13:59Z",
+  "approvedBy": "project owner",
+  "rightsConfirmed": true,
+  "generation": {
+    "method": "OpenAI built-in image generation, one generation per episode, followed by a centered 1600 x 900 WebP export",
+    "sharedDirection": "Premium cinematic 3D scientific editorial illustration on deep charcoal, with cyan structure and restrained amber emphasis. Keep the focal subject central and leave dark edge space for responsive website overlays.",
+    "excluded": "Embedded text, numbers, logos, watermarks, identifiable people, fake clinical scans, gore, treatment promises, and purple-dominant palettes"
+  },
+  "assets": [
+    {
+      "logicalId": "episode-001-thumbnail",
+      "episodeSlug": "brain-fog-part-1",
+      "concept": "A brain emerging from diffuse fog into a clear connected neural network",
+      "path": "public/images/episodes/brain-fog-part-1.webp",
+      "mediaType": "image/webp",
+      "width": 1600,
+      "height": 900,
+      "sizeBytes": 63060,
+      "sha256": "2215d21b2499a925189139188e97497affbbe6ad044d706e418e096fe312c8ae"
+    },
+    {
+      "logicalId": "episode-002-thumbnail",
+      "episodeSlug": "brain-fog-part-2",
+      "concept": "A brain connected to multiple diagnostic and foundational-solution pathways",
+      "path": "public/images/episodes/brain-fog-part-2.webp",
+      "mediaType": "image/webp",
+      "width": 1600,
+      "height": 900,
+      "sizeBytes": 81750,
+      "sha256": "c820a96466ab4c0388b01a12b9ae9b4b6bcf1b5b36b023f4bc063729f53b6ccc"
+    },
+    {
+      "logicalId": "episode-003-thumbnail",
+      "episodeSlug": "episode-3-insomnia",
+      "concept": "A wakeful bedside profile transitioning from active rhythms toward dawn",
+      "path": "public/images/episodes/insomnia.webp",
+      "mediaType": "image/webp",
+      "width": 1600,
+      "height": 900,
+      "sizeBytes": 33924,
+      "sha256": "f377e6829d0cca470781ec2f1f1ce3a792c20ac003c62119d6a164bd72cd4aaf"
+    },
+    {
+      "logicalId": "episode-004-thumbnail",
+      "episodeSlug": "episode-4-emf",
+      "concept": "A phone and router emitting receding fields beside a wired connection",
+      "path": "public/images/episodes/emf.webp",
+      "mediaType": "image/webp",
+      "width": 1600,
+      "height": 900,
+      "sizeBytes": 22874,
+      "sha256": "9154bf582ce3e328e4fe349bb0033bec3a593c309ddf6efb32c30de729b18216"
+    },
+    {
+      "logicalId": "episode-005-thumbnail",
+      "episodeSlug": "episode-5-energy",
+      "concept": "A mitochondrion transitioning from cool low activity to warm energy production",
+      "path": "public/images/episodes/energy-mitochondria.webp",
+      "mediaType": "image/webp",
+      "width": 1600,
+      "height": 900,
+      "sizeBytes": 65582,
+      "sha256": "0d2a49e06ff8daa1172e64f47c4afefc7ff0211cf1c89c420cc4f8d909367e92"
+    },
+    {
+      "logicalId": "episode-006-thumbnail",
+      "episodeSlug": "episode-6-concussion-and-pathophysiology",
+      "concept": "Opposing directional forces illustrating concussion mechanics around the brain",
+      "path": "public/images/episodes/concussion-mechanics.webp",
+      "mediaType": "image/webp",
+      "width": 1600,
+      "height": 900,
+      "sizeBytes": 65278,
+      "sha256": "1c8aa48af05041cbda5eb402cf68c1a5a201e9373ab48f11321fe462b3cd78e9"
+    },
+    {
+      "logicalId": "episode-007-thumbnail",
+      "episodeSlug": "episode-7-the-brain-on-fire",
+      "concept": "A localized amber and coral neural activation pattern representing neuroinflammation",
+      "path": "public/images/episodes/brain-neuroinflammation.webp",
+      "mediaType": "image/webp",
+      "width": 1600,
+      "height": 900,
+      "sizeBytes": 79398,
+      "sha256": "7175f4ae5db187728df185d0e78e6bb6380b3d8a6e06b6b4c7e2e92f943654d3"
+    }
+  ],
+  "notes": "These clean, text-free derivatives are approved for the website. Direct-channel thumbnails may need platform-specific text and safe-area variants before replacement. Generated originals remain outside the repository in the local Codex image output store."
+}

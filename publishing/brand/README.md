@@ -1,6 +1,8 @@
 # Brand Asset Production Brief
 
-Status: planned; no replacement artwork is approved for publication yet.
+Status: the seven episode-specific website thumbnails are approved. The logo,
+show cover, avatar, direct-video thumbnail variants, banners, Open Graph image,
+and motion assets remain planned.
 
 This directory will hold versioned masters, export settings, and a non-secret
 asset manifest for the Dr. M Experienced visual system. Do not commit licensed
@@ -38,7 +40,9 @@ exports are committed or hosted deliberately.
 ## Composition Rules
 
 - Podcast cover: real face, large show name, smaller host line, no episode copy.
-- Long-form thumbnail: face or inspectable topic image, four to seven words,
+- Website episode thumbnail: inspectable topic image without embedded copy; the
+  responsive site supplies the title, number, duration, and state overlays.
+- Direct-video thumbnail: face or inspectable topic image, four to seven words,
   small brand mark, optional small episode-number index.
 - Reel cover: hook/topic only; keep face and copy inside the center-safe crop.
 - Long-form video: cold open first, then the short sting.
@@ -58,10 +62,15 @@ exports are committed or hosted deliberately.
 7. Publish the approved podcast cover through the canonical Spotify/Anchor show
    under a new filename/URL, then verify Spotify and Apple propagation. Verify
    Amazon after its one-time Anchor-feed submission.
-8. Replace the seven title-bearing thumbnails during the coordinated episode
-   title transition.
+8. Completed for the website: publish the seven clean episode-specific images.
+   Replace title-bearing thumbnails on video platforms only after approving
+   their text-bearing derivatives and destination crop checks.
 
-Before website artwork is switched, update sync/fallback behavior so remote
-`vumbnail.com` URLs cannot overwrite approved art in Supabase or recovery data.
+The website catalog, fallback data, and Supabase projection now use the approved
+local artwork. The master catalog remains authoritative, so remote
+`vumbnail.com` URLs cannot overwrite these derivatives during sync or recovery.
+
+Exact website export paths, dimensions, SHA-256 values, generation method, and
+subject concepts are recorded in `asset-manifest.json`.
 
 See `docs/operations-manual.md`, Sections 12-13, for the cross-platform sequence.

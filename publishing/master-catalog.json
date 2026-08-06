@@ -1,8 +1,8 @@
 {
   "$schema": "./master-catalog.schema.json",
   "schemaVersion": 1,
-  "revision": 1,
-  "updatedAt": "2026-08-05T21:44:37Z",
+  "revision": 2,
+  "updatedAt": "2026-08-06T02:13:59Z",
   "show": {
     "names": {
       "full": "Dr. M Experienced, with Dr. David Musnick",
@@ -119,7 +119,7 @@
       "sizeBytes": null,
       "mediaType": "image/png",
       "status": "unmounted",
-      "publishedUrl": "https://vumbnail.com/1156414707.jpg"
+      "publishedUrl": "https://drmexperienced.com/images/episodes/brain-fog-part-1.webp"
     },
     "episode-002-master-video": {
       "kind": "video",
@@ -147,7 +147,7 @@
       "sizeBytes": null,
       "mediaType": "image/png",
       "status": "unmounted",
-      "publishedUrl": "https://vumbnail.com/1159441883.jpg"
+      "publishedUrl": "https://drmexperienced.com/images/episodes/brain-fog-part-2.webp"
     },
     "episode-003-master-video": {
       "kind": "video",
@@ -175,7 +175,7 @@
       "sizeBytes": null,
       "mediaType": "image/png",
       "status": "unmounted",
-      "publishedUrl": "https://vumbnail.com/1179740758.jpg"
+      "publishedUrl": "https://drmexperienced.com/images/episodes/insomnia.webp"
     },
     "episode-004-master-video": {
       "kind": "video",
@@ -203,7 +203,7 @@
       "sizeBytes": null,
       "mediaType": "image/png",
       "status": "unmounted",
-      "publishedUrl": "https://vumbnail.com/1179956166.jpg"
+      "publishedUrl": "https://drmexperienced.com/images/episodes/emf.webp"
     },
     "episode-005-master-video": {
       "kind": "video",
@@ -231,7 +231,7 @@
       "sizeBytes": null,
       "mediaType": "image/png",
       "status": "unmounted",
-      "publishedUrl": "https://vumbnail.com/1204939658.jpg"
+      "publishedUrl": "https://drmexperienced.com/images/episodes/energy-mitochondria.webp"
     },
     "episode-006-master-video": {
       "kind": "video",
@@ -259,7 +259,7 @@
       "sizeBytes": null,
       "mediaType": "image/png",
       "status": "unmounted",
-      "publishedUrl": "https://vumbnail.com/1204939692.jpg"
+      "publishedUrl": "https://drmexperienced.com/images/episodes/concussion-mechanics.webp"
     },
     "episode-007-master-video": {
       "kind": "video",
@@ -287,7 +287,7 @@
       "sizeBytes": null,
       "mediaType": "image/png",
       "status": "unmounted",
-      "publishedUrl": "https://vumbnail.com/1205004739.jpg"
+      "publishedUrl": "https://drmexperienced.com/images/episodes/brain-neuroinflammation.webp"
     }
   },
   "episodes": [

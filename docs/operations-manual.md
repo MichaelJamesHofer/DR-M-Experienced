@@ -607,12 +607,15 @@ splash gate or one universal splash image.
 - Podcast art still uses the retired `DRM EXPERIENCED` design.
 - YouTube uses a generic `D`; Vimeo/Instagram use the sketch; Rumble lacks a
   verified channel image.
-- All seven long-video thumbnails contain the retired title.
+- Direct-channel thumbnails on YouTube, Vimeo, and Rumble still contain the
+  retired title; their text-bearing replacement variants remain pending.
 - Website header/footer use a mountain emoji while favicon SVGs use a different
   mountain treatment.
 - The website has no default Open Graph image.
-- Episode thumbnails come from remote Vimeo fallback URLs. Sync scripts and
-  Supabase recovery data must be changed so approved local art is not overwritten.
+- Completed for the website: all seven episodes use checked-in 1600 x 900 WebP
+  artwork registered in the master catalog, fallback data, and Supabase
+  projection. The catalog-owned URLs prevent platform sync from restoring
+  remote Vimeo fallback art.
 
 Store approved binary masters in the project-scoped Dropbox tree, register them
 in `publishing/master-catalog.json`, and verify their hashes before remote
@@ -859,9 +862,11 @@ Quarterly:
    ID/URL.
 4. Reconcile Instagram captions that use old numbered titles; the Anchor,
    website, YouTube, Vimeo, and Rumble batch is complete.
-5. Produce and approve the logo, show cover, avatar, thumbnail, Reel, banner, OG,
-   sting, and end-screen system.
-6. Prevent sync scripts from overwriting approved custom artwork.
+5. Produce and approve the logo, show cover, avatar, direct-channel thumbnail
+   variants, Reel, banner, OG, sting, and end-screen system. Website episode art
+   is complete.
+6. Completed for website episode art: master-catalog ownership prevents sync
+   scripts from overwriting approved custom thumbnails.
 7. Complete YouTube, Vimeo, and Instagram official API authorization.
 8. Add a durable upload receipt ledger, deterministic operation IDs, and remote
    reconciliation before calling the workflow unattended.
