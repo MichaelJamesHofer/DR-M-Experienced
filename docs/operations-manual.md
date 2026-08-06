@@ -39,20 +39,25 @@ runuser -u otto -- env \
 Interpretation on August 5, 2026:
 
 - Anchor source: HTTP 200, exact new show title, seven episodes, seven original
-  GUIDs, exact canonical description, structured episode numbers 1-7, and all
-  seven approved public titles. `RSSVERIFY` is absent. The clean source feed was
-  independently verified at `2026-08-05T21:04:36Z`.
+  GUIDs, structured episode numbers 1-7, all seven approved public titles, and
+  seven unique 3000 x 3000 item-art URLs. The show description is not currently
+  exact because `RSSVERIFY` has been appended again; Episodes 4-7 also contain
+  retired show-name variants in their descriptions. The source was independently
+  verified at `2026-08-06T03:32:22Z`.
 - Spotify for Creators/Anchor remains canonical during migration.
 - RSS.com migration: active pre-cutover. The supported self-service import was
   requested at `2026-08-05T21:17:39Z` and awaits project-email confirmation.
   The empty old-slug show has exact branding but remains noncanonical. Do not
   populate it manually, distribute it, or redirect Anchor.
-- Apple public show: preserve ID `1870433419`; Episodes 3-7 are public, Episodes
-  1-2 are missing from the public catalog.
-- YouTube, Vimeo, and Rumble: all seven public titles and descriptions were
-  reconciled to the catalog and verified on August 5, 2026. Vimeo represents
-  catalog lists as rich-text bullets; YouTube replaces forbidden angle brackets
-  with equivalent comparison words.
+- Apple public show: preserve ID `1870433419`; Episodes 3-7 are Available,
+  Episodes 1-2 remain Draft, and one separate manual Episode 4 Draft remains.
+  Podcasts Connect accepted one refresh after the episode-art feed update on
+  August 5, 2026; artwork and episode-state propagation remain unverified.
+- YouTube, Vimeo, and Rumble: all seven public titles, descriptions, and approved
+  episode thumbnails were reconciled and independently read back on August 5,
+  2026. Spotify also has all seven 16:9 video thumbnails and all seven square
+  episode-art images. Vimeo represents catalog lists as rich-text bullets;
+  YouTube replaces forbidden angle brackets with equivalent comparison words.
 - Local publishing browser: normally stopped when not in active use.
 - GitHub connector: authenticated with admin/push access to this repository.
   Otto's local `gh` credential currently needs attended reauthentication; use
@@ -68,6 +73,7 @@ Interpretation on August 5, 2026:
 | Shared show and episode distribution metadata | `publishing/master-catalog.json` |
 | Stable account/show/channel IDs and current routing | `publishing/platforms.json` |
 | Approved seven-episode title-transition evidence | `publishing/episode-title-migration.json` |
+| Approved episode-art assets and remote rollout receipt | `publishing/brand/asset-manifest.json` and `publishing/episode-thumbnail-rollout.json` |
 | Episode approval schema | `publishing/episode.schema.json` |
 | Visual briefs and templates | `publishing/brand/` |
 | Binary masters | Project-scoped Dropbox folder mapped by `~/.config/drm-publisher/sources.json` |
@@ -558,7 +564,12 @@ or remote content IDs.
    visibility, licensing, and monetization settings were preserved.
 8. Update Instagram captions only where the old numbered title is presented as
    the primary title; do not erase engagement history merely for cosmetic copy.
-9. Replace title-bearing thumbnails using the new asset templates.
+9. Completed on August 5, 2026: replace all seven existing thumbnails on
+   YouTube, Vimeo, Rumble, and Spotify video; upload all seven square episode-art
+   images to Spotify; verify seven unique item images in the canonical RSS; and
+   request one refresh on existing Apple show `1870433419`. Preserve existing
+   Instagram posts because their covers cannot be replaced through the
+   documented post-publication workflow.
 10. After RSS.com cutover, update existing Apple show `1870433419`, then submit
     the final feed once to Amazon and verify Apple/Spotify/Amazon propagation.
 11. Run a cross-platform audit and keep the crosswalk as evidence.
@@ -607,8 +618,10 @@ splash gate or one universal splash image.
 - Podcast art still uses the retired `DRM EXPERIENCED` design.
 - YouTube uses a generic `D`; Vimeo/Instagram use the sketch; Rumble lacks a
   verified channel image.
-- Direct-channel thumbnails on YouTube, Vimeo, and Rumble still contain the
-  retired title; their text-bearing replacement variants remain pending.
+- Completed for episode artwork: YouTube, Vimeo, Rumble, Spotify video, Spotify
+  episode art, and the canonical RSS all use the seven approved topic images.
+  Apple received a refresh request, but its directory propagation remains to be
+  verified. Existing Instagram Reel covers remain unchanged.
 - Website header/footer use a mountain emoji while favicon SVGs use a different
   mountain treatment.
 - The website has no default Open Graph image.
@@ -860,20 +873,29 @@ Quarterly:
    update that same show during cutover.
 3. Submit the final canonical RSS.com feed once to Amazon and record its stable
    ID/URL.
-4. Reconcile Instagram captions that use old numbered titles; the Anchor,
-   website, YouTube, Vimeo, and Rumble batch is complete.
-5. Produce and approve the logo, show cover, avatar, direct-channel thumbnail
-   variants, Reel, banner, OG, sting, and end-screen system. Website episode art
-   is complete.
-6. Completed for website episode art: master-catalog ownership prevents sync
-   scripts from overwriting approved custom thumbnails.
-7. Complete YouTube, Vimeo, and Instagram official API authorization.
-8. Add a durable upload receipt ledger, deterministic operation IDs, and remote
+4. Reconcile Instagram captions that use old numbered titles and apply approved
+   covers to future Reels; preserve existing posts and engagement. The Anchor,
+   website, YouTube, Vimeo, Rumble, and Spotify episode-art batch is complete.
+5. Produce and approve the logo, show cover, avatar, Reel, banner, OG, sting,
+   and end-screen system. Website and direct-platform episode art is complete.
+6. Completed for episode art: master-catalog ownership prevents website sync
+   scripts from overwriting approved custom thumbnails, and the rollout receipt
+   records every direct-platform ID and RSS artwork URL.
+7. Separate affiliate-page workstream: redesign it as a compact, mobile-first
+   product directory with useful links visible above the fold; replace generic
+   company links with verified direct links to the products Dr. David Musnick
+   specifically recommends, retain clear affiliate disclosures, and use the
+   Supabase affiliate relationships to show each product on relevant episode
+   pages. Validate mobile tap targets and every outbound product URL before
+   release. This is a separate workstream from the completed episode-thumbnail
+   rollout.
+8. Complete YouTube, Vimeo, and Instagram official API authorization.
+9. Add a durable upload receipt ledger, deterministic operation IDs, and remote
    reconciliation before calling the workflow unattended.
-9. Version and test workstation-wrapper installation/recovery.
-10. Build a small authenticated Supabase editorial/import tool after the release
+10. Version and test workstation-wrapper installation/recovery.
+11. Build a small authenticated Supabase editorial/import tool after the release
     workflow is stable.
-11. Configure the project-scoped Dropbox root, replace unmounted placeholder
+12. Configure the project-scoped Dropbox root, replace unmounted placeholder
     asset records with measured hashes/sizes, and complete independent path
     binding for production episode jobs.
 
@@ -886,6 +908,7 @@ Quarterly:
 - Apple podcast requirements: <https://podcasters.apple.com/support/823-podcast-requirements>
 - Apple metadata: <https://podcasters.apple.com/support/832-podcast-metadata>
 - Apple show-cover template: <https://podcasters.apple.com/support/5514-show-cover-template>
+- Apple episode-art template: <https://podcasters.apple.com/support/5516-episode-art-template>
 - RSS.com import: <https://help.rss.com/en/support/solutions/articles/44002261804-how-do-i-import-my-podcast-from-a-different-hosting-provider->
 - RSS.com imported directory links: <https://help.rss.com/en/support/solutions/articles/44002727331-updating-directory-links-for-imported-podcasts>
 - RSS.com Spotify redirect: <https://help.rss.com/en/support/solutions/articles/44002264641-how-do-i-redirect-my-podcast-from-spotify-for-creators-formerly-anchor->
@@ -893,12 +916,22 @@ Quarterly:
 - Amazon RSS submission: <https://podcasters.amazon.com/submit-rss>
 - YouTube upload API: <https://developers.google.com/youtube/v3/docs/videos/insert>
 - YouTube channel branding: <https://support.google.com/youtube/answer/10456525>
+- YouTube video thumbnails: <https://support.google.com/youtube/answer/72431>
 - Instagram publishing: <https://developers.facebook.com/documentation/instagram-platform/content-publishing>
+- Instagram Reel covers: <https://www.facebook.com/help/instagram/1038071743007909>
 - Vimeo upload API: <https://developer.vimeo.com/api/upload/videos>
+- Vimeo video thumbnails: <https://help.vimeo.com/hc/en-us/articles/12426471350289-How-to-change-the-thumbnail-image-for-my-video>
 - Rumble upload/edit: <https://rumble.support/help/upload-and-edit-content>
+- Rumble video thumbnails: <https://rumble.support/help/changing-a-thumbnail>
+- Spotify video thumbnails: <https://support.spotify.com/us/creators/article/thumbnails/>
+- Spotify episode cover art: <https://support.spotify.com/us/creators/article/uploading-cover-art/>
 
 ## 19. Change Log
 
+- August 5, 2026: published seven approved topic thumbnails to YouTube, Vimeo,
+  Rumble, Spotify video, and Spotify episode art; verified seven unique square
+  images in the canonical RSS; requested one Apple feed refresh; and recorded
+  the separate compact, mobile-first affiliate product-directory workstream.
 - August 5, 2026: temporarily parked RSS.com and made Spotify/Anchor canonical,
   approved removal of `RSSVERIFY` and the seven-title batch, and changed
   Apple/Amazon procedures to preserve the existing listings.

@@ -36,7 +36,7 @@
     "apple": {
       "label": "Apple Podcasts",
       "mode": "rss_fanout",
-      "channelUrl": "https://podcasts.apple.com/us/podcast/dr-ms-experienced-functional-and-sports-medicine/id1870433419",
+      "channelUrl": "https://podcasts.apple.com/us/podcast/dr-m-experienced-with-dr-david-musnick/id1870433419",
       "destinationIds": {
         "accountId": null,
         "containerId": "1870433419"
@@ -44,7 +44,7 @@
       "requiredDestinationIds": ["containerId"],
       "source": "rss",
       "dependsOn": "spotify",
-      "notes": "Do not upload the episode separately. Apple receives the approved podcast audio from Spotify's canonical RSS feed."
+      "notes": "Do not upload the episode separately. Apple receives the approved podcast audio and item-level episode artwork from Spotify's canonical RSS feed. Preserve show ID 1870433419 and refresh that listing after source-feed changes."
     },
     "amazon": {
       "label": "Amazon Music and Audible",

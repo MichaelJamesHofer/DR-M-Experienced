@@ -23,17 +23,20 @@
       "1e40e02b-b217-477c-9cc3-4271cb304c23",
       "c9b853b6-a828-4012-9998-217919ff9163"
     ],
-    "lastVerifiedAt": "2026-08-05T21:44:37Z",
-    "lastVerifiedSha256": "1a5bc72c191152d10a9f55548a9690045ab2e93856cd886c4a05073b281dde8c",
+    "lastVerifiedAt": "2026-08-06T03:32:40Z",
+    "lastVerifiedSha256": "87e836bcdd5272ec468ba39676da7c5d1e9cf8cb8f59c988ff362747cc973910",
     "verification": {
       "exactTitle": true,
-      "exactDescription": true,
-      "verificationTokenPresent": false,
+      "exactDescription": false,
+      "verificationTokenPresent": true,
       "episodeCount": 7,
       "uniqueGuidCount": 7,
       "guidSetMatchesBaseline": true,
       "structuredEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7],
-      "legacyTitleCount": 0
+      "legacyTitleCount": 0,
+      "episodeArtworkCount": 7,
+      "uniqueEpisodeArtworkCount": 7,
+      "episodeArtworkDimensions": "3000x3000"
     }
   },
   "destination": {
@@ -43,6 +46,7 @@
     "candidateMetadataCorrectedAt": "2026-08-05T21:17:39Z",
     "candidateMetadataVerifiedAt": "2026-08-05T21:44:37Z",
     "candidateFeedSha256": "ad5fbf254588ec7f41b1f0d2b09e8226071cabd9bf2e9208794515ee580ba447",
+    "candidateEpisodeCountCheckedAt": "2026-08-06T03:32:40Z",
     "candidateMetadataVerified": {
       "titleMatches": true,
       "descriptionMatches": true,
@@ -50,18 +54,21 @@
     },
     "proposedPermanentSlug": "dr-m-experienced",
     "proposedPermanentFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+    "proposedPermanentFeedHttpStatus": 404,
+    "proposedPermanentFeedCheckedAt": "2026-08-06T03:32:40Z",
     "permanentSlugApproved": true,
     "permanentSlugApprovedAt": "2026-08-05T06:09:16Z",
     "permanentFeedUrlApproved": false,
     "importRequestSubmittedAt": "2026-08-05T21:17:39Z",
     "importMethod": "supported_self_service_switch_flow",
     "importConfirmationStatus": "email_confirmation_pending",
-    "importConfirmationLastCheckedAt": "2026-08-05T21:44:37Z",
+    "importConfirmationLastCheckedAt": "2026-08-06T03:32:40Z",
     "ownershipVerification": {
       "token": "RSSVERIFY",
       "publicSourceFeedObserved": true,
       "publicSourceFeedObservedAt": "2026-08-05T17:22:25Z",
       "removedFromSourceFeedAt": "2026-08-05T21:04:36Z",
+      "reappearedInSourceFeedAt": "2026-08-06T03:32:40Z",
       "specialistEmailReplyStatus": "user_confirmed_sent",
       "specialistEmailReplyRecordedAt": "2026-08-05T17:22:25Z"
     }
@@ -86,7 +93,9 @@
       "duplicateDraftShowId": "949adc0b-c62f-410c-962d-17563cf3b07a",
       "duplicateDraftAppleShowId": "1896845422",
       "duplicateDraftHasRssFeed": false,
-      "feedRefreshRequestedAt": "2026-08-05T05:03:28Z",
+      "feedRefreshRequestedAt": "2026-08-06T03:32:40Z",
+      "feedRefreshReason": "Seven unique approved episode-art URLs became available in the canonical feed; Podcasts Connect accepted one refresh request on the existing show.",
+      "episodeArtworkPropagationVerified": false,
       "preexistingEpisodeCountDiscrepancyRequiresReview": true,
       "verifiedAfterCutover": false
     },

@@ -1,7 +1,10 @@
 # Brand Asset Production Brief
 
-Status: the seven episode-specific website thumbnails are approved. The logo,
-show cover, avatar, direct-video thumbnail variants, banners, Open Graph image,
+Status: the seven episode-specific website thumbnails, 16:9 direct-video
+exports, and 3000 x 3000 podcast episode-art exports are approved. The direct
+video set is live on YouTube, Vimeo, Rumble, and Spotify; the square set is live
+on Spotify and in the canonical RSS. Apple propagation is pending after a feed
+refresh. The logo, show cover, avatar, Reel covers, banners, Open Graph image,
 and motion assets remain planned.
 
 This directory will hold versioned masters, export settings, and a non-secret
@@ -42,8 +45,9 @@ exports are committed or hosted deliberately.
 - Podcast cover: real face, large show name, smaller host line, no episode copy.
 - Website episode thumbnail: inspectable topic image without embedded copy; the
   responsive site supplies the title, number, duration, and state overlays.
-- Direct-video thumbnail: face or inspectable topic image, four to seven words,
-  small brand mark, optional small episode-number index.
+- Direct-video thumbnail: prefer the approved inspectable, text-free topic
+  image. Add short copy or a small brand mark only when a measured platform test
+  demonstrates a clear benefit and a separately approved export is available.
 - Reel cover: hook/topic only; keep face and copy inside the center-safe crop.
 - Long-form video: cold open first, then the short sting.
 - Reels: start with content. Do not add an opening splash slate.
@@ -62,15 +66,20 @@ exports are committed or hosted deliberately.
 7. Publish the approved podcast cover through the canonical Spotify/Anchor show
    under a new filename/URL, then verify Spotify and Apple propagation. Verify
    Amazon after its one-time Anchor-feed submission.
-8. Completed for the website: publish the seven clean episode-specific images.
-   Replace title-bearing thumbnails on video platforms only after approving
-   their text-bearing derivatives and destination crop checks.
+8. Completed: publish the seven clean episode-specific images to the website,
+   YouTube, Vimeo, Rumble, and both Spotify artwork surfaces. The canonical RSS
+   now exposes seven unique 3000 x 3000 item images; an Apple feed refresh was
+   requested. Existing Instagram Reel covers cannot be replaced through the
+   documented post-publication workflow and must not be deleted/reposted merely
+   for cosmetic convergence.
 
 The website catalog, fallback data, and Supabase projection now use the approved
 local artwork. The master catalog remains authoritative, so remote
 `vumbnail.com` URLs cannot overwrite these derivatives during sync or recovery.
 
-Exact website export paths, dimensions, SHA-256 values, generation method, and
-subject concepts are recorded in `asset-manifest.json`.
+Exact website and platform export paths, dimensions, SHA-256 values, generation
+method, and subject concepts are recorded in `asset-manifest.json`. Remote IDs
+and rollout verification are recorded in
+`publishing/episode-thumbnail-rollout.json`.
 
 See `docs/operations-manual.md`, Sections 12-13, for the cross-platform sequence.
