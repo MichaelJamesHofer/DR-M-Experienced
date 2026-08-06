@@ -60,6 +60,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "rss.com": { "$ref": "#/$defs/releaseTarget" },
         "spotify": { "$ref": "#/$defs/releaseTarget" },
         "youtube": { "$ref": "#/$defs/releaseTarget" },
         "vimeo": { "$ref": "#/$defs/releaseTarget" },
@@ -72,11 +73,27 @@
       "minItems": 1,
       "uniqueItems": true,
       "items": {
-        "enum": ["spotify", "apple", "amazon", "youtube", "vimeo", "instagram", "rumble"]
+        "enum": ["rss.com", "spotify", "apple", "amazon", "youtube", "vimeo", "instagram", "rumble"]
       }
     }
   },
   "allOf": [
+    {
+      "if": {
+        "type": "object",
+        "properties": { "targets": { "type": "array", "contains": { "const": "rss.com" } } }
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "assets": {
+            "type": "object",
+            "required": ["podcastAudio"],
+            "properties": { "podcastAudio": { "type": "string" } }
+          }
+        }
+      }
+    },
     {
       "if": {
         "type": "object",
@@ -105,17 +122,15 @@
         "properties": {
           "assets": {
             "type": "object",
-            "anyOf": [
-              { "type": "object", "required": ["fullVideo"], "properties": { "fullVideo": { "type": "string" } } },
-              { "type": "object", "required": ["podcastAudio"], "properties": { "podcastAudio": { "type": "string" } } }
-            ]
+            "required": ["fullVideo"],
+            "properties": { "fullVideo": { "type": "string" } }
           }
         }
       }
     },
     {
       "if": { "type": "object", "properties": { "targets": { "type": "array", "contains": { "enum": ["apple", "amazon"] } } } },
-      "then": { "type": "object", "properties": { "targets": { "type": "array", "contains": { "const": "spotify" } } } }
+      "then": { "type": "object", "properties": { "targets": { "type": "array", "contains": { "const": "rss.com" } } } }
     }
   ],
   "$defs": {

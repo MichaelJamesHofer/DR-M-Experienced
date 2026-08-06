@@ -19,6 +19,7 @@ import {
   htmlDescriptionToPlainText,
   loadCatalog,
   manifestCatalogProblems,
+  normalizeDescriptionForComparison,
   resolveCatalogAsset,
   resolveSourceRef,
   validateCatalog,
@@ -35,6 +36,16 @@ const expectedIdentities = [
   [7, "5QJlHSE6JhP3ymSCNzbWxv", "3IVDJqwT2yY", "1205004739", "v7bvtu4"],
 ];
 
+const expectedPodcastAudio = [
+  ["brain-fog-part-1", "1156414707", "https://content.rss.com/episodes/397420/3050766/dr-m-experienced/2026_08_06_08_58_14_5ecd30b1-aef2-4666-ad49-f8c0f210fea2.mp3"],
+  ["brain-fog-part-2", "1159441883", "https://content.rss.com/episodes/397420/3050765/dr-m-experienced/2026_08_06_08_58_12_56d5c865-9d3e-4c15-943c-095c535ffe7b.mp3"],
+  ["episode-3-insomnia", "1179740758", "https://content.rss.com/episodes/397420/3050764/dr-m-experienced/2026_08_06_08_58_10_29cdf885-f097-4016-91fa-79229beaffe2.mp3"],
+  ["episode-4-emf", "1179956166", "https://content.rss.com/episodes/397420/3050763/dr-m-experienced/2026_08_06_08_58_08_299310cb-53c0-4de1-88ca-684a25901bc5.mp3"],
+  ["episode-5-energy", "1204939658", "https://content.rss.com/episodes/397420/3050762/dr-m-experienced/2026_08_06_08_58_06_7cc0ba78-000a-4bfe-9360-e2526cf972ab.mp3"],
+  ["episode-6-concussion-and-pathophysiology", "1204939692", "https://content.rss.com/episodes/397420/3050761/dr-m-experienced/2026_08_06_08_58_03_e31f1115-3f5b-4192-a929-58eada8d76e1.mp3"],
+  ["episode-7-the-brain-on-fire", "1205004739", "https://content.rss.com/episodes/397420/3050760/dr-m-experienced/2026_08_06_08_58_01_2d87eb57-8e98-435a-a59b-509643963942.mp3"],
+];
+
 async function temporarySources() {
   const temporary = await fs.mkdtemp(path.join(os.tmpdir(), "drm-catalog-"));
   const root = path.join(temporary, "project-source");
@@ -49,7 +60,7 @@ test("master catalog validates and has a deterministic hash", async () => {
   const result = validateCatalog(catalog);
   assert.deepEqual(result, { valid: true, errors: [] });
   assert.equal(catalog.schemaVersion, 1);
-  assert.equal(catalog.revision, 2);
+  assert.equal(catalog.revision, 4);
   assert.equal(catalog.episodes.length, 7);
   assert.match(catalogHash(catalog), /^[a-f0-9]{64}$/);
   assert.equal(catalogHash(catalog), catalogHash(structuredClone(catalog)));
@@ -88,6 +99,17 @@ test("HTML descriptions have a deterministic readable plain-text projection", ()
   assert.throws(() => htmlDescriptionToPlainText(null), /must be a string/);
 });
 
+test("doctor accepts RSS.com single-paragraph markup for the canonical show description", () => {
+  const canonical =
+    "Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine.";
+  const rssCom = `<p>${canonical}</p>`;
+
+  assert.equal(
+    normalizeDescriptionForComparison(rssCom),
+    normalizeDescriptionForComparison(canonical)
+  );
+});
+
 test("YouTube projection replaces forbidden angle brackets without losing comparison meaning", () => {
   assert.equal(
     youtubeDescriptionFromHtml("<p>Episodes &gt;15 minutes and values &lt; 2.</p>"),
@@ -111,6 +133,48 @@ test("checked-in site brand projection exactly matches the master catalog", asyn
   const generated = await fs.readFile(DEFAULT_SITE_BRAND_PATH, "utf8");
   assert.equal(generated, renderSiteBrandProjection(catalog));
   assert.deepEqual(JSON.parse(generated), buildSiteBrandProjection(catalog));
+  assert.equal(JSON.parse(generated).podcastFeedUrl, catalog.show.canonicalPodcastFeed.url);
+});
+
+test("published podcast enclosures bind the website and Supabase seed projections", async () => {
+  const catalog = await loadCatalog();
+  const enrichment = JSON.parse(
+    await fs.readFile(new URL("../../src/data/episodes-enrichment.json", import.meta.url), "utf8")
+  );
+  const seed = await fs.readFile(new URL("../../supabase/seed.sql", import.meta.url), "utf8");
+  const insertStart = seed.indexOf("insert into public.episodes (");
+  const insertEnd = seed.indexOf("on conflict (slug) do update set", insertStart);
+  assert.ok(insertStart >= 0 && insertEnd > insertStart, "could not isolate the episode seed projection");
+  const episodeSeed = seed.slice(insertStart, insertEnd);
+
+  const catalogProjection = catalog.episodes
+    .filter((episode) => episode.publicationState === "published")
+    .map((episode) => {
+      const audio = catalog.assetRegistry[episode.assetRefs.podcastAudio];
+      assert.equal(audio?.kind, "audio", `${episode.slug} podcastAudio must reference an audio asset`);
+      assert.equal(audio?.role, "podcastAudio", `${episode.slug} podcastAudio role drifted`);
+      return [episode.slug, episode.destinations.vimeo?.id, audio?.publishedUrl];
+    });
+  assert.deepEqual(catalogProjection, expectedPodcastAudio);
+
+  assert.deepEqual(
+    expectedPodcastAudio.map(([slug, vimeoId]) => [slug, vimeoId, enrichment[vimeoId]?.audioUrl]),
+    expectedPodcastAudio
+  );
+
+  for (const [index, [slug, , audioUrl]] of expectedPodcastAudio.entries()) {
+    const rowStart = episodeSeed.indexOf(`    '${slug}',`);
+    const nextSlug = expectedPodcastAudio[index + 1]?.[0];
+    const rowEnd = nextSlug ? episodeSeed.indexOf(`    '${nextSlug}',`, rowStart + 1) : episodeSeed.length;
+    assert.ok(rowStart >= 0 && rowEnd > rowStart, `${slug} is missing from the episode seed projection`);
+    assert.ok(
+      episodeSeed.slice(rowStart, rowEnd).includes(`    '${audioUrl}',`),
+      `${slug} seed audio_url does not match the master catalog`
+    );
+  }
+
+  assert.equal((episodeSeed.match(/https:\/\/content\.rss\.com\/episodes\//g) ?? []).length, 7);
+  assert.doesNotMatch(episodeSeed, /https:\/\/anchor\.fm\/s\/10e1b0328\/podcast\/play\//);
 });
 
 test("semantic validation rejects duplicate immutable episode identities", async () => {
@@ -135,6 +199,20 @@ test("semantic validation rejects duplicate immutable episode identities", async
   const result = validateCatalog(duplicateDestination);
   assert.equal(result.valid, false);
   assert.ok(result.errors.some((error) => error.includes("Duplicate destination ID spotify:")), result.errors.join("\n"));
+});
+
+test("published episodes require a hosted podcast enclosure", async () => {
+  const catalog = await loadCatalog();
+  const changed = structuredClone(catalog);
+  const assetId = changed.episodes[0].assetRefs.podcastAudio;
+  delete changed.assetRegistry[assetId].publishedUrl;
+
+  const result = validateCatalog(changed);
+  assert.equal(result.valid, false);
+  assert.ok(
+    result.errors.some((error) => error.includes("must reference a hosted asset with publishedUrl")),
+    result.errors.join("\n")
+  );
 });
 
 test("catalog scales beyond the initial seven episodes with contiguous identities", async () => {
@@ -197,13 +275,15 @@ function parsedFeedFromCatalog(catalog) {
       .map((episode) => ({
         guid: episode.rssGuid,
         title: episode.title,
+        description: episode.description.full,
         episodeNumber: String(episode.number),
+        seasonNumber: null,
       }))
       .reverse(),
   };
 }
 
-test("published catalog feed comparison passes exact metadata without relying on episode order", async () => {
+test("published catalog feed comparison passes exact metadata in reverse episode-number order", async () => {
   const catalog = await loadCatalog();
   const result = comparePublishedCatalogFeed(catalog, parsedFeedFromCatalog(catalog));
 
@@ -216,15 +296,22 @@ test("published catalog feed comparison passes exact metadata without relying on
     uniqueGuids: true,
     titleMatches: true,
     structuredNumbersMatch: true,
+    descriptionsMatch: true,
+    noSeasonMetadata: true,
+    feedOrderMatches: true,
     noLegacyTitlePrefixes: true,
     expectedStructuredEpisodeNumbers: [1, 2, 3, 4, 5, 6, 7],
     actualStructuredEpisodeNumbers: [1, 2, 3, 4, 5, 6, 7],
+    expectedFeedOrder: [7, 6, 5, 4, 3, 2, 1],
+    actualFeedOrder: [7, 6, 5, 4, 3, 2, 1],
     missingGuids: [],
     extraGuids: [],
     duplicateGuids: [],
     missingGuidIndexes: [],
     titleMismatches: [],
     episodeNumberMismatches: [],
+    descriptionMismatches: [],
+    seasonMetadataEpisodes: [],
     legacyTitleEpisodes: [],
   });
 });
@@ -322,6 +409,56 @@ test("published catalog feed comparison rejects missing structured numbers and l
       title: changed.episodes[1].title,
     },
   ]);
+});
+
+test("published catalog feed comparison normalizes HTML/plain descriptions and rejects visible drift", async () => {
+  const catalog = await loadCatalog();
+  const equivalent = parsedFeedFromCatalog(catalog);
+  for (const episode of equivalent.episodes) {
+    episode.description = normalizeDescriptionForComparison(episode.description);
+  }
+
+  assert.equal(comparePublishedCatalogFeed(catalog, equivalent).descriptionsMatch, true);
+
+  equivalent.episodes[0].description += " Changed.";
+  const drifted = comparePublishedCatalogFeed(catalog, equivalent);
+  assert.equal(drifted.ok, false);
+  assert.equal(drifted.descriptionsMatch, false);
+  assert.deepEqual(drifted.descriptionMismatches, [
+    {
+      guid: equivalent.episodes[0].guid,
+      title: equivalent.episodes[0].title,
+      actualCount: 1,
+    },
+  ]);
+});
+
+test("published catalog feed comparison rejects season metadata and noncanonical feed order", async () => {
+  const catalog = await loadCatalog();
+  const seasonDrift = parsedFeedFromCatalog(catalog);
+  seasonDrift.episodes[0].seasonNumber = "1";
+  const seasonResult = comparePublishedCatalogFeed(catalog, seasonDrift);
+  assert.equal(seasonResult.ok, false);
+  assert.equal(seasonResult.noSeasonMetadata, false);
+  assert.deepEqual(seasonResult.seasonMetadataEpisodes, [
+    {
+      index: 0,
+      guid: seasonDrift.episodes[0].guid,
+      title: seasonDrift.episodes[0].title,
+      seasonNumber: "1",
+    },
+  ]);
+
+  const orderDrift = parsedFeedFromCatalog(catalog);
+  [orderDrift.episodes[0], orderDrift.episodes[1]] = [
+    orderDrift.episodes[1],
+    orderDrift.episodes[0],
+  ];
+  const orderResult = comparePublishedCatalogFeed(catalog, orderDrift);
+  assert.equal(orderResult.ok, false);
+  assert.equal(orderResult.feedOrderMatches, false);
+  assert.deepEqual(orderResult.expectedFeedOrder, [7, 6, 5, 4, 3, 2, 1]);
+  assert.deepEqual(orderResult.actualFeedOrder, [6, 7, 5, 4, 3, 2, 1]);
 });
 
 test("published catalog feed comparison validates its collection inputs", () => {

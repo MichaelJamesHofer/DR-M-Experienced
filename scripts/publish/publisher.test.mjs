@@ -29,6 +29,7 @@ import {
 
 function resolvedReleasePlan(target, overrides = {}) {
   const values = {
+    "rss.com": { initialVisibility: "draft", finalVisibility: "public", license: "not_applicable" },
     spotify: { initialVisibility: "draft", finalVisibility: "public", license: "not_applicable" },
     youtube: { initialVisibility: "private", finalVisibility: "public", license: "youtube" },
     vimeo: { initialVisibility: "nobody", finalVisibility: "anybody", license: "none" },
@@ -66,10 +67,11 @@ function validManifest() {
     assets: { fullVideo: "/tmp/video.mp4", podcastAudio: "/tmp/audio.mp3", instagramReel: null },
     copy: {},
     releasePlan: {
+      "rss.com": resolvedReleasePlan("rss.com"),
       spotify: resolvedReleasePlan("spotify"),
       instagram: resolvedReleasePlan("instagram"),
     },
-    targets: ["spotify", "apple", "amazon", "instagram"],
+    targets: ["rss.com", "spotify", "apple", "amazon", "instagram"],
   };
 }
 
@@ -78,14 +80,15 @@ function validPlatformConfig() {
     brand: "Dr. M Experienced, with Dr. David Musnick",
     rssFeed: "https://example.test/podcast.rss",
     podcastDistribution: {
-      canonicalHost: "spotify",
-      hostAssets: ["fullVideo", "podcastAudio"],
-      rssDownstream: ["apple", "amazon"],
+      canonicalHost: "rss.com",
+      hostAssets: ["podcastAudio"],
+      rssDownstream: ["spotify", "apple", "amazon"],
     },
     platforms: {
-      spotify: { label: "Spotify", mode: "manual_host_upload", asset: "fullVideo", fallbackAsset: "podcastAudio", rssRole: "canonical_host", channelUrl: "https://example.test/spotify", ...platformIdentity("spotify-account", "abcdefghijklmnopqrstuv", ["containerId"]), notes: "" },
-      apple: { label: "Apple", mode: "rss_fanout", source: "rss", dependsOn: "spotify", channelUrl: "https://example.test/apple", ...platformIdentity(null, "1870433419", ["containerId"]), notes: "" },
-      amazon: { label: "Amazon", mode: "rss_fanout", source: "rss", dependsOn: "spotify", channelUrl: null, ...platformIdentity(null, "amazon-show", ["containerId"]), notes: "" },
+      "rss.com": { label: "RSS.com", mode: "manual_host_upload", asset: "podcastAudio", rssRole: "canonical_host", channelUrl: "https://example.test/rss-com", ...platformIdentity(null, "dr-m-experienced", ["containerId"]), notes: "" },
+      spotify: { label: "Spotify", mode: "manual_video_replacement_after_rss_ingest", asset: "fullVideo", rssRole: "direct_media_destination", channelUrl: "https://example.test/spotify", ...platformIdentity("spotify-account", "abcdefghijklmnopqrstuv", ["containerId"]), notes: "" },
+      apple: { label: "Apple", mode: "rss_fanout", source: "rss", dependsOn: "rss.com", channelUrl: "https://example.test/apple", ...platformIdentity(null, "1870433419", ["containerId"]), notes: "" },
+      amazon: { label: "Amazon", mode: "rss_fanout", source: "rss", dependsOn: "rss.com", channelUrl: null, ...platformIdentity(null, "amazon-show", ["containerId"]), notes: "" },
       youtube: { label: "YouTube", mode: "api_after_auth_and_audit", asset: "fullVideo", channelUrl: "https://example.test/youtube", ...platformIdentity("UCabcdefghijklmnopqrstuv", "PLabcdefghijklmnopqrstuvwx", ["accountId", "containerId"]), notes: "" },
       vimeo: { label: "Vimeo", mode: "api_after_auth", asset: "fullVideo", channelUrl: "https://example.test/vimeo", ...platformIdentity("12345678", null, ["accountId"]), notes: "" },
       instagram: { label: "Instagram", mode: "api_after_auth", asset: "instagramReel", channelUrl: "https://example.test/instagram", ...platformIdentity("17841400000000000", null, ["accountId"]), notes: "" },
@@ -211,9 +214,9 @@ test("manifest validation rejects fields and values excluded by the JSON schema"
 
 test("manifest validation binds release plans to selected direct destinations", () => {
   const missing = validManifest();
-  delete missing.releasePlan.spotify;
+  delete missing.releasePlan["rss.com"];
   let result = validateManifest(missing);
-  assert.ok(result.errors.some((error) => error.includes("releasePlan.spotify is required")), result.errors.join("\n"));
+  assert.ok(result.errors.some((error) => error.includes("releasePlan.rss.com is required")), result.errors.join("\n"));
 
   const extra = validManifest();
   extra.releasePlan.youtube = resolvedReleasePlan("youtube");
@@ -222,8 +225,8 @@ test("manifest validation binds release plans to selected direct destinations", 
 
   const rssFanout = {
     ...validManifest(),
-    releasePlan: { spotify: resolvedReleasePlan("spotify") },
-    targets: ["spotify", "apple", "amazon"],
+    releasePlan: { "rss.com": resolvedReleasePlan("rss.com") },
+    targets: ["rss.com", "apple", "amazon"],
   };
   assert.deepEqual(validateManifest(rssFanout).errors, []);
 });
@@ -293,23 +296,37 @@ test("manifest normalization freezes publish time as a UTC instant without mutat
 });
 
 test("manifest schema and semantic rules agree on platform asset dependencies", () => {
-  const audioOnly = {
+  const spotifyVideo = {
     ...validManifest(),
-    assets: { podcastAudio: "/tmp/audio.mp3" },
+    assets: { fullVideo: "/tmp/video.mp4" },
     releasePlan: { spotify: resolvedReleasePlan("spotify") },
     targets: ["spotify"],
   };
-  assert.deepEqual(validateManifest(audioOnly).errors, []);
+  assert.deepEqual(validateManifest(spotifyVideo).errors, []);
+
+  const audioOnlySpotify = {
+    ...spotifyVideo,
+    assets: { podcastAudio: "/tmp/audio.mp3" },
+  };
+  assert.ok(validateManifest(audioOnlySpotify).errors.some((error) => error.includes("fullVideo")));
 
   const missingVideo = {
-    ...audioOnly,
+    ...audioOnlySpotify,
     releasePlan: { youtube: resolvedReleasePlan("youtube") },
     targets: ["youtube"],
   };
   assert.ok(validateManifest(missingVideo).errors.some((error) => error.includes("fullVideo")));
 
-  const missingHost = { ...audioOnly, releasePlan: {}, targets: ["apple"] };
-  assert.ok(validateManifest(missingHost).errors.some((error) => error.includes("spotify")));
+  const missingRssAudio = {
+    ...audioOnlySpotify,
+    assets: { fullVideo: "/tmp/video.mp4" },
+    releasePlan: { "rss.com": resolvedReleasePlan("rss.com") },
+    targets: ["rss.com"],
+  };
+  assert.ok(validateManifest(missingRssAudio).errors.some((error) => error.includes("podcastAudio")));
+
+  const missingHost = { ...audioOnlySpotify, releasePlan: {}, targets: ["apple"] };
+  assert.ok(validateManifest(missingHost).errors.some((error) => error.includes("rss.com")));
 });
 
 test("manifest validation warns when a selected Instagram target lacks a Reel", () => {
@@ -327,7 +344,11 @@ test("target planning models RSS fan-out and account gates", () => {
     instagramReel: null,
   };
   const plan = buildTargetPlan(config, manifest, assets);
-  assert.equal(plan.find((item) => item.id === "spotify").readiness, "manual_upload_required");
+  assert.equal(plan.find((item) => item.id === "rss.com").readiness, "manual_upload_required");
+  assert.equal(
+    plan.find((item) => item.id === "spotify").readiness,
+    "manual_video_replacement_required"
+  );
   assert.equal(plan.find((item) => item.id === "apple").readiness, "waiting_for_host_publish");
   assert.equal(plan.find((item) => item.id === "amazon").readiness, "directory_setup_required");
   assert.equal(plan.find((item) => item.id === "instagram").readiness, "asset_required");
@@ -456,6 +477,31 @@ test("RSS destinations cannot appear ready without the canonical host action", (
   const plan = buildTargetPlan(validPlatformConfig(), manifest, {});
   assert.equal(plan[0].readiness, "host_publish_dependency_missing");
   assert.equal(plan[0].asset, "rss_feed");
+});
+
+test("RSS.com requires real audio while an explicit Spotify target requires replacement video", () => {
+  const noAudio = assetRecord("podcastAudio", {
+    media: { durationSeconds: 60, streams: [{ type: "video", codec: "h264" }] },
+  });
+  const rssManifest = {
+    ...validManifest(),
+    releasePlan: { "rss.com": resolvedReleasePlan("rss.com") },
+    targets: ["rss.com"],
+  };
+  const rssValidation = validateMediaAssets({ podcastAudio: noAudio }, rssManifest);
+  assert.deepEqual(rssValidation.targetErrors["rss.com"], ["podcastAudio has no audio stream."]);
+
+  const spotifyManifest = {
+    ...validManifest(),
+    assets: { fullVideo: null, podcastAudio: "/tmp/audio.mp3" },
+    releasePlan: { spotify: resolvedReleasePlan("spotify") },
+    targets: ["spotify"],
+  };
+  assert.ok(
+    validateManifest(spotifyManifest).errors.some((error) =>
+      error.includes("Spotify replacement requires assets.fullVideo")
+    )
+  );
 });
 
 test("media preflight applies upload limits only to selected targets", () => {
@@ -636,10 +682,26 @@ test("private writers provide atomic exclusive creation under contention", async
   );
 });
 
-test("hosting migration gate requires both migration records to remain active", () => {
-  assert.equal(hostingMigrationIsActive({ decision: { active: true } }, { active: true }), true);
-  assert.equal(hostingMigrationIsActive({ decision: { active: false } }, { active: true }), false);
-  assert.equal(hostingMigrationIsActive({ decision: { active: true } }, { active: false }), false);
+test("hosting migration gate requires aligned active nonterminal records", () => {
+  const activeMigration = {
+    status: "pre_redirect_cleanup",
+    decision: { active: true },
+    gates: { redirectVerified: false },
+  };
+  const activePending = { active: true, status: "pre_redirect_cleanup" };
+  assert.equal(hostingMigrationIsActive(activeMigration, activePending), true);
+  assert.equal(
+    hostingMigrationIsActive({ ...activeMigration, decision: { active: false } }, activePending),
+    false
+  );
+  assert.equal(hostingMigrationIsActive(activeMigration, { ...activePending, active: false }), false);
+  assert.equal(
+    hostingMigrationIsActive(
+      { ...activeMigration, status: "completed", decision: { active: false } },
+      { active: false, status: "completed" }
+    ),
+    false
+  );
   assert.equal(hostingMigrationIsActive(null, { active: true }), false);
 });
 

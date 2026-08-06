@@ -2,10 +2,10 @@
 
 This workspace turns one approved episode manifest into a repeatable seven-destination publishing plan. Preparing a job is local-only: it reads media, runs `ffprobe`, calculates SHA-256 fingerprints, and writes an integrity-checked review packet. It never logs in or uploads.
 
-Start with `docs/operations-manual.md` for the complete ecosystem and recovery procedures. See `docs/publishing-platform-setup.md` for the account inventory. `docs/rss-com-migration.md` tracks the active pre-cutover RSS.com import and its hard validation and redirect gates.
+Start with `docs/operations-manual.md` for the complete ecosystem and recovery procedures. See `docs/publishing-platform-setup.md` for the account inventory. `docs/rss-com-migration.md` records the completed RSS.com cutover, its validation evidence, and post-cutover monitoring.
 
 The approved cross-platform removal of visible `Episode N:` title prefixes is
-recorded in `publishing/episode-title-migration.json`. The Anchor, website,
+recorded in `publishing/episode-title-migration.json`. The RSS.com, website,
 YouTube, Vimeo, and Rumble batch is complete. Keep `episodeNumber` required in
 the manifest and RSS metadata, preserve every GUID and remote content ID, and
 use the evidence file to finish Apple, Instagram, Amazon, and artwork propagation.
@@ -88,8 +88,9 @@ drm-publish approve <job-id> --hash <approval-hash> --by "Otto" --confirm "appro
 drm-publish status <job-id>
 ```
 
-Use `drm-publish migration-check [--verify-media] [--snapshot]` only after the
-supported import produces a candidate feed; a failed gate blocks cutover.
+Use `drm-publish migration-check [--verify-media] [--verify-artwork]
+[--decode-edge-audio] [--snapshot]` to audit migration evidence or investigate
+feed drift. It is not part of routine episode publishing.
 
 After registering the episode in `publishing/master-catalog.json`, start from
 `publishing/episode.example.json`. `episodeNumber` is required structured data;
@@ -97,9 +98,9 @@ the public `title` does not include an `Episode N:` prefix. Keep the real episod
 manifest beside the edited media or in another private working directory. Do
 not place credentials in the manifest or repository.
 
-Every direct destination needs a `releasePlan` entry. The example deliberately uses `hold` with `not_selected` values so it cannot be mistaken for release approval. Fill in the exact initial and final visibility, platform license, monetization, and notification choices before review. Apple and Amazon inherit the podcast-audio release through the canonical RSS feed and do not get separate release entries.
+Every direct destination needs a `releasePlan` entry. The example deliberately uses `hold` with `not_selected` values so it cannot be mistaken for release approval. Fill in the exact initial and final visibility, platform license, monetization, and notification choices before review. Spotify, Apple, and Amazon inherit podcast audio through the canonical RSS feed and do not get separate audio-release entries; an optional Spotify `fullVideo` replacement still needs its exact release decisions.
 
-`prepare` creates a job under `~/.local/state/drm-publisher/jobs/`. Spotify prefers `fullVideo` and can fall back to a supplied `podcastAudio` file for an audio-only episode. The approval hash covers the normalized manifest, platform plan, media paths, media metadata, and media SHA-256 values. `approve` rejects a hash mismatch, a changed review document, any changed source asset, or a missing exact confirmation phrase.
+`prepare` creates a job under `~/.local/state/drm-publisher/jobs/`. RSS.com receives `podcastAudio`. After that episode appears in Spotify through RSS, an approved `fullVideo` may replace its audio on Spotify only; audio-only episodes need no direct Spotify upload. The approval hash covers the normalized manifest, platform plan, media paths, media metadata, and media SHA-256 values. `approve` rejects a hash mismatch, a changed review document, any changed source asset, or a missing exact confirmation phrase.
 
 When the Dropbox project root is configured, `prepare` also requires each media
 path to resolve to the episode's catalog asset. A catalog asset marked
@@ -110,12 +111,13 @@ claiming independent Dropbox path verification.
 
 ## Distribution model
 
-- Spotify for Creators/Anchor remains canonical during the active RSS.com import. Preserve show `7GGLljxmO0G3FLjPy8vfcw` and every existing episode GUID.
-- RSS.com is the intended host after a verified supported import and separately approved redirect. Never populate the empty show manually or treat it as canonical before parity checks pass.
-- Preserve Apple show `1870433419` and update it in place after cutover. Hold Amazon, then submit the final canonical RSS.com feed once; never create duplicate directory listings.
+- The supported RSS.com import is complete at `https://media.rss.com/dr-m-experienced/feed.xml`; all seven GUIDs, media files, and artwork assets passed parity. Preserve every imported identity.
+- The legacy Anchor URL now returns one HTTP 301 hop to RSS.com. Preserve that redirect and Spotify show `7GGLljxmO0G3FLjPy8vfcw` for RSS audio ingestion, optional video replacement, analytics, and continuity.
+- Apple show `1870433419` is configured directly to RSS.com with exact metadata, but still exposes five Available episodes and has three Draft records to inspect. Submit the RSS.com feed once to Amazon and never create duplicate directory listings.
+- Production Supabase has the exact seven catalog-projected RSS.com audio URLs; the guarded migration and catalog readback passed.
 - YouTube, Vimeo, and Instagram have official API routes, but each needs account authorization and platform-specific setup.
 - Instagram should use resumable upload from the approved local Reel. A short-lived public staging URL is fallback-only and must be removed after Meta finishes processing.
-- Rumble VOD and the current Spotify creator upload remain manual browser steps because no supported public creator-upload API is available for those flows.
+- Rumble VOD and Spotify's optional replace-with-video action remain manual browser steps because no supported public creator-upload API is available for those flows.
 
 The live phase must always begin from an unchanged, integrity-checked job. The current local review record is self-reported attribution, not identity authentication, and explicitly grants neither upload nor release authority. Future upload adapters must require a separate user-presence-backed authorization, create private or draft content where supported, record returned IDs and URLs, and require another explicit confirmation before public release.
 
@@ -123,36 +125,36 @@ The live phase must always begin from an unchanged, integrity-checked job. The c
 
 ## Browser bridge
 
-The workstation has a pinned local Chrome DevTools bridge for Spotify, Rumble, and account settings that do not expose a suitable API. It uses an isolated profile at `~/.local/share/drm-publisher/chrome-profile`; it never attaches to Otto's normal Chrome data or copies cookies from it.
+The workstation has a pinned local Chrome DevTools bridge for Spotify, Rumble, and account settings that do not expose a suitable API. It uses the isolated Chrome data directory `~/.local/share/drm-publisher/chrome-profile`; it never attaches to Otto's normal Chrome data. Inside that directory, `Default` is `drmexperienced@gmail.com` for every publishing platform and `Profile 1` is `ottotheautonomous@gmail.com` for GitHub and Supabase. Never sign out the DRM identity or copy authentication material between profiles.
 
 ```bash
-# One time: sign in to the seven project dashboards in the isolated window,
-# then close that window normally.
+# One time: sign in to the assigned project dashboards in both isolated
+# profiles, then close that browser normally.
 drm-browser login
 
 # During an attended publishing session, select exactly one platform:
 drm-browser open
+drm-browser identities
 drm-browser connect spotify
+drm-browser connect supabase
 drm-browser status
 drm-browser disconnect
 drm-browser close
 ```
 
-The `login` command does not expose a debugging endpoint. The `open` command exposes one only on loopback and only for the isolated profile. `connect` requires one of `rss`, `spotify`, `apple`, `amazon`, `youtube`, `vimeo`, `instagram`, or `rumble`; the command-line bridge blocks Gmail and every other publishing origin for that session. It also redacts sensitive network headers, disables usage statistics and external update/CrUX lookups, and omits network, performance, and extension tooling. Disconnect before switching platforms. Keep email and unrelated tabs out of this profile. `drm-browser close` is the security boundary: it closes Chrome and verifies that the debugging endpoint is gone.
+The `login` command does not expose a debugging endpoint. The `open` command exposes one only on loopback for this isolated data directory. `identities` validates the exact account-to-profile mapping. `connect` accepts `rss`, `spotify`, `apple`, `amazon`, `youtube`, `vimeo`, `instagram`, `rumble`, or `supabase`; it stops the previous bridge, preserves tabs and sessions in both profiles, activates the requested dashboard in its assigned profile, and restricts the new bridge to that scope. The bridge also redacts sensitive network headers, disables usage statistics and external update/CrUX lookups, and omits network, performance, and extension tooling. Disconnect when unattended. `drm-browser close` closes both isolated-profile windows and verifies that the debugging endpoint is gone without signing either account out.
 
 Browser access is not a release authorization. Default automation behavior is to inspect, fill, and save a draft/private item where the platform supports one. Instagram has no durable private publishing draft, and Rumble's best documented review state is unlisted; both require an explicit final-action confirmation.
 
 ## One-time account work
 
-1. Spotify source cleanup is complete: exact description, no `RSSVERIFY`, seven approved titles, structured numbers 1-7, and unchanged GUIDs.
+1. Completed: removed `RSSVERIFY`, cleared Episode 3's stray Season 1 value, aligned Episodes 4-7 with the catalog, and verified one Anchor 301 hop to RSS.com.
 2. YouTube and Vimeo public readback, plus authenticated Rumble persistence,
    confirms all seven titles and descriptions match deterministic catalog
    projections as of August 5, 2026.
-3. Complete and validate the supported RSS.com import. Keep Anchor canonical until the exact redirect receives separate approval.
-4. Repair existing Apple show `1870433419` in place, then update that same listing
-   during cutover. Leave the separate nonpublic Draft untouched until its content
-   and subscription settings have been inspected.
-5. Hold Amazon until cutover, then submit the final canonical RSS.com feed once and record the stable show ID and URL.
+3. Completed: the supported RSS.com import passed exact GUID, metadata, media, artwork, and edge-audio validation, and the Anchor redirect returns the expected 301.
+4. Apple show `1870433419` is configured directly to RSS.com. Repair its five-Available/three-Draft discrepancy in place; do not replace the show or delete uninspected drafts.
+5. Submit the canonical RSS.com feed once to Amazon and record the stable show ID and URL.
 6. Create a Google OAuth desktop client, enable YouTube Data API v3, and complete YouTube's upload compliance audit before public API uploads.
 7. Create or confirm a Vimeo API app with upload access and an own-account token carrying `upload` and `edit` scopes.
 8. Confirm Instagram is a professional account, create the Meta app, authorize content-publishing permissions, and configure resumable local upload. Configure temporary public staging only as a fallback.

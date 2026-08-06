@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "rolloutId": "episode-thumbnails-2026-08-05",
-  "status": "direct_platforms_complete_apple_refresh_pending",
+  "status": "rss_com_canonical_artwork_verified_downstream_convergence_pending",
   "recordedAt": "2026-08-06T03:32:40Z",
   "authorization": "Project owner approved the episode artwork and requested a comprehensive platform thumbnail update.",
   "catalog": {
@@ -44,7 +44,9 @@
       "updatedCount": 7,
       "variant": "16x9",
       "showId": "7GGLljxmO0G3FLjPy8vfcw",
-      "verification": "Saved in Spotify for Creators and read back from Spotify's episode editor image sources."
+      "verification": "Saved in Spotify for Creators and read back from Spotify's episode editor image sources.",
+      "postCutoverAuditStatus": "persistence_and_replacement_audit_required",
+      "postCutoverAuditComplete": false
     },
     "spotifyEpisodeArt": {
       "status": "live_and_rss_verified",
@@ -53,26 +55,38 @@
       "showId": "7GGLljxmO0G3FLjPy8vfcw",
       "rssVerifiedAt": "2026-08-06T03:32:22Z",
       "rssLastBuildDate": "Thu, 06 Aug 2026 03:29:45 GMT",
-      "verification": "Seven unique 3000 x 3000 item-level itunes:image URLs returned HTTP 200 and matched the approved square assets after Spotify JPEG recompression."
+      "verification": "Seven unique 3000 x 3000 item-level itunes:image URLs returned HTTP 200 and matched the approved square assets after Spotify JPEG recompression.",
+      "canonicalRoleAfterCutover": "historical_source_art_imported_to_rss_com"
     },
     "apple": {
-      "status": "feed_refresh_requested_propagation_pending",
+      "status": "target_feed_and_metadata_exact_public_episode_and_draft_reconciliation_pending",
       "variant": "1x1-via-rss",
       "showId": "1870433419",
       "podcastsConnectShowId": "cfab5caf-554e-4ebe-a28c-2e4748147b82",
-      "feedUrl": "https://anchor.fm/s/10e1b0328/podcast/rss",
+      "feedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
       "refreshRecordedAt": "2026-08-06T03:32:40Z",
-      "verification": "Podcasts Connect accepted one Refresh request on the existing Available show. Public directory propagation has not yet been verified."
+      "metadataExact": true,
+      "availableEpisodeCount": 5,
+      "publicSevenEpisodeConvergenceVerified": false,
+      "draftEpisodeNumbers": [1, 2],
+      "staleDuplicateDraftEpisodeNumbers": [4],
+      "verification": "The existing Apple show directly targets the RSS.com feed and its metadata is exact. Only five episodes are Available; Draft Episodes 1 and 2 plus a stale duplicate Draft Episode 4 still require reconciliation, so seven-episode public convergence is not claimed."
     },
     "rssCom": {
-      "status": "not_updated_import_pending",
-      "variant": "none",
-      "reason": "The candidate show still has zero imported episodes and is not canonical. Do not duplicate episodes or redirect the Anchor feed."
+      "status": "canonical_feed_artwork_parity_verified_post_cutover",
+      "variant": "1x1-via-rss",
+      "feedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+      "verifiedAt": "2026-08-06T18:02:24Z",
+      "updatedCount": 7,
+      "finalFeedSha256": "a4b8b14724ecd2af81901555a1f601feb4d9901d6ffd0001b329196e0c2f69d1",
+      "verification": "The redirect-resolved canonical feed has seven items, exact target metadata, no RSSVERIFY, no season metadata, no legacy description references, and byte-identical episode and show artwork parity."
     },
     "amazon": {
-      "status": "not_applicable_no_listing",
-      "variant": "future-rss",
-      "reason": "No show is claimed in the project account. Submit only the final canonical feed after the gated RSS.com cutover."
+      "status": "ready_for_one_time_claim_not_claimed",
+      "variant": "1x1-via-rss-after-claim",
+      "feedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+      "claimed": false,
+      "reason": "The final canonical feed is ready for one-time submission and claim; no Amazon show has been claimed yet."
     },
     "instagram": {
       "status": "existing_covers_unchanged",
@@ -81,6 +95,8 @@
     }
   },
   "canonicalRssEvidence": {
+    "role": "historical_pre_cutover_anchor_source",
+    "supersededBy": "rssComCanonicalEvidence",
     "url": "https://anchor.fm/s/10e1b0328/podcast/rss",
     "verifiedAt": "2026-08-06T03:32:22Z",
     "sha256AtVerification": "87e836bcdd5272ec468ba39676da7c5d1e9cf8cb8f59c988ff362747cc973910",
@@ -96,6 +112,32 @@
       6,
       7
     ]
+  },
+  "rssComCandidateEvidence": {
+    "role": "historical_import_candidate",
+    "url": "https://media.rss.com/dr-m-experienced/feed.xml",
+    "verifiedAt": "2026-08-06T17:02:27Z",
+    "sha256AtVerification": "7b053d2e10e640ebeb875c76b2e6bbc49b7dd33093d285f093619faa395e27ed",
+    "episodeCount": 7,
+    "uniqueGuidCount": 7,
+    "uniqueEpisodeArtworkCount": 7,
+    "artworkReachabilityChecksPassed": true,
+    "artworkByteParityPassed": true
+  },
+  "rssComCanonicalEvidence": {
+    "url": "https://media.rss.com/dr-m-experienced/feed.xml",
+    "verifiedAt": "2026-08-06T18:02:24Z",
+    "sha256AtVerification": "a4b8b14724ecd2af81901555a1f601feb4d9901d6ffd0001b329196e0c2f69d1",
+    "episodeCount": 7,
+    "uniqueGuidCount": 7,
+    "uniqueEpisodeArtworkCount": 7,
+    "exactTargetMetadata": true,
+    "verificationTokenPresent": false,
+    "seasonMetadataCount": 0,
+    "legacyDescriptionReferenceCount": 0,
+    "artworkReachabilityChecksPassed": true,
+    "artworkByteParityPassed": true,
+    "redirectVerified": true
   },
   "episodes": [
     {
@@ -296,8 +338,9 @@
     }
   ],
   "knownUnresolvedMetadataDrift": [
-    "The canonical show description and itunes:summary currently end with RSSVERIFY.",
-    "Episode 4, 5, 6, and 7 descriptions still contain retired show-name variants.",
-    "The show-level podcast cover remains the prior DRM EXPERIENCED design; this rollout changes episode artwork only."
+    "The show-level podcast cover remains the prior DRM EXPERIENCED design; this rollout changes episode artwork only.",
+    "Apple directly targets the canonical RSS.com feed with exact metadata but still has only five Available episodes, Draft Episodes 1 and 2, and a stale duplicate Draft Episode 4.",
+    "Spotify video persistence and any replacement need remain subject to an explicit post-cutover audit.",
+    "Amazon is ready for a one-time canonical-feed claim but has not been claimed."
   ]
 }

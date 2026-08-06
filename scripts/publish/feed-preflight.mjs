@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 
 import { createHash, randomBytes } from "node:crypto";
+import { spawn } from "node:child_process";
 import fs from "node:fs/promises";
 import { isIP } from "node:net";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { XMLParser, XMLValidator } from "fast-xml-parser";
+import { comparePublishedCatalogFeed } from "./catalog.mjs";
 import { writePrivateText } from "./lib.mjs";
 
 const scriptPath = fileURLToPath(import.meta.url);
@@ -13,18 +16,25 @@ const projectRoot = path.resolve(path.dirname(scriptPath), "..", "..");
 const redirectStatuses = new Set([301, 302, 303, 307, 308]);
 const defaultTimeoutMs = 15_000;
 const maxFeedBytes = 10 * 1024 * 1024;
+const defaultEdgeDecodeTimeoutMs = 30 * 60 * 1000;
+const defaultMaxDecodedMediaBytes = 1024 * 1024 * 1024;
 
 function usage() {
   return `Usage:
   node scripts/publish/feed-preflight.mjs --source <feed-url> --candidate <feed-url> [options]
 
 Options:
-  --snapshot-dir <directory>  Save both raw feeds as private 0600 files outside the repository.
-  --verify-media              Check candidate enclosures with HEAD or a one-byte range request.
-  --timeout-ms <milliseconds> Per-request timeout (default: ${defaultTimeoutMs}).
-  -h, --help                  Show this help.
+  --snapshot-dir <directory>   Save both raw feeds as private 0600 files outside the repository.
+  --target-metadata <json>     Require candidate metadata from a JSON object or its targetMetadata field.
+  --verify-media               Check every candidate enclosure with HEAD and a one-byte range request.
+  --verify-artwork             Require and probe every candidate episode's item-level artwork URL.
+  --decode-edge-audio          Fully download and ffmpeg-decode the oldest and newest candidate audio.
+                                Downloads use private OS temp files, are capped at 1 GiB each, and are deleted.
+  --timeout-ms <milliseconds>  Per-request timeout (default: ${defaultTimeoutMs}).
+  -h, --help                   Show this help.
 
-This command only reads public feed and media URLs. It never changes a hosting service.`;
+The default command writes no files. Optional snapshots and decode temp files stay outside the repository.
+This command never changes a hosting service.`;
 }
 
 function arrayValue(value) {
@@ -69,6 +79,20 @@ function enclosureUrl(item) {
   for (const enclosure of arrayValue(childByLocalName(item, "enclosure"))) {
     const url = attributeByLocalName(enclosure, "url") ?? textValue(enclosure);
     if (url) return url;
+  }
+  return null;
+}
+
+function artworkUrl(value) {
+  for (const name of ["image", "thumbnail"]) {
+    for (const artwork of arrayValue(childByLocalName(value, name))) {
+      const url =
+        attributeByLocalName(artwork, "href") ??
+        attributeByLocalName(artwork, "url") ??
+        textValue(childByLocalName(artwork, "url")) ??
+        textValue(artwork);
+      if (url) return url;
+    }
   }
   return null;
 }
@@ -124,6 +148,7 @@ function parseRssItem(item) {
   const pubDate = textValue(childByLocalName(item, "pubdate")) ?? textValue(childByLocalName(item, "published"));
   const duration = textValue(childByLocalName(item, "duration"));
   const mediaUrl = enclosureUrl(item);
+  const episodeArtworkUrl = artworkUrl(item);
   return {
     guid,
     title,
@@ -141,13 +166,13 @@ function parseRssItem(item) {
     episodeType: textValue(childByLocalName(item, "episodetype"))?.toLowerCase() ?? null,
     enclosurePresent: Boolean(mediaUrl),
     enclosureUrl: mediaUrl,
+    artworkPresent: Boolean(episodeArtworkUrl),
+    artworkUrl: episodeArtworkUrl,
   };
 }
 
 function channelArtworkPresent(channel) {
-  const image = childByLocalName(channel, "image");
-  if (!image) return false;
-  return Boolean(attributeByLocalName(image, "href") ?? textValue(childByLocalName(image, "url")) ?? textValue(image));
+  return Boolean(artworkUrl(channel));
 }
 
 export function parsePodcastFeed(xml) {
@@ -297,6 +322,7 @@ export function comparePodcastFeeds(source, candidate) {
     if (sourceEpisode.seasonNumber !== candidateEpisode.seasonNumber) fields.push("seasonNumber");
     if (sourceEpisode.episodeType !== candidateEpisode.episodeType) fields.push("episodeType");
     if (sourceEpisode.enclosurePresent !== candidateEpisode.enclosurePresent) fields.push("enclosure");
+    if (sourceEpisode.artworkPresent !== candidateEpisode.artworkPresent) fields.push("artwork");
     if (fields.length) {
       metadataMismatches.push({
         fingerprint: guidFingerprint(guid),
@@ -322,6 +348,39 @@ export function comparePodcastFeeds(source, candidate) {
     sharedGuidCount,
     metadataMismatches,
   };
+}
+
+export function compareTargetMetadata(candidate, expected) {
+  const supportedFields = ["title", "description", "language", "author", "explicit", "podcastType"];
+  const checkedFields = supportedFields.filter((field) => Object.hasOwn(expected ?? {}, field));
+  if (!checkedFields.length) {
+    throw new Error("Target metadata must define at least one supported show field.");
+  }
+  if (checkedFields.some((field) => expected[field] == null || typeof expected[field] === "object")) {
+    throw new Error("Target metadata fields must contain scalar values.");
+  }
+
+  const mismatches = [];
+  for (const field of checkedFields) {
+    let normalize = (value) => value;
+    if (field === "description") normalize = comparableDescription;
+    if (["language", "podcastType"].includes(field)) normalize = (value) => textValue(value)?.toLowerCase() ?? null;
+    if (field === "explicit") normalize = comparableBoolean;
+    if (normalize(candidate[field]) !== normalize(expected[field])) mismatches.push(field);
+  }
+  return { ok: mismatches.length === 0, checkedFields, mismatches };
+}
+
+export async function loadTargetMetadata(filePath) {
+  let document;
+  try {
+    document = JSON.parse(await fs.readFile(path.resolve(filePath), "utf8"));
+  } catch {
+    throw new Error("Target metadata JSON could not be read and parsed.");
+  }
+  const metadata = document?.targetMetadata ?? document;
+  compareTargetMetadata({}, metadata);
+  return metadata;
 }
 
 export function compareSourceBaseline(source, expected = {}) {
@@ -621,6 +680,271 @@ export async function verifyCandidateMedia(candidateFeed, options = {}) {
   });
 }
 
+async function probeArtworkUrl(url, options) {
+  const head = await requestWithRedirects(url, {
+    ...options,
+    method: "HEAD",
+    headers: { "user-agent": "DrM-RSS-Migration-Preflight/1.0" },
+  });
+  const headStatus = head.ok ? head.response.status : null;
+  const headUsable = head.ok && headStatus >= 200 && headStatus < 300;
+  const headContentType = headUsable ? normalizedContentType(head.response.headers.get("content-type")) : null;
+  const headContentLength = headUsable ? positiveIntegerHeader(head.response.headers.get("content-length")) : null;
+  if (head.ok) await cancelBody(head.response);
+
+  const ranged = await requestWithRedirects(url, {
+    ...options,
+    method: "GET",
+    headers: {
+      range: "bytes=0-0",
+      "accept-encoding": "identity",
+      "user-agent": "DrM-RSS-Migration-Preflight/1.0",
+    },
+  });
+  const rangeStatus = ranged.ok ? ranged.response.status : null;
+  const rangeUsable = ranged.ok && rangeStatus >= 200 && rangeStatus < 300;
+  const rangeContentType = rangeUsable ? normalizedContentType(ranged.response.headers.get("content-type")) : null;
+  const rangeTotal = rangeUsable
+    ? contentRangeTotal(ranged.response.headers.get("content-range")) ??
+      positiveIntegerHeader(ranged.response.headers.get("content-length"))
+    : null;
+  if (ranged.ok) await cancelBody(ranged.response);
+
+  const contentType = rangeContentType ?? headContentType;
+  const contentLength = headContentLength ?? rangeTotal;
+  const checks = {
+    imageContentType: Boolean(contentType?.startsWith("image/")),
+    positiveContentLength: Boolean(contentLength),
+    reachableGet: rangeUsable,
+  };
+  return {
+    ok: Object.values(checks).every(Boolean),
+    headStatus,
+    rangeStatus,
+    contentType,
+    contentLength,
+    checks,
+    headChain: head.chain,
+    rangeChain: ranged.chain,
+  };
+}
+
+export async function verifyCandidateArtwork(candidateFeed, options = {}) {
+  const episodes = candidateFeed.episodes.filter((episode) => episode.guid && episode.artworkUrl);
+  return mapWithConcurrency(episodes, options.concurrency ?? 3, async (episode) => {
+    const probe = await probeArtworkUrl(episode.artworkUrl, options);
+    return {
+      ...probe,
+      fingerprint: guidFingerprint(episode.guid),
+      title: episode.title,
+    };
+  });
+}
+
+function codedError(code) {
+  const error = new Error(code);
+  error.code = code;
+  return error;
+}
+
+async function writeFullResponseToFile(response, filePath, { timeoutMs, maxBytes }) {
+  const declaredLength = positiveIntegerHeader(response.headers.get("content-length"));
+  if (declaredLength && declaredLength > maxBytes) throw codedError("media_exceeds_size_limit");
+  if (!response.body) throw codedError("media_body_missing");
+
+  const handle = await fs.open(filePath, "wx", 0o600);
+  const reader = response.body.getReader();
+  let bytesWritten = 0;
+  let timedOut = false;
+  const timeout = setTimeout(() => {
+    timedOut = true;
+    void reader.cancel().catch(() => {});
+  }, timeoutMs);
+  timeout.unref?.();
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (timedOut) throw codedError("media_download_timeout");
+      if (done) break;
+      bytesWritten += value.byteLength;
+      if (bytesWritten > maxBytes) throw codedError("media_exceeds_size_limit");
+
+      const chunk = Buffer.from(value);
+      let offset = 0;
+      while (offset < chunk.length) {
+        const { bytesWritten: written } = await handle.write(chunk, offset, chunk.length - offset, null);
+        if (!written) throw codedError("media_file_write_failed");
+        offset += written;
+      }
+    }
+    if (timedOut) throw codedError("media_download_timeout");
+    if (!bytesWritten) throw codedError("media_body_empty");
+
+    const contentEncoding = response.headers.get("content-encoding")?.toLowerCase();
+    if (declaredLength && (!contentEncoding || contentEncoding === "identity") && bytesWritten !== declaredLength) {
+      throw codedError("media_content_length_mismatch");
+    }
+    return bytesWritten;
+  } catch (error) {
+    await reader.cancel().catch(() => {});
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+    await handle.close();
+  }
+}
+
+async function downloadFullMedia(url, filePath, options = {}) {
+  const fetched = await requestWithRedirects(url, {
+    ...options,
+    method: "GET",
+    headers: {
+      accept: "audio/*, application/octet-stream;q=0.5",
+      "accept-encoding": "identity",
+      "user-agent": "DrM-RSS-Migration-Preflight/1.0",
+    },
+  });
+  if (!fetched.ok) return { ok: false, error: fetched.error, chain: fetched.chain };
+  if (fetched.response.status !== 200) {
+    await cancelBody(fetched.response);
+    return { ok: false, error: "http_status", chain: fetched.chain, status: fetched.response.status };
+  }
+
+  const contentType = normalizedContentType(fetched.response.headers.get("content-type"));
+  try {
+    const bytes = await writeFullResponseToFile(fetched.response, filePath, {
+      timeoutMs: options.edgeDecodeTimeoutMs ?? defaultEdgeDecodeTimeoutMs,
+      maxBytes: options.maxDecodedMediaBytes ?? defaultMaxDecodedMediaBytes,
+    });
+    return { ok: true, bytes, contentType, chain: fetched.chain, status: fetched.response.status };
+  } catch (error) {
+    await fs.rm(filePath, { force: true });
+    return {
+      ok: false,
+      error: error.code ?? "media_download_failed",
+      contentType,
+      chain: fetched.chain,
+      status: fetched.response.status,
+    };
+  }
+}
+
+export async function decodeAudioFile(filePath, options = {}) {
+  const spawnImpl = options.spawnImpl ?? spawn;
+  const ffmpegPath = options.ffmpegPath ?? "ffmpeg";
+  const timeoutMs = options.edgeDecodeTimeoutMs ?? defaultEdgeDecodeTimeoutMs;
+  return new Promise((resolve) => {
+    let child;
+    try {
+      child = spawnImpl(
+        ffmpegPath,
+        ["-nostdin", "-v", "error", "-xerror", "-i", filePath, "-map", "0:a:0", "-f", "null", "-"],
+        { stdio: ["ignore", "ignore", "ignore"] }
+      );
+    } catch {
+      resolve({ ok: false, error: "ffmpeg_start_failed" });
+      return;
+    }
+
+    let settled = false;
+    const finish = (result) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      resolve(result);
+    };
+    const timeout = setTimeout(() => {
+      child.kill("SIGKILL");
+      finish({ ok: false, error: "ffmpeg_timeout" });
+    }, timeoutMs);
+    timeout.unref?.();
+    child.once("error", () => finish({ ok: false, error: "ffmpeg_start_failed" }));
+    child.once("close", (status, signal) =>
+      finish(status === 0 ? { ok: true } : { ok: false, error: signal ? "ffmpeg_terminated" : "ffmpeg_decode_failed" })
+    );
+  });
+}
+
+function edgeEpisodes(candidateFeed) {
+  const expectedCount = Math.min(2, candidateFeed.episodes.length);
+  if (!candidateFeed.episodes.length) {
+    return { ok: false, selectionOk: false, expectedCount, error: "candidate_has_no_episodes", episodes: [] };
+  }
+
+  const dated = [];
+  for (const episode of candidateFeed.episodes) {
+    const timestamp = Date.parse(episode.pubDate ?? "");
+    if (!episode.guid || !episode.enclosureUrl || !Number.isFinite(timestamp)) {
+      return {
+        ok: false,
+        selectionOk: false,
+        expectedCount,
+        error: "candidate_edge_selection_metadata_invalid",
+        episodes: [],
+      };
+    }
+    dated.push({ episode, timestamp });
+  }
+  dated.sort((left, right) => left.timestamp - right.timestamp);
+  const first = dated[0].episode;
+  const last = dated.at(-1).episode;
+  return {
+    ok: true,
+    selectionOk: true,
+    expectedCount,
+    episodes: first.guid === last.guid ? [{ role: "oldest/newest", episode: first }] : [
+      { role: "oldest", episode: first },
+      { role: "newest", episode: last },
+    ],
+  };
+}
+
+export async function verifyCandidateEdgeAudio(candidateFeed, options = {}) {
+  const selection = edgeEpisodes(candidateFeed);
+  if (!selection.ok) return { ...selection, results: [] };
+
+  const temporaryRoot = path.resolve(options.temporaryRoot ?? os.tmpdir());
+  const resolvedProjectRoot = await fs.realpath(projectRoot);
+  const prospectiveRoot = await resolveThroughExistingAncestor(temporaryRoot);
+  if (isInside(resolvedProjectRoot, prospectiveRoot)) {
+    throw new Error("Edge decode temporary files must be outside the project repository.");
+  }
+  await fs.mkdir(temporaryRoot, { recursive: true, mode: 0o700 });
+  const temporaryDirectory = await fs.mkdtemp(path.join(temporaryRoot, "drm-feed-edge-audio-"));
+  await fs.chmod(temporaryDirectory, 0o700);
+
+  const results = [];
+  try {
+    for (const [index, selected] of selection.episodes.entries()) {
+      const filePath = path.join(temporaryDirectory, `candidate-${index + 1}.media`);
+      const download = await downloadFullMedia(selected.episode.enclosureUrl, filePath, options);
+      const decoded = download.ok
+        ? await (options.decodeImpl ?? decodeAudioFile)(filePath, options)
+        : { ok: false, error: "not_decoded" };
+      results.push({
+        ok: download.ok && decoded.ok,
+        role: selected.role,
+        fingerprint: guidFingerprint(selected.episode.guid),
+        title: selected.episode.title,
+        downloadedBytes: download.bytes ?? null,
+        contentType: download.contentType ?? null,
+        downloadError: download.ok ? null : download.error,
+        decodeError: decoded.ok ? null : decoded.error,
+      });
+    }
+  } finally {
+    await fs.rm(temporaryDirectory, { recursive: true, force: true });
+  }
+
+  return {
+    ok: results.length === selection.expectedCount && results.every((result) => result.ok),
+    expectedCount: selection.expectedCount,
+    selectionOk: true,
+    results,
+  };
+}
+
 function isInside(parent, candidate) {
   const relative = path.relative(parent, candidate);
   return relative === "" || (!relative.startsWith(`..${path.sep}`) && relative !== ".." && !path.isAbsolute(relative));
@@ -708,14 +1032,125 @@ function renderEndpoint(label, fetched, feed) {
   return lines;
 }
 
+function finalFetchedUrl(fetched) {
+  return fetched?.chain?.at(-1)?.url ?? null;
+}
+
+function buildCatalogBinding({ catalog, required, sourceFetch, candidateFetch, sourceFeed, candidateFeed }) {
+  if (!catalog && !required) return null;
+
+  const sourceFinalUrl = finalFetchedUrl(sourceFetch);
+  const candidateFinalUrl = finalFetchedUrl(candidateFetch);
+  const sourceRedirectedToCandidate = Boolean(
+    sourceFetch?.chain?.length > 1 &&
+      sourceFinalUrl &&
+      candidateFinalUrl &&
+      sourceFinalUrl === candidateFinalUrl
+  );
+  const binding = {
+    required: true,
+    phase: sourceRedirectedToCandidate ? "post_redirect" : "pre_redirect",
+    sourceRequired: !sourceRedirectedToCandidate,
+    sourceRedirectedToCandidate,
+    source: null,
+    candidate: null,
+    error: null,
+    ok: false,
+  };
+
+  if (!catalog) {
+    binding.error = "A validated master catalog was not supplied.";
+    return binding;
+  }
+
+  try {
+    if (sourceFeed) binding.source = comparePublishedCatalogFeed(catalog, sourceFeed);
+    if (candidateFeed) binding.candidate = comparePublishedCatalogFeed(catalog, candidateFeed);
+  } catch (error) {
+    binding.error = error.message;
+    return binding;
+  }
+
+  binding.ok =
+    Boolean(binding.candidate?.ok) &&
+    (!binding.sourceRequired || Boolean(binding.source?.ok));
+  return binding;
+}
+
+function catalogGuidLabel(guid) {
+  return typeof guid === "string" && guid ? guidFingerprint(guid) : "missing-guid";
+}
+
+function renderCatalogFeedBinding(label, result, { required }) {
+  const lines = [`${label}${required ? " (required)" : " (informational after redirect)"}`];
+  if (!result) {
+    lines.push("- result: FAIL (feed could not be parsed and checked)");
+    return lines;
+  }
+
+  const guidSetOk = result.guidSetMatches && result.uniqueGuids;
+  const order = (values) => values.map((value) => value ?? "missing").join(" > ");
+  lines.push(
+    `- episode count: ${result.episodeCountMatches ? "PASS" : "FAIL"} (${result.actualEpisodeCount}/${result.expectedEpisodeCount})`,
+    `- exact unique GUID set: ${guidSetOk ? "PASS" : "FAIL"}`,
+    `- canonical titles by GUID: ${result.titleMatches ? "PASS" : "FAIL"}`,
+    `- structured episode numbers by GUID: ${result.structuredNumbersMatch ? "PASS" : "FAIL"}`,
+    `- canonical descriptions by GUID: ${result.descriptionsMatch ? "PASS" : "FAIL"}`,
+    `- no season metadata: ${result.noSeasonMetadata ? "PASS" : "FAIL"}`,
+    `- reverse episode-number order: ${result.feedOrderMatches ? "PASS" : "FAIL"} (${order(result.actualFeedOrder)})`,
+    `- legacy episode-number title prefixes: ${result.noLegacyTitlePrefixes ? "none" : "FAIL"}`,
+    `- result: ${result.ok ? "PASS" : "FAIL"}`
+  );
+  if (!result.feedOrderMatches) {
+    lines.push(`- expected order: ${order(result.expectedFeedOrder)}`);
+  }
+  if (result.missingGuids.length) {
+    lines.push(`- missing catalog GUID fingerprints: ${result.missingGuids.map(catalogGuidLabel).join(", ")}`);
+  }
+  if (result.extraGuids.length) {
+    lines.push(`- extra feed GUID fingerprints: ${result.extraGuids.map(catalogGuidLabel).join(", ")}`);
+  }
+  for (const duplicate of result.duplicateGuids) {
+    lines.push(`- duplicate GUID ${catalogGuidLabel(duplicate.guid)}: ${duplicate.count} occurrences`);
+  }
+  if (result.missingGuidIndexes.length) {
+    lines.push(`- missing GUID at feed indexes: ${result.missingGuidIndexes.join(", ")}`);
+  }
+  for (const mismatch of result.titleMismatches) {
+    lines.push(
+      `- title mismatch ${catalogGuidLabel(mismatch.guid)}: expected ${safeText(mismatch.expected, 100)}; actual ${safeText(mismatch.actual.join(" | "), 100)}`
+    );
+  }
+  for (const mismatch of result.episodeNumberMismatches) {
+    lines.push(
+      `- episode number mismatch ${catalogGuidLabel(mismatch.guid)}: expected ${mismatch.expected}; actual ${mismatch.actual.map((value) => value ?? "missing").join(" | ") || "missing"}`
+    );
+  }
+  for (const mismatch of result.descriptionMismatches) {
+    lines.push(
+      `- description mismatch ${catalogGuidLabel(mismatch.guid)} (${safeText(mismatch.title, 100)})`
+    );
+  }
+  for (const episode of result.seasonMetadataEpisodes) {
+    lines.push(
+      `- season metadata ${catalogGuidLabel(episode.guid)} (${safeText(episode.title, 100)}) at feed index ${episode.index}: ${safeText(episode.seasonNumber, 40)}`
+    );
+  }
+  return lines;
+}
+
 export function renderPreflightReport({
   sourceFetch,
   candidateFetch,
   sourceFeed,
   candidateFeed,
   sourceBaseline,
+  targetMetadata,
+  catalogBinding,
   comparison,
   media,
+  artwork,
+  edgeAudio,
   snapshots,
 }) {
   const lines = ["RSS host migration preflight", ""];
@@ -737,6 +1172,39 @@ export function renderPreflightReport({
     lines.push("");
   }
 
+  if (targetMetadata) {
+    lines.push("Canonical target metadata");
+    lines.push(`- checked fields: ${targetMetadata.checkedFields.join(", ")}`);
+    lines.push(`- exact target values: ${targetMetadata.ok ? "PASS" : "FAIL"}`);
+    if (targetMetadata.mismatches.length) {
+      lines.push(`- mismatches: ${targetMetadata.mismatches.join(", ")}`);
+    }
+    lines.push("");
+  }
+
+  if (catalogBinding) {
+    lines.push("Master catalog episode binding");
+    if (catalogBinding.sourceRedirectedToCandidate) {
+      lines.push(
+        "- routing observation: source resolves to the candidate endpoint",
+        "- source result is informational; candidate was fetched and checked separately"
+      );
+    } else {
+      lines.push("- routing observation: source and candidate returned independently; both are required");
+    }
+    if (catalogBinding.error) lines.push(`- gate error: ${safeText(catalogBinding.error)}`);
+    lines.push(
+      ...renderCatalogFeedBinding("Source feed catalog binding", catalogBinding.source, {
+        required: catalogBinding.sourceRequired,
+      }),
+      ...renderCatalogFeedBinding("Candidate feed catalog binding", catalogBinding.candidate, {
+        required: true,
+      }),
+      `- catalog gate: ${catalogBinding.ok ? "PASS" : "FAIL"}`,
+      ""
+    );
+  }
+
   if (comparison) {
     const sourceHasEpisodes = sourceFeed.episodes.length > 0;
     const candidateHasEpisodes = candidateFeed.episodes.length > 0;
@@ -748,6 +1216,8 @@ export function renderPreflightReport({
       `- candidate GUID uniqueness: ${candidateHasEpisodes ? (comparison.candidateDuplicates.length ? "FAIL" : "PASS") : "NOT CHECKED (candidate feed has no episodes)"}`,
       `- exact GUID set: ${comparison.missingGuids.length || comparison.extraGuids.length ? "FAIL" : "PASS"}`,
       `- show metadata: ${comparison.showMetadataMismatches.length ? "FAIL" : "PASS"}`,
+      `- source item artwork: ${sourceFeed.episodes.filter((episode) => episode.artworkPresent).length}/${sourceFeed.episodes.length}`,
+      `- candidate item artwork: ${candidateFeed.episodes.filter((episode) => episode.artworkPresent).length}/${candidateFeed.episodes.length}`,
       `- per-GUID metadata: ${sharedGuidsExist ? (comparison.metadataMismatches.length ? "FAIL" : "PASS") : "NOT CHECKED (no shared GUIDs)"}`,
       `- required source episode metadata: ${sourceHasEpisodes ? (comparison.sourceMissingMetadata.length ? "FAIL" : "PASS") : "NOT CHECKED (source feed has no episodes)"}`,
       `- required candidate episode metadata: ${candidateHasEpisodes ? (comparison.candidateMissingMetadata.length ? "FAIL" : "PASS") : "NOT CHECKED (candidate feed has no episodes)"}`
@@ -798,6 +1268,47 @@ export function renderPreflightReport({
     lines.push("");
   }
 
+  if (artwork) {
+    const failures = artwork.filter((item) => !item.ok);
+    const passedChecks = (name) => artwork.filter((item) => item.checks[name]).length;
+    const expectedChecks = candidateFeed?.episodes.length ?? 0;
+    const coverageOk = expectedChecks > 0 && artwork.length === expectedChecks;
+    const artworkStatus = (name) =>
+      artwork.length
+        ? `${passedChecks(name) === artwork.length ? "PASS" : "FAIL"} (${passedChecks(name)}/${artwork.length})`
+        : "NOT CHECKED (no candidate artwork)";
+    lines.push("Candidate item-level artwork availability");
+    lines.push(`- checked: ${artwork.length}`);
+    lines.push(`- episode coverage: ${coverageOk ? "PASS" : "FAIL"} (${artwork.length}/${expectedChecks})`);
+    lines.push(`- image content-type: ${artworkStatus("imageContentType")}`);
+    lines.push(`- positive content length: ${artworkStatus("positiveContentLength")}`);
+    lines.push(`- reachable GET: ${artworkStatus("reachableGet")}`);
+    lines.push(`- result: ${coverageOk && !failures.length ? "PASS" : "FAIL"}`);
+    for (const failure of failures) {
+      const failedChecks = Object.entries(failure.checks)
+        .filter(([, passed]) => !passed)
+        .map(([name]) => name)
+        .join(", ");
+      lines.push(
+        `- unavailable ${failure.fingerprint} (${safeText(failure.title, 100)}): ${failedChecks}; HEAD ${failure.headStatus ?? "no response"}, GET ${failure.rangeStatus ?? "no response"}`
+      );
+    }
+    lines.push("");
+  }
+
+  if (edgeAudio) {
+    lines.push("Oldest/newest full audio decode");
+    lines.push(`- edge selection: ${edgeAudio.selectionOk === false ? "FAIL" : "PASS"}`);
+    lines.push(`- episode coverage: ${edgeAudio.results.length === edgeAudio.expectedCount ? "PASS" : "FAIL"} (${edgeAudio.results.length}/${edgeAudio.expectedCount})`);
+    for (const result of edgeAudio.results) {
+      lines.push(
+        `- ${result.role} ${result.fingerprint} (${safeText(result.title, 100)}): ${result.ok ? `PASS (${result.downloadedBytes} bytes downloaded and decoded)` : `FAIL (${safeText(result.downloadError ?? result.decodeError)})`}`
+      );
+    }
+    if (edgeAudio.error) lines.push(`- error: ${safeText(edgeAudio.error)}`);
+    lines.push(`- result: ${edgeAudio.ok ? "PASS" : "FAIL"}`, "");
+  }
+
   if (snapshots) {
     lines.push("Private raw snapshots");
     lines.push(`- source: ${safeText(snapshots.sourcePath)}`);
@@ -808,14 +1319,36 @@ export function renderPreflightReport({
   const mediaOk =
     !media ||
     (Boolean(candidateFeed?.episodes.length) && media.length === candidateFeed.episodes.length && media.every((item) => item.ok));
+  const artworkOk =
+    !artwork ||
+    (Boolean(candidateFeed?.episodes.length) &&
+      artwork.length === candidateFeed.episodes.length &&
+      artwork.every((item) => item.ok));
   const baselineOk = !sourceBaseline || sourceBaseline.ok;
-  const passed = sourceFetch.ok && candidateFetch.ok && baselineOk && Boolean(comparison?.ok) && mediaOk;
-  lines.push(`RESULT: ${passed ? "PASS - feeds are structurally consistent" : "FAIL - do not cut over or redirect"}`);
+  const targetMetadataOk = !targetMetadata || targetMetadata.ok;
+  const catalogBindingOk = !catalogBinding || catalogBinding.ok;
+  const edgeAudioOk = !edgeAudio || edgeAudio.ok;
+  const passed =
+    sourceFetch.ok &&
+    candidateFetch.ok &&
+    baselineOk &&
+    targetMetadataOk &&
+    catalogBindingOk &&
+    Boolean(comparison?.ok) &&
+    mediaOk &&
+    artworkOk &&
+    edgeAudioOk;
+  lines.push(`RESULT: ${passed ? "PASS - all requested feed gates passed" : "FAIL - do not cut over or redirect"}`);
   return `${lines.join("\n")}\n`;
 }
 
 function parseArguments(args) {
-  const options = { verifyMedia: false, timeoutMs: defaultTimeoutMs };
+  const options = {
+    verifyMedia: false,
+    verifyArtwork: false,
+    decodeEdgeAudio: false,
+    timeoutMs: defaultTimeoutMs,
+  };
   for (let index = 0; index < args.length; index += 1) {
     const argument = args[index];
     if (["-h", "--help"].includes(argument)) {
@@ -826,13 +1359,22 @@ function parseArguments(args) {
       options.verifyMedia = true;
       continue;
     }
-    if (["--source", "--candidate", "--snapshot-dir", "--timeout-ms"].includes(argument)) {
+    if (argument === "--verify-artwork") {
+      options.verifyArtwork = true;
+      continue;
+    }
+    if (argument === "--decode-edge-audio") {
+      options.decodeEdgeAudio = true;
+      continue;
+    }
+    if (["--source", "--candidate", "--snapshot-dir", "--target-metadata", "--timeout-ms"].includes(argument)) {
       const value = args[index + 1];
       if (!value || value.startsWith("--")) throw new Error(`${argument} requires a value.`);
       index += 1;
       if (argument === "--source") options.source = value;
       if (argument === "--candidate") options.candidate = value;
       if (argument === "--snapshot-dir") options.snapshotDirectory = value;
+      if (argument === "--target-metadata") options.targetMetadataPath = value;
       if (argument === "--timeout-ms") options.timeoutMs = Number(value);
       continue;
     }
@@ -869,6 +1411,8 @@ export async function runPreflight(options) {
   let sourceFeed = null;
   let candidateFeed = null;
   let sourceBaseline = null;
+  let targetMetadata = null;
+  let catalogBinding = null;
   let comparison = null;
   if (sourceFetch.ok) {
     try {
@@ -887,18 +1431,39 @@ export async function runPreflight(options) {
     }
   }
   if (sourceFeed && options.expectedSource) sourceBaseline = compareSourceBaseline(sourceFeed, options.expectedSource);
+  if (candidateFeed && options.expectedCandidate) {
+    targetMetadata = compareTargetMetadata(candidateFeed, options.expectedCandidate);
+  }
+  catalogBinding = buildCatalogBinding({
+    catalog: options.catalog,
+    required: options.requireCatalogBinding,
+    sourceFetch,
+    candidateFetch,
+    sourceFeed,
+    candidateFeed,
+  });
   if (sourceFeed && candidateFeed) comparison = comparePodcastFeeds(sourceFeed, candidateFeed);
 
   let media = null;
   if (options.verifyMedia && candidateFeed) media = await verifyCandidateMedia(candidateFeed, fetchOptions);
+  let artwork = null;
+  if (options.verifyArtwork && candidateFeed) artwork = await verifyCandidateArtwork(candidateFeed, fetchOptions);
+  let edgeAudio = null;
+  if (options.decodeEdgeAudio && candidateFeed) {
+    edgeAudio = await verifyCandidateEdgeAudio(candidateFeed, { ...fetchOptions, ...options.edgeAudioOptions });
+  }
   const report = renderPreflightReport({
     sourceFetch,
     candidateFetch,
     sourceFeed,
     candidateFeed,
     sourceBaseline,
+    targetMetadata,
+    catalogBinding,
     comparison,
     media,
+    artwork,
+    edgeAudio,
     snapshots,
   });
   return {
@@ -906,10 +1471,26 @@ export async function runPreflight(options) {
       sourceFetch.ok &&
       candidateFetch.ok &&
       (!sourceBaseline || sourceBaseline.ok) &&
+      (!targetMetadata || targetMetadata.ok) &&
+      (!catalogBinding || catalogBinding.ok) &&
       Boolean(comparison?.ok) &&
-      (!media || media.every((item) => item.ok)),
+      (!media ||
+        (Boolean(candidateFeed?.episodes.length) &&
+          media.length === candidateFeed.episodes.length &&
+          media.every((item) => item.ok))) &&
+      (!artwork ||
+        (Boolean(candidateFeed?.episodes.length) &&
+          artwork.length === candidateFeed.episodes.length &&
+          artwork.every((item) => item.ok))) &&
+      (!edgeAudio || edgeAudio.ok),
     report,
     sourceBaseline,
+    targetMetadata,
+    catalogBinding,
+    comparison,
+    media,
+    artwork,
+    edgeAudio,
   };
 }
 
@@ -918,6 +1499,9 @@ async function main() {
   if (options.help) {
     process.stdout.write(`${usage()}\n`);
     return;
+  }
+  if (options.targetMetadataPath) {
+    options.expectedCandidate = await loadTargetMetadata(options.targetMetadataPath);
   }
   const result = await runPreflight(options);
   process.stdout.write(result.report);

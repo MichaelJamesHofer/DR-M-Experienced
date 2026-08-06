@@ -2,10 +2,12 @@
 
 Status: the seven episode-specific website thumbnails, 16:9 direct-video
 exports, and 3000 x 3000 podcast episode-art exports are approved. The direct
-video set is live on YouTube, Vimeo, Rumble, and Spotify; the square set is live
-on Spotify and in the canonical RSS. Apple propagation is pending after a feed
-refresh. The logo, show cover, avatar, Reel covers, banners, Open Graph image,
-and motion assets remain planned.
+video set is live on YouTube, Vimeo, and Rumble. Spotify video and square-art
+surfaces were verified before the RSS.com cutover and need post-cutover
+persistence readback; the square set is verified in the canonical RSS.com feed.
+Apple propagation remains pending on the directly configured RSS.com listing.
+The logo, show cover, avatar, Reel covers, banners, Open Graph image, and motion
+assets remain planned.
 
 This directory will hold versioned masters, export settings, and a non-secret
 asset manifest for the Dr. M Experienced visual system. Do not commit licensed
@@ -63,13 +65,14 @@ exports are committed or hosted deliberately.
 4. Approve one direction and freeze its colors, type, clear space, and mark.
 5. Record each master/export path and SHA-256 in `asset-manifest.json`.
 6. Replace website icons/OG image and direct-channel avatars/banners.
-7. Publish the approved podcast cover through the canonical Spotify/Anchor show
-   under a new filename/URL, then verify Spotify and Apple propagation. Verify
-   Amazon after its one-time Anchor-feed submission.
+7. Publish the approved podcast cover through RSS.com under a new filename/URL,
+   then verify RSS.com, Spotify, and Apple propagation. Verify Amazon after its
+   one-time RSS.com-feed submission.
 8. Completed: publish the seven clean episode-specific images to the website,
    YouTube, Vimeo, Rumble, and both Spotify artwork surfaces. The canonical RSS
-   now exposes seven unique 3000 x 3000 item images; an Apple feed refresh was
-   requested. Existing Instagram Reel covers cannot be replaced through the
+   now exposes seven unique 3000 x 3000 item images. Apple now points directly
+   to RSS.com, but its episode-art and five-to-seven episode convergence remain
+   pending. Existing Instagram Reel covers cannot be replaced through the
    documented post-publication workflow and must not be deleted/reposted merely
    for cosmetic convergence.
 

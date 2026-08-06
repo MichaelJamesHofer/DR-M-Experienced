@@ -17,7 +17,7 @@
   "category": "Health & Fitness",
   "assets": {
     "fullVideo": "/absolute/path/to/episode-08-master.mp4",
-    "podcastAudio": null,
+    "podcastAudio": "/absolute/path/to/episode-08-podcast.mp3",
     "instagramReel": "/absolute/path/to/episode-08-reel.mp4",
     "thumbnail": "/absolute/path/to/episode-08-thumbnail.jpg",
     "captions": "/absolute/path/to/episode-08-captions.srt"
@@ -29,6 +29,14 @@
     "vimeo": null
   },
   "releasePlan": {
+    "rss.com": {
+      "releaseMode": "hold",
+      "initialVisibility": "not_selected",
+      "finalVisibility": "not_selected",
+      "license": "not_selected",
+      "monetization": "not_selected",
+      "notifications": "not_selected"
+    },
     "spotify": {
       "releaseMode": "hold",
       "initialVisibility": "not_selected",
@@ -71,6 +79,7 @@
     }
   },
   "targets": [
+    "rss.com",
     "spotify",
     "apple",
     "amazon",
