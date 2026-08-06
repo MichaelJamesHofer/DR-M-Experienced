@@ -34,14 +34,6 @@ export default async function Home() {
 
         <div className="relative mx-auto max-w-6xl px-4 py-20 lg:px-6 lg:py-32">
           <div className="flex flex-col items-center text-center">
-            {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/50 backdrop-blur px-4 py-2 mb-8 animate-fade-in">
-              <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-caption font-medium text-foreground-muted">
-                Watch and listen on your preferred platform
-              </span>
-            </div>
-
             {/* Main Headline */}
             <h1 className="text-display-lg md:text-display-xl font-bold text-foreground max-w-4xl mb-6">
               {SITE_SHORT_NAME},{" "}

@@ -7,6 +7,7 @@ import {
 } from "./affiliates";
 import { BLOG_POSTS, type BlogPost, type BlogReference, type BlogSection } from "./blogs";
 import { EPISODES, type Episode, type EpisodeReference, type EpisodeSection } from "./episodes";
+import { siteImageSrc } from "@/lib/site-images";
 
 export type ContentCatalog = {
   episodes: Episode[];
@@ -167,7 +168,10 @@ type BlogRelatedAffiliateProductRow = {
 };
 
 const fallbackCatalog: ContentCatalog = {
-  episodes: EPISODES,
+  episodes: EPISODES.map((episode) => ({
+    ...episode,
+    thumbnailUrl: siteImageSrc(episode.thumbnailUrl),
+  })),
   affiliateCategories: AFFILIATE_CATEGORIES,
   affiliateProducts: AFFILIATE_PRODUCTS,
   blogPosts: BLOG_POSTS,
@@ -461,7 +465,7 @@ function mapEpisodes(
         audioUrl: row.audio_url ?? undefined,
         vimeoId: row.vimeo_id ?? undefined,
         spotifyId: row.spotify_id ?? undefined,
-        thumbnailUrl: row.thumbnail_url ?? undefined,
+        thumbnailUrl: siteImageSrc(row.thumbnail_url ?? undefined),
         transcriptUrl: row.transcript_url ?? undefined,
         references,
         keyTakeaways: keyTakeawaysByEpisode.get(row.slug) ?? [],

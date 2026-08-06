@@ -70,8 +70,9 @@ canonical while the supported RSS.com import and parity checks are completed.
 6. After verified cutover, submit the final RSS.com feed once to Amazon, complete
    ownership verification, and record the stable show ID and public URL.
 7. YouTube, Vimeo, and Rumble metadata cleanup is complete. Reconcile Instagram
-   captions where needed, then update title-bearing artwork. Do not rename stable
-   handles or IDs merely to match display text.
+   captions where needed, then update their title-bearing artwork from approved
+   platform variants. The website already uses clean episode-specific art. Do
+   not rename stable handles or IDs merely to match display text.
 8. Verify every public profile and the website before announcing convergence.
 
 Apple's current discrepancy is cleanup work, not a reason to recreate the show.
