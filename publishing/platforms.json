@@ -1,27 +1,73 @@
 {
   "pendingHostingMigration": {
-    "active": true,
+    "active": false,
     "target": "rss.com",
     "stateFile": "publishing/hosting-migration.json",
-    "status": "self_service_import_confirmation_pending",
-    "cutoverReady": false,
+    "status": "completed",
+    "cutoverReady": true,
     "resumeRequiresExplicitApproval": false
   },
+  "downstreamPropagation": {
+    "status": "issues_pending",
+    "hostMigrationComplete": true,
+    "issues": [
+      {
+        "code": "apple_episode_convergence_pending",
+        "showId": "1870433419",
+        "dashboardEpisodeCount": 8,
+        "availableEpisodeCount": 5,
+        "draftEpisodeCount": 3,
+        "publicLookupTrackCount": 5,
+        "deletionAuthorized": false
+      },
+      {
+        "code": "podcast_index_redirect_crawl_pending",
+        "canonicalFeedRecordId": "7982906",
+        "legacyFeedRecordId": "7799755"
+      }
+    ]
+  },
   "podcastDistribution": {
-    "canonicalHost": "spotify",
+    "canonicalHost": "rss.com",
     "hostAssets": [
-      "fullVideo",
       "podcastAudio"
     ],
     "rssDownstream": [
+      "spotify",
       "apple",
       "amazon"
     ]
   },
+  "podcastDirectories": {
+    "podcastIndex": {
+      "status": "duplicate_records_pending_redirect_crawl",
+      "canonicalFeedRecordId": "7982906",
+      "legacyFeedRecordId": "7799755",
+      "canonicalRecordUrl": "https://podcastindex.org/podcast/7982906",
+      "legacyRecordUrl": "https://podcastindex.org/podcast/7799755"
+    },
+    "listenNotes": {
+      "status": "public_indexing_unverified",
+      "channelUrl": null
+    }
+  },
   "platforms": {
+    "rss.com": {
+      "label": "RSS.com",
+      "mode": "manual_host_upload",
+      "channelUrl": "https://rss.com/podcasts/dr-m-experienced/",
+      "destinationIds": {
+        "accountId": null,
+        "containerId": "dr-m-experienced"
+      },
+      "requiredDestinationIds": ["containerId"],
+      "asset": "podcastAudio",
+      "rssRole": "canonical_host",
+      "notes": "Publish the approved podcastAudio here first. RSS.com is the canonical audio host and feed source for Apple Podcasts and Amazon Music/Audible; do not use the full-video master as its audio asset."
+    },
     "spotify": {
       "label": "Spotify for Creators",
-      "mode": "manual_host_upload",
+      "mode": "manual_video_replacement_after_rss_ingest",
       "channelUrl": "https://open.spotify.com/show/7GGLljxmO0G3FLjPy8vfcw",
       "destinationIds": {
         "accountId": null,
@@ -29,9 +75,8 @@
       },
       "requiredDestinationIds": ["containerId"],
       "asset": "fullVideo",
-      "fallbackAsset": "podcastAudio",
-      "rssRole": "canonical_host",
-      "notes": "Upload the approved full video to the current Spotify-hosted show; Spotify makes the episode audio available through the canonical RSS feed. Use podcastAudio only as the fallback for an audio-only episode. Spotify does not expose a public creator episode-upload API."
+      "rssRole": "direct_media_destination",
+      "notes": "Wait for RSS.com audio to create the episode in the existing Spotify show. For an approved video release, replace that exact ingested episode with fullVideo in Spotify for Creators. Audio-only releases need no separate Spotify action; never create a duplicate episode. Spotify does not expose a public creator episode-upload API."
     },
     "apple": {
       "label": "Apple Podcasts",
@@ -43,8 +88,8 @@
       },
       "requiredDestinationIds": ["containerId"],
       "source": "rss",
-      "dependsOn": "spotify",
-      "notes": "Do not upload the episode separately. Apple receives the approved podcast audio and item-level episode artwork from Spotify's canonical RSS feed. Preserve show ID 1870433419 and refresh that listing after source-feed changes."
+      "dependsOn": "rss.com",
+      "notes": "Do not upload the episode separately. Apple receives the approved podcast audio and item-level episode artwork from RSS.com's canonical feed. Preserve show ID 1870433419 and verify that listing after each host publication."
     },
     "amazon": {
       "label": "Amazon Music and Audible",
@@ -56,8 +101,8 @@
       },
       "requiredDestinationIds": ["containerId"],
       "source": "rss",
-      "dependsOn": "spotify",
-      "notes": "Do not upload the episode separately. One-time RSS submission and ownership verification are still required before Amazon can receive the approved podcast audio from Spotify's canonical feed."
+      "dependsOn": "rss.com",
+      "notes": "Do not upload the episode separately. After the one-time listing claim and ownership verification, Amazon Music and Audible receive the approved podcast audio from RSS.com's canonical feed."
     },
     "youtube": {
       "label": "YouTube",
@@ -91,10 +136,13 @@
         "accountId": null,
         "containerId": null
       },
+      "publicProfileId": "80068141150",
+      "publicExternalUrl": null,
+      "professionalAccountVerified": false,
       "requiredDestinationIds": ["accountId"],
       "asset": "instagramReel",
       "fallbackMode": "temporary_public_media_staging",
-      "notes": "Prefer Meta's resumable upload from the approved local Reel. Use short-lived public media staging only when resumable upload is unavailable, then remove the staged object after Meta finishes processing."
+      "notes": "The public profile has exact name and bio but no external link and currently reports a non-business account. Add the website listening hub and complete professional-account/API setup before automation. Prefer Meta's resumable upload from the approved local Reel."
     },
     "rumble": {
       "label": "Rumble",

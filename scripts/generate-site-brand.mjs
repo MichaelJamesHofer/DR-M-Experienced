@@ -17,6 +17,7 @@ export function buildSiteBrandProjection(catalog) {
     shortName: catalog.show.names.short,
     hostLine: catalog.show.names.hostLine,
     description: catalog.show.profileCopy.short,
+    podcastFeedUrl: catalog.show.canonicalPodcastFeed.url,
   };
 }
 

@@ -9,9 +9,12 @@ import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 import { htmlDescriptionToPlainText, youtubeDescriptionFromHtml } from "./catalog.mjs";
 
+export { hostingMigrationIsActive } from "./migration-state.mjs";
+
 const execFileAsync = promisify(execFile);
 
 export const PLATFORM_IDS = [
+  "rss.com",
   "spotify",
   "apple",
   "amazon",
@@ -25,7 +28,7 @@ const ASSET_KEYS = ["fullVideo", "podcastAudio", "instagramReel", "thumbnail", "
 const VIDEO_TARGETS = new Set(["youtube", "vimeo", "rumble"]);
 const PLAIN_DESCRIPTION_TARGETS = new Set(["youtube", "vimeo", "rumble"]);
 const DIRECT_COPY_KEYS = new Set(["instagram", "rumble", "youtube", "vimeo"]);
-const DIRECT_RELEASE_TARGETS = new Set(["spotify", "youtube", "vimeo", "instagram", "rumble"]);
+const DIRECT_RELEASE_TARGETS = new Set(["rss.com", "spotify", "youtube", "vimeo", "instagram", "rumble"]);
 const RELEASE_CHOICE_KEYS = [
   "initialVisibility",
   "finalVisibility",
@@ -34,6 +37,10 @@ const RELEASE_CHOICE_KEYS = [
   "notifications",
 ];
 const PLATFORM_RELEASE_RULES = {
+  "rss.com": {
+    visibility: new Set(["draft", "public", "not_selected"]),
+    license: new Set(["not_applicable", "not_selected"]),
+  },
   spotify: {
     visibility: new Set(["draft", "public", "not_selected"]),
     license: new Set(["not_applicable", "not_selected"]),
@@ -87,10 +94,6 @@ export function publisherHome(env = process.env) {
 export function configHome(env = process.env) {
   const configRoot = env.XDG_CONFIG_HOME || path.join(os.homedir(), ".config");
   return path.join(configRoot, "drm-publisher");
-}
-
-export function hostingMigrationIsActive(migration, pendingMigration) {
-  return Boolean(migration) && migration.decision?.active !== false && pendingMigration?.active !== false;
 }
 
 function sortedValue(value) {
@@ -243,12 +246,15 @@ export function validateManifest(manifest) {
     if ([...VIDEO_TARGETS].some((target) => targets.has(target)) && !manifest.assets.fullVideo) {
       errors.push("assets.fullVideo is required for YouTube, Vimeo, or Rumble.");
     }
-    if (targets.has("spotify") && !manifest.assets.fullVideo && !manifest.assets.podcastAudio) {
-      errors.push("Spotify requires assets.fullVideo or assets.podcastAudio.");
+    if (targets.has("rss.com") && !manifest.assets.podcastAudio) {
+      errors.push("RSS.com requires assets.podcastAudio.");
+    }
+    if (targets.has("spotify") && !manifest.assets.fullVideo) {
+      errors.push("Spotify replacement requires assets.fullVideo.");
     }
     for (const directory of ["apple", "amazon"]) {
-      if (targets.has(directory) && !targets.has("spotify")) {
-        errors.push(`${directory} requires spotify in targets because this show distributes through the canonical RSS feed.`);
+      if (targets.has(directory) && !targets.has("rss.com")) {
+        errors.push(`${directory} requires rss.com in targets because this show distributes through the canonical RSS feed.`);
       }
     }
     if (targets.has("instagram") && !manifest.assets.instagramReel) {
@@ -418,8 +424,8 @@ export function validateMediaAssets(assetRecords, manifest) {
     }
   }
 
-  if (selected.has("spotify") && !fullVideo && podcastAudio && !audioStream(podcastAudio)) {
-    block("spotify", "podcastAudio has no audio stream.");
+  if (selected.has("rss.com") && podcastAudio && !audioStream(podcastAudio)) {
+    block("rss.com", "podcastAudio has no audio stream.");
   }
 
   if (selected.has("instagram")) {
@@ -530,7 +536,8 @@ export function buildTargetPlan(platformConfig, manifest, assetRecords, targetEr
     else if (missingIds.length) readiness = "destination_id_required";
     else if (invalidIds.length) readiness = "destination_id_invalid";
     else if (!releasePlan || unresolvedChoices.length) readiness = "release_choices_required";
-    else if (platformId === "spotify") readiness = "manual_upload_required";
+    else if (platformId === "rss.com") readiness = "manual_upload_required";
+    else if (platformId === "spotify") readiness = "manual_video_replacement_required";
     else if (platformId === "rumble") readiness = "manual_browser_required";
     else if (platformId === "youtube") readiness = "oauth_and_audit_required";
     else if (platformId === "vimeo") readiness = "api_auth_required";

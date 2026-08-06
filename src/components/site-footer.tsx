@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PlatformBadges } from "@/components/platform-badges";
 import { NewsletterCapture } from "@/components/newsletter-capture";
-import { SITE_DESCRIPTION, SITE_HOST_LINE, SITE_NAME, SITE_SHORT_NAME } from "@/lib/site-brand";
+import { PODCAST_FEED_URL, SITE_DESCRIPTION, SITE_HOST_LINE, SITE_NAME, SITE_SHORT_NAME } from "@/lib/site-brand";
 
 const footerLinks = [
   { href: "/episodes", label: "Episodes" },
@@ -39,7 +39,7 @@ export function SiteFooter() {
             </p>
             <PlatformBadges variant="compact" className="mb-6" />
             <a
-              href="https://anchor.fm/s/10e1b0328/podcast/rss"
+              href={PODCAST_FEED_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-body-sm text-foreground-muted hover:text-foreground transition-colors duration-200"

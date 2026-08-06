@@ -5,6 +5,7 @@
   "approvedBy": "project owner",
   "rightsConfirmed": true,
   "platformRolloutRecordedAt": "2026-08-06T03:32:40Z",
+  "canonicalHostCutoverRecordedAt": "2026-08-06T18:02:24Z",
   "generation": {
     "method": "OpenAI built-in image generation, one generation per episode, followed by centered website and 16:9 JPEG exports plus purpose-built square recompositions for podcast episode art",
     "sharedDirection": "Premium cinematic 3D scientific editorial illustration on deep charcoal, with cyan structure and restrained amber emphasis. Keep the focal subject central and leave dark edge space for responsive website overlays.",
@@ -154,9 +155,10 @@
     },
     "1x1": {
       "uses": [
+        "rss-com-canonical",
         "spotify-episode-art",
         "apple-rss",
-        "future-rss-directories"
+        "amazon-rss"
       ],
       "mediaType": "image/jpeg",
       "width": 3000,
@@ -214,5 +216,34 @@
       ]
     }
   },
-  "notes": "The clean, text-free website, 16:9, and square derivatives are approved. The 16:9 set is live on YouTube, Vimeo, Rumble, and Spotify video; the square set is live in Spotify and its canonical RSS item artwork. Apple refresh is requested and may still be propagating. RSS.com, Amazon, and existing Instagram covers remain outside this completed direct rollout. Generated originals remain outside the repository in the local Codex image output store."
+  "canonicalHostCutover": {
+    "status": "rss_com_canonical_redirect_verified",
+    "feedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+    "finalFeedSha256": "a4b8b14724ecd2af81901555a1f601feb4d9901d6ffd0001b329196e0c2f69d1",
+    "verifiedAt": "2026-08-06T18:02:24Z",
+    "episodeCount": 7,
+    "exactTargetMetadata": true,
+    "verificationTokenPresent": false,
+    "seasonMetadataCount": 0,
+    "legacyDescriptionReferenceCount": 0,
+    "episodeAndShowArtworkParityPassed": true,
+    "spotifyVideo": {
+      "status": "post_cutover_persistence_and_replacement_audit_required",
+      "auditComplete": false
+    },
+    "apple": {
+      "showId": "1870433419",
+      "feedDirectlyTargetsCanonicalUrl": true,
+      "metadataExact": true,
+      "availableEpisodeCount": 5,
+      "publicSevenEpisodeConvergenceVerified": false,
+      "draftEpisodeNumbers": [1, 2],
+      "staleDuplicateDraftEpisodeNumbers": [4]
+    },
+    "amazon": {
+      "status": "ready_for_one_time_claim_not_claimed",
+      "claimed": false
+    }
+  },
+  "notes": "The clean, text-free website, 16:9, and square derivatives are approved. The historical 16:9 rollout is live on YouTube, Vimeo, Rumble, and Spotify video; Spotify video persistence and any replacement need still require an explicit post-cutover audit. The square set is present in the canonical RSS.com feed with seven-item episode and show artwork parity. Apple directly targets that feed with exact metadata but still exposes only five Available episodes alongside Draft Episodes 1 and 2 and a stale duplicate Draft Episode 4, so seven-episode public convergence is not claimed. Amazon is ready for a one-time claim but remains unclaimed, and existing Instagram covers remain unchanged. Generated originals remain outside the repository in the local Codex image output store."
 }

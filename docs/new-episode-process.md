@@ -4,9 +4,10 @@ Use this checklist from approved media through website publication. Preparing or
 
 If `publishing/hosting-migration.json` has `gates.publishingFreezeActive` set to `true`, stop. Do not publish a new episode until the host cutover validation is complete and the freeze is cleared.
 
-The RSS.com self-service import currently awaits project-email confirmation.
-Anchor remains the canonical feed until the imported feed passes parity checks
-and the exact cutover/redirect receives separate approval.
+RSS.com is the canonical podcast-audio host. Spotify, Apple Podcasts, and, after
+its one-time claim, Amazon Music/Audible receive podcast audio from that feed;
+they are not separate audio uploads. Spotify may replace an already-ingested
+RSS episode with an approved full-video version for Spotify only.
 
 ## 1. Register The Episode In The Master Catalog
 
@@ -67,7 +68,10 @@ Review the exact title, descriptions, media fingerprints, audience and disclosur
 
 If `prepare` reports catalog/manifest drift, correct the catalog or manifest and
 create a new packet. Do not bypass the catalog by editing only a remote
-dashboard.
+dashboard. Select `rss.com` for every podcast-audio release, include a verified
+`assets.podcastAudio`, and add its exact release decision under
+`releasePlan["rss.com"]`. Selecting Apple or Amazon also requires `rss.com` in
+`targets`; neither directory gets its own release-plan entry.
 
 With a configured Dropbox project root, `prepare` verifies that supplied media
 resolves to the registered logical asset; a `verified` catalog asset must also
@@ -89,11 +93,16 @@ For each destination, keep upload and release as separate decisions:
 
 Once those two authorizations exist, use the unchanged assets in this order:
 
-- before cutover, use Spotify for Creators for canonical podcast audio; after cutover, publish podcast audio through RSS.com while continuing Spotify video in the creator workflow
-- before cutover, verify existing Apple show `1870433419` ingests the episode
-  from Anchor and keep Amazon on hold; after cutover, verify Apple and the one
-  newly claimed Amazon listing ingest the RSS.com feed without separate episode
-  uploads
+- publish the approved `podcastAudio` through RSS.com first, then verify the new
+  GUID, enclosure, title, structured episode number, description, artwork, and
+  publication date in the canonical feed before treating any directory as done
+- verify existing Apple show `1870433419` ingests that RSS.com item; after
+  Amazon's one-time claim is complete, verify its single listing does the same
+- wait for the RSS.com item to appear in the existing Spotify show. For an
+  approved video episode, use the episode menu in Spotify for Creators to upload
+  `fullVideo` as the replacement for that existing episode. For an audio-only
+  release, do nothing separately in Spotify. Never create a duplicate Spotify
+  episode or upload `podcastAudio` as a direct fallback
 - upload the full video to YouTube and Vimeo through their approved API connections when configured
 - publish the approved vertical Reel through Instagram's resumable upload from the local file when configured; use short-lived public staging only as a fallback and delete the staged object after processing
 - complete Rumble VOD through its local browser session, stopping for any license, monetization, visibility, or final-release decision not frozen in the approval packet
@@ -129,7 +138,7 @@ Create or update the parent row in `public.episodes`, then add its related rows:
 - `public.episode_sections`
 - `public.episode_section_paragraphs`
 
-Keep the episode in `draft` until all four platform references and the editorial sections are complete. Public RLS policies hide both draft parent rows and their child content. Copy overlapping number, slug, title, and destination identities from the master catalog; Supabase is authoritative only for the website-specific editorial fields and publication state.
+Keep the episode in `draft` until all four platform references and the editorial sections are complete. Public RLS policies hide both draft parent rows and their child content. Copy overlapping number, slug, title, RSS.com `audio_url`, and destination identities from the master catalog; verify exact catalog readback after the production write. Supabase is authoritative only for the website-specific editorial fields and publication state.
 
 ## 6. Verify Related Products And Blogs
 

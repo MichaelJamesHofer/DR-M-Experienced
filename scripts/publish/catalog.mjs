@@ -222,6 +222,16 @@ export function htmlDescriptionToPlainText(html) {
 }
 
 /**
+ * Normalizes either catalog HTML or feed-provided HTML/plain text for exact
+ * semantic comparison. Markup-only paragraph boundaries and whitespace do not
+ * create drift, while every visible word and punctuation mark still does.
+ */
+export function normalizeDescriptionForComparison(value) {
+  if (value == null) return null;
+  return htmlDescriptionToPlainText(String(value)).replace(/\s+/g, " ").trim();
+}
+
+/**
  * Produces YouTube-safe text without angle brackets, which Studio rejects in
  * video descriptions even when they are intended as comparison operators.
  */
@@ -359,6 +369,16 @@ function semanticErrors(catalog) {
       if (!asset) errors.push(`episodes.${episodeIndex}.assetRefs.${role} references missing asset ${assetId}.`);
       else if (asset.role !== role) errors.push(`episodes.${episodeIndex}.assetRefs.${role} references an asset with role ${asset.role}.`);
     }
+
+    if (episode.publicationState === "published") {
+      const podcastAudioId = episode.assetRefs?.podcastAudio;
+      const podcastAudio = podcastAudioId ? assetRegistry[podcastAudioId] : null;
+      if (podcastAudio && !podcastAudio.publishedUrl) {
+        errors.push(
+          `episodes.${episodeIndex}.assetRefs.podcastAudio must reference a hosted asset with publishedUrl.`
+        );
+      }
+    }
   }
 
   const shortCopy = catalog.show?.profileCopy?.short;
@@ -432,8 +452,8 @@ function feedEpisodeNumber(value) {
 
 /**
  * Compares a parsed podcast feed with the published portion of the master
- * catalog. Feed item order is irrelevant; GUIDs bind titles and structured
- * episode numbers to their catalog episodes.
+ * catalog. GUIDs bind canonical metadata to each episode, while feed order is
+ * derived from published episode numbers so the rule scales with the catalog.
  */
 export function comparePublishedCatalogFeed(catalog, feed) {
   if (!catalog || !Array.isArray(catalog.episodes)) {
@@ -474,6 +494,7 @@ export function comparePublishedCatalogFeed(catalog, feed) {
 
   const titleMismatches = [];
   const episodeNumberMismatches = [];
+  const descriptionMismatches = [];
   for (const [guid, expected] of expectedByGuid) {
     const matches = feedByGuid.get(guid) ?? [];
     const actualTitles = matches.map((episode) => episode?.title ?? null);
@@ -484,6 +505,14 @@ export function comparePublishedCatalogFeed(catalog, feed) {
     const actualNumbers = matches.map((episode) => feedEpisodeNumber(episode?.episodeNumber));
     if (matches.length !== 1 || actualNumbers[0] !== expected.number) {
       episodeNumberMismatches.push({ guid, expected: expected.number, actual: actualNumbers });
+    }
+
+    const expectedDescription = normalizeDescriptionForComparison(expected.description?.full);
+    const actualDescriptions = matches.map((episode) =>
+      normalizeDescriptionForComparison(episode?.description)
+    );
+    if (matches.length !== 1 || actualDescriptions[0] !== expectedDescription) {
+      descriptionMismatches.push({ guid, title: expected.title, actualCount: matches.length });
     }
   }
 
@@ -501,12 +530,31 @@ export function comparePublishedCatalogFeed(catalog, feed) {
     .map((episode) => feedEpisodeNumber(episode?.episodeNumber))
     .filter((number) => number != null)
     .sort((left, right) => left - right);
+  const expectedFeedOrder = [...expectedStructuredEpisodeNumbers].sort((left, right) => right - left);
+  const actualFeedOrder = feedEpisodes.map((episode) => feedEpisodeNumber(episode?.episodeNumber));
+  const seasonMetadataEpisodes = feedEpisodes
+    .map((episode, index) => ({
+      index,
+      guid: feedGuid(episode?.guid),
+      title: episode?.title ?? null,
+      seasonNumber: episode?.seasonNumber ?? null,
+    }))
+    .filter(
+      (episode) =>
+        episode.seasonNumber != null &&
+        (typeof episode.seasonNumber !== "string" || episode.seasonNumber.trim() !== "")
+    );
 
   const episodeCountMatches = feedEpisodes.length === publishedEpisodes.length;
   const guidSetMatches = missingGuids.length === 0 && extraGuids.length === 0;
   const uniqueGuids = missingGuidIndexes.length === 0 && duplicateGuids.length === 0;
   const titleMatches = titleMismatches.length === 0;
   const structuredNumbersMatch = episodeNumberMismatches.length === 0;
+  const descriptionsMatch = descriptionMismatches.length === 0;
+  const noSeasonMetadata = seasonMetadataEpisodes.length === 0;
+  const feedOrderMatches =
+    actualFeedOrder.length === expectedFeedOrder.length &&
+    actualFeedOrder.every((number, index) => number === expectedFeedOrder[index]);
   const noLegacyTitlePrefixes = legacyTitleEpisodes.length === 0;
 
   return {
@@ -516,6 +564,9 @@ export function comparePublishedCatalogFeed(catalog, feed) {
       uniqueGuids &&
       titleMatches &&
       structuredNumbersMatch &&
+      descriptionsMatch &&
+      noSeasonMetadata &&
+      feedOrderMatches &&
       noLegacyTitlePrefixes,
     expectedEpisodeCount: publishedEpisodes.length,
     actualEpisodeCount: feedEpisodes.length,
@@ -524,15 +575,22 @@ export function comparePublishedCatalogFeed(catalog, feed) {
     uniqueGuids,
     titleMatches,
     structuredNumbersMatch,
+    descriptionsMatch,
+    noSeasonMetadata,
+    feedOrderMatches,
     noLegacyTitlePrefixes,
     expectedStructuredEpisodeNumbers,
     actualStructuredEpisodeNumbers,
+    expectedFeedOrder,
+    actualFeedOrder,
     missingGuids,
     extraGuids,
     duplicateGuids,
     missingGuidIndexes,
     titleMismatches,
     episodeNumberMismatches,
+    descriptionMismatches,
+    seasonMetadataEpisodes,
     legacyTitleEpisodes,
   };
 }

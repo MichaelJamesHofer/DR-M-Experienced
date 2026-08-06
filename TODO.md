@@ -75,13 +75,28 @@ Based on analysis of top-tier health content creators (Huberman Lab, Peter Attia
 
 ## Remaining Optional Enhancements
 - [x] Add actual YouTube/Spotify/Apple links
+- [ ] Approve one Round 01 logo direction (Switchback, Cutline, Waypoint Steps, or none)
+- [ ] After logo selection, produce and approve the outlined logo family, podcast cover, avatar, banners, Open Graph image, letterhead, lower third, sting, and end-screen exports
+- [ ] Approve the V3 layered desktop/tablet/mobile cartographic hero exports and promote their hashes from review status into the brand asset manifest
+- [ ] Configure and verify the production PostHog project token, region, IP-discard setting, live events, and initial growth dashboard
 - [ ] Add timestamps to episode data when audio is recorded
 - [ ] Add episode video embeds when YouTube channel is set up
 - [ ] Performance audit (lighthouse)
 - [ ] Add Open Graph images for social sharing
-- [x] Keep the verified Spotify/Anchor feed canonical during the active RSS.com import
+- [x] Validate the seven-episode RSS.com import, including GUIDs, byte-identical audio, artwork, and full oldest/newest decode
+- [x] Complete canonical-copy/season cleanup and verify the approved one-hop Anchor 301 to RSS.com
+- [x] Migrate all seven production Supabase episode audio URLs to RSS.com and verify exact catalog readback
+- [ ] Verify Podcast Index duplicate convergence after the Anchor redirect is crawled
+- [ ] Repair existing Apple show `1870433419` in place from five to seven Available episodes; inspect Draft Episodes 1-2 and the stale duplicate Episode 4 without creating a replacement show
+- [ ] Verify all seven existing Spotify video episodes survived the host cutover and test the RSS-ingest-then-replace-with-video workflow on the next approved video episode
+- [ ] Claim the show once in Amazon Music/Audible using `https://media.rss.com/dr-m-experienced/feed.xml`, then record its stable ID and URL
+- [ ] Add `https://drmexperienced.com` as Instagram's external link and complete professional-account/API setup
+- [ ] Review the off-catalog public Vimeo video `Pesto v2`; archive or catalog it only after content ownership and intent are confirmed
+- [ ] Replace company-level affiliate destinations with verified links to the exact products Dr. Musnick recommends, then validate every link and its related-episode placement before publishing
 
-## Current Status: WEBSITE COMPLETE; DISTRIBUTION MIGRATION ACTIVE
-The site is functional. RSS.com import, feed parity, directory cutover, Apple
-repair, Amazon onboarding, and replacement artwork are tracked in the publishing
-runbooks.
+## Current Status: WEBSITE AND HOST CUTOVER COMPLETE; DOWNSTREAM CLEANUP ACTIVE
+The site is functional. RSS.com is canonical, the legacy Anchor feed redirects,
+Apple is configured directly to RSS.com, and production Supabase uses the seven
+RSS.com audio URLs. Apple draft/public-count repair, Podcast Index convergence,
+Spotify video readback, Amazon onboarding, and replacement artwork remain
+tracked in the publishing runbooks.

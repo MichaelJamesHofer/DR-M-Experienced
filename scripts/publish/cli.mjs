@@ -14,6 +14,7 @@ import {
   findEpisode,
   loadCatalog,
   manifestCatalogProblems,
+  normalizeDescriptionForComparison,
   resolveCatalogAsset,
   sourcesConfigPath,
 } from "./catalog.mjs";
@@ -24,7 +25,6 @@ import {
   configHome,
   hashText,
   hashSnapshot,
-  hostingMigrationIsActive,
   inspectAsset,
   invalidDestinationIds,
   missingDestinationIds,
@@ -40,6 +40,11 @@ import {
   writePrivateJson,
   writePrivateText,
 } from "./lib.mjs";
+import {
+  migrationCheckMode,
+  migrationDoctorAdvice,
+  validatePublishingMigrationState,
+} from "./migration-state.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDir, "..", "..");
@@ -49,7 +54,7 @@ const hostingMigrationPath = path.join(projectRoot, "publishing", "hosting-migra
 function usage() {
   return `Usage:
   drm-publish doctor
-  drm-publish migration-check [--verify-media] [--snapshot]
+  drm-publish migration-check [--verify-media] [--verify-artwork] [--decode-edge-audio] [--snapshot]
   drm-publish prepare <episode.json>
   drm-publish show <job-id>
   drm-publish approve <job-id> --hash <sha256> --by <name> --confirm "approve <job-id> <sha256>"
@@ -384,18 +389,37 @@ async function exists(filePath) {
 }
 
 async function migrationCheck(args) {
-  const allowed = new Set(["--verify-media", "--snapshot"]);
+  const allowed = new Set(["--verify-media", "--verify-artwork", "--decode-edge-audio", "--snapshot"]);
   const unknown = args.filter((argument) => !allowed.has(argument));
   if (unknown.length) throw new Error(`Unknown migration-check option: ${unknown[0]}`);
 
   const migration = await readJson(hostingMigrationPath);
-  const platformConfig = await loadPlatformConfig();
-  if (!hostingMigrationIsActive(migration, platformConfig.pendingHostingMigration)) {
+  const catalog = await loadCatalog();
+  const platformConfig = await loadPlatformConfig(catalog);
+  const migrationState = validatePublishingMigrationState({
+    migration,
+    platforms: platformConfig,
+    canonicalFeedUrl: platformConfig.rssFeed,
+    expectedTitle: platformConfig.brand,
+    expectedDescription: platformConfig.brandDescription,
+  });
+  if (migrationState.errors.length) {
+    throw new Error(`Hosting migration state is contradictory:\n- ${migrationState.errors.join("\n- ")}`);
+  }
+  const checkMode = migrationCheckMode(migrationState.phase);
+  if (checkMode === "skip_parked") {
     process.stdout.write(
-      `Hosting migration is parked. Anchor remains canonical at ${platformConfig.rssFeed}.\n` +
+      `Hosting migration is parked. The recorded source feed remains canonical at ${migration.source.feedUrl}.\n` +
         `No feed preflight was run; resuming the migration requires explicit approval.\n`
     );
     return;
+  }
+  if (checkMode === "post_cutover_read_only") {
+    process.stdout.write(
+      `Completed cutover: running read-only post-cutover validation from the legacy redirect source to the RSS.com feed.\n\n`
+    );
+  } else if (checkMode === "post_redirect_validation") {
+    process.stdout.write(`Running read-only post-redirect validation while the publishing freeze remains active.\n\n`);
   }
   const source = migration.source?.feedUrl;
   const candidate = migration.destination?.candidateFeedUrl;
@@ -411,7 +435,12 @@ async function migrationCheck(args) {
       expectedEpisodeCount: migration.source.expectedEpisodeCount,
       expectedGuids: migration.source.expectedGuids,
     },
+    expectedCandidate: migration.targetMetadata,
+    catalog,
+    requireCatalogBinding: true,
     verifyMedia: args.includes("--verify-media"),
+    verifyArtwork: args.includes("--verify-artwork"),
+    decodeEdgeAudio: args.includes("--decode-edge-audio"),
     snapshotDirectory,
     timeoutMs: 30_000,
   });
@@ -473,10 +502,15 @@ async function doctor() {
   const invalidIdentities = Object.fromEntries(
     Object.entries(platformConfig.platforms).map(([id, platform]) => [id, invalidDestinationIds(id, platform)])
   );
-  const hostingMigrationActive = hostingMigrationIsActive(
-    hostingMigration,
-    platformConfig.pendingHostingMigration
-  );
+  const migrationState = hostingMigration
+    ? validatePublishingMigrationState({
+        migration: hostingMigration,
+        platforms: platformConfig,
+        canonicalFeedUrl: platformConfig.rssFeed,
+        expectedTitle: platformConfig.brand,
+        expectedDescription: platformConfig.brandDescription,
+      })
+    : { phase: "missing", errors: ["publishing/hosting-migration.json is missing."] };
 
   let rss = {
     reachable: false,
@@ -509,7 +543,9 @@ async function doctor() {
     rss = {
       reachable: response.ok,
       title: feed.title,
-      descriptionMatches: feed.description === platformConfig.brandDescription,
+      descriptionMatches:
+        normalizeDescriptionForComparison(feed.description) ===
+        normalizeDescriptionForComparison(platformConfig.brandDescription),
       verificationTokenPresent: feed.description?.includes("RSSVERIFY") ?? false,
       episodeCount: feed.episodes.length,
       uniqueGuidCount: guidCount,
@@ -558,11 +594,14 @@ async function doctor() {
   );
   if (hostingMigration) {
     process.stdout.write(`\nHosting migration\n`);
-    process.stdout.write(`- active: ${hostingMigrationActive ? "yes" : "no"}\n`);
+    process.stdout.write(`- phase: ${migrationState.phase}\n`);
+    process.stdout.write(`- state valid: ${migrationState.errors.length ? "no" : "yes"}\n`);
     process.stdout.write(`- target: ${hostingMigration.destination.provider}\n`);
     process.stdout.write(`- status: ${hostingMigration.status}\n`);
     process.stdout.write(`- candidate: ${hostingMigration.destination.candidateStatus}\n`);
     process.stdout.write(`- redirect authorized: ${hostingMigration.gates.redirectAuthorized ? "yes" : "no"}\n`);
+    process.stdout.write(`- redirect verified: ${hostingMigration.gates.redirectVerified ? "yes" : "no"}\n`);
+    for (const error of migrationState.errors) process.stdout.write(`- state error: ${error}\n`);
   }
   process.stdout.write(`\nAccount setup\n`);
   process.stdout.write(`- YouTube OAuth client: ${setup.youtubeClient ? "configured" : "needed"}\n`);
@@ -580,30 +619,24 @@ async function doctor() {
         : "configured";
     process.stdout.write(`- ${id} stable destination IDs: ${identityStatus}\n`);
   }
-  process.stdout.write(`- Spotify creator upload: manual browser step\n- Rumble VOD upload: manual browser step\n`);
+  process.stdout.write(`- Spotify video replacement: manual browser step\n- Rumble VOD upload: manual browser step\n`);
 
-  if (hostingMigrationActive && !platformConfig.pendingHostingMigration?.cutoverReady) {
-    process.stdout.write(
-      `\nAction: complete and validate the supported RSS.com import. Keep the Anchor feed canonical and do not redirect or rename the remote show yet.\n`
-    );
-  } else if (rss.title && rss.title !== platformConfig.brand) {
-    process.stdout.write(`\nAction: rename the show at the verified canonical host so the title can fan out to podcast directories.\n`);
-  } else if (
-    !rss.descriptionMatches ||
-    rss.verificationTokenPresent ||
-    !rss.catalogMatches
-  ) {
-    process.stdout.write(
-      `\nAction: finish the approved Spotify metadata batch, then rerun doctor before refreshing Apple or submitting Amazon.\n`
-    );
-  }
   const rssHealthy =
     rss.reachable &&
     rss.title === platformConfig.brand &&
     rss.descriptionMatches &&
     !rss.verificationTokenPresent &&
     rss.catalogMatches;
-  if (Object.values(core).some((ready) => !ready) || !rssHealthy) process.exitCode = 2;
+  const advice = migrationDoctorAdvice({
+    phase: migrationState.phase,
+    migration: hostingMigration,
+    pendingMigration: platformConfig.pendingHostingMigration,
+    rssHealthy,
+  });
+  process.stdout.write(`\nAction: ${advice}\n`);
+  if (Object.values(core).some((ready) => !ready) || !rssHealthy || migrationState.errors.length) {
+    process.exitCode = 2;
+  }
 }
 
 async function main() {

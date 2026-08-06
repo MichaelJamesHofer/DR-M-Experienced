@@ -1,11 +1,12 @@
 {
   "schemaVersion": 1,
   "migrationId": "spotify-to-rss-com-2026-08",
-  "status": "self_service_import_confirmation_pending",
+  "status": "completed",
   "decision": {
-    "active": true,
+    "active": false,
     "decidedAt": "2026-08-05T21:17:39Z",
-    "reason": "The owner reconfirmed the RSS.com migration. RSS.com now exposes a supported self-service import flow, so migration work resumed without authorizing a redirect or directory submission.",
+    "completedAt": "2026-08-06T18:31:00Z",
+    "reason": "RSS.com confirmed the supported import of all seven episodes. The owner explicitly authorized completing the exact RSS.com cutover after feed, GUID, media, and artwork parity were independently verified.",
     "resumeRequiresExplicitApproval": false
   },
   "source": {
@@ -23,12 +24,12 @@
       "1e40e02b-b217-477c-9cc3-4271cb304c23",
       "c9b853b6-a828-4012-9998-217919ff9163"
     ],
-    "lastVerifiedAt": "2026-08-06T03:32:40Z",
-    "lastVerifiedSha256": "87e836bcdd5272ec468ba39676da7c5d1e9cf8cb8f59c988ff362747cc973910",
+    "lastVerifiedAt": "2026-08-06T17:56:58.407Z",
+    "lastVerifiedSha256": "1955ac25a3bd22a1929acf3c31de8f4ba5ae278efe33d7ef778f78b9751f3019",
     "verification": {
       "exactTitle": true,
-      "exactDescription": false,
-      "verificationTokenPresent": true,
+      "exactDescription": true,
+      "verificationTokenPresent": false,
       "episodeCount": 7,
       "uniqueGuidCount": 7,
       "guidSetMatchesBaseline": true,
@@ -37,32 +38,83 @@
       "episodeArtworkCount": 7,
       "uniqueEpisodeArtworkCount": 7,
       "episodeArtworkDimensions": "3000x3000"
+    },
+    "redirectVerification": {
+      "verifiedAt": "2026-08-06T18:02:24Z",
+      "sourceStatus": 301,
+      "location": "https://media.rss.com/dr-m-experienced/feed.xml",
+      "hopCount": 1,
+      "finalStatus": 200,
+      "finalUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+      "finalBodySha256": "a4b8b14724ecd2af81901555a1f601feb4d9901d6ffd0001b329196e0c2f69d1"
     }
   },
   "destination": {
     "provider": "rss.com",
-    "candidateFeedUrl": "https://media.rss.com/dr-m-s-experienced-functional-and-sports-medicine/feed.xml",
-    "candidateStatus": "empty_show_brand_corrected_import_confirmation_pending",
+    "candidateFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+    "candidateStatus": "host_cutover_completed_downstream_propagation_pending",
     "candidateMetadataCorrectedAt": "2026-08-05T21:17:39Z",
-    "candidateMetadataVerifiedAt": "2026-08-05T21:44:37Z",
-    "candidateFeedSha256": "ad5fbf254588ec7f41b1f0d2b09e8226071cabd9bf2e9208794515ee580ba447",
-    "candidateEpisodeCountCheckedAt": "2026-08-06T03:32:40Z",
+    "candidateMetadataVerifiedAt": "2026-08-06T17:56:58.407Z",
+    "candidateFeedSha256": "a4b8b14724ecd2af81901555a1f601feb4d9901d6ffd0001b329196e0c2f69d1",
+    "candidateEpisodeCountCheckedAt": "2026-08-06T17:56:58.407Z",
     "candidateMetadataVerified": {
       "titleMatches": true,
-      "descriptionMatches": true,
-      "episodeCount": 0
+      "descriptionMatchesSource": true,
+      "descriptionMatchesTarget": true,
+      "verificationTokenPresent": false,
+      "episodeCount": 7,
+      "uniqueGuidCount": 7,
+      "guidSetMatches": true,
+      "episodeMetadataMatchesSource": true,
+      "episodeDescriptionsMatchCatalog": true,
+      "audioByteIdentical": true,
+      "episodeArtworkByteIdentical": true,
+      "showArtworkByteIdentical": true,
+      "artworkDimensions": "3000x3000",
+      "episodeOrderRequiresCleanup": false,
+      "episodeOrder": [7, 6, 5, 4, 3, 2, 1],
+      "seasonMetadataPresent": false
+    },
+    "validation": {
+      "verifiedAt": "2026-08-06T17:56:58.407Z",
+      "fullPreflightPassed": true,
+      "structuralParityPassed": true,
+      "canonicalTargetMetadataPassed": true,
+      "blockingMismatch": null,
+      "candidateMediaRangeChecksPassed": true,
+      "candidateEpisodeArtworkChecksPassed": true,
+      "oldestAndNewestAudioFullyDecoded": true,
+      "allAudioPairsByteIdentical": true,
+      "allArtworkPairsByteIdentical": true,
+      "sourceSnapshot": "/home/otto/.local/state/drm-publisher/migrations/spotify-to-rss-com-2026-08/source-20260806t175658407z-4a4fd4c5.xml",
+      "sourceSnapshotSha256": "1955ac25a3bd22a1929acf3c31de8f4ba5ae278efe33d7ef778f78b9751f3019",
+      "candidateSnapshot": "/home/otto/.local/state/drm-publisher/migrations/spotify-to-rss-com-2026-08/candidate-20260806t175658407z-4a4fd4c5.xml",
+      "candidateSnapshotSha256": "a4b8b14724ecd2af81901555a1f601feb4d9901d6ffd0001b329196e0c2f69d1",
+      "pairVerification": {
+        "verifiedAt": "2026-08-06T17:58:34.006Z",
+        "evidenceFile": "/home/otto/.local/state/drm-publisher/migrations/spotify-to-rss-com-2026-08/pair-verification-20260806t175834006z.json",
+        "evidenceSha256": "2b46612f70fda14c92c936da462df271dbfa852ff76215af7e0e78c3b38511d4",
+        "episodeCount": 7,
+        "audioAllByteIdentical": true,
+        "artworkAllByteIdentical": true,
+        "artworkAllDimensionsMatch": true,
+        "showArtworkByteIdentical": true,
+        "showArtworkDimensionsMatch": true
+      }
     },
     "proposedPermanentSlug": "dr-m-experienced",
     "proposedPermanentFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
-    "proposedPermanentFeedHttpStatus": 404,
-    "proposedPermanentFeedCheckedAt": "2026-08-06T03:32:40Z",
+    "proposedPermanentFeedHttpStatus": 200,
+    "proposedPermanentFeedCheckedAt": "2026-08-06T16:37:33Z",
     "permanentSlugApproved": true,
     "permanentSlugApprovedAt": "2026-08-05T06:09:16Z",
-    "permanentFeedUrlApproved": false,
+    "permanentFeedUrlApproved": true,
+    "permanentFeedUrlApprovedAt": "2026-08-06T16:37:33Z",
     "importRequestSubmittedAt": "2026-08-05T21:17:39Z",
     "importMethod": "supported_self_service_switch_flow",
-    "importConfirmationStatus": "email_confirmation_pending",
-    "importConfirmationLastCheckedAt": "2026-08-06T03:32:40Z",
+    "importConfirmationStatus": "completed",
+    "importConfirmationLastCheckedAt": "2026-08-06T16:37:33Z",
+    "importCompletedAt": "2026-08-06T09:00:00Z",
     "ownershipVerification": {
       "token": "RSSVERIFY",
       "publicSourceFeedObserved": true,
@@ -71,6 +123,21 @@
       "reappearedInSourceFeedAt": "2026-08-06T03:32:40Z",
       "specialistEmailReplyStatus": "user_confirmed_sent",
       "specialistEmailReplyRecordedAt": "2026-08-05T17:22:25Z"
+    },
+    "canonicalMetadataCleanedAt": "2026-08-06T17:25:00Z",
+    "episodeMetadataCleanedAt": "2026-08-06T17:35:00Z",
+    "directoryLinks": {
+      "spotify": {
+        "url": "https://open.spotify.com/show/7GGLljxmO0G3FLjPy8vfcw",
+        "status": "active"
+      },
+      "apple": {
+        "url": "https://podcasts.apple.com/us/podcast/dr-m-experienced-with-dr-david-musnick/id1870433419",
+        "status": "active"
+      },
+      "amazon": {
+        "status": "inactive_not_submitted"
+      }
     }
   },
   "targetMetadata": {
@@ -80,15 +147,49 @@
   "existingListings": {
     "spotify": {
       "showId": "7GGLljxmO0G3FLjPy8vfcw",
-      "verifiedAfterCutover": false
+      "currentFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+      "subscriptionsActive": false,
+      "partnerProgramActive": false,
+      "publicDescriptionVerificationTokenPresent": false,
+      "episodeCount": 7,
+      "monetizationReviewedAt": "2026-08-06T16:49:00Z",
+      "redirectUiReadyAt": "2026-08-06T16:49:00Z",
+      "verifiedAfterCutover": true,
+      "verifiedAfterCutoverAt": "2026-08-06T18:02:24Z"
     },
     "apple": {
       "showId": "1870433419",
       "podcastsConnectClaimed": true,
       "podcastsConnectShowId": "cfab5caf-554e-4ebe-a28c-2e4748147b82",
-      "currentFeedUrl": "https://anchor.fm/s/10e1b0328/podcast/rss",
+      "currentFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+      "currentFeedEffectiveViaRedirectAt": "2026-08-06T18:02:24Z",
+      "directFeedChangedAt": "2026-08-06T18:29:00Z",
+      "directFeedChangeTimeApproximate": true,
+      "dashboardLastUpdateAt": "2026-08-06T18:31:00Z",
+      "dashboardTitleMatchesTarget": true,
+      "dashboardDescriptionMatchesTarget": true,
+      "dashboardVerificationTokenPresent": false,
       "availableEpisodeCount": 5,
+      "publicDescriptionVerificationTokenPresent": false,
+      "publicLookupLegacyMetadataPresent": false,
       "draftEpisodeCount": 3,
+      "dashboardAllEpisodesCount": 8,
+      "dashboardDrafts": [
+        {
+          "episodeNumber": 1,
+          "status": "draft"
+        },
+        {
+          "episodeNumber": 2,
+          "status": "draft"
+        },
+        {
+          "episodeNumber": 4,
+          "status": "draft",
+          "staleDuplicate": true
+        }
+      ],
+      "draftDeletionAuthorized": false,
       "duplicateDraftShowPresent": true,
       "duplicateDraftShowId": "949adc0b-c62f-410c-962d-17563cf3b07a",
       "duplicateDraftAppleShowId": "1896845422",
@@ -97,7 +198,20 @@
       "feedRefreshReason": "Seven unique approved episode-art URLs became available in the canonical feed; Podcasts Connect accepted one refresh request on the existing show.",
       "episodeArtworkPropagationVerified": false,
       "preexistingEpisodeCountDiscrepancyRequiresReview": true,
-      "verifiedAfterCutover": false
+      "publicLookupTrackCount": 5,
+      "episodeConvergenceStatus": "pending",
+      "verifiedAfterCutover": true,
+      "verifiedAfterCutoverAt": "2026-08-06T18:31:00Z"
+    },
+    "podcastIndex": {
+      "newRssComFeedId": "7982906",
+      "oldAnchorFeedId": "7799755",
+      "duplicateRecordsPendingRedirectCrawl": true,
+      "verifiedAt": "2026-08-06T17:00:00Z"
+    },
+    "listenNotes": {
+      "indexingVerified": false,
+      "reason": "Anonymous search and typeahead did not provide a reliable result; API verification requires credentials."
     },
     "amazon": {
       "showId": null,
@@ -108,16 +222,46 @@
       "verifiedAfterCutover": false
     }
   },
+  "downstreamPropagation": {
+    "status": "issues_pending",
+    "hostMigrationComplete": true,
+    "blocksHostMigrationCompletion": false,
+    "issues": [
+      {
+        "code": "apple_episode_convergence_pending",
+        "showId": "1870433419",
+        "dashboardAllEpisodesCount": 8,
+        "dashboardAvailableEpisodeCount": 5,
+        "dashboardDraftEpisodeCount": 3,
+        "publicLookupTrackCount": 5,
+        "deletionAuthorized": false
+      },
+      {
+        "code": "podcast_index_redirect_crawl_pending",
+        "canonicalFeedRecordId": "7982906",
+        "legacyFeedRecordId": "7799755"
+      }
+    ]
+  },
+  "productionWebsiteProjection": {
+    "status": "verified",
+    "guardedSupabaseMigrationApplied": true,
+    "migrationFile": "supabase/migrations/20260806164500_repoint_episode_audio_to_rss_com.sql",
+    "catalogVerificationCommand": "npm run verify:catalog",
+    "catalogVerificationPassed": true,
+    "publishedEpisodeCount": 7
+  },
   "gates": {
     "publishingFreezeActive": false,
-    "rssComImportComplete": false,
-    "episodeCountMatches": false,
-    "guidSetMatches": false,
-    "episodeMetadataMatches": false,
-    "mediaVerified": false,
-    "existingDirectoryLinksRecorded": false,
-    "monetizationAndSubscriptionsReviewed": false,
-    "redirectAuthorized": false,
-    "redirectVerified": false
+    "rssComImportComplete": true,
+    "episodeCountMatches": true,
+    "guidSetMatches": true,
+    "episodeMetadataMatches": true,
+    "mediaVerified": true,
+    "artworkVerified": true,
+    "existingDirectoryLinksRecorded": true,
+    "monetizationAndSubscriptionsReviewed": true,
+    "redirectAuthorized": true,
+    "redirectVerified": true
   }
 }

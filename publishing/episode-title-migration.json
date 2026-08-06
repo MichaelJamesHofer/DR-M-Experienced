@@ -1,13 +1,14 @@
 {
   "schemaVersion": 1,
-  "status": "source_direct_video_and_episode_art_complete_awaiting_directory_propagation_and_instagram",
+  "status": "rss_com_cutover_complete_directory_and_spotify_video_audits_pending",
   "auditedAt": "2026-08-05",
   "approvedAt": "2026-08-05",
   "spotifyBatchCompletedAt": "2026-08-05T21:04:36Z",
   "canonicalRssVerifiedAt": "2026-08-06T03:32:22Z",
   "longFormVideoBatchCompletedAt": "2026-08-05T22:54:33Z",
   "episodeArtworkBatchRecordedAt": "2026-08-06T03:32:40Z",
-  "canonicalHost": "spotify_for_creators_anchor",
+  "cutoverVerifiedAt": "2026-08-06T18:02:24Z",
+  "canonicalHost": "rss_com",
   "policy": {
     "publicTitleFormat": "Primary topic - practical tagline",
     "visibleEpisodeNumberPrefix": false,
@@ -17,13 +18,17 @@
     "preserveUrlsAndSlugsWhenImmutable": true
   },
   "gates": {
-    "anchorCanonicalHostConfirmed": true,
+    "anchorCanonicalHostConfirmed": false,
+    "rssComCanonicalHostConfirmed": true,
     "appleHasSevenPublicEpisodes": false,
     "allProposedTitlesApproved": true,
     "spotifySourceBatchComplete": true,
-    "canonicalRssMetadataVerified": false,
+    "canonicalRssMetadataVerified": true,
     "canonicalRssIdentityAndTitlesVerified": true,
-    "canonicalRssDescriptionCurrentlyExact": false,
+    "canonicalRssDescriptionCurrentlyExact": true,
+    "canonicalRssHasNoVerificationToken": true,
+    "canonicalRssHasNoSeasonMetadata": true,
+    "canonicalRssHasNoLegacyDescriptions": true,
     "rssStructuredEpisodeNumbersOneThroughSeven": true,
     "rssGuidIdentityPreserved": true,
     "publisherSupportsUnnumberedPublicTitles": true,
@@ -31,12 +36,60 @@
     "directVideoTitlesUpdated": true,
     "directVideoDescriptionsUpdated": true,
     "directVideoPersistenceReadbackVerified": true,
+    "spotifyPostCutoverVideoPersistenceAndReplacementAuditComplete": false,
     "replacementArtworkReady": true,
     "directPlatformArtworkUpdated": true,
     "podcastEpisodeArtworkUpdated": true,
     "canonicalRssEpisodeArtworkVerified": true,
+    "rssComImportGuidAndMetadataParityVerified": true,
+    "rssComImportMediaAndArtworkParityVerified": true,
     "appleEpisodeArtworkPropagationVerified": false,
+    "appleDirectFeedAndMetadataVerified": true,
+    "applePublicSevenEpisodeConvergenceVerified": false,
+    "amazonOneTimeClaimCompleted": false,
     "maintenanceWindowApproved": true
+  },
+  "cutoverEvidence": {
+    "provider": "rss.com",
+    "feedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+    "finalFeedSha256": "a4b8b14724ecd2af81901555a1f601feb4d9901d6ffd0001b329196e0c2f69d1",
+    "verifiedAt": "2026-08-06T18:02:24Z",
+    "episodeCount": 7,
+    "uniqueGuidCount": 7,
+    "structuredEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7],
+    "descriptionExact": true,
+    "verificationTokenPresent": false,
+    "seasonMetadataCount": 0,
+    "legacyDescriptionReferenceCount": 0,
+    "artworkParityPassed": true,
+    "spotifyRedirect": {
+      "sourceShowId": "7GGLljxmO0G3FLjPy8vfcw",
+      "sourceStatus": 301,
+      "hopCount": 1,
+      "finalStatus": 200,
+      "verified": true
+    }
+  },
+  "downstreamState": {
+    "spotifyVideo": {
+      "showId": "7GGLljxmO0G3FLjPy8vfcw",
+      "status": "post_cutover_persistence_and_replacement_audit_required",
+      "auditComplete": false
+    },
+    "apple": {
+      "showId": "1870433419",
+      "feedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+      "metadataExact": true,
+      "availableEpisodeCount": 5,
+      "publicSevenEpisodeConvergenceVerified": false,
+      "draftEpisodeNumbers": [1, 2],
+      "staleDuplicateDraftEpisodeNumbers": [4]
+    },
+    "amazon": {
+      "status": "ready_for_one_time_claim_not_claimed",
+      "feedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+      "claimed": false
+    }
   },
   "directPlatformEvidence": {
     "youtube": {
@@ -72,8 +125,9 @@
     "directPlatformUpdatedCount": 7,
     "spotifyEpisodeArtUpdatedCount": 7,
     "canonicalRssUniqueEpisodeArtworkCount": 7,
+    "rssComCanonicalArtworkParityVerified": true,
     "appleFeedRefreshRequested": true,
-    "unresolvedDescriptionDrift": "RSSVERIFY is appended to the show description, and Episodes 4-7 contain retired show-name variants."
+    "unresolvedDescriptionDrift": null
   },
   "episodes": [
     {

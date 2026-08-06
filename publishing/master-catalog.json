@@ -1,8 +1,8 @@
 {
   "$schema": "./master-catalog.schema.json",
   "schemaVersion": 1,
-  "revision": 2,
-  "updatedAt": "2026-08-06T02:13:59Z",
+  "revision": 4,
+  "updatedAt": "2026-08-06T17:51:02Z",
   "show": {
     "names": {
       "full": "Dr. M Experienced, with Dr. David Musnick",
@@ -15,8 +15,8 @@
       "long": "Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine. Dr. Musnick is board-certified in Internal Medicine and Sports Medicine and brings more than 35 years of patient-care experience to focused conversations about brain health, concussion, sleep, fatigue, inflammation, recovery, and whole-person medicine. Episodes are educational and are not a substitute for individualized medical advice, diagnosis, or treatment."
     },
     "canonicalPodcastFeed": {
-      "provider": "spotify_for_creators_anchor",
-      "url": "https://anchor.fm/s/10e1b0328/podcast/rss"
+      "provider": "rss_com",
+      "url": "https://media.rss.com/dr-m-experienced/feed.xml"
     },
     "artworkRefs": {
       "logoHorizontal": "show-logo-horizontal",
@@ -109,7 +109,8 @@
       "sha256": null,
       "sizeBytes": null,
       "mediaType": "audio/wav",
-      "status": "unmounted"
+      "status": "unmounted",
+      "publishedUrl": "https://content.rss.com/episodes/397420/3050766/dr-m-experienced/2026_08_06_08_58_14_5ecd30b1-aef2-4666-ad49-f8c0f210fea2.mp3"
     },
     "episode-001-thumbnail": {
       "kind": "image",
@@ -137,7 +138,8 @@
       "sha256": null,
       "sizeBytes": null,
       "mediaType": "audio/wav",
-      "status": "unmounted"
+      "status": "unmounted",
+      "publishedUrl": "https://content.rss.com/episodes/397420/3050765/dr-m-experienced/2026_08_06_08_58_12_56d5c865-9d3e-4c15-943c-095c535ffe7b.mp3"
     },
     "episode-002-thumbnail": {
       "kind": "image",
@@ -165,7 +167,8 @@
       "sha256": null,
       "sizeBytes": null,
       "mediaType": "audio/wav",
-      "status": "unmounted"
+      "status": "unmounted",
+      "publishedUrl": "https://content.rss.com/episodes/397420/3050764/dr-m-experienced/2026_08_06_08_58_10_29cdf885-f097-4016-91fa-79229beaffe2.mp3"
     },
     "episode-003-thumbnail": {
       "kind": "image",
@@ -193,7 +196,8 @@
       "sha256": null,
       "sizeBytes": null,
       "mediaType": "audio/wav",
-      "status": "unmounted"
+      "status": "unmounted",
+      "publishedUrl": "https://content.rss.com/episodes/397420/3050763/dr-m-experienced/2026_08_06_08_58_08_299310cb-53c0-4de1-88ca-684a25901bc5.mp3"
     },
     "episode-004-thumbnail": {
       "kind": "image",
@@ -221,7 +225,8 @@
       "sha256": null,
       "sizeBytes": null,
       "mediaType": "audio/wav",
-      "status": "unmounted"
+      "status": "unmounted",
+      "publishedUrl": "https://content.rss.com/episodes/397420/3050762/dr-m-experienced/2026_08_06_08_58_06_7cc0ba78-000a-4bfe-9360-e2526cf972ab.mp3"
     },
     "episode-005-thumbnail": {
       "kind": "image",
@@ -249,7 +254,8 @@
       "sha256": null,
       "sizeBytes": null,
       "mediaType": "audio/wav",
-      "status": "unmounted"
+      "status": "unmounted",
+      "publishedUrl": "https://content.rss.com/episodes/397420/3050761/dr-m-experienced/2026_08_06_08_58_03_e31f1115-3f5b-4192-a929-58eada8d76e1.mp3"
     },
     "episode-006-thumbnail": {
       "kind": "image",
@@ -277,7 +283,8 @@
       "sha256": null,
       "sizeBytes": null,
       "mediaType": "audio/wav",
-      "status": "unmounted"
+      "status": "unmounted",
+      "publishedUrl": "https://content.rss.com/episodes/397420/3050760/dr-m-experienced/2026_08_06_08_58_01_2d87eb57-8e98-435a-a59b-509643963942.mp3"
     },
     "episode-007-thumbnail": {
       "kind": "image",

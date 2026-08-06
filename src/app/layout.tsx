@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { PostHogProvider } from "@/components/posthog-provider";
-import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/site-brand";
+import { PODCAST_FEED_URL, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site-brand";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   },
   alternates: {
     types: {
-      "application/rss+xml": "https://anchor.fm/s/10e1b0328/podcast/rss",
+      "application/rss+xml": PODCAST_FEED_URL,
     },
   },
 };

@@ -190,6 +190,10 @@ for (const episode of publishedEpisodes) {
     if (thumbnail?.publishedUrl && episode.thumbnail_url !== thumbnail.publishedUrl) {
       problems.push(`${slug}: Supabase thumbnail_url does not match the master catalog asset.`);
     }
+    const podcastAudio = masterCatalog.assetRegistry[masterEpisode.assetRefs.podcastAudio];
+    if (podcastAudio?.publishedUrl && episode.audio_url !== podcastAudio.publishedUrl) {
+      problems.push(`${slug}: Supabase audio_url does not match the master catalog asset.`);
+    }
   }
 
   if (topics.length === 0) problems.push(`${slug}: missing episode_topics rows.`);
