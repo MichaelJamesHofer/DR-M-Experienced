@@ -1,6 +1,6 @@
 # Publishing platform setup
 
-Last verified: August 6, 2026.
+Last verified: August 7, 2026.
 
 The local publisher uses official upload interfaces where they exist, RSS fan-out for podcast directories, and explicit browser handoffs where a supported public creator-upload API is unavailable. Credentials stay outside the repository under `~/.config/drm-publisher/` with owner-only permissions.
 
@@ -8,15 +8,16 @@ The local publisher uses official upload interfaces where they exist, RSS fan-ou
 
 | Destination | Delivery path | Current setup state |
 |---|---|---|
-| RSS.com | Canonical podcast host | Feed `https://media.rss.com/dr-m-experienced/feed.xml` has seven parity-verified episodes, exact metadata, no `RSSVERIFY`, and no stray season value |
-| Spotify for Creators | RSS audio consumer plus optional Spotify-only video replacement | Existing show `7GGLljxmO0G3FLjPy8vfcw` receives RSS.com audio through the verified Anchor 301; preserve the account, redirect, seven episode identities, analytics, and existing video surfaces |
-| Apple Podcasts | Episode audio and art directly from RSS.com | Existing show `1870433419` was configured to the exact RSS.com feed at approximately 18:29 UTC on August 6; metadata is exact and token-free, but only five episodes are Available and Draft Episodes 1-2 plus a stale duplicate Episode 4 remain |
+| RSS.com | Canonical podcast host | Feed `https://media.rss.com/dr-m-experienced/feed.xml` has seven normalized, remotely decoded and loudness-verified enclosures with the GUIDs captured from Anchor on August 5, exact XML metadata, no XML `RSSVERIFY`, and no stray season value. Apple case `20000130526608` later supplied older historical GUIDs for Episodes 1-2; no live GUID change is approved. The separate public landing-page metadata still exposes a cached `RSSVERIFY` token |
+| Spotify for Creators | RSS audio consumer plus per-episode Spotify video replacement | Existing show `7GGLljxmO0G3FLjPy8vfcw` preserves all seven episode identities; corrected video is attached to 7/7 and public readback verifies video, approved artwork, and approved copy |
+| Apple Podcasts | Episode audio and art directly from RSS.com | Existing show `1870433419` uses the exact RSS.com feed and has exact token-free canonical metadata; the duplicate show now returns 404 and the stale Episode 4 Draft was archived. Only five episodes are Available. Under case `20000130526608`, Apple confirmed that its existing Episode 1-2 records use historical GUIDs different from the current feed. Repair remains blocked while Apple-side remapping, RSS.com in-place capability, and Spotify identity preservation are reviewed. Public JSON-LD/search caches retain legacy wording for Episodes 4-7 |
 | Amazon Music and Audible | Episode audio from RSS.com after one-time claim | Signed-in dashboard has zero claimed shows; submit the canonical RSS.com feed once, complete ownership verification, and record the stable listing ID/URL |
 | Podcast Index | Automatic RSS indexing | New RSS.com record `7982906` and old Anchor record `7799755` are both live; verify convergence after the 301 is crawled |
-| YouTube | OAuth 2 plus resumable Data API upload | Channel `UCFA1nVv4lKMBlx81gjMAOFQ` exists; upload OAuth and API audit required |
-| Vimeo | Vimeo API tus upload | User `253415660` exists; app upload access and token required |
-| Instagram | Professional-account API with resumable local upload | Public profile ID `80068141150` has exact name/bio, but no external link and currently reports non-business; professional conversion, app permissions, and a publishing ID remain required |
-| Rumble | Local browser handoff | Channel `7820170` exists; no supported public VOD upload API confirmed |
+| Production Supabase projection | Guarded SQL migrations plus exact readback | Both August 7 guarded migrations were applied after exact file-hash verification; all seven current RSS audio URLs, YouTube IDs, and `Watch on YouTube` references match catalog revision 10 |
+| YouTube | Direct full-video upload; OAuth 2 plus resumable Data API for future automation | Seven normalized replacements are public and verified. The prior seven uploads remain Unlisted with replacement links and are retained as rollback records; future API automation still needs OAuth and the applicable compliance audit |
+| Vimeo | Vimeo API tus upload or attended in-place version replacement | All seven corrected videos were replaced in place and verified on their stable existing IDs. App upload access and an upload/edit-scoped token are still required for future API automation |
+| Instagram | Creator professional-account API with resumable local upload | Public profile state independently confirms `@drmexperienced` is a Creator professional account and not a Business account. Name/bio are exact, but the external website link, authenticated Graph API publishing ID, Meta app permissions, and token remain incomplete; no Business-account conversion is required |
+| Rumble | Local browser handoff | Seven corrected uploads are staged Unlisted but not submitted. Submission is blocked on user ownership confirmation, updated Terms review, and exact release-choice approval; no supported public VOD upload API is confirmed |
 
 ## Remote rebrand status
 
@@ -24,18 +25,19 @@ The canonical short profile description is `Dr. M Experienced, with Dr. David Mu
 
 | Profile | Current public name state |
 |---|---|
-| Spotify and Apple | RSS.com and the authenticated Apple configuration use exact title/description copy with no `RSSVERIFY`. Spotify preserves all seven episode identities; Apple still exposes only five Available episodes and has three Draft episode records. Preserve Apple show `1870433419` and repair it rather than creating a replacement |
+| Spotify and Apple | RSS.com's XML and the authenticated Apple configuration use exact title/description copy with no feed `RSSVERIFY`. Spotify preserves all seven episode identities and now has corrected video with approved art/copy on 7/7. Apple exposes only five Available episodes and has two RSS Draft records; case `20000130526608` confirmed a historical GUID mismatch for Episodes 1-2. Preserve both show identities and follow the blocked repair gates in `publishing/apple-guid-repair.json` rather than creating replacements or changing live GUIDs. Public JSON-LD/search caches retain legacy wording for Episodes 4-7 |
 | Amazon | No claimed show exists in the signed-in account; submit the canonical RSS.com feed once and record the resulting stable identity |
-| YouTube | Canonical description is published; display name remains `Dr. M Experienced` because the manager-role name save did not persist |
-| Instagram | Display name and bio are exact; handle `@drmexperienced` is unchanged. Add the website listening hub as the missing external link and complete professional-account setup |
+| YouTube | Canonical episode copy is published on the seven normalized replacement IDs; display name remains `Dr. M Experienced` because the manager-role name save did not persist. Prior episode uploads remain Unlisted and link to the replacements |
+| Instagram | Display name and bio are exact; handle `@drmexperienced` is unchanged and public state confirms Creator professional with Business false. Add the website listening hub and complete authenticated Graph API authorization; do not use the public profile ID as the publishing ID or convert the account to Business |
 | Vimeo | Display name is `Dr. M Experienced, David Musnick`, the closest form allowed by Vimeo's 32-character limit; the bio begins with canonical copy. Seven catalog episodes plus off-catalog public video `Pesto v2` are visible; review that extra video before changing it |
 | Rumble | Channel title is exact and About uses the canonical description; channel name and account username remain `drmexperienced` |
 
-The seven existing YouTube, Vimeo, and Rumble videos use the catalog's approved
-unnumbered titles, deterministic descriptions, and approved topic thumbnails as
-of August 5, 2026. Spotify video and Spotify episode art also use the seven
-approved images, and the canonical RSS exposes seven unique 3000 x 3000 item
-images. YouTube uses a safe plain-text projection that spells out comparison
+YouTube's seven normalized public replacements, Vimeo's seven in-place corrected
+videos, Spotify's seven corrected video attachments, and the existing Rumble
+videos use approved topic thumbnails. Rumble's seven new corrected uploads are
+staged Unlisted and not submitted. The canonical RSS exposes seven unique
+3000 x 3000 item images.
+YouTube uses a safe plain-text projection that spells out comparison
 operators because Studio rejects angle brackets. Vimeo stores list items as
 native rich-text bullets, so its public oEmbed text is compared semantically
 rather than byte for byte. Exact assets, remote IDs, and verification state are
@@ -77,36 +79,60 @@ The source code, RSS.com feed, and authenticated Apple configuration now use
 metadata cleanup, media/artwork parity audit, and exact one-hop Anchor 301 are
 complete.
 
-1. Completed: RSS.com has exact show and episode metadata, no `RSSVERIFY`, no
-   stray season value, seven original GUIDs, and seven approved unnumbered titles.
-2. Completed: all seven RSS.com audio and artwork assets match the validated
-   source; the oldest and newest audio files fully decode.
+1. Completed: RSS.com's XML has exact show and episode metadata, no `RSSVERIFY`,
+   no stray season value, the seven GUIDs captured from Anchor on August 5, and
+   seven approved unnumbered titles. That retained snapshot cannot prove the
+   GUIDs used when Episodes 1-2 were first published; Apple later supplied older
+   historical values. The separate public landing-page metadata still has a
+   cached token.
+2. Completed: all seven normalized RSS.com enclosures left the captured August
+   5 GUID set unchanged and pass remote download, full-decode, and loudness
+   gates; artwork parity remains verified. The Apple identity repair is a
+   separate, blocked incident.
 3. Completed: Apple show `1870433419` was configured directly to the RSS.com
    feed at approximately 18:29 UTC on August 6, 2026. Its authenticated metadata
    is exact and token-free.
-4. Pending: Apple still has five Available episodes. Inspect Draft Episodes 1-2,
-   the stale duplicate Episode 4, and separate no-feed Draft show `1896845422`.
-   Archive only records with no unique content, channel, subscription, or
-   analytics setup and only where Apple offers a reversible archive control.
+4. Support response received; remote repair blocked: Apple still has five
+   Available episodes. The inspected no-feed Draft show `1896845422` and stale
+   manual Episode 4 Draft were archived on August 6, 2026, and one feed refresh
+   was requested. Apple case `20000130526608` confirmed that its existing
+   Episode 1-2 records use historical GUIDs different from the current feed.
+   Follow `publishing/apple-guid-repair.json`; do not change either live GUID
+   while the support-first preservation checks remain open.
 5. Pending: submit the RSS.com feed once to Amazon, complete ownership
    verification, and record the stable show ID and public URL.
-6. Pending: verify that all seven existing Spotify video episodes persisted
-   after cutover. For future video, wait for RSS ingestion and replace that
-   existing episode's audio with the approved video; never create a duplicate.
-7. YouTube, Vimeo, Rumble, Spotify video, Spotify episode art, and canonical RSS
-   episode-art updates are complete. Reconcile Instagram captions where needed
+6. Completed August 7, 2026: all seven corrected Spotify videos are attached to
+   the existing episode IDs and public readback verifies video, approved art, and
+   approved copy for 7/7. There is no account-wide video switch; retain the
+   existing-episode `Upload video` procedure for future video episodes and leave
+   intentionally audio-only episodes as RSS audio only.
+7. YouTube, Vimeo, Spotify video/art, existing Rumble video art, and canonical
+   RSS episode-art updates are complete. Seven corrected Rumble uploads are
+   staged Unlisted but not submitted pending ownership and Terms confirmation.
+   Reconcile Instagram captions where needed
    and use approved covers for future Reels; preserve existing posts because the
    documented post-publication flow does not replace Reel covers. Do not rename
    stable handles or IDs merely to match display text.
 8. Verify Podcast Index convergence, every public profile, and the website
    before announcing full directory convergence.
 
-Apple's current discrepancy is cleanup work, not a reason to recreate the show.
-Podcasts Connect lists public show `1870433419`, a separate no-feed Draft show
-`1896845422`, and manual Draft episode records. Preserve the public listing and
-its followers/history. If self-service refresh does not converge, leave Apple
-unused and the public identity intact while the source feed and draft state are
-re-audited; do not create a second public listing.
+Apple's exact support crosswalk is:
+
+| Episode | Apple Episode ID | Current feed GUID | Apple historical GUID |
+|---|---|---|---|
+| 1 | `1000746628307` | `c9b853b6-a828-4012-9998-217919ff9163` | `59063e08-e4a6-4e56-b7ec-d2a66d69beb8` |
+| 2 | `1000746628422` | `1e40e02b-b217-477c-9cc3-4271cb304c23` | `26896da2-76cf-4865-93f8-f94ddfb24568` |
+
+This is a catalog identity incident, not a reason to recreate the show or either
+episode. Ask Apple first whether it can remap the two existing episode records
+to the current feed GUIDs server-side. In parallel, ask RSS.com whether import
+engineering can make an in-place GUID-only correction without recreating an
+episode, and ask Spotify whether it can preserve the existing episode IDs and
+attached videos across either substitution. Make no live GUID change, deletion,
+recreation, or two-episode batch while those answers and exact user approval are
+missing. If a feed change remains necessary, capture complete Apple, Spotify,
+RSS, and feed snapshots and use one attended episode as a canary. Independently
+verify its Apple and Spotify identities before considering the second episode.
 
 ## Instagram media delivery
 
@@ -119,6 +145,7 @@ If resumable upload is unavailable for the configured account or API flow, stage
 - Apple Podcasts RSS requirements: <https://podcasters.apple.com/support/823-podcast-requirements>
 - Apple Podcasts metadata updates: <https://podcasters.apple.com/support/832-podcast-metadata>
 - Apple Podcasts episode art: <https://podcasters.apple.com/support/5516-episode-art-template>
+- RSS.com support ticket: <https://help.rss.com/en/support/tickets/new>
 - Spotify show claiming: <https://support.spotify.com/us/creators/article/claiming-your-podcast-on-spotify-for-creators/>
 - Spotify video for externally hosted shows: <https://support.spotify.com/us/creators/article/video-episodes-for-shows-not-hosted-with-spotify/>
 - Spotify platform update timing: <https://support.spotify.com/us/creators/article/new-episodes-or-podcast-updates-not-appearing-on-listening-platforms/>

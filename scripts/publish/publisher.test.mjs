@@ -105,6 +105,7 @@ function assetRecord(key, overrides = {}) {
     modifiedMs: 1,
     sha256: "a".repeat(64),
     media: { durationSeconds: 60, streams: [] },
+    loudness: { integratedLufs: -16, truePeakDbtp: -1.5 },
     ...overrides,
   };
 }
@@ -501,6 +502,49 @@ test("RSS.com requires real audio while an explicit Spotify target requires repl
     validateManifest(spotifyManifest).errors.some((error) =>
       error.includes("Spotify replacement requires assets.fullVideo")
     )
+  );
+});
+
+test("RSS.com and Spotify block unmeasured or out-of-range loudness", () => {
+  const audioMedia = { durationSeconds: 60, streams: [{ type: "audio", codec: "mp3" }] };
+  const rssManifest = {
+    ...validManifest(),
+    releasePlan: { "rss.com": resolvedReleasePlan("rss.com") },
+    targets: ["rss.com"],
+  };
+  const quietAudio = assetRecord("podcastAudio", {
+    media: audioMedia,
+    loudness: { integratedLufs: -28.75, truePeakDbtp: -7.5 },
+  });
+  const quietValidation = validateMediaAssets({ podcastAudio: quietAudio }, rssManifest);
+  assert.ok(
+    quietValidation.targetErrors["rss.com"].some((error) => error.includes("outside the approved")),
+    quietValidation.warnings.join("\n")
+  );
+
+  const unmeasuredAudio = assetRecord("podcastAudio", { media: audioMedia, loudness: null });
+  const unmeasuredValidation = validateMediaAssets({ podcastAudio: unmeasuredAudio }, rssManifest);
+  assert.ok(
+    unmeasuredValidation.targetErrors["rss.com"].some((error) => error.includes("missing a valid")),
+    unmeasuredValidation.warnings.join("\n")
+  );
+
+  const spotifyManifest = {
+    ...validManifest(),
+    releasePlan: { spotify: resolvedReleasePlan("spotify") },
+    targets: ["spotify"],
+  };
+  const hotVideo = assetRecord("fullVideo", {
+    media: {
+      durationSeconds: 60,
+      streams: [{ type: "video", codec: "h264" }, { type: "audio", codec: "aac" }],
+    },
+    loudness: { integratedLufs: -16, truePeakDbtp: -0.25 },
+  });
+  const hotValidation = validateMediaAssets({ fullVideo: hotVideo }, spotifyManifest);
+  assert.ok(
+    hotValidation.targetErrors.spotify.some((error) => error.includes("true peak")),
+    hotValidation.warnings.join("\n")
   );
 });
 

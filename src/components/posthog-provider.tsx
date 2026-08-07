@@ -3,19 +3,39 @@
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import type { CaptureResult, PostHog } from 'posthog-js';
-import { sanitizeAnalyticsProperties } from '@/lib/analytics-privacy';
+import {
+  sanitizeAnalyticsProperties,
+  type AnalyticsProperties,
+} from '@/lib/analytics-privacy';
 
 type PostHogClient = Pick<PostHog, 'capture'>;
+
+function sanitizePostHogProperties(properties: AnalyticsProperties): AnalyticsProperties {
+  const sanitized = sanitizeAnalyticsProperties(properties);
+
+  return Object.fromEntries(
+    Object.entries(sanitized).filter(([key]) => {
+      // PostHog prefixes session attribution after parsing it from the URL.
+      const unscopedKey = key
+        .toLowerCase()
+        .replace(/^\$/, '')
+        .replace(/^(?:(?:initial|session_entry)_)+/, '');
+      const policyProbe = sanitizeAnalyticsProperties({ [unscopedKey]: true });
+
+      return unscopedKey !== 'ph_keyword' && unscopedKey in policyProbe;
+    }),
+  );
+}
 
 function sanitizeAnalyticsEvent(event: CaptureResult | null): CaptureResult | null {
   if (!event) return null;
 
   return {
     ...event,
-    properties: sanitizeAnalyticsProperties(event.properties),
-    $set: event.$set ? sanitizeAnalyticsProperties(event.$set) : undefined,
+    properties: sanitizePostHogProperties(event.properties),
+    $set: event.$set ? sanitizePostHogProperties(event.$set) : undefined,
     $set_once: event.$set_once
-      ? sanitizeAnalyticsProperties(event.$set_once)
+      ? sanitizePostHogProperties(event.$set_once)
       : undefined,
   };
 }
@@ -64,6 +84,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
           },
           autocapture: false,
           capture_pageview: false,
+          capture_pageleave: true,
           capture_performance: false,
           disable_session_recording: true,
           disable_surveys: true,

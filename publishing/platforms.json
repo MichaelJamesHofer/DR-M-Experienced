@@ -14,11 +14,35 @@
       {
         "code": "apple_episode_convergence_pending",
         "showId": "1870433419",
-        "dashboardEpisodeCount": 8,
+        "dashboardShowCount": 1,
+        "dashboardEpisodeCount": 7,
         "availableEpisodeCount": 5,
-        "draftEpisodeCount": 3,
+        "draftEpisodeCount": 2,
         "publicLookupTrackCount": 5,
+        "duplicateCleanupCompleted": true,
+        "supportEscalationRequired": true,
+        "supportRequestSubmitted": true,
+        "supportRequestSubmittedDate": "2026-08-06",
+        "structuredMetadataCacheDrift": true,
+        "structuredMetadataCacheScope": "episode_json_ld_and_search_cache_for_episodes_4_through_7",
         "deletionAuthorized": false
+      },
+      {
+        "code": "rumble_corrected_uploads_staged_submission_pending",
+        "channelId": "7820170",
+        "stagedUploadCount": 7,
+        "stagedVisibility": "unlisted",
+        "submitted": false,
+        "ownershipConfirmationRequired": true,
+        "updatedTermsReviewRequired": true,
+        "auditedAt": "2026-08-07"
+      },
+      {
+        "code": "rss_com_public_landing_page_cache_drift",
+        "feedMetadataExact": true,
+        "dashboardMetadataExact": true,
+        "publicLandingPageVerificationTokenPresent": true,
+        "auditedAt": "2026-08-07"
       },
       {
         "code": "podcast_index_redirect_crawl_pending",
@@ -63,7 +87,12 @@
       "requiredDestinationIds": ["containerId"],
       "asset": "podcastAudio",
       "rssRole": "canonical_host",
-      "notes": "Publish the approved podcastAudio here first. RSS.com is the canonical audio host and feed source for Apple Podcasts and Amazon Music/Audible; do not use the full-video master as its audio asset."
+      "currentAudioState": "seven_normalized_enclosures_remote_verified",
+      "currentEpisodeCount": 7,
+      "guidsPreserved": true,
+      "remoteLoudnessGatesPassed": 7,
+      "remoteReplacementVerifiedAt": "2026-08-07T06:07:40.834Z",
+      "notes": "All seven existing episodes now use remotely verified normalized enclosures with the GUIDs captured from Anchor on August 5 unchanged. RSS.com remains the canonical audio host and feed source for Spotify, Apple Podcasts, and Amazon Music/Audible. For future episodes, publish the approved podcastAudio here first and never use the full-video master as its audio asset. The XML feed is clean; the separate public landing-page metadata still exposes a cached RSSVERIFY token."
     },
     "spotify": {
       "label": "Spotify for Creators",
@@ -76,7 +105,12 @@
       "requiredDestinationIds": ["containerId"],
       "asset": "fullVideo",
       "rssRole": "direct_media_destination",
-      "notes": "Wait for RSS.com audio to create the episode in the existing Spotify show. For an approved video release, replace that exact ingested episode with fullVideo in Spotify for Creators. Audio-only releases need no separate Spotify action; never create a duplicate episode. Spotify does not expose a public creator episode-upload API."
+      "currentVideoState": "seven_corrected_videos_public_verified",
+      "currentVideoEpisodeCount": 7,
+      "videoStateAuditedAt": "2026-08-07",
+      "approvedArtworkVerified": true,
+      "approvedCopyVerified": true,
+      "notes": "All seven corrected videos are attached to the seven existing Spotify episode IDs and public readback confirms video, approved artwork, and approved copy for 7/7. There is no account-wide video switch. For a future video episode, wait for RSS.com audio to create the episode in this existing show, then use that exact episode's Upload video action with the approved fullVideo. For an audio-only episode, make no separate Spotify upload. Never create a duplicate episode; Spotify does not expose a public creator episode-upload API for this workflow."
     },
     "apple": {
       "label": "Apple Podcasts",
@@ -89,7 +123,7 @@
       "requiredDestinationIds": ["containerId"],
       "source": "rss",
       "dependsOn": "rss.com",
-      "notes": "Do not upload the episode separately. Apple receives the approved podcast audio and item-level episode artwork from RSS.com's canonical feed. Preserve show ID 1870433419 and verify that listing after each host publication."
+      "notes": "Do not upload the episode separately. Apple receives the approved podcast audio and item-level episode artwork from RSS.com's canonical feed. Preserve show ID 1870433419. The duplicate show ID 1896845422 now returns 404 and the stale manual Episode 4 Draft was archived on August 6, 2026. Public show 1870433419 exposes Episodes 3-7. Under case 20000130526608, Apple confirmed its existing Episode 1-2 records use older GUIDs than the current feed; the exact blocked crosswalk is in publishing/apple-guid-repair.json. Do not change the feed, delete, or recreate episodes until RSS.com in-place capability and Spotify identity preservation are confirmed. Apple public JSON-LD/search caches also retain legacy show wording for Episodes 4-7."
     },
     "amazon": {
       "label": "Amazon Music and Audible",
@@ -102,7 +136,7 @@
       "requiredDestinationIds": ["containerId"],
       "source": "rss",
       "dependsOn": "rss.com",
-      "notes": "Do not upload the episode separately. After the one-time listing claim and ownership verification, Amazon Music and Audible receive the approved podcast audio from RSS.com's canonical feed."
+      "notes": "No public Amazon Music or Audible listing was discoverable in the August 7, 2026 audit. Do not upload episodes separately. After the one-time listing claim and ownership verification, Amazon Music and Audible receive the approved podcast audio from RSS.com's canonical feed."
     },
     "youtube": {
       "label": "YouTube",
@@ -114,7 +148,13 @@
       },
       "requiredDestinationIds": ["accountId", "containerId"],
       "asset": "fullVideo",
-      "notes": "Use OAuth and resumable upload. New API projects keep uploads private until YouTube completes its separate compliance audit."
+      "currentVideoState": "seven_normalized_replacements_public_verified",
+      "currentPublicVideoCount": 7,
+      "priorVideoState": "seven_prior_uploads_unlisted_with_replacement_links",
+      "priorVideoCount": 7,
+      "priorVideosDeleted": false,
+      "cutoverVerifiedAt": "2026-08-07T07:46:32Z",
+      "notes": "The seven normalized replacement videos are public with exact catalog titles, YouTube-safe descriptions, and approved thumbnails. Each prior upload remains unlisted and directly playable, and its description links to the corresponding replacement; preserve those prior IDs as rollback evidence. Future API automation still requires OAuth and the applicable YouTube compliance audit."
     },
     "vimeo": {
       "label": "Vimeo",
@@ -126,7 +166,11 @@
       },
       "requiredDestinationIds": ["accountId"],
       "asset": "fullVideo",
-      "notes": "Use the official Vimeo API with upload and edit scopes after app upload access is enabled."
+      "currentVideoState": "seven_in_place_replacements_verified",
+      "currentVideoCount": 7,
+      "stableVideoIdsPreserved": true,
+      "replacementStateAuditedAt": "2026-08-07",
+      "notes": "All seven corrected videos were replaced in place and verified on their existing Vimeo IDs. Preserve those stable IDs. Future automation may use the official Vimeo API after app upload access and an upload/edit-scoped token are configured."
     },
     "instagram": {
       "label": "Instagram",
@@ -138,11 +182,16 @@
       },
       "publicProfileId": "80068141150",
       "publicExternalUrl": null,
+      "publicProfessionalAccountVerified": true,
+      "publicProfessionalAccountVerifiedAt": "2026-08-07",
+      "publicBusinessAccount": false,
       "professionalAccountVerified": false,
       "requiredDestinationIds": ["accountId"],
       "asset": "instagramReel",
       "fallbackMode": "temporary_public_media_staging",
-      "notes": "The public profile has exact name and bio but no external link and currently reports a non-business account. Add the website listening hub and complete professional-account/API setup before automation. Prefer Meta's resumable upload from the approved local Reel."
+      "accountType": "creator_professional",
+      "accountTypeConfirmedAt": "2026-08-07",
+      "notes": "Public profile data independently confirms this is an Instagram Creator professional account and not a Business account, which is the correct classification for Dr. David Musnick as a creator. The public profile has exact name and bio but no external website link. The separate professionalAccountVerified field remains false until the stable authenticated Graph API publishing ID is read back; do not substitute the public profile ID. Add the website listening hub and complete Meta app authorization before API automation. Prefer Meta's resumable upload from the approved local Reel."
     },
     "rumble": {
       "label": "Rumble",
@@ -154,7 +203,13 @@
       },
       "requiredDestinationIds": ["containerId"],
       "asset": "fullVideo",
-      "notes": "No documented public creator VOD-upload API is available. Keep final license, visibility, and monetization choices in an approved browser handoff."
+      "currentVideoState": "seven_corrected_uploads_staged_unlisted_not_submitted",
+      "stagedUploadCount": 7,
+      "stagedVisibility": "unlisted",
+      "submitted": false,
+      "submissionBlockedOn": ["user_ownership_confirmation", "updated_terms_review"],
+      "stagingStateAuditedAt": "2026-08-07",
+      "notes": "Seven corrected uploads are staged Unlisted but have not been submitted. Do not submit them until the user confirms ownership and reviews the updated Terms, then confirms the exact licensing, visibility, monetization, and distribution choices. No documented public creator VOD-upload API is available, so keep the final handoff attended."
     }
   }
 }

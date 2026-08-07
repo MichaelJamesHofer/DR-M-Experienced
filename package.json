@@ -13,13 +13,15 @@
     "start": "next start",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx --max-warnings=0",
     "typecheck": "tsc --noEmit",
+    "test:production-env": "node --test scripts/verify-production-env.test.mjs",
     "test:database-security": "bash scripts/test-database-security.sh",
-    "test:publisher": "node --test scripts/publish/publisher.test.mjs scripts/publish/feed-preflight.test.mjs scripts/publish/catalog.test.mjs scripts/publish/migration-state.test.mjs scripts/sync-episodes.test.mjs",
+    "test:publisher": "node --test scripts/publish/publisher.test.mjs scripts/publish/feed-preflight.test.mjs scripts/publish/catalog.test.mjs scripts/publish/migration-state.test.mjs scripts/publish/apple-guid-repair.test.mjs scripts/publish/integrate-delivery-batch.test.mjs scripts/publish/integrate-platform-derived-video.test.mjs scripts/publish/integrate-remote-audio-receipt.test.mjs scripts/sync-episodes.test.mjs",
     "generate:site-brand": "node scripts/generate-site-brand.mjs",
     "publish:doctor": "/home/otto/.local/bin/drm-publish doctor",
     "publish:feed-preflight": "node scripts/publish/feed-preflight.mjs",
     "publish:prepare": "/home/otto/.local/bin/drm-publish prepare",
     "sync-episodes": "node scripts/sync-episodes.mjs",
+    "verify:production-env": "node scripts/verify-production-env.mjs",
     "verify:catalog": "node scripts/verify-content-catalog.mjs"
   },
   "dependencies": {

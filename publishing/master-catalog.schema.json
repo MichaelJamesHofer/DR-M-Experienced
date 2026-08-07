@@ -252,6 +252,11 @@
             "vimeo": { "oneOf": [{ "$ref": "#/$defs/vimeoIdentity" }, { "type": "null" }] },
             "rumble": { "oneOf": [{ "$ref": "#/$defs/rumbleIdentity" }, { "type": "null" }] }
           }
+        },
+        "destinationArchives": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/destinationArchive" }
         }
       },
       "allOf": [
@@ -291,6 +296,30 @@
         { "$ref": "#/$defs/destinationIdentity" },
         { "type": "object", "properties": { "id": { "type": "string", "pattern": "^[A-Za-z0-9_-]{11}$" } } }
       ]
+    },
+    "destinationArchive": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "platform",
+        "id",
+        "url",
+        "status",
+        "archivedAt",
+        "reason",
+        "supersededById",
+        "rollbackEligible"
+      ],
+      "properties": {
+        "platform": { "const": "youtube" },
+        "id": { "type": "string", "pattern": "^[A-Za-z0-9_-]{11}$" },
+        "url": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "status": { "const": "unlisted" },
+        "archivedAt": { "type": "string", "format": "date-time" },
+        "reason": { "const": "normalized_video_cutover" },
+        "supersededById": { "type": "string", "pattern": "^[A-Za-z0-9_-]{11}$" },
+        "rollbackEligible": { "const": true }
+      }
     },
     "vimeoIdentity": {
       "allOf": [

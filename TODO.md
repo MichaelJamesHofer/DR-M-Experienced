@@ -78,25 +78,41 @@ Based on analysis of top-tier health content creators (Huberman Lab, Peter Attia
 - [ ] Approve one Round 01 logo direction (Switchback, Cutline, Waypoint Steps, or none)
 - [ ] After logo selection, produce and approve the outlined logo family, podcast cover, avatar, banners, Open Graph image, letterhead, lower third, sting, and end-screen exports
 - [ ] Approve the V3 layered desktop/tablet/mobile cartographic hero exports and promote their hashes from review status into the brand asset manifest
-- [ ] Configure and verify the production PostHog project token, region, IP-discard setting, live events, and initial growth dashboard
+- [x] Add explicit PostHog page-leave capture and a tested production deploy guard for a missing project key
+- [x] Configure the production PostHog Actions key and authorize the apex/`www` production URLs
+- [x] Confirm the PostHog US project region and enable `Discard client IP data`; keep cookieless server hash mode disabled for the memory-only client
+- [ ] Deploy the analytics-enabled build, verify live `$pageview`/`$pageleave` receipts, and create the initial growth dashboard
 - [ ] Add timestamps to episode data when audio is recorded
 - [ ] Add episode video embeds when YouTube channel is set up
 - [ ] Performance audit (lighthouse)
 - [ ] Add Open Graph images for social sharing
 - [x] Validate the seven-episode RSS.com import, including GUIDs, byte-identical audio, artwork, and full oldest/newest decode
 - [x] Complete canonical-copy/season cleanup and verify the approved one-hop Anchor 301 to RSS.com
-- [x] Migrate all seven production Supabase episode audio URLs to RSS.com and verify exact catalog readback
+- [x] Apply the guarded normalized-RSS-audio migration in production Supabase and verify all seven current audio URLs against catalog revision 10
+- [x] Apply the guarded YouTube-destination migration in production Supabase and verify all seven YouTube IDs and `Watch on YouTube` references against catalog revision 10
 - [ ] Verify Podcast Index duplicate convergence after the Anchor redirect is crawled
-- [ ] Repair existing Apple show `1870433419` in place from five to seven Available episodes; inspect Draft Episodes 1-2 and the stale duplicate Episode 4 without creating a replacement show
-- [ ] Verify all seven existing Spotify video episodes survived the host cutover and test the RSS-ingest-then-replace-with-video workflow on the next approved video episode
+- [x] Record Apple case `20000130526608` and the exact historical/current GUID crosswalk for missing Episodes 1-2 in `publishing/apple-guid-repair.json`
+- [ ] Ask Apple for server-side remapping, RSS.com for an in-place GUID-only correction, and Spotify for identity protection before changing either live GUID
+- [ ] If a feed repair remains necessary, capture a baseline and use one attended episode as a canary; preserve Apple/Spotify episode IDs, video, analytics, and the other six feed items
+- [x] Replace all seven under-level RSS.com enclosures with normalized MP3s, preserve every GUID, and verify all seven remote downloads, full decodes, and loudness gates
+- [x] Attach corrected video to all seven existing Spotify episode IDs and verify public video, approved artwork, and approved copy for 7/7 without creating duplicates
+- [x] Validate and register Episode 5's sub-25 Mbps Spotify derivative without changing its catalog master binding or claiming a remote upload
+- [x] Publish and verify all seven normalized YouTube replacements, move the prior uploads to Unlisted with replacement links, and retain both ID sets for rollback
+- [x] Replace all seven Vimeo videos in place and verify the corrected media on the stable existing IDs
+- [ ] Submit the seven corrected Rumble uploads only after the user confirms ownership, reviews the updated Terms, and approves the exact licensing/visibility/monetization choices; all seven are staged Unlisted and not submitted
+- [x] Confirm GitHub Pages recovery after the provider outage: the apex returns HTTP 200 and `www` redirects to the apex
+- [ ] Clear or escalate RSS.com's cached `RSSVERIFY` token on the public landing page without changing the exact dashboard/feed description
 - [ ] Claim the show once in Amazon Music/Audible using `https://media.rss.com/dr-m-experienced/feed.xml`, then record its stable ID and URL
-- [ ] Add `https://drmexperienced.com` as Instagram's external link and complete professional-account/API setup
+- [x] Independently verify Instagram is a Creator professional account, not a Business account, with exact public name and bio
+- [ ] Add `https://drmexperienced.com` as Instagram's external link and complete authenticated Graph API publishing-ID/token authorization; do not use the public profile ID as the publishing ID or convert the account to Business
 - [ ] Review the off-catalog public Vimeo video `Pesto v2`; archive or catalog it only after content ownership and intent are confirmed
 - [ ] Replace company-level affiliate destinations with verified links to the exact products Dr. Musnick recommends, then validate every link and its related-episode placement before publishing
 
-## Current Status: WEBSITE AND HOST CUTOVER COMPLETE; DOWNSTREAM CLEANUP ACTIVE
-The site is functional. RSS.com is canonical, the legacy Anchor feed redirects,
-Apple is configured directly to RSS.com, and production Supabase uses the seven
-RSS.com audio URLs. Apple draft/public-count repair, Podcast Index convergence,
-Spotify video readback, Amazon onboarding, and replacement artwork remain
-tracked in the publishing runbooks.
+## Current Status: HOST CUTOVER COMPLETE; PLATFORM REMEDIATION ACTIVE
+RSS.com is canonical, the legacy Anchor feed redirects, Apple is configured
+directly to RSS.com, and production Supabase matches catalog revision 10 for all
+seven current RSS audio URLs, YouTube IDs, and `Watch on YouTube` references.
+The website apex has recovered to HTTP 200 and `www` redirects to it.
+Apple support, Podcast Index convergence, Amazon onboarding, RSS.com's cached
+landing-page token, Instagram's missing website link, Rumble's attended submission,
+and remaining profile corrections are tracked in the publishing runbooks.

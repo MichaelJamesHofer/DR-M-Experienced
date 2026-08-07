@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "status": "rss_com_cutover_complete_directory_and_spotify_video_audits_pending",
-  "auditedAt": "2026-08-05",
+  "status": "rss_com_cutover_complete_platform_remediation_active",
+  "auditedAt": "2026-08-07",
   "approvedAt": "2026-08-05",
   "spotifyBatchCompletedAt": "2026-08-05T21:04:36Z",
   "canonicalRssVerifiedAt": "2026-08-06T03:32:22Z",
@@ -36,7 +36,8 @@
     "directVideoTitlesUpdated": true,
     "directVideoDescriptionsUpdated": true,
     "directVideoPersistenceReadbackVerified": true,
-    "spotifyPostCutoverVideoPersistenceAndReplacementAuditComplete": false,
+    "spotifyPostCutoverVideoPersistenceAndReplacementAuditComplete": true,
+    "spotifyVideoRestorationComplete": true,
     "replacementArtworkReady": true,
     "directPlatformArtworkUpdated": true,
     "podcastEpisodeArtworkUpdated": true,
@@ -73,8 +74,13 @@
   "downstreamState": {
     "spotifyVideo": {
       "showId": "7GGLljxmO0G3FLjPy8vfcw",
-      "status": "post_cutover_persistence_and_replacement_audit_required",
-      "auditComplete": false
+      "status": "seven_existing_episode_ids_restored_and_publicly_verified_video",
+      "auditComplete": true,
+      "auditedAt": "2026-08-07",
+      "episodeCount": 7,
+      "publicVideoEpisodeCount": 7,
+      "approvedCopyAndArtworkCount": 7,
+      "restoreAgainstExistingEpisodeIds": true
     },
     "apple": {
       "showId": "1870433419",
@@ -83,7 +89,10 @@
       "availableEpisodeCount": 5,
       "publicSevenEpisodeConvergenceVerified": false,
       "draftEpisodeNumbers": [1, 2],
-      "staleDuplicateDraftEpisodeNumbers": [4]
+      "staleDuplicateDraftEpisodeNumbers": [],
+      "duplicateCleanupComplete": true,
+      "supportRequestSubmitted": true,
+      "supportRequestSubmittedDate": "2026-08-06"
     },
     "amazon": {
       "status": "ready_for_one_time_claim_not_claimed",
@@ -93,25 +102,39 @@
   },
   "directPlatformEvidence": {
     "youtube": {
-      "verifiedAt": "2026-08-05T22:54:33Z",
+      "verifiedAt": "2026-08-07T07:46:32Z",
       "titleMatchCount": 7,
       "descriptionMatchCount": 7,
-      "readback": "public watch-page shortDescription",
-      "projection": "deterministic YouTube-safe plain text; angle brackets are written as comparison words"
+      "readback": "public channel RSS plus direct-page shortDescription",
+      "projection": "deterministic YouTube-safe plain text; angle brackets are written as comparison words",
+      "normalizedVideoCutoverStatus": "seven_public_replacements_verified",
+      "priorUploadStatus": "seven_unlisted_with_replacement_links",
+      "priorUploadsDeleted": false,
+      "rollbackEligible": true,
+      "replacementChannelFeedCount": 7,
+      "retiredBrandingCount": 0,
+      "verificationTokenCount": 0,
+      "replacementCharacterCount": 0
     },
     "vimeo": {
-      "verifiedAt": "2026-08-05T22:54:33Z",
+      "verifiedAt": "2026-08-07T07:54:49Z",
       "titleMatchCount": 7,
       "descriptionMatchCount": 7,
-      "readback": "persisted editor plus public oEmbed semantic comparison",
-      "projection": "deterministic plain text represented with Vimeo rich-text lists where applicable"
+      "readback": "stable public IDs, matching replacement durations, approved thumbnails, and public oEmbed semantic comparison",
+      "projection": "deterministic plain text represented with Vimeo rich-text lists where applicable",
+      "normalizedVideoReplacementStatus": "seven_in_place_replacements_verified_on_stable_ids"
     },
     "rumble": {
-      "verifiedAt": "2026-08-05T22:54:33Z",
+      "verifiedAt": "2026-08-07T07:54:49Z",
       "titleMatchCount": 7,
       "descriptionMatchCount": 7,
       "readback": "authenticated content list after reload",
-      "projection": "deterministic plain text"
+      "projection": "deterministic plain text",
+      "normalizedVideoReplacementStatus": "seven_unlisted_uploads_staged_not_submitted",
+      "submissionBlockedBy": [
+        "user ownership attestation",
+        "user acceptance of Rumble Terms updated July 21, 2026"
+      ]
     }
   },
   "artworkEvidence": {
@@ -139,9 +162,14 @@
       "rssStructuredEpisodeNumberPresent": true,
       "remoteIds": {
         "spotify": "7cAdb8GE4khC9EYKAjmYuc",
-        "youtube": "LXASEw-WFq8",
+        "youtube": "5IMYaqnQsFY",
         "vimeo": "1156414707",
         "rumbleUrl": "https://rumble.com/v74kzcw-episode-1-brain-fog-part-1-is-your-brain-in-a-fog.html"
+      },
+      "archivedRemoteIds": {
+        "youtube": "LXASEw-WFq8",
+        "youtubeVisibility": "unlisted",
+        "rollbackEligible": true
       },
       "knownIssues": []
     },
@@ -154,9 +182,14 @@
       "rssStructuredEpisodeNumberPresent": true,
       "remoteIds": {
         "spotify": "19Pct0ClX3j1EOwJ3ySVd7",
-        "youtube": "s740_XVTaAY",
+        "youtube": "DJe0fPmTf8k",
         "vimeo": "1159441883",
         "rumbleUrl": "https://rumble.com/v74l0km-episode-brain-fog-part-2-testing-and-basic-solutions-for-brain-fog.html"
+      },
+      "archivedRemoteIds": {
+        "youtube": "s740_XVTaAY",
+        "youtubeVisibility": "unlisted",
+        "rollbackEligible": true
       },
       "knownIssues": []
     },
@@ -169,9 +202,14 @@
       "rssStructuredEpisodeNumberPresent": true,
       "remoteIds": {
         "spotify": "07OHz4sfbefOORcNi9xaUK",
-        "youtube": "59r5XFynaDo",
+        "youtube": "r5JYtE8Vm9I",
         "vimeo": "1179740758",
         "rumbleUrl": "https://rumble.com/v77zlls-episode-3-insomnia.html"
+      },
+      "archivedRemoteIds": {
+        "youtube": "59r5XFynaDo",
+        "youtubeVisibility": "unlisted",
+        "rollbackEligible": true
       },
       "knownIssues": []
     },
@@ -184,9 +222,14 @@
       "rssStructuredEpisodeNumberPresent": true,
       "remoteIds": {
         "spotify": "0aDVuIwrRlDKxEylMj2dyw",
-        "youtube": "X8WChChyh9c",
+        "youtube": "binbLcb3f_s",
         "vimeo": "1179956166",
         "rumbleUrl": "https://rumble.com/v780pxq-episode-4-emf.html"
+      },
+      "archivedRemoteIds": {
+        "youtube": "X8WChChyh9c",
+        "youtubeVisibility": "unlisted",
+        "rollbackEligible": true
       },
       "knownIssues": []
     },
@@ -199,9 +242,14 @@
       "rssStructuredEpisodeNumberPresent": true,
       "remoteIds": {
         "spotify": "6fQAClcR4AAuueHjBNlrJC",
-        "youtube": "JyBK6KtOo_k",
+        "youtube": "N_F0hhHkIQ4",
         "vimeo": "1204939658",
         "rumbleUrl": "https://rumble.com/v7bvj32-episode-5-electro.magnetic.frequencies.html"
+      },
+      "archivedRemoteIds": {
+        "youtube": "JyBK6KtOo_k",
+        "youtubeVisibility": "unlisted",
+        "rollbackEligible": true
       },
       "knownIssues": [
         "Rumble's current title matches the approved title, but its immutable-looking URL slug incorrectly mentions electromagnetic frequencies; preserve the existing video/URL."
@@ -216,9 +264,14 @@
       "rssStructuredEpisodeNumberPresent": true,
       "remoteIds": {
         "spotify": "7MbKWgPZN40KEyN5j123JC",
-        "youtube": "odNrtPEuong",
+        "youtube": "8u1Ps_mCpO4",
         "vimeo": "1204939692",
         "rumbleUrl": "https://rumble.com/v7bvk8i-episode-6-concussion-and-pathophysiology.html"
+      },
+      "archivedRemoteIds": {
+        "youtube": "odNrtPEuong",
+        "youtubeVisibility": "unlisted",
+        "rollbackEligible": true
       },
       "knownIssues": []
     },
@@ -231,9 +284,14 @@
       "rssStructuredEpisodeNumberPresent": true,
       "remoteIds": {
         "spotify": "5QJlHSE6JhP3ymSCNzbWxv",
-        "youtube": "3IVDJqwT2yY",
+        "youtube": "5UOEvs59hBA",
         "vimeo": "1205004739",
         "rumbleUrl": "https://rumble.com/v7bvtu4-episode-7-the-brain-on-fire.html"
+      },
+      "archivedRemoteIds": {
+        "youtube": "3IVDJqwT2yY",
+        "youtubeVisibility": "unlisted",
+        "rollbackEligible": true
       },
       "knownIssues": []
     }

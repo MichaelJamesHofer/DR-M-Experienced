@@ -1,0 +1,64 @@
+{
+  "$schema": "./apple-guid-repair.schema.json",
+  "schemaVersion": 1,
+  "status": "support_mismatch_confirmed_remote_change_blocked",
+  "discoveredAt": "2026-08-07",
+  "lastVerifiedAt": "2026-08-07",
+  "feedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+  "appleShowId": "1870433419",
+  "appleCaseNumber": "20000130526608",
+  "sourceEvidence": {
+    "provider": "Apple Podcasts Support",
+    "summary": "Apple reported that its existing episode records for Episodes 1 and 2 use historical GUIDs that differ from the current feed GUIDs.",
+    "localBaselineLimitation": "The earliest retained Anchor snapshot is from August 5, 2026 and already contains the current feed GUIDs, so it cannot prove the GUIDs Apple ingested when the episodes were first published."
+  },
+  "episodes": [
+    {
+      "episodeNumber": 1,
+      "slug": "brain-fog-part-1",
+      "title": "Brain Fog, Part 1 - Is Your Brain in a Fog?",
+      "rssComEpisodeId": "3050766",
+      "appleEpisodeId": "1000746628307",
+      "spotifyEpisodeId": "7cAdb8GE4khC9EYKAjmYuc",
+      "currentFeedGuid": "c9b853b6-a828-4012-9998-217919ff9163",
+      "appleHistoricalGuid": "59063e08-e4a6-4e56-b7ec-d2a66d69beb8"
+    },
+    {
+      "episodeNumber": 2,
+      "slug": "brain-fog-part-2",
+      "title": "Brain Fog, Part 2 - Testing and Basic Solutions",
+      "rssComEpisodeId": "3050765",
+      "appleEpisodeId": "1000746628422",
+      "spotifyEpisodeId": "19Pct0ClX3j1EOwJ3ySVd7",
+      "currentFeedGuid": "1e40e02b-b217-477c-9cc3-4271cb304c23",
+      "appleHistoricalGuid": "26896da2-76cf-4865-93f8-f94ddfb24568"
+    }
+  ],
+  "gates": {
+    "appleSupportCrosswalkRecorded": true,
+    "appleTitleMappingIndependentlyVerified": true,
+    "rssComInPlaceEditConfirmed": false,
+    "spotifyImpactReviewed": true,
+    "spotifyIdentityPreservationConfirmed": false,
+    "exactRemoteChangeApproved": false,
+    "beforeSnapshotCaptured": false,
+    "remoteWritePerformed": false,
+    "feedVerified": false,
+    "appleIdentityPreserved": false,
+    "spotifyIdentityPreserved": false
+  },
+  "constraints": [
+    "Do not delete, recreate, unpublish, or re-upload either RSS.com episode.",
+    "Do not change the live feed or master-catalog GUIDs while this record is blocked.",
+    "Preserve RSS.com episode IDs, enclosure URLs and bytes, publication dates, episode numbers, copy, artwork, and analytics.",
+    "Preserve Apple show 1870433419 and the two existing Apple episode IDs.",
+    "Preserve Spotify show 7GGLljxmO0G3FLjPy8vfcw, the two existing Spotify episode IDs, and their attached videos.",
+    "Do not toggle GUIDs repeatedly; stop and escalate if any directory creates a duplicate or changes an episode ID."
+  ],
+  "nextActions": [
+    "Ask Apple whether it can remap the two existing episode records to the current feed GUIDs server-side.",
+    "Ask RSS.com whether import engineering can perform an in-place GUID-only correction without recreating either episode.",
+    "Ask Spotify whether the two existing episode IDs and attached videos can be pinned across the proposed GUID substitutions.",
+    "If a feed change remains necessary, capture a full baseline and use one attended episode as a canary before changing the second."
+  ]
+}

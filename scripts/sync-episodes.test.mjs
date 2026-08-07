@@ -53,10 +53,10 @@ test("multi-platform sync deduplicates punctuation variants and orders same-date
     { spotifyId: "7MbKWgPZN40KEyN5j123JC", title: "Concussion - What Happens in the Brain", publishDate: "2026-06-26" },
   ];
   const youtube = [
-    { youtubeId: "odNrtPEuong", title: "Episode 6: Concussion -- What Happens in the Brain", publishDate: "2026-06-26" },
-    { youtubeId: "X8WChChyh9c", title: "Episode 4: Electro / Magnetic / Frequencies", publishDate: "2026-04-03" },
-    { youtubeId: "3IVDJqwT2yY", title: "Episode 7:  The Brain on Fire", publishDate: "2026-06-26" },
-    { youtubeId: "JyBK6KtOo_k", title: "Episode 5 - Energy", publishDate: "2026-06-26" },
+    { youtubeId: "8u1Ps_mCpO4", title: "Episode 6: Concussion -- What Happens in the Brain", publishDate: "2026-06-26" },
+    { youtubeId: "binbLcb3f_s", title: "Episode 4: Electro / Magnetic / Frequencies", publishDate: "2026-04-03" },
+    { youtubeId: "5UOEvs59hBA", title: "Episode 7:  The Brain on Fire", publishDate: "2026-06-26" },
+    { youtubeId: "N_F0hhHkIQ4", title: "Episode 5 - Energy", publishDate: "2026-06-26" },
   ];
 
   const episodes = mergeAndSort(vimeo, spotify, youtube, registry);
@@ -70,7 +70,7 @@ test("multi-platform sync deduplicates punctuation variants and orders same-date
   assert.equal(episodes[0].vimeoId, "1179956166");
   assert.equal(episodes[0].spotifyId, "0aDVuIwrRlDKxEylMj2dyw");
   assert.equal(episodes[0].spotifyUrl, "https://open.spotify.com/episode/0aDVuIwrRlDKxEylMj2dyw");
-  assert.equal(episodes[0].youtubeId, "X8WChChyh9c");
+  assert.equal(episodes[0].youtubeId, "binbLcb3f_s");
 });
 
 test("stable IDs take precedence over a misleading title", () => {
