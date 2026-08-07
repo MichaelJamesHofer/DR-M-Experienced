@@ -232,12 +232,14 @@
         "supportEscalationRequired": true,
         "supportRequestSubmitted": true,
         "supportRequestSubmittedDate": "2026-08-06",
-        "supportRequestStatus": "submitted_awaiting_response"
+        "supportRequestStatus": "guid_mismatch_confirmed_remote_change_blocked",
+        "supportCaseNumber": "20000130526608",
+        "guidRepairRecord": "publishing/apple-guid-repair.json"
       },
       "episodeArtworkPropagationVerified": false,
       "preexistingEpisodeCountDiscrepancyRequiresReview": true,
       "publicLookupTrackCount": 5,
-      "episodeConvergenceStatus": "support_request_submitted_awaiting_response",
+      "episodeConvergenceStatus": "historical_guid_mismatch_confirmed_remote_change_blocked",
       "verifiedAfterCutover": true,
       "verifiedAfterCutoverAt": "2026-08-07T05:24:00Z"
     },
@@ -266,7 +268,7 @@
     "blocksHostMigrationCompletion": false,
     "issues": [
       {
-        "code": "apple_episode_convergence_pending",
+        "code": "apple_episode_historical_guid_mismatch_confirmed",
         "showId": "1870433419",
         "dashboardShowCount": 1,
         "dashboardAllEpisodesCount": 7,
@@ -277,6 +279,9 @@
         "supportEscalationRequired": true,
         "supportRequestSubmitted": true,
         "supportRequestSubmittedDate": "2026-08-06",
+        "supportCaseNumber": "20000130526608",
+        "guidRepairRecord": "publishing/apple-guid-repair.json",
+        "remoteChangeBlocked": true,
         "deletionAuthorized": false
       },
       {

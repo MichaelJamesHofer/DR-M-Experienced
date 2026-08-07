@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://drmexperienced.com/schemas/apple-guid-repair.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "status",
+    "discoveredAt",
+    "lastVerifiedAt",
+    "feedUrl",
+    "appleShowId",
+    "appleCaseNumber",
+    "sourceEvidence",
+    "episodes",
+    "gates",
+    "constraints",
+    "nextActions"
+  ],
+  "properties": {
+    "$schema": { "const": "./apple-guid-repair.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "status": { "const": "support_mismatch_confirmed_remote_change_blocked" },
+    "discoveredAt": { "type": "string", "format": "date" },
+    "lastVerifiedAt": { "type": "string", "format": "date" },
+    "feedUrl": { "const": "https://media.rss.com/dr-m-experienced/feed.xml" },
+    "appleShowId": { "const": "1870433419" },
+    "appleCaseNumber": { "const": "20000130526608" },
+    "sourceEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "summary", "localBaselineLimitation"],
+      "properties": {
+        "provider": { "const": "Apple Podcasts Support" },
+        "summary": { "$ref": "#/$defs/nonBlank" },
+        "localBaselineLimitation": { "$ref": "#/$defs/nonBlank" }
+      }
+    },
+    "episodes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "episodeNumber",
+          "slug",
+          "title",
+          "rssComEpisodeId",
+          "appleEpisodeId",
+          "spotifyEpisodeId",
+          "currentFeedGuid",
+          "appleHistoricalGuid"
+        ],
+        "properties": {
+          "episodeNumber": { "type": "integer", "minimum": 1, "maximum": 2 },
+          "slug": { "type": "string", "minLength": 1 },
+          "title": { "$ref": "#/$defs/nonBlank" },
+          "rssComEpisodeId": { "type": "string", "pattern": "^[0-9]+$" },
+          "appleEpisodeId": { "type": "string", "pattern": "^[0-9]+$" },
+          "spotifyEpisodeId": { "type": "string", "pattern": "^[A-Za-z0-9]{22}$" },
+          "currentFeedGuid": { "$ref": "#/$defs/uuid" },
+          "appleHistoricalGuid": { "$ref": "#/$defs/uuid" }
+        }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "appleSupportCrosswalkRecorded",
+        "appleTitleMappingIndependentlyVerified",
+        "rssComInPlaceEditConfirmed",
+        "spotifyImpactReviewed",
+        "spotifyIdentityPreservationConfirmed",
+        "exactRemoteChangeApproved",
+        "beforeSnapshotCaptured",
+        "remoteWritePerformed",
+        "feedVerified",
+        "appleIdentityPreserved",
+        "spotifyIdentityPreserved"
+      ],
+      "properties": {
+        "appleSupportCrosswalkRecorded": { "const": true },
+        "appleTitleMappingIndependentlyVerified": { "type": "boolean" },
+        "rssComInPlaceEditConfirmed": { "type": "boolean" },
+        "spotifyImpactReviewed": { "const": true },
+        "spotifyIdentityPreservationConfirmed": { "type": "boolean" },
+        "exactRemoteChangeApproved": { "type": "boolean" },
+        "beforeSnapshotCaptured": { "type": "boolean" },
+        "remoteWritePerformed": { "type": "boolean" },
+        "feedVerified": { "type": "boolean" },
+        "appleIdentityPreserved": { "type": "boolean" },
+        "spotifyIdentityPreserved": { "type": "boolean" }
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/nonBlank" }
+    },
+    "nextActions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/nonBlank" }
+    }
+  },
+  "$defs": {
+    "nonBlank": { "type": "string", "pattern": "\\S" },
+    "uuid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    }
+  }
+}

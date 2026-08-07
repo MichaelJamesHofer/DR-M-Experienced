@@ -1072,8 +1072,8 @@
     "verifyFeedAndRemoteIdsAfterReplacement": true
   },
   "platformNotes": {
-    "rssCom": "All seven existing RSS.com episodes now reference verified normalized enclosures. Original GUIDs and catalog identity were preserved, all seven remote files passed full decode and loudness gates, and production Supabase audio URL readback matches catalog revision 10. Downstream directory refresh remains unverified.",
-    "apple": "Receives corrected audio through RSS; never upload a separate episode. The public show still exposes five of seven episodes, with RSS Episodes 1-2 missing and structured metadata cache drift still present.",
+    "rssCom": "All seven existing RSS.com episodes now reference verified normalized enclosures. The GUIDs captured from Anchor on August 5 and catalog identity were unchanged by the audio replacement, all seven remote files passed full decode and loudness gates, and production Supabase audio URL readback matches catalog revision 10. Downstream directory refresh remains unverified.",
+    "apple": "Receives corrected audio through RSS; never upload a separate episode. The public show still exposes five of seven episodes. Apple case 20000130526608 attributes missing Episodes 1-2 to historical GUID mismatches; the blocked repair is tracked in publishing/apple-guid-repair.json. Structured metadata cache drift also remains.",
     "amazon": "Receives corrected audio through RSS after the one-time show claim.",
     "spotifyAudio": "Receives normalized podcast audio through RSS.com. All seven current episodes also have their corrected video attached to the existing Spotify episode IDs.",
     "spotifyVideo": "Public readback confirms corrected video, approved artwork, and approved copy for 7/7 existing episode IDs. For a future video episode, attach the approved full video only after RSS ingestion; there is no account-wide video toggle. Leave intentionally audio-only episodes as RSS audio only.",

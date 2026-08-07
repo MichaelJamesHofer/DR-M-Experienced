@@ -91,7 +91,9 @@ Based on analysis of top-tier health content creators (Huberman Lab, Peter Attia
 - [x] Apply the guarded normalized-RSS-audio migration in production Supabase and verify all seven current audio URLs against catalog revision 10
 - [x] Apply the guarded YouTube-destination migration in production Supabase and verify all seven YouTube IDs and `Watch on YouTube` references against catalog revision 10
 - [ ] Verify Podcast Index duplicate convergence after the Anchor redirect is crawled
-- [ ] Follow up on the submitted Apple support request for RSS Episodes 1-2 on show `1870433419`; both remain `DRAFTING`/`HIDDEN`
+- [x] Record Apple case `20000130526608` and the exact historical/current GUID crosswalk for missing Episodes 1-2 in `publishing/apple-guid-repair.json`
+- [ ] Ask Apple for server-side remapping, RSS.com for an in-place GUID-only correction, and Spotify for identity protection before changing either live GUID
+- [ ] If a feed repair remains necessary, capture a baseline and use one attended episode as a canary; preserve Apple/Spotify episode IDs, video, analytics, and the other six feed items
 - [x] Replace all seven under-level RSS.com enclosures with normalized MP3s, preserve every GUID, and verify all seven remote downloads, full decodes, and loudness gates
 - [x] Attach corrected video to all seven existing Spotify episode IDs and verify public video, approved artwork, and approved copy for 7/7 without creating duplicates
 - [x] Validate and register Episode 5's sub-25 Mbps Spotify derivative without changing its catalog master binding or claiming a remote upload

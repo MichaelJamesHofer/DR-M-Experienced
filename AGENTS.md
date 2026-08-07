@@ -30,8 +30,12 @@ directly to RSS.com. Apple draft/public-count cleanup, Amazon's one-time claim,
 and directory cache convergence are downstream work, not reasons to recreate a
 show or switch the canonical host.
 
-The Apple reprocessing request for RSS Episodes 1-2 was submitted on August 6,
-2026 and is awaiting response. On August 7, corrected video was restored against
+Apple replied on August 7 under case `20000130526608`: its existing Episode 1
+and 2 records contain historical GUIDs that differ from the current feed. The
+blocked repair crosswalk and gates are in `publishing/apple-guid-repair.json`.
+Do not change either live GUID until Apple-side remapping, RSS.com in-place edit
+capability, and Spotify identity preservation have been reviewed. On August 7,
+corrected video was restored against
 all seven existing Spotify episode IDs after the masters passed the loudness and
 sync checks in `publishing/audio-replacement-audit.json`; independent public
 checks now report video, exact copy, and approved artwork for all seven.
@@ -64,10 +68,11 @@ checks now report video, exact copy, and approved artwork for all seven.
   unless new evidence shows that it contained unique configuration.
 - The imported RSS.com feed is
   `https://media.rss.com/dr-m-experienced/feed.xml`. It preserves all seven
-  GUIDs, titles, episode numbers, dates, playable byte-identical enclosures, and
-  3000 x 3000 artwork. Its canonical metadata is exact, `RSSVERIFY` is absent,
-  and no stray Season 1 metadata remains. Do not recreate those episodes or
-  submit duplicate shows.
+  captured August 5 GUIDs, titles, episode numbers, dates, playable enclosures,
+  and 3000 x 3000 artwork. Its canonical metadata is exact, `RSSVERIFY` is
+  absent, and no stray Season 1 metadata remains. Apple later supplied older
+  GUID evidence for Episodes 1-2; that is a controlled identity-repair incident,
+  not permission to recreate episodes or submit duplicate shows.
 - Preserve the legacy Anchor URL and Spotify account. The old feed returns one
   HTTP 301 hop to RSS.com; do not remove or reverse that redirect merely because
   a directory or cache has not converged yet.
@@ -75,7 +80,10 @@ checks now report video, exact copy, and approved artwork for all seven.
   for the RSS item to appear in the existing Spotify show, then use Spotify for
   Creators to replace that episode's audio with the approved full video. Never
   create a second Spotify episode or directly upload fallback podcast audio.
-- Never change podcast GUIDs during metadata, title, or directory cleanup.
+- Never change podcast GUIDs during metadata, title, or directory cleanup. The
+  only pending exception is the support-confirmed Apple repair recorded in
+  `publishing/apple-guid-repair.json`, and every gate there must pass before a
+  remote write.
 - Public episode titles omit `Episode N`; the number remains required structured
   internal/RSS metadata. Apply the approved seven-title transition as one
   coordinated batch and preserve every remote content ID.
@@ -89,8 +97,8 @@ checks now report video, exact copy, and approved artwork for all seven.
   episodes.
 - The seven current RSS audio enclosures are the August 7 normalized replacements.
   They measure between `-16.91` and `-16.75` LUFS with true peak no higher than
-  `-1.86 dBTP`; their exact remote bytes fully decode and all original GUIDs are
-  preserved. Treat every later render as a new binary: hash and fully decode it,
+  `-1.86 dBTP`; their exact remote bytes fully decode and their captured August 5
+  GUIDs are unchanged. Treat every later render as a new binary: hash and fully decode it,
   require `-17` through `-15` LUFS and true peak no higher than `-1 dBTP`, then
   replace the existing RSS.com episode audio without changing its GUID or other
   identity fields.

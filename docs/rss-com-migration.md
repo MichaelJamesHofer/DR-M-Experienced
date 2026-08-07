@@ -3,15 +3,19 @@
 Status: completed August 6, 2026. RSS.com is canonical at
 `https://media.rss.com/dr-m-experienced/feed.xml`. The legacy Anchor feed
 returns one direct HTTP 301 hop to that exact URL, which returns HTTP 200. All
-seven GUIDs, metadata records, audio files, and artwork assets passed parity;
-the canonical feed has exact copy, no `RSSVERIFY`, and no season tags.
+the seven GUIDs captured from Anchor on August 5, metadata records, audio files,
+and artwork assets passed migration parity; the canonical feed has exact copy,
+no `RSSVERIFY`, and no season tags. Apple later supplied older historical GUIDs
+for Episodes 1-2 under case `20000130526608`; no live GUID change is approved.
 
 Apple show `1870433419` was configured directly to the RSS.com feed at
 approximately 18:29 UTC on August 6. Its authenticated title and description are
 exact and token-free. The duplicate Draft show and stale manual Episode 4 Draft
 were archived, but only five episodes are Available. RSS Episodes 1-2 remain
-`DRAFTING`/`HIDDEN` after one feed refresh. A reprocessing request was submitted
-to Apple support on August 6, 2026 and is awaiting response.
+`DRAFTING`/`HIDDEN` after one feed refresh. Apple replied under case
+`20000130526608` and confirmed that its existing Episode 1-2 records use
+historical GUIDs different from the current feed. The support-first repair is
+recorded in `publishing/apple-guid-repair.json` and remains blocked.
 
 The machine-readable record is `publishing/hosting-migration.json`. Private raw
 feed snapshots belong under `~/.local/state/drm-publisher/migrations/`, never in
@@ -21,17 +25,20 @@ the repository.
 
 - Keep Spotify show `7GGLljxmO0G3FLjPy8vfcw`, its account, and the verified
   Anchor redirect active. RSS.com remains canonical.
-- Preserve the imported `dr-m-experienced` slug and all seven original GUIDs.
+- Preserve the imported `dr-m-experienced` slug and the seven current GUIDs
+  captured on August 5 while the Apple identity-repair gates remain blocked.
 - Publish podcast audio to RSS.com. After Spotify ingests an RSS episode, use
   Spotify for Creators only to replace that existing episode with approved video
   when applicable; do not upload duplicate or fallback audio episodes.
-- Preserve Apple show `1870433419` while Apple processes the submitted support
-  request for its two valid but `DRAFTING`/`HIDDEN` RSS records. Do not submit a
-  replacement show.
+- Preserve Apple show `1870433419`, its two existing episode IDs, and the two
+  valid but `DRAFTING`/`HIDDEN` RSS records. Apple has answered the submitted
+  request with a historical GUID crosswalk; do not submit a replacement show or
+  change the feed until the support-first preservation checks pass.
 - Submit the canonical RSS.com feed once to Amazon, complete owner verification,
   and record its stable listing ID and URL.
 - Monitor directory caches and Podcast Index convergence without changing the
-  canonical host or GUIDs.
+  canonical host. Treat any GUID repair as the single controlled exception in
+  `publishing/apple-guid-repair.json`, not routine metadata cleanup.
 
 RSS.com's free plan provides directory-submission convenience but no supported
 publishing API; API access is limited to its paid Network plan. The repository
@@ -40,8 +47,11 @@ destinations regardless of host.
 
 ## Historical Evidence
 
-- The source Anchor feed returned seven episodes with seven unique original
-  GUIDs when baselined on August 5, 2026.
+- The source Anchor feed returned seven episodes with seven unique GUIDs when
+  baselined on August 5, 2026. This is the earliest retained snapshot, so it
+  proves migration parity but not the GUIDs used when Episodes 1-2 were first
+  published. Apple later supplied older historical GUID evidence for those two
+  records under case `20000130526608`.
 - A supported Switch to RSS request was submitted at
   `2026-08-05T04:32:55Z`.
 - RSS.com requested `RSSVERIFY`; the token was added to the source description,
@@ -112,6 +122,33 @@ Any future count, GUID, media, metadata, or directory-identity mismatch is a
 hard stop for publication. Keep RSS.com canonical while investigating; do not
 reverse the established redirect as a first response.
 
+## Apple Historical GUID Incident
+
+Apple support supplied this crosswalk under case `20000130526608`:
+
+| Episode | Apple Episode ID | Current feed GUID | Apple historical GUID |
+|---|---|---|---|
+| 1 | `1000746628307` | `c9b853b6-a828-4012-9998-217919ff9163` | `59063e08-e4a6-4e56-b7ec-d2a66d69beb8` |
+| 2 | `1000746628422` | `1e40e02b-b217-477c-9cc3-4271cb304c23` | `26896da2-76cf-4865-93f8-f94ddfb24568` |
+
+This evidence supersedes the assumption that the August 5 captured GUIDs were
+necessarily the original publication identities; it does not authorize an
+immediate feed change. Follow this fail-closed sequence:
+
+1. Ask Apple whether it can remap its two existing episode records to the
+   current feed GUIDs server-side while preserving show and episode IDs.
+2. Ask RSS.com whether import engineering can make an in-place GUID-only backend
+   correction without deleting, recreating, unpublishing, or re-uploading either
+   episode.
+3. Ask Spotify whether it can preserve the two existing episode IDs and their
+   attached corrected videos across either proposed GUID substitution.
+4. Make no live GUID change until those answers, full before-state snapshots,
+   and exact remote-change approval are recorded. Never change both episodes at
+   once.
+5. If a feed change remains necessary, use one attended episode as a canary and
+   independently verify the RSS.com, Apple, and Spotify identities before
+   considering the second episode. Stop if any duplicate or ID change appears.
+
 ## Redirect Completion And Monitoring
 
 1. Completed: froze publication and captured final Anchor/RSS.com snapshots.
@@ -121,15 +158,18 @@ reverse the established redirect as a first response.
 4. Keep the old Spotify account and redirect active for at least 90 days. A
    cached client may briefly return the old feed body while the 301 propagates;
    verify with no-cache requests before treating that as redirect failure.
-5. Pending Apple support response: resolve RSS Episodes 1-2, which remain
-   `DRAFTING`/`HIDDEN` after duplicate cleanup and one feed refresh. The public
-   listing still has five Available episodes.
+5. Apple response received; remote repair blocked: case `20000130526608`
+   identified historical GUID mismatches for RSS Episodes 1-2. Follow the
+   support-first sequence above while the public listing remains at five
+   Available episodes.
 6. Pending: submit and claim the RSS.com feed once in Amazon without creating a
    duplicate listing.
-7. Pending remediation: the public audit found all seven Spotify episodes
-   audio-only. For existing and new video episodes, let RSS own the episode
+7. Completed August 7, 2026: corrected video is attached to all seven existing
+   Spotify episode IDs and public readback verifies video, approved artwork, and
+   approved copy. Preserve those IDs and attached videos during the blocked
+   Apple GUID incident. For new video episodes, let RSS establish the episode
    identity, then use that episode's `Upload video` action in Spotify for
-   Creators. There is no show-wide video toggle and no duplicate should be made.
+   Creators; there is no show-wide video toggle.
 
 ## Official References
 
@@ -137,6 +177,8 @@ reverse the established redirect as a first response.
 - RSS.com pre-redirect checklist: <https://help.rss.com/en/support/solutions/articles/44002321566-important-steps-to-do-before-redirecting-a-podcast-to-rss-com>
 - RSS.com Spotify redirect: <https://help.rss.com/en/support/solutions/articles/44002264641-how-do-i-redirect-my-podcast-from-spotify-for-creators-formerly-anchor->
 - RSS.com API access: <https://help.rss.com/en/support/solutions/articles/44002648949-api-access>
+- RSS.com support ticket: <https://help.rss.com/en/support/tickets/new>
+- Apple Podcasts RSS requirements: <https://podcasters.apple.com/support/823-podcast-requirements>
 - Apple change feed URL: <https://podcasters.apple.com/support/837-change-the-rss-feed-url>
 - Spotify 301 migration: <https://support.spotify.com/us/creators/article/switching-away-from-spotify-for-creators-with-a-301-redirect/>
 - Spotify video for externally hosted shows: <https://support.spotify.com/us/creators/article/video-episodes-for-shows-not-hosted-with-spotify/>
