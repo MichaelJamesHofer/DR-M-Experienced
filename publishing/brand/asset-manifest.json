@@ -11,6 +11,18 @@
     "sharedDirection": "Premium cinematic 3D scientific editorial illustration on deep charcoal, with cyan structure and restrained amber emphasis. Keep the focal subject central and leave dark edge space for responsive website overlays.",
     "excluded": "Embedded text, numbers, logos, watermarks, identifiable people, fake clinical scans, gore, treatment promises, and purple-dominant palettes"
   },
+  "dropboxLayout": {
+    "root": "dropbox:episodes",
+    "organizedAt": "2026-08-07T04:30:13Z",
+    "exactCopyCount": 21,
+    "episodeDirectoryPattern": "NNN-episode-slug/artwork",
+    "files": {
+      "website": "website-1600x900.webp",
+      "videoThumbnail": "video-thumbnail-1920x1080.jpg",
+      "podcastArt": "podcast-art-3000x3000.jpg"
+    },
+    "verification": "All 21 Dropbox copies are byte-identical to the approved repository assets."
+  },
   "assets": [
     {
       "logicalId": "episode-001-thumbnail",
@@ -228,8 +240,10 @@
     "legacyDescriptionReferenceCount": 0,
     "episodeAndShowArtworkParityPassed": true,
     "spotifyVideo": {
-      "status": "post_cutover_persistence_and_replacement_audit_required",
-      "auditComplete": false
+      "status": "seven_existing_episode_ids_restored_and_publicly_verified_video",
+      "auditComplete": true,
+      "publicVideoEpisodeCount": 7,
+      "approvedThumbnailCount": 7
     },
     "apple": {
       "showId": "1870433419",
@@ -238,12 +252,14 @@
       "availableEpisodeCount": 5,
       "publicSevenEpisodeConvergenceVerified": false,
       "draftEpisodeNumbers": [1, 2],
-      "staleDuplicateDraftEpisodeNumbers": [4]
+      "staleDuplicateDraftEpisodeNumbers": [],
+      "supportRequestSubmitted": true,
+      "supportRequestStatus": "submitted_awaiting_response"
     },
     "amazon": {
       "status": "ready_for_one_time_claim_not_claimed",
       "claimed": false
     }
   },
-  "notes": "The clean, text-free website, 16:9, and square derivatives are approved. The historical 16:9 rollout remains live on YouTube, Vimeo, and Rumble. Spotify's prior video attachments are no longer public after the RSS.com cutover; all seven episodes are currently audio-only and need video restored against their existing Spotify episode IDs. The square set is present in the canonical RSS.com feed with seven-item episode and show artwork parity. Apple directly targets that feed with exact metadata but still exposes only five Available episodes; its duplicate show and stale manual Episode 4 Draft were archived, and a support request is pending for RSS Episodes 1 and 2. Amazon is ready for a one-time claim but remains unclaimed, and existing Instagram covers remain unchanged. Generated originals remain outside the repository in the local Codex image output store."
+  "notes": "The clean, text-free website, 16:9, and square derivatives are approved. The approved 16:9 set is live on YouTube's seven normalized public replacements and on Vimeo's seven in-place replacements; the prior YouTube uploads remain Unlisted with replacement links and are retained for rollback. Spotify now serves corrected video with the approved 16:9 thumbnails on all seven existing episode IDs. Seven corrected Rumble replacements are staged Unlisted with approved thumbnails but have not been submitted because ownership and the updated Terms still require user confirmation. The square set is present in the canonical RSS.com feed with seven-item episode and show artwork parity. Apple directly targets that feed with exact metadata but still exposes only five Available episodes; its duplicate show and stale manual Episode 4 Draft were archived, and a support request is pending for RSS Episodes 1 and 2. Amazon is ready for a one-time claim but remains unclaimed, and existing Instagram covers remain unchanged. Generated originals remain outside the repository in the local Codex image output store."
 }

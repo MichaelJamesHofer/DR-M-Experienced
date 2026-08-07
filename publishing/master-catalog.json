@@ -1,8 +1,8 @@
 {
   "$schema": "./master-catalog.schema.json",
   "schemaVersion": 1,
-  "revision": 5,
-  "updatedAt": "2026-08-06T21:27:21Z",
+  "revision": 10,
+  "updatedAt": "2026-08-07T07:46:32Z",
   "show": {
     "names": {
       "full": "Dr. M Experienced, with Dr. David Musnick",
@@ -97,204 +97,213 @@
       "kind": "video",
       "role": "fullVideo",
       "uri": "dropbox:episodes/001-brain-fog-part-1/master-video.mp4",
-      "sha256": null,
-      "sizeBytes": null,
+      "sha256": "bc873595eb688c19a1684af6d4bfac720a9afb2d4c4b017ecc299e4e673716d5",
+      "sizeBytes": 936971338,
       "mediaType": "video/mp4",
-      "status": "unmounted"
+      "status": "verified"
     },
     "episode-001-podcast-audio": {
       "kind": "audio",
       "role": "podcastAudio",
-      "uri": "dropbox:episodes/001-brain-fog-part-1/podcast-audio.wav",
-      "sha256": null,
-      "sizeBytes": null,
-      "mediaType": "audio/wav",
-      "status": "unmounted",
-      "publishedUrl": "https://content.rss.com/episodes/397420/3050766/dr-m-experienced/2026_08_06_08_58_14_5ecd30b1-aef2-4666-ad49-f8c0f210fea2.mp3"
+      "uri": "dropbox:episodes/001-brain-fog-part-1/podcast-audio.mp3",
+      "sha256": "4d7821bbd98fb7830100f8af415a17f68b803043c1b6bb09429f51b56c746d5a",
+      "sizeBytes": 24509421,
+      "mediaType": "audio/mpeg",
+      "status": "verified",
+      "publishedUrl": "https://content.rss.com/episodes/397420/3050766/dr-m-experienced/2026_08_07_05_37_14_57d1a0c9-5f80-4880-bc5d-57f7eeef7cb5.mp3"
     },
     "episode-001-thumbnail": {
       "kind": "image",
       "role": "thumbnail",
-      "uri": "dropbox:episodes/001-brain-fog-part-1/thumbnail-master.png",
-      "sha256": null,
-      "sizeBytes": null,
-      "mediaType": "image/png",
-      "status": "unmounted",
+      "uri": "dropbox:episodes/001-brain-fog-part-1/artwork/video-thumbnail-1920x1080.jpg",
+      "sha256": "b091d52d514dc00725e52d3760117b431e063ed1220c2b328613a200caa88416",
+      "sizeBytes": 227511,
+      "mediaType": "image/jpeg",
+      "status": "verified",
       "publishedUrl": "https://drmexperienced.com/images/episodes/brain-fog-part-1.webp"
     },
     "episode-002-master-video": {
       "kind": "video",
       "role": "fullVideo",
       "uri": "dropbox:episodes/002-brain-fog-part-2/master-video.mp4",
-      "sha256": null,
-      "sizeBytes": null,
+      "sha256": "935ceca9290699c70fe1fc07a2d430113f8a703f2d674742ffd66c412593bb0f",
+      "sizeBytes": 1086944676,
       "mediaType": "video/mp4",
-      "status": "unmounted"
+      "status": "verified"
     },
     "episode-002-podcast-audio": {
       "kind": "audio",
       "role": "podcastAudio",
-      "uri": "dropbox:episodes/002-brain-fog-part-2/podcast-audio.wav",
-      "sha256": null,
-      "sizeBytes": null,
-      "mediaType": "audio/wav",
-      "status": "unmounted",
-      "publishedUrl": "https://content.rss.com/episodes/397420/3050765/dr-m-experienced/2026_08_06_08_58_12_56d5c865-9d3e-4c15-943c-095c535ffe7b.mp3"
+      "uri": "dropbox:episodes/002-brain-fog-part-2/podcast-audio.mp3",
+      "sha256": "406373597936f206a7b788647fa6ac39301c3e25d9b30d8db7fde571ea80450f",
+      "sizeBytes": 28828845,
+      "mediaType": "audio/mpeg",
+      "status": "verified",
+      "publishedUrl": "https://content.rss.com/episodes/397420/3050765/dr-m-experienced/2026_08_07_05_41_20_c5dc584a-9799-404f-96e5-66fd2958ad94.mp3"
     },
     "episode-002-thumbnail": {
       "kind": "image",
       "role": "thumbnail",
-      "uri": "dropbox:episodes/002-brain-fog-part-2/thumbnail-master.png",
-      "sha256": null,
-      "sizeBytes": null,
-      "mediaType": "image/png",
-      "status": "unmounted",
+      "uri": "dropbox:episodes/002-brain-fog-part-2/artwork/video-thumbnail-1920x1080.jpg",
+      "sha256": "04f743a5d2f06028a31407e62f5da2c21f450ce4c4ee2165c1a6ef94f24a1677",
+      "sizeBytes": 252981,
+      "mediaType": "image/jpeg",
+      "status": "verified",
       "publishedUrl": "https://drmexperienced.com/images/episodes/brain-fog-part-2.webp"
     },
     "episode-003-master-video": {
       "kind": "video",
       "role": "fullVideo",
       "uri": "dropbox:episodes/003-episode-3-insomnia/master-video.mp4",
-      "sha256": null,
-      "sizeBytes": null,
+      "sha256": "538b7a80a60268dbe87bff468e144ee8458c244309f6607b00548098ca0a2ca4",
+      "sizeBytes": 1382150506,
       "mediaType": "video/mp4",
-      "status": "unmounted"
+      "status": "verified"
     },
     "episode-003-podcast-audio": {
       "kind": "audio",
       "role": "podcastAudio",
-      "uri": "dropbox:episodes/003-episode-3-insomnia/podcast-audio.wav",
-      "sha256": null,
-      "sizeBytes": null,
-      "mediaType": "audio/wav",
-      "status": "unmounted",
-      "publishedUrl": "https://content.rss.com/episodes/397420/3050764/dr-m-experienced/2026_08_06_08_58_10_29cdf885-f097-4016-91fa-79229beaffe2.mp3"
+      "uri": "dropbox:episodes/003-episode-3-insomnia/podcast-audio.mp3",
+      "sha256": "3804409eb2f96e52eba661d678c88a30ee9c4cbc0ea0709524fbdbdaa94cbe4e",
+      "sizeBytes": 28779309,
+      "mediaType": "audio/mpeg",
+      "status": "verified",
+      "publishedUrl": "https://content.rss.com/episodes/397420/3050764/dr-m-experienced/2026_08_07_05_42_30_c6bd9b48-095f-4ee9-9eda-ebb0d7956d09.mp3"
     },
     "episode-003-thumbnail": {
       "kind": "image",
       "role": "thumbnail",
-      "uri": "dropbox:episodes/003-episode-3-insomnia/thumbnail-master.png",
-      "sha256": null,
-      "sizeBytes": null,
-      "mediaType": "image/png",
-      "status": "unmounted",
+      "uri": "dropbox:episodes/003-episode-3-insomnia/artwork/video-thumbnail-1920x1080.jpg",
+      "sha256": "6e09d43daf671d65d81f8fd403f9c693d073c4edaf99c759f01e46da27d2de4b",
+      "sizeBytes": 155490,
+      "mediaType": "image/jpeg",
+      "status": "verified",
       "publishedUrl": "https://drmexperienced.com/images/episodes/insomnia.webp"
     },
     "episode-004-master-video": {
       "kind": "video",
       "role": "fullVideo",
       "uri": "dropbox:episodes/004-episode-4-emf/master-video.mp4",
-      "sha256": null,
-      "sizeBytes": null,
+      "sha256": "129bf322ed83c38ae586bd83d6124dac64bc9864056e6e4ff72034b5e85780ca",
+      "sizeBytes": 1189902893,
       "mediaType": "video/mp4",
-      "status": "unmounted"
+      "status": "verified"
     },
     "episode-004-podcast-audio": {
       "kind": "audio",
       "role": "podcastAudio",
-      "uri": "dropbox:episodes/004-episode-4-emf/podcast-audio.wav",
-      "sha256": null,
-      "sizeBytes": null,
-      "mediaType": "audio/wav",
-      "status": "unmounted",
-      "publishedUrl": "https://content.rss.com/episodes/397420/3050763/dr-m-experienced/2026_08_06_08_58_08_299310cb-53c0-4de1-88ca-684a25901bc5.mp3"
+      "uri": "dropbox:episodes/004-episode-4-emf/podcast-audio.mp3",
+      "sha256": "c3e2ea0f8ee52401d3e98580465b10294170d50ce4db59ea89a00db46f37f460",
+      "sizeBytes": 28313325,
+      "mediaType": "audio/mpeg",
+      "status": "verified",
+      "publishedUrl": "https://content.rss.com/episodes/397420/3050763/dr-m-experienced/2026_08_07_05_43_51_32e2ccc6-04c8-4592-9e50-aa8d48eb9cb8.mp3"
     },
     "episode-004-thumbnail": {
       "kind": "image",
       "role": "thumbnail",
-      "uri": "dropbox:episodes/004-episode-4-emf/thumbnail-master.png",
-      "sha256": null,
-      "sizeBytes": null,
-      "mediaType": "image/png",
-      "status": "unmounted",
+      "uri": "dropbox:episodes/004-episode-4-emf/artwork/video-thumbnail-1920x1080.jpg",
+      "sha256": "af56bcf291e595d9b80ce262b2f9d9199d7ce01ceba44829371163cb3b88721d",
+      "sizeBytes": 110860,
+      "mediaType": "image/jpeg",
+      "status": "verified",
       "publishedUrl": "https://drmexperienced.com/images/episodes/emf.webp"
     },
     "episode-005-master-video": {
       "kind": "video",
       "role": "fullVideo",
       "uri": "dropbox:episodes/005-episode-5-energy/master-video.mp4",
-      "sha256": null,
-      "sizeBytes": null,
+      "sha256": "7d54ec306f76dc665e30336fb0808ecb039a338afbf3e11c31b9322658aa8639",
+      "sizeBytes": 9118424761,
       "mediaType": "video/mp4",
-      "status": "unmounted"
+      "status": "verified"
     },
     "episode-005-podcast-audio": {
       "kind": "audio",
       "role": "podcastAudio",
-      "uri": "dropbox:episodes/005-episode-5-energy/podcast-audio.wav",
-      "sha256": null,
-      "sizeBytes": null,
-      "mediaType": "audio/wav",
-      "status": "unmounted",
-      "publishedUrl": "https://content.rss.com/episodes/397420/3050762/dr-m-experienced/2026_08_06_08_58_06_7cc0ba78-000a-4bfe-9360-e2526cf972ab.mp3"
+      "uri": "dropbox:episodes/005-episode-5-energy/podcast-audio.mp3",
+      "sha256": "2c6cb7eb2a176a4fdcd2c42cf694305b36290e7844fdeda4104f5d4abcdf1d62",
+      "sizeBytes": 44685549,
+      "mediaType": "audio/mpeg",
+      "status": "verified",
+      "publishedUrl": "https://content.rss.com/episodes/397420/3050762/dr-m-experienced/2026_08_07_05_46_23_1de2f4f3-aeab-457a-a02d-2bf61108132d.mp3"
     },
     "episode-005-thumbnail": {
       "kind": "image",
       "role": "thumbnail",
-      "uri": "dropbox:episodes/005-episode-5-energy/thumbnail-master.png",
-      "sha256": null,
-      "sizeBytes": null,
-      "mediaType": "image/png",
-      "status": "unmounted",
+      "uri": "dropbox:episodes/005-episode-5-energy/artwork/video-thumbnail-1920x1080.jpg",
+      "sha256": "0efbc07a236a563590381682f21439bfb310444418793a3ff4d51522da46cb6f",
+      "sizeBytes": 235198,
+      "mediaType": "image/jpeg",
+      "status": "verified",
       "publishedUrl": "https://drmexperienced.com/images/episodes/energy-mitochondria.webp"
     },
     "episode-006-master-video": {
       "kind": "video",
       "role": "fullVideo",
       "uri": "dropbox:episodes/006-episode-6-concussion-and-pathophysiology/master-video.mp4",
-      "sha256": null,
-      "sizeBytes": null,
+      "sha256": "839a6dcc325e26327a0622e8a56a9d123bda8dcff1758f192f1dc905f12fd4e6",
+      "sizeBytes": 1209784602,
       "mediaType": "video/mp4",
-      "status": "unmounted"
+      "status": "verified"
     },
     "episode-006-podcast-audio": {
       "kind": "audio",
       "role": "podcastAudio",
-      "uri": "dropbox:episodes/006-episode-6-concussion-and-pathophysiology/podcast-audio.wav",
-      "sha256": null,
-      "sizeBytes": null,
-      "mediaType": "audio/wav",
-      "status": "unmounted",
-      "publishedUrl": "https://content.rss.com/episodes/397420/3050761/dr-m-experienced/2026_08_06_08_58_03_e31f1115-3f5b-4192-a929-58eada8d76e1.mp3"
+      "uri": "dropbox:episodes/006-episode-6-concussion-and-pathophysiology/podcast-audio.mp3",
+      "sha256": "0cb468025346ff1920e9b51ca1ac56a6a04978efa31d035b3389cd3d9dc4b4ca",
+      "sizeBytes": 28809261,
+      "mediaType": "audio/mpeg",
+      "status": "verified",
+      "publishedUrl": "https://content.rss.com/episodes/397420/3050761/dr-m-experienced/2026_08_07_05_55_46_4806f336-163e-4ffb-b446-e4e03bb81013.mp3"
     },
     "episode-006-thumbnail": {
       "kind": "image",
       "role": "thumbnail",
-      "uri": "dropbox:episodes/006-episode-6-concussion-and-pathophysiology/thumbnail-master.png",
-      "sha256": null,
-      "sizeBytes": null,
-      "mediaType": "image/png",
-      "status": "unmounted",
+      "uri": "dropbox:episodes/006-episode-6-concussion-and-pathophysiology/artwork/video-thumbnail-1920x1080.jpg",
+      "sha256": "ba187ddfaa2f3fc705f4e3193aa262f68fea595e0ae025ec54f5f9cd96e3c301",
+      "sizeBytes": 219940,
+      "mediaType": "image/jpeg",
+      "status": "verified",
       "publishedUrl": "https://drmexperienced.com/images/episodes/concussion-mechanics.webp"
     },
     "episode-007-master-video": {
       "kind": "video",
       "role": "fullVideo",
       "uri": "dropbox:episodes/007-episode-7-the-brain-on-fire/master-video.mp4",
-      "sha256": null,
-      "sizeBytes": null,
+      "sha256": "3205342031b992497423bac7204388c9444ddbc020e05023d9956f65ff2b984e",
+      "sizeBytes": 2452892683,
       "mediaType": "video/mp4",
-      "status": "unmounted"
+      "status": "verified"
     },
     "episode-007-podcast-audio": {
       "kind": "audio",
       "role": "podcastAudio",
-      "uri": "dropbox:episodes/007-episode-7-the-brain-on-fire/podcast-audio.wav",
-      "sha256": null,
-      "sizeBytes": null,
-      "mediaType": "audio/wav",
-      "status": "unmounted",
-      "publishedUrl": "https://content.rss.com/episodes/397420/3050760/dr-m-experienced/2026_08_06_08_58_01_2d87eb57-8e98-435a-a59b-509643963942.mp3"
+      "uri": "dropbox:episodes/007-episode-7-the-brain-on-fire/podcast-audio.mp3",
+      "sha256": "cf9c4d16c7698770cf77a1248f6affc482d935883d51dd3496d6f590bb107f93",
+      "sizeBytes": 30165741,
+      "mediaType": "audio/mpeg",
+      "status": "verified",
+      "publishedUrl": "https://content.rss.com/episodes/397420/3050760/dr-m-experienced/2026_08_07_05_56_36_52e27ebd-6648-4ff7-adf3-f9f7731c1b86.mp3"
     },
     "episode-007-thumbnail": {
       "kind": "image",
       "role": "thumbnail",
-      "uri": "dropbox:episodes/007-episode-7-the-brain-on-fire/thumbnail-master.png",
-      "sha256": null,
-      "sizeBytes": null,
-      "mediaType": "image/png",
-      "status": "unmounted",
+      "uri": "dropbox:episodes/007-episode-7-the-brain-on-fire/artwork/video-thumbnail-1920x1080.jpg",
+      "sha256": "094cad3194a2fa8ada3019eed943f8585fb2a466cc737eb919fc0158c6a25781",
+      "sizeBytes": 235673,
+      "mediaType": "image/jpeg",
+      "status": "verified",
       "publishedUrl": "https://drmexperienced.com/images/episodes/brain-neuroinflammation.webp"
+    },
+    "episode-005-spotify-video": {
+      "kind": "video",
+      "role": "spotifyVideo",
+      "uri": "dropbox:episodes/005-episode-5-energy/platform-video.mp4",
+      "sha256": "704e6b6c3137d2d6cdfc68876f651564e3d904a3174902fbe7c73aacae10804c",
+      "sizeBytes": 911564890,
+      "mediaType": "video/mp4",
+      "status": "verified"
     }
   },
   "episodes": [
@@ -337,8 +346,8 @@
           "url": "https://open.spotify.com/episode/7cAdb8GE4khC9EYKAjmYuc"
         },
         "youtube": {
-          "id": "LXASEw-WFq8",
-          "url": "https://www.youtube.com/watch?v=LXASEw-WFq8"
+          "id": "5IMYaqnQsFY",
+          "url": "https://www.youtube.com/watch?v=5IMYaqnQsFY"
         },
         "vimeo": {
           "id": "1156414707",
@@ -348,7 +357,19 @@
           "id": "v74kzcw",
           "url": "https://rumble.com/v74kzcw-episode-1-brain-fog-part-1-is-your-brain-in-a-fog.html"
         }
-      }
+      },
+      "destinationArchives": [
+        {
+          "platform": "youtube",
+          "id": "LXASEw-WFq8",
+          "url": "https://www.youtube.com/watch?v=LXASEw-WFq8",
+          "status": "unlisted",
+          "archivedAt": "2026-08-07T07:46:32Z",
+          "reason": "normalized_video_cutover",
+          "supersededById": "5IMYaqnQsFY",
+          "rollbackEligible": true
+        }
+      ]
     },
     {
       "publicationState": "published",
@@ -389,8 +410,8 @@
           "url": "https://open.spotify.com/episode/19Pct0ClX3j1EOwJ3ySVd7"
         },
         "youtube": {
-          "id": "s740_XVTaAY",
-          "url": "https://www.youtube.com/watch?v=s740_XVTaAY"
+          "id": "DJe0fPmTf8k",
+          "url": "https://www.youtube.com/watch?v=DJe0fPmTf8k"
         },
         "vimeo": {
           "id": "1159441883",
@@ -400,7 +421,19 @@
           "id": "v74l0km",
           "url": "https://rumble.com/v74l0km-episode-brain-fog-part-2-testing-and-basic-solutions-for-brain-fog.html"
         }
-      }
+      },
+      "destinationArchives": [
+        {
+          "platform": "youtube",
+          "id": "s740_XVTaAY",
+          "url": "https://www.youtube.com/watch?v=s740_XVTaAY",
+          "status": "unlisted",
+          "archivedAt": "2026-08-07T07:46:32Z",
+          "reason": "normalized_video_cutover",
+          "supersededById": "DJe0fPmTf8k",
+          "rollbackEligible": true
+        }
+      ]
     },
     {
       "publicationState": "published",
@@ -441,8 +474,8 @@
           "url": "https://open.spotify.com/episode/07OHz4sfbefOORcNi9xaUK"
         },
         "youtube": {
-          "id": "59r5XFynaDo",
-          "url": "https://www.youtube.com/watch?v=59r5XFynaDo"
+          "id": "r5JYtE8Vm9I",
+          "url": "https://www.youtube.com/watch?v=r5JYtE8Vm9I"
         },
         "vimeo": {
           "id": "1179740758",
@@ -452,7 +485,19 @@
           "id": "v77zlls",
           "url": "https://rumble.com/v77zlls-episode-3-insomnia.html"
         }
-      }
+      },
+      "destinationArchives": [
+        {
+          "platform": "youtube",
+          "id": "59r5XFynaDo",
+          "url": "https://www.youtube.com/watch?v=59r5XFynaDo",
+          "status": "unlisted",
+          "archivedAt": "2026-08-07T07:46:32Z",
+          "reason": "normalized_video_cutover",
+          "supersededById": "r5JYtE8Vm9I",
+          "rollbackEligible": true
+        }
+      ]
     },
     {
       "publicationState": "published",
@@ -493,8 +538,8 @@
           "url": "https://open.spotify.com/episode/0aDVuIwrRlDKxEylMj2dyw"
         },
         "youtube": {
-          "id": "X8WChChyh9c",
-          "url": "https://www.youtube.com/watch?v=X8WChChyh9c"
+          "id": "binbLcb3f_s",
+          "url": "https://www.youtube.com/watch?v=binbLcb3f_s"
         },
         "vimeo": {
           "id": "1179956166",
@@ -504,7 +549,19 @@
           "id": "v780pxq",
           "url": "https://rumble.com/v780pxq-episode-4-emf.html"
         }
-      }
+      },
+      "destinationArchives": [
+        {
+          "platform": "youtube",
+          "id": "X8WChChyh9c",
+          "url": "https://www.youtube.com/watch?v=X8WChChyh9c",
+          "status": "unlisted",
+          "archivedAt": "2026-08-07T07:46:32Z",
+          "reason": "normalized_video_cutover",
+          "supersededById": "binbLcb3f_s",
+          "rollbackEligible": true
+        }
+      ]
     },
     {
       "publicationState": "published",
@@ -545,8 +602,8 @@
           "url": "https://open.spotify.com/episode/6fQAClcR4AAuueHjBNlrJC"
         },
         "youtube": {
-          "id": "JyBK6KtOo_k",
-          "url": "https://www.youtube.com/watch?v=JyBK6KtOo_k"
+          "id": "N_F0hhHkIQ4",
+          "url": "https://www.youtube.com/watch?v=N_F0hhHkIQ4"
         },
         "vimeo": {
           "id": "1204939658",
@@ -556,7 +613,19 @@
           "id": "v7bvj32",
           "url": "https://rumble.com/v7bvj32-episode-5-electro.magnetic.frequencies.html"
         }
-      }
+      },
+      "destinationArchives": [
+        {
+          "platform": "youtube",
+          "id": "JyBK6KtOo_k",
+          "url": "https://www.youtube.com/watch?v=JyBK6KtOo_k",
+          "status": "unlisted",
+          "archivedAt": "2026-08-07T07:46:32Z",
+          "reason": "normalized_video_cutover",
+          "supersededById": "N_F0hhHkIQ4",
+          "rollbackEligible": true
+        }
+      ]
     },
     {
       "publicationState": "published",
@@ -597,8 +666,8 @@
           "url": "https://open.spotify.com/episode/7MbKWgPZN40KEyN5j123JC"
         },
         "youtube": {
-          "id": "odNrtPEuong",
-          "url": "https://www.youtube.com/watch?v=odNrtPEuong"
+          "id": "8u1Ps_mCpO4",
+          "url": "https://www.youtube.com/watch?v=8u1Ps_mCpO4"
         },
         "vimeo": {
           "id": "1204939692",
@@ -608,7 +677,19 @@
           "id": "v7bvk8i",
           "url": "https://rumble.com/v7bvk8i-episode-6-concussion-and-pathophysiology.html"
         }
-      }
+      },
+      "destinationArchives": [
+        {
+          "platform": "youtube",
+          "id": "odNrtPEuong",
+          "url": "https://www.youtube.com/watch?v=odNrtPEuong",
+          "status": "unlisted",
+          "archivedAt": "2026-08-07T07:46:32Z",
+          "reason": "normalized_video_cutover",
+          "supersededById": "8u1Ps_mCpO4",
+          "rollbackEligible": true
+        }
+      ]
     },
     {
       "publicationState": "published",
@@ -649,8 +730,8 @@
           "url": "https://open.spotify.com/episode/5QJlHSE6JhP3ymSCNzbWxv"
         },
         "youtube": {
-          "id": "3IVDJqwT2yY",
-          "url": "https://www.youtube.com/watch?v=3IVDJqwT2yY"
+          "id": "5UOEvs59hBA",
+          "url": "https://www.youtube.com/watch?v=5UOEvs59hBA"
         },
         "vimeo": {
           "id": "1205004739",
@@ -660,7 +741,19 @@
           "id": "v7bvtu4",
           "url": "https://rumble.com/v7bvtu4-episode-7-the-brain-on-fire.html"
         }
-      }
+      },
+      "destinationArchives": [
+        {
+          "platform": "youtube",
+          "id": "3IVDJqwT2yY",
+          "url": "https://www.youtube.com/watch?v=3IVDJqwT2yY",
+          "status": "unlisted",
+          "archivedAt": "2026-08-07T07:46:32Z",
+          "reason": "normalized_video_cutover",
+          "supersededById": "5UOEvs59hBA",
+          "rollbackEligible": true
+        }
+      ]
     }
   ]
 }

@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "rolloutId": "episode-thumbnails-2026-08-05",
-  "status": "rss_com_canonical_artwork_verified_platform_remediation_pending",
-  "recordedAt": "2026-08-06T03:32:40Z",
+  "status": "current_art_verified_distribution_and_profile_remediation_pending",
+  "recordedAt": "2026-08-07T08:02:59Z",
   "authorization": "Project owner approved the episode artwork and requested a comprehensive platform thumbnail update.",
   "catalog": {
-    "revision": 2,
-    "publisherHash": "92897c80d706d72851d9ce07ad46b5bf57098481f4eb71b953052b5bb0fca909",
-    "fileSha256": "81256745c841815de10976e2fc049e2992f2c4423a44fed2c1ce4be607f707b9",
+    "revision": 10,
+    "publisherHash": "291001fd7cb325d05b51e99d1ccb6040b84e24ac21692eec90d8ea09a305ba4b",
+    "fileSha256": "04b1830acf72ba626b3438195facaae53607dd5267324792be05229f0852a919",
     "source": "publishing/master-catalog.json"
   },
   "assetManifest": "publishing/brand/asset-manifest.json",
@@ -22,33 +22,42 @@
   ],
   "platforms": {
     "youtube": {
-      "status": "live_verified",
+      "status": "normalized_replacement_live_verified",
       "updatedCount": 7,
       "variant": "16x9",
-      "verification": "Saved in the authenticated editor and read back from the public thumbnail CDN."
+      "verification": "All seven normalized replacement uploads are public with the approved 16:9 thumbnails. The prior seven uploads remain unlisted with replacement links and were not deleted.",
+      "cutoverVerifiedAt": "2026-08-07T07:46:32Z",
+      "priorUploadCount": 7,
+      "priorUploadVisibility": "unlisted",
+      "priorUploadsDeleted": false,
+      "rollbackEligible": true
     },
     "vimeo": {
       "status": "live_verified",
       "updatedCount": 7,
       "variant": "16x9",
-      "verification": "Saved in the authenticated editor and read back from public oEmbed/CDN images."
+      "verification": "Approved artwork remains verified after all seven corrected videos were replaced in place on their stable Vimeo IDs.",
+      "mediaReplacementStatus": "seven_in_place_replacements_verified",
+      "stableVideoIdsPreserved": true
     },
     "rumble": {
-      "status": "live_verified",
+      "status": "legacy_live_art_verified_corrected_uploads_staged_unlisted",
       "updatedCount": 7,
       "variant": "16x9",
-      "verification": "Saved in the authenticated editor and read back from the public creator listing/CDN after cache propagation."
+      "verification": "The approved artwork remains verified on the existing public videos. Seven corrected uploads with approved art are staged Unlisted but are not submitted pending user ownership confirmation and updated Terms review.",
+      "correctedUploadStagedCount": 7,
+      "correctedUploadsSubmitted": false
     },
     "spotifyVideo": {
-      "status": "historical_live_verified_currently_audio_only",
+      "status": "corrected_video_and_art_live_verified",
       "updatedCount": 7,
       "variant": "16x9",
       "showId": "7GGLljxmO0G3FLjPy8vfcw",
-      "verification": "Saved in Spotify for Creators and read back from Spotify's episode editor image sources.",
-      "postCutoverAuditStatus": "audio_only_video_restoration_required",
+      "verification": "All seven corrected videos are attached to the existing Spotify episode IDs; public readback confirms video, approved artwork, and approved copy for 7/7.",
+      "postCutoverAuditStatus": "seven_corrected_videos_public_verified",
       "postCutoverAuditComplete": true,
-      "postCutoverAuditDate": "2026-08-06",
-      "currentPublicVideoEpisodeCount": 0
+      "postCutoverAuditDate": "2026-08-07",
+      "currentPublicVideoEpisodeCount": 7
     },
     "spotifyEpisodeArt": {
       "status": "live_and_rss_verified",
@@ -75,7 +84,10 @@
       "duplicateCleanupComplete": true,
       "supportRequestSubmitted": true,
       "supportRequestSubmittedDate": "2026-08-06",
-      "verification": "The existing Apple show directly targets the RSS.com feed and its metadata is exact. The duplicate show and stale manual Episode 4 Draft were archived. Only five episodes are Available; RSS Episodes 1 and 2 remain Draft while Apple support reviews the submitted reprocessing request, so seven-episode public convergence is not claimed."
+      "publicVerifiedAt": "2026-08-07T05:24:00Z",
+      "duplicatePublicShowStatus": "show_1896845422_returns_404",
+      "publicDescriptionCacheStatus": "stale_json_ld_for_episodes_4_through_7",
+      "verification": "The existing Apple show directly targets the RSS.com feed and its canonical metadata is exact. Public show 1870433419 exposes exact Episodes 3-7; the duplicate show ID 1896845422 now returns 404 and the stale manual Episode 4 Draft was archived. RSS Episodes 1 and 2 remain Draft while Apple support reviews the submitted reprocessing request. Apple public JSON-LD/search caches retain legacy show wording for Episodes 4-7, so seven-episode and description-cache convergence are not claimed."
     },
     "rssCom": {
       "status": "canonical_feed_artwork_parity_verified_post_cutover",
@@ -95,9 +107,16 @@
       "reason": "The final canonical feed is ready for one-time submission and claim; no Amazon show has been claimed yet."
     },
     "instagram": {
-      "status": "existing_covers_unchanged",
+      "status": "creator_professional_verified_existing_covers_unchanged",
       "variant": "future-reel-cover",
-      "reason": "The documented post-publication workflow does not support replacing existing Reel covers. Existing posts were preserved rather than deleted and reposted."
+      "publicVerifiedAt": "2026-08-07T05:24:00Z",
+      "publicProfileId": "80068141150",
+      "publicProfessionalAccount": true,
+      "publicBusinessAccount": false,
+      "publicExternalUrl": null,
+      "publicRelevantReelCount": 3,
+      "catalogEpisodeReelMappingsVerified": false,
+      "reason": "Public profile data confirms the correct Creator professional classification, exact name, and exact bio. The website link is missing, and the three observed Reels do not provide verified catalog mappings for Episodes 3-7. The documented post-publication workflow does not support replacing existing Reel covers, so existing posts were preserved rather than deleted and reposted."
     }
   },
   "canonicalRssEvidence": {
@@ -163,9 +182,14 @@
       },
       "remoteIds": {
         "spotify": "7cAdb8GE4khC9EYKAjmYuc",
-        "youtube": "LXASEw-WFq8",
+        "youtube": "5IMYaqnQsFY",
         "vimeo": "1156414707",
         "rumble": "v74kzcw"
+      },
+      "archivedRemoteIds": {
+        "youtube": "LXASEw-WFq8",
+        "youtubeVisibility": "unlisted",
+        "rollbackEligible": true
       },
       "rssArtwork": {
         "url": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/45216186/45216186-1785986217144-c5eb148c29409.jpg",
@@ -191,9 +215,14 @@
       },
       "remoteIds": {
         "spotify": "19Pct0ClX3j1EOwJ3ySVd7",
-        "youtube": "s740_XVTaAY",
+        "youtube": "DJe0fPmTf8k",
         "vimeo": "1159441883",
         "rumble": "v74l0km"
+      },
+      "archivedRemoteIds": {
+        "youtube": "s740_XVTaAY",
+        "youtubeVisibility": "unlisted",
+        "rollbackEligible": true
       },
       "rssArtwork": {
         "url": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/45216186/45216186-1785986456927-b5c6dc7f1605c.jpg",
@@ -219,9 +248,14 @@
       },
       "remoteIds": {
         "spotify": "07OHz4sfbefOORcNi9xaUK",
-        "youtube": "59r5XFynaDo",
+        "youtube": "r5JYtE8Vm9I",
         "vimeo": "1179740758",
         "rumble": "v77zlls"
+      },
+      "archivedRemoteIds": {
+        "youtube": "59r5XFynaDo",
+        "youtubeVisibility": "unlisted",
+        "rollbackEligible": true
       },
       "rssArtwork": {
         "url": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/45216186/45216186-1785986656342-51780a29c3f4d.jpg",
@@ -247,9 +281,14 @@
       },
       "remoteIds": {
         "spotify": "0aDVuIwrRlDKxEylMj2dyw",
-        "youtube": "X8WChChyh9c",
+        "youtube": "binbLcb3f_s",
         "vimeo": "1179956166",
         "rumble": "v780pxq"
+      },
+      "archivedRemoteIds": {
+        "youtube": "X8WChChyh9c",
+        "youtubeVisibility": "unlisted",
+        "rollbackEligible": true
       },
       "rssArtwork": {
         "url": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/45216186/45216186-1785986688272-f0ff16446b3ab.jpg",
@@ -275,9 +314,14 @@
       },
       "remoteIds": {
         "spotify": "6fQAClcR4AAuueHjBNlrJC",
-        "youtube": "JyBK6KtOo_k",
+        "youtube": "N_F0hhHkIQ4",
         "vimeo": "1204939658",
         "rumble": "v7bvj32"
+      },
+      "archivedRemoteIds": {
+        "youtube": "JyBK6KtOo_k",
+        "youtubeVisibility": "unlisted",
+        "rollbackEligible": true
       },
       "rssArtwork": {
         "url": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/45216186/45216186-1785986720680-a6b9c47aeb86b.jpg",
@@ -303,9 +347,14 @@
       },
       "remoteIds": {
         "spotify": "7MbKWgPZN40KEyN5j123JC",
-        "youtube": "odNrtPEuong",
+        "youtube": "8u1Ps_mCpO4",
         "vimeo": "1204939692",
         "rumble": "v7bvk8i"
+      },
+      "archivedRemoteIds": {
+        "youtube": "odNrtPEuong",
+        "youtubeVisibility": "unlisted",
+        "rollbackEligible": true
       },
       "rssArtwork": {
         "url": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/45216186/45216186-1785986824642-a6b0d3f1feb6b.jpg",
@@ -331,9 +380,14 @@
       },
       "remoteIds": {
         "spotify": "5QJlHSE6JhP3ymSCNzbWxv",
-        "youtube": "3IVDJqwT2yY",
+        "youtube": "5UOEvs59hBA",
         "vimeo": "1205004739",
         "rumble": "v7bvtu4"
+      },
+      "archivedRemoteIds": {
+        "youtube": "3IVDJqwT2yY",
+        "youtubeVisibility": "unlisted",
+        "rollbackEligible": true
       },
       "rssArtwork": {
         "url": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/45216186/45216186-1785986855672-489d6c10e6989.jpg",
@@ -346,8 +400,9 @@
   "knownUnresolvedMetadataDrift": [
     "The show-level podcast cover remains the prior DRM EXPERIENCED design; this rollout changes episode artwork only.",
     "Apple directly targets the canonical RSS.com feed with exact metadata but still has only five Available episodes; the duplicate records are archived and support is reviewing RSS Episodes 1 and 2.",
-    "Spotify's seven prior video attachments are not present after cutover; all seven episodes are currently audio-only and need video restored against their existing episode IDs.",
+    "Rumble's seven corrected uploads are staged Unlisted but are not submitted pending user ownership confirmation and updated Terms review.",
     "RSS.com's XML feed and dashboard metadata are exact, but the separate public landing-page metadata still contains a cached RSSVERIFY token.",
-    "Amazon is ready for a one-time canonical-feed claim but has not been claimed."
+    "Amazon is ready for a one-time canonical-feed claim but has not been claimed.",
+    "Instagram is verified as a Creator professional account with exact name and bio, but its external website link is still missing."
   ]
 }

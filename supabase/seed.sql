@@ -45,10 +45,10 @@ insert into public.episodes (
     '2026-01-20',
     17,
     $$Dr. David Musnick (Dr. M), board-certified in Internal Medicine and Sports Medicine with 35+ years in regenerative and functional medicine, dives straight into one of the most common complaints he sees: brain fog.$$,
-    'https://content.rss.com/episodes/397420/3050766/dr-m-experienced/2026_08_06_08_58_14_5ecd30b1-aef2-4666-ad49-f8c0f210fea2.mp3',
+    'https://content.rss.com/episodes/397420/3050766/dr-m-experienced/2026_08_07_05_37_14_57d1a0c9-5f80-4880-bc5d-57f7eeef7cb5.mp3',
     '1156414707',
     '7cAdb8GE4khC9EYKAjmYuc',
-    'LXASEw-WFq8',
+    '5IMYaqnQsFY',
     'https://drmexperienced.com/images/episodes/brain-fog-part-1.webp'
   ),
   (
@@ -58,10 +58,10 @@ insert into public.episodes (
     '2026-01-27',
     20,
     $$Dr. David Musnick (Dr. M) picks up where Part 1 left off and gets specific about which tests make sense for brain fog and which basics help almost everyone.$$,
-    'https://content.rss.com/episodes/397420/3050765/dr-m-experienced/2026_08_06_08_58_12_56d5c865-9d3e-4c15-943c-095c535ffe7b.mp3',
+    'https://content.rss.com/episodes/397420/3050765/dr-m-experienced/2026_08_07_05_41_20_c5dc584a-9799-404f-96e5-66fd2958ad94.mp3',
     '1159441883',
     '19Pct0ClX3j1EOwJ3ySVd7',
-    's740_XVTaAY',
+    'DJe0fPmTf8k',
     'https://drmexperienced.com/images/episodes/brain-fog-part-2.webp'
   ),
   (
@@ -71,10 +71,10 @@ insert into public.episodes (
     '2026-04-03',
     20,
     $$Dr. M breaks down insomnia and sleep: difficulty falling or staying asleep, types of insomnia, and why 7+ hours of quality sleep matters for reducing inflammation in your brain and body—plus practical tools for wind-down, caffeine timing, natural supports, and more.$$,
-    'https://content.rss.com/episodes/397420/3050764/dr-m-experienced/2026_08_06_08_58_10_29cdf885-f097-4016-91fa-79229beaffe2.mp3',
+    'https://content.rss.com/episodes/397420/3050764/dr-m-experienced/2026_08_07_05_42_30_c6bd9b48-095f-4ee9-9eda-ebb0d7956d09.mp3',
     '1179740758',
     '07OHz4sfbefOORcNi9xaUK',
-    '59r5XFynaDo',
+    'r5JYtE8Vm9I',
     'https://drmexperienced.com/images/episodes/insomnia.webp'
   ),
   (
@@ -84,10 +84,10 @@ insert into public.episodes (
     '2026-04-03',
     19,
     $$Dr. Musnick explains how RF, EMF, and electrical fields affect the brain and blood-brain barrier—and practical steps to reduce exposure from phones, WiFi, Bluetooth, vehicles, and smart meters.$$,
-    'https://content.rss.com/episodes/397420/3050763/dr-m-experienced/2026_08_06_08_58_08_299310cb-53c0-4de1-88ca-684a25901bc5.mp3',
+    'https://content.rss.com/episodes/397420/3050763/dr-m-experienced/2026_08_07_05_43_51_32e2ccc6-04c8-4592-9e50-aa8d48eb9cb8.mp3',
     '1179956166',
     '0aDVuIwrRlDKxEylMj2dyw',
-    'X8WChChyh9c',
+    'binbLcb3f_s',
     'https://drmexperienced.com/images/episodes/emf.webp'
   ),
   (
@@ -97,10 +97,10 @@ insert into public.episodes (
     '2026-06-26',
     31,
     $$Dr. M takes a functional-medicine look at energy, fatigue, and mitochondrial health, including sleep, inflammation, viral reactivation, infections, mold, heavy metals, hormones, organ stress, and practical supports for ATP production.$$,
-    'https://content.rss.com/episodes/397420/3050762/dr-m-experienced/2026_08_06_08_58_06_7cc0ba78-000a-4bfe-9360-e2526cf972ab.mp3',
+    'https://content.rss.com/episodes/397420/3050762/dr-m-experienced/2026_08_07_05_46_23_1de2f4f3-aeab-457a-a02d-2bf61108132d.mp3',
     '1204939658',
     '6fQAClcR4AAuueHjBNlrJC',
-    'JyBK6KtOo_k',
+    'N_F0hhHkIQ4',
     'https://drmexperienced.com/images/episodes/energy-mitochondria.webp'
   ),
   (
@@ -110,10 +110,10 @@ insert into public.episodes (
     '2026-06-26',
     20,
     $$Dr. Musnick explains concussion and traumatic brain injury mechanisms, from neural shearing, excitotoxicity, neuroinflammation, oxidative stress, hypoxia, and blood-brain barrier disruption to persistent symptoms and recovery pathways.$$,
-    'https://content.rss.com/episodes/397420/3050761/dr-m-experienced/2026_08_06_08_58_03_e31f1115-3f5b-4192-a929-58eada8d76e1.mp3',
+    'https://content.rss.com/episodes/397420/3050761/dr-m-experienced/2026_08_07_05_55_46_4806f336-163e-4ffb-b446-e4e03bb81013.mp3',
     '1204939692',
     '7MbKWgPZN40KEyN5j123JC',
-    'odNrtPEuong',
+    '8u1Ps_mCpO4',
     'https://drmexperienced.com/images/episodes/concussion-mechanics.webp'
   ),
   (
@@ -123,10 +123,10 @@ insert into public.episodes (
     '2026-06-26',
     21,
     $$Dr. Musnick continues the brain-injury series with a focused look at the inflamed brain, including concussion, traumatic brain injury, neuroinflammation, oxidative stress, blood-brain barrier disruption, brain autoimmunity, hormone and mitochondrial effects, and persistent symptoms.$$,
-    'https://content.rss.com/episodes/397420/3050760/dr-m-experienced/2026_08_06_08_58_01_2d87eb57-8e98-435a-a59b-509643963942.mp3',
+    'https://content.rss.com/episodes/397420/3050760/dr-m-experienced/2026_08_07_05_56_36_52e27ebd-6648-4ff7-adf3-f9f7731c1b86.mp3',
     '1205004739',
     '5QJlHSE6JhP3ymSCNzbWxv',
-    '3IVDJqwT2yY',
+    '5UOEvs59hBA',
     'https://drmexperienced.com/images/episodes/brain-neuroinflammation.webp'
   )
 on conflict (slug) do update set
@@ -177,31 +177,31 @@ on conflict (episode_slug, topic_slug) do nothing;
 insert into public.episode_references (episode_slug, label, url, display_order) values
   ('brain-fog-part-1', 'Watch on Vimeo', 'https://vimeo.com/1156414707', 10),
   ('brain-fog-part-1', 'Listen on Spotify', 'https://open.spotify.com/episode/7cAdb8GE4khC9EYKAjmYuc', 20),
-  ('brain-fog-part-1', 'Watch on YouTube', 'https://www.youtube.com/watch?v=LXASEw-WFq8', 30),
+  ('brain-fog-part-1', 'Watch on YouTube', 'https://www.youtube.com/watch?v=5IMYaqnQsFY', 30),
   ('brain-fog-part-1', 'Watch on Rumble', 'https://rumble.com/v74kzcw-episode-1-brain-fog-part-1-is-your-brain-in-a-fog.html', 40),
   ('brain-fog-part-2', 'Watch on Vimeo', 'https://vimeo.com/1159441883', 10),
   ('brain-fog-part-2', 'Listen on Spotify', 'https://open.spotify.com/episode/19Pct0ClX3j1EOwJ3ySVd7', 20),
-  ('brain-fog-part-2', 'Watch on YouTube', 'https://www.youtube.com/watch?v=s740_XVTaAY', 30),
+  ('brain-fog-part-2', 'Watch on YouTube', 'https://www.youtube.com/watch?v=DJe0fPmTf8k', 30),
   ('brain-fog-part-2', 'Watch on Rumble', 'https://rumble.com/v74l0km-episode-brain-fog-part-2-testing-and-basic-solutions-for-brain-fog.html', 40),
   ('episode-3-insomnia', 'Watch on Vimeo', 'https://vimeo.com/1179740758', 10),
   ('episode-3-insomnia', 'Listen on Spotify', 'https://open.spotify.com/episode/07OHz4sfbefOORcNi9xaUK', 20),
-  ('episode-3-insomnia', 'Watch on YouTube', 'https://www.youtube.com/watch?v=59r5XFynaDo', 30),
+  ('episode-3-insomnia', 'Watch on YouTube', 'https://www.youtube.com/watch?v=r5JYtE8Vm9I', 30),
   ('episode-3-insomnia', 'Watch on Rumble', 'https://rumble.com/v77zlls-episode-3-insomnia.html', 40),
   ('episode-4-emf', 'Watch on Vimeo', 'https://vimeo.com/1179956166', 10),
   ('episode-4-emf', 'Listen on Spotify', 'https://open.spotify.com/episode/0aDVuIwrRlDKxEylMj2dyw', 20),
-  ('episode-4-emf', 'Watch on YouTube', 'https://www.youtube.com/watch?v=X8WChChyh9c', 30),
+  ('episode-4-emf', 'Watch on YouTube', 'https://www.youtube.com/watch?v=binbLcb3f_s', 30),
   ('episode-4-emf', 'Watch on Rumble', 'https://rumble.com/v780pxq-episode-4-emf.html', 40),
   ('episode-5-energy', 'Watch on Vimeo', 'https://vimeo.com/1204939658', 10),
   ('episode-5-energy', 'Listen on Spotify', 'https://open.spotify.com/episode/6fQAClcR4AAuueHjBNlrJC', 20),
-  ('episode-5-energy', 'Watch on YouTube', 'https://www.youtube.com/watch?v=JyBK6KtOo_k', 30),
+  ('episode-5-energy', 'Watch on YouTube', 'https://www.youtube.com/watch?v=N_F0hhHkIQ4', 30),
   ('episode-5-energy', 'Watch on Rumble', 'https://rumble.com/v7bvj32-episode-5-electro.magnetic.frequencies.html', 40),
   ('episode-6-concussion-and-pathophysiology', 'Watch on Vimeo', 'https://vimeo.com/1204939692', 10),
   ('episode-6-concussion-and-pathophysiology', 'Listen on Spotify', 'https://open.spotify.com/episode/7MbKWgPZN40KEyN5j123JC', 20),
-  ('episode-6-concussion-and-pathophysiology', 'Watch on YouTube', 'https://www.youtube.com/watch?v=odNrtPEuong', 30),
+  ('episode-6-concussion-and-pathophysiology', 'Watch on YouTube', 'https://www.youtube.com/watch?v=8u1Ps_mCpO4', 30),
   ('episode-6-concussion-and-pathophysiology', 'Watch on Rumble', 'https://rumble.com/v7bvk8i-episode-6-concussion-and-pathophysiology.html', 40),
   ('episode-7-the-brain-on-fire', 'Watch on Vimeo', 'https://vimeo.com/1205004739', 10),
   ('episode-7-the-brain-on-fire', 'Listen on Spotify', 'https://open.spotify.com/episode/5QJlHSE6JhP3ymSCNzbWxv', 20),
-  ('episode-7-the-brain-on-fire', 'Watch on YouTube', 'https://www.youtube.com/watch?v=3IVDJqwT2yY', 30),
+  ('episode-7-the-brain-on-fire', 'Watch on YouTube', 'https://www.youtube.com/watch?v=5UOEvs59hBA', 30),
   ('episode-7-the-brain-on-fire', 'Watch on Rumble', 'https://rumble.com/v7bvtu4-episode-7-the-brain-on-fire.html', 40)
 on conflict (episode_slug, url) do update set
   label = excluded.label,

@@ -1,6 +1,6 @@
 # Publishing platform setup
 
-Last verified: August 6, 2026.
+Last verified: August 7, 2026.
 
 The local publisher uses official upload interfaces where they exist, RSS fan-out for podcast directories, and explicit browser handoffs where a supported public creator-upload API is unavailable. Credentials stay outside the repository under `~/.config/drm-publisher/` with owner-only permissions.
 
@@ -8,15 +8,16 @@ The local publisher uses official upload interfaces where they exist, RSS fan-ou
 
 | Destination | Delivery path | Current setup state |
 |---|---|---|
-| RSS.com | Canonical podcast host | Feed `https://media.rss.com/dr-m-experienced/feed.xml` has seven parity-verified episodes, exact metadata, no `RSSVERIFY`, and no stray season value |
-| Spotify for Creators | RSS audio consumer plus per-episode Spotify video replacement | Existing show `7GGLljxmO0G3FLjPy8vfcw` receives RSS.com audio through the verified Anchor 301 and preserves seven episode identities, but all seven are currently audio-only; restore corrected video on those exact episodes |
-| Apple Podcasts | Episode audio and art directly from RSS.com | Existing show `1870433419` uses the exact RSS.com feed and has exact token-free metadata; the duplicate show and stale Episode 4 Draft were archived, but only five episodes are Available and the submitted support request for RSS Episodes 1-2 is awaiting response |
+| RSS.com | Canonical podcast host | Feed `https://media.rss.com/dr-m-experienced/feed.xml` has seven normalized, remotely decoded and loudness-verified enclosures with original GUIDs, exact XML metadata, no XML `RSSVERIFY`, and no stray season value. The separate public landing-page metadata still exposes a cached `RSSVERIFY` token |
+| Spotify for Creators | RSS audio consumer plus per-episode Spotify video replacement | Existing show `7GGLljxmO0G3FLjPy8vfcw` preserves all seven episode identities; corrected video is attached to 7/7 and public readback verifies video, approved artwork, and approved copy |
+| Apple Podcasts | Episode audio and art directly from RSS.com | Existing show `1870433419` uses the exact RSS.com feed and has exact token-free canonical metadata; the duplicate show now returns 404 and the stale Episode 4 Draft was archived. Only five episodes are Available, the support request for RSS Episodes 1-2 is awaiting response, and public JSON-LD/search caches retain legacy wording for Episodes 4-7 |
 | Amazon Music and Audible | Episode audio from RSS.com after one-time claim | Signed-in dashboard has zero claimed shows; submit the canonical RSS.com feed once, complete ownership verification, and record the stable listing ID/URL |
 | Podcast Index | Automatic RSS indexing | New RSS.com record `7982906` and old Anchor record `7799755` are both live; verify convergence after the 301 is crawled |
-| YouTube | OAuth 2 plus resumable Data API upload | Channel `UCFA1nVv4lKMBlx81gjMAOFQ` exists; upload OAuth and API audit required |
-| Vimeo | Vimeo API tus upload | User `253415660` exists; app upload access and token required |
-| Instagram | Professional-account API with resumable local upload | Public profile ID `80068141150` has exact name/bio, but no external link and currently reports non-business; professional conversion, app permissions, and a publishing ID remain required |
-| Rumble | Local browser handoff | Channel `7820170` exists; no supported public VOD upload API confirmed |
+| Production Supabase projection | Guarded SQL migrations plus exact readback | Both August 7 guarded migrations were applied after exact file-hash verification; all seven current RSS audio URLs, YouTube IDs, and `Watch on YouTube` references match catalog revision 10 |
+| YouTube | Direct full-video upload; OAuth 2 plus resumable Data API for future automation | Seven normalized replacements are public and verified. The prior seven uploads remain Unlisted with replacement links and are retained as rollback records; future API automation still needs OAuth and the applicable compliance audit |
+| Vimeo | Vimeo API tus upload or attended in-place version replacement | All seven corrected videos were replaced in place and verified on their stable existing IDs. App upload access and an upload/edit-scoped token are still required for future API automation |
+| Instagram | Creator professional-account API with resumable local upload | Public profile state independently confirms `@drmexperienced` is a Creator professional account and not a Business account. Name/bio are exact, but the external website link, authenticated Graph API publishing ID, Meta app permissions, and token remain incomplete; no Business-account conversion is required |
+| Rumble | Local browser handoff | Seven corrected uploads are staged Unlisted but not submitted. Submission is blocked on user ownership confirmation, updated Terms review, and exact release-choice approval; no supported public VOD upload API is confirmed |
 
 ## Remote rebrand status
 
@@ -24,18 +25,18 @@ The canonical short profile description is `Dr. M Experienced, with Dr. David Mu
 
 | Profile | Current public name state |
 |---|---|
-| Spotify and Apple | RSS.com and the authenticated Apple configuration use exact title/description copy with no `RSSVERIFY`. Spotify preserves all seven episode identities but currently has no video episodes. Apple still exposes only five Available episodes and has two RSS Draft records; its support request is awaiting response. Preserve both show identities rather than creating replacements |
+| Spotify and Apple | RSS.com's XML and the authenticated Apple configuration use exact title/description copy with no feed `RSSVERIFY`. Spotify preserves all seven episode identities and now has corrected video with approved art/copy on 7/7. Apple exposes only five Available episodes and has two RSS Draft records; public JSON-LD/search caches retain legacy wording for Episodes 4-7. Its support request is awaiting response. Preserve both show identities rather than creating replacements |
 | Amazon | No claimed show exists in the signed-in account; submit the canonical RSS.com feed once and record the resulting stable identity |
-| YouTube | Canonical description is published; display name remains `Dr. M Experienced` because the manager-role name save did not persist |
-| Instagram | Display name and bio are exact; handle `@drmexperienced` is unchanged. Add the website listening hub as the missing external link and complete professional-account setup |
+| YouTube | Canonical episode copy is published on the seven normalized replacement IDs; display name remains `Dr. M Experienced` because the manager-role name save did not persist. Prior episode uploads remain Unlisted and link to the replacements |
+| Instagram | Display name and bio are exact; handle `@drmexperienced` is unchanged and public state confirms Creator professional with Business false. Add the website listening hub and complete authenticated Graph API authorization; do not use the public profile ID as the publishing ID or convert the account to Business |
 | Vimeo | Display name is `Dr. M Experienced, David Musnick`, the closest form allowed by Vimeo's 32-character limit; the bio begins with canonical copy. Seven catalog episodes plus off-catalog public video `Pesto v2` are visible; review that extra video before changing it |
 | Rumble | Channel title is exact and About uses the canonical description; channel name and account username remain `drmexperienced` |
 
-The seven existing YouTube, Vimeo, and Rumble videos use the catalog's approved
-unnumbered titles, deterministic descriptions, and approved topic thumbnails as
-of August 5, 2026. Spotify video and Spotify episode art used the seven approved
-images before the RSS.com cutover; the current public Spotify records are all
-audio-only. The canonical RSS exposes seven unique 3000 x 3000 item images.
+YouTube's seven normalized public replacements, Vimeo's seven in-place corrected
+videos, Spotify's seven corrected video attachments, and the existing Rumble
+videos use approved topic thumbnails. Rumble's seven new corrected uploads are
+staged Unlisted and not submitted. The canonical RSS exposes seven unique
+3000 x 3000 item images.
 YouTube uses a safe plain-text projection that spells out comparison
 operators because Studio rejects angle brackets. Vimeo stores list items as
 native rich-text bullets, so its public oEmbed text is compared semantically
@@ -78,10 +79,12 @@ The source code, RSS.com feed, and authenticated Apple configuration now use
 metadata cleanup, media/artwork parity audit, and exact one-hop Anchor 301 are
 complete.
 
-1. Completed: RSS.com has exact show and episode metadata, no `RSSVERIFY`, no
-   stray season value, seven original GUIDs, and seven approved unnumbered titles.
-2. Completed: all seven RSS.com audio and artwork assets match the validated
-   source; the oldest and newest audio files fully decode.
+1. Completed: RSS.com's XML has exact show and episode metadata, no `RSSVERIFY`,
+   no stray season value, seven original GUIDs, and seven approved unnumbered
+   titles. Its separate public landing-page metadata still has a cached token.
+2. Completed: all seven normalized RSS.com enclosures preserve their GUIDs and
+   pass remote download, full-decode, and loudness gates; artwork parity remains
+   verified.
 3. Completed: Apple show `1870433419` was configured directly to the RSS.com
    feed at approximately 18:29 UTC on August 6, 2026. Its authenticated metadata
    is exact and token-free.
@@ -92,12 +95,15 @@ complete.
    no manual Publish action. The reprocessing request was submitted on August 6.
 5. Pending: submit the RSS.com feed once to Amazon, complete ownership
    verification, and record the stable show ID and public URL.
-6. Pending remediation: all seven public Spotify episodes are audio-only. There
-   is no account-wide video switch. Open each existing episode in Spotify for
-   Creators and use `Upload video` only after the corrected master is approved;
-   never create a duplicate episode.
-7. YouTube, Vimeo, Rumble, Spotify episode art, and canonical RSS episode-art
-   updates are complete. Reconcile Instagram captions where needed
+6. Completed August 7, 2026: all seven corrected Spotify videos are attached to
+   the existing episode IDs and public readback verifies video, approved art, and
+   approved copy for 7/7. There is no account-wide video switch; retain the
+   existing-episode `Upload video` procedure for future video episodes and leave
+   intentionally audio-only episodes as RSS audio only.
+7. YouTube, Vimeo, Spotify video/art, existing Rumble video art, and canonical
+   RSS episode-art updates are complete. Seven corrected Rumble uploads are
+   staged Unlisted but not submitted pending ownership and Terms confirmation.
+   Reconcile Instagram captions where needed
    and use approved covers for future Reels; preserve existing posts because the
    documented post-publication flow does not replace Reel covers. Do not rename
    stable handles or IDs merely to match display text.

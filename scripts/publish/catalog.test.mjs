@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -14,6 +15,7 @@ import {
   catalogAssetBindingProblems,
   catalogHash,
   comparePublishedCatalogFeed,
+  DEFAULT_CATALOG_PATH,
   episodeHash,
   findEpisode,
   htmlDescriptionToPlainText,
@@ -27,23 +29,33 @@ import {
 } from "./catalog.mjs";
 
 const expectedIdentities = [
-  [1, "7cAdb8GE4khC9EYKAjmYuc", "LXASEw-WFq8", "1156414707", "v74kzcw"],
-  [2, "19Pct0ClX3j1EOwJ3ySVd7", "s740_XVTaAY", "1159441883", "v74l0km"],
-  [3, "07OHz4sfbefOORcNi9xaUK", "59r5XFynaDo", "1179740758", "v77zlls"],
-  [4, "0aDVuIwrRlDKxEylMj2dyw", "X8WChChyh9c", "1179956166", "v780pxq"],
-  [5, "6fQAClcR4AAuueHjBNlrJC", "JyBK6KtOo_k", "1204939658", "v7bvj32"],
-  [6, "7MbKWgPZN40KEyN5j123JC", "odNrtPEuong", "1204939692", "v7bvk8i"],
-  [7, "5QJlHSE6JhP3ymSCNzbWxv", "3IVDJqwT2yY", "1205004739", "v7bvtu4"],
+  [1, "7cAdb8GE4khC9EYKAjmYuc", "5IMYaqnQsFY", "1156414707", "v74kzcw"],
+  [2, "19Pct0ClX3j1EOwJ3ySVd7", "DJe0fPmTf8k", "1159441883", "v74l0km"],
+  [3, "07OHz4sfbefOORcNi9xaUK", "r5JYtE8Vm9I", "1179740758", "v77zlls"],
+  [4, "0aDVuIwrRlDKxEylMj2dyw", "binbLcb3f_s", "1179956166", "v780pxq"],
+  [5, "6fQAClcR4AAuueHjBNlrJC", "N_F0hhHkIQ4", "1204939658", "v7bvj32"],
+  [6, "7MbKWgPZN40KEyN5j123JC", "8u1Ps_mCpO4", "1204939692", "v7bvk8i"],
+  [7, "5QJlHSE6JhP3ymSCNzbWxv", "5UOEvs59hBA", "1205004739", "v7bvtu4"],
+];
+
+const expectedArchivedYouTubeIdentities = [
+  [1, "LXASEw-WFq8"],
+  [2, "s740_XVTaAY"],
+  [3, "59r5XFynaDo"],
+  [4, "X8WChChyh9c"],
+  [5, "JyBK6KtOo_k"],
+  [6, "odNrtPEuong"],
+  [7, "3IVDJqwT2yY"],
 ];
 
 const expectedPodcastAudio = [
-  ["brain-fog-part-1", "1156414707", "https://content.rss.com/episodes/397420/3050766/dr-m-experienced/2026_08_06_08_58_14_5ecd30b1-aef2-4666-ad49-f8c0f210fea2.mp3"],
-  ["brain-fog-part-2", "1159441883", "https://content.rss.com/episodes/397420/3050765/dr-m-experienced/2026_08_06_08_58_12_56d5c865-9d3e-4c15-943c-095c535ffe7b.mp3"],
-  ["episode-3-insomnia", "1179740758", "https://content.rss.com/episodes/397420/3050764/dr-m-experienced/2026_08_06_08_58_10_29cdf885-f097-4016-91fa-79229beaffe2.mp3"],
-  ["episode-4-emf", "1179956166", "https://content.rss.com/episodes/397420/3050763/dr-m-experienced/2026_08_06_08_58_08_299310cb-53c0-4de1-88ca-684a25901bc5.mp3"],
-  ["episode-5-energy", "1204939658", "https://content.rss.com/episodes/397420/3050762/dr-m-experienced/2026_08_06_08_58_06_7cc0ba78-000a-4bfe-9360-e2526cf972ab.mp3"],
-  ["episode-6-concussion-and-pathophysiology", "1204939692", "https://content.rss.com/episodes/397420/3050761/dr-m-experienced/2026_08_06_08_58_03_e31f1115-3f5b-4192-a929-58eada8d76e1.mp3"],
-  ["episode-7-the-brain-on-fire", "1205004739", "https://content.rss.com/episodes/397420/3050760/dr-m-experienced/2026_08_06_08_58_01_2d87eb57-8e98-435a-a59b-509643963942.mp3"],
+  ["brain-fog-part-1", "1156414707", "https://content.rss.com/episodes/397420/3050766/dr-m-experienced/2026_08_07_05_37_14_57d1a0c9-5f80-4880-bc5d-57f7eeef7cb5.mp3"],
+  ["brain-fog-part-2", "1159441883", "https://content.rss.com/episodes/397420/3050765/dr-m-experienced/2026_08_07_05_41_20_c5dc584a-9799-404f-96e5-66fd2958ad94.mp3"],
+  ["episode-3-insomnia", "1179740758", "https://content.rss.com/episodes/397420/3050764/dr-m-experienced/2026_08_07_05_42_30_c6bd9b48-095f-4ee9-9eda-ebb0d7956d09.mp3"],
+  ["episode-4-emf", "1179956166", "https://content.rss.com/episodes/397420/3050763/dr-m-experienced/2026_08_07_05_43_51_32e2ccc6-04c8-4592-9e50-aa8d48eb9cb8.mp3"],
+  ["episode-5-energy", "1204939658", "https://content.rss.com/episodes/397420/3050762/dr-m-experienced/2026_08_07_05_46_23_1de2f4f3-aeab-457a-a02d-2bf61108132d.mp3"],
+  ["episode-6-concussion-and-pathophysiology", "1204939692", "https://content.rss.com/episodes/397420/3050761/dr-m-experienced/2026_08_07_05_55_46_4806f336-163e-4ffb-b446-e4e03bb81013.mp3"],
+  ["episode-7-the-brain-on-fire", "1205004739", "https://content.rss.com/episodes/397420/3050760/dr-m-experienced/2026_08_07_05_56_36_52e27ebd-6648-4ff7-adf3-f9f7731c1b86.mp3"],
 ];
 
 async function temporarySources() {
@@ -60,12 +72,21 @@ test("master catalog validates and has a deterministic hash", async () => {
   const result = validateCatalog(catalog);
   assert.deepEqual(result, { valid: true, errors: [] });
   assert.equal(catalog.schemaVersion, 1);
-  assert.equal(catalog.revision, 5);
+  assert.equal(catalog.revision, 10);
   assert.equal(catalog.episodes.length, 7);
   assert.match(catalogHash(catalog), /^[a-f0-9]{64}$/);
   assert.equal(catalogHash(catalog), catalogHash(structuredClone(catalog)));
   assert.ok(Object.values(catalog.assetRegistry).every((asset) => asset.uri.startsWith("dropbox:")));
-  assert.ok(Object.values(catalog.assetRegistry).every((asset) => asset.sha256 === null && asset.sizeBytes === null));
+  assert.ok(
+    Object.values(catalog.assetRegistry)
+      .filter((asset) => asset.status === "unmounted")
+      .every((asset) => asset.sha256 === null && asset.sizeBytes === null)
+  );
+  assert.ok(
+    Object.values(catalog.assetRegistry)
+      .filter((asset) => asset.status === "verified")
+      .every((asset) => /^[a-f0-9]{64}$/.test(asset.sha256) && Number.isInteger(asset.sizeBytes))
+  );
 });
 
 test("HTML descriptions have a deterministic readable plain-text projection", () => {
@@ -224,6 +245,7 @@ test("catalog scales beyond the initial seven episodes with contiguous identitie
   episode.rssGuid = "00000000-0000-4000-8000-000000000008";
   episode.title = "A Future Episode - Ready for Distribution";
   episode.aliases = { titles: [], slugs: [] };
+  episode.destinationArchives = [];
   episode.destinations = {
     spotify: { id: "AAAAAAAAAAAAAAAAAAAAA8", url: "https://open.spotify.com/episode/AAAAAAAAAAAAAAAAAAAAA8" },
     youtube: { id: "ep000000008", url: "https://www.youtube.com/watch?v=ep000000008" },
@@ -249,6 +271,7 @@ test("catalog supports draft episodes before hosts assign remote identities", as
   episode.publishDate = null;
   episode.feedPublishedAt = null;
   episode.aliases = { titles: [], slugs: [] };
+  episode.destinationArchives = [];
   episode.destinations = { spotify: null, youtube: null, vimeo: null, rumble: null };
   expanded.episodes.push(episode);
 
@@ -518,11 +541,22 @@ test("catalog asset binding enforces registered roles and verified fingerprints"
     podcastAudio: null,
   };
 
-  const pending = catalogAssetBindingProblems(catalog, episode, inspected);
+  const pendingCatalog = structuredClone(catalog);
+  pendingCatalog.assetRegistry[assetId] = {
+    ...pendingCatalog.assetRegistry[assetId],
+    status: "unmounted",
+    sha256: null,
+    sizeBytes: null,
+  };
+  const pending = catalogAssetBindingProblems(
+    pendingCatalog,
+    findEpisode(pendingCatalog, 1),
+    inspected
+  );
   assert.deepEqual(pending.errors, []);
   assert.ok(pending.warnings.some((warning) => warning.includes(assetId)));
 
-  const verifiedCatalog = structuredClone(catalog);
+  const verifiedCatalog = structuredClone(pendingCatalog);
   verifiedCatalog.assetRegistry[assetId] = {
     ...verifiedCatalog.assetRegistry[assetId],
     status: "verified",
@@ -570,6 +604,131 @@ test("all stable destination identities are explicit and support lookup", async 
     }
     assert.equal(findEpisode(catalog, episode.slug)?.number, number);
     assert.equal(findEpisode(catalog, episode.rssGuid)?.number, number);
+  }
+});
+
+test("YouTube cutover projects normalized public IDs and retains the prior uploads as rollback archives", async () => {
+  const catalog = await loadCatalog();
+  const catalogBytes = await fs.readFile(DEFAULT_CATALOG_PATH);
+  const platformProjection = JSON.parse(
+    await fs.readFile(new URL("../../src/data/episodes-from-platforms.json", import.meta.url), "utf8")
+  );
+  const enrichment = JSON.parse(
+    await fs.readFile(new URL("../../src/data/episodes-enrichment.json", import.meta.url), "utf8")
+  );
+  const seed = await fs.readFile(new URL("../../supabase/seed.sql", import.meta.url), "utf8");
+  const audit = JSON.parse(
+    await fs.readFile(new URL("../../publishing/audio-replacement-audit.json", import.meta.url), "utf8")
+  );
+  const titleReceipt = JSON.parse(
+    await fs.readFile(new URL("../../publishing/episode-title-migration.json", import.meta.url), "utf8")
+  );
+  const thumbnailReceipt = JSON.parse(
+    await fs.readFile(new URL("../../publishing/episode-thumbnail-rollout.json", import.meta.url), "utf8")
+  );
+  const platforms = JSON.parse(
+    await fs.readFile(new URL("../../publishing/platforms.json", import.meta.url), "utf8")
+  );
+  const migration = await fs.readFile(
+    new URL("../../supabase/migrations/20260807074632_publish_normalized_youtube_destinations.sql", import.meta.url),
+    "utf8"
+  );
+
+  for (const [number, , currentYouTubeId, vimeoId] of expectedIdentities) {
+    const episode = findEpisode(catalog, number);
+    const [, archivedYouTubeId] = expectedArchivedYouTubeIdentities.find(([candidate]) => candidate === number);
+    const archives = episode.destinationArchives.filter((archive) => archive.platform === "youtube");
+
+    assert.deepEqual(archives, [{
+      platform: "youtube",
+      id: archivedYouTubeId,
+      url: `https://www.youtube.com/watch?v=${archivedYouTubeId}`,
+      status: "unlisted",
+      archivedAt: "2026-08-07T07:46:32Z",
+      reason: "normalized_video_cutover",
+      supersededById: currentYouTubeId,
+      rollbackEligible: true,
+    }]);
+    assert.equal(findEpisode(catalog, { platform: "youtube", id: archivedYouTubeId }), null);
+    assert.equal(platformProjection.find((item) => item.number === number)?.youtubeId, currentYouTubeId);
+    assert.ok(
+      enrichment[vimeoId].references.some(
+        (reference) => reference.label === "Watch on YouTube" &&
+          reference.url === `https://www.youtube.com/watch?v=${currentYouTubeId}`
+      ),
+      `episode ${number} enrichment did not project the current YouTube URL`
+    );
+    assert.match(seed, new RegExp(`['"]${currentYouTubeId}['"]`));
+    assert.doesNotMatch(seed, new RegExp(archivedYouTubeId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+
+    const auditTarget = audit.episodes
+      .find((item) => item.number === number)
+      .remoteReplacementTargets.find((target) => target.platform === "youtube");
+    assert.equal(auditTarget.status, "verified_public_cutover");
+    assert.equal(auditTarget.existingId, currentYouTubeId);
+    assert.deepEqual(
+      [auditTarget.cutover.currentId, auditTarget.cutover.priorId],
+      [currentYouTubeId, archivedYouTubeId]
+    );
+    assert.equal(auditTarget.cutover.priorVisibility, "unlisted");
+    assert.equal(auditTarget.cutover.deletePerformed, false);
+    assert.equal(auditTarget.cutover.rollbackEligible, true);
+
+    const titleEpisode = titleReceipt.episodes.find((item) => item.episodeNumber === number);
+    const thumbnailEpisode = thumbnailReceipt.episodes.find((item) => item.episodeNumber === number);
+    assert.deepEqual(
+      [titleEpisode.remoteIds.youtube, titleEpisode.archivedRemoteIds.youtube],
+      [currentYouTubeId, archivedYouTubeId]
+    );
+    assert.deepEqual(
+      [thumbnailEpisode.remoteIds.youtube, thumbnailEpisode.archivedRemoteIds.youtube],
+      [currentYouTubeId, archivedYouTubeId]
+    );
+    assert.match(migration, new RegExp(currentYouTubeId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    assert.match(migration, new RegExp(archivedYouTubeId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  }
+
+  assert.equal(platforms.platforms.youtube.currentPublicVideoCount, 7);
+  assert.equal(platforms.platforms.youtube.priorVideoCount, 7);
+  assert.equal(platforms.platforms.youtube.priorVideosDeleted, false);
+  assert.equal(thumbnailReceipt.catalog.revision, catalog.revision);
+  assert.equal(thumbnailReceipt.catalog.publisherHash, catalogHash(catalog));
+  assert.equal(
+    thumbnailReceipt.catalog.fileSha256,
+    createHash("sha256").update(catalogBytes).digest("hex")
+  );
+});
+
+test("catalog validation rejects a YouTube archive that is active or points at the wrong successor", async () => {
+  const catalog = await loadCatalog();
+
+  const activeArchive = structuredClone(catalog);
+  activeArchive.episodes[0].destinationArchives[0].id = activeArchive.episodes[0].destinations.youtube.id;
+  activeArchive.episodes[0].destinationArchives[0].url = activeArchive.episodes[0].destinations.youtube.url;
+  const activeResult = validateCatalog(activeArchive);
+  assert.equal(activeResult.valid, false);
+  assert.ok(activeResult.errors.some((error) => error.includes("is still active")), activeResult.errors.join("\n"));
+
+  const wrongSuccessor = structuredClone(catalog);
+  wrongSuccessor.episodes[0].destinationArchives[0].supersededById = wrongSuccessor.episodes[1].destinations.youtube.id;
+  const successorResult = validateCatalog(wrongSuccessor);
+  assert.equal(successorResult.valid, false);
+  assert.ok(
+    successorResult.errors.some((error) => error.includes("must match the active youtube destination")),
+    successorResult.errors.join("\n")
+  );
+});
+
+test("checked-in catalog projection migrations are transaction-wrapped and contain no patch artifacts", async () => {
+  for (const relativePath of [
+    "../../supabase/migrations/20260807061500_publish_normalized_rss_audio.sql",
+    "../../supabase/migrations/20260807074632_publish_normalized_youtube_destinations.sql",
+  ]) {
+    const sql = await fs.readFile(new URL(relativePath, import.meta.url), "utf8");
+    assert.doesNotMatch(sql, /^\+/m, `${relativePath} contains a literal patch-marker prefix`);
+    assert.doesNotMatch(sql, /^(?:<{7}|={7}|>{7})/m, `${relativePath} contains a merge-conflict marker`);
+    assert.match(sql, /^begin;$/m, `${relativePath} is not transaction-wrapped`);
+    assert.match(sql, /^commit;$/m, `${relativePath} is not transaction-wrapped`);
   }
 });
 

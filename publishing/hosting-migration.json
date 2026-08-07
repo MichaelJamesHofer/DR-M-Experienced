@@ -152,10 +152,11 @@
       "partnerProgramActive": false,
       "publicDescriptionVerificationTokenPresent": false,
       "episodeCount": 7,
-      "publicVideoEpisodeCount": 0,
-      "videoStateAuditedAt": "2026-08-06",
-      "videoState": "audio_only_after_host_cutover",
-      "videoRestorationRequired": true,
+      "publicVideoEpisodeCount": 7,
+      "videoStateAuditedAt": "2026-08-07",
+      "videoState": "corrected_video_restored_on_all_existing_episode_ids",
+      "videoRestorationRequired": false,
+      "approvedVideoArtworkAndCopyCount": 7,
       "monetizationReviewedAt": "2026-08-06T16:49:00Z",
       "redirectUiReadyAt": "2026-08-06T16:49:00Z",
       "verifiedAfterCutover": true,
@@ -175,7 +176,9 @@
       "dashboardVerificationTokenPresent": false,
       "availableEpisodeCount": 5,
       "publicDescriptionVerificationTokenPresent": false,
-      "publicLookupLegacyMetadataPresent": false,
+      "publicLookupLegacyMetadataPresent": true,
+      "publicLookupLegacyMetadataScope": "episode_json_ld_and_search_cache_for_episodes_4_through_7",
+      "publicLookupLegacyMetadataAuditedAt": "2026-08-07T05:24:00Z",
       "draftEpisodeCount": 2,
       "dashboardAllEpisodesCount": 7,
       "dashboardShowCount": 1,
@@ -201,6 +204,8 @@
       "duplicateDraftAppleShowId": "1896845422",
       "duplicateDraftHasRssFeed": false,
       "duplicateDraftShowArchivedDate": "2026-08-06",
+      "duplicateDraftPublicLookupStatus": 404,
+      "duplicateDraftPublicLookupCheckedAt": "2026-08-07T05:24:00Z",
       "archivedManualEpisodes": [
         {
           "episodeNumber": 4,
@@ -234,7 +239,7 @@
       "publicLookupTrackCount": 5,
       "episodeConvergenceStatus": "support_request_submitted_awaiting_response",
       "verifiedAfterCutover": true,
-      "verifiedAfterCutoverAt": "2026-08-06T20:26:34Z"
+      "verifiedAfterCutoverAt": "2026-08-07T05:24:00Z"
     },
     "podcastIndex": {
       "newRssComFeedId": "7982906",
@@ -251,7 +256,7 @@
       "existingListingRequiresIdentification": false,
       "publicListingFound": false,
       "currentAccountClaimedShowCount": 0,
-      "absenceReviewedAt": "2026-08-05T04:58:04Z",
+      "absenceReviewedAt": "2026-08-07T05:24:00Z",
       "verifiedAfterCutover": false
     }
   },
@@ -275,14 +280,6 @@
         "deletionAuthorized": false
       },
       {
-        "code": "spotify_video_restoration_required",
-        "showId": "7GGLljxmO0G3FLjPy8vfcw",
-        "episodeCount": 7,
-        "publicVideoEpisodeCount": 0,
-        "auditedAt": "2026-08-06",
-        "restoreAgainstExistingEpisodeIds": true
-      },
-      {
         "code": "rss_com_public_landing_page_cache_drift",
         "feedMetadataExact": true,
         "dashboardMetadataExact": true,
@@ -297,14 +294,22 @@
     ]
   },
   "productionWebsiteProjection": {
-    "status": "public_deployment_outage",
+    "status": "public_deployment_healthy",
     "staticProjectionVerified": true,
-    "publicUrlAvailable": false,
-    "publicHttpStatus": 404,
-    "outageProvider": "github_pages",
+    "publicUrlAvailable": true,
+    "publicHttpStatus": 200,
+    "wwwRedirectsToApex": true,
+    "recoveryVerifiedAt": "2026-08-07T05:24:00Z",
+    "outageProvider": null,
     "deploymentRetryQueuedAt": "2026-08-06T21:23:35Z",
     "guardedSupabaseMigrationApplied": true,
     "migrationFile": "supabase/migrations/20260806164500_repoint_episode_audio_to_rss_com.sql",
+    "normalizedMediaMigrationsApplied": [
+      "supabase/migrations/20260807061500_publish_normalized_rss_audio.sql",
+      "supabase/migrations/20260807074632_publish_normalized_youtube_destinations.sql"
+    ],
+    "normalizedMediaReadbackVerifiedAt": "2026-08-07",
+    "normalizedMediaCatalogRevision": 10,
     "catalogVerificationCommand": "npm run verify:catalog",
     "catalogVerificationPassed": true,
     "publishedEpisodeCount": 7

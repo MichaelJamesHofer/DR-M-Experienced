@@ -42,6 +42,9 @@ jobs:
       - name: Type check
         run: npm run typecheck
 
+      - name: Test production environment guard
+        run: npm run test:production-env
+
       - name: Test publisher
         run: npm run test:publisher
 
@@ -69,6 +72,12 @@ jobs:
           SUPABASE_CATALOG_KEY: ${{ secrets.SUPABASE_CATALOG_KEY }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
         run: npm run verify:catalog
+
+      - name: Verify production environment
+        if: github.event_name != 'pull_request'
+        env:
+          NEXT_PUBLIC_POSTHOG_API_KEY: ${{ secrets.NEXT_PUBLIC_POSTHOG_API_KEY }}
+        run: npm run verify:production-env
 
       - name: Build static site for review
         if: github.event_name == 'pull_request'

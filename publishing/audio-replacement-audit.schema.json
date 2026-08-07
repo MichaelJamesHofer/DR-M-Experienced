@@ -1,0 +1,446 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://drmexperienced.com/schemas/audio-replacement-audit.json",
+  "title": "Dr. M audio replacement audit after local delivery validation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "auditId",
+    "auditedAt",
+    "updatedAt",
+    "status",
+    "canonicalFeedUrl",
+    "measurement",
+    "protectedIdentityFields",
+    "localDelivery",
+    "episodes",
+    "replacementPolicy",
+    "platformNotes"
+  ],
+  "properties": {
+    "$schema": { "const": "./audio-replacement-audit.schema.json" },
+    "schemaVersion": { "const": 2 },
+    "auditId": { "const": "canonical-audio-loudness-2026-08-06" },
+    "auditedAt": { "type": "string", "format": "date" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "status": {
+      "enum": [
+        "validated_local_delivery_pending_remote_replacement",
+        "rss_com_remote_replacement_verified_downstream_refresh_unverified"
+      ]
+    },
+    "canonicalFeedUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
+    "measurement": { "$ref": "#/$defs/measurement" },
+    "protectedIdentityFields": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/nonBlank" }
+    },
+    "localDelivery": { "$ref": "#/$defs/localDelivery" },
+    "remoteReplacement": { "$ref": "#/$defs/remoteReplacement" },
+    "episodes": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": { "$ref": "#/$defs/episode" }
+    },
+    "replacementPolicy": { "$ref": "#/$defs/replacementPolicy" },
+    "platformNotes": { "$ref": "#/$defs/platformNotes" }
+  },
+  "$defs": {
+    "nonBlank": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tool",
+        "audioStream",
+        "targetIntegratedLufs",
+        "integratedToleranceLufs",
+        "maximumTruePeakDbtp",
+        "acceptanceIntegratedRangeLufs"
+      ],
+      "properties": {
+        "tool": { "$ref": "#/$defs/nonBlank" },
+        "audioStream": { "$ref": "#/$defs/nonBlank" },
+        "targetIntegratedLufs": { "const": -16 },
+        "integratedToleranceLufs": { "const": 1 },
+        "maximumTruePeakDbtp": { "const": -1 },
+        "acceptanceIntegratedRangeLufs": {
+          "type": "array",
+          "prefixItems": [{ "const": -17 }, { "const": -15 }],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        }
+      }
+    },
+    "localDelivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "batchId",
+        "manifestSha256",
+        "sourceMeasurementsSha256",
+        "status",
+        "validatedAt",
+        "integratedAt",
+        "catalogRevision",
+        "uploadAuthorized",
+        "uploadsPerformed"
+      ],
+      "properties": {
+        "batchId": { "const": "20260806T2253-0600-first-seven-loudness-v2" },
+        "manifestSha256": { "$ref": "#/$defs/sha256" },
+        "sourceMeasurementsSha256": { "$ref": "#/$defs/sha256" },
+        "status": { "const": "validated_local_delivery" },
+        "validatedAt": { "type": "string", "format": "date-time" },
+        "integratedAt": { "type": "string", "format": "date-time" },
+        "catalogRevision": { "type": "integer", "minimum": 7 },
+        "uploadAuthorized": { "const": false },
+        "uploadsPerformed": { "const": false }
+      }
+    },
+    "remoteReplacement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "status",
+        "verifiedAt",
+        "receiptSha256",
+        "baselineFeedSha256",
+        "currentFeedSha256",
+        "allSevenGuidsRetained",
+        "allSevenEnclosureUrlsChanged",
+        "downloadsPassed",
+        "fullDecodesPassed",
+        "loudnessGatesPassed",
+        "downstreamRefreshVerified"
+      ],
+      "properties": {
+        "provider": { "const": "rss.com" },
+        "status": { "const": "verified_remote_replacement" },
+        "verifiedAt": { "type": "string", "format": "date-time" },
+        "receiptSha256": { "$ref": "#/$defs/sha256" },
+        "baselineFeedSha256": { "$ref": "#/$defs/sha256" },
+        "currentFeedSha256": { "$ref": "#/$defs/sha256" },
+        "allSevenGuidsRetained": { "const": true },
+        "allSevenEnclosureUrlsChanged": { "const": true },
+        "downloadsPassed": { "const": 7 },
+        "fullDecodesPassed": { "const": 7 },
+        "loudnessGatesPassed": { "const": 7 },
+        "downstreamRefreshVerified": { "const": false }
+      }
+    },
+    "episode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "number",
+        "title",
+        "rssGuid",
+        "publishedAudioBaseline",
+        "correctedSourceRender",
+        "validatedDelivery",
+        "remoteReplacementTargets"
+      ],
+      "properties": {
+        "number": { "type": "integer", "minimum": 1, "maximum": 7 },
+        "title": { "$ref": "#/$defs/nonBlank" },
+        "rssGuid": { "type": "string", "format": "uuid" },
+        "publishedAudioBaseline": { "$ref": "#/$defs/publishedAudioBaseline" },
+        "correctedSourceRender": { "$ref": "#/$defs/correctedSourceRender" },
+        "validatedDelivery": { "$ref": "#/$defs/validatedDelivery" },
+        "remoteReplacementTargets": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/remoteTarget" }
+        }
+      }
+    },
+    "publishedAudioBaseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["measuredAt", "integratedLufs", "truePeakDbtp", "status"],
+      "properties": {
+        "measuredAt": { "type": "string", "format": "date" },
+        "integratedLufs": { "type": "number" },
+        "truePeakDbtp": { "type": "number" },
+        "status": { "const": "published_pending_replacement" }
+      }
+    },
+    "correctedSourceRender": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sha256",
+        "integratedLufs",
+        "truePeakDbtp",
+        "measurementEvidenceSha256",
+        "decodeEvidenceSha256",
+        "assessment"
+      ],
+      "properties": {
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "integratedLufs": { "type": "number", "exclusiveMaximum": -17 },
+        "truePeakDbtp": { "type": "number" },
+        "measurementEvidenceSha256": { "$ref": "#/$defs/sha256" },
+        "decodeEvidenceSha256": { "$ref": "#/$defs/sha256" },
+        "assessment": { "const": "under_delivery_target" }
+      }
+    },
+    "validatedAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assetId",
+        "sha256",
+        "sizeBytes",
+        "durationSeconds",
+        "integratedLufs",
+        "truePeakDbtp"
+      ],
+      "properties": {
+        "assetId": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "sizeBytes": { "type": "integer", "minimum": 1 },
+        "durationSeconds": { "type": "number", "exclusiveMinimum": 0 },
+        "integratedLufs": { "type": "number", "minimum": -17, "maximum": -15 },
+        "truePeakDbtp": { "type": "number", "maximum": -1 }
+      }
+    },
+    "validatedDelivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "sourceMode",
+        "completedAt",
+        "masterVideo",
+        "podcastAudio",
+        "platformDerivedVideos",
+        "verification"
+      ],
+      "properties": {
+        "status": { "const": "validated_local_delivery" },
+        "sourceMode": { "enum": ["reencoded", "validated_v1_candidate"] },
+        "completedAt": { "type": "string", "format": "date-time" },
+        "masterVideo": { "$ref": "#/$defs/validatedAsset" },
+        "podcastAudio": { "$ref": "#/$defs/validatedAsset" },
+        "platformDerivedVideos": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/platformDerivedVideo" }
+        },
+        "verification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["fullDecode", "sourceUnchanged", "videoPacketContentPreserved", "videoEssenceSha256"],
+          "properties": {
+            "fullDecode": { "const": true },
+            "sourceUnchanged": { "const": true },
+            "videoPacketContentPreserved": { "const": true },
+            "videoEssenceSha256": { "$ref": "#/$defs/sha256" }
+          }
+        }
+      }
+    },
+    "platformDerivedVideo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "platform",
+        "assetId",
+        "catalogRevision",
+        "receiptSha256",
+        "uri",
+        "sha256",
+        "sizeBytes",
+        "mediaType",
+        "videoCodec",
+        "averageBitrateBitsPerSecond",
+        "durationSeconds",
+        "integratedLufs",
+        "truePeakDbtp",
+        "status"
+      ],
+      "properties": {
+        "platform": { "enum": ["spotify", "youtube", "vimeo", "rumble", "instagram"] },
+        "assetId": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "catalogRevision": { "type": "integer", "minimum": 8 },
+        "receiptSha256": { "$ref": "#/$defs/sha256" },
+        "uri": { "type": "string", "pattern": "^dropbox:[^/\\\\][^\\\\]*$" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "sizeBytes": { "type": "integer", "minimum": 1 },
+        "mediaType": { "const": "video/mp4" },
+        "videoCodec": { "$ref": "#/$defs/nonBlank" },
+        "averageBitrateBitsPerSecond": { "type": "integer", "minimum": 1 },
+        "durationSeconds": { "type": "number", "exclusiveMinimum": 0 },
+        "integratedLufs": { "type": "number", "minimum": -17, "maximum": -15 },
+        "truePeakDbtp": { "type": "number", "maximum": -1 },
+        "status": { "const": "validated_local_derivative" }
+      }
+    },
+    "remoteTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["platform", "assetRole", "action", "status", "existingId", "existingUrl"],
+      "properties": {
+        "platform": { "enum": ["rssCom", "spotify", "vimeo", "youtube", "rumble", "apple", "amazon", "instagram"] },
+        "assetRole": { "enum": ["podcastAudio", "fullVideo", "instagramReel"] },
+        "action": { "$ref": "#/$defs/nonBlank" },
+        "status": {
+          "enum": [
+            "pending",
+            "verified_remote_replacement",
+            "verified_public_cutover",
+            "pending_capability_confirmation",
+            "decision_required",
+            "inspection_required",
+            "pending_rss_fanout",
+            "blocked_show_unclaimed",
+            "blocked_platform_derivative_required",
+            "not_in_scope"
+          ]
+        },
+        "existingId": { "type": ["string", "null"], "minLength": 1 },
+        "existingUrl": { "type": ["string", "null"], "format": "uri" },
+        "verification": { "$ref": "#/$defs/remoteVerification" },
+        "cutover": { "$ref": "#/$defs/directVideoCutover" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "status": { "const": "verified_public_cutover" } },
+            "required": ["status"]
+          },
+          "then": {
+            "required": ["cutover"],
+            "properties": {
+              "platform": { "const": "youtube" },
+              "assetRole": { "const": "fullVideo" },
+              "cutover": { "$ref": "#/$defs/directVideoCutover" }
+            }
+          }
+        }
+      ]
+    },
+    "directVideoCutover": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verifiedAt",
+        "currentId",
+        "currentUrl",
+        "priorId",
+        "priorUrl",
+        "currentVisibility",
+        "priorVisibility",
+        "publicReadbackVerified",
+        "metadataVerified",
+        "thumbnailVerified",
+        "priorDescriptionLinksToCurrent",
+        "deletePerformed",
+        "rollbackEligible"
+      ],
+      "properties": {
+        "verifiedAt": { "type": "string", "format": "date-time" },
+        "currentId": { "type": "string", "pattern": "^[A-Za-z0-9_-]{11}$" },
+        "currentUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "priorId": { "type": "string", "pattern": "^[A-Za-z0-9_-]{11}$" },
+        "priorUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "currentVisibility": { "const": "public" },
+        "priorVisibility": { "const": "unlisted" },
+        "publicReadbackVerified": { "const": true },
+        "metadataVerified": { "const": true },
+        "thumbnailVerified": { "const": true },
+        "priorDescriptionLinksToCurrent": { "const": true },
+        "deletePerformed": { "const": false },
+        "rollbackEligible": { "const": true }
+      }
+    },
+    "remoteVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verifiedAt",
+        "receiptSha256",
+        "priorUrl",
+        "currentUrl",
+        "urlChanged",
+        "sha256",
+        "sizeBytes",
+        "mediaType",
+        "durationSeconds",
+        "bitRate",
+        "integratedLufs",
+        "truePeakDbtp",
+        "fullDecodePassed"
+      ],
+      "properties": {
+        "verifiedAt": { "type": "string", "format": "date-time" },
+        "receiptSha256": { "$ref": "#/$defs/sha256" },
+        "priorUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "currentUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "urlChanged": { "const": true },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "sizeBytes": { "type": "integer", "minimum": 1 },
+        "mediaType": { "const": "audio/mpeg" },
+        "durationSeconds": { "type": "number", "exclusiveMinimum": 0 },
+        "bitRate": { "type": "integer", "minimum": 1 },
+        "integratedLufs": { "type": "number", "minimum": -17, "maximum": -15 },
+        "truePeakDbtp": { "type": "number", "maximum": -1 },
+        "fullDecodePassed": { "const": true }
+      }
+    },
+    "replacementPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "replaceExistingRssEpisode",
+        "deleteOrRecreateRssEpisode",
+        "preserveGuid",
+        "requireFullDecode",
+        "requireSha256",
+        "requireDurationAndSyncCheck",
+        "requireExactFileApprovalBeforePublicSave",
+        "spotifyVideoUsesCorrectedFullVideo",
+        "updateSupabaseWhenEnclosureUrlChanges",
+        "verifyFeedAndRemoteIdsAfterReplacement"
+      ],
+      "properties": {
+        "replaceExistingRssEpisode": { "const": true },
+        "deleteOrRecreateRssEpisode": { "const": false },
+        "preserveGuid": { "const": true },
+        "requireFullDecode": { "const": true },
+        "requireSha256": { "const": true },
+        "requireDurationAndSyncCheck": { "const": true },
+        "requireExactFileApprovalBeforePublicSave": { "const": true },
+        "spotifyVideoUsesCorrectedFullVideo": { "const": true },
+        "updateSupabaseWhenEnclosureUrlChanges": { "const": true },
+        "verifyFeedAndRemoteIdsAfterReplacement": { "const": true }
+      }
+    },
+    "platformNotes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rssCom", "apple", "amazon", "spotifyAudio", "spotifyVideo", "vimeo", "youtube", "rumble", "instagram"],
+      "properties": {
+        "rssCom": { "$ref": "#/$defs/nonBlank" },
+        "apple": { "$ref": "#/$defs/nonBlank" },
+        "amazon": { "$ref": "#/$defs/nonBlank" },
+        "spotifyAudio": { "$ref": "#/$defs/nonBlank" },
+        "spotifyVideo": { "$ref": "#/$defs/nonBlank" },
+        "vimeo": { "$ref": "#/$defs/nonBlank" },
+        "youtube": { "$ref": "#/$defs/nonBlank" },
+        "rumble": { "$ref": "#/$defs/nonBlank" },
+        "instagram": { "$ref": "#/$defs/nonBlank" }
+      }
+    }
+  }
+}

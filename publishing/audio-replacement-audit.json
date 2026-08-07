@@ -1,8 +1,10 @@
 {
-  "schemaVersion": 1,
+  "$schema": "./audio-replacement-audit.schema.json",
+  "schemaVersion": 2,
   "auditId": "canonical-audio-loudness-2026-08-06",
   "auditedAt": "2026-08-06",
-  "status": "awaiting_corrected_audio_and_video_masters",
+  "updatedAt": "2026-08-07T08:02:59Z",
+  "status": "rss_com_remote_replacement_verified_downstream_refresh_unverified",
   "canonicalFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
   "measurement": {
     "tool": "ffmpeg loudnorm full-file analysis",
@@ -10,7 +12,10 @@
     "targetIntegratedLufs": -16,
     "integratedToleranceLufs": 1,
     "maximumTruePeakDbtp": -1,
-    "acceptanceIntegratedRangeLufs": [-17, -15]
+    "acceptanceIntegratedRangeLufs": [
+      -17,
+      -15
+    ]
   },
   "protectedIdentityFields": [
     "RSS GUID",
@@ -19,66 +24,1039 @@
     "episode title",
     "episode artwork",
     "Spotify episode ID",
-    "YouTube video ID",
+    "active YouTube video ID and archived predecessor ID",
     "Vimeo video ID",
     "Rumble video ID"
   ],
+  "localDelivery": {
+    "batchId": "20260806T2253-0600-first-seven-loudness-v2",
+    "manifestSha256": "d1e31257597f905835d5ed1cac37d7017a3c4f1babba61908c44a7c1c7970f70",
+    "sourceMeasurementsSha256": "2c547683cb8c5fecb8ff7aead759270d5deb7f9949e6102bc3e4b590db4f8b51",
+    "status": "validated_local_delivery",
+    "validatedAt": "2026-08-06T23:14:33-06:00",
+    "integratedAt": "2026-08-07T05:20:25.932Z",
+    "catalogRevision": 7,
+    "uploadAuthorized": false,
+    "uploadsPerformed": false
+  },
   "episodes": [
     {
       "number": 1,
       "title": "Brain Fog, Part 1 - Is Your Brain in a Fog?",
       "rssGuid": "c9b853b6-a828-4012-9998-217919ff9163",
-      "inputIntegratedLufs": -28.75,
-      "inputTruePeakDbtp": -7.5,
-      "replacementRecommended": true
+      "publishedAudioBaseline": {
+        "measuredAt": "2026-08-06",
+        "integratedLufs": -28.75,
+        "truePeakDbtp": -7.5,
+        "status": "published_pending_replacement"
+      },
+      "correctedSourceRender": {
+        "sha256": "5be4feefbdca2417e8a97527ea3f13d072bb07b0549127d590998f1977c6dd60",
+        "integratedLufs": -22.51,
+        "truePeakDbtp": -1.18,
+        "measurementEvidenceSha256": "961cfe596b3774d6fb21c9f1c76d75a102a17c93479664513aae5ae8d1af559a",
+        "decodeEvidenceSha256": "c989710107a789306ffb61650ab3161ef8fcbf3ae03f1506e82318e2f69cf80c",
+        "assessment": "under_delivery_target"
+      },
+      "validatedDelivery": {
+        "status": "validated_local_delivery",
+        "sourceMode": "validated_v1_candidate",
+        "completedAt": "2026-08-06T23:03:26-06:00",
+        "masterVideo": {
+          "assetId": "episode-001-master-video",
+          "sha256": "bc873595eb688c19a1684af6d4bfac720a9afb2d4c4b017ecc299e4e673716d5",
+          "sizeBytes": 936971338,
+          "durationSeconds": 1021.2,
+          "integratedLufs": -16.21,
+          "truePeakDbtp": -1.32
+        },
+        "podcastAudio": {
+          "assetId": "episode-001-podcast-audio",
+          "sha256": "4d7821bbd98fb7830100f8af415a17f68b803043c1b6bb09429f51b56c746d5a",
+          "sizeBytes": 24509421,
+          "durationSeconds": 1021.2,
+          "integratedLufs": -16.47,
+          "truePeakDbtp": -1.73
+        },
+        "platformDerivedVideos": [],
+        "verification": {
+          "fullDecode": true,
+          "sourceUnchanged": true,
+          "videoPacketContentPreserved": true,
+          "videoEssenceSha256": "e279731e7ac088b188eab6611e3a1e16e52ec66ae6c83b35d1f2d7f6dd985681"
+        }
+      },
+      "remoteReplacementTargets": [
+        {
+          "platform": "rssCom",
+          "assetRole": "podcastAudio",
+          "action": "replace_audio_in_existing_episode",
+          "status": "verified_remote_replacement",
+          "existingId": "c9b853b6-a828-4012-9998-217919ff9163",
+          "existingUrl": "https://content.rss.com/episodes/397420/3050766/dr-m-experienced/2026_08_07_05_37_14_57d1a0c9-5f80-4880-bc5d-57f7eeef7cb5.mp3",
+          "verification": {
+            "verifiedAt": "2026-08-07T06:07:40.834Z",
+            "receiptSha256": "063ecadcf46aa53b8649d3bbe56fa679819f4b2e89710d2b3991325c1dc25809",
+            "priorUrl": "https://content.rss.com/episodes/397420/3050766/dr-m-experienced/2026_08_06_08_58_14_5ecd30b1-aef2-4666-ad49-f8c0f210fea2.mp3",
+            "currentUrl": "https://content.rss.com/episodes/397420/3050766/dr-m-experienced/2026_08_07_05_37_14_57d1a0c9-5f80-4880-bc5d-57f7eeef7cb5.mp3",
+            "urlChanged": true,
+            "sha256": "9f9402d98ec297cd350e6c6859e1d79459ca5e35ba44bbb4797eb4ef09a1c65b",
+            "sizeBytes": 16339867,
+            "mediaType": "audio/mpeg",
+            "durationSeconds": 1021.204898,
+            "bitRate": 128004,
+            "integratedLufs": -16.91,
+            "truePeakDbtp": -1.98,
+            "fullDecodePassed": true
+          }
+        },
+        {
+          "platform": "spotify",
+          "assetRole": "fullVideo",
+          "action": "attach_video_to_existing_rss_episode",
+          "status": "pending",
+          "existingId": "7cAdb8GE4khC9EYKAjmYuc",
+          "existingUrl": "https://open.spotify.com/episode/7cAdb8GE4khC9EYKAjmYuc"
+        },
+        {
+          "platform": "vimeo",
+          "assetRole": "fullVideo",
+          "action": "replace_existing_video_version_if_supported",
+          "status": "pending_capability_confirmation",
+          "existingId": "1156414707",
+          "existingUrl": "https://vimeo.com/1156414707"
+        },
+        {
+          "platform": "youtube",
+          "assetRole": "fullVideo",
+          "action": "publish_normalized_replacement_and_retain_prior_unlisted",
+          "status": "verified_public_cutover",
+          "existingId": "5IMYaqnQsFY",
+          "existingUrl": "https://www.youtube.com/watch?v=5IMYaqnQsFY",
+          "cutover": {
+            "verifiedAt": "2026-08-07T07:46:32Z",
+            "currentId": "5IMYaqnQsFY",
+            "currentUrl": "https://www.youtube.com/watch?v=5IMYaqnQsFY",
+            "priorId": "LXASEw-WFq8",
+            "priorUrl": "https://www.youtube.com/watch?v=LXASEw-WFq8",
+            "currentVisibility": "public",
+            "priorVisibility": "unlisted",
+            "publicReadbackVerified": true,
+            "metadataVerified": true,
+            "thumbnailVerified": true,
+            "priorDescriptionLinksToCurrent": true,
+            "deletePerformed": false,
+            "rollbackEligible": true
+          }
+        },
+        {
+          "platform": "rumble",
+          "assetRole": "fullVideo",
+          "action": "inspect_replace_support_or_stage_unlisted",
+          "status": "inspection_required",
+          "existingId": "v74kzcw",
+          "existingUrl": "https://rumble.com/v74kzcw-episode-1-brain-fog-part-1-is-your-brain-in-a-fog.html"
+        },
+        {
+          "platform": "apple",
+          "assetRole": "podcastAudio",
+          "action": "rss_fanout_after_rss_com_replacement",
+          "status": "pending_rss_fanout",
+          "existingId": null,
+          "existingUrl": null
+        },
+        {
+          "platform": "amazon",
+          "assetRole": "podcastAudio",
+          "action": "rss_fanout_after_show_claim",
+          "status": "blocked_show_unclaimed",
+          "existingId": null,
+          "existingUrl": null
+        },
+        {
+          "platform": "instagram",
+          "assetRole": "instagramReel",
+          "action": "separate_repost_decision_required",
+          "status": "not_in_scope",
+          "existingId": null,
+          "existingUrl": null
+        }
+      ]
     },
     {
       "number": 2,
       "title": "Brain Fog, Part 2 - Testing and Basic Solutions",
       "rssGuid": "1e40e02b-b217-477c-9cc3-4271cb304c23",
-      "inputIntegratedLufs": -28.42,
-      "inputTruePeakDbtp": -6.62,
-      "replacementRecommended": true
+      "publishedAudioBaseline": {
+        "measuredAt": "2026-08-06",
+        "integratedLufs": -28.42,
+        "truePeakDbtp": -6.62,
+        "status": "published_pending_replacement"
+      },
+      "correctedSourceRender": {
+        "sha256": "7e138b91dc4c0385420f8b4f75cb316efcc77db8e88ed249b31352dbb6e5ab81",
+        "integratedLufs": -22.78,
+        "truePeakDbtp": -0.95,
+        "measurementEvidenceSha256": "92b06ae1290395573f59a5f887259f502a90c6116bb012e47dc93622e63510f5",
+        "decodeEvidenceSha256": "1019e7d49ef7ffd1d41d9dad1692d471fd3284ed744cb1258aee2b761944e2d7",
+        "assessment": "under_delivery_target"
+      },
+      "validatedDelivery": {
+        "status": "validated_local_delivery",
+        "sourceMode": "validated_v1_candidate",
+        "completedAt": "2026-08-06T23:03:42-06:00",
+        "masterVideo": {
+          "assetId": "episode-002-master-video",
+          "sha256": "935ceca9290699c70fe1fc07a2d430113f8a703f2d674742ffd66c412593bb0f",
+          "sizeBytes": 1086944676,
+          "durationSeconds": 1201.2,
+          "integratedLufs": -16.07,
+          "truePeakDbtp": -1.29
+        },
+        "podcastAudio": {
+          "assetId": "episode-002-podcast-audio",
+          "sha256": "406373597936f206a7b788647fa6ac39301c3e25d9b30d8db7fde571ea80450f",
+          "sizeBytes": 28828845,
+          "durationSeconds": 1201.176,
+          "integratedLufs": -16.33,
+          "truePeakDbtp": -1.71
+        },
+        "platformDerivedVideos": [],
+        "verification": {
+          "fullDecode": true,
+          "sourceUnchanged": true,
+          "videoPacketContentPreserved": true,
+          "videoEssenceSha256": "52b6f691fd288917e9a0027b05bed095355ef5c02320910cc4f94993190c8339"
+        }
+      },
+      "remoteReplacementTargets": [
+        {
+          "platform": "rssCom",
+          "assetRole": "podcastAudio",
+          "action": "replace_audio_in_existing_episode",
+          "status": "verified_remote_replacement",
+          "existingId": "1e40e02b-b217-477c-9cc3-4271cb304c23",
+          "existingUrl": "https://content.rss.com/episodes/397420/3050765/dr-m-experienced/2026_08_07_05_41_20_c5dc584a-9799-404f-96e5-66fd2958ad94.mp3",
+          "verification": {
+            "verifiedAt": "2026-08-07T06:07:40.834Z",
+            "receiptSha256": "063ecadcf46aa53b8649d3bbe56fa679819f4b2e89710d2b3991325c1dc25809",
+            "priorUrl": "https://content.rss.com/episodes/397420/3050765/dr-m-experienced/2026_08_06_08_58_12_56d5c865-9d3e-4c15-943c-095c535ffe7b.mp3",
+            "currentUrl": "https://content.rss.com/episodes/397420/3050765/dr-m-experienced/2026_08_07_05_41_20_c5dc584a-9799-404f-96e5-66fd2958ad94.mp3",
+            "urlChanged": true,
+            "sha256": "a0a387271bba6ae1a2a4d13528b31da97243fc237746bd207bf9ca214edd1f05",
+            "sizeBytes": 19219606,
+            "mediaType": "audio/mpeg",
+            "durationSeconds": 1201.188571,
+            "bitRate": 128003,
+            "integratedLufs": -16.77,
+            "truePeakDbtp": -1.96,
+            "fullDecodePassed": true
+          }
+        },
+        {
+          "platform": "spotify",
+          "assetRole": "fullVideo",
+          "action": "attach_video_to_existing_rss_episode",
+          "status": "pending",
+          "existingId": "19Pct0ClX3j1EOwJ3ySVd7",
+          "existingUrl": "https://open.spotify.com/episode/19Pct0ClX3j1EOwJ3ySVd7"
+        },
+        {
+          "platform": "vimeo",
+          "assetRole": "fullVideo",
+          "action": "replace_existing_video_version_if_supported",
+          "status": "pending_capability_confirmation",
+          "existingId": "1159441883",
+          "existingUrl": "https://vimeo.com/1159441883"
+        },
+        {
+          "platform": "youtube",
+          "assetRole": "fullVideo",
+          "action": "publish_normalized_replacement_and_retain_prior_unlisted",
+          "status": "verified_public_cutover",
+          "existingId": "DJe0fPmTf8k",
+          "existingUrl": "https://www.youtube.com/watch?v=DJe0fPmTf8k",
+          "cutover": {
+            "verifiedAt": "2026-08-07T07:46:32Z",
+            "currentId": "DJe0fPmTf8k",
+            "currentUrl": "https://www.youtube.com/watch?v=DJe0fPmTf8k",
+            "priorId": "s740_XVTaAY",
+            "priorUrl": "https://www.youtube.com/watch?v=s740_XVTaAY",
+            "currentVisibility": "public",
+            "priorVisibility": "unlisted",
+            "publicReadbackVerified": true,
+            "metadataVerified": true,
+            "thumbnailVerified": true,
+            "priorDescriptionLinksToCurrent": true,
+            "deletePerformed": false,
+            "rollbackEligible": true
+          }
+        },
+        {
+          "platform": "rumble",
+          "assetRole": "fullVideo",
+          "action": "inspect_replace_support_or_stage_unlisted",
+          "status": "inspection_required",
+          "existingId": "v74l0km",
+          "existingUrl": "https://rumble.com/v74l0km-episode-brain-fog-part-2-testing-and-basic-solutions-for-brain-fog.html"
+        },
+        {
+          "platform": "apple",
+          "assetRole": "podcastAudio",
+          "action": "rss_fanout_after_rss_com_replacement",
+          "status": "pending_rss_fanout",
+          "existingId": null,
+          "existingUrl": null
+        },
+        {
+          "platform": "amazon",
+          "assetRole": "podcastAudio",
+          "action": "rss_fanout_after_show_claim",
+          "status": "blocked_show_unclaimed",
+          "existingId": null,
+          "existingUrl": null
+        },
+        {
+          "platform": "instagram",
+          "assetRole": "instagramReel",
+          "action": "separate_repost_decision_required",
+          "status": "not_in_scope",
+          "existingId": null,
+          "existingUrl": null
+        }
+      ]
     },
     {
       "number": 3,
       "title": "Insomnia - Causes and Practical Sleep Strategies",
       "rssGuid": "e4bde82f-54e6-43a2-a50a-4044f9cdbe8e",
-      "inputIntegratedLufs": -28.46,
-      "inputTruePeakDbtp": -5.42,
-      "replacementRecommended": true
+      "publishedAudioBaseline": {
+        "measuredAt": "2026-08-06",
+        "integratedLufs": -28.46,
+        "truePeakDbtp": -5.42,
+        "status": "published_pending_replacement"
+      },
+      "correctedSourceRender": {
+        "sha256": "a9cdd14dc73af1e16571ac3378e47cac1d3be9b25fdc87a307326667fd5eb3e4",
+        "integratedLufs": -24.02,
+        "truePeakDbtp": -0.98,
+        "measurementEvidenceSha256": "d0f4aed6ce6b8e3578034d716d9805d40276b1b08125e52a13abf02ad0a0625a",
+        "decodeEvidenceSha256": "df932c1ff4c3047efc6042f05723914402451cccae31aa7d037f04d2903b756a",
+        "assessment": "under_delivery_target"
+      },
+      "validatedDelivery": {
+        "status": "validated_local_delivery",
+        "sourceMode": "reencoded",
+        "completedAt": "2026-08-06T23:06:11-06:00",
+        "masterVideo": {
+          "assetId": "episode-003-master-video",
+          "sha256": "538b7a80a60268dbe87bff468e144ee8458c244309f6607b00548098ca0a2ca4",
+          "sizeBytes": 1382150506,
+          "durationSeconds": 1199.1,
+          "integratedLufs": -16.14,
+          "truePeakDbtp": -1.32
+        },
+        "podcastAudio": {
+          "assetId": "episode-003-podcast-audio",
+          "sha256": "3804409eb2f96e52eba661d678c88a30ee9c4cbc0ea0709524fbdbdaa94cbe4e",
+          "sizeBytes": 28779309,
+          "durationSeconds": 1199.112,
+          "integratedLufs": -16.4,
+          "truePeakDbtp": -1.72
+        },
+        "platformDerivedVideos": [],
+        "verification": {
+          "fullDecode": true,
+          "sourceUnchanged": true,
+          "videoPacketContentPreserved": true,
+          "videoEssenceSha256": "5269526126918af86b0ca126bf5574bd05429a2f91fc64238f144869a9757ed4"
+        }
+      },
+      "remoteReplacementTargets": [
+        {
+          "platform": "rssCom",
+          "assetRole": "podcastAudio",
+          "action": "replace_audio_in_existing_episode",
+          "status": "verified_remote_replacement",
+          "existingId": "e4bde82f-54e6-43a2-a50a-4044f9cdbe8e",
+          "existingUrl": "https://content.rss.com/episodes/397420/3050764/dr-m-experienced/2026_08_07_05_42_30_c6bd9b48-095f-4ee9-9eda-ebb0d7956d09.mp3",
+          "verification": {
+            "verifiedAt": "2026-08-07T06:07:40.834Z",
+            "receiptSha256": "063ecadcf46aa53b8649d3bbe56fa679819f4b2e89710d2b3991325c1dc25809",
+            "priorUrl": "https://content.rss.com/episodes/397420/3050764/dr-m-experienced/2026_08_06_08_58_10_29cdf885-f097-4016-91fa-79229beaffe2.mp3",
+            "currentUrl": "https://content.rss.com/episodes/397420/3050764/dr-m-experienced/2026_08_07_05_42_30_c6bd9b48-095f-4ee9-9eda-ebb0d7956d09.mp3",
+            "urlChanged": true,
+            "sha256": "dbfc17033c1b7c49d4f59f0ed15038bf669fe62d65102dd4142ae01a13ad0ea3",
+            "sizeBytes": 19186587,
+            "mediaType": "audio/mpeg",
+            "durationSeconds": 1199.124898,
+            "bitRate": 128003,
+            "integratedLufs": -16.84,
+            "truePeakDbtp": -1.92,
+            "fullDecodePassed": true
+          }
+        },
+        {
+          "platform": "spotify",
+          "assetRole": "fullVideo",
+          "action": "attach_video_to_existing_rss_episode",
+          "status": "pending",
+          "existingId": "07OHz4sfbefOORcNi9xaUK",
+          "existingUrl": "https://open.spotify.com/episode/07OHz4sfbefOORcNi9xaUK"
+        },
+        {
+          "platform": "vimeo",
+          "assetRole": "fullVideo",
+          "action": "replace_existing_video_version_if_supported",
+          "status": "pending_capability_confirmation",
+          "existingId": "1179740758",
+          "existingUrl": "https://vimeo.com/1179740758"
+        },
+        {
+          "platform": "youtube",
+          "assetRole": "fullVideo",
+          "action": "publish_normalized_replacement_and_retain_prior_unlisted",
+          "status": "verified_public_cutover",
+          "existingId": "r5JYtE8Vm9I",
+          "existingUrl": "https://www.youtube.com/watch?v=r5JYtE8Vm9I",
+          "cutover": {
+            "verifiedAt": "2026-08-07T07:46:32Z",
+            "currentId": "r5JYtE8Vm9I",
+            "currentUrl": "https://www.youtube.com/watch?v=r5JYtE8Vm9I",
+            "priorId": "59r5XFynaDo",
+            "priorUrl": "https://www.youtube.com/watch?v=59r5XFynaDo",
+            "currentVisibility": "public",
+            "priorVisibility": "unlisted",
+            "publicReadbackVerified": true,
+            "metadataVerified": true,
+            "thumbnailVerified": true,
+            "priorDescriptionLinksToCurrent": true,
+            "deletePerformed": false,
+            "rollbackEligible": true
+          }
+        },
+        {
+          "platform": "rumble",
+          "assetRole": "fullVideo",
+          "action": "inspect_replace_support_or_stage_unlisted",
+          "status": "inspection_required",
+          "existingId": "v77zlls",
+          "existingUrl": "https://rumble.com/v77zlls-episode-3-insomnia.html"
+        },
+        {
+          "platform": "apple",
+          "assetRole": "podcastAudio",
+          "action": "rss_fanout_after_rss_com_replacement",
+          "status": "pending_rss_fanout",
+          "existingId": null,
+          "existingUrl": null
+        },
+        {
+          "platform": "amazon",
+          "assetRole": "podcastAudio",
+          "action": "rss_fanout_after_show_claim",
+          "status": "blocked_show_unclaimed",
+          "existingId": null,
+          "existingUrl": null
+        },
+        {
+          "platform": "instagram",
+          "assetRole": "instagramReel",
+          "action": "separate_repost_decision_required",
+          "status": "not_in_scope",
+          "existingId": null,
+          "existingUrl": null
+        }
+      ]
     },
     {
       "number": 4,
       "title": "Electromagnetic Frequencies (EMF) - Practical Ways to Reduce Exposure",
       "rssGuid": "9579ff89-9e16-40db-b84a-00cee25c604a",
-      "inputIntegratedLufs": -29.25,
-      "inputTruePeakDbtp": -8.6,
-      "replacementRecommended": true
+      "publishedAudioBaseline": {
+        "measuredAt": "2026-08-06",
+        "integratedLufs": -29.25,
+        "truePeakDbtp": -8.6,
+        "status": "published_pending_replacement"
+      },
+      "correctedSourceRender": {
+        "sha256": "3e819ed30bc8393dfb684c0669a5b32e68843a2adeb4942f6c65991b42029d9d",
+        "integratedLufs": -21.81,
+        "truePeakDbtp": -1.02,
+        "measurementEvidenceSha256": "ce8a400d3046ceb4da5af937e75c1a476d49cd4c2e90fc6aba3e14d7f145513f",
+        "decodeEvidenceSha256": "a34515612821d2cfcad3b3f5421493736018ca3ebadde7c6ad7267b8a94e89b3",
+        "assessment": "under_delivery_target"
+      },
+      "validatedDelivery": {
+        "status": "validated_local_delivery",
+        "sourceMode": "reencoded",
+        "completedAt": "2026-08-06T23:06:08-06:00",
+        "masterVideo": {
+          "assetId": "episode-004-master-video",
+          "sha256": "129bf322ed83c38ae586bd83d6124dac64bc9864056e6e4ff72034b5e85780ca",
+          "sizeBytes": 1189902893,
+          "durationSeconds": 1179.7,
+          "integratedLufs": -16.05,
+          "truePeakDbtp": -1.32
+        },
+        "podcastAudio": {
+          "assetId": "episode-004-podcast-audio",
+          "sha256": "c3e2ea0f8ee52401d3e98580465b10294170d50ce4db59ea89a00db46f37f460",
+          "sizeBytes": 28313325,
+          "durationSeconds": 1179.696,
+          "integratedLufs": -16.3,
+          "truePeakDbtp": -1.71
+        },
+        "platformDerivedVideos": [],
+        "verification": {
+          "fullDecode": true,
+          "sourceUnchanged": true,
+          "videoPacketContentPreserved": true,
+          "videoEssenceSha256": "41395f05a60ff2cf23c75c47fd09d5debf10cc6b6456837fabd39f35ee03b27f"
+        }
+      },
+      "remoteReplacementTargets": [
+        {
+          "platform": "rssCom",
+          "assetRole": "podcastAudio",
+          "action": "replace_audio_in_existing_episode",
+          "status": "verified_remote_replacement",
+          "existingId": "9579ff89-9e16-40db-b84a-00cee25c604a",
+          "existingUrl": "https://content.rss.com/episodes/397420/3050763/dr-m-experienced/2026_08_07_05_43_51_32e2ccc6-04c8-4592-9e50-aa8d48eb9cb8.mp3",
+          "verification": {
+            "verifiedAt": "2026-08-07T06:07:40.834Z",
+            "receiptSha256": "063ecadcf46aa53b8649d3bbe56fa679819f4b2e89710d2b3991325c1dc25809",
+            "priorUrl": "https://content.rss.com/episodes/397420/3050763/dr-m-experienced/2026_08_06_08_58_08_299310cb-53c0-4de1-88ca-684a25901bc5.mp3",
+            "currentUrl": "https://content.rss.com/episodes/397420/3050763/dr-m-experienced/2026_08_07_05_43_51_32e2ccc6-04c8-4592-9e50-aa8d48eb9cb8.mp3",
+            "urlChanged": true,
+            "sha256": "64748d4de3c409a2ace36d6e9fa0a1fa33587489d83a0088f6b0e311cb95f985",
+            "sizeBytes": 18876043,
+            "mediaType": "audio/mpeg",
+            "durationSeconds": 1179.715918,
+            "bitRate": 128003,
+            "integratedLufs": -16.75,
+            "truePeakDbtp": -1.98,
+            "fullDecodePassed": true
+          }
+        },
+        {
+          "platform": "spotify",
+          "assetRole": "fullVideo",
+          "action": "attach_video_to_existing_rss_episode",
+          "status": "pending",
+          "existingId": "0aDVuIwrRlDKxEylMj2dyw",
+          "existingUrl": "https://open.spotify.com/episode/0aDVuIwrRlDKxEylMj2dyw"
+        },
+        {
+          "platform": "vimeo",
+          "assetRole": "fullVideo",
+          "action": "replace_existing_video_version_if_supported",
+          "status": "pending_capability_confirmation",
+          "existingId": "1179956166",
+          "existingUrl": "https://vimeo.com/1179956166"
+        },
+        {
+          "platform": "youtube",
+          "assetRole": "fullVideo",
+          "action": "publish_normalized_replacement_and_retain_prior_unlisted",
+          "status": "verified_public_cutover",
+          "existingId": "binbLcb3f_s",
+          "existingUrl": "https://www.youtube.com/watch?v=binbLcb3f_s",
+          "cutover": {
+            "verifiedAt": "2026-08-07T07:46:32Z",
+            "currentId": "binbLcb3f_s",
+            "currentUrl": "https://www.youtube.com/watch?v=binbLcb3f_s",
+            "priorId": "X8WChChyh9c",
+            "priorUrl": "https://www.youtube.com/watch?v=X8WChChyh9c",
+            "currentVisibility": "public",
+            "priorVisibility": "unlisted",
+            "publicReadbackVerified": true,
+            "metadataVerified": true,
+            "thumbnailVerified": true,
+            "priorDescriptionLinksToCurrent": true,
+            "deletePerformed": false,
+            "rollbackEligible": true
+          }
+        },
+        {
+          "platform": "rumble",
+          "assetRole": "fullVideo",
+          "action": "inspect_replace_support_or_stage_unlisted",
+          "status": "inspection_required",
+          "existingId": "v780pxq",
+          "existingUrl": "https://rumble.com/v780pxq-episode-4-emf.html"
+        },
+        {
+          "platform": "apple",
+          "assetRole": "podcastAudio",
+          "action": "rss_fanout_after_rss_com_replacement",
+          "status": "pending_rss_fanout",
+          "existingId": null,
+          "existingUrl": null
+        },
+        {
+          "platform": "amazon",
+          "assetRole": "podcastAudio",
+          "action": "rss_fanout_after_show_claim",
+          "status": "blocked_show_unclaimed",
+          "existingId": null,
+          "existingUrl": null
+        },
+        {
+          "platform": "instagram",
+          "assetRole": "instagramReel",
+          "action": "separate_repost_decision_required",
+          "status": "not_in_scope",
+          "existingId": null,
+          "existingUrl": null
+        }
+      ]
     },
     {
       "number": 5,
       "title": "Energy - Understanding Fatigue and Mitochondrial Health",
       "rssGuid": "e9f7596f-0333-49ca-8946-bc11e96b2091",
-      "inputIntegratedLufs": -28.99,
-      "inputTruePeakDbtp": -8.28,
-      "replacementRecommended": true
+      "publishedAudioBaseline": {
+        "measuredAt": "2026-08-06",
+        "integratedLufs": -28.99,
+        "truePeakDbtp": -8.28,
+        "status": "published_pending_replacement"
+      },
+      "correctedSourceRender": {
+        "sha256": "e625018ef62d01c90d605e5a057c0c89e79e8e71ad6c5c920604274c0076bad6",
+        "integratedLufs": -21.75,
+        "truePeakDbtp": -1.08,
+        "measurementEvidenceSha256": "9e96e2b9bdfbc4381837161aa1495a7b8dc343156d5dafe883ab2d3db58c76c8",
+        "decodeEvidenceSha256": "403be0dfb8ac44576d2496a27d9ef5ec3a5fe8d1f3598fb3a08b32bf525bc3d3",
+        "assessment": "under_delivery_target"
+      },
+      "validatedDelivery": {
+        "status": "validated_local_delivery",
+        "sourceMode": "reencoded",
+        "completedAt": "2026-08-06T23:11:41-06:00",
+        "masterVideo": {
+          "assetId": "episode-005-master-video",
+          "sha256": "7d54ec306f76dc665e30336fb0808ecb039a338afbf3e11c31b9322658aa8639",
+          "sizeBytes": 9118424761,
+          "durationSeconds": 1861.9,
+          "integratedLufs": -16.08,
+          "truePeakDbtp": -1.35
+        },
+        "podcastAudio": {
+          "assetId": "episode-005-podcast-audio",
+          "sha256": "2c6cb7eb2a176a4fdcd2c42cf694305b36290e7844fdeda4104f5d4abcdf1d62",
+          "sizeBytes": 44685549,
+          "durationSeconds": 1861.872,
+          "integratedLufs": -16.33,
+          "truePeakDbtp": -1.68
+        },
+        "platformDerivedVideos": [
+          {
+            "platform": "spotify",
+            "assetId": "episode-005-spotify-video",
+            "catalogRevision": 8,
+            "receiptSha256": "47f768c171fbef207dfc21697f9f975e35c17cc0835c9c36db65eea88bb62bfe",
+            "uri": "dropbox:episodes/005-episode-5-energy/platform-video.mp4",
+            "sha256": "704e6b6c3137d2d6cdfc68876f651564e3d904a3174902fbe7c73aacae10804c",
+            "sizeBytes": 911564890,
+            "mediaType": "video/mp4",
+            "videoCodec": "h264",
+            "averageBitrateBitsPerSecond": 3916663,
+            "durationSeconds": 1861.921333,
+            "integratedLufs": -16.08,
+            "truePeakDbtp": -1.35,
+            "status": "validated_local_derivative"
+          }
+        ],
+        "verification": {
+          "fullDecode": true,
+          "sourceUnchanged": true,
+          "videoPacketContentPreserved": true,
+          "videoEssenceSha256": "89d761922031e73332e556940bcd5875de7ee481e15ee90f6c5f87b57980a850"
+        }
+      },
+      "remoteReplacementTargets": [
+        {
+          "platform": "rssCom",
+          "assetRole": "podcastAudio",
+          "action": "replace_audio_in_existing_episode",
+          "status": "verified_remote_replacement",
+          "existingId": "e9f7596f-0333-49ca-8946-bc11e96b2091",
+          "existingUrl": "https://content.rss.com/episodes/397420/3050762/dr-m-experienced/2026_08_07_05_46_23_1de2f4f3-aeab-457a-a02d-2bf61108132d.mp3",
+          "verification": {
+            "verifiedAt": "2026-08-07T06:07:40.834Z",
+            "receiptSha256": "063ecadcf46aa53b8649d3bbe56fa679819f4b2e89710d2b3991325c1dc25809",
+            "priorUrl": "https://content.rss.com/episodes/397420/3050762/dr-m-experienced/2026_08_06_08_58_06_7cc0ba78-000a-4bfe-9360-e2526cf972ab.mp3",
+            "currentUrl": "https://content.rss.com/episodes/397420/3050762/dr-m-experienced/2026_08_07_05_46_23_1de2f4f3-aeab-457a-a02d-2bf61108132d.mp3",
+            "urlChanged": true,
+            "sha256": "a0ecb49c88a43da05735492279c40aaea9d3cb4d45eec309e412784fd49424de",
+            "sizeBytes": 29790629,
+            "mediaType": "audio/mpeg",
+            "durationSeconds": 1861.877551,
+            "bitRate": 128002,
+            "integratedLufs": -16.78,
+            "truePeakDbtp": -1.86,
+            "fullDecodePassed": true
+          }
+        },
+        {
+          "platform": "spotify",
+          "assetRole": "fullVideo",
+          "action": "attach_validated_platform_derivative_to_existing_rss_episode",
+          "status": "pending",
+          "existingId": "6fQAClcR4AAuueHjBNlrJC",
+          "existingUrl": "https://open.spotify.com/episode/6fQAClcR4AAuueHjBNlrJC"
+        },
+        {
+          "platform": "vimeo",
+          "assetRole": "fullVideo",
+          "action": "replace_existing_video_version_if_supported",
+          "status": "pending_capability_confirmation",
+          "existingId": "1204939658",
+          "existingUrl": "https://vimeo.com/1204939658"
+        },
+        {
+          "platform": "youtube",
+          "assetRole": "fullVideo",
+          "action": "publish_normalized_replacement_and_retain_prior_unlisted",
+          "status": "verified_public_cutover",
+          "existingId": "N_F0hhHkIQ4",
+          "existingUrl": "https://www.youtube.com/watch?v=N_F0hhHkIQ4",
+          "cutover": {
+            "verifiedAt": "2026-08-07T07:46:32Z",
+            "currentId": "N_F0hhHkIQ4",
+            "currentUrl": "https://www.youtube.com/watch?v=N_F0hhHkIQ4",
+            "priorId": "JyBK6KtOo_k",
+            "priorUrl": "https://www.youtube.com/watch?v=JyBK6KtOo_k",
+            "currentVisibility": "public",
+            "priorVisibility": "unlisted",
+            "publicReadbackVerified": true,
+            "metadataVerified": true,
+            "thumbnailVerified": true,
+            "priorDescriptionLinksToCurrent": true,
+            "deletePerformed": false,
+            "rollbackEligible": true
+          }
+        },
+        {
+          "platform": "rumble",
+          "assetRole": "fullVideo",
+          "action": "inspect_replace_support_or_stage_unlisted",
+          "status": "inspection_required",
+          "existingId": "v7bvj32",
+          "existingUrl": "https://rumble.com/v7bvj32-episode-5-electro.magnetic.frequencies.html"
+        },
+        {
+          "platform": "apple",
+          "assetRole": "podcastAudio",
+          "action": "rss_fanout_after_rss_com_replacement",
+          "status": "pending_rss_fanout",
+          "existingId": null,
+          "existingUrl": null
+        },
+        {
+          "platform": "amazon",
+          "assetRole": "podcastAudio",
+          "action": "rss_fanout_after_show_claim",
+          "status": "blocked_show_unclaimed",
+          "existingId": null,
+          "existingUrl": null
+        },
+        {
+          "platform": "instagram",
+          "assetRole": "instagramReel",
+          "action": "separate_repost_decision_required",
+          "status": "not_in_scope",
+          "existingId": null,
+          "existingUrl": null
+        }
+      ]
     },
     {
       "number": 6,
       "title": "Concussion - What Happens in the Brain",
       "rssGuid": "13a0565e-582c-4969-a57d-9700b7babbe4",
-      "inputIntegratedLufs": -30.99,
-      "inputTruePeakDbtp": -8.79,
-      "replacementRecommended": true
+      "publishedAudioBaseline": {
+        "measuredAt": "2026-08-06",
+        "integratedLufs": -30.99,
+        "truePeakDbtp": -8.79,
+        "status": "published_pending_replacement"
+      },
+      "correctedSourceRender": {
+        "sha256": "846a8b843657f058a440eca57c7d43af12bf4b15c3bf57d28ba58c1d26791e8b",
+        "integratedLufs": -23.16,
+        "truePeakDbtp": -1.08,
+        "measurementEvidenceSha256": "12c9acce7d95be6765f0a4c2e273df251a82fe45a8ee3e89b7f3e0b1f768d74c",
+        "decodeEvidenceSha256": "9a00e9b5f8e4fc21e6a2d9d58eb8245a73b02ecb662977e2f3d319aba6650ff3",
+        "assessment": "under_delivery_target"
+      },
+      "validatedDelivery": {
+        "status": "validated_local_delivery",
+        "sourceMode": "reencoded",
+        "completedAt": "2026-08-06T23:08:35-06:00",
+        "masterVideo": {
+          "assetId": "episode-006-master-video",
+          "sha256": "839a6dcc325e26327a0622e8a56a9d123bda8dcff1758f192f1dc905f12fd4e6",
+          "sizeBytes": 1209784602,
+          "durationSeconds": 1200.4,
+          "integratedLufs": -16.16,
+          "truePeakDbtp": -1.31
+        },
+        "podcastAudio": {
+          "assetId": "episode-006-podcast-audio",
+          "sha256": "0cb468025346ff1920e9b51ca1ac56a6a04978efa31d035b3389cd3d9dc4b4ca",
+          "sizeBytes": 28809261,
+          "durationSeconds": 1200.36,
+          "integratedLufs": -16.42,
+          "truePeakDbtp": -1.7
+        },
+        "platformDerivedVideos": [],
+        "verification": {
+          "fullDecode": true,
+          "sourceUnchanged": true,
+          "videoPacketContentPreserved": true,
+          "videoEssenceSha256": "bde982757f71db47681a54feee987e0956996c9e48fca807c849a5d3efd36b46"
+        }
+      },
+      "remoteReplacementTargets": [
+        {
+          "platform": "rssCom",
+          "assetRole": "podcastAudio",
+          "action": "replace_audio_in_existing_episode",
+          "status": "verified_remote_replacement",
+          "existingId": "13a0565e-582c-4969-a57d-9700b7babbe4",
+          "existingUrl": "https://content.rss.com/episodes/397420/3050761/dr-m-experienced/2026_08_07_05_55_46_4806f336-163e-4ffb-b446-e4e03bb81013.mp3",
+          "verification": {
+            "verifiedAt": "2026-08-07T06:07:40.834Z",
+            "receiptSha256": "063ecadcf46aa53b8649d3bbe56fa679819f4b2e89710d2b3991325c1dc25809",
+            "priorUrl": "https://content.rss.com/episodes/397420/3050761/dr-m-experienced/2026_08_06_08_58_03_e31f1115-3f5b-4192-a929-58eada8d76e1.mp3",
+            "currentUrl": "https://content.rss.com/episodes/397420/3050761/dr-m-experienced/2026_08_07_05_55_46_4806f336-163e-4ffb-b446-e4e03bb81013.mp3",
+            "urlChanged": true,
+            "sha256": "af880a7bbc854cdfc99d928d9c575c9f470bedb6266209d9be0f0d3712e94a53",
+            "sizeBytes": 19206231,
+            "mediaType": "audio/mpeg",
+            "durationSeconds": 1200.352653,
+            "bitRate": 128003,
+            "integratedLufs": -16.86,
+            "truePeakDbtp": -1.94,
+            "fullDecodePassed": true
+          }
+        },
+        {
+          "platform": "spotify",
+          "assetRole": "fullVideo",
+          "action": "attach_video_to_existing_rss_episode",
+          "status": "pending",
+          "existingId": "7MbKWgPZN40KEyN5j123JC",
+          "existingUrl": "https://open.spotify.com/episode/7MbKWgPZN40KEyN5j123JC"
+        },
+        {
+          "platform": "vimeo",
+          "assetRole": "fullVideo",
+          "action": "replace_existing_video_version_if_supported",
+          "status": "pending_capability_confirmation",
+          "existingId": "1204939692",
+          "existingUrl": "https://vimeo.com/1204939692"
+        },
+        {
+          "platform": "youtube",
+          "assetRole": "fullVideo",
+          "action": "publish_normalized_replacement_and_retain_prior_unlisted",
+          "status": "verified_public_cutover",
+          "existingId": "8u1Ps_mCpO4",
+          "existingUrl": "https://www.youtube.com/watch?v=8u1Ps_mCpO4",
+          "cutover": {
+            "verifiedAt": "2026-08-07T07:46:32Z",
+            "currentId": "8u1Ps_mCpO4",
+            "currentUrl": "https://www.youtube.com/watch?v=8u1Ps_mCpO4",
+            "priorId": "odNrtPEuong",
+            "priorUrl": "https://www.youtube.com/watch?v=odNrtPEuong",
+            "currentVisibility": "public",
+            "priorVisibility": "unlisted",
+            "publicReadbackVerified": true,
+            "metadataVerified": true,
+            "thumbnailVerified": true,
+            "priorDescriptionLinksToCurrent": true,
+            "deletePerformed": false,
+            "rollbackEligible": true
+          }
+        },
+        {
+          "platform": "rumble",
+          "assetRole": "fullVideo",
+          "action": "inspect_replace_support_or_stage_unlisted",
+          "status": "inspection_required",
+          "existingId": "v7bvk8i",
+          "existingUrl": "https://rumble.com/v7bvk8i-episode-6-concussion-and-pathophysiology.html"
+        },
+        {
+          "platform": "apple",
+          "assetRole": "podcastAudio",
+          "action": "rss_fanout_after_rss_com_replacement",
+          "status": "pending_rss_fanout",
+          "existingId": null,
+          "existingUrl": null
+        },
+        {
+          "platform": "amazon",
+          "assetRole": "podcastAudio",
+          "action": "rss_fanout_after_show_claim",
+          "status": "blocked_show_unclaimed",
+          "existingId": null,
+          "existingUrl": null
+        },
+        {
+          "platform": "instagram",
+          "assetRole": "instagramReel",
+          "action": "separate_repost_decision_required",
+          "status": "not_in_scope",
+          "existingId": null,
+          "existingUrl": null
+        }
+      ]
     },
     {
       "number": 7,
       "title": "The Brain on Fire - Neuroinflammation After Concussion",
       "rssGuid": "4a0b3903-b7d1-4ced-967b-079df4004a4e",
-      "inputIntegratedLufs": -30.7,
-      "inputTruePeakDbtp": -7.39,
-      "replacementRecommended": true
+      "publishedAudioBaseline": {
+        "measuredAt": "2026-08-06",
+        "integratedLufs": -30.7,
+        "truePeakDbtp": -7.39,
+        "status": "published_pending_replacement"
+      },
+      "correctedSourceRender": {
+        "sha256": "4e8f3315048427ba5d55c7f3f46fea7945b59b977238e14fa80b41132d77354a",
+        "integratedLufs": -23.27,
+        "truePeakDbtp": -0.93,
+        "measurementEvidenceSha256": "7a7e7e7a1407ea7f9a5fe325f45cc339101a375222531238ddfa6b9c588b2502",
+        "decodeEvidenceSha256": "fd10302c804afd7cf96c78e82fa5a7c025824c9136bed32d08da71c8bde10faf",
+        "assessment": "under_delivery_target"
+      },
+      "validatedDelivery": {
+        "status": "validated_local_delivery",
+        "sourceMode": "reencoded",
+        "completedAt": "2026-08-06T23:14:33-06:00",
+        "masterVideo": {
+          "assetId": "episode-007-master-video",
+          "sha256": "3205342031b992497423bac7204388c9444ddbc020e05023d9956f65ff2b984e",
+          "sizeBytes": 2452892683,
+          "durationSeconds": 1256.9,
+          "integratedLufs": -16.12,
+          "truePeakDbtp": -1.32
+        },
+        "podcastAudio": {
+          "assetId": "episode-007-podcast-audio",
+          "sha256": "cf9c4d16c7698770cf77a1248f6affc482d935883d51dd3496d6f590bb107f93",
+          "sizeBytes": 30165741,
+          "durationSeconds": 1256.88,
+          "integratedLufs": -16.37,
+          "truePeakDbtp": -1.7
+        },
+        "platformDerivedVideos": [],
+        "verification": {
+          "fullDecode": true,
+          "sourceUnchanged": true,
+          "videoPacketContentPreserved": true,
+          "videoEssenceSha256": "54d93004506a678e7c511864f7ae62ad68facd03f4d78beb0068288063e283e2"
+        }
+      },
+      "remoteReplacementTargets": [
+        {
+          "platform": "rssCom",
+          "assetRole": "podcastAudio",
+          "action": "replace_audio_in_existing_episode",
+          "status": "verified_remote_replacement",
+          "existingId": "4a0b3903-b7d1-4ced-967b-079df4004a4e",
+          "existingUrl": "https://content.rss.com/episodes/397420/3050760/dr-m-experienced/2026_08_07_05_56_36_52e27ebd-6648-4ff7-adf3-f9f7731c1b86.mp3",
+          "verification": {
+            "verifiedAt": "2026-08-07T06:07:40.834Z",
+            "receiptSha256": "063ecadcf46aa53b8649d3bbe56fa679819f4b2e89710d2b3991325c1dc25809",
+            "priorUrl": "https://content.rss.com/episodes/397420/3050760/dr-m-experienced/2026_08_06_08_58_01_2d87eb57-8e98-435a-a59b-509643963942.mp3",
+            "currentUrl": "https://content.rss.com/episodes/397420/3050760/dr-m-experienced/2026_08_07_05_56_36_52e27ebd-6648-4ff7-adf3-f9f7731c1b86.mp3",
+            "urlChanged": true,
+            "sha256": "11038c052bb65c7597d9c1fad031b529ef7e1bade417844cfaecf507d34e2897",
+            "sizeBytes": 20110695,
+            "mediaType": "audio/mpeg",
+            "durationSeconds": 1256.881633,
+            "bitRate": 128003,
+            "integratedLufs": -16.82,
+            "truePeakDbtp": -1.92,
+            "fullDecodePassed": true
+          }
+        },
+        {
+          "platform": "spotify",
+          "assetRole": "fullVideo",
+          "action": "attach_video_to_existing_rss_episode",
+          "status": "pending",
+          "existingId": "5QJlHSE6JhP3ymSCNzbWxv",
+          "existingUrl": "https://open.spotify.com/episode/5QJlHSE6JhP3ymSCNzbWxv"
+        },
+        {
+          "platform": "vimeo",
+          "assetRole": "fullVideo",
+          "action": "replace_existing_video_version_if_supported",
+          "status": "pending_capability_confirmation",
+          "existingId": "1205004739",
+          "existingUrl": "https://vimeo.com/1205004739"
+        },
+        {
+          "platform": "youtube",
+          "assetRole": "fullVideo",
+          "action": "publish_normalized_replacement_and_retain_prior_unlisted",
+          "status": "verified_public_cutover",
+          "existingId": "5UOEvs59hBA",
+          "existingUrl": "https://www.youtube.com/watch?v=5UOEvs59hBA",
+          "cutover": {
+            "verifiedAt": "2026-08-07T07:46:32Z",
+            "currentId": "5UOEvs59hBA",
+            "currentUrl": "https://www.youtube.com/watch?v=5UOEvs59hBA",
+            "priorId": "3IVDJqwT2yY",
+            "priorUrl": "https://www.youtube.com/watch?v=3IVDJqwT2yY",
+            "currentVisibility": "public",
+            "priorVisibility": "unlisted",
+            "publicReadbackVerified": true,
+            "metadataVerified": true,
+            "thumbnailVerified": true,
+            "priorDescriptionLinksToCurrent": true,
+            "deletePerformed": false,
+            "rollbackEligible": true
+          }
+        },
+        {
+          "platform": "rumble",
+          "assetRole": "fullVideo",
+          "action": "inspect_replace_support_or_stage_unlisted",
+          "status": "inspection_required",
+          "existingId": "v7bvtu4",
+          "existingUrl": "https://rumble.com/v7bvtu4-episode-7-the-brain-on-fire.html"
+        },
+        {
+          "platform": "apple",
+          "assetRole": "podcastAudio",
+          "action": "rss_fanout_after_rss_com_replacement",
+          "status": "pending_rss_fanout",
+          "existingId": null,
+          "existingUrl": null
+        },
+        {
+          "platform": "amazon",
+          "assetRole": "podcastAudio",
+          "action": "rss_fanout_after_show_claim",
+          "status": "blocked_show_unclaimed",
+          "existingId": null,
+          "existingUrl": null
+        },
+        {
+          "platform": "instagram",
+          "assetRole": "instagramReel",
+          "action": "separate_repost_decision_required",
+          "status": "not_in_scope",
+          "existingId": null,
+          "existingUrl": null
+        }
+      ]
     }
   ],
   "replacementPolicy": {
@@ -94,14 +1072,28 @@
     "verifyFeedAndRemoteIdsAfterReplacement": true
   },
   "platformNotes": {
-    "rssCom": "Replace audio on the existing episode and preserve its identity.",
-    "apple": "Receives corrected audio through RSS; never upload a separate episode.",
+    "rssCom": "All seven existing RSS.com episodes now reference verified normalized enclosures. Original GUIDs and catalog identity were preserved, all seven remote files passed full decode and loudness gates, and production Supabase audio URL readback matches catalog revision 10. Downstream directory refresh remains unverified.",
+    "apple": "Receives corrected audio through RSS; never upload a separate episode. The public show still exposes five of seven episodes, with RSS Episodes 1-2 missing and structured metadata cache drift still present.",
     "amazon": "Receives corrected audio through RSS after the one-time show claim.",
-    "spotifyAudio": "Receives corrected audio through RSS while the episode remains audio-only.",
-    "spotifyVideo": "Upload a corrected full video to the existing RSS-ingested Spotify episode; there is no account-wide video toggle.",
-    "vimeo": "Prefer an in-place video version replacement when available.",
-    "youtube": "Uploaded media cannot be replaced in place; any corrected upload requires an explicit new-ID decision.",
-    "rumble": "Do not assume media replacement is available; inspect the existing item before deciding whether a new upload is necessary.",
+    "spotifyAudio": "Receives normalized podcast audio through RSS.com. All seven current episodes also have their corrected video attached to the existing Spotify episode IDs.",
+    "spotifyVideo": "Public readback confirms corrected video, approved artwork, and approved copy for 7/7 existing episode IDs. For a future video episode, attach the approved full video only after RSS ingestion; there is no account-wide video toggle. Leave intentionally audio-only episodes as RSS audio only.",
+    "vimeo": "All seven corrected videos were replaced in place and verified on their stable Vimeo IDs; prefer the same in-place version workflow for future corrections when available.",
+    "youtube": "All seven normalized replacements are public with exact approved metadata and thumbnails. The prior seven uploads remain unlisted, link to their replacements, and are retained as rollback records; none were deleted.",
+    "rumble": "Seven corrected uploads are staged Unlisted but are not submitted pending user ownership confirmation and updated Terms review. Do not infer publication or submit without those attended confirmations.",
     "instagram": "Existing Reels are outside RSS fan-out and require a separate repost decision if affected."
+  },
+  "remoteReplacement": {
+    "provider": "rss.com",
+    "status": "verified_remote_replacement",
+    "verifiedAt": "2026-08-07T06:07:40.834Z",
+    "receiptSha256": "063ecadcf46aa53b8649d3bbe56fa679819f4b2e89710d2b3991325c1dc25809",
+    "baselineFeedSha256": "a4b8b14724ecd2af81901555a1f601feb4d9901d6ffd0001b329196e0c2f69d1",
+    "currentFeedSha256": "9060c586b46bee86faea28e7f1c94e6b5cf53ac330fe3cb1804e441ac1a1736a",
+    "allSevenGuidsRetained": true,
+    "allSevenEnclosureUrlsChanged": true,
+    "downloadsPassed": 7,
+    "fullDecodesPassed": 7,
+    "loudnessGatesPassed": 7,
+    "downstreamRefreshVerified": false
   }
 }

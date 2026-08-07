@@ -334,6 +334,31 @@ function semanticErrors(catalog) {
         errors.push(`episodes.${episodeIndex}.destinations.${platform}.url does not match stable ID ${identity.id}.`);
       }
     }
+
+  }
+
+  const archivedDestinationIds = new Map();
+  for (const [episodeIndex, episode] of episodes.entries()) {
+    for (const [archiveIndex, archive] of (episode.destinationArchives ?? []).entries()) {
+      if (!archive || typeof archive.id !== "string") continue;
+      const key = `${archive.platform}:${archive.id}`;
+      if (destinationIds.has(key)) {
+        errors.push(`Archived destination ID ${key} is still active at episode ${destinationIds.get(key)}.`);
+      }
+      if (archivedDestinationIds.has(key)) {
+        const previous = archivedDestinationIds.get(key);
+        errors.push(`Duplicate archived destination ID ${key} at ${previous} and episodes.${episodeIndex}.destinationArchives.${archiveIndex}.`);
+      } else {
+        archivedDestinationIds.set(key, `episodes.${episodeIndex}.destinationArchives.${archiveIndex}`);
+      }
+      if (!identityUrlMatches(archive.platform, archive)) {
+        errors.push(`episodes.${episodeIndex}.destinationArchives.${archiveIndex}.url does not match stable ID ${archive.id}.`);
+      }
+      const active = episode.destinations?.[archive.platform];
+      if (!active || archive.supersededById !== active.id) {
+        errors.push(`episodes.${episodeIndex}.destinationArchives.${archiveIndex}.supersededById must match the active ${archive.platform} destination.`);
+      }
+    }
   }
 
   const assetRegistry = catalog.assetRegistry && typeof catalog.assetRegistry === "object" ? catalog.assetRegistry : {};

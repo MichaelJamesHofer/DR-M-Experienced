@@ -16,7 +16,7 @@ export default function PrivacyPage() {
           Legal
         </p>
         <h1 className="mb-4 text-display font-bold text-foreground">Privacy notice</h1>
-        <p className="text-body-sm text-foreground-muted">Last updated July 10, 2026</p>
+        <p className="text-body-sm text-foreground-muted">Last updated August 7, 2026</p>
       </header>
 
       <div className="space-y-10 text-body text-foreground-muted">
@@ -55,7 +55,8 @@ export default function PrivacyPage() {
           <p>
             Optional PostHog analytics records page paths when configured. Query strings, form values,
             persistent browser identifiers, person profiles, autocapture, and session recording are
-            disabled by this site&apos;s configuration.
+            disabled by this site&apos;s configuration. The analytics project is configured to discard
+            client IP addresses rather than store them with events.
           </p>
         </section>
 

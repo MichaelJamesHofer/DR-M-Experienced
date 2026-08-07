@@ -26,6 +26,10 @@ In your GitHub repository settings:
    - **Name:** `NEXT_PUBLIC_POSTHOG_API_KEY`
    - **Value:** Your PostHog API key
 
+Production deployments run `npm run verify:production-env` and stop before the
+build when this secret is absent or blank. Local and pull-request builds keep
+analytics optional.
+
 If you're using `POSTHOG_API_KEY` in your GitHub Actions workflow, you can map it:
 
 ```yaml
@@ -63,6 +67,7 @@ The PostHog provider is configured in `src/components/posthog-provider.tsx`. Cur
 
 - `autocapture: false` - Manual events only
 - `capture_pageview: false` - Pageviews are sent by the route tracker
+- `capture_pageleave: true` - Page-leave events support duration and bounce metrics
 - `capture_performance: false` - Performance telemetry is disabled
 - `disable_session_recording: true` - Session replay is disabled
 - surveys, web experiments, and remote feature-flag configuration are disabled
@@ -72,3 +77,27 @@ The PostHog provider is configured in `src/components/posthog-provider.tsx`. Cur
 - `before_send` - Query strings, fragments, and campaign parameters are removed
 
 Keep any configuration changes consistent with `src/app/legal/privacy/page.tsx`.
+
+## Production Verification
+
+After a deployment, open PostHog Installation Health and verify all of the
+following without exposing the project key:
+
+1. `$pageview` is received from the production domain.
+2. `$pageleave` and scroll-depth checks pass.
+3. `https://drmexperienced.com` and `https://www.drmexperienced.com` are listed
+   as authorized URLs.
+4. The configured ingestion host and project region match.
+5. IP collection/discard behavior matches the approved privacy policy.
+
+The August 6, 2026 authenticated check initially reported no events, an
+incomplete `$pageview` check, and no authorized URLs. The Actions project key was
+then configured and both production origins were authorized. Page-leave, scroll
+depth, reverse proxy, and performance checks passed. The website has recovered
+from the provider outage, but configuration is not proof of production
+ingestion; repeat this checklist after an analytics-enabled deploy.
+
+On August 7, 2026, authenticated readback confirmed this is the US PostHog
+project and `Discard client IP data` was enabled successfully. Cookieless server
+hash mode remains disabled; the client uses memory-only identity instead. Live
+production event verification remains pending deployment.

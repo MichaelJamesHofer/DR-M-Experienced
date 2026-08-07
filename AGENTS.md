@@ -31,10 +31,10 @@ and directory cache convergence are downstream work, not reasons to recreate a
 show or switch the canonical host.
 
 The Apple reprocessing request for RSS Episodes 1-2 was submitted on August 6,
-2026 and is awaiting response. The post-cutover public audit found every Spotify
-episode audio-only. Restore video only against the existing seven episode IDs
-after corrected masters pass the loudness and sync checks in
-`publishing/audio-replacement-audit.json`.
+2026 and is awaiting response. On August 7, corrected video was restored against
+all seven existing Spotify episode IDs after the masters passed the loudness and
+sync checks in `publishing/audio-replacement-audit.json`; independent public
+checks now report video, exact copy, and approved artwork for all seven.
 
 ## Operating Role
 
@@ -87,8 +87,10 @@ after corrected masters pass the loudness and sync checks in
   despite valid source items and audio. Repair that listing in place through
   the submitted Apple support request; do not recreate or manually upload those
   episodes.
-- The seven current RSS audio enclosures measure between `-30.99` and `-28.42`
-  LUFS. Treat every corrected render as a new binary: hash and fully decode it,
+- The seven current RSS audio enclosures are the August 7 normalized replacements.
+  They measure between `-16.91` and `-16.75` LUFS with true peak no higher than
+  `-1.86 dBTP`; their exact remote bytes fully decode and all original GUIDs are
+  preserved. Treat every later render as a new binary: hash and fully decode it,
   require `-17` through `-15` LUFS and true peak no higher than `-1 dBTP`, then
   replace the existing RSS.com episode audio without changing its GUID or other
   identity fields.
@@ -98,8 +100,8 @@ after corrected masters pass the loudness and sync checks in
 - `publishing/master-catalog.json` is the distribution metadata authority.
   Supabase remains the production authority for website-only editorial content;
   overlapping identity/title/audio fields are verified projections of the
-  master. The production seven-row episode audio migration and exact catalog
-  readback passed on August 6, 2026.
+  master. The production seven-row normalized-audio and YouTube-destination
+  migrations and exact catalog revision 10 readback passed on August 7, 2026.
 - Dropbox is binary storage, not metadata authority. Configure only a
   project-scoped synced root outside git, use portable logical references, and
   verify hashes before preparation or upload.
