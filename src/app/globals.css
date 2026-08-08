@@ -100,15 +100,15 @@ html {
 
 @media (min-width: 900px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .home-hero-layer--far {
-    transform: translate3d(0, calc(var(--hero-progress) * -5px), 0);
+    transform: translate3d(0, calc(var(--hero-progress) * -10px), 0);
   }
 
   .home-hero-layer--route {
-    transform: translate3d(0, calc(var(--hero-progress) * -13px), 0);
+    transform: translate3d(0, calc(var(--hero-progress) * -28px), 0);
   }
 
   .home-hero-layer--near {
-    transform: translate3d(0, calc(var(--hero-progress) * -24px), 0);
+    transform: translate3d(0, calc(var(--hero-progress) * -52px), 0);
   }
 
   .home-hero-scene[data-motion-active="true"] .home-hero-layer {
