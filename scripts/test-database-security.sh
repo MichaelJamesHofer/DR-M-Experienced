@@ -4,6 +4,7 @@ set -euo pipefail
 root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 container="drm-security-test-${RANDOM}-$$"
 audio_migration="$root_dir/supabase/migrations/20260806164500_repoint_episode_audio_to_rss_com.sql"
+episode7_copy_migration="$root_dir/supabase/migrations/20260808180918_correct_episode7_editorial_copy.sql"
 
 run_sql_file() {
   local database="$1"
@@ -137,6 +138,8 @@ for migration in "$root_dir"/supabase/migrations/*.sql; do
 done
 
 run_sql_file postgres "$root_dir/supabase/seed.sql"
+# The correction must also be safe when a fresh seed already contains the new copy.
+run_sql_file postgres "$episode7_copy_migration"
 run_sql_file postgres "$root_dir/supabase/tests/catalog_security.sql"
 
 # Exercise the production order separately: populated Anchor rows, guarded

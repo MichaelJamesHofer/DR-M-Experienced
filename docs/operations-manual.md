@@ -1,6 +1,6 @@
 # Dr. M Experienced Ecosystem Operations Manual
 
-Last verified: August 7, 2026.
+Last verified: August 8, 2026.
 
 This is the first-stop instruction manual for the website, podcast host,
 directories, video channels, social publishing, workstation tooling, and brand
@@ -36,7 +36,7 @@ runuser -u otto -- env \
   gh auth status
 ```
 
-Interpretation on August 7, 2026:
+Interpretation on August 8, 2026:
 
 - RSS.com is canonical at
   `https://media.rss.com/dr-m-experienced/feed.xml`. It has the seven GUIDs
@@ -75,6 +75,14 @@ Interpretation on August 7, 2026:
   acknowledgment of the July 21, 2026 Terms provisions.
   Vimeo represents catalog lists as rich-text bullets;
   YouTube replaces forbidden angle brackets with equivalent comparison words.
+- Catalog revision 11 corrects Episode 7's description, which had duplicated
+  Episode 6 copy. RSS.com, Spotify fanout, YouTube video `5UOEvs59hBA`, and
+  Vimeo video `1205004739` now match the corrected description. Production
+  Supabase also passed the guarded migration and independent editorial readback.
+  Apple cache convergence, Rumble's manual reupload, and the website deployment
+  remain pending in
+  `publishing/episode-description-correction.json`; do not report global parity
+  until that receipt is complete.
 - Local publishing browser: normally stopped when not in active use.
 - GitHub connector: authenticated with admin/push access to this repository.
   Otto's local `gh` credential currently needs attended reauthentication; use
@@ -234,7 +242,7 @@ have been tested against draft/private items.
 |---|---|---|
 | Website | `https://drmexperienced.com` | Static Next.js export is valid; the apex returns HTTP 200 and `www` redirects to it. The analytics-enabled revision still needs deployment and live-event verification |
 | GitHub | `MichaelJamesHofer/DR-M-Experienced` | Public repo; `main` deploys production |
-| Supabase | project `tdbsuzciwotleualdcjf` | Production content catalog and form receiver; both guarded August 7 migrations are applied and seven-row readback matches catalog revision 10 for RSS audio and YouTube destination projections |
+| Supabase | project `tdbsuzciwotleualdcjf` | Production content catalog and form receiver; the guarded August 7 migrations retain their revision-10 RSS/YouTube readback, and the August 8 Episode 7 editorial correction migration passed independent summary, takeaway, section, paragraph, and topic readback |
 | RSS.com | slug `dr-m-experienced`, feed `https://media.rss.com/dr-m-experienced/feed.xml` | Canonical XML/dashboard copy is exact and token-free; seven normalized enclosures retain the GUIDs captured August 5 and pass remote decode/loudness gates; no season tags; public landing-page cache still exposes `RSSVERIFY` |
 | Spotify | show `7GGLljxmO0G3FLjPy8vfcw` | Corrected video is attached to all seven existing episode IDs; public readback verifies video, approved artwork, and approved copy for 7/7 |
 | Apple | public show `1870433419` | Configured directly to RSS.com with exact canonical metadata; preserve it; five Available and two RSS Draft records remain. Support case `20000130526608` confirmed historical GUID mismatches for Episodes 1-2; remote repair is blocked by `publishing/apple-guid-repair.json`. Public JSON-LD/search caches still use legacy show wording for Episodes 4-7 |
@@ -626,8 +634,12 @@ After Spotify, Vimeo, YouTube, and Rumble references are verified:
   asset rights and the July 21 Terms, directly check the rights and Terms boxes,
   and submit. Record the resulting ID and URL without an
   automated signed-in readback.
-- Current seven titles and descriptions are verified; the existing episode 5
-  URL slug remains misleading but must be preserved with the same video ID.
+- The August 5 revision-10 title/description readback remains historical
+  evidence. Current Rumble description parity is false: existing Episode 7
+  video `v7bvtu4` still needs the revision-11 description during its manual
+  reupload. Track it in `publishing/episode-description-correction.json`. The
+  existing episode 5 URL slug remains misleading and is preserved as historical
+  identity evidence until its replacement is submitted.
 
 ## 10. Completed RSS.com Migration And Monitoring
 
@@ -773,7 +785,10 @@ or remote content IDs.
 7. Update direct video titles and descriptions on YouTube, Vimeo, and Rumble.
    Completed on August 5, 2026: YouTube and Vimeo public readback and Rumble's
    authenticated post-save readback match the catalog. Existing video IDs, URLs,
-   visibility, licensing, and monetization settings were preserved.
+   visibility, licensing, and monetization settings were preserved. This is
+   revision-10 historical evidence; the revision-11 Episode 7 correction is
+   current on YouTube and Vimeo and pending manual Rumble reupload, as recorded
+   in `publishing/episode-description-correction.json`.
 8. Update Instagram captions only where the old numbered title is presented as
    the primary title; do not erase engagement history merely for cosmetic copy.
 9. Completed on August 5, 2026: replace all seven existing thumbnails on

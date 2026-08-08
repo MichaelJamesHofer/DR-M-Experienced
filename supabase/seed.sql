@@ -122,7 +122,7 @@ insert into public.episodes (
     $$The Brain on Fire - Neuroinflammation After Concussion$$,
     '2026-06-26',
     21,
-    $$Dr. Musnick continues the brain-injury series with a focused look at the inflamed brain, including concussion, traumatic brain injury, neuroinflammation, oxidative stress, blood-brain barrier disruption, brain autoimmunity, hormone and mitochondrial effects, and persistent symptoms.$$,
+    $$Dr. Musnick explains brain reserve and why symptom relief may precede full recovery, then explores glial cells, M1 and M2 microglia, neuroinflammation after concussion, and research-informed recovery factors.$$,
     'https://content.rss.com/episodes/397420/3050760/dr-m-experienced/2026_08_07_05_56_36_52e27ebd-6648-4ff7-adf3-f9f7731c1b86.mp3',
     '1205004739',
     '5QJlHSE6JhP3ymSCNzbWxv',
@@ -170,7 +170,6 @@ insert into public.episode_topics (episode_slug, topic_slug) values
   ('episode-7-the-brain-on-fire', 'brain-health'),
   ('episode-7-the-brain-on-fire', 'neuroinflammation'),
   ('episode-7-the-brain-on-fire', 'blood-brain-barrier'),
-  ('episode-7-the-brain-on-fire', 'brain-autoimmunity'),
   ('episode-7-the-brain-on-fire', 'functional-medicine')
 on conflict (episode_slug, topic_slug) do nothing;
 
@@ -236,11 +235,11 @@ insert into public.episode_key_takeaways (episode_slug, display_order, body) val
   ($$episode-6-concussion-and-pathophysiology$$, 30, $$Persistent symptoms may involve brain autoimmunity, hormone and pituitary effects, vagus nerve dysfunction, mitochondrial dysfunction, protein folding abnormalities, and gut microbiome changes.$$),
   ($$episode-6-concussion-and-pathophysiology$$, 40, $$Brain fog, headache, dizziness, emotional instability, fatigue, sleepiness, and brain-based fatigue can persist even when the person did not directly hit their head.$$),
   ($$episode-6-concussion-and-pathophysiology$$, 50, $$The episode lays the mechanism foundation for future concussion recovery conversations and does not replace individualized medical evaluation.$$),
-  ($$episode-7-the-brain-on-fire$$, 10, $$The brain-on-fire frame centers on neuroinflammation and the downstream effects of concussion or traumatic brain injury.$$),
-  ($$episode-7-the-brain-on-fire$$, 20, $$Brain injury can involve structural injury, neural shearing, excitotoxicity, oxidative stress, hypoxia, and blood-brain barrier disruption.$$),
-  ($$episode-7-the-brain-on-fire$$, 30, $$Persistent symptoms may be driven by brain autoimmunity, hormone and pituitary effects, vagus nerve dysfunction, mitochondrial dysfunction, and gut-brain changes.$$),
-  ($$episode-7-the-brain-on-fire$$, 40, $$Brain fog, headache, dizziness, emotional instability, fatigue, sleepiness, and brain-based fatigue can continue even when there was no direct head impact.$$),
-  ($$episode-7-the-brain-on-fire$$, 50, $$This episode reinforces the need for personalized evaluation and recovery planning after concussion or head injury.$$)
+  ($$episode-7-the-brain-on-fire$$, 10, $$Brain reserve can differ across regions, so symptom improvement does not always mean the brain has fully restored its reserve.$$),
+  ($$episode-7-the-brain-on-fire$$, 20, $$A healing brain needs protection from reinjury even after the most noticeable symptoms begin to improve.$$),
+  ($$episode-7-the-brain-on-fire$$, 30, $$Astrocytes support the blood-brain barrier, oligodendrocytes help form myelin, and microglia respond to injury and inflammation.$$),
+  ($$episode-7-the-brain-on-fire$$, 40, $$Prolonged pro-inflammatory M1 microglial activity can impair neurons and synapses, while repair-oriented M2 activity supports recovery.$$),
+  ($$episode-7-the-brain-on-fire$$, 50, $$Sleep, selected foods and flavonoids, vitamin D, omega-3s, curcumin, and Nrf2 signaling are discussed as research-informed considerations, not a self-treatment protocol.$$)
 on conflict (episode_slug, display_order) do update set body = excluded.body;
 
 insert into public.episode_checklist_items (episode_slug, display_order, body) values
@@ -277,10 +276,10 @@ insert into public.episode_sections (episode_slug, display_order, title) values
   ($$episode-6-concussion-and-pathophysiology$$, 20, $$What happens in the brain$$),
   ($$episode-6-concussion-and-pathophysiology$$, 30, $$Symptoms that can persist$$),
   ($$episode-6-concussion-and-pathophysiology$$, 40, $$Foundation for recovery discussions$$),
-  ($$episode-7-the-brain-on-fire$$, 10, $$The inflamed brain$$),
-  ($$episode-7-the-brain-on-fire$$, 20, $$Mechanisms after injury$$),
-  ($$episode-7-the-brain-on-fire$$, 30, $$Symptoms and patterns$$),
-  ($$episode-7-the-brain-on-fire$$, 40, $$Use medical context$$)
+  ($$episode-7-the-brain-on-fire$$, 10, $$Brain reserve and symptom recovery$$),
+  ($$episode-7-the-brain-on-fire$$, 20, $$Protecting a healing brain$$),
+  ($$episode-7-the-brain-on-fire$$, 30, $$Glial cells and microglia$$),
+  ($$episode-7-the-brain-on-fire$$, 40, $$Supporting inflammatory balance$$)
 on conflict (episode_slug, display_order) do update set title = excluded.title;
 
 insert into public.episode_section_paragraphs (
@@ -324,13 +323,14 @@ insert into public.episode_section_paragraphs (
   ($$episode-6-concussion-and-pathophysiology$$, 30, 20, $$He also notes that concussion-like injury can occur even when someone does not directly hit their head.$$),
   ($$episode-6-concussion-and-pathophysiology$$, 40, 10, $$This episode sets up later conversations on how to address concussion recovery pathways.$$),
   ($$episode-6-concussion-and-pathophysiology$$, 40, 20, $$Listeners are reminded to use personalized medical care for diagnosis, treatment, testing, supplements, and return-to-play decisions after head injury.$$),
-  ($$episode-7-the-brain-on-fire$$, 10, 10, $$Dr. M frames the post-injury brain as a system that can remain activated and inflamed after concussion or traumatic brain injury.$$),
-  ($$episode-7-the-brain-on-fire$$, 10, 20, $$The episode connects the brain-on-fire idea to neuroinflammation, oxidative stress, and the blood-brain barrier.$$),
-  ($$episode-7-the-brain-on-fire$$, 20, 10, $$Mechanisms discussed include structural injury, neural shearing, excitotoxicity, hypoxia, blood-brain barrier disruption, brain autoimmunity, hormone dysfunction, pituitary involvement, vagus nerve dysfunction, mitochondrial dysfunction, protein folding abnormalities, neurogenesis, synaptogenesis, and gut microbiome changes.$$),
-  ($$episode-7-the-brain-on-fire$$, 30, 10, $$Dr. M connects these pathways to persistent symptoms such as brain fog, headache, dizziness, emotional instability, fatigue, sleepiness, and brain-based fatigue.$$),
-  ($$episode-7-the-brain-on-fire$$, 30, 20, $$He also emphasizes that concussion-like injury can occur without a direct blow to the head.$$),
-  ($$episode-7-the-brain-on-fire$$, 40, 10, $$The episode is educational and should not be used as a stand-alone protocol for diagnosis, treatment, testing, supplements, or return-to-play decisions.$$),
-  ($$episode-7-the-brain-on-fire$$, 40, 20, $$Listeners are directed toward individualized medical evaluation after concussion or head injury.$$)
+  ($$episode-7-the-brain-on-fire$$, 10, 10, $$Dr. M explains that different brain regions can have different amounts of reserve before an injury becomes symptomatic.$$),
+  ($$episode-7-the-brain-on-fire$$, 10, 20, $$Symptoms may improve once function rises above that threshold, even though the brain has not yet returned to its full pre-injury reserve.$$),
+  ($$episode-7-the-brain-on-fire$$, 20, 10, $$The episode emphasizes protecting the brain from another impact while recovery is still underway.$$),
+  ($$episode-7-the-brain-on-fire$$, 20, 20, $$Dr. M briefly revisits excitotoxicity from the preceding pathophysiology episode before focusing on neuroinflammation.$$),
+  ($$episode-7-the-brain-on-fire$$, 30, 10, $$Astrocytes help support the blood-brain barrier, oligodendrocytes help form myelin, and microglia act as immune-support cells within the brain.$$),
+  ($$episode-7-the-brain-on-fire$$, 30, 20, $$Dr. M contrasts prolonged pro-inflammatory M1 microglial activity, which can impair neurons and synapses, with repair-oriented M2 activity.$$),
+  ($$episode-7-the-brain-on-fire$$, 40, 10, $$The discussion covers sleep, luteolin and apigenin, vitamin D, Nrf2 signaling, curcumin, and omega-3 fats as research-informed considerations.$$),
+  ($$episode-7-the-brain-on-fire$$, 40, 20, $$These topics are educational and should be evaluated with an appropriate clinician rather than used as a stand-alone treatment or return-to-play protocol.$$)
 on conflict (episode_slug, section_display_order, display_order) do update set body = excluded.body;
 
 insert into public.affiliate_categories (slug, label, description, display_order) values

@@ -376,7 +376,6 @@
       "brain-health",
       "neuroinflammation",
       "blood-brain-barrier",
-      "brain-autoimmunity",
       "functional-medicine"
     ],
     "references": [
@@ -398,39 +397,40 @@
       }
     ],
     "keyTakeaways": [
-      "The brain-on-fire frame centers on neuroinflammation and the downstream effects of concussion or traumatic brain injury.",
-      "Brain injury can involve structural injury, neural shearing, excitotoxicity, oxidative stress, hypoxia, and blood-brain barrier disruption.",
-      "Persistent symptoms may be driven by brain autoimmunity, hormone and pituitary effects, vagus nerve dysfunction, mitochondrial dysfunction, and gut-brain changes.",
-      "Brain fog, headache, dizziness, emotional instability, fatigue, sleepiness, and brain-based fatigue can continue even when there was no direct head impact.",
-      "This episode reinforces the need for personalized evaluation and recovery planning after concussion or head injury."
+      "Brain reserve can differ across regions, so symptom improvement does not always mean the brain has fully restored its reserve.",
+      "A healing brain needs protection from reinjury even after the most noticeable symptoms begin to improve.",
+      "Astrocytes support the blood-brain barrier, oligodendrocytes help form myelin, and microglia respond to injury and inflammation.",
+      "Prolonged pro-inflammatory M1 microglial activity can impair neurons and synapses, while repair-oriented M2 activity supports recovery.",
+      "Sleep, selected foods and flavonoids, vitamin D, omega-3s, curcumin, and Nrf2 signaling are discussed as research-informed considerations, not a self-treatment protocol."
     ],
     "checklist": [],
     "sections": [
       {
-        "title": "The inflamed brain",
+        "title": "Brain reserve and symptom recovery",
         "content": [
-          "Dr. M frames the post-injury brain as a system that can remain activated and inflamed after concussion or traumatic brain injury.",
-          "The episode connects the brain-on-fire idea to neuroinflammation, oxidative stress, and the blood-brain barrier."
+          "Dr. M explains that different brain regions can have different amounts of reserve before an injury becomes symptomatic.",
+          "Symptoms may improve once function rises above that threshold, even though the brain has not yet returned to its full pre-injury reserve."
         ]
       },
       {
-        "title": "Mechanisms after injury",
+        "title": "Protecting a healing brain",
         "content": [
-          "Mechanisms discussed include structural injury, neural shearing, excitotoxicity, hypoxia, blood-brain barrier disruption, brain autoimmunity, hormone dysfunction, pituitary involvement, vagus nerve dysfunction, mitochondrial dysfunction, protein folding abnormalities, neurogenesis, synaptogenesis, and gut microbiome changes."
+          "The episode emphasizes protecting the brain from another impact while recovery is still underway.",
+          "Dr. M briefly revisits excitotoxicity from the preceding pathophysiology episode before focusing on neuroinflammation."
         ]
       },
       {
-        "title": "Symptoms and patterns",
+        "title": "Glial cells and microglia",
         "content": [
-          "Dr. M connects these pathways to persistent symptoms such as brain fog, headache, dizziness, emotional instability, fatigue, sleepiness, and brain-based fatigue.",
-          "He also emphasizes that concussion-like injury can occur without a direct blow to the head."
+          "Astrocytes help support the blood-brain barrier, oligodendrocytes help form myelin, and microglia act as immune-support cells within the brain.",
+          "Dr. M contrasts prolonged pro-inflammatory M1 microglial activity, which can impair neurons and synapses, with repair-oriented M2 activity."
         ]
       },
       {
-        "title": "Use medical context",
+        "title": "Supporting inflammatory balance",
         "content": [
-          "The episode is educational and should not be used as a stand-alone protocol for diagnosis, treatment, testing, supplements, or return-to-play decisions.",
-          "Listeners are directed toward individualized medical evaluation after concussion or head injury."
+          "The discussion covers sleep, luteolin and apigenin, vitamin D, Nrf2 signaling, curcumin, and omega-3 fats as research-informed considerations.",
+          "These topics are educational and should be evaluated with an appropriate clinician rather than used as a stand-alone treatment or return-to-play protocol."
         ]
       }
     ]

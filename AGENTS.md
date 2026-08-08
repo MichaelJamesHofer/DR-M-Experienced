@@ -121,11 +121,12 @@ checks now report video, exact copy, and approved artwork for all seven.
   AI/ML training and third-party AI sublicensing provisions, turn syndication
   off, check the rights and Terms boxes, and submit. Do not infer that the user
   has acknowledged a newly surfaced provision.
-- `publishing/master-catalog.json` is the distribution metadata authority.
-  Supabase remains the production authority for website-only editorial content;
-  overlapping identity/title/audio fields are verified projections of the
-  master. The production seven-row normalized-audio and YouTube-destination
-  migrations and exact catalog revision 10 readback passed on August 7, 2026.
+- `publishing/master-catalog.json` revision 11 is the current distribution
+  metadata authority. Supabase remains the production authority for website-only
+  editorial content; overlapping identity/title/audio fields are verified
+  projections of the master. The August 8 Episode 7 correction passed guarded
+  production migration and independent editorial readback. Current destination
+  parity is recorded in `publishing/episode-description-correction.json`.
 - Dropbox is binary storage, not metadata authority. Configure only a
   project-scoped synced root outside git, use portable logical references, and
   verify hashes before preparation or upload.

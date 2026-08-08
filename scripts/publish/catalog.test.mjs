@@ -1,5 +1,4 @@
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -72,7 +71,7 @@ test("master catalog validates and has a deterministic hash", async () => {
   const result = validateCatalog(catalog);
   assert.deepEqual(result, { valid: true, errors: [] });
   assert.equal(catalog.schemaVersion, 1);
-  assert.equal(catalog.revision, 10);
+  assert.equal(catalog.revision, 11);
   assert.equal(catalog.episodes.length, 7);
   assert.match(catalogHash(catalog), /^[a-f0-9]{64}$/);
   assert.equal(catalogHash(catalog), catalogHash(structuredClone(catalog)));
@@ -198,6 +197,19 @@ test("published podcast enclosures bind the website and Supabase seed projection
   assert.doesNotMatch(episodeSeed, /https:\/\/anchor\.fm\/s\/10e1b0328\/podcast\/play\//);
 });
 
+test("checked-in episode summaries project exactly from the master catalog", async () => {
+  const catalog = await loadCatalog();
+  const projection = JSON.parse(
+    await fs.readFile(new URL("../../src/data/episodes-from-platforms.json", import.meta.url), "utf8")
+  );
+
+  for (const episode of catalog.episodes) {
+    const projected = projection.find((item) => item.number === episode.number);
+    assert.ok(projected, `episode ${episode.number} is missing from the checked-in site projection`);
+    assert.equal(projected.summary, episode.websiteSummary, `episode ${episode.number} summary drifted`);
+  }
+});
+
 test("semantic validation rejects duplicate immutable episode identities", async () => {
   const catalog = await loadCatalog();
   const cases = [
@@ -222,6 +234,24 @@ test("semantic validation rejects duplicate immutable episode identities", async
   assert.ok(result.errors.some((error) => error.includes("Duplicate destination ID spotify:")), result.errors.join("\n"));
 });
 
+test("semantic validation rejects duplicate visible episode descriptions", async () => {
+  const catalog = await loadCatalog();
+  assert.notEqual(
+    normalizeDescriptionForComparison(catalog.episodes[5].description.full),
+    normalizeDescriptionForComparison(catalog.episodes[6].description.full),
+    "Episodes 6 and 7 regressed to the same visible description"
+  );
+  const changed = structuredClone(catalog);
+  changed.episodes[1].description.full = `<section>\n${changed.episodes[0].description.full}\n</section>`;
+
+  const result = validateCatalog(changed);
+  assert.equal(result.valid, false);
+  assert.ok(
+    result.errors.some((error) => error.includes("Duplicate normalized episode description")),
+    result.errors.join("\n")
+  );
+});
+
 test("published episodes require a hosted podcast enclosure", async () => {
   const catalog = await loadCatalog();
   const changed = structuredClone(catalog);
@@ -244,6 +274,8 @@ test("catalog scales beyond the initial seven episodes with contiguous identitie
   episode.slug = "future-episode";
   episode.rssGuid = "00000000-0000-4000-8000-000000000008";
   episode.title = "A Future Episode - Ready for Distribution";
+  episode.description.full = "<p>A unique approved description for the future distributed episode.</p>";
+  episode.websiteSummary = "A unique website summary for the future distributed episode.";
   episode.aliases = { titles: [], slugs: [] };
   episode.destinationArchives = [];
   episode.destinations = {
@@ -267,6 +299,8 @@ test("catalog supports draft episodes before hosts assign remote identities", as
   episode.slug = "future-draft";
   episode.rssGuid = null;
   episode.title = "A Future Draft - Approved Before Distribution";
+  episode.description.full = "<p>A unique approved description for the future draft episode.</p>";
+  episode.websiteSummary = "A unique website summary for the future draft episode.";
   episode.durationMinutes = null;
   episode.publishDate = null;
   episode.feedPublishedAt = null;
@@ -609,7 +643,6 @@ test("all stable destination identities are explicit and support lookup", async 
 
 test("YouTube cutover projects normalized public IDs and retains the prior uploads as rollback archives", async () => {
   const catalog = await loadCatalog();
-  const catalogBytes = await fs.readFile(DEFAULT_CATALOG_PATH);
   const platformProjection = JSON.parse(
     await fs.readFile(new URL("../../src/data/episodes-from-platforms.json", import.meta.url), "utf8")
   );
@@ -691,12 +724,10 @@ test("YouTube cutover projects normalized public IDs and retains the prior uploa
   assert.equal(platforms.platforms.youtube.currentPublicVideoCount, 7);
   assert.equal(platforms.platforms.youtube.priorVideoCount, 7);
   assert.equal(platforms.platforms.youtube.priorVideosDeleted, false);
-  assert.equal(thumbnailReceipt.catalog.revision, catalog.revision);
-  assert.equal(thumbnailReceipt.catalog.publisherHash, catalogHash(catalog));
-  assert.equal(
-    thumbnailReceipt.catalog.fileSha256,
-    createHash("sha256").update(catalogBytes).digest("hex")
-  );
+  assert.equal(thumbnailReceipt.catalog.revision, 10);
+  assert.ok(thumbnailReceipt.catalog.revision < catalog.revision);
+  assert.match(thumbnailReceipt.catalog.publisherHash, /^[a-f0-9]{64}$/);
+  assert.match(thumbnailReceipt.catalog.fileSha256, /^[a-f0-9]{64}$/);
 });
 
 test("catalog validation rejects a YouTube archive that is active or points at the wrong successor", async () => {

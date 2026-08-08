@@ -7,6 +7,14 @@
     "cutoverReady": true,
     "resumeRequiresExplicitApproval": false
   },
+  "episodeDescriptionCorrection": {
+    "stateFile": "publishing/episode-description-correction.json",
+    "catalogRevision": 11,
+    "episodeNumber": 7,
+    "status": "remote_propagation_partial",
+    "verifiedComplete": ["rss.com", "spotify", "youtube", "vimeo", "supabase"],
+    "pending": ["rumble", "apple", "website"]
+  },
   "downstreamPropagation": {
     "status": "issues_pending",
     "hostMigrationComplete": true,
@@ -36,7 +44,8 @@
         "youtubeSyndicationEnabledCount": 7,
         "submitted": false,
         "manualCorrectionRequired": true,
-        "aiMlGeneralLicenseAcknowledgmentRequired": true,
+        "cacheResetInvalidatedStagedForms": true,
+        "aiMlGeneralLicenseAcknowledgmentRequired": false,
         "thirdPartyAssetRightsReviewRequired": true,
         "policyFile": "publishing/rumble-release-policy.json",
         "auditedAt": "2026-08-07"
@@ -207,7 +216,11 @@
       },
       "requiredDestinationIds": ["containerId"],
       "asset": "fullVideo",
-      "currentVideoState": "seven_corrected_uploads_staged_unlisted_not_submitted",
+      "currentVideoState": "seven_verified_local_uploads_require_manual_restaging",
+      "currentCatalogDescriptionParity": false,
+      "pendingDescriptionCorrectionEpisodeNumbers": [7],
+      "descriptionCorrectionReceipt": "publishing/episode-description-correction.json",
+      "stagedFormsOperational": false,
       "stagedUploadCount": 7,
       "stagedVisibility": "unlisted",
       "stagedLicense": "rumble_only_option_c",
@@ -233,14 +246,14 @@
         "submissionMethod": "manual_human_only"
       },
       "submissionBlockedOn": [
+        "apply_episode_7_catalog_revision_11_description_during_manual_reupload",
         "disable_youtube_syndication_on_all_seven_forms",
         "verify_premium_exclusive_disabled_on_all_seven_forms",
-        "acknowledge_ai_ml_general_license_caveat",
         "review_third_party_asset_rights",
         "human_reverify_and_complete_rights_terms_controls"
       ],
       "stagingStateAuditedAt": "2026-08-07",
-      "notes": "Seven corrected uploads are staged Unlisted with Rumble Only Option C (form code 6), the permitted non-exclusive license, and have not been submitted. The hidden Additional Syndication controls currently have YouTube enabled on all seven; Vimeo and Facebook are off. Do not submit until YouTube syndication is manually disabled, Premium exclusivity is manually verified off, the July 21, 2026 general-license AI/ML and third-party asset-rights caveats are acknowledged/reviewed, and every form is reverified. Rumble's current Terms prohibit automated site interaction without prior written permission, so a human must complete the rights and Terms controls and final submission."
+      "notes": "The August 7 audit found seven corrected uploads staged Unlisted with Rumble Only Option C (form code 6), the permitted non-exclusive license, and no submissions. Hidden YouTube syndication was enabled on all seven; Vimeo and Facebook were off. The August 8 browser cache reset invalidated those staged forms, so the counts above are retained as historical audit evidence and all seven uploads require manual restaging. Rumble is not in current catalog-description parity: Episode 7 must receive the revision-11 description recorded in publishing/episode-description-correction.json during manual reupload. On August 8 the user explicitly accepted the Terms last modified July 21, 2026, including the general-license AI/ML and third-party AI sublicensing provision. Do not submit until all syndication is disabled, Premium exclusivity is verified off, third-party asset rights are reviewed, and every form is reverified. Rumble's current Terms prohibit automated site interaction without prior written permission, so a human must complete the rights and Terms controls and final submission."
     }
   }
 }

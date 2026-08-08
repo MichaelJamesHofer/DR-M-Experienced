@@ -413,9 +413,28 @@ function semanticErrors(catalog) {
   }
 
   const retiredNames = /The Dr\. M Experience|Dr\. M[’']s (?:Functional Medicine &amp; Sports|Experienced, Functional &amp; Sports Medicine) Podcast/i;
+  const descriptionOwners = new Map();
   for (const [episodeIndex, episode] of episodes.entries()) {
     if (typeof episode.description?.full === "string" && retiredNames.test(episode.description.full)) {
       errors.push(`episodes.${episodeIndex}.description.full contains a retired show name.`);
+    }
+    if (typeof episode.description?.full !== "string") continue;
+    try {
+      const normalized = normalizeDescriptionForComparison(episode.description.full);
+      if (!normalized) {
+        errors.push(`episodes.${episodeIndex}.description.full has no visible text.`);
+        continue;
+      }
+      const first = descriptionOwners.get(normalized);
+      if (first) {
+        errors.push(
+          `Duplicate normalized episode description at episodes.${first.index} (episode ${first.number}) and episodes.${episodeIndex} (episode ${episode.number}).`
+        );
+      } else {
+        descriptionOwners.set(normalized, { index: episodeIndex, number: episode.number });
+      }
+    } catch (error) {
+      errors.push(`episodes.${episodeIndex}.description.full cannot be normalized: ${error.message}`);
     }
   }
   return errors;
