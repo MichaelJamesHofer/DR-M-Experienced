@@ -93,8 +93,8 @@ Interpretation on August 8, 2026:
   until that receipt is complete.
 - All three cataloged Instagram shorts now have verified Vimeo recovery copies:
   `1216695521`, `1216695522`, and `1204939542`. Their canonical titles,
-  descriptions, and posters match the short-form catalog. The three website
-  short routes are prepared in source but still await production deployment.
+  descriptions, and posters match the short-form catalog. All three website
+  short routes are deployed and verified against those exact Vimeo IDs.
 - Catalog revision 12 mounts the exact portrait-free Show Brand Package
   `1.0.0-rc1` binaries in Dropbox for local verification. The package remains
   `review_owner_approval_required`; no website or platform received these
@@ -102,8 +102,8 @@ Interpretation on August 8, 2026:
   changed.
 - Local publishing browser: normally stopped when not in active use.
 - GitHub connector: authenticated with admin/push access to this repository.
-  Otto's local `gh` credential currently needs attended reauthentication; use
-  the connector in the meantime and do not trigger repeated keyring prompts.
+  Otto's local `gh` credential is also authenticated through the Otto Chrome
+  profile and stored outside the repository; use `HOME=/home/otto` for CLI work.
 - The publisher now has a general immutable per-job release-receipt ledger for
   `accepted`, `processing`, `published`, `verified`, `failed`, and `superseded`
   states. It validates each receipt against the approved packet and operation ID.
@@ -270,7 +270,7 @@ against draft/private items before this is described as fully automated.
 
 | Destination | Stable identity | Current delivery and state |
 |---|---|---|
-| Website | `https://drmexperienced.com` | The apex returns HTTP 200 and `www` redirects to it. The corrected Episode 7 page is deployed and verified on desktop plus 320/390-pixel mobile views. Production PostHog ingestion and all three tracked event checks are verified. Dashboard `1086989` has six verified growth views; the three short-form routes remain pending |
+| Website | `https://drmexperienced.com` | The apex returns HTTP 200 and `www` redirects to it. The corrected Episode 7 page and all three short-form routes are deployed. The short routes return HTTP 200, are sitemap-indexed, load their checked-in posters, bind the exact Vimeo IDs, and have no document overflow at 320, 390, or 1440 pixels. Production PostHog ingestion and all three tracked event checks are verified. Dashboard `1086989` has six verified growth views |
 | GitHub | `MichaelJamesHofer/DR-M-Experienced` | Public repo; `main` deploys production |
 | Supabase | project `tdbsuzciwotleualdcjf` | Production content catalog and form receiver; the guarded August 7 migrations retain their revision-10 RSS/YouTube readback, and the August 8 Episode 7 editorial correction migration passed independent summary, takeaway, section, paragraph, and topic readback |
 | RSS.com | slug `dr-m-experienced`, feed `https://media.rss.com/dr-m-experienced/feed.xml` | Canonical XML/dashboard copy is exact and token-free; seven normalized enclosures retain the GUIDs captured August 5 and pass remote decode/loudness gates; no season tags. A support request for in-place GUID-only capability is pending, no live GUID change was requested, and the public landing-page cache still exposes `RSSVERIFY` |
@@ -652,7 +652,7 @@ After Spotify, Vimeo, YouTube, and Rumble references are verified:
 - All three Instagram-mapped shorts now have Vimeo recovery copies with
   canonical titles, descriptions, and posters: Brain Fog Part 1 is `1216695521`,
   Brain Fog Part 2 is `1216695522`, and the pesto recipe is `1204939542`.
-  Preserve these stable IDs. Their website routes are prepared but not deployed.
+  Preserve these stable IDs. Their website routes are deployed and verified.
 - Current Vimeo display name is shortened to fit the platform limit.
 - Current seven episode titles and descriptions are verified. Vimeo may render catalog
   hyphen lists as native rich-text bullets; compare persisted editor structure
@@ -672,7 +672,7 @@ After Spotify, Vimeo, YouTube, and Rumble references are verified:
   readback confirms it.
 - All three public Reels have distinct captions and are mapped to verified local
   masters plus Vimeo IDs `1216695521`, `1216695522`, and `1204939542` in
-  `publishing/short-form-catalog.json`. Their website routes await deployment.
+  `publishing/short-form-catalog.json`. Their website routes are deployed.
 - Prefer Meta's resumable local upload after the stable publishing ID is
   verified. Meta developer setup is currently waiting for the owner's Facebook
   developer login. Meta limits this local-file route to Facebook Login for Business,
@@ -1352,10 +1352,11 @@ Quarterly:
   actions; live adapters and automatic reconciliation remain incomplete.
 - August 8, 2026: verified all three Instagram-mapped shorts on Vimeo as
   `1216695521`, `1216695522`, and `1204939542` with canonical metadata and
-  posters. Their website routes remain ready for deployment. Prepared a private
-  Vimeo API app pending the owner's legal attestation and token, and recorded
-  that Instagram link editing requires mobile while Meta setup awaits Facebook
-  developer login.
+  posters. Deployed their three website routes and verified HTTP 200, sitemap
+  inclusion, checked-in posters, exact Vimeo playback IDs, and no horizontal
+  overflow at 320, 390, or 1440 pixels. Prepared a private Vimeo API app pending
+  the owner's legal attestation and token, and recorded that Instagram link
+  editing requires mobile while Meta setup awaits Facebook developer login.
 - August 8, 2026: submitted support follow-ups to Apple, RSS.com, and Spotify for
   the Episodes 1-2 GUID incident. All three responses remain pending and no live
   GUID was changed or authorized for change.

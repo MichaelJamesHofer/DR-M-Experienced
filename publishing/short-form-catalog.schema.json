@@ -339,13 +339,55 @@
       ],
       "properties": {
         "state": {
-          "const": "ready_for_deployment"
+          "enum": [
+            "ready_for_deployment",
+            "published"
+          ]
         },
         "path": {
           "type": "string",
           "pattern": "^/shorts/[a-z0-9-]+/$"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://drmexperienced\\.com/shorts/[a-z0-9-]+/$"
+        },
+        "verifiedAt": {
+          "type": "string",
+          "format": "date-time"
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "published"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "url": true,
+              "verifiedAt": true
+            },
+            "required": [
+              "url",
+              "verifiedAt"
+            ]
+          },
+          "else": {
+            "properties": {
+              "url": false,
+              "verifiedAt": false
+            }
+          }
+        }
+      ]
     },
     "short": {
       "type": "object",

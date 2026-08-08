@@ -21,7 +21,7 @@ async function loadPlatformRegistry() {
 test("checked-in short-form catalog validates with stable platform identities", async () => {
   const catalog = await loadShortFormCatalog();
   assert.equal(catalog.schemaVersion, 2);
-  assert.equal(catalog.revision, 2);
+  assert.equal(catalog.revision, 3);
   assert.equal(catalog.items.length, 3);
   assert.match(shortFormCatalogHash(catalog), /^[a-f0-9]{64}$/);
 
@@ -36,6 +36,29 @@ test("checked-in short-form catalog validates with stable platform identities", 
       ["short-brain-fog-what-it-feels-like", "3818274203859121888", "DT9PCiID3bg", "1216695521"],
       ["short-brain-fog-testing-and-basic-solutions", "3818276316521641998", "DT9PhRsjzgO", "1216695522"],
       ["short-cilantro-basil-pesto", "3928186163131134659", "DaDuIDBCTLD", "1204939542"],
+    ]
+  );
+  assert.deepEqual(
+    catalog.items.map((item) => item.destinations.website),
+    [
+      {
+        state: "published",
+        path: "/shorts/what-brain-fog-feels-like/",
+        url: "https://drmexperienced.com/shorts/what-brain-fog-feels-like/",
+        verifiedAt: "2026-08-08T21:49:06Z",
+      },
+      {
+        state: "published",
+        path: "/shorts/brain-fog-testing-and-basic-solutions/",
+        url: "https://drmexperienced.com/shorts/brain-fog-testing-and-basic-solutions/",
+        verifiedAt: "2026-08-08T21:49:06Z",
+      },
+      {
+        state: "published",
+        path: "/shorts/cilantro-basil-pesto-with-broccoli-sprouts/",
+        url: "https://drmexperienced.com/shorts/cilantro-basil-pesto-with-broccoli-sprouts/",
+        verifiedAt: "2026-08-08T21:49:06Z",
+      },
     ]
   );
 });
@@ -87,16 +110,16 @@ test("short-form semantic validation rejects duplicate and contradictory identit
 
 test("short-form verification timestamps and Vimeo identity bindings reject stale ledger mutations", async () => {
   const catalog = await loadShortFormCatalog();
+  const futureVerification = new Date(Date.parse(catalog.lastVerifiedAt) + 1_000).toISOString();
 
   const oldSchemaVersion = structuredClone(catalog);
   oldSchemaVersion.schemaVersion = 1;
   let result = validateShortFormCatalog(oldSchemaVersion);
   assert.equal(result.valid, false);
 
-  for (const destination of ["instagram", "vimeo"]) {
+  for (const destination of ["instagram", "vimeo", "website"]) {
     const futureChildVerification = structuredClone(catalog);
-    futureChildVerification.items[0].destinations[destination].verifiedAt =
-      "2026-08-08T20:43:50Z";
+    futureChildVerification.items[0].destinations[destination].verifiedAt = futureVerification;
     result = validateShortFormCatalog(futureChildVerification);
     assert.equal(result.valid, false, destination);
     assert.ok(
@@ -110,6 +133,43 @@ test("short-form verification timestamps and Vimeo identity bindings reject stal
   result = validateShortFormCatalog(mismatchedVimeoUrl);
   assert.equal(result.valid, false);
   assert.ok(result.errors.some((error) => error.includes("URL does not match its stable video ID")));
+
+  const mismatchedWebsiteUrl = structuredClone(catalog);
+  mismatchedWebsiteUrl.items[0].destinations.website.url =
+    "https://drmexperienced.com/shorts/brain-fog-testing-and-basic-solutions/";
+  result = validateShortFormCatalog(mismatchedWebsiteUrl);
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some((error) => error.includes("website URL does not match")));
+});
+
+test("website publication evidence is complete and forbidden before deployment", async () => {
+  const catalog = await loadShortFormCatalog();
+
+  const readyWithoutEvidence = structuredClone(catalog);
+  const readyWebsite = readyWithoutEvidence.items[0].destinations.website;
+  readyWebsite.state = "ready_for_deployment";
+  delete readyWebsite.url;
+  delete readyWebsite.verifiedAt;
+  assert.deepEqual(validateShortFormCatalog(readyWithoutEvidence), {
+    valid: true,
+    errors: [],
+  });
+
+  for (const missingField of ["url", "verifiedAt"]) {
+    const missingEvidence = structuredClone(catalog);
+    delete missingEvidence.items[0].destinations.website[missingField];
+    const result = validateShortFormCatalog(missingEvidence);
+    assert.equal(result.valid, false, missingField);
+  }
+
+  for (const forbiddenField of ["url", "verifiedAt"]) {
+    const prematureEvidence = structuredClone(catalog);
+    const website = prematureEvidence.items[0].destinations.website;
+    website.state = "ready_for_deployment";
+    delete website[forbiddenField === "url" ? "verifiedAt" : "url"];
+    const result = validateShortFormCatalog(prematureEvidence);
+    assert.equal(result.valid, false, forbiddenField);
+  }
 });
 
 test("Vimeo parity flags remain derived from observed copy and selected poster evidence", async () => {
@@ -158,6 +218,9 @@ test("Vimeo parity flags remain derived from observed copy and selected poster e
 test("Vimeo platform registry rejects stale counts, IDs, timestamps, and drift projection", async () => {
   const catalog = await loadShortFormCatalog();
   const platformRegistry = await loadPlatformRegistry();
+  const latestVimeoVerification = Math.max(
+    ...catalog.items.map((item) => Date.parse(item.destinations.vimeo.verifiedAt))
+  );
   const mutations = [
     (value) => {
       value.platforms.vimeo.currentShortVideoCount -= 1;
@@ -172,7 +235,9 @@ test("Vimeo platform registry rejects stale counts, IDs, timestamps, and drift p
       value.platforms.vimeo.shortMetadataDriftVideoIds = ["1216695521"];
     },
     (value) => {
-      value.platforms.vimeo.shortStateAuditedAt = "2026-08-08T20:43:48Z";
+      value.platforms.vimeo.shortStateAuditedAt = new Date(
+        latestVimeoVerification - 1
+      ).toISOString();
     },
   ];
 
@@ -181,6 +246,17 @@ test("Vimeo platform registry rejects stale counts, IDs, timestamps, and drift p
     mutate(candidate);
     assert.equal(validateShortFormPlatformRegistry(catalog, candidate).valid, false);
   }
+
+  const laterWebsiteOnlyVerification = structuredClone(catalog);
+  const laterTimestamp = new Date(Date.parse(catalog.lastVerifiedAt) + 1_000).toISOString();
+  laterWebsiteOnlyVerification.lastVerifiedAt = laterTimestamp;
+  for (const item of laterWebsiteOnlyVerification.items) {
+    item.destinations.website.verifiedAt = laterTimestamp;
+  }
+  assert.deepEqual(
+    validateShortFormPlatformRegistry(laterWebsiteOnlyVerification, platformRegistry),
+    { valid: true, errors: [] }
+  );
 });
 
 test("website posters are checked-in, immutable catalog assets", async () => {

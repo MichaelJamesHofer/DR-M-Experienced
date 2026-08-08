@@ -113,7 +113,7 @@ Based on analysis of top-tier health content creators (Huberman Lab, Peter Attia
 - [x] Independently verify Instagram is a Creator professional account, not a Business account, with exact public name and bio
 - [ ] Add `https://drmexperienced.com` through Instagram's mobile-only external-link control; then complete Facebook developer login and authenticated Graph API publishing-ID/token authorization without using the public profile ID or converting the account to Business
 - [x] Publish and verify all three Instagram-mapped Vimeo recovery copies as `1216695521`, `1216695522`, and `1204939542` with canonical titles, descriptions, and posters
-- [ ] Deploy and publicly verify the three prepared short-form website routes
+- [x] Deploy and publicly verify the three short-form website routes at 320, 390, and 1440 pixels with exact Vimeo bindings and sitemap inclusion
 - [ ] Complete the owner-only Vimeo legal-attestation checkbox for the prepared private API app, then create and verify an own-account upload/edit token
 - [x] Add the immutable per-job release-receipt ledger and commands for `accepted`, `processing`, `published`, `verified`, `failed`, and `superseded`
 - [ ] Connect official upload adapters to the approved packets, write receipt states automatically, and implement remote reconciliation before calling the workflow unattended
@@ -128,10 +128,10 @@ match catalog revision 11; the public website deployment and mobile readback are
 verified at merge `a291990`.
 Catalog revision 12 is the current metadata authority and mounts the review-only
 show brand package; revision 11 remains the dated Episode 7 correction receipt.
-The Episode 7 website correction, PostHog production ingestion, and initial
-growth dashboard are verified; the three short-form routes remain pending. Apple,
-RSS.com, and Spotify GUID-preservation requests are submitted with no live
-change and await responses. Podcast Index convergence, Amazon onboarding,
+The Episode 7 website correction, all three short-form routes, PostHog production
+ingestion, and the initial growth dashboard are verified. Apple, RSS.com, and
+Spotify GUID-preservation requests are submitted with no live change and await
+responses. Podcast Index convergence, Amazon onboarding,
 RSS.com's cached landing-page token, Instagram's mobile-only website-link step,
 Meta/Vimeo API credentials, Rumble's manual rights/Terms
 review and syndication correction,
