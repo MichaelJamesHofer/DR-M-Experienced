@@ -46,6 +46,14 @@ import {
   migrationDoctorAdvice,
   validatePublishingMigrationState,
 } from "./migration-state.mjs";
+import {
+  buildReleaseReceipt,
+  receiptFileName,
+  releaseReceiptAppendProblems,
+  releaseReceiptLedgerProblems,
+  releaseReceiptProblems,
+  withReceiptWriteLock,
+} from "./release-receipt.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDir, "..", "..");
@@ -59,6 +67,8 @@ function usage() {
   drm-publish prepare <episode.json>
   drm-publish show <job-id>
   drm-publish approve <job-id> --hash <sha256> --by <name> --confirm "approve <job-id> <sha256>"
+  drm-publish receipt <job-id> --platform <id> --operation-id <id> --status <status> --by <name> [--remote-id <id>] [--remote-url <https-url>] [--evidence <kind=value>] --confirm "record-receipt <job-id> <platform> <sha256> <operation-id>"
+  drm-publish receipts <job-id>
   drm-publish status <job-id>
   drm-publish list`;
 }
@@ -281,6 +291,10 @@ function flagValue(args, name) {
   return index >= 0 ? args[index + 1] : null;
 }
 
+function flagValues(args, name) {
+  return args.flatMap((argument, index) => (argument === name ? [args[index + 1]] : [])).filter(Boolean);
+}
+
 async function approve(jobId, args) {
   if (!jobId) throw new Error("approve requires a job id.");
   const expectedHash = flagValue(args, "--hash");
@@ -339,6 +353,128 @@ async function approve(jobId, args) {
   process.stdout.write(`Local review attestation recorded for ${jobId}. No content was uploaded or released.\n`);
 }
 
+async function loadApproval(directory, packet, reviewDocument) {
+  let approval;
+  try {
+    approval = await readJson(path.join(directory, "approval.json"));
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      throw new Error("A valid local review attestation is required before recording a remote receipt.");
+    }
+    throw error;
+  }
+  const problems = approvalRecordProblems(packet, approval, reviewDocument);
+  if (problems.length) throw new Error(`Approval record integrity check failed:\n- ${problems.join("\n- ")}`);
+  return approval;
+}
+
+async function readReceipts(directory, packet) {
+  const receiptsDirectory = path.join(directory, "receipts");
+  let entries = [];
+  try {
+    entries = await fs.readdir(receiptsDirectory, { withFileTypes: true });
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+  const receipts = [];
+  for (const entry of entries.filter((candidate) => candidate.isFile() && candidate.name.endsWith(".json"))) {
+    const receipt = await readJson(path.join(receiptsDirectory, entry.name));
+    const problems = releaseReceiptProblems(packet, receipt);
+    if (problems.length) {
+      throw new Error(`Receipt ${entry.name} failed integrity validation:\n- ${problems.join("\n- ")}`);
+    }
+    if (entry.name !== receiptFileName(receipt)) {
+      throw new Error(`Receipt filename does not match its immutable content: ${entry.name}`);
+    }
+    receipts.push(receipt);
+  }
+  const sorted = receipts.sort(
+    (left, right) =>
+      Date.parse(left.recordedAt) - Date.parse(right.recordedAt) ||
+      left.receiptHash.localeCompare(right.receiptHash),
+  );
+  const ledgerProblems = releaseReceiptLedgerProblems(packet, sorted);
+  if (ledgerProblems.length) {
+    throw new Error(`Receipt ledger failed lifecycle validation:\n- ${ledgerProblems.join("\n- ")}`);
+  }
+  return sorted;
+}
+
+function parseEvidence(args) {
+  return flagValues(args, "--evidence").map((value) => {
+    const separator = value.indexOf("=");
+    if (separator < 1 || separator === value.length - 1) {
+      throw new Error("Each --evidence value must use kind=value.");
+    }
+    return { kind: value.slice(0, separator), value: value.slice(separator + 1) };
+  });
+}
+
+async function recordReceipt(jobId, args) {
+  if (!jobId) throw new Error("receipt requires a job id.");
+  const { directory, packet, reviewDocument } = await loadVerifiedJob(jobId);
+  await loadApproval(directory, packet, reviewDocument);
+
+  const platformId = flagValue(args, "--platform");
+  const operationId = flagValue(args, "--operation-id");
+  const statusValue = flagValue(args, "--status");
+  const recordedBy = flagValue(args, "--by");
+  if (!platformId) throw new Error("receipt requires --platform.");
+  if (!operationId) throw new Error("receipt requires --operation-id.");
+  if (!statusValue) throw new Error("receipt requires --status.");
+  if (!recordedBy?.trim()) throw new Error("receipt requires --by.");
+
+  const confirmation = flagValue(args, "--confirm");
+  const expectedConfirmation = `record-receipt ${packet.id} ${platformId} ${packet.approvalHash} ${operationId}`;
+  if (confirmation !== expectedConfirmation) {
+    throw new Error("Receipt confirmation phrase does not match the approved job and operation.");
+  }
+
+  const receipt = await withReceiptWriteLock(directory, async () => {
+    const existing = await readReceipts(directory, packet);
+    const candidate = buildReleaseReceipt({
+      packet,
+      platformId,
+      operationId,
+      status: statusValue,
+      remoteId: flagValue(args, "--remote-id"),
+      remoteUrl: flagValue(args, "--remote-url"),
+      recordedBy,
+      evidence: parseEvidence(args),
+    });
+    const problems = [
+      ...releaseReceiptProblems(packet, candidate),
+      ...releaseReceiptAppendProblems(existing, candidate),
+    ];
+    if (problems.length) {
+      throw new Error(`Receipt validation failed:\n- ${[...new Set(problems)].join("\n- ")}`);
+    }
+
+    const destination = path.join(directory, "receipts", receiptFileName(candidate));
+    await writePrivateJson(destination, candidate, { exclusive: true });
+    return { ...candidate, destination };
+  });
+  process.stdout.write(`Recorded immutable ${platformId} ${receipt.status} receipt.\n`);
+  process.stdout.write(`Operation: ${operationId}\n`);
+  process.stdout.write(`Receipt SHA-256: ${receipt.receiptHash}\n`);
+  process.stdout.write(`File: ${receipt.destination}\n`);
+}
+
+async function listReceipts(jobId) {
+  if (!jobId) throw new Error("receipts requires a job id.");
+  const { directory, packet } = await loadVerifiedJob(jobId);
+  const receipts = await readReceipts(directory, packet);
+  if (!receipts.length) {
+    process.stdout.write("No remote delivery receipts recorded.\n");
+    return;
+  }
+  for (const receipt of receipts) {
+    process.stdout.write(
+      `${receipt.recordedAt}\t${receipt.platformId}\t${receipt.status}\t${receipt.operationId}\t${receipt.remote.id || receipt.remote.url || "-"}\t${receipt.receiptHash}\n`,
+    );
+  }
+}
+
 async function status(jobId) {
   if (!jobId) throw new Error("status requires a job id.");
   const { directory, packet, reviewDocument } = await loadVerifiedJob(jobId);
@@ -355,6 +491,7 @@ async function status(jobId) {
     const problems = approvalRecordProblems(packet, approval, reviewDocument);
     if (problems.length) throw new Error(`Approval record integrity check failed:\n- ${problems.join("\n- ")}`);
   }
+  const receipts = await readReceipts(directory, packet);
 
   process.stdout.write(`Job: ${packet.id}\n`);
   process.stdout.write(`Title: ${packet.snapshot.manifest.title}\n`);
@@ -363,8 +500,13 @@ async function status(jobId) {
     `Local review: ${approval ? `self-reported by ${approval.approvedBy} at ${approval.approvedAt}` : "pending"}\n`
   );
   process.stdout.write("Upload/release authorization: not granted\n");
+  process.stdout.write(`Remote delivery receipts: ${receipts.length}\n`);
   for (const target of packet.snapshot.targets) {
-    process.stdout.write(`- ${target.label}: ${target.readiness}\n`);
+    const targetReceipts = receipts.filter((receipt) => receipt.platformId === target.id);
+    const latest = targetReceipts.at(-1);
+    process.stdout.write(
+      `- ${target.label}: ${target.readiness}; receipt ${latest ? `${latest.status} (${latest.operationId})` : "none"}\n`,
+    );
   }
 }
 
@@ -660,6 +802,8 @@ async function main() {
   if (command === "prepare") return prepare(first);
   if (command === "show") return show(first);
   if (command === "approve") return approve(first, rest);
+  if (command === "receipt") return recordReceipt(first, rest);
+  if (command === "receipts") return listReceipts(first);
   if (command === "status") return status(first);
   if (command === "list") return listJobs();
   throw new Error(`Unknown command: ${command}\n\n${usage()}`);
