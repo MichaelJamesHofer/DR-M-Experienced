@@ -35,6 +35,7 @@ Deno.test("runtime configuration prefers the project token and uses a bounded ho
 Deno.test("privacy-sensitive PostHog collection remains explicitly disabled", () => {
   assert(POSTHOG_PRIVACY_OPTIONS.autocapture === false, "autocapture was enabled");
   assert(POSTHOG_PRIVACY_OPTIONS.capture_pageview === false, "automatic pageviews were enabled");
+  assert(POSTHOG_PRIVACY_OPTIONS.capture_pageleave, "pageleave capture was disabled");
   assert(POSTHOG_PRIVACY_OPTIONS.capture_performance === false, "performance capture was enabled");
   assert(POSTHOG_PRIVACY_OPTIONS.disable_session_recording, "session recording was enabled");
   assert(POSTHOG_PRIVACY_OPTIONS.disable_surveys, "surveys were enabled");

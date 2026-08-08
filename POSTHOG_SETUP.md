@@ -10,9 +10,9 @@ Last verified: August 7, 2026.
 
 - `posthog-js` is installed and initialized by
   `src/components/posthog-provider.tsx`.
-- The configured GitHub Actions secret uses `NEXT_PUBLIC_POSTHOG_API_KEY`, the
-  name currently required by `npm run verify:production-env`. The runtime also
-  accepts `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` as an alias.
+- The configured GitHub Actions secret uses `NEXT_PUBLIC_POSTHOG_API_KEY`. Both
+  the runtime and `npm run verify:production-env` also accept
+  `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` as the preferred alias.
 - The apex and `www` production origins are authorized. Authenticated readback
   confirmed the US project region and enabled `Discard client IP data`.
   Cookieless server hashing remains disabled because the client uses memory-only
@@ -33,15 +33,15 @@ NEXT_PUBLIC_POSTHOG_API_KEY=your_posthog_project_token
 NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 ```
 
-PostHog calls this browser-safe value a **project token**. The current production
-guard still requires `NEXT_PUBLIC_POSTHOG_API_KEY`, so do not remove or rename
-that configured Actions secret unless the guard, workflow, tests, and docs change
-together. Never commit a token or print it into operational logs.
+PostHog calls this browser-safe value a **project token**. Keep at least one
+supported Actions secret configured; when both are present, the preferred
+`NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` value wins. Never commit a token or print it
+into operational logs.
 
 Production deployments run `npm run verify:production-env` and stop before the
-build when the required secret is absent or blank. Local and pull-request builds
-keep analytics optional. A production build inlines `NEXT_PUBLIC_` values, so a
-secret change requires a new deployment.
+build when both supported token variables are absent or blank. Local and
+pull-request builds keep analytics optional. A production build inlines
+`NEXT_PUBLIC_` values, so a secret change requires a new deployment.
 
 ## Privacy Contract
 
@@ -53,8 +53,8 @@ The client is intentionally configured with:
 - no session recording, surveys, web experiments, or remote dependency loading
 - no person profiles or calls to `identify`
 - memory-only identity and respect for Do Not Track
-- no query strings, fragments, campaign IDs, form values, contact details, or
-  free-text searches in event properties
+- no external referrers, query strings, fragments, campaign IDs, form values,
+  contact details, or free-text searches in event properties
 - a `before_send` sanitizer as a final outbound guard
 
 Never attach email addresses, names, messages, health terms, search text,

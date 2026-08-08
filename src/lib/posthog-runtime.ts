@@ -7,6 +7,7 @@ export type PostHogPublicEnvironment = {
 export const POSTHOG_PRIVACY_OPTIONS = {
   autocapture: false,
   capture_pageview: false,
+  capture_pageleave: true,
   capture_performance: false,
   disable_session_recording: true,
   disable_surveys: true,

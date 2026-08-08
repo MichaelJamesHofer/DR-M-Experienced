@@ -23,8 +23,8 @@ export function VimeoPlayer({
   const [shouldLoad, setShouldLoad] = useState(false);
   const previewImage = thumbnailUrl || `https://vumbnail.com/${videoId}.jpg`;
 
-  function handlePlay() {
-    capture('episode video started', { video_id: videoId });
+  function handlePlayerOpen() {
+    capture('episode player opened', { video_id: videoId });
     setShouldLoad(true);
   }
 
@@ -42,9 +42,9 @@ export function VimeoPlayer({
       ) : (
         <button
           type="button"
-          onClick={handlePlay}
+          onClick={handlePlayerOpen}
           className="group absolute inset-0 flex h-full w-full items-center justify-center bg-surface text-background"
-          aria-label={`Play ${title}`}
+          aria-label={`Open ${title} player`}
         >
           <Image src={previewImage} alt="" fill sizes="(max-width: 1024px) 100vw, 720px" className="object-cover" />
           <span className="absolute inset-0 bg-black/35 transition-colors duration-200 group-hover:bg-black/25" />

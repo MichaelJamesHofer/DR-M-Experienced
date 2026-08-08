@@ -1146,8 +1146,9 @@ The site sends privacy-sanitized `$pageview` events from its route tracker and
 explicitly enables `$pageleave`; autocapture, session recording, persistent
 identity, person profiles, and query-string collection remain disabled. The
 non-pull-request deployment runs `npm run verify:production-env` and fails before
-the production build if `NEXT_PUBLIC_POSTHOG_API_KEY` is absent or blank. Local
-and pull-request builds may remain keyless.
+the production build when both `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` and legacy
+`NEXT_PUBLIC_POSTHOG_API_KEY` are absent or blank. Local and pull-request builds
+may remain keyless.
 
 The approved low-cardinality conversion events are `newsletter subscribed`,
 `contact form submitted`, and `episode player opened`. Form events are emitted
@@ -1309,9 +1310,10 @@ Chrome.
 
 - Read the failing job/log first; reproduce the exact command locally.
 - Check Actions secrets only for presence/permissions, never print values.
-- If `verify:production-env` fails, add or repair the
-  `NEXT_PUBLIC_POSTHOG_API_KEY` Actions secret; do not bypass the guard or place
-  the key in git.
+- If `verify:production-env` fails, add or repair either the preferred
+  `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` Actions secret or the legacy
+  `NEXT_PUBLIC_POSTHOG_API_KEY`; do not bypass the guard or place the token in
+  git.
 - Fix on the branch, require green CI, merge, and verify the live commit.
 - A successful local fallback build is not proof of a successful strict catalog
   build.

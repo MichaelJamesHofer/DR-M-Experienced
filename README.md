@@ -48,8 +48,10 @@ See `FORM_SETUP.md` and `SECURITY.md` for deployment and security details.
 Run these checks before deployment:
 
 ```bash
+npm ci
 npm run lint
 npm run typecheck
+npm run test:production-env
 npm run test:publisher
 npm audit --audit-level=high
 npm run verify:catalog

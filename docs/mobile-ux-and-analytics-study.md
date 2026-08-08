@@ -1,6 +1,6 @@
 # Mobile UX And Analytics Study
 
-Last reviewed: August 5, 2026
+Last reviewed: August 8, 2026
 
 ## Scope And Method
 
@@ -122,14 +122,15 @@ to merchant, newsletter completion, contact completion, and mobile menu traversa
 
 Event properties are deliberately low-cardinality and non-personal. Never emit
 form values, search text, health terms, emails, names, messages, full outbound
-URLs, query strings, fragments, or campaign IDs.
+URLs, external referrers, query strings, fragments, or campaign IDs.
 
 | Event | Status | Trigger | Safe properties |
 | --- | --- | --- | --- |
 | `$pageview` | Implemented | Route change | sanitized current path |
+| `$pageleave` | Implemented | PostHog page lifecycle | sanitized path-only URL properties |
 | `newsletter subscribed` | Implemented | Backend accepts form | `placement` |
 | `contact form submitted` | Implemented | Backend accepts form | fixed `subject` enum |
-| `episode video started` | Implemented | Vimeo iframe requested | `video_id` |
+| `episode player opened` | Implemented | Poster activated and Vimeo iframe requested | `video_id` |
 | `episode opened` | Planned | Episode detail navigation | `episode_slug`, `placement` |
 | `platform outbound clicked` | Planned | Platform link activation | `platform`, `placement` |
 | `affiliate product clicked` | Planned | Merchant link activation | product/brand slugs, `placement` |
@@ -139,13 +140,15 @@ URLs, query strings, fragments, or campaign IDs.
 
 Do not emit an event per keystroke or scroll tick. Search/filter events should be
 debounced or emitted when a result is opened so event volume represents intent.
+`episode player opened` measures intent to load the player; it does not prove
+that Vimeo playback started or reached any duration threshold.
 
 ## Funnels And Dashboard
 
 Build these PostHog insights after production ingestion is verified:
 
-1. **Episode discovery:** homepage page view -> episode opened -> episode video
-   started or platform outbound clicked.
+1. **Episode discovery:** homepage page view -> episode opened -> episode player
+   opened or platform outbound clicked.
 2. **Newsletter:** eligible page view -> newsletter subscribed, broken down by
    placement.
 3. **Affiliate:** episode or affiliate page view -> affiliate product clicked,
@@ -156,7 +159,7 @@ Build these PostHog insights after production ingestion is verified:
 5. **Content findability:** library page view -> search/filter used -> episode or
    blog opened.
 
-Dashboard tiles should show weekly page-view counts, episode opens, video starts,
+Dashboard tiles should show weekly page-view counts, episode opens, player opens,
 platform outbound clicks, newsletter conversion, contact conversion by subject,
 and affiliate click-through by product. Compare mobile and desktop viewport
 classes only after the property is intentionally added and documented.
@@ -170,8 +173,9 @@ change requires owner approval and a privacy-notice update.
 
 Before calling analytics operational:
 
-1. Confirm either `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` or the legacy
-   `NEXT_PUBLIC_POSTHOG_API_KEY` exists in GitHub Actions secrets.
+1. Confirm at least one supported token is present in GitHub Actions secrets:
+   preferred `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` or legacy
+   `NEXT_PUBLIC_POSTHOG_API_KEY`.
 2. Confirm `NEXT_PUBLIC_POSTHOG_HOST` matches the actual PostHog region.
 3. Deploy, then verify sanitized events in Live events using a controlled test.
 4. Confirm project-level client IP capture is set to discard.

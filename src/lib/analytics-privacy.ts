@@ -15,6 +15,7 @@ const QUERY_DERIVED_PROPERTIES = new Set([
   "mc_cid",
   "mc_eid",
   "msclkid",
+  "ph_keyword",
   "qclid",
   "rdt_cid",
   "sccid",
@@ -40,10 +41,17 @@ const SENSITIVE_VALUE_PROPERTIES = new Set([
   "search_query",
   "search_term",
 ]);
-const URL_PROPERTY = /(?:url|referrer)/i;
+const REFERRER_PROPERTIES = new Set([
+  "referrer",
+  "referring_domain",
+]);
+const URL_PROPERTY = /url/i;
 
 function normalizedPropertyKey(key: string): string {
-  return key.toLowerCase().replace(/^\$/, "").replace(/^initial_/, "");
+  return key
+    .toLowerCase()
+    .replace(/^\$/, "")
+    .replace(/^(?:(?:initial|session_entry)_)+/, "");
 }
 
 function isQueryDerivedProperty(key: string): boolean {
@@ -54,6 +62,10 @@ function isQueryDerivedProperty(key: string): boolean {
 
 function isSensitiveValueProperty(key: string): boolean {
   return SENSITIVE_VALUE_PROPERTIES.has(normalizedPropertyKey(key));
+}
+
+function isReferrerProperty(key: string): boolean {
+  return REFERRER_PROPERTIES.has(normalizedPropertyKey(key));
 }
 
 function isRecord(value: unknown): value is AnalyticsProperties {
@@ -78,7 +90,11 @@ export function sanitizeAnalyticsProperties(
   const sanitized: AnalyticsProperties = {};
 
   for (const [key, value] of Object.entries(properties)) {
-    if (isQueryDerivedProperty(key) || isSensitiveValueProperty(key)) continue;
+    if (
+      isReferrerProperty(key) ||
+      isQueryDerivedProperty(key) ||
+      isSensitiveValueProperty(key)
+    ) continue;
     sanitized[key] = sanitizeAnalyticsValue(value, key);
   }
 

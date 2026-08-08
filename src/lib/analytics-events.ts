@@ -19,7 +19,7 @@ export type AnalyticsEventProperties = {
     episode_slug: string;
     placement: string;
   };
-  "episode video started": {
+  "episode player opened": {
     video_id: string;
   };
   "media item opened": {

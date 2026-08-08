@@ -11,8 +11,17 @@ Deno.test("removes URL queries, fragments, and campaign properties", () => {
     $initial_current_url: "https://drmexperienced.com/?utm_source=newsletter",
     $utm_source: "newsletter",
     $initial_utm_campaign: "launch",
+    $session_entry_utm_source: "newsletter",
+    $initial_session_entry_utm_medium: "email",
     gclid: "tracking-id",
     $initial_fbclid: "tracking-id",
+    $session_entry_gclid: "tracking-id",
+    $session_entry_ph_keyword: "private search phrase",
+    $referrer: "https://health.example/patients/private-path?source=search",
+    $initial_referrer: "https://health.example/initial/private-path",
+    $session_entry_referrer: "https://health.example/session/private-path",
+    $referring_domain: "health.example",
+    $initial_referring_domain: "health.example",
     $pathname: "/episodes/example/",
   });
 
@@ -29,10 +38,43 @@ Deno.test("removes URL queries, fragments, and campaign properties", () => {
     !("$initial_utm_campaign" in sanitized),
     "initial UTM property was retained",
   );
+  assert(
+    !("$session_entry_utm_source" in sanitized),
+    "session-entry UTM property was retained",
+  );
+  assert(
+    !("$initial_session_entry_utm_medium" in sanitized),
+    "nested attribution prefix was retained",
+  );
   assert(!("gclid" in sanitized), "click identifier was retained");
   assert(
     !("$initial_fbclid" in sanitized),
     "initial click identifier was retained",
+  );
+  assert(
+    !("$session_entry_gclid" in sanitized),
+    "session-entry click identifier was retained",
+  );
+  assert(
+    !("$session_entry_ph_keyword" in sanitized),
+    "PostHog keyword attribution was retained",
+  );
+  assert(!("$referrer" in sanitized), "referrer path was retained");
+  assert(
+    !("$initial_referrer" in sanitized),
+    "initial referrer path was retained",
+  );
+  assert(
+    !("$session_entry_referrer" in sanitized),
+    "session-entry referrer path was retained",
+  );
+  assert(
+    !("$referring_domain" in sanitized),
+    "referring domain was retained",
+  );
+  assert(
+    !("$initial_referring_domain" in sanitized),
+    "initial referring domain was retained",
   );
   assert(sanitized.$pathname === "/episodes/example/", "safe path was changed");
 });
@@ -42,6 +84,7 @@ Deno.test("sanitizes nested objects and URL arrays without changing non-plain va
   const sanitized = sanitizeAnalyticsProperties({
     nested: {
       referrer: "https://search.example/?q=medical",
+      preferred_platform: "vimeo",
       utm_medium: "search",
     },
     related_urls: [
@@ -52,9 +95,10 @@ Deno.test("sanitizes nested objects and URL arrays without changing non-plain va
   });
 
   const nested = sanitized.nested as Record<string, unknown>;
+  assert(!("referrer" in nested), "nested referrer was retained");
   assert(
-    nested.referrer === "https://search.example/",
-    "nested referrer was not sanitized",
+    nested.preferred_platform === "vimeo",
+    "unrelated preferred property was removed",
   );
   assert(!("utm_medium" in nested), "nested campaign property was retained");
   assert(

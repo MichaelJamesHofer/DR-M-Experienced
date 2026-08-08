@@ -27,20 +27,7 @@ const AnalyticsContext = createContext<AnalyticsContextValue>({
 });
 
 function sanitizePostHogProperties(properties: AnalyticsProperties): AnalyticsProperties {
-  const sanitized = sanitizeAnalyticsProperties(properties);
-
-  return Object.fromEntries(
-    Object.entries(sanitized).filter(([key]) => {
-      // PostHog prefixes session attribution after parsing it from the URL.
-      const unscopedKey = key
-        .toLowerCase()
-        .replace(/^\$/, '')
-        .replace(/^(?:(?:initial|session_entry)_)+/, '');
-      const policyProbe = sanitizeAnalyticsProperties({ [unscopedKey]: true });
-
-      return unscopedKey !== 'ph_keyword' && unscopedKey in policyProbe;
-    }),
-  );
+  return sanitizeAnalyticsProperties(properties);
 }
 
 function sanitizeAnalyticsEvent(event: CaptureResult | null): CaptureResult | null {
