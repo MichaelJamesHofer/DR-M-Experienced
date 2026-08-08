@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ExternalLink, Plus } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
+import { AnimatedDisclosure } from "@/app/about/animated-disclosure";
 import { MEDIA_FEATURES } from "@/data/media";
 import { physicianProfileExperience, physicianProfileYears } from "@/data/physician-profile";
 
@@ -336,19 +337,17 @@ export default function AboutPage() {
           </p>
         </div>
         <div className="grid lg:grid-cols-2 lg:gap-x-10">
-          {sportsFocus.map((focus, index) => (
-            <details key={index} className="group border-t border-border last:border-b lg:[&:nth-last-child(-n+2)]:border-b">
-              <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-left text-body font-semibold text-foreground marker:content-none">
-                {focus.title}
-                <Plus
-                  aria-hidden="true"
-                  className="h-5 w-5 shrink-0 text-primary transition-transform duration-200 group-open:rotate-45"
-                />
-              </summary>
+          {sportsFocus.map((focus) => (
+            <AnimatedDisclosure
+              key={focus.title}
+              label={focus.title}
+              className="border-t border-border last:border-b lg:[&:nth-last-child(-n+2)]:border-b"
+              triggerClassName="min-h-14 gap-4 py-3 text-body font-semibold text-foreground"
+            >
               <p className="pb-5 pr-9 text-body-sm leading-relaxed text-foreground-muted">
                 {focus.description}
               </p>
-            </details>
+            </AnimatedDisclosure>
           ))}
         </div>
       </section>
@@ -372,18 +371,17 @@ export default function AboutPage() {
                 {area.title}
               </h3>
               {area.items.map((item) => (
-                <details key={item.label} className="group border-t border-border last:border-b">
-                  <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 py-3 text-body-sm font-semibold text-foreground marker:content-none">
-                    {item.label}
-                    <Plus
-                      aria-hidden="true"
-                      className="h-4 w-4 shrink-0 text-primary transition-transform duration-200 group-open:rotate-45"
-                    />
-                  </summary>
+                <AnimatedDisclosure
+                  key={item.label}
+                  label={item.label}
+                  className="border-t border-border last:border-b"
+                  triggerClassName="min-h-12 gap-3 py-3 text-body-sm font-semibold text-foreground"
+                  iconClassName="h-4 w-4"
+                >
                   <p className="pb-4 pr-7 text-body-sm leading-relaxed text-foreground-muted">
                     {item.detail}
                   </p>
-                </details>
+                </AnimatedDisclosure>
               ))}
             </div>
           ))}
@@ -403,14 +401,16 @@ export default function AboutPage() {
           </p>
         </div>
         <div className="grid gap-x-10 lg:grid-cols-2">
-          <details className="group border-t border-border">
-            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-heading-sm font-semibold text-foreground marker:content-none">
+          <AnimatedDisclosure
+            className="border-t border-border"
+            triggerClassName="min-h-14 gap-4 py-3 text-heading-sm font-semibold text-foreground"
+            label={
               <span>
                 Selected publications
                 <span className="ml-2 text-caption font-normal text-foreground-subtle">{publications.length}</span>
               </span>
-              <Plus aria-hidden="true" className="h-5 w-5 shrink-0 text-primary transition-transform duration-200 group-open:rotate-45" />
-            </summary>
+            }
+          >
             <div className="divide-y divide-border border-t border-border pb-3">
               {publications.map((pub) => (
                 <div key={pub.title} className="py-4">
@@ -419,16 +419,18 @@ export default function AboutPage() {
                 </div>
               ))}
             </div>
-          </details>
+          </AnimatedDisclosure>
 
-          <details className="group border-t border-border">
-            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-heading-sm font-semibold text-foreground marker:content-none">
+          <AnimatedDisclosure
+            className="border-t border-border"
+            triggerClassName="min-h-14 gap-4 py-3 text-heading-sm font-semibold text-foreground"
+            label={
               <span>
                 Lectures &amp; workshops
                 <span className="ml-2 text-caption font-normal text-foreground-subtle">{lectures.length}</span>
               </span>
-              <Plus aria-hidden="true" className="h-5 w-5 shrink-0 text-primary transition-transform duration-200 group-open:rotate-45" />
-            </summary>
+            }
+          >
             <div className="divide-y divide-border border-t border-border pb-3">
               {lectures.map((lecture) => (
                 <div key={`${lecture.venue}-${lecture.year}`} className="py-4">
@@ -440,16 +442,18 @@ export default function AboutPage() {
                 </div>
               ))}
             </div>
-          </details>
+          </AnimatedDisclosure>
 
-          <details className="group border-t border-border lg:border-b">
-            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-heading-sm font-semibold text-foreground marker:content-none">
+          <AnimatedDisclosure
+            className="border-t border-border lg:border-b"
+            triggerClassName="min-h-14 gap-4 py-3 text-heading-sm font-semibold text-foreground"
+            label={
               <span>
                 Faculty positions
                 <span className="ml-2 text-caption font-normal text-foreground-subtle">{facultyTraining.length}</span>
               </span>
-              <Plus aria-hidden="true" className="h-5 w-5 shrink-0 text-primary transition-transform duration-200 group-open:rotate-45" />
-            </summary>
+            }
+          >
             <div className="divide-y divide-border border-t border-border pb-3">
               {facultyTraining.map((item) => (
                 <div key={`${item.role}-${item.org}`} className="py-4">
@@ -461,22 +465,24 @@ export default function AboutPage() {
                 </div>
               ))}
             </div>
-          </details>
+          </AnimatedDisclosure>
 
-          <details className="group border-y border-border lg:border-t">
-            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-heading-sm font-semibold text-foreground marker:content-none">
+          <AnimatedDisclosure
+            className="border-y border-border lg:border-t"
+            triggerClassName="min-h-14 gap-4 py-3 text-heading-sm font-semibold text-foreground"
+            label={
               <span>
                 Recent continuing education
                 <span className="ml-2 text-caption font-normal text-foreground-subtle">{recentCME.length}</span>
               </span>
-              <Plus aria-hidden="true" className="h-5 w-5 shrink-0 text-primary transition-transform duration-200 group-open:rotate-45" />
-            </summary>
+            }
+          >
             <div className="divide-y divide-border border-t border-border pb-3">
               {recentCME.map((item) => (
                 <p key={item} className="py-3 text-body-sm text-foreground-muted">{item}</p>
               ))}
             </div>
-          </details>
+          </AnimatedDisclosure>
         </div>
       </section>
 

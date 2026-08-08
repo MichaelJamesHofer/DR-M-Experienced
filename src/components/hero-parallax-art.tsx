@@ -26,7 +26,7 @@ export function HeroParallaxArt() {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const coarsePointer = window.matchMedia("(hover: none), (pointer: coarse)");
     let sectionTop = 0;
-    let sectionHeight = 1;
+    let motionRange = 1;
     let currentProgress = 0;
     let targetProgress = 0;
     let frame = 0;
@@ -36,7 +36,7 @@ export function HeroParallaxArt() {
 
     function renderFrame() {
       frame = 0;
-      currentProgress += (targetProgress - currentProgress) * 0.14;
+      currentProgress += (targetProgress - currentProgress) * 0.2;
 
       if (Math.abs(targetProgress - currentProgress) < 0.001) {
         currentProgress = targetProgress;
@@ -57,14 +57,14 @@ export function HeroParallaxArt() {
       if (!motionAllowed() || !isVisible) return;
       targetProgress = Math.min(
         1,
-        Math.max(0, (window.scrollY - sectionTop) / sectionHeight)
+        Math.max(0, (window.scrollY - sectionTop) / motionRange)
       );
       queueFrame();
     }
 
     function measureScene() {
       sectionTop = sectionElement.getBoundingClientRect().top + window.scrollY;
-      sectionHeight = Math.max(1, sectionElement.offsetHeight);
+      motionRange = Math.max(1, sectionElement.offsetHeight * 0.7);
       updateTarget();
     }
 

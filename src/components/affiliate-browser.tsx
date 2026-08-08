@@ -352,7 +352,7 @@ export function AffiliateBrowser({ products, categories, episodes }: AffiliateBr
                   {category.description}
                 </p>
               </div>
-              <div className="grid items-start gap-4 xl:grid-cols-2">
+              <div className="grid items-stretch gap-4 xl:grid-cols-2">
                 {groupProducts.map((product) => (
                   <ProductCard
                     key={product.slug}
@@ -365,7 +365,7 @@ export function AffiliateBrowser({ products, categories, episodes }: AffiliateBr
           ))}
         </div>
       ) : (
-        <div className="grid items-start gap-4 xl:grid-cols-2">
+        <div className="grid items-stretch gap-4 xl:grid-cols-2">
           {filteredProducts.map((product) => (
             <ProductCard
               key={product.slug}
@@ -521,14 +521,14 @@ function ProductCard({
       onPointerMove={(event) => updateBrandDepth(event, cardRef.current)}
       onPointerLeave={() => resetBrandDepth(cardRef.current)}
       style={cardStyle}
-      className="relative scroll-mt-28 overflow-hidden rounded-lg border bg-surface"
+      className="relative flex h-full scroll-mt-28 overflow-hidden rounded-lg border bg-surface"
     >
       <span
         aria-hidden="true"
         className="absolute inset-y-0 left-0 w-1"
         style={{ backgroundColor: accent }}
       />
-      <div className="flex flex-1 flex-col p-4 pl-5 sm:p-5 sm:pl-6">
+      <div className="flex min-w-0 flex-1 flex-col p-4 pl-5 sm:p-5 sm:pl-6">
         <div className={logoSrc ? "grid gap-4 sm:grid-cols-[8.5rem_minmax(0,1fr)]" : ""}>
           {logoSrc && (
             <div
@@ -552,124 +552,130 @@ function ProductCard({
             </div>
           )}
 
-          <div className="min-w-0">
-            <div className="flex flex-col gap-3 text-center sm:flex-row sm:items-start sm:justify-between sm:text-left">
-              <div className="min-w-0">
-                <p className="mb-1 text-caption font-semibold uppercase text-primary">
-                  {product.category}
-                </p>
-                <h3 className="text-heading font-bold text-foreground">{companyName}</h3>
-                {product.brand && (
-                  <p className="mt-1 text-body-sm font-semibold text-foreground-muted">
-                    {product.name}
-                  </p>
-                )}
-              </div>
-              {productUrl && (
-                <a
-                  href={productUrl}
-                  target="_blank"
-                  rel="sponsored noopener noreferrer"
-                  aria-label={`Visit ${companyName}`}
-                  className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-body-sm font-semibold text-background transition-colors duration-200 hover:bg-primary-hover"
-                >
-                  Visit partner
-                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                </a>
-              )}
-            </div>
-
-            <p className="mt-3 text-left text-body-sm leading-6 text-foreground-muted">
-              {product.summary}
+          <div className="min-w-0 text-center sm:text-left">
+            <p className="mb-1 text-caption font-semibold uppercase text-primary">
+              {product.category}
             </p>
-
-            {(product.couponCode || product.discountNote || product.purchaseNote) && (
-              <div className="mt-3 border-y border-border py-2.5 text-left text-body-sm text-foreground-muted">
-                {product.couponCode && (
-                  <p>
-                    Code: <span className="font-bold text-foreground">{product.couponCode}</span>
-                  </p>
-                )}
-                {product.discountNote && <p>{product.discountNote}</p>}
-                {product.purchaseNote && <p>{product.purchaseNote}</p>}
-              </div>
-            )}
-
-            {(product.featuredProducts?.length ?? 0) > 0 && (
-              <div className="mt-3 min-w-0 text-left">
-                <p className="mb-2 text-caption font-semibold uppercase text-foreground-subtle">
-                  Products Dr. M mentioned
-                </p>
-                <div
-                  className="flex gap-2 overflow-x-auto pb-2 [scrollbar-color:var(--color-border-strong)_transparent] [scrollbar-width:thin] focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45 focus-visible:ring-offset-2 focus-visible:ring-offset-surface [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border-strong [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5"
-                  role="region"
-                  aria-label={`${companyName} recommended products`}
-                  tabIndex={0}
-                >
-                  {product.featuredProducts!.map((item) => (
-                    <span
-                      key={item}
-                      className="shrink-0 rounded-lg border border-border bg-background px-2.5 py-1 text-caption font-medium text-foreground-muted"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
+            <h3 className="text-heading font-bold text-foreground">{companyName}</h3>
+            {product.brand && (
+              <p className="mt-1 text-body-sm font-semibold text-foreground-muted">
+                {product.name}
+              </p>
             )}
           </div>
         </div>
 
-        {relatedEpisodes.length > 0 && (
-          <div className="mt-4 border-t border-border pt-3">
+        <div className="mt-4 border-t border-border pt-4 xl:min-h-[6.5rem]">
+          <p className="text-left text-body-sm leading-6 text-foreground-muted">
+            {product.summary}
+          </p>
+        </div>
+
+        {(product.couponCode || product.discountNote || product.purchaseNote) && (
+          <div className="mt-4 border-t border-border pt-3 text-left text-body-sm leading-6 text-foreground-muted xl:min-h-[5.25rem]">
             <p className="mb-1 text-caption font-semibold uppercase text-foreground-subtle">
-              Referenced in
+              Partner details
             </p>
-            <div className="divide-y divide-border">
-              {relatedEpisodes.map((episode) => (
-                <Link
-                  key={episode.slug}
-                  href={`/episodes/${episode.slug}`}
-                  className="group flex min-h-11 items-center justify-between gap-4 py-2 text-body-sm text-foreground-muted transition-colors duration-200 hover:text-primary"
+            {product.couponCode && (
+              <p>
+                Code: <span className="font-bold text-foreground">{product.couponCode}</span>
+              </p>
+            )}
+            {product.discountNote && <p>{product.discountNote}</p>}
+            {product.purchaseNote && <p>{product.purchaseNote}</p>}
+          </div>
+        )}
+
+        {(product.featuredProducts?.length ?? 0) > 0 && (
+          <div className="mt-4 min-w-0 border-t border-border pt-3 text-left">
+            <p className="mb-2 text-caption font-semibold uppercase text-foreground-subtle">
+              Products Dr. M mentioned
+            </p>
+            <div
+              className="flex gap-2 overflow-x-auto pb-2 [scrollbar-color:var(--color-border-strong)_transparent] [scrollbar-width:thin] focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45 focus-visible:ring-offset-2 focus-visible:ring-offset-surface [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border-strong [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5"
+              role="region"
+              aria-label={`${companyName} recommended products`}
+              tabIndex={0}
+            >
+              {product.featuredProducts!.map((item) => (
+                <span
+                  key={item}
+                  className="shrink-0 rounded-lg border border-border bg-background px-2.5 py-1 text-caption font-medium text-foreground-muted"
                 >
-                  <span className="line-clamp-1">{episodeDisplayTitle(episode)}</span>
-                  <ArrowRight
-                    className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-1"
-                    aria-hidden="true"
-                  />
-                </Link>
+                  {item}
+                </span>
               ))}
             </div>
           </div>
         )}
 
-        <details className="group mt-2 border-t border-border">
-          <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 py-3 text-body-sm font-semibold text-foreground transition-colors hover:text-primary [&::-webkit-details-marker]:hidden">
-            Why Dr. M references this
-            <ChevronDown
-              className="h-4 w-4 shrink-0 text-foreground-subtle transition-transform group-open:rotate-180"
-              aria-hidden="true"
-            />
-          </summary>
-          <div className="space-y-5 border-t border-border py-5">
-            <InfoBlock title="Dr. M's take" body={product.drmThoughts} />
-            <BulletBlock title="Why he likes it" items={product.reasonsToLike} />
-            <BulletBlock title="Could be used for" items={product.usedFor} />
-            {product.cautionNote && <CautionBlock body={product.cautionNote} />}
-            {(product.tags?.length ?? 0) > 0 && (
-              <div className="flex flex-wrap gap-2 pt-1">
-                {product.tags!.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-lg border border-border px-2.5 py-1 text-caption text-foreground-subtle"
+        <div className="mt-auto pt-4">
+          {relatedEpisodes.length > 0 && (
+            <div className="border-t border-border pt-3">
+              <p className="mb-1 text-caption font-semibold uppercase text-foreground-subtle">
+                Referenced in
+              </p>
+              <div className="divide-y divide-border">
+                {relatedEpisodes.map((episode) => (
+                  <Link
+                    key={episode.slug}
+                    href={`/episodes/${episode.slug}`}
+                    className="group flex min-h-11 items-center justify-between gap-4 py-2 text-body-sm text-foreground-muted transition-colors duration-200 hover:text-primary"
                   >
-                    {tag}
-                  </span>
+                    <span className="line-clamp-1">{episodeDisplayTitle(episode)}</span>
+                    <ArrowRight
+                      className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-1"
+                      aria-hidden="true"
+                    />
+                  </Link>
                 ))}
               </div>
-            )}
-          </div>
-        </details>
+            </div>
+          )}
+
+          <details className="group border-t border-border">
+            <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 py-3 text-body-sm font-semibold text-foreground transition-colors hover:text-primary [&::-webkit-details-marker]:hidden">
+              Why Dr. M references this
+              <ChevronDown
+                className="h-4 w-4 shrink-0 text-foreground-subtle transition-transform group-open:rotate-180"
+                aria-hidden="true"
+              />
+            </summary>
+            <div className="space-y-5 border-t border-border py-5">
+              <InfoBlock title="Dr. M's take" body={product.drmThoughts} />
+              <BulletBlock title="Why he likes it" items={product.reasonsToLike} />
+              <BulletBlock title="Could be used for" items={product.usedFor} />
+              {product.cautionNote && <CautionBlock body={product.cautionNote} />}
+              {(product.tags?.length ?? 0) > 0 && (
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {product.tags!.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-lg border border-border px-2.5 py-1 text-caption text-foreground-subtle"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </details>
+
+          {productUrl && (
+            <div className="border-t border-border pt-4 sm:flex sm:justify-end">
+              <a
+                href={productUrl}
+                target="_blank"
+                rel="sponsored noopener noreferrer"
+                aria-label={`Visit ${companyName}`}
+                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-body-sm font-semibold text-background transition-colors duration-200 hover:bg-primary-hover sm:w-auto sm:min-w-44"
+              >
+                Visit partner
+                <ExternalLink className="h-4 w-4" aria-hidden="true" />
+              </a>
+            </div>
+          )}
+        </div>
       </div>
     </article>
   );

@@ -47,13 +47,16 @@ decorative decode.
 ## Motion Contract
 
 1. Keep all live copy and controls stationary.
-2. At 900 CSS pixels and above, move the far plate no more than 5 pixels, the
-   amber route no more than 13 pixels, and the foreground no more than 24 pixels
-   over the full hero scroll interval.
+2. At 900 CSS pixels and above, let the far plate, amber route, and foreground
+   lag the page scroll downward by 8, 30, and 64 pixels respectively. Complete
+   that travel over the first 70 percent of the hero scroll interval so the
+   depth change is perceptible while the scene remains on screen.
 3. Ease toward one scroll-progress value. Do not track the cursor and do not
    snap any layer back on pointer leave.
-4. Keep 24 pixels of authored layout bleed on every desktop layer. Do not use a
-   transform scale that softens the raster.
+4. Keep 24 pixels of authored layout bleed on every desktop layer and use only
+   the downward, viewport-lagging direction. The hero's upward page travel must
+   clear the leading edge before transformed travel exceeds that bleed. Do not
+   use a transform scale that softens the raster.
 5. Disable motion for reduced-motion preferences, hoverless devices, coarse
    pointers, tablet, and mobile.
 6. Toggle `will-change` only while the hero intersects the viewport.

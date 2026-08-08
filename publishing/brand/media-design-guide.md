@@ -323,10 +323,12 @@ as Dr. M Experienced even when Dr. Musnick is not pictured.
   behind centered live copy. Use only a restrained uniform readability wash;
   never separate the art into a top strip or put the copy inside a card.
 - Desktop parallax uses independently authored far-terrain, route, and
-  foreground planes. Use eased scroll progress, not cursor tracking. Keep the
-  far plane within 6 CSS pixels, the route within 14 pixels, and the near plane
-  within 24 pixels. Remove motion for reduced motion, hoverless devices, coarse
-  pointers, tablet, and mobile.
+  foreground planes. Use eased scroll progress, not cursor tracking. Let the far
+  plane, route, and near plane lag page scroll by 8, 30, and 64 CSS pixels over
+  the first 70 percent of the hero interval. Use only this viewport-lagging
+  direction so the 24-pixel authored bleed remains covered as the hero exits.
+  Remove motion for reduced motion, hoverless devices, coarse pointers, tablet,
+  and mobile.
 - Supply density-aware sources up to at least 4096 pixels wide for a desktop
   hero. Do not transform-scale a low-resolution master to create motion bleed.
 - Use an approved real portrait selectively on About, host profile, press-kit,

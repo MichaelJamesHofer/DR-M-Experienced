@@ -12,6 +12,7 @@ import {
 } from "@/data/affiliates";
 import { getContentCatalog } from "@/data/content-catalog";
 import { NewsletterCapture } from "@/components/newsletter-capture";
+import { EpisodeTopicRail } from "@/components/episode-topic-rail";
 import { VimeoPlayer } from "@/components/vimeo-player";
 
 const dateFormatter = new Intl.DateTimeFormat("en", {
@@ -139,19 +140,7 @@ export default async function EpisodeDetailPage({
             <p className="text-body-lg text-foreground-muted">
               {episode.summary}
             </p>
-            <div className="-mx-4 mt-6 max-w-[calc(100%+2rem)] overflow-x-auto overscroll-x-contain px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:max-w-full sm:px-0" aria-label="Episode topics">
-              <div className="flex w-max gap-2">
-                {episode.topics.map((topic) => (
-                  <Link
-                    key={topic}
-                    href={`/episodes?topic=${encodeURIComponent(topic.toLowerCase())}`}
-                    className="inline-flex min-h-11 shrink-0 items-center whitespace-nowrap rounded-lg border border-border bg-surface px-4 py-2 text-body-sm capitalize text-foreground-muted transition-colors duration-200 hover:border-primary hover:text-primary"
-                  >
-                    {topic.replaceAll("-", " ")}
-                  </Link>
-                ))}
-              </div>
-            </div>
+            <EpisodeTopicRail topics={episode.topics} />
           </header>
 
           {/* Video Player */}
@@ -229,40 +218,47 @@ export default async function EpisodeDetailPage({
               </div>
             )}
             {episode.references && episode.references.length > 0 && (
-              <div className="p-4 border-t border-border bg-surface-elevated">
-                <p className="text-body-sm font-semibold text-foreground mb-3">
-                  Listen or watch on:
+              <nav
+                aria-label="Episode listening and viewing platforms"
+                className="border-t border-border bg-surface-elevated p-4 sm:p-5"
+              >
+                <p className="mb-4 text-center text-body-sm font-semibold text-foreground">
+                  Listen or watch
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <ul className="mx-auto grid max-w-3xl grid-cols-1 gap-2 min-[360px]:grid-cols-2 md:grid-cols-4">
                   {episode.references.map((ref, index) => {
                     const isComingSoon = ref.comingSoon === true;
                     if (isComingSoon) {
                       return (
-                        <span
-                          key={index}
-                          className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-dashed border-border bg-surface px-4 py-2 text-body-sm font-medium text-foreground-subtle opacity-60"
-                          title="Coming soon"
-                        >
-                          <Clock3 className="h-4 w-4" aria-hidden="true" />
-                          {ref.label}
-                        </span>
+                        <li key={`${ref.label}-${index}`}>
+                          <span
+                            className="flex min-h-14 w-full items-center justify-center gap-2 rounded-md border border-dashed border-border bg-surface px-3 py-2 text-center text-body-sm font-medium leading-snug text-foreground-subtle opacity-60"
+                            title="Coming soon"
+                            aria-disabled="true"
+                          >
+                            <Clock3 className="h-4 w-4 shrink-0" aria-hidden="true" />
+                            {ref.label}
+                          </span>
+                        </li>
                       );
                     }
                     return (
-                      <a
-                        key={index}
-                        href={ref.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-body-sm font-medium text-foreground-muted transition-colors duration-200 hover:border-primary hover:text-primary"
-                      >
-                        <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                        {ref.label}
-                      </a>
+                      <li key={`${ref.url}-${index}`}>
+                        <a
+                          href={ref.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex min-h-14 w-full items-center justify-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-center text-body-sm font-semibold leading-snug text-foreground-muted transition-all duration-200 hover:-translate-y-0.5 hover:border-primary hover:text-primary focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 motion-reduce:transform-none motion-reduce:transition-none"
+                        >
+                          <span>{ref.label}</span>
+                          <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
+                          <span className="sr-only"> (opens in a new tab)</span>
+                        </a>
+                      </li>
                     );
                   })}
-                </div>
-              </div>
+                </ul>
+              </nav>
             )}
           </section>
 
@@ -395,30 +391,6 @@ export default async function EpisodeDetailPage({
                   <EpisodeAffiliateCard key={product.slug} product={product} />
                 ))}
               </div>
-            </section>
-          )}
-
-          {/* References */}
-          {episode.references && episode.references.length > 0 && (
-            <section className="rounded-lg border border-border bg-surface p-8">
-              <h2 className="text-heading-lg font-bold text-foreground mb-6">
-                References & resources
-              </h2>
-              <ul className="space-y-3">
-                {episode.references.map((ref, index) => (
-                  <li key={index}>
-                    <a
-                      href={ref.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex min-h-11 items-center gap-2 text-body text-primary transition-colors duration-200 hover:text-primary-hover"
-                    >
-                      <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
-                      {ref.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
             </section>
           )}
 
