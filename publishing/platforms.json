@@ -245,6 +245,14 @@
         "automationRequiresPriorWrittenPermission": true,
         "submissionMethod": "manual_human_only"
       },
+      "automationPermissionRequest": {
+        "status": "sent_pending_response",
+        "confirmedSentAt": "2026-08-08T19:43:18Z",
+        "sender": "drmexperienced@gmail.com",
+        "recipient": "support@rumble.com",
+        "subject": "Written permission request for supervised upload automation - account 282015440",
+        "requestedScope": "owner_approved_local_browser_assisted_vod_upload_and_submission"
+      },
       "submissionBlockedOn": [
         "apply_episode_7_catalog_revision_11_description_during_manual_reupload",
         "disable_youtube_syndication_on_all_seven_forms",
@@ -253,7 +261,7 @@
         "human_reverify_and_complete_rights_terms_controls"
       ],
       "stagingStateAuditedAt": "2026-08-07",
-      "notes": "The August 7 audit found seven corrected uploads staged Unlisted with Rumble Only Option C (form code 6), the permitted non-exclusive license, and no submissions. Hidden YouTube syndication was enabled on all seven; Vimeo and Facebook were off. The August 8 browser cache reset invalidated those staged forms, so the counts above are retained as historical audit evidence and all seven uploads require manual restaging. Rumble is not in current catalog-description parity: Episode 7 must receive the revision-11 description recorded in publishing/episode-description-correction.json during manual reupload. On August 8 the user explicitly accepted the Terms last modified July 21, 2026, including the general-license AI/ML and third-party AI sublicensing provision. Do not submit until all syndication is disabled, Premium exclusivity is verified off, third-party asset rights are reviewed, and every form is reverified. Rumble's current Terms prohibit automated site interaction without prior written permission, so a human must complete the rights and Terms controls and final submission."
+      "notes": "The August 7 audit found seven corrected uploads staged Unlisted with Rumble Only Option C (form code 6), the permitted non-exclusive license, and no submissions. Hidden YouTube syndication was enabled on all seven; Vimeo and Facebook were off. The August 8 browser cache reset invalidated those staged forms, so the counts above are retained as historical audit evidence and all seven uploads require restaging. Rumble is not in current catalog-description parity: Episode 7 must receive the revision-11 description recorded in publishing/episode-description-correction.json during reupload. On August 8 the user explicitly accepted the Terms last modified July 21, 2026, including the general-license AI/ML and third-party AI sublicensing provision. A written-permission request for owner-supervised upload automation was sent to support@rumble.com and is pending. Leave Rumble untouched until a written response establishes a permitted automated workflow."
     }
   }
 }

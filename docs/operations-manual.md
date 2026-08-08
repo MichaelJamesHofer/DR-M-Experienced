@@ -319,12 +319,15 @@ changed input or catalog/manifest drift invalidates approval.
 # Human sign-in only; no automation endpoint
 /home/otto/.local/bin/drm-browser login
 
-# Attended work, one platform at a time
+# Attended work: use a narrow scope for account maintenance
 /home/otto/.local/bin/drm-browser open
 /home/otto/.local/bin/drm-browser identities
 /home/otto/.local/bin/drm-browser reauth rss
 /home/otto/.local/bin/drm-browser connect apple
 /home/otto/.local/bin/drm-browser connect supabase
+
+# Approved cross-platform release/reconciliation run; Rumble and Gmail blocked
+/home/otto/.local/bin/drm-browser connect publishing
 /home/otto/.local/bin/drm-browser status
 /home/otto/.local/bin/drm-browser disconnect
 /home/otto/.local/bin/drm-browser close
@@ -346,7 +349,7 @@ State and log: `~/.local/state/drm-publisher/browser/`
 Loopback endpoint: port `9223`, only while `open` is active
 
 Wrapper-recognized scopes: `rss`, `spotify`, `apple`, `amazon`, `youtube`, `vimeo`,
-`instagram`, `rumble`, `supabase`
+`instagram`, `rumble`, `supabase`, `email`, `publishing`
 
 The wrapper recognizes the `rumble` name only to reject `connect rumble` and
 `reauth rumble`; future wrapper launches do not open Rumble automatically. Keep
@@ -356,13 +359,15 @@ use and leave the bridge disconnected.
 `login` and `open` are different modes; both open the assigned dashboards in
 both isolated profiles. Close the sign-in-only browser before using `open`.
 `connect` stops the previous CLI bridge, activates or opens the requested
-dashboard in its assigned profile, and restricts the new bridge to that scope.
-It must preserve unrelated tabs and authenticated sessions in both profiles.
-The bridge starts with unrestricted local-path access because the CLI does not
-negotiate MCP filesystem roots and approved media is supplied from the delegated
-Dropbox tree. This is acceptable only together with the existing single-platform
-URL scope, blocked Gmail access, Otto-user execution, and an attended local
-machine. Disconnect the bridge when account work finishes.
+dashboard in its assigned profile, and normally restricts the new bridge to that
+scope. `connect publishing` is the deliberate exception for an approved release
+or reconciliation run: it exposes the non-Rumble publishing dashboards across
+the DRM profile while keeping Gmail and Rumble blocked. It must preserve
+unrelated tabs and authenticated sessions in both profiles. The bridge starts
+with unrestricted local-path access because the CLI does not negotiate MCP
+filesystem roots and approved media is supplied from the delegated Dropbox tree.
+Use the wider scope only for an approved cross-platform job on the attended
+local machine, then disconnect it when account work finishes.
 Always disconnect the bridge when unattended and close the isolated browser
 when the account-work session is finished. Never attach to Otto's regular Chrome
 data directory.
@@ -614,6 +619,11 @@ After Spotify, Vimeo, YouTube, and Rumble references are verified:
   prohibit automated software access or interaction absent prior written
   permission. This applies to inspection and form preparation as well as
   checkbox attestation and submission.
+- On August 8, 2026, an owner-authorized request for a supervised upload and
+  submission workflow was sent from `drmexperienced@gmail.com` to
+  `support@rumble.com`. Its status is `sent_pending_response` in
+  `publishing/platforms.json`. Leave Rumble untouched until its written reply
+  permits automation or identifies a supported VOD integration.
 - The only permitted license is Option C, `Rumble Only (non-exclusive, similar
   to YouTube)` (`rumble_only_option_c`). Rumble's official [licensing
   explanation](https://rumble.support/help/a-simple-explanation-of-the-differences-between-licensing-options)
@@ -1242,6 +1252,11 @@ Quarterly:
   clear third-party asset rights or provide Rumble's written automation
   permission. The browser cache reset invalidated the staged forms; all seven
   source videos and thumbnails remain hash-verified locally.
+- August 8, 2026: sent Rumble Support the owner-authorized written-permission
+  request for local, supervised upload automation. The request covers exact
+  preapproved files and metadata, non-exclusive Option C, Unlisted visibility,
+  Premium off, all syndication off, owner-confirmed rights and Terms, and an
+  audit trail. Rumble remains untouched while the response is pending.
 - August 7, 2026: Apple Support case `20000130526608` confirmed that the
   existing Apple records for Episodes 1-2 use historical GUIDs different from
   the current feed. Recorded the exact Apple episode ID/current GUID/historical

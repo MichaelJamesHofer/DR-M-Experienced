@@ -1,11 +1,13 @@
 # Brand Asset Production Brief
 
 Status: the seven episode-specific website thumbnails, 16:9 direct-video
-exports, and 3000 x 3000 podcast episode-art exports are approved. The direct
-video set is live on YouTube, Vimeo, and Rumble. Spotify video and square-art
-surfaces were verified before the RSS.com cutover and need post-cutover
-persistence readback; the square set is verified in the canonical RSS.com feed.
-Apple propagation remains pending on the directly configured RSS.com listing.
+exports, and 3000 x 3000 podcast episode-art exports are approved. The corrected
+direct-video set is live and verified on YouTube, Vimeo, and Spotify. Rumble's
+replacement uploads expired before submission and the existing Episode 7 copy
+does not match catalog revision 11; Rumble remains untouched while its written
+automation-permission request is pending. The square set is verified in the
+canonical RSS.com feed and on Spotify. Apple propagation remains pending on the
+directly configured RSS.com listing.
 The logo, show cover, avatar, Reel covers, banners, Open Graph image, and motion
 assets remain planned.
 
@@ -68,13 +70,13 @@ exports are committed or hosted deliberately.
 7. Publish the approved podcast cover through RSS.com under a new filename/URL,
    then verify RSS.com, Spotify, and Apple propagation. Verify Amazon after its
    one-time RSS.com-feed submission.
-8. Completed: publish the seven clean episode-specific images to the website,
-   YouTube, Vimeo, Rumble, and both Spotify artwork surfaces. The canonical RSS
-   now exposes seven unique 3000 x 3000 item images. Apple now points directly
-   to RSS.com, but its episode-art and five-to-seven episode convergence remain
-   pending. Existing Instagram Reel covers cannot be replaced through the
-   documented post-publication workflow and must not be deleted/reposted merely
-   for cosmetic convergence.
+8. Completed for the website build assets, YouTube, Vimeo, Spotify, and the
+   canonical RSS feed: seven clean episode-specific images and seven unique
+   3000 x 3000 item images. Rumble is excluded until its automation-permission
+   issue is resolved. Apple points directly to RSS.com, but its episode-art and
+   five-to-seven episode convergence remain pending. Existing Instagram Reel
+   covers cannot be replaced through the documented post-publication workflow
+   and must not be deleted/reposted merely for cosmetic convergence.
 
 The website catalog, fallback data, and Supabase projection now use the approved
 local artwork. The master catalog remains authoritative, so remote

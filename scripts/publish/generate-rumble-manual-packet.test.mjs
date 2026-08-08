@@ -104,10 +104,10 @@ test("manual packet verifies and renders the exact seven catalog-bound videos an
   assert.equal((result.content.match(/off every syndication control/g) ?? []).length, 7);
   assert.equal((result.content.match(/Keep \*\*Premium and every exclusive placement option off\*\*/g) ?? []).length, 7);
   assert.equal((result.content.match(/Human only:\*\* review and accept the \*\*July 21, 2026 Terms/g) ?? []).length, 7);
-  assert.match(result.content, /Optional unsent draft: prior written automation permission request/);
-  assert.match(result.content, /Status: DRAFT ONLY - NOT SENT/);
+  assert.match(result.content, /Automation permission request/);
+  assert.match(result.content, /SENT TO support@rumble\.com ON AUGUST 8, 2026 - RESPONSE PENDING/);
   assert.match(result.content, /would not scrape Rumble/);
-  assert.match(result.content, /A human account owner would personally review and complete all Terms acceptance and rights attestations/);
+  assert.match(result.content, /submit an exact release only after the owner has approved that release packet/);
   assert.doesNotMatch(result.content, /<strong>|<p>|<ul>|<li>/);
 
   const stored = await fs.readFile(fixture.outputPath, "utf8");
@@ -168,5 +168,5 @@ test("manual packet generator has no network or browser integration", async () =
   const source = await fs.readFile(generatorPath, "utf8");
   assert.doesNotMatch(source, /from\s+["']node:(?:http|https|net|tls|dns|dgram)["']/);
   assert.doesNotMatch(source, /\bfetch\s*\(/);
-  assert.doesNotMatch(source, /drm-browser|playwright|puppeteer|selenium|rumble\.com/i);
+  assert.doesNotMatch(source, /drm-browser|playwright|puppeteer|selenium/i);
 });

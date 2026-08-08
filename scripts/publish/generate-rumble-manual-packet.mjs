@@ -201,27 +201,41 @@ Generated: ${packet.generatedAt}
 
 This is an offline, copy-ready handoff. Generation reads local files only. It does not open Rumble, use a browser, accept Terms, attest rights, change licensing, or submit uploads.
 
-## Optional unsent draft: prior written automation permission request
+## Automation permission request
 
-**Status: DRAFT ONLY - NOT SENT**
+**Status: SENT TO support@rumble.com ON AUGUST 8, 2026 - RESPONSE PENDING**
 
 ### Subject
 
-${markdownCode("Request for prior written permission for limited upload assistance")}
+${markdownCode("Written permission request for supervised upload automation - account 282015440")}
 
 ### Message
 
 ${markdownCode(`Hello Rumble Support,
 
-I am requesting prior written permission to use limited software assistance in my own authenticated Rumble account for podcast-video uploads that I review and approve in advance.
+I am the account owner or authorized manager for Dr. M Experienced:
+Rumble account: 282015440
+Channel: 7820170
 
-The proposed scope is limited to entering owner-approved titles and descriptions and uploading owner-approved local video and thumbnail files. Metadata and file-integrity checks are prepared offline before any account interaction. The assistance would not scrape Rumble, collect other users' data, evade access controls, solve CAPTCHA or MFA prompts, run unattended, or make independent publishing decisions.
+I am requesting prior written permission under the "Restrictions on Automated Software" section of Rumble's Terms to use limited, local, owner-supervised browser assistance for our podcast-video publishing workflow.
 
-Every upload would use Option C, Rumble Only (non-exclusive, similar to YouTube), start Unlisted, keep all syndication off, and keep Premium and every exclusive placement option off. A human account owner would personally review and complete all Terms acceptance and rights attestations and would control final submission.
+The proposed software assistance would:
+- enter titles, descriptions, tags, and other metadata that the owner approved in advance;
+- attach exact owner-approved local video and thumbnail files;
+- select the owner's approved visibility and distribution settings;
+- submit an exact release only after the owner has approved that release packet and confirmed the applicable content rights and current Terms.
 
-Please confirm in writing whether Rumble permits this narrowly scoped workflow and identify any required API, tool, or additional safeguards.
+Every upload would use Option C, Rumble Only, so it remains non-exclusive. New uploads would start Unlisted, keep Premium and every exclusive placement option off, and keep all auto-syndication destinations off.
 
-Thank you.`)}
+The assistance would not scrape Rumble or other users, collect interaction data, evade access controls, solve CAPTCHA or MFA prompts, generate engagement, post comments, make independent editorial or licensing decisions, or run without an owner-approved release. We can retain an audit trail tying each action to the approved metadata and file hashes.
+
+Please confirm in writing whether Rumble grants prior written permission for this narrowly scoped workflow. If browser assistance is not approved, please identify any supported VOD upload API, partner integration, or bulk-import workflow that would let us publish the same approved releases programmatically.
+
+Thank you,
+
+Michael
+Dr. M Experienced
+drmexperienced@gmail.com`)}
 
 ${sections.join("\n---\n\n")}`;
 }
