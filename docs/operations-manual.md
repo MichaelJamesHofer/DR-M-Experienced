@@ -102,6 +102,7 @@ Interpretation on August 8, 2026:
 | Operating rules | `AGENTS.md` |
 | Completed host-migration evidence and downstream directory state | `publishing/hosting-migration.json` |
 | Shared show and episode distribution metadata | `publishing/master-catalog.json` |
+| Short-form metadata, local-master fingerprints, and Instagram/Vimeo mappings | `publishing/short-form-catalog.json` |
 | Stable account/show/channel IDs and current routing | `publishing/platforms.json` |
 | Apple Episodes 1-2 GUID incident, crosswalk, and repair gates | `publishing/apple-guid-repair.json` |
 | Approved seven-episode title-transition evidence | `publishing/episode-title-migration.json` |
@@ -129,6 +130,13 @@ episode-level remote IDs and URLs. The title-migration file and generated
 website recovery files are evidence/projections, not parallel authorities.
 The small website brand projection at `src/data/site-brand.generated.json` is
 regenerated from the master before `dev` and `build`; catalog tests reject drift.
+
+`publishing/short-form-catalog.json` is the separate authority for Reels,
+recipe clips, and episode excerpts. It assigns platform-neutral IDs, binds the
+fingerprinted local master and website poster, and records Instagram, Vimeo, and
+website destinations. These items never receive podcast episode numbers or RSS
+GUIDs. Follow `docs/short-form-content-system.md` for the verified inventory and
+recovery steps.
 
 Supabase remains authoritative for website-only editorial fields such as topics,
 references, takeaways, checklists, long-form sections, affiliate/blog
@@ -588,8 +596,12 @@ After Spotify, Vimeo, YouTube, and Rumble references are verified:
 - An official API token with upload/edit scopes is still needed for automation.
 - Completed August 7: all seven corrected videos were replaced in place and
   verified on the existing stable Vimeo IDs.
+- Recipe short `1204939542` is cataloged against the verified local `Pesto v2.mp4`
+  master. Its current `Pesto v2` title, empty description, and poster need an
+  in-place metadata correction; preserve the stable ID. The two cataloged Brain
+  Fog excerpts still need separate Vimeo short uploads.
 - Current Vimeo display name is shortened to fit the platform limit.
-- Current seven titles and descriptions are verified. Vimeo may render catalog
+- Current seven episode titles and descriptions are verified. Vimeo may render catalog
   hyphen lists as native rich-text bullets; compare persisted editor structure
   and normalized public text rather than raw oEmbed punctuation.
 
@@ -604,9 +616,14 @@ After Spotify, Vimeo, YouTube, and Rumble references are verified:
 - Keep the public profile ID separate from the authenticated Graph API publishing
   ID. The former is recorded; the latter remains unknown until an authorized API
   readback confirms it.
-- Prefer Meta's resumable local upload after the stable
-  publishing ID are verified. Temporary public media staging is fallback-only
-  and must be removed after processing.
+- All three public Reels have distinct captions and are mapped to verified local
+  masters in `publishing/short-form-catalog.json`.
+- Prefer Meta's resumable local upload after the stable publishing ID is
+  verified. Meta limits this local-file route to Facebook Login for Business,
+  which requires linking the Creator account to a Facebook Page but does not
+  convert the Instagram account to Business. The alternative Instagram Login
+  flow requires a public media URL; any temporary staging object must be removed
+  after processing.
 - Instagram has no durable private publishing draft, so the final creation call
   requires exact release approval.
 

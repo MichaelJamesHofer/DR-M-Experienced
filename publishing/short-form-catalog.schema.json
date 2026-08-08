@@ -1,0 +1,254 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://drmexperienced.com/schemas/short-form-catalog.json",
+  "title": "Dr. M Experienced short-form content catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "revision",
+    "lastVerifiedAt",
+    "authority",
+    "items"
+  ],
+  "properties": {
+    "$schema": { "const": "./short-form-catalog.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "revision": { "type": "integer", "minimum": 1 },
+    "lastVerifiedAt": { "type": "string", "format": "date-time" },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metadata", "binaryMaster", "videoHost", "audioDistribution"],
+      "properties": {
+        "metadata": { "const": "publishing/short-form-catalog.json" },
+        "binaryMaster": { "const": "fingerprinted_project_dropbox_asset" },
+        "videoHost": { "const": "vimeo_distribution_and_recovery_copy" },
+        "audioDistribution": { "const": "not_applicable_use_rss_for_podcast_audio_only" }
+      }
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/short" }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "logicalAssetUri": {
+      "type": "string",
+      "pattern": "^dropbox:(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+"
+    },
+    "sourceAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uri", "sha256", "sizeBytes", "durationSeconds"],
+      "properties": {
+        "uri": { "$ref": "#/$defs/logicalAssetUri" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "sizeBytes": { "type": "integer", "minimum": 1 },
+        "durationSeconds": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "masterAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "uri",
+        "status",
+        "sha256",
+        "sizeBytes",
+        "container",
+        "durationSeconds",
+        "width",
+        "height",
+        "framesPerSecond",
+        "videoCodec",
+        "audioCodec",
+        "audioSampleRateHz",
+        "audioChannels"
+      ],
+      "properties": {
+        "uri": { "$ref": "#/$defs/logicalAssetUri" },
+        "status": { "const": "verified" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "sizeBytes": { "type": "integer", "minimum": 1 },
+        "container": { "enum": ["mp4", "mov"] },
+        "durationSeconds": { "type": "number", "exclusiveMinimum": 0 },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "framesPerSecond": { "type": "number", "exclusiveMinimum": 0 },
+        "videoCodec": { "const": "h264" },
+        "audioCodec": { "const": "aac" },
+        "audioSampleRateHz": { "type": "integer", "minimum": 1 },
+        "audioChannels": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "posterAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "websitePath",
+        "sha256",
+        "sizeBytes",
+        "width",
+        "height",
+        "sourcePlatform",
+        "sourceMediaId",
+        "capturedAt"
+      ],
+      "properties": {
+        "websitePath": {
+          "type": "string",
+          "pattern": "^/images/shorts/[a-z0-9-]+\\.(?:jpg|jpeg|png|webp)$"
+        },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "sizeBytes": { "type": "integer", "minimum": 1 },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "sourcePlatform": { "const": "instagram" },
+        "sourceMediaId": { "type": "string", "pattern": "^[0-9]+$" },
+        "capturedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "instagramDestination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "mediaId",
+        "shortcode",
+        "url",
+        "publishedAt",
+        "verifiedAt",
+        "remoteDurationSeconds",
+        "remoteWidth",
+        "remoteHeight"
+      ],
+      "properties": {
+        "state": { "const": "published" },
+        "mediaId": { "type": "string", "pattern": "^[0-9]+$" },
+        "shortcode": { "type": "string", "pattern": "^[A-Za-z0-9_-]+$" },
+        "url": { "type": "string", "format": "uri", "pattern": "^https://www\\.instagram\\.com/reel/" },
+        "publishedAt": { "type": "string", "format": "date-time" },
+        "verifiedAt": { "type": "string", "format": "date-time" },
+        "remoteDurationSeconds": { "type": "number", "exclusiveMinimum": 0 },
+        "remoteWidth": { "type": "integer", "minimum": 1 },
+        "remoteHeight": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "vimeoDestination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "id",
+        "url",
+        "verifiedAt",
+        "observedTitle",
+        "observedDescription",
+        "metadataParity"
+      ],
+      "properties": {
+        "state": { "enum": ["published", "not_published_as_short"] },
+        "id": { "type": ["string", "null"], "pattern": "^[0-9]+$" },
+        "url": { "type": ["string", "null"], "format": "uri" },
+        "verifiedAt": { "type": "string", "format": "date-time" },
+        "observedTitle": { "type": ["string", "null"] },
+        "observedDescription": { "type": ["string", "null"] },
+        "metadataParity": { "type": "boolean" }
+      }
+    },
+    "websiteDestination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "path"],
+      "properties": {
+        "state": { "const": "ready_for_deployment" },
+        "path": { "type": "string", "pattern": "^/shorts/[a-z0-9-]+/$" }
+      }
+    },
+    "short": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "slug",
+        "contentType",
+        "publicationState",
+        "recordedOn",
+        "title",
+        "summary",
+        "body",
+        "topics",
+        "relatedEpisodeNumbers",
+        "provenance",
+        "master",
+        "poster",
+        "destinationCopy",
+        "destinations"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^short-[a-z0-9-]+$" },
+        "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "contentType": { "enum": ["educational_clip", "recipe"] },
+        "publicationState": { "const": "published" },
+        "recordedOn": { "type": "string", "format": "date" },
+        "title": { "type": "string", "minLength": 1 },
+        "summary": { "type": "string", "minLength": 1 },
+        "body": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "topics": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+        },
+        "relatedEpisodeNumbers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "integer", "minimum": 1 }
+        },
+        "ingredients": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["sourceType", "sourceAssets"],
+          "properties": {
+            "sourceType": { "enum": ["episode_excerpt", "multi_clip_edit"] },
+            "sourceAssets": { "type": "array", "items": { "$ref": "#/$defs/sourceAsset" } }
+          }
+        },
+        "master": { "$ref": "#/$defs/masterAsset" },
+        "poster": { "$ref": "#/$defs/posterAsset" },
+        "destinationCopy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["instagramCaption", "vimeoTitle", "vimeoDescription"],
+          "properties": {
+            "instagramCaption": { "type": "string", "minLength": 1 },
+            "vimeoTitle": { "type": "string", "minLength": 1 },
+            "vimeoDescription": { "type": "string", "minLength": 1 }
+          }
+        },
+        "destinations": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["instagram", "vimeo", "website"],
+          "properties": {
+            "instagram": { "$ref": "#/$defs/instagramDestination" },
+            "vimeo": { "$ref": "#/$defs/vimeoDestination" },
+            "website": { "$ref": "#/$defs/websiteDestination" }
+          }
+        }
+      }
+    }
+  }
+}

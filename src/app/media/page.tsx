@@ -122,11 +122,12 @@ export default function MediaPage() {
 }
 
 function MediaCard({ media }: { media: typeof MEDIA_FEATURES[number] }) {
+  const external = /^https?:\/\//.test(media.url);
   return (
-    <a
+    <Link
       href={media.url}
-      target="_blank"
-      rel="noopener noreferrer"
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
       className="group flex flex-col rounded-2xl border border-border bg-surface overflow-hidden hover:border-primary/50 hover:shadow-glow-sm transition-all duration-300"
     >
       {/* Thumbnail */}
@@ -188,6 +189,6 @@ function MediaCard({ media }: { media: typeof MEDIA_FEATURES[number] }) {
           </svg>
         </div>
       </div>
-    </a>
+    </Link>
   );
 }

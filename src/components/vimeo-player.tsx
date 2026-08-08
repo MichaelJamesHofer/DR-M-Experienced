@@ -8,6 +8,7 @@ type VimeoPlayerProps = {
   title?: string;
   thumbnailUrl?: string;
   className?: string;
+  aspectClassName?: string;
 };
 
 export function VimeoPlayer({
@@ -15,12 +16,13 @@ export function VimeoPlayer({
   title = 'Episode video',
   thumbnailUrl,
   className = '',
+  aspectClassName = 'aspect-video',
 }: VimeoPlayerProps) {
   const [shouldLoad, setShouldLoad] = useState(false);
   const previewImage = thumbnailUrl || `https://vumbnail.com/${videoId}.jpg`;
 
   return (
-    <div className={`relative aspect-video overflow-hidden bg-surface-elevated ${className}`}>
+    <div className={`relative overflow-hidden bg-surface-elevated ${aspectClassName} ${className}`}>
       {shouldLoad ? (
         <iframe
           src={`https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0&badge=0&dnt=1`}

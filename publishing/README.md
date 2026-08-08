@@ -43,6 +43,20 @@ The other stores have narrower roles:
   propagation receipt for the revision-11 Episode 7 correction. Do not infer
   cross-platform parity from the older transition receipt.
 
+The fingerprinted Dropbox file is the binary master for each video, audio file,
+and artwork asset. Vimeo is a direct-video destination and useful remote recovery
+copy, but it is not a co-master and must never overwrite the local asset binding.
+RSS.com is the canonical published-audio host and feed fanout source; Apple,
+Amazon, and Spotify audio inherit the existing RSS item and GUID. The
+fingerprinted local MP3 remains the canonical audio binary.
+
+Short-form media has a separate authority at
+`publishing/short-form-catalog.json`. It assigns platform-neutral IDs to Reels,
+recipe clips, and episode excerpts; fingerprints their local masters; records
+Instagram and Vimeo identities; and projects them to stable website routes.
+Short-form items are never added to the episode catalog or RSS feed. Follow
+`docs/short-form-content-system.md` for reconciliation, API setup, and recovery.
+
 Dropbox stores large binaries; it is not a metadata database. Map only the
 synced Dr. M project folder, never an entire personal Dropbox, in the ignored
 workstation file `~/.config/drm-publisher/sources.json`:

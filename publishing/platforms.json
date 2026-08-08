@@ -180,10 +180,16 @@
       "requiredDestinationIds": ["accountId"],
       "asset": "fullVideo",
       "currentVideoState": "seven_in_place_replacements_verified",
-      "currentVideoCount": 7,
+      "currentVideoCount": 8,
+      "currentEpisodeVideoCount": 7,
+      "currentShortVideoCount": 1,
+      "shortFormCatalog": "publishing/short-form-catalog.json",
+      "catalogedShortVideoIds": ["1204939542"],
+      "shortMetadataDriftVideoIds": ["1204939542"],
       "stableVideoIdsPreserved": true,
       "replacementStateAuditedAt": "2026-08-07",
-      "notes": "All seven corrected videos were replaced in place and verified on their existing Vimeo IDs. Preserve those stable IDs. Future automation may use the official Vimeo API after app upload access and an upload/edit-scoped token are configured."
+      "shortStateAuditedAt": "2026-08-08T20:10:01Z",
+      "notes": "All seven corrected episode videos were replaced in place and verified on their existing Vimeo IDs. Preserve those stable IDs. Recipe short 1204939542 is now cataloged against its verified local master, but its Pesto v2 filename title, empty description, and poster need an in-place metadata correction. The two cataloged Brain Fog Instagram excerpts are not yet hosted as separate Vimeo shorts. Future automation may use the official Vimeo API after app upload access and an upload/edit-scoped token are configured."
     },
     "instagram": {
       "label": "Instagram",
@@ -204,7 +210,22 @@
       "fallbackMode": "temporary_public_media_staging",
       "accountType": "creator_professional",
       "accountTypeConfirmedAt": "2026-08-07",
-      "notes": "Public profile data independently confirms this is an Instagram Creator professional account and not a Business account, which is the correct classification for Dr. David Musnick as a creator. The public profile has exact name and bio but no external website link. The separate professionalAccountVerified field remains false until the stable authenticated Graph API publishing ID is read back; do not substitute the public profile ID. Add the website listening hub and complete Meta app authorization before API automation. Prefer Meta's resumable upload from the approved local Reel."
+      "publicPostCount": 3,
+      "publicPostCountVerifiedAt": "2026-08-08T20:05:16Z",
+      "shortFormCatalog": "publishing/short-form-catalog.json",
+      "catalogedPublicMediaIds": [
+        "3818274203859121888",
+        "3818276316521641998",
+        "3928186163131134659"
+      ],
+      "apiSetup": {
+        "preferredFlow": "facebook_login_for_business_local_resumable",
+        "instagramAccountConversionRequired": false,
+        "linkedFacebookPageRequired": true,
+        "authenticatedPublishingIdRequired": true,
+        "directInstagramLoginAlternative": "temporary_public_media_staging"
+      },
+      "notes": "Public profile data independently confirms this is an Instagram Creator professional account and not a Business account, which is the correct classification for Dr. David Musnick as a creator. The public profile has exact name and bio but no external website link. All three public Reels have distinct captions and catalog mappings to verified local masters. The separate professionalAccountVerified field remains false until the stable authenticated Graph API publishing ID is read back; do not substitute the public profile ID. Add the website listening hub and complete Meta app authorization before API automation. Meta's local resumable route requires Facebook Login for Business and a linked Page but does not require converting Instagram to Business; direct Instagram Login instead requires temporary public media staging."
     },
     "rumble": {
       "label": "Rumble",

@@ -108,7 +108,8 @@ Based on analysis of top-tier health content creators (Huberman Lab, Peter Attia
 - [ ] Claim the show once in Amazon Music/Audible using `https://media.rss.com/dr-m-experienced/feed.xml`, then record its stable ID and URL
 - [x] Independently verify Instagram is a Creator professional account, not a Business account, with exact public name and bio
 - [ ] Add `https://drmexperienced.com` as Instagram's external link and complete authenticated Graph API publishing-ID/token authorization; do not use the public profile ID as the publishing ID or convert the account to Business
-- [ ] Review the off-catalog public Vimeo video `Pesto v2`; archive or catalog it only after content ownership and intent are confirmed
+- [x] Catalog Vimeo video `1204939542` and Instagram Reel `DaDuIDBCTLD` as the platform-neutral short `short-cilantro-basil-pesto`, bind the verified local `Pesto v2.mp4` master, and add its website route
+- [ ] Correct Vimeo video `1204939542` from filename metadata to the catalog Pesto title/description/poster; upload the two cataloged Brain Fog short masters to Vimeo and record their stable IDs
 - [ ] Replace company-level affiliate destinations with verified links to the exact products Dr. Musnick recommends, then validate every link and its related-episode placement before publishing
 
 ## Current Status: HOST CUTOVER COMPLETE; PLATFORM REMEDIATION ACTIVE
