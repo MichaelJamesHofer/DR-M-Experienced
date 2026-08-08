@@ -1,8 +1,8 @@
 {
   "$schema": "./short-form-catalog.schema.json",
-  "schemaVersion": 1,
-  "revision": 1,
-  "lastVerifiedAt": "2026-08-08T20:10:01Z",
+  "schemaVersion": 2,
+  "revision": 2,
+  "lastVerifiedAt": "2026-08-08T20:43:49Z",
   "authority": {
     "metadata": "publishing/short-form-catalog.json",
     "binaryMaster": "fingerprinted_project_dropbox_asset",
@@ -22,8 +22,14 @@
         "Brain fog is a description of impaired cognitive function, not a diagnosis. Dr. Musnick outlines common signs people notice and explains why persistent or worsening symptoms deserve a careful evaluation.",
         "This excerpt comes from Brain Fog, Part 1 and is provided for general education. It does not replace individualized medical evaluation or treatment."
       ],
-      "topics": ["brain-fog", "brain-health", "functional-medicine"],
-      "relatedEpisodeNumbers": [1],
+      "topics": [
+        "brain-fog",
+        "brain-health",
+        "functional-medicine"
+      ],
+      "relatedEpisodeNumbers": [
+        1
+      ],
       "provenance": {
         "sourceType": "episode_excerpt",
         "sourceAssets": []
@@ -71,13 +77,15 @@
           "remoteHeight": 607
         },
         "vimeo": {
-          "state": "not_published_as_short",
-          "id": null,
-          "url": null,
-          "verifiedAt": "2026-08-08T20:10:01Z",
-          "observedTitle": null,
-          "observedDescription": null,
-          "metadataParity": false
+          "state": "published",
+          "id": "1216695521",
+          "url": "https://vimeo.com/1216695521",
+          "verifiedAt": "2026-08-08T20:43:49Z",
+          "observedTitle": "What Brain Fog Really Feels Like",
+          "observedDescription": "Dr. David Musnick explains common signs people mean when they describe brain fog. This short excerpt is from Brain Fog, Part 1. Learn more at https://drmexperienced.com/shorts/what-brain-fog-feels-like/. Educational content only; not individualized medical advice.",
+          "metadataParity": true,
+          "selectedThumbnailId": "2188196097",
+          "posterParity": true
         },
         "website": {
           "state": "ready_for_deployment",
@@ -97,8 +105,15 @@
         "This excerpt covers selected laboratory and exposure questions that may be considered during an evaluation for persistent brain fog, along with basic brain-supportive habits used while the underlying cause is investigated.",
         "Testing and treatment choices depend on a person's history, examination, and risk factors. This clip is educational and does not recommend a specific test or treatment for every viewer."
       ],
-      "topics": ["brain-fog", "brain-health", "functional-medicine", "testing"],
-      "relatedEpisodeNumbers": [2],
+      "topics": [
+        "brain-fog",
+        "brain-health",
+        "functional-medicine",
+        "testing"
+      ],
+      "relatedEpisodeNumbers": [
+        2
+      ],
       "provenance": {
         "sourceType": "episode_excerpt",
         "sourceAssets": []
@@ -146,13 +161,15 @@
           "remoteHeight": 607
         },
         "vimeo": {
-          "state": "not_published_as_short",
-          "id": null,
-          "url": null,
-          "verifiedAt": "2026-08-08T20:10:01Z",
-          "observedTitle": null,
-          "observedDescription": null,
-          "metadataParity": false
+          "state": "published",
+          "id": "1216695522",
+          "url": "https://vimeo.com/1216695522",
+          "verifiedAt": "2026-08-08T20:43:49Z",
+          "observedTitle": "Brain Fog: Testing and Foundational Support",
+          "observedDescription": "Dr. David Musnick discusses evaluation questions and foundational support for persistent brain fog. This short excerpt is from Brain Fog, Part 2. Learn more at https://drmexperienced.com/shorts/brain-fog-testing-and-basic-solutions/. Educational content only; not individualized medical advice.",
+          "metadataParity": true,
+          "selectedThumbnailId": "2188195959",
+          "posterParity": true
         },
         "website": {
           "state": "ready_for_deployment",
@@ -172,7 +189,11 @@
         "Dr. Musnick combines fresh herbs, broccoli sprouts, olive oil, nuts, and seasonings into a dairy-free pesto. He also discusses the ingredients he chooses and practical ways to use the finished pesto with vegetables, eggs, fish, or meat.",
         "Ingredient amounts are demonstrated in the video rather than presented as a standardized medical nutrition plan. Adjust ingredients for allergies, dietary needs, and clinician guidance."
       ],
-      "topics": ["brain-health", "nutrition", "recipe"],
+      "topics": [
+        "brain-health",
+        "nutrition",
+        "recipe"
+      ],
       "relatedEpisodeNumbers": [],
       "ingredients": [
         "Basil",
@@ -247,10 +268,12 @@
           "state": "published",
           "id": "1204939542",
           "url": "https://vimeo.com/1204939542",
-          "verifiedAt": "2026-08-08T20:10:01Z",
-          "observedTitle": "Pesto v2",
-          "observedDescription": "",
-          "metadataParity": false
+          "verifiedAt": "2026-08-08T20:43:49Z",
+          "observedTitle": "Cilantro-Basil Pesto with Broccoli Sprouts",
+          "observedDescription": "Dr. David Musnick demonstrates a dairy-free pesto made with cilantro, basil, broccoli sprouts, olive oil, pistachios, pine nuts, and simple seasonings. Recipe details and the Instagram Reel are at https://drmexperienced.com/shorts/cilantro-basil-pesto-with-broccoli-sprouts/. Educational content only; adjust ingredients for allergies and individual dietary needs.",
+          "metadataParity": true,
+          "selectedThumbnailId": "2188196239",
+          "posterParity": true
         },
         "website": {
           "state": "ready_for_deployment",

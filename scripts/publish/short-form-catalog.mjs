@@ -16,6 +16,10 @@ export const DEFAULT_SHORT_FORM_SCHEMA_PATH = path.resolve(
   moduleDirectory,
   "../../publishing/short-form-catalog.schema.json"
 );
+export const DEFAULT_PLATFORM_REGISTRY_PATH = path.resolve(
+  moduleDirectory,
+  "../../publishing/platforms.json"
+);
 export const DEFAULT_SOURCES_CONFIG_PATH = path.join(
   os.homedir(),
   ".config/drm-publisher/sources.json"
@@ -90,6 +94,13 @@ function relativeDurationDifference(left, right) {
   return Math.abs(left - right) / Math.max(left, right);
 }
 
+function sameStringSet(actual, expected) {
+  if (!Array.isArray(actual) || actual.length !== expected.length) return false;
+  const sortedActual = [...actual].sort();
+  const sortedExpected = [...expected].sort();
+  return sortedActual.every((value, index) => value === sortedExpected[index]);
+}
+
 export function shortFormCatalogHash(catalog) {
   return createHash("sha256").update(JSON.stringify(canonicalValue(catalog))).digest("hex");
 }
@@ -101,6 +112,8 @@ export function validateShortFormCatalog(catalog) {
     : validateSchema.errors.map((error) => `${schemaPath(error)} ${error.message}`);
 
   if (!catalog || !Array.isArray(catalog.items)) return { valid: false, errors };
+
+  const catalogVerifiedAt = Date.parse(catalog.lastVerifiedAt);
 
   errors.push(...duplicateProblems(catalog.items, (item) => item.id, "short ID"));
   errors.push(...duplicateProblems(catalog.items, (item) => item.slug, "short slug"));
@@ -148,6 +161,18 @@ export function validateShortFormCatalog(catalog) {
     const vimeo = item.destinations?.vimeo;
     const website = item.destinations?.website;
 
+    for (const [destinationName, destination] of Object.entries(item.destinations ?? {})) {
+      if (
+        typeof destination?.verifiedAt === "string" &&
+        Number.isFinite(catalogVerifiedAt) &&
+        Date.parse(destination.verifiedAt) > catalogVerifiedAt
+      ) {
+        errors.push(
+          `${prefix} ${destinationName} verifiedAt cannot be later than catalog lastVerifiedAt`
+        );
+      }
+    }
+
     if (website?.path !== `/shorts/${item.slug}/`) {
       errors.push(`${prefix} website path must be /shorts/${item.slug}/`);
     }
@@ -167,12 +192,36 @@ export function validateShortFormCatalog(catalog) {
     ) {
       errors.push(`${prefix} Instagram duration does not match the verified master`);
     }
-    if (vimeo?.state === "published" && (!vimeo.id || !vimeo.url)) {
-      errors.push(`${prefix} published Vimeo destination is missing its stable ID or URL`);
+    if (vimeo?.state === "published" && (!vimeo.id || !vimeo.url || !vimeo.selectedThumbnailId)) {
+      errors.push(
+        `${prefix} published Vimeo destination is missing its stable ID, URL, or selected thumbnail ID`
+      );
+    }
+    if (vimeo?.state === "published" && vimeo.id && vimeo.url !== `https://vimeo.com/${vimeo.id}`) {
+      errors.push(`${prefix} Vimeo URL does not match its stable video ID`);
+    }
+    if (vimeo?.state === "published") {
+      const metadataMatches =
+        vimeo.observedTitle === item.destinationCopy?.vimeoTitle &&
+        vimeo.observedDescription === item.destinationCopy?.vimeoDescription;
+      if (vimeo.metadataParity !== metadataMatches) {
+        errors.push(
+          `${prefix} Vimeo metadataParity must exactly reflect the observed title and description`
+        );
+      }
+      if (vimeo.posterParity && !vimeo.selectedThumbnailId) {
+        errors.push(`${prefix} Vimeo posterParity requires a selected thumbnail ID`);
+      }
     }
     if (
       vimeo?.state === "not_published_as_short" &&
-      (vimeo.id !== null || vimeo.url !== null || vimeo.observedTitle !== null || vimeo.observedDescription !== null)
+      (vimeo.id !== null ||
+        vimeo.url !== null ||
+        vimeo.observedTitle !== null ||
+        vimeo.observedDescription !== null ||
+        vimeo.metadataParity ||
+        vimeo.selectedThumbnailId !== null ||
+        vimeo.posterParity)
     ) {
       errors.push(`${prefix} unpublished Vimeo destination must not claim remote identity or metadata`);
     }
@@ -185,6 +234,63 @@ export function validateShortFormCatalog(catalog) {
     if (Object.hasOwn(item.destinations ?? {}, "rumble")) {
       errors.push(`${prefix} short-form catalog must not add an unreviewed Rumble destination`);
     }
+  }
+
+  return { valid: errors.length === 0, errors };
+}
+
+export function validateShortFormPlatformRegistry(catalog, platformRegistry) {
+  const errors = [];
+  const catalogResult = validateShortFormCatalog(catalog);
+  if (!catalogResult.valid) {
+    errors.push(...catalogResult.errors.map((error) => `Catalog: ${error}`));
+  }
+
+  const vimeo = platformRegistry?.platforms?.vimeo;
+  if (!vimeo || typeof vimeo !== "object") {
+    errors.push("Platform registry is missing platforms.vimeo");
+    return { valid: false, errors };
+  }
+
+  const publishedVimeo = Array.isArray(catalog?.items)
+    ? catalog.items.filter((item) => item.destinations?.vimeo?.state === "published")
+    : [];
+  const expectedIds = publishedVimeo.map((item) => item.destinations.vimeo.id);
+  const expectedDriftIds = publishedVimeo
+    .filter(
+      (item) =>
+        item.destinations.vimeo.metadataParity !== true ||
+        item.destinations.vimeo.posterParity !== true
+    )
+    .map((item) => item.destinations.vimeo.id);
+
+  if (vimeo.shortFormCatalog !== "publishing/short-form-catalog.json") {
+    errors.push("Vimeo registry shortFormCatalog does not point to the short-form catalog");
+  }
+  if (vimeo.currentShortVideoCount !== expectedIds.length) {
+    errors.push(
+      `Vimeo registry currentShortVideoCount must be ${expectedIds.length}, found ${vimeo.currentShortVideoCount}`
+    );
+  }
+  if (
+    !Number.isInteger(vimeo.currentEpisodeVideoCount) ||
+    vimeo.currentVideoCount !== vimeo.currentEpisodeVideoCount + expectedIds.length
+  ) {
+    errors.push("Vimeo registry currentVideoCount must equal episode videos plus cataloged shorts");
+  }
+  if (!sameStringSet(vimeo.catalogedShortVideoIds, expectedIds)) {
+    errors.push("Vimeo registry catalogedShortVideoIds do not match published catalog IDs");
+  }
+  if (!sameStringSet(vimeo.shortMetadataDriftVideoIds, expectedDriftIds)) {
+    errors.push(
+      "Vimeo registry shortMetadataDriftVideoIds do not match catalog metadata/poster parity"
+    );
+  }
+  const registryAuditedAt = Date.parse(vimeo.shortStateAuditedAt);
+  if (!Number.isFinite(registryAuditedAt)) {
+    errors.push("Vimeo registry shortStateAuditedAt must be a valid date-time");
+  } else if (registryAuditedAt < Date.parse(catalog?.lastVerifiedAt)) {
+    errors.push("Vimeo registry shortStateAuditedAt is older than catalog lastVerifiedAt");
   }
 
   return { valid: errors.length === 0, errors };
@@ -292,11 +398,15 @@ export async function configuredDropboxRoot(
 async function main() {
   const verifyFiles = process.argv.includes("--verify-files");
   const catalog = await loadShortFormCatalog();
+  const platformRegistry = JSON.parse(await fs.readFile(DEFAULT_PLATFORM_REGISTRY_PATH, "utf8"));
+  const platformResult = validateShortFormPlatformRegistry(catalog, platformRegistry);
+  if (!platformResult.valid) throw new ShortFormCatalogValidationError(platformResult.errors);
   const summary = {
     valid: true,
     revision: catalog.revision,
     itemCount: catalog.items.length,
     catalogSha256: shortFormCatalogHash(catalog),
+    platformRegistryVerified: true,
   };
 
   if (verifyFiles) {

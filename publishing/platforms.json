@@ -97,7 +97,9 @@
         "accountId": null,
         "containerId": "dr-m-experienced"
       },
-      "requiredDestinationIds": ["containerId"],
+      "requiredDestinationIds": [
+        "containerId"
+      ],
       "asset": "podcastAudio",
       "rssRole": "canonical_host",
       "currentAudioState": "seven_normalized_enclosures_remote_verified",
@@ -115,7 +117,9 @@
         "accountId": null,
         "containerId": "7GGLljxmO0G3FLjPy8vfcw"
       },
-      "requiredDestinationIds": ["containerId"],
+      "requiredDestinationIds": [
+        "containerId"
+      ],
       "asset": "fullVideo",
       "rssRole": "direct_media_destination",
       "currentVideoState": "seven_corrected_videos_public_verified",
@@ -133,7 +137,9 @@
         "accountId": null,
         "containerId": "1870433419"
       },
-      "requiredDestinationIds": ["containerId"],
+      "requiredDestinationIds": [
+        "containerId"
+      ],
       "source": "rss",
       "dependsOn": "rss.com",
       "notes": "Do not upload the episode separately. Apple receives the approved podcast audio and item-level episode artwork from RSS.com's canonical feed. Preserve show ID 1870433419. The duplicate show ID 1896845422 now returns 404 and the stale manual Episode 4 Draft was archived on August 6, 2026. Public show 1870433419 exposes Episodes 3-7. Under case 20000130526608, Apple confirmed its existing Episode 1-2 records use older GUIDs than the current feed; the exact blocked crosswalk is in publishing/apple-guid-repair.json. Do not change the feed, delete, or recreate episodes until RSS.com in-place capability and Spotify identity preservation are confirmed. Apple public JSON-LD/search caches also retain legacy show wording for Episodes 4-7."
@@ -146,7 +152,9 @@
         "accountId": null,
         "containerId": null
       },
-      "requiredDestinationIds": ["containerId"],
+      "requiredDestinationIds": [
+        "containerId"
+      ],
       "source": "rss",
       "dependsOn": "rss.com",
       "notes": "No public Amazon Music or Audible listing was discoverable in the August 7, 2026 audit. Do not upload episodes separately. After the one-time listing claim and ownership verification, Amazon Music and Audible receive the approved podcast audio from RSS.com's canonical feed."
@@ -159,7 +167,10 @@
         "accountId": "UCFA1nVv4lKMBlx81gjMAOFQ",
         "containerId": "UUFA1nVv4lKMBlx81gjMAOFQ"
       },
-      "requiredDestinationIds": ["accountId", "containerId"],
+      "requiredDestinationIds": [
+        "accountId",
+        "containerId"
+      ],
       "asset": "fullVideo",
       "currentVideoState": "seven_normalized_replacements_public_verified",
       "currentPublicVideoCount": 7,
@@ -177,19 +188,25 @@
         "accountId": "253415660",
         "containerId": null
       },
-      "requiredDestinationIds": ["accountId"],
+      "requiredDestinationIds": [
+        "accountId"
+      ],
       "asset": "fullVideo",
       "currentVideoState": "seven_in_place_replacements_verified",
-      "currentVideoCount": 8,
+      "currentVideoCount": 10,
       "currentEpisodeVideoCount": 7,
-      "currentShortVideoCount": 1,
+      "currentShortVideoCount": 3,
       "shortFormCatalog": "publishing/short-form-catalog.json",
-      "catalogedShortVideoIds": ["1204939542"],
-      "shortMetadataDriftVideoIds": ["1204939542"],
+      "catalogedShortVideoIds": [
+        "1216695521",
+        "1216695522",
+        "1204939542"
+      ],
+      "shortMetadataDriftVideoIds": [],
       "stableVideoIdsPreserved": true,
       "replacementStateAuditedAt": "2026-08-07",
-      "shortStateAuditedAt": "2026-08-08T20:10:01Z",
-      "notes": "All seven corrected episode videos were replaced in place and verified on their existing Vimeo IDs. Preserve those stable IDs. Recipe short 1204939542 is now cataloged against its verified local master, but its Pesto v2 filename title, empty description, and poster need an in-place metadata correction. The two cataloged Brain Fog Instagram excerpts are not yet hosted as separate Vimeo shorts. Future automation may use the official Vimeo API after app upload access and an upload/edit-scoped token are configured."
+      "shortStateAuditedAt": "2026-08-08T20:43:49Z",
+      "notes": "All seven corrected episode videos were replaced in place and verified on their existing Vimeo IDs. Preserve those stable IDs. The three cataloged Instagram shorts are now also published on Vimeo as 1216695521, 1216695522, and 1204939542 with canonical titles, descriptions, and selected custom posters. Future automation may use the official Vimeo API after the private first-party app is created, upload access is confirmed, and an upload/edit-scoped token is stored locally."
     },
     "instagram": {
       "label": "Instagram",
@@ -205,7 +222,9 @@
       "publicProfessionalAccountVerifiedAt": "2026-08-07",
       "publicBusinessAccount": false,
       "professionalAccountVerified": false,
-      "requiredDestinationIds": ["accountId"],
+      "requiredDestinationIds": [
+        "accountId"
+      ],
       "asset": "instagramReel",
       "fallbackMode": "temporary_public_media_staging",
       "accountType": "creator_professional",
@@ -235,11 +254,15 @@
         "accountId": "282015440",
         "containerId": "7820170"
       },
-      "requiredDestinationIds": ["containerId"],
+      "requiredDestinationIds": [
+        "containerId"
+      ],
       "asset": "fullVideo",
       "currentVideoState": "seven_verified_local_uploads_require_manual_restaging",
       "currentCatalogDescriptionParity": false,
-      "pendingDescriptionCorrectionEpisodeNumbers": [7],
+      "pendingDescriptionCorrectionEpisodeNumbers": [
+        7
+      ],
       "descriptionCorrectionReceipt": "publishing/episode-description-correction.json",
       "stagedFormsOperational": false,
       "stagedUploadCount": 7,
