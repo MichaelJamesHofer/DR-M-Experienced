@@ -5,13 +5,14 @@ This workspace turns one approved episode manifest into a repeatable seven-desti
 Start with `docs/operations-manual.md` for the complete ecosystem and recovery procedures. See `docs/publishing-platform-setup.md` for the account inventory. `docs/rss-com-migration.md` records the completed RSS.com cutover, its validation evidence, and post-cutover monitoring.
 
 The approved cross-platform removal of visible `Episode N:` title prefixes is
-recorded in `publishing/episode-title-migration.json`. The RSS.com, website,
-YouTube, Vimeo, and existing Rumble catalog title/description batch is complete.
-Keep `episodeNumber` required in the manifest and RSS metadata, preserve every
-GUID and remote content ID, and use the evidence file for Apple convergence,
-Instagram and Amazon onboarding, and the staged Rumble replacement cutover.
-All seven corrected Spotify videos are now attached to the existing episode IDs
-and public readback verifies video, approved art, and approved copy for 7/7.
+recorded in `publishing/episode-title-migration.json`; that file remains the
+dated revision-10 transition evidence. The later Episode 7 description
+correction is tracked separately in
+`publishing/episode-description-correction.json`. At revision 11, RSS.com,
+Spotify fanout, YouTube, Vimeo, and the production Supabase editorial readback
+are verified current; Apple cache convergence, Rumble's manual reupload, and
+website deployment remain pending. Keep `episodeNumber` required in the manifest
+and RSS metadata, and preserve every GUID and remote content ID.
 
 ## Master catalog and binary assets
 
@@ -37,6 +38,9 @@ The other stores have narrower roles:
   overlapping episode identity fields are a checked projection of the catalog.
 - `publishing/episode-title-migration.json` is transition evidence, not the live
   metadata authority.
+- `publishing/episode-description-correction.json` is the current per-destination
+  propagation receipt for the revision-11 Episode 7 correction. Do not infer
+  cross-platform parity from the older transition receipt.
 
 Dropbox stores large binaries; it is not a metadata database. Map only the
 synced Dr. M project folder, never an entire personal Dropbox, in the ignored
@@ -141,6 +145,9 @@ third-party asset-rights review, and specific acknowledgment of the July 21,
 - The legacy Anchor URL now returns one HTTP 301 hop to RSS.com. Preserve that redirect and Spotify show `7GGLljxmO0G3FLjPy8vfcw` for RSS audio ingestion, video replacement, analytics, and continuity. All seven corrected videos are attached to the existing episode IDs and publicly verified. There is no account-wide video switch; for future video episodes, use the RSS-ingested episode's `Upload video` action after its corrected master is approved, while leaving intentionally audio-only episodes alone.
 - Apple show `1870433419` is configured directly to RSS.com with exact metadata, but still exposes five Available episodes. The duplicate show and stale manual Episode 4 Draft are archived. Apple case `20000130526608` confirmed that its existing Episode 1-2 records use historical GUIDs that differ from the current feed. `publishing/apple-guid-repair.json` records the exact blocked crosswalk and Spotify-preservation gates. Do not change, delete, or recreate either feed item until the support-first plan clears those gates. Submit the RSS.com feed once to Amazon and never create duplicate directory listings.
 - Both guarded Supabase migrations were applied in production on August 7 after exact SQL-file hash verification. Seven-row readback matches catalog revision 10 for current RSS.com audio URLs, YouTube IDs, and `Watch on YouTube` references.
+- The guarded August 8 Episode 7 editorial migration and independent production
+  readback match catalog revision 11. Website deployment and public-page readback
+  are tracked separately in `publishing/episode-description-correction.json`.
 - YouTube's seven normalized replacements are public and cataloged; the prior seven uploads remain Unlisted with replacement links and explicit rollback records. Vimeo's seven corrected videos are verified in place on their stable IDs. YouTube, Vimeo, and Instagram have official API routes, but each still needs account authorization and platform-specific setup for future automation.
 - Instagram should use resumable upload from the approved local Reel. A short-lived public staging URL is fallback-only and must be removed after Meta finishes processing.
 - Spotify's optional replace-with-video action remains a manual browser step because no supported public creator-upload API is available for that flow. Rumble is human-operated only under the current Terms: seven corrected uploads are staged Unlisted with Option C selected, but all seven have hidden YouTube syndication enabled and remain unsubmitted.
@@ -220,7 +227,10 @@ Browser access is not a release authorization. Default automation behavior is to
 1. Completed: removed `RSSVERIFY` from the dashboard/XML copy, cleared Episode 3's stray Season 1 value, aligned Episodes 4-7 with the catalog, and verified one Anchor 301 hop to RSS.com. RSS.com's separate public landing-page cache still exposes the token and remains a follow-up item.
 2. YouTube and Vimeo public readback, plus authenticated Rumble persistence,
    confirms all seven titles and descriptions match deterministic catalog
-   projections as of August 5, 2026.
+   projections as of August 5, 2026. That is revision-10 historical evidence;
+   the current revision-11 Episode 7 correction is complete on RSS.com, Spotify,
+   YouTube, and Vimeo but remains pending on Rumble and downstream Apple cache,
+   as recorded in `publishing/episode-description-correction.json`.
 3. Completed: the supported RSS.com import passed exact GUID, metadata, media, artwork, and edge-audio validation, and the Anchor redirect returns the expected 301.
 4. Apple show `1870433419` is configured directly to RSS.com. Duplicate cleanup and one feed refresh are complete. Apple case `20000130526608` identified a historical GUID mismatch for Episodes 1-2; follow `publishing/apple-guid-repair.json` and do not replace the show, recreate episodes, or change both GUIDs without the recorded gates.
 5. Submit the canonical RSS.com feed once to Amazon and record the stable show ID and URL.

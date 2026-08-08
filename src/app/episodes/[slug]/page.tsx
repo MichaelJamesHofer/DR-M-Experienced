@@ -118,9 +118,9 @@ export default async function EpisodeDetailPage({
         <span className="text-foreground line-clamp-2">{episodeDisplayTitle(episode)}</span>
       </nav>
 
-      <div className="grid gap-12 lg:grid-cols-3">
+      <div className="grid min-w-0 gap-12 lg:grid-cols-3">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-10">
+        <div className="min-w-0 space-y-10 lg:col-span-2">
           {/* Header */}
           <header>
             <div className="flex items-center gap-3 mb-4">
@@ -137,7 +137,7 @@ export default async function EpisodeDetailPage({
                 )}
               </div>
             </div>
-            <h1 className="text-display font-bold text-foreground mb-4">
+            <h1 className="break-words text-heading-lg font-bold !tracking-normal text-foreground mb-4 sm:text-heading-xl lg:text-display">
               {episodeDisplayTitle(episode)}
             </h1>
             <p className="text-body-lg text-foreground-muted">
@@ -211,7 +211,7 @@ export default async function EpisodeDetailPage({
             {(episode.audioUrl || episode.spotifyId) && (
               <div className="p-4 border-t border-border">
                 {episode.audioUrl ? (
-                  <audio controls preload="none" className="w-full" src={episode.audioUrl}>
+                  <audio controls preload="none" className="min-w-0 w-full max-w-full" src={episode.audioUrl}>
                     Your browser does not support audio.
                   </audio>
                 ) : episode.spotifyId ? (

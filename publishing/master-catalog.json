@@ -1,8 +1,8 @@
 {
   "$schema": "./master-catalog.schema.json",
   "schemaVersion": 1,
-  "revision": 10,
-  "updatedAt": "2026-08-07T07:46:32Z",
+  "revision": 11,
+  "updatedAt": "2026-08-08T18:09:18Z",
   "show": {
     "names": {
       "full": "Dr. M Experienced, with Dr. David Musnick",
@@ -699,9 +699,9 @@
       "title": "The Brain on Fire - Neuroinflammation After Concussion",
       "description": {
         "format": "html",
-        "full": "<p>In this episode of <strong>Dr. M Experienced, with Dr. David Musnick</strong>, Dr. David Musnick takes a deep dive into <strong>concussion, traumatic brain injury, and the functional medicine mechanisms behind brain injury recovery</strong>. Drawing on decades of experience in sports medicine and functional medicine, Dr. M explains why concussion care should go beyond simply ruling out a brain bleed and telling someone to rest.</p><p>This episode explores what actually happens in the brain after a concussion, including structural injury, neural shearing, excitotoxicity, neuroinflammation, oxidative stress, hypoxia, blood-brain barrier disruption, brain autoimmunity, hormone dysfunction, pituitary involvement, vagus nerve dysfunction, mitochondrial dysfunction, protein folding abnormalities, neurogenesis, synaptogenesis, and gut microbiome changes.</p><p>Dr. M also discusses why symptoms such as brain fog, headache, dizziness, emotional instability, fatigue, sleepiness, and brain-based fatigue can persist after a head injury — even when the person never directly hit their head. This episode sets the foundation for future conversations on how to address the pathways involved in concussion recovery.</p><p>This episode is for educational purposes only and is not a substitute for personalized medical care. Always consult your own healthcare provider for diagnosis, treatment, testing, supplements, or return-to-play decisions after a concussion or head injury.</p>"
+        "full": "<p>In this follow-up to the concussion pathophysiology episode, Dr. David Musnick explains how brain reserve can differ across regions and why symptom relief does not always mean that reserve is fully restored. He discusses practical ways to protect a healing brain from reinjury and briefly revisits excitotoxicity before turning to the episode's central focus: neuroinflammation.</p><p>Dr. M describes how glial cells support the brain, including astrocytes at the blood-brain barrier, oligodendrocytes that help form myelin, and microglia that respond to injury. He explains how prolonged pro-inflammatory M1 microglial activity can impair neurons and synapses, while repair-oriented M2 activity supports recovery.</p><p>The episode also reviews research-informed factors Dr. M considers when thinking about inflammation after concussion, including sleep, selected foods and flavonoids, vitamin D, omega-3s, curcumin, and Nrf2 signaling.</p><p>This episode is for educational purposes only and is not a substitute for personalized medical care. Always consult your own healthcare provider for diagnosis, treatment, testing, supplements, or return-to-play decisions after a concussion or head injury.</p>"
       },
-      "websiteSummary": "Dr. Musnick continues the brain-injury series with a focused look at the inflamed brain, including concussion, traumatic brain injury, neuroinflammation, oxidative stress, blood-brain barrier disruption, brain autoimmunity, hormone and mitochondrial effects, and persistent symptoms.",
+      "websiteSummary": "Dr. Musnick explains brain reserve and why symptom relief may precede full recovery, then explores glial cells, M1 and M2 microglia, neuroinflammation after concussion, and research-informed recovery factors.",
       "durationMinutes": 21,
       "publishDate": "2026-06-26",
       "feedPublishedAt": "2026-06-27T00:58:08.000Z",

@@ -99,6 +99,7 @@ Based on analysis of top-tier health content creators (Huberman Lab, Peter Attia
 - [x] Validate and register Episode 5's sub-25 Mbps Spotify derivative without changing its catalog master binding or claiming a remote upload
 - [x] Publish and verify all seven normalized YouTube replacements, move the prior uploads to Unlisted with replacement links, and retain both ID sets for rollback
 - [x] Replace all seven Vimeo videos in place and verify the corrected media on the stable existing IDs
+- [x] Correct Episode 7's duplicated Episode 6 description from the local transcript, propagate revision 11 to RSS.com/Spotify, YouTube, Vimeo, and production Supabase, and add a normalized-copy uniqueness gate plus per-destination receipt
 - [x] Audit the seven staged Rumble replacements: 7/7 are Unlisted with non-exclusive Option C and Vimeo/Facebook syndication off, but hidden YouTube syndication on; none was submitted and Premium state remains unverified
 - [ ] User-only Rumble completion: review every episode's third-party asset rights and the July 21, 2026 General License AI/ML training and third-party AI sublicensing provisions; then manually turn YouTube syndication off in all seven tabs, reverify Option C/Unlisted/Premium off, check the rights and Terms boxes, submit, and record each ID/URL. Do not automate Rumble absent its prior written permission
 - [x] Confirm GitHub Pages recovery after the provider outage: the apex returns HTTP 200 and `www` redirects to the apex
@@ -113,6 +114,8 @@ Based on analysis of top-tier health content creators (Huberman Lab, Peter Attia
 RSS.com is canonical, the legacy Anchor feed redirects, Apple is configured
 directly to RSS.com, and production Supabase matches catalog revision 10 for all
 seven current RSS audio URLs, YouTube IDs, and `Watch on YouTube` references.
+The guarded Episode 7 editorial correction and independent production readback
+match catalog revision 11; website deployment remains pending.
 The website apex has recovered to HTTP 200 and `www` redirects to it.
 Apple support, Podcast Index convergence, Amazon onboarding, RSS.com's cached
 landing-page token, Instagram's missing website link, Rumble's manual rights/Terms

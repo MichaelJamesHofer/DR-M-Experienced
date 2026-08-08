@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "correctionId": "episode-7-description-correction-2026-08-08",
+  "status": "remote_propagation_partial",
+  "recordedAt": "2026-08-08T18:34:56Z",
+  "catalog": {
+    "source": "publishing/master-catalog.json",
+    "revision": 11,
+    "publisherHash": "9b7774c8359112a4d25a6598df9025e540004092a8dd02ac08a56f85a9db713d"
+  },
+  "episode": {
+    "number": 7,
+    "slug": "episode-7-the-brain-on-fire",
+    "title": "The Brain on Fire - Neuroinflammation After Concussion",
+    "rssGuid": "4a0b3903-b7d1-4ced-967b-079df4004a4e",
+    "rssGuidPreserved": true,
+    "stableDestinationIdsPreserved": {
+      "spotify": "5QJlHSE6JhP3ymSCNzbWxv",
+      "youtube": "5UOEvs59hBA",
+      "vimeo": "1205004739"
+    }
+  },
+  "description": {
+    "normalization": "visible text normalized by scripts/publish/catalog.mjs normalizeDescriptionForComparison",
+    "previousCatalogRevision": 10,
+    "previousNormalizedSha256": "ae583e210f4388721f5ae4b3093218f50a6932845a7aefdecf2e2eb324b42fec",
+    "previousCopyDuplicatedEpisodeNumber": 6,
+    "currentNormalizedLength": 1181,
+    "currentNormalizedSha256": "380e4a70a27d02ea1ff76792a872482de893c10aa699b72f94921096c171c30a"
+  },
+  "targets": {
+    "rss.com": {
+      "role": "canonical_published_audio_host",
+      "status": "complete_verified",
+      "verifiedAt": "2026-08-08",
+      "readback": "canonical_feed",
+      "descriptionMatch": "exact_normalized",
+      "normalizedSha256": "380e4a70a27d02ea1ff76792a872482de893c10aa699b72f94921096c171c30a",
+      "rssGuidPreserved": true
+    },
+    "spotify": {
+      "role": "rss_fanout_and_video_destination",
+      "status": "complete_public_fanout_verified",
+      "verifiedAt": "2026-08-08",
+      "episodeId": "5QJlHSE6JhP3ymSCNzbWxv",
+      "source": "rss.com",
+      "duplicateEpisodeCreated": false
+    },
+    "youtube": {
+      "role": "direct_video_destination",
+      "status": "complete_verified",
+      "verifiedAt": "2026-08-08",
+      "videoId": "5UOEvs59hBA",
+      "descriptionMatch": "exact_normalized",
+      "normalizedSha256": "380e4a70a27d02ea1ff76792a872482de893c10aa699b72f94921096c171c30a",
+      "stableIdPreserved": true
+    },
+    "vimeo": {
+      "role": "direct_video_destination_and_remote_recovery_copy",
+      "status": "complete_verified",
+      "verifiedAt": "2026-08-08",
+      "videoId": "1205004739",
+      "descriptionMatch": "exact_normalized",
+      "normalizedSha256": "380e4a70a27d02ea1ff76792a872482de893c10aa699b72f94921096c171c30a",
+      "stableIdPreserved": true
+    },
+    "rumble": {
+      "role": "direct_video_destination",
+      "status": "pending_manual_reupload",
+      "existingPublicVideoId": "v7bvtu4",
+      "replacementVideoId": null,
+      "currentCatalogParity": false,
+      "requiredDescriptionSha256": "380e4a70a27d02ea1ff76792a872482de893c10aa699b72f94921096c171c30a",
+      "automationRequiresPriorWrittenPermission": true,
+      "submissionMethod": "manual_human_only",
+      "notes": "The expired upload must be restaged from the verified local asset. Apply the revision-11 description during that attended upload; keep Option C, Unlisted, Premium off, and all syndication off. Do not access or automate Rumble without its prior written permission."
+    },
+    "apple": {
+      "role": "rss_fanout",
+      "status": "pending_cache_convergence_verification",
+      "showId": "1870433419",
+      "source": "rss.com",
+      "separateUploadRequired": false
+    },
+    "amazon": {
+      "role": "rss_fanout",
+      "status": "not_claimed",
+      "source": "rss.com",
+      "separateUploadRequired": false
+    },
+    "instagram": {
+      "role": "short_form_social",
+      "status": "not_applicable_no_episode_7_asset",
+      "assetRef": null
+    },
+    "supabase": {
+      "role": "website_editorial_authority",
+      "status": "complete_verified",
+      "verifiedAt": "2026-08-08T18:36:00Z",
+      "readback": {
+        "summaryMatches": true,
+        "takeawayCount": 5,
+        "sectionTitles": [
+          "Brain reserve and symptom recovery",
+          "Protecting a healing brain",
+          "Glial cells and microglia",
+          "Supporting inflammatory balance"
+        ],
+        "paragraphCount": 8,
+        "brainAutoimmunityTopicPresent": false
+      }
+    },
+    "website": {
+      "role": "published_website_projection",
+      "status": "pending_deployment_live_drift_verified",
+      "verifiedAt": "2026-08-08T18:43:00Z",
+      "liveReadback": {
+        "currentSummaryPresent": false,
+        "previousSummaryPresent": true,
+        "currentSectionsPresent": false,
+        "previousSectionsPresent": true
+      }
+    }
+  },
+  "completion": {
+    "verifiedComplete": [
+      "rss.com",
+      "spotify",
+      "youtube",
+      "vimeo",
+      "supabase"
+    ],
+    "pending": [
+      "rumble",
+      "apple",
+      "website"
+    ],
+    "notApplicableOrNotOnboarded": [
+      "amazon",
+      "instagram"
+    ]
+  }
+}
