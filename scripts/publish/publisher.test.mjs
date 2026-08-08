@@ -17,6 +17,7 @@ import {
   hostingMigrationIsActive,
   normalizeManifest,
   packetIntegrityProblems,
+  releaseApprovalProblems,
   renderApprovalPacket,
   resolveDestinationCopy,
   reviewDocumentProblems,
@@ -34,13 +35,27 @@ function resolvedReleasePlan(target, overrides = {}) {
     youtube: { initialVisibility: "private", finalVisibility: "public", license: "youtube" },
     vimeo: { initialVisibility: "nobody", finalVisibility: "anybody", license: "none" },
     instagram: { initialVisibility: "not_applicable", finalVisibility: "public", license: "not_applicable" },
-    rumble: { initialVisibility: "unlisted", finalVisibility: "public", license: "personal_use" },
+    rumble: {
+      initialVisibility: "unlisted",
+      finalVisibility: "unlisted",
+      license: "rumble_only_option_c",
+      monetization: "enabled",
+      syndication: { youtube: false, vimeo: false, facebook: false },
+      premiumExclusive: false,
+      termsRevision: "2026-07-21",
+      humanAttestation: {
+        termsAcceptance: "human_only_not_recorded",
+        rightsConfirmation: "human_only_not_recorded",
+        aiMlLicenseAcknowledgement: "human_only_not_recorded",
+        thirdPartyRightsConfirmation: "human_only_not_recorded",
+      },
+    },
   };
   return {
     releaseMode: "hold",
-    ...values[target],
     monetization: "unchanged",
     notifications: "disabled",
+    ...values[target],
     ...overrides,
   };
 }
@@ -92,7 +107,7 @@ function validPlatformConfig() {
       youtube: { label: "YouTube", mode: "api_after_auth_and_audit", asset: "fullVideo", channelUrl: "https://example.test/youtube", ...platformIdentity("UCabcdefghijklmnopqrstuv", "PLabcdefghijklmnopqrstuvwx", ["accountId", "containerId"]), notes: "" },
       vimeo: { label: "Vimeo", mode: "api_after_auth", asset: "fullVideo", channelUrl: "https://example.test/vimeo", ...platformIdentity("12345678", null, ["accountId"]), notes: "" },
       instagram: { label: "Instagram", mode: "api_after_auth", asset: "instagramReel", channelUrl: "https://example.test/instagram", ...platformIdentity("17841400000000000", null, ["accountId"]), notes: "" },
-      rumble: { label: "Rumble", mode: "manual_browser", asset: "fullVideo", channelUrl: "https://example.test/rumble", ...platformIdentity(null, "rumble-channel", ["containerId"]), notes: "" },
+      rumble: { label: "Rumble", mode: "manual_human_only", asset: "fullVideo", channelUrl: "https://example.test/rumble", ...platformIdentity(null, "rumble-channel", ["containerId"]), notes: "" },
     },
   };
 }
@@ -149,6 +164,23 @@ function validApprovalPacket() {
     approvalHash: hashSnapshot(snapshot),
     snapshot,
   };
+}
+
+function validRumbleApprovalPacket() {
+  const packet = validApprovalPacket();
+  packet.snapshot.manifest = {
+    ...packet.snapshot.manifest,
+    copy: {},
+    releasePlan: { rumble: resolvedReleasePlan("rumble") },
+    targets: ["rumble"],
+  };
+  packet.snapshot.targets = buildTargetPlan(
+    validPlatformConfig(),
+    packet.snapshot.manifest,
+    packet.snapshot.assets
+  );
+  packet.approvalHash = hashSnapshot(packet.snapshot);
+  return packet;
 }
 
 function validApprovalRecord(packet, reviewDocument) {
@@ -263,6 +295,137 @@ test("manifest validation rejects unsupported platform visibility and license va
   const result = validateManifest(manifest);
   assert.ok(result.errors.some((error) => error.includes("initialVisibility")), result.errors.join("\n"));
   assert.ok(result.errors.some((error) => error.includes("license")), result.errors.join("\n"));
+});
+
+test("Rumble release policy permits only Unlisted non-exclusive Option C with syndication and Premium disabled", () => {
+  const manifest = {
+    ...validManifest(),
+    releasePlan: { rumble: resolvedReleasePlan("rumble") },
+    targets: ["rumble"],
+  };
+  assert.deepEqual(validateManifest(manifest).errors, []);
+  assert.deepEqual(releaseApprovalProblems(manifest), []);
+
+  const plan = buildTargetPlan(
+    validPlatformConfig(),
+    manifest,
+    { fullVideo: assetRecord("fullVideo") }
+  );
+  assert.equal(plan[0].readiness, "manual_human_submission_required");
+  assert.deepEqual(plan[0].releasePolicyIssues, []);
+
+  for (const license of [
+    "exclusive_video_management",
+    "video_management_excluding_youtube",
+    "rumble_player",
+    "personal_use",
+  ]) {
+    const changed = structuredClone(manifest);
+    changed.releasePlan.rumble.license = license;
+    const validation = validateManifest(changed);
+    assert.ok(validation.errors.some((error) => error.includes("license")), `${license} was accepted`);
+  }
+
+  const unsafeChanges = [
+    ["public initial visibility", (release) => { release.initialVisibility = "public"; }],
+    ["YouTube syndication", (release) => { release.syndication.youtube = true; }],
+    ["Vimeo syndication", (release) => { release.syndication.vimeo = true; }],
+    ["Facebook syndication", (release) => { release.syndication.facebook = true; }],
+    ["Premium exclusivity", (release) => { release.premiumExclusive = true; }],
+    ["stale terms", (release) => { release.termsRevision = "2026-07-20"; }],
+    ["machine-recorded acceptance", (release) => { release.humanAttestation.termsAcceptance = "accepted"; }],
+  ];
+  for (const [label, change] of unsafeChanges) {
+    const changed = structuredClone(manifest);
+    change(changed.releasePlan.rumble);
+    const validation = validateManifest(changed);
+    assert.ok(validation.errors.length > 0, `${label} was accepted`);
+    const changedPlan = buildTargetPlan(
+      validPlatformConfig(),
+      changed,
+      { fullVideo: assetRecord("fullVideo") }
+    );
+    assert.equal(changedPlan[0].readiness, "release_policy_violation", label);
+  }
+
+  const publicAfterManualReview = structuredClone(manifest);
+  publicAfterManualReview.releasePlan.rumble.finalVisibility = "public";
+  assert.deepEqual(validateManifest(publicAfterManualReview).errors, []);
+  assert.equal(
+    buildTargetPlan(
+      validPlatformConfig(),
+      publicAfterManualReview,
+      { fullVideo: assetRecord("fullVideo") }
+    )[0].readiness,
+    "manual_human_submission_required"
+  );
+});
+
+test("Rumble unresolved controls stay visible and pre-policy release plans fail closed", () => {
+  const unresolved = {
+    ...validManifest(),
+    releasePlan: {
+      rumble: resolvedReleasePlan("rumble", {
+        license: "not_selected",
+        syndication: { youtube: "not_selected", vimeo: false, facebook: false },
+        premiumExclusive: "not_selected",
+        termsRevision: "not_selected",
+      }),
+    },
+    targets: ["rumble"],
+  };
+  const validation = validateManifest(unresolved);
+  assert.deepEqual(validation.errors, []);
+  assert.ok(validation.warnings.some((warning) => warning.includes("syndication.youtube")));
+  assert.ok(validation.warnings.some((warning) => warning.includes("premiumExclusive")));
+  assert.ok(validation.warnings.some((warning) => warning.includes("termsRevision")));
+  assert.ok(releaseApprovalProblems(unresolved).some((problem) => problem.includes("unresolved")));
+  const plan = buildTargetPlan(
+    validPlatformConfig(),
+    unresolved,
+    { fullVideo: assetRecord("fullVideo") }
+  );
+  assert.equal(plan[0].readiness, "release_choices_required");
+
+  const legacy = structuredClone(unresolved);
+  legacy.releasePlan.rumble = {
+    releaseMode: "hold",
+    initialVisibility: "unlisted",
+    finalVisibility: "unlisted",
+    license: "rumble_only_option_c",
+    monetization: "enabled",
+    notifications: "disabled",
+  };
+  const legacyValidation = validateManifest(legacy);
+  assert.ok(legacyValidation.errors.some((error) => error.includes("syndication")));
+  assert.ok(legacyValidation.errors.some((error) => error.includes("termsRevision")));
+  assert.ok(legacyValidation.errors.some((error) => error.includes("humanAttestation")));
+});
+
+test("checked-in example keeps every Rumble release decision unresolved", async () => {
+  const example = JSON.parse(
+    await fs.readFile(new URL("../../publishing/episode.example.json", import.meta.url), "utf8")
+  );
+  const rumble = example.releasePlan.rumble;
+  assert.equal(rumble.releaseMode, "hold");
+  for (const key of [
+    "initialVisibility",
+    "finalVisibility",
+    "license",
+    "monetization",
+    "notifications",
+    "premiumExclusive",
+    "termsRevision",
+  ]) {
+    assert.equal(rumble[key], "not_selected", `example preselected Rumble ${key}`);
+  }
+  assert.deepEqual(rumble.syndication, {
+    youtube: "not_selected",
+    vimeo: "not_selected",
+    facebook: "not_selected",
+  });
+  assert.deepEqual(validateManifest(example).errors, []);
+  assert.ok(releaseApprovalProblems(example).some((problem) => problem.includes("rumble release choices are unresolved")));
 });
 
 test("manifest validation requires timezone-qualified RFC 3339 publish times", () => {
@@ -633,6 +796,21 @@ test("approval rendering is deterministic and includes every publishing field", 
   assert.notEqual(hashSnapshot(packet.snapshot), hashSnapshot(changedBinding));
 });
 
+test("approval rendering surfaces every Rumble safety control and leaves attestations human-only", () => {
+  const rendered = renderApprovalPacket(validRumbleApprovalPacket());
+  assert.match(rendered, /Rumble non-exclusive safety controls/);
+  assert.match(rendered, /rumble_only_option_c/);
+  assert.match(rendered, /YouTube syndication \| false/);
+  assert.match(rendered, /Vimeo syndication \| false/);
+  assert.match(rendered, /Facebook syndication \| false/);
+  assert.match(rendered, /Premium exclusive \| false/);
+  assert.match(rendered, /2026-07-21/);
+  assert.match(rendered, /AI\/ML license/i);
+  assert.match(rendered, /human-only/i);
+  assert.match(rendered, /prohibit automated site interaction/i);
+  assert.match(rendered, /cannot accept them or submit the form/i);
+});
+
 test("packet and review integrity helpers detect stale or tampered state", () => {
   const packet = validApprovalPacket();
   const reviewDocument = renderApprovalPacket(packet);
@@ -650,6 +828,24 @@ test("packet and review integrity helpers detect stale or tampered state", () =>
   unsupportedPacket.snapshot.schemaVersion = 99;
   unsupportedPacket.approvalHash = hashSnapshot(unsupportedPacket.snapshot);
   assert.ok(packetIntegrityProblems(unsupportedPacket, packet.id).some((problem) => problem.includes("schema version")));
+
+  const preRumblePolicyPacket = structuredClone(packet);
+  preRumblePolicyPacket.snapshot.schemaVersion = 4;
+  preRumblePolicyPacket.approvalHash = hashSnapshot(preRumblePolicyPacket.snapshot);
+  assert.ok(
+    packetIntegrityProblems(preRumblePolicyPacket, packet.id).some((problem) => problem.includes("schema version"))
+  );
+
+  const unsafeRumblePacket = validRumbleApprovalPacket();
+  unsafeRumblePacket.snapshot.manifest.releasePlan.rumble.syndication.youtube = true;
+  unsafeRumblePacket.snapshot.targets[0].releasePlan.syndication.youtube = true;
+  unsafeRumblePacket.snapshot.targets[0].releasePolicyIssues = ["Rumble youtube syndication must be disabled."];
+  unsafeRumblePacket.approvalHash = hashSnapshot(unsafeRumblePacket.snapshot);
+  assert.ok(
+    packetIntegrityProblems(unsafeRumblePacket, unsafeRumblePacket.id).some((problem) =>
+      problem.includes("Stored packet manifest is invalid")
+    )
+  );
 
   const invalidBinding = structuredClone(packet);
   invalidBinding.snapshot.catalogBinding.episodeNumber += 1;
@@ -837,7 +1033,12 @@ test("CLI fails closed on review tampering, bad confirmation, and stale assets",
     await fs.writeFile(path.join(jobDirectory, "packet.json"), `${JSON.stringify(packet, null, 2)}\n`, { mode: 0o600 });
     await fs.writeFile(path.join(jobDirectory, "approval.md"), reviewDocument, { mode: 0o600 });
 
-    for (const readiness of ["destination_id_required", "destination_id_invalid", "release_choices_required"]) {
+    for (const readiness of [
+      "destination_id_required",
+      "destination_id_invalid",
+      "release_choices_required",
+      "release_policy_violation",
+    ]) {
       const blockedPacket = structuredClone(packet);
       blockedPacket.snapshot.targets[0].readiness = readiness;
       blockedPacket.approvalHash = hashSnapshot(blockedPacket.snapshot);

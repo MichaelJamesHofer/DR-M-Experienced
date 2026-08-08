@@ -28,13 +28,17 @@
         "deletionAuthorized": false
       },
       {
-        "code": "rumble_corrected_uploads_staged_submission_pending",
+        "code": "rumble_youtube_syndication_enabled_manual_submission_blocked",
         "channelId": "7820170",
         "stagedUploadCount": 7,
         "stagedVisibility": "unlisted",
+        "optionCSelectedCount": 7,
+        "youtubeSyndicationEnabledCount": 7,
         "submitted": false,
-        "ownershipConfirmationRequired": true,
-        "updatedTermsReviewRequired": true,
+        "manualCorrectionRequired": true,
+        "aiMlGeneralLicenseAcknowledgmentRequired": true,
+        "thirdPartyAssetRightsReviewRequired": true,
+        "policyFile": "publishing/rumble-release-policy.json",
         "auditedAt": "2026-08-07"
       },
       {
@@ -195,7 +199,7 @@
     },
     "rumble": {
       "label": "Rumble",
-      "mode": "manual_browser",
+      "mode": "manual_human_only",
       "channelUrl": "https://rumble.com/c/c-7820170",
       "destinationIds": {
         "accountId": "282015440",
@@ -206,10 +210,37 @@
       "currentVideoState": "seven_corrected_uploads_staged_unlisted_not_submitted",
       "stagedUploadCount": 7,
       "stagedVisibility": "unlisted",
+      "stagedLicense": "rumble_only_option_c",
+      "stagedLicenseFormCode": 6,
+      "stagedExclusive": false,
+      "youtubeSyndicationEnabledCount": 7,
+      "vimeoSyndicationEnabledCount": 0,
+      "facebookSyndicationEnabledCount": 0,
       "submitted": false,
-      "submissionBlockedOn": ["user_ownership_confirmation", "updated_terms_review"],
+      "releasePolicy": {
+        "policyFile": "publishing/rumble-release-policy.json",
+        "requiredLicense": "rumble_only_option_c",
+        "exclusive": false,
+        "initialVisibility": "unlisted",
+        "syndication": {
+          "youtube": false,
+          "vimeo": false,
+          "facebook": false
+        },
+        "premiumExclusive": false,
+        "termsLastModified": "2026-07-21",
+        "automationRequiresPriorWrittenPermission": true,
+        "submissionMethod": "manual_human_only"
+      },
+      "submissionBlockedOn": [
+        "disable_youtube_syndication_on_all_seven_forms",
+        "verify_premium_exclusive_disabled_on_all_seven_forms",
+        "acknowledge_ai_ml_general_license_caveat",
+        "review_third_party_asset_rights",
+        "human_reverify_and_complete_rights_terms_controls"
+      ],
       "stagingStateAuditedAt": "2026-08-07",
-      "notes": "Seven corrected uploads are staged Unlisted but have not been submitted. Do not submit them until the user confirms ownership and reviews the updated Terms, then confirms the exact licensing, visibility, monetization, and distribution choices. No documented public creator VOD-upload API is available, so keep the final handoff attended."
+      "notes": "Seven corrected uploads are staged Unlisted with Rumble Only Option C (form code 6), the permitted non-exclusive license, and have not been submitted. The hidden Additional Syndication controls currently have YouTube enabled on all seven; Vimeo and Facebook are off. Do not submit until YouTube syndication is manually disabled, Premium exclusivity is manually verified off, the July 21, 2026 general-license AI/ML and third-party asset-rights caveats are acknowledged/reviewed, and every form is reverified. Rumble's current Terms prohibit automated site interaction without prior written permission, so a human must complete the rights and Terms controls and final submission."
     }
   }
 }

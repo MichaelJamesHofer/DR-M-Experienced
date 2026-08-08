@@ -75,7 +75,20 @@
       "finalVisibility": "not_selected",
       "license": "not_selected",
       "monetization": "not_selected",
-      "notifications": "not_selected"
+      "notifications": "not_selected",
+      "syndication": {
+        "youtube": "not_selected",
+        "vimeo": "not_selected",
+        "facebook": "not_selected"
+      },
+      "premiumExclusive": "not_selected",
+      "termsRevision": "not_selected",
+      "humanAttestation": {
+        "termsAcceptance": "human_only_not_recorded",
+        "rightsConfirmation": "human_only_not_recorded",
+        "aiMlLicenseAcknowledgement": "human_only_not_recorded",
+        "thirdPartyRightsConfirmation": "human_only_not_recorded"
+      }
     }
   },
   "targets": [

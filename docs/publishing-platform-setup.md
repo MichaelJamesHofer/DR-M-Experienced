@@ -17,7 +17,7 @@ The local publisher uses official upload interfaces where they exist, RSS fan-ou
 | YouTube | Direct full-video upload; OAuth 2 plus resumable Data API for future automation | Seven normalized replacements are public and verified. The prior seven uploads remain Unlisted with replacement links and are retained as rollback records; future API automation still needs OAuth and the applicable compliance audit |
 | Vimeo | Vimeo API tus upload or attended in-place version replacement | All seven corrected videos were replaced in place and verified on their stable existing IDs. App upload access and an upload/edit-scoped token are still required for future API automation |
 | Instagram | Creator professional-account API with resumable local upload | Public profile state independently confirms `@drmexperienced` is a Creator professional account and not a Business account. Name/bio are exact, but the external website link, authenticated Graph API publishing ID, Meta app permissions, and token remain incomplete; no Business-account conversion is required |
-| Rumble | Local browser handoff | Seven corrected uploads are staged Unlisted but not submitted. Submission is blocked on user ownership confirmation, updated Terms review, and exact release-choice approval; no supported public VOD upload API is confirmed |
+| Rumble | Direct human browser use only | Seven corrected uploads are staged Unlisted with Option C selected but not submitted. The hidden YouTube syndication switch is on for all seven, so submission is blocked on manually disabling it, rechecking every release control, human third-party asset-rights review, and specific acknowledgment of the July 21, 2026 Terms provisions. Automated site interaction is prohibited absent Rumble's prior written permission |
 
 ## Remote rebrand status
 
@@ -35,7 +35,8 @@ The canonical short profile description is `Dr. M Experienced, with Dr. David Mu
 YouTube's seven normalized public replacements, Vimeo's seven in-place corrected
 videos, Spotify's seven corrected video attachments, and the existing Rumble
 videos use approved topic thumbnails. Rumble's seven new corrected uploads are
-staged Unlisted and not submitted. The canonical RSS exposes seven unique
+staged Unlisted with Option C selected and not submitted; hidden YouTube
+syndication is currently on for all seven. The canonical RSS exposes seven unique
 3000 x 3000 item images.
 YouTube uses a safe plain-text projection that spells out comparison
 operators because Studio rejects angle brackets. Vimeo stores list items as
@@ -49,7 +50,37 @@ Public profile URLs are navigation aids, not routing authority. Record each veri
 
 ## Release-plan values
 
-The manifest stores platform-facing values so later adapters do not guess. YouTube uses `private`, `unlisted`, or `public` visibility and the official `youtube` or `creativeCommon` license codes. Vimeo uses its API visibility values such as `nobody`, `unlisted`, and `anybody`, plus its documented Creative Commons codes or `none`. Rumble uses `unlisted` or `public` and one of the four normalized choices `exclusive_video_management`, `video_management_excluding_youtube`, `rumble_player`, or `personal_use`. Spotify and Instagram use `not_applicable` for per-episode licensing. Leave any undecided field as `not_selected`; that value blocks local review attestation.
+The manifest stores platform-facing values so later adapters do not guess. YouTube uses `private`, `unlisted`, or `public` visibility and the official `youtube` or `creativeCommon` license codes. Vimeo uses its API visibility values such as `nobody`, `unlisted`, and `anybody`, plus its documented Creative Commons codes or `none`. Rumble project policy allows only initial `unlisted` visibility and `rumble_only_option_c`, which maps to Option C `Rumble Only (non-exclusive, similar to YouTube)`. The exclusive `exclusive_video_management` and `video_management_excluding_youtube` choices are prohibited; `personal_use` is not a permitted project release mode. Rumble also requires explicit disabled values for every syndication target and Premium/exclusive placement. Spotify and Instagram use `not_applicable` for per-episode licensing. Leave any undecided field as `not_selected`; that value blocks local review attestation.
+
+### Rumble release policy
+
+Rumble's [Terms](https://rumble.com/s/terms), last modified July 21, 2026,
+prohibit automated software access or interaction without Rumble's prior written
+permission. Do not use `drm-browser connect rumble`, CDP, scripts, or another
+automation tool to inspect or change forms, check attestations, or submit. The
+saved authenticated tabs remain available for direct human use.
+
+Option C is the project's only permitted Rumble license. Rumble's official
+[licensing explanation](https://rumble.support/help/a-simple-explanation-of-the-differences-between-licensing-options)
+describes it as non-exclusive. Never use Option A `Video Management` or Option B
+`Video Management (excluding YouTube)`; both are exclusive agency choices. Keep
+Premium/exclusive placement off and disable YouTube, Vimeo, Facebook, and every
+other additional-syndication control. Initial visibility is always Unlisted.
+
+Option C remains subject to the Terms' General License, including AI/ML training
+and third-party AI sublicensing provisions. The Terms' third-party-material
+requirements also need a human review of all music, footage, graphics, and other
+incorporated assets. The user has not yet acknowledged these newly surfaced
+provisions in the current record, so do not infer acceptance or rights clearance.
+
+The August 7 form audit found 7/7 corrected uploads staged Unlisted with Option
+C and Vimeo/Facebook syndication off, but hidden YouTube syndication on. Premium
+state was not verified and remains an open manual gate. All seven remain
+unsubmitted. For each tab, the user must manually expand Additional Syndication,
+turn YouTube off, reverify Option C and Unlisted, verify Premium is off, review
+asset rights and the July 21 Terms, check the rights and Terms boxes, and submit.
+Record the returned video ID and URL after
+the human action; do not automate a readback from the signed-in site.
 
 Format validation is not account verification. Before a future API adapter can upload, it must query the authenticated account, compare the returned immutable ID with `publishing/platforms.json`, and stop on any mismatch.
 
@@ -71,6 +102,10 @@ restricts the new bridge to the requested origin. If a session expires,
 `drm-browser reauth <platform>` opens that dashboard in its assigned profile for
 human OAuth/keychain use. Disconnect the bridge when unattended and finish the
 account-work session with `drm-browser close`.
+
+Rumble is excluded from attended automation under the current Terms. Leave its
+logged-in tabs open for the user, but do not connect a bridge to them without
+Rumble's prior written permission.
 
 ## Rebrand And Directory Sequence
 
@@ -108,7 +143,9 @@ complete.
    intentionally audio-only episodes as RSS audio only.
 7. YouTube, Vimeo, Spotify video/art, existing Rumble video art, and canonical
    RSS episode-art updates are complete. Seven corrected Rumble uploads are
-   staged Unlisted but not submitted pending ownership and Terms confirmation.
+   staged Unlisted with Option C selected but not submitted because hidden
+   YouTube syndication is on for all seven. The user must manually clear that
+   switch and complete the rights/Terms review described above.
    Reconcile Instagram captions where needed
    and use approved covers for future Reels; preserve existing posts because the
    documented post-publication flow does not replace Reel covers. Do not rename
@@ -165,9 +202,11 @@ If resumable upload is unavailable for the configured account or API flow, stage
 - Rumble upload and editing: <https://rumble.support/help/upload-and-edit-content>
 - Rumble video thumbnails: <https://rumble.support/help/changing-a-thumbnail>
 - Rumble licensing choices: <https://rumble.support/help/a-simple-explanation-of-the-differences-between-licensing-options>
+- Rumble licensing comparison: <https://rumble.com/s/licensing-comparison.html>
+- Rumble Terms, last modified July 21, 2026: <https://rumble.com/s/terms>
 
 ## Safety boundary
 
 No timer or background service may execute external publication. Automation may ingest, transcode, validate, fingerprint, and prepare a review packet. The local `--by` value is self-reported attribution; it is not identity authentication and must never be consumed as authorization for an external side effect. Future live adapters require a separate user-presence-backed authorization and must use the exact integrity-checked packet. Any changed file, title, description, schedule, disclosure flag, destination, monetization choice, or license choice invalidates prior review.
 
-Browser automation may update already-approved profile text and may prepare drafts/private uploads. It must stop for MFA, CAPTCHA, reauthentication, account agreements, content-rights declarations, AI/synthetic-media disclosures, audience settings, paid promotion, monetization, licensing, public visibility, scheduling, and the final publish action unless those exact values received fresh explicit approval.
+Browser automation may update already-approved profile text and may prepare drafts/private uploads where the platform permits automated access. It must stop for MFA, CAPTCHA, reauthentication, account agreements, content-rights declarations, AI/synthetic-media disclosures, audience settings, paid promotion, monetization, licensing, public visibility, scheduling, and the final publish action unless those exact values received fresh explicit approval. Rumble is stricter: no automated site access or interaction is permitted without Rumble's prior written permission, even for inspection or draft preparation.

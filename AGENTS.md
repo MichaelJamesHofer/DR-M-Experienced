@@ -105,6 +105,22 @@ checks now report video, exact copy, and approved artwork for all seven.
 - Amazon has no claimed show yet. Submit the canonical RSS.com feed once,
   complete the required owner attestations manually, and record the resulting
   stable show ID and URL. Never submit the legacy Anchor URL.
+- Rumble must remain non-exclusive. The only permitted Rumble license is Option
+  C, `Rumble Only (non-exclusive, similar to YouTube)`
+  (`rumble_only_option_c`). Never select either Video Management option (A or B)
+  or Personal Use for a project
+  release. Start Unlisted, keep Premium/exclusive placement off, and disable all
+  additional syndication, especially the hidden YouTube switch. The August 7
+  audit found all seven corrected uploads staged Unlisted with Option C but
+  YouTube syndication enabled, so they remain blocked and unsubmitted.
+- Rumble's Terms last modified July 21, 2026 prohibit automated software access
+  or interaction without Rumble's prior written permission. Do not connect a
+  browser automation bridge to Rumble or automate form inspection, editing,
+  checkbox attestation, or submission. A human must review every episode's
+  original/third-party asset rights, acknowledge the Terms' general-license
+  AI/ML training and third-party AI sublicensing provisions, turn syndication
+  off, check the rights and Terms boxes, and submit. Do not infer that the user
+  has acknowledged a newly surfaced provision.
 - `publishing/master-catalog.json` is the distribution metadata authority.
   Supabase remains the production authority for website-only editorial content;
   overlapping identity/title/audio fields are verified projections of the
@@ -132,7 +148,8 @@ checks now report video, exact copy, and approved artwork for all seven.
   `drm-browser reauth <platform>`. This stops the automation bridge and opens
   that dashboard in its assigned profile within the same isolated browser
   process so OAuth and the profile keychain work without losing either identity.
-  Reconnect only after the authenticated dashboard is open.
+  Reconnect only after the authenticated dashboard is open. Rumble is the
+  exception: leave its bridge disconnected and continue by direct human use.
 - Never attach automation to Otto's normal Chrome profile, copy cookies, print
   tokens, or place credentials in the repository.
 - Run account tooling as Otto. When a root shell is unavoidable, use the local

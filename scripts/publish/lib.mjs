@@ -41,6 +41,16 @@ const RELEASE_CHOICE_KEYS = [
   "monetization",
   "notifications",
 ];
+const RUMBLE_TERMS_REVISION = "2026-07-21";
+const RUMBLE_OPTION_C = "rumble_only_option_c";
+const RUMBLE_SYNDICATION_TARGETS = ["youtube", "vimeo", "facebook"];
+const RUMBLE_HUMAN_ATTESTATION_KEYS = [
+  "termsAcceptance",
+  "rightsConfirmation",
+  "aiMlLicenseAcknowledgement",
+  "thirdPartyRightsConfirmation",
+];
+const RUMBLE_HUMAN_ATTESTATION_VALUE = "human_only_not_recorded";
 const PLATFORM_RELEASE_RULES = {
   "rss.com": {
     visibility: new Set(["draft", "public", "not_selected"]),
@@ -64,13 +74,7 @@ const PLATFORM_RELEASE_RULES = {
   },
   rumble: {
     visibility: new Set(["unlisted", "public", "not_selected"]),
-    license: new Set([
-      "exclusive_video_management",
-      "video_management_excluding_youtube",
-      "rumble_player",
-      "personal_use",
-      "not_selected",
-    ]),
+    license: new Set([RUMBLE_OPTION_C, "not_selected"]),
   },
 };
 const DESTINATION_ID_PATTERNS = {
@@ -141,9 +145,81 @@ function isPlainObject(value) {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
-function unresolvedReleaseChoices(releasePlan) {
+function unresolvedReleaseChoices(platformId, releasePlan) {
   if (!isPlainObject(releasePlan)) return RELEASE_CHOICE_KEYS;
-  return RELEASE_CHOICE_KEYS.filter((key) => releasePlan[key] === "not_selected");
+  const unresolved = RELEASE_CHOICE_KEYS.filter((key) => releasePlan[key] === "not_selected");
+  if (platformId !== "rumble") return unresolved;
+
+  for (const destination of RUMBLE_SYNDICATION_TARGETS) {
+    if (releasePlan.syndication?.[destination] === "not_selected") {
+      unresolved.push(`syndication.${destination}`);
+    }
+  }
+  if (releasePlan.premiumExclusive === "not_selected") unresolved.push("premiumExclusive");
+  if (releasePlan.termsRevision === "not_selected") unresolved.push("termsRevision");
+  return unresolved;
+}
+
+export function rumbleReleasePolicyProblems(releasePlan) {
+  if (!isPlainObject(releasePlan)) {
+    return ["Rumble release controls are missing or invalid."];
+  }
+
+  const problems = [];
+  if (!["unlisted", "not_selected"].includes(releasePlan.initialVisibility)) {
+    problems.push("Rumble initialVisibility must be unlisted.");
+  }
+  if (![RUMBLE_OPTION_C, "not_selected"].includes(releasePlan.license)) {
+    problems.push("Rumble license must be Option C (Rumble Only, non-exclusive).");
+  }
+  if (!["enabled", "not_selected"].includes(releasePlan.monetization)) {
+    problems.push("Rumble Option C monetization must be enabled.");
+  }
+  if (!isPlainObject(releasePlan.syndication)) {
+    problems.push("Rumble syndication controls are missing or invalid.");
+  } else {
+    for (const destination of RUMBLE_SYNDICATION_TARGETS) {
+      if (![false, "not_selected"].includes(releasePlan.syndication[destination])) {
+        problems.push(`Rumble ${destination} syndication must be disabled.`);
+      }
+    }
+  }
+  if (![false, "not_selected"].includes(releasePlan.premiumExclusive)) {
+    problems.push("Rumble Premium exclusivity must be disabled.");
+  }
+  if (![RUMBLE_TERMS_REVISION, "not_selected"].includes(releasePlan.termsRevision)) {
+    problems.push(`Rumble terms revision must be ${RUMBLE_TERMS_REVISION}.`);
+  }
+  if (!isPlainObject(releasePlan.humanAttestation)) {
+    problems.push("Rumble human-only attestation controls are missing or invalid.");
+  } else {
+    for (const key of RUMBLE_HUMAN_ATTESTATION_KEYS) {
+      if (releasePlan.humanAttestation[key] !== RUMBLE_HUMAN_ATTESTATION_VALUE) {
+        problems.push(`Rumble ${key} must remain human-only and unrecorded by local approval.`);
+      }
+    }
+  }
+  return problems;
+}
+
+export function releaseApprovalProblems(manifest) {
+  if (!isPlainObject(manifest) || !Array.isArray(manifest.targets)) {
+    return ["Manifest release controls are missing or invalid."];
+  }
+  const problems = [];
+  for (const target of manifest.targets.filter((platformId) => DIRECT_RELEASE_TARGETS.has(platformId))) {
+    const releasePlan = manifest.releasePlan?.[target];
+    if (!isPlainObject(releasePlan)) {
+      problems.push(`${target} release controls are missing.`);
+      continue;
+    }
+    const unresolved = unresolvedReleaseChoices(target, releasePlan);
+    if (unresolved.length) {
+      problems.push(`${target} release choices are unresolved: ${unresolved.join(", ")}.`);
+    }
+    if (target === "rumble") problems.push(...rumbleReleasePolicyProblems(releasePlan));
+  }
+  return [...new Set(problems)];
 }
 
 export function missingDestinationIds(platform) {
@@ -238,7 +314,8 @@ export function validateManifest(manifest) {
         if (typeof releasePlan?.license === "string" && !rules?.license.has(releasePlan.license)) {
           errors.push(`releasePlan.${target}.license is not a supported ${target} license value.`);
         }
-        const unresolved = unresolvedReleaseChoices(releasePlan);
+        if (target === "rumble") errors.push(...rumbleReleasePolicyProblems(releasePlan));
+        const unresolved = unresolvedReleaseChoices(target, releasePlan);
         if (unresolved.length) {
           warnings.push(`${target} release choices still need selection: ${unresolved.join(", ")}.`);
         }
@@ -579,7 +656,8 @@ export function buildTargetPlan(platformConfig, manifest, assetRecords, targetEr
     const missingIds = missingDestinationIds(platform);
     const invalidIds = invalidDestinationIds(platformId, platform);
     const releasePlan = manifest.releasePlan?.[platformId] || null;
-    const unresolvedChoices = releasePlan ? unresolvedReleaseChoices(releasePlan) : [];
+    const unresolvedChoices = releasePlan ? unresolvedReleaseChoices(platformId, releasePlan) : [];
+    const releasePolicyIssues = platformId === "rumble" ? rumbleReleasePolicyProblems(releasePlan) : [];
     const preferredAsset = platform.asset || null;
     const assetKey =
       preferredAsset && assetRecords[preferredAsset]
@@ -608,10 +686,11 @@ export function buildTargetPlan(platformConfig, manifest, assetRecords, targetEr
     else if (validationIssues.length) readiness = "asset_invalid";
     else if (missingIds.length) readiness = "destination_id_required";
     else if (invalidIds.length) readiness = "destination_id_invalid";
+    else if (releasePolicyIssues.length) readiness = "release_policy_violation";
     else if (!releasePlan || unresolvedChoices.length) readiness = "release_choices_required";
     else if (platformId === "rss.com") readiness = "manual_upload_required";
     else if (platformId === "spotify") readiness = "manual_video_replacement_required";
-    else if (platformId === "rumble") readiness = "manual_browser_required";
+    else if (platformId === "rumble") readiness = "manual_human_submission_required";
     else if (platformId === "youtube") readiness = "oauth_and_audit_required";
     else if (platformId === "vimeo") readiness = "api_auth_required";
     else if (platformId === "instagram") readiness = "api_auth_required";
@@ -630,6 +709,7 @@ export function buildTargetPlan(platformConfig, manifest, assetRecords, targetEr
       invalidDestinationIds: invalidIds,
       releasePlan,
       unresolvedReleaseChoices: unresolvedChoices,
+      releasePolicyIssues,
       validationIssues,
       ...destinationCopy,
       channelUrl: platform.channelUrl,
@@ -643,7 +723,7 @@ export function buildApprovalSnapshot({ platformConfig, manifest, assets, target
     throw new TypeError("A master catalog binding is required for every approval snapshot.");
   }
   return {
-    schemaVersion: 4,
+    schemaVersion: 5,
     brand: platformConfig.brand,
     rssFeed: platformConfig.rssFeed,
     catalogBinding,
@@ -711,8 +791,10 @@ export function renderApprovalPacket(packet) {
       return `| ${escapeTableCell(key)} | ${displayBytes(asset.sizeBytes)} | ${displayDuration(asset.media?.durationSeconds)} | ${escapeTableCell(asset.sha256)} | ${escapeTableCell(asset.path)} |`;
     });
   const targetLines = packet.snapshot.targets.map(
-    (target) =>
-      `| ${escapeTableCell(target.label)} | ${escapeTableCell(target.readiness)} | ${escapeTableCell(target.asset)} | ${escapeTableCell(target.copySource)} | ${escapeTableCell(target.validationIssues?.join("; ") || "-")} |`
+    (target) => {
+      const issues = [...(target.validationIssues || []), ...(target.releasePolicyIssues || [])];
+      return `| ${escapeTableCell(target.label)} | ${escapeTableCell(target.readiness)} | ${escapeTableCell(target.asset)} | ${escapeTableCell(target.copySource)} | ${escapeTableCell(issues.join("; ") || "-")} |`;
+    }
   );
   const identityLines = packet.snapshot.targets.map(
     (target) =>
@@ -724,6 +806,33 @@ export function renderApprovalPacket(packet) {
       const release = target.releasePlan;
       return `| ${escapeTableCell(target.label)} | ${escapeTableCell(release.releaseMode)} | ${escapeTableCell(release.initialVisibility)} | ${escapeTableCell(release.finalVisibility)} | ${escapeTableCell(release.license)} | ${escapeTableCell(release.monetization)} | ${escapeTableCell(release.notifications)} |`;
     });
+  const rumbleTarget = packet.snapshot.targets.find((target) => target.id === "rumble");
+  const rumbleRelease = rumbleTarget?.releasePlan;
+  const rumbleSafetySection = rumbleRelease
+    ? [
+        "## Rumble non-exclusive safety controls",
+        "",
+        "| Control | Recorded value |",
+        "|---|---|",
+        `| License | ${escapeTableCell(rumbleRelease.license)} |`,
+        `| Initial visibility | ${escapeTableCell(rumbleRelease.initialVisibility)} |`,
+        `| Final visibility | ${escapeTableCell(rumbleRelease.finalVisibility)} |`,
+        `| YouTube syndication | ${escapeTableCell(rumbleRelease.syndication?.youtube)} |`,
+        `| Vimeo syndication | ${escapeTableCell(rumbleRelease.syndication?.vimeo)} |`,
+        `| Facebook syndication | ${escapeTableCell(rumbleRelease.syndication?.facebook)} |`,
+        `| Premium exclusive | ${escapeTableCell(rumbleRelease.premiumExclusive)} |`,
+        `| Terms revision | ${escapeTableCell(rumbleRelease.termsRevision)} |`,
+        "",
+        `- Terms acceptance: ${escapeTableCell(rumbleRelease.humanAttestation?.termsAcceptance)}`,
+        `- Rights confirmation: ${escapeTableCell(rumbleRelease.humanAttestation?.rightsConfirmation)}`,
+        `- AI/ML license acknowledgement: ${escapeTableCell(rumbleRelease.humanAttestation?.aiMlLicenseAcknowledgement)}`,
+        `- Third-party rights confirmation: ${escapeTableCell(rumbleRelease.humanAttestation?.thirdPartyRightsConfirmation)}`,
+        "- The July 21, 2026 Rumble terms include AI/ML license language and third-party-rights requirements. Review the current terms directly: https://rumble.com/s/terms",
+        "- Rumble's current terms prohibit automated site interaction without prior written permission; submission must be completed by a person unless that permission is obtained.",
+        "- Every Rumble rights or terms attestation is human-only. This local packet records none of those attestations and cannot accept them or submit the form.",
+        "",
+      ]
+    : [];
   const flags = [
     `Explicit: ${manifest.explicit}`,
     `Made for kids: ${manifest.madeForKids}`,
@@ -778,6 +887,7 @@ export function renderApprovalPacket(packet) {
     "|---|---|---|---|---|---|---|",
     ...releaseLines,
     "",
+    ...rumbleSafetySection,
     "## Approved title",
     "",
     fencedText(manifest.title),
@@ -803,7 +913,7 @@ export function renderApprovalPacket(packet) {
     "",
     "## Record approval",
     "",
-    "After reviewing the exact files, title, copy, flags, schedule, destination identities, release controls, and targets above, type the displayed confirmation phrase into this local command:",
+    "After reviewing the exact files, title, copy, flags, schedule, destination identities, release controls, and targets above, type the displayed confirmation phrase into this local command. For Rumble, this does not replace the human-only rights and terms review on Rumble itself:",
     "",
     "```bash",
     `drm-publish approve ${packet.id} --hash ${packet.approvalHash} --by "Otto" --confirm "${confirmation}"`,
@@ -819,10 +929,30 @@ export function packetIntegrityProblems(packet, expectedJobId) {
   if (!isPlainObject(packet)) return ["Stored packet must be a JSON object."];
   if (packet.id !== expectedJobId) problems.push("Stored packet job id does not match its directory.");
   if (!isPlainObject(packet.snapshot)) problems.push("Stored packet snapshot is missing or invalid.");
-  if (isPlainObject(packet.snapshot) && packet.snapshot.schemaVersion !== 4) {
+  if (isPlainObject(packet.snapshot) && packet.snapshot.schemaVersion !== 5) {
     problems.push("Stored packet snapshot schema version is unsupported.");
   }
   if (isPlainObject(packet.snapshot)) {
+    const manifestValidation = validateManifest(packet.snapshot.manifest);
+    for (const error of manifestValidation.errors) {
+      problems.push(`Stored packet manifest is invalid: ${error}`);
+    }
+    const rumbleSelected = packet.snapshot.manifest?.targets?.includes("rumble");
+    const rumbleTarget = Array.isArray(packet.snapshot.targets)
+      ? packet.snapshot.targets.find((target) => target?.id === "rumble")
+      : null;
+    if (rumbleSelected && !rumbleTarget) {
+      problems.push("Stored packet is missing its selected Rumble destination plan.");
+    } else if (rumbleSelected) {
+      const manifestRelease = packet.snapshot.manifest.releasePlan?.rumble;
+      if (canonicalJson(rumbleTarget.releasePlan) !== canonicalJson(manifestRelease)) {
+        problems.push("Stored Rumble destination plan does not match the manifest release controls.");
+      }
+      const expectedPolicyIssues = rumbleReleasePolicyProblems(manifestRelease);
+      if (canonicalJson(rumbleTarget.releasePolicyIssues || []) !== canonicalJson(expectedPolicyIssues)) {
+        problems.push("Stored Rumble destination policy result is stale or inconsistent.");
+      }
+    }
     const binding = packet.snapshot.catalogBinding;
     if (!isPlainObject(binding)) {
       problems.push("Stored packet master catalog binding is missing or invalid.");

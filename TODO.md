@@ -99,7 +99,8 @@ Based on analysis of top-tier health content creators (Huberman Lab, Peter Attia
 - [x] Validate and register Episode 5's sub-25 Mbps Spotify derivative without changing its catalog master binding or claiming a remote upload
 - [x] Publish and verify all seven normalized YouTube replacements, move the prior uploads to Unlisted with replacement links, and retain both ID sets for rollback
 - [x] Replace all seven Vimeo videos in place and verify the corrected media on the stable existing IDs
-- [ ] Submit the seven corrected Rumble uploads only after the user confirms ownership, reviews the updated Terms, and approves the exact licensing/visibility/monetization choices; all seven are staged Unlisted and not submitted
+- [x] Audit the seven staged Rumble replacements: 7/7 are Unlisted with non-exclusive Option C and Vimeo/Facebook syndication off, but hidden YouTube syndication on; none was submitted and Premium state remains unverified
+- [ ] User-only Rumble completion: review every episode's third-party asset rights and the July 21, 2026 General License AI/ML training and third-party AI sublicensing provisions; then manually turn YouTube syndication off in all seven tabs, reverify Option C/Unlisted/Premium off, check the rights and Terms boxes, submit, and record each ID/URL. Do not automate Rumble absent its prior written permission
 - [x] Confirm GitHub Pages recovery after the provider outage: the apex returns HTTP 200 and `www` redirects to the apex
 - [ ] Clear or escalate RSS.com's cached `RSSVERIFY` token on the public landing page without changing the exact dashboard/feed description
 - [ ] Claim the show once in Amazon Music/Audible using `https://media.rss.com/dr-m-experienced/feed.xml`, then record its stable ID and URL
@@ -114,5 +115,6 @@ directly to RSS.com, and production Supabase matches catalog revision 10 for all
 seven current RSS audio URLs, YouTube IDs, and `Watch on YouTube` references.
 The website apex has recovered to HTTP 200 and `www` redirects to it.
 Apple support, Podcast Index convergence, Amazon onboarding, RSS.com's cached
-landing-page token, Instagram's missing website link, Rumble's attended submission,
+landing-page token, Instagram's missing website link, Rumble's manual rights/Terms
+review and syndication correction,
 and remaining profile corrections are tracked in the publishing runbooks.

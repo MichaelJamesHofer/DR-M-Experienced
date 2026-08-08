@@ -73,6 +73,12 @@ dashboard. Select `rss.com` for every podcast-audio release, include a verified
 `releasePlan["rss.com"]`. Selecting Apple or Amazon also requires `rss.com` in
 `targets`; neither directory gets its own release-plan entry.
 
+For Rumble, the only permitted release plan is Option C
+`rumble_only_option_c`, initial
+Unlisted visibility, Premium/exclusive placement disabled, and every additional
+syndication target disabled. Options A/B and `personal_use` are not allowed for
+this project. Any missing or enabled syndication value blocks preparation.
+
 With a configured Dropbox project root, `prepare` verifies that supplied media
 resolves to the registered logical asset; a `verified` catalog asset must also
 match SHA-256 and byte size. Until that root is configured, the packet warns
@@ -105,7 +111,21 @@ Once those two authorizations exist, use the unchanged assets in this order:
   episode or upload `podcastAudio` as a direct fallback
 - upload the full video to YouTube and Vimeo through their approved API connections when configured
 - publish the approved vertical Reel through Instagram's resumable upload from the local file when configured; use short-lived public staging only as a fallback and delete the staged object after processing
-- complete Rumble VOD through its local browser session, stopping for any license, monetization, visibility, or final-release decision not frozen in the approval packet
+- prepare the Rumble media and metadata locally, then hand the unchanged packet to the user for direct manual entry and submission; do not attach browser automation to Rumble without Rumble's prior written permission
+
+Rumble's [Terms](https://rumble.com/s/terms), last modified July 21, 2026,
+prohibit automated software access or interaction absent prior written
+permission. The user must manually expand Additional Syndication, turn YouTube,
+Vimeo, Facebook, and any other syndication off, select only Option C `Rumble
+Only (non-exclusive, similar to YouTube)`, keep Premium off and initial
+visibility Unlisted, and then complete the rights and Terms attestations and
+submit. Option C is non-exclusive under Rumble's official [licensing
+explanation](https://rumble.support/help/a-simple-explanation-of-the-differences-between-licensing-options),
+but it remains subject to the Terms' General License, including AI/ML training
+and third-party AI sublicensing provisions. Before checking the rights box, a
+human must review every incorporated music, footage, graphic, and other
+third-party asset. Never infer that this review or the newly surfaced Terms
+provisions have been acknowledged.
 
 Do not regenerate or edit copy after review; create a new packet if anything changes. Automated live posting remains disabled until the publisher has immutable receipts, deterministic operation IDs, per-target state, and remote reconciliation.
 

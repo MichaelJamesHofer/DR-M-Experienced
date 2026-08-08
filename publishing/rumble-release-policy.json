@@ -1,0 +1,60 @@
+{
+  "$schema": "./rumble-release-policy.schema.json",
+  "revision": 1,
+  "platform": "rumble",
+  "status": "blocked_manual_corrections_and_acknowledgment_required",
+  "terms": {
+    "url": "https://rumble.com/s/terms",
+    "lastModified": "2026-07-21",
+    "licensingHelpUrl": "https://rumble.support/help/a-simple-explanation-of-the-differences-between-licensing-options",
+    "automatedInteractionAllowed": false,
+    "writtenAutomationPermissionOnFile": false,
+    "aiMlTrainingAndThirdPartySublicensingApplies": true,
+    "thirdPartyAssetRightsReviewRequired": true
+  },
+  "requiredReleaseConfiguration": {
+    "license": "rumble_only_option_c",
+    "licenseFormCode": 6,
+    "exclusive": false,
+    "initialVisibility": "unlisted",
+    "syndication": {
+      "youtube": false,
+      "vimeo": false,
+      "facebook": false
+    },
+    "premiumExclusive": false,
+    "submissionMethod": "manual_human_only"
+  },
+  "currentAudit": {
+    "auditedAt": "2026-08-07",
+    "stagedUploadCount": 7,
+    "optionCSelectedCount": 7,
+    "unlistedCount": 7,
+    "youtubeSyndicationEnabledCount": 7,
+    "vimeoSyndicationEnabledCount": 0,
+    "facebookSyndicationEnabledCount": 0,
+    "submittedCount": 0
+  },
+  "userAuthorizations": {
+    "noPriorExclusiveAgreementConfirmed": true,
+    "nonExclusiveOnlyConfirmed": true,
+    "unlistedSubmissionApproved": true,
+    "july21TermsGeneralAcceptanceConfirmed": true
+  },
+  "actionGates": {
+    "optionCSelectedAll": true,
+    "unlistedAll": true,
+    "youtubeSyndicationDisabledAll": false,
+    "vimeoSyndicationDisabledAll": true,
+    "facebookSyndicationDisabledAll": true,
+    "premiumExclusiveDisabledAll": false,
+    "aiMlGeneralLicenseAcknowledged": false,
+    "thirdPartyAssetRightsReviewed": false,
+    "allFormsReverified": false,
+    "humanRightsAttestationCompletedAll": false,
+    "humanTermsAcceptanceCompletedAll": false,
+    "submittedAll": false,
+    "remoteResultsVerifiedAll": false
+  },
+  "submissionReceipt": null
+}
