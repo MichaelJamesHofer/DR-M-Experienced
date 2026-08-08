@@ -71,7 +71,7 @@ test("master catalog validates and has a deterministic hash", async () => {
   const result = validateCatalog(catalog);
   assert.deepEqual(result, { valid: true, errors: [] });
   assert.equal(catalog.schemaVersion, 1);
-  assert.equal(catalog.revision, 11);
+  assert.equal(catalog.revision, 12);
   assert.equal(catalog.episodes.length, 7);
   assert.match(catalogHash(catalog), /^[a-f0-9]{64}$/);
   assert.equal(catalogHash(catalog), catalogHash(structuredClone(catalog)));

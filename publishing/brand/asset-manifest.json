@@ -261,5 +261,76 @@
       "claimed": false
     }
   },
+  "showPackage": {
+    "packageVersion": "1.0.0-rc1",
+    "status": "review_owner_approval_required",
+    "direction": "Cutline",
+    "portraitDependency": false,
+    "catalogRevision": 12,
+    "mountedAt": "2026-08-08T20:24:39Z",
+    "repositoryManifest": "publishing/brand/show-package/1.0.0-rc1/package-manifest.json",
+    "dropboxVersionRoot": "dropbox:brand/masters/1.0.0-rc1",
+    "ownerVisualApprovalRequired": true,
+    "remotePublishingAuthorized": false,
+    "approvedDestinations": [],
+    "assets": {
+      "show-logo-horizontal": {
+        "uri": "dropbox:brand/masters/logo-horizontal.svg",
+        "mediaType": "image/svg+xml",
+        "width": 1440,
+        "height": 320,
+        "sizeBytes": 10312,
+        "sha256": "0e2cdac66f4c30240e1fe9d6db0f6ee6f80e4a891c28e746af3c15da3f5d28d9"
+      },
+      "show-logo-stacked": {
+        "uri": "dropbox:brand/masters/logo-stacked.svg",
+        "mediaType": "image/svg+xml",
+        "width": 1000,
+        "height": 1000,
+        "sizeBytes": 10234,
+        "sha256": "e853d83964198b49c70bad4731cf27fff71748ebf8b4bc763817d6eb56983239"
+      },
+      "show-logo-mark": {
+        "uri": "dropbox:brand/masters/logo-mark.svg",
+        "mediaType": "image/svg+xml",
+        "width": 512,
+        "height": 512,
+        "sizeBytes": 513,
+        "sha256": "162ea4755a17a356c26b1495a04d96ae58a1985aa86a3065cb3164e90a5ea5b4"
+      },
+      "show-avatar": {
+        "uri": "dropbox:brand/masters/avatar.png",
+        "mediaType": "image/png",
+        "width": 1200,
+        "height": 1200,
+        "sizeBytes": 66311,
+        "sha256": "13220c2e153700417df901362e5fb9455f88a80effc27fdfcd94b4e557309465"
+      },
+      "show-podcast-cover": {
+        "uri": "dropbox:brand/masters/podcast-cover-3000x3000.jpg",
+        "mediaType": "image/jpeg",
+        "width": 3000,
+        "height": 3000,
+        "sizeBytes": 1067196,
+        "sha256": "fb4a1e2244e7f7d97956043f201d23650e1689f5f30caafdc873207cedcbe596"
+      },
+      "show-youtube-banner": {
+        "uri": "dropbox:brand/masters/youtube-banner-2560x1440.png",
+        "mediaType": "image/png",
+        "width": 2560,
+        "height": 1440,
+        "sizeBytes": 2854854,
+        "sha256": "1ddbfc6a325b1c6b2eb719c6a4015377cd761b5e8b6501c41e8b15a416507797"
+      },
+      "show-open-graph": {
+        "uri": "dropbox:brand/masters/open-graph-1200x630.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1200,
+        "height": 630,
+        "sizeBytes": 189768,
+        "sha256": "a2494395a02c7682a3214baee87755dedbad4f03d95253c69c7fedf44b576e98"
+      }
+    }
+  },
   "notes": "The clean, text-free website, 16:9, and square derivatives are approved. The approved 16:9 set is live on YouTube's seven normalized public replacements and on Vimeo's seven in-place replacements; the prior YouTube uploads remain Unlisted with replacement links and are retained for rollback. Spotify now serves corrected video with the approved 16:9 thumbnails on all seven existing episode IDs. The exact seven corrected Rumble videos and approved thumbnails remain hash-verified locally; the cache reset invalidated their staged browser forms, and manual restaging, asset-rights review, and submission remain. The user accepted the Terms last modified July 21, 2026 on August 8. The square set is present in the canonical RSS.com feed with seven-item episode and show artwork parity. Apple directly targets that feed with exact metadata but still exposes only five Available episodes; its duplicate show and stale manual Episode 4 Draft were archived, and a support request is pending for RSS Episodes 1 and 2. Amazon is ready for a one-time claim but remains unclaimed, and existing Instagram covers remain unchanged. Generated originals remain outside the repository in the local Codex image output store."
 }

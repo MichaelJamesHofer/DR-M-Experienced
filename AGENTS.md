@@ -123,15 +123,20 @@ checks now report video, exact copy, and approved artwork for all seven.
   Terms last modified July 21, including the general-license AI/ML training and
   third-party AI sublicensing provisions. That acceptance is not an asset-rights
   attestation and does not grant Rumble's required written automation permission.
-- `publishing/master-catalog.json` revision 11 is the current distribution
-  metadata authority. Supabase remains the production authority for website-only
-  editorial content; overlapping identity/title/audio fields are verified
-  projections of the master. The August 8 Episode 7 correction passed guarded
-  production migration and independent editorial readback. Current destination
-  parity is recorded in `publishing/episode-description-correction.json`.
-- Dropbox is binary storage, not metadata authority. Configure only a
-  project-scoped synced root outside git, use portable logical references, and
-  verify hashes before preparation or upload.
+- `publishing/master-catalog.json` revision 12 is the current distribution
+  metadata authority. Revision 12 mounts the exact Show Brand Package
+  `1.0.0-rc1` hashes for local verification only; that package still requires
+  owner visual approval and has no remote publishing authorization. Supabase
+  remains the production authority for website-only editorial content;
+  overlapping identity/title/audio fields are verified projections of the
+  master. The August 8 Episode 7 correction passed guarded production migration
+  and independent editorial readback. Current destination parity is recorded in
+  `publishing/episode-description-correction.json`.
+- Project-scoped Dropbox contains the canonical fingerprinted binary masters;
+  it is not metadata authority. Vimeo is a distribution and recovery copy, not
+  a co-master. RSS.com is the canonical published-audio host/feed, while the
+  fingerprinted local MP3 remains the canonical audio binary. Use portable
+  logical references and verify hashes before preparation or upload.
 - Work on a branch, preserve unrelated changes, require passing CI, and verify
   the live website after deployment.
 

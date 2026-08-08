@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-import { catalogHash, normalizeDescriptionForComparison } from "./catalog.mjs";
+import { normalizeDescriptionForComparison } from "./catalog.mjs";
 
 const root = new URL("../../", import.meta.url);
 
@@ -11,7 +11,7 @@ async function readJson(path) {
   return JSON.parse(await readFile(new URL(path, root), "utf8"));
 }
 
-test("Episode 7 description-correction receipt matches current catalog identities and copy", async () => {
+test("Episode 7 historical correction receipt matches current catalog identities and copy", async () => {
   const [receipt, catalog] = await Promise.all([
     readJson("publishing/episode-description-correction.json"),
     readJson("publishing/master-catalog.json"),
@@ -22,8 +22,9 @@ test("Episode 7 description-correction receipt matches current catalog identitie
   const normalized = normalizeDescriptionForComparison(episode.description.full);
   const normalizedSha256 = createHash("sha256").update(normalized).digest("hex");
 
-  assert.equal(receipt.catalog.revision, catalog.revision);
-  assert.equal(receipt.catalog.publisherHash, catalogHash(catalog));
+  assert.equal(receipt.catalog.revision, 11);
+  assert.ok(receipt.catalog.revision < catalog.revision);
+  assert.match(receipt.catalog.publisherHash, /^[a-f0-9]{64}$/);
   assert.equal(receipt.episode.slug, episode.slug);
   assert.equal(receipt.episode.title, episode.title);
   assert.equal(receipt.episode.rssGuid, episode.rssGuid);

@@ -1,8 +1,8 @@
 {
   "$schema": "./master-catalog.schema.json",
   "schemaVersion": 1,
-  "revision": 11,
-  "updatedAt": "2026-08-08T18:09:18Z",
+  "revision": 12,
+  "updatedAt": "2026-08-08T20:24:39Z",
   "show": {
     "names": {
       "full": "Dr. M Experienced, with Dr. David Musnick",
@@ -33,65 +33,65 @@
       "kind": "image",
       "role": "logoHorizontal",
       "uri": "dropbox:brand/masters/logo-horizontal.svg",
-      "sha256": null,
-      "sizeBytes": null,
+      "sha256": "0e2cdac66f4c30240e1fe9d6db0f6ee6f80e4a891c28e746af3c15da3f5d28d9",
+      "sizeBytes": 10312,
       "mediaType": "image/svg+xml",
-      "status": "unmounted"
+      "status": "verified"
     },
     "show-logo-stacked": {
       "kind": "image",
       "role": "logoStacked",
       "uri": "dropbox:brand/masters/logo-stacked.svg",
-      "sha256": null,
-      "sizeBytes": null,
+      "sha256": "e853d83964198b49c70bad4731cf27fff71748ebf8b4bc763817d6eb56983239",
+      "sizeBytes": 10234,
       "mediaType": "image/svg+xml",
-      "status": "unmounted"
+      "status": "verified"
     },
     "show-logo-mark": {
       "kind": "image",
       "role": "logoMark",
       "uri": "dropbox:brand/masters/logo-mark.svg",
-      "sha256": null,
-      "sizeBytes": null,
+      "sha256": "162ea4755a17a356c26b1495a04d96ae58a1985aa86a3065cb3164e90a5ea5b4",
+      "sizeBytes": 513,
       "mediaType": "image/svg+xml",
-      "status": "unmounted"
+      "status": "verified"
     },
     "show-avatar": {
       "kind": "image",
       "role": "avatar",
       "uri": "dropbox:brand/masters/avatar.png",
-      "sha256": null,
-      "sizeBytes": null,
+      "sha256": "13220c2e153700417df901362e5fb9455f88a80effc27fdfcd94b4e557309465",
+      "sizeBytes": 66311,
       "mediaType": "image/png",
-      "status": "unmounted"
+      "status": "verified"
     },
     "show-podcast-cover": {
       "kind": "image",
       "role": "podcastCover",
       "uri": "dropbox:brand/masters/podcast-cover-3000x3000.jpg",
-      "sha256": null,
-      "sizeBytes": null,
+      "sha256": "fb4a1e2244e7f7d97956043f201d23650e1689f5f30caafdc873207cedcbe596",
+      "sizeBytes": 1067196,
       "mediaType": "image/jpeg",
-      "status": "unmounted",
+      "status": "verified",
       "publishedUrl": "https://media.rss.com/dr-m-experienced/podcast_cover.jpg"
     },
     "show-youtube-banner": {
       "kind": "image",
       "role": "youtubeBanner",
       "uri": "dropbox:brand/masters/youtube-banner-2560x1440.png",
-      "sha256": null,
-      "sizeBytes": null,
+      "sha256": "1ddbfc6a325b1c6b2eb719c6a4015377cd761b5e8b6501c41e8b15a416507797",
+      "sizeBytes": 2854854,
       "mediaType": "image/png",
-      "status": "unmounted"
+      "status": "verified"
     },
     "show-open-graph": {
       "kind": "image",
       "role": "openGraph",
       "uri": "dropbox:brand/masters/open-graph-1200x630.jpg",
-      "sha256": null,
-      "sizeBytes": null,
+      "sha256": "a2494395a02c7682a3214baee87755dedbad4f03d95253c69c7fedf44b576e98",
+      "sizeBytes": 189768,
       "mediaType": "image/jpeg",
-      "status": "unmounted"
+      "status": "verified"
     },
     "episode-001-master-video": {
       "kind": "video",

@@ -11,6 +11,10 @@ import sharp from "sharp";
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const packageRoot = path.join(repoRoot, "publishing/brand/show-package/1.0.0-rc1");
 const manifest = JSON.parse(await fs.readFile(path.join(packageRoot, "package-manifest.json"), "utf8"));
+const catalog = JSON.parse(await fs.readFile(path.join(repoRoot, "publishing/master-catalog.json"), "utf8"));
+const assetManifest = JSON.parse(
+  await fs.readFile(path.join(repoRoot, "publishing/brand/asset-manifest.json"), "utf8")
+);
 const sourceConfigPath =
   process.env.DRM_PUBLISH_SOURCES_CONFIG ??
   path.join(process.env.HOME ?? os.homedir(), ".config/drm-publisher/sources.json");
@@ -47,6 +51,34 @@ test("candidate remains review-only and uses the canonical identity", () => {
   assert.equal(manifest.approval.ownerVisualApprovalRequired, true);
   assert.equal(manifest.approval.remotePublishingAuthorized, false);
   assert.deepEqual(manifest.approval.approvedDestinations, []);
+});
+
+test("catalog revision 12 mounts exact candidate hashes without publishing approval", () => {
+  assert.equal(catalog.revision, 12);
+  assert.equal(assetManifest.showPackage.packageVersion, manifest.packageVersion);
+  assert.equal(assetManifest.showPackage.status, "review_owner_approval_required");
+  assert.equal(assetManifest.showPackage.catalogRevision, catalog.revision);
+  assert.equal(assetManifest.showPackage.remotePublishingAuthorized, false);
+  assert.deepEqual(assetManifest.showPackage.approvedDestinations, []);
+
+  for (const [assetId, mounted] of Object.entries(manifest.mountedCatalogAssets)) {
+    const catalogAsset = catalog.assetRegistry[assetId];
+    const recordedAsset = assetManifest.showPackage.assets[assetId];
+    assert.ok(catalogAsset, `${assetId} missing from catalog`);
+    assert.ok(recordedAsset, `${assetId} missing from brand manifest`);
+    assert.equal(catalogAsset.uri, mounted.uri, `${assetId} catalog URI`);
+    assert.equal(catalogAsset.sizeBytes, mounted.sizeBytes, `${assetId} catalog byte size`);
+    assert.equal(catalogAsset.sha256, mounted.sha256, `${assetId} catalog SHA-256`);
+    assert.equal(catalogAsset.status, "verified", `${assetId} catalog status`);
+    assert.equal(recordedAsset.uri, mounted.uri, `${assetId} brand-manifest URI`);
+    assert.equal(recordedAsset.sizeBytes, mounted.sizeBytes, `${assetId} brand-manifest byte size`);
+    assert.equal(recordedAsset.sha256, mounted.sha256, `${assetId} brand-manifest SHA-256`);
+  }
+
+  assert.equal(
+    catalog.assetRegistry["show-podcast-cover"].publishedUrl,
+    "https://media.rss.com/dr-m-experienced/podcast_cover.jpg"
+  );
 });
 
 test("every package manifest entry matches the checked-in binary", async () => {

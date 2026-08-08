@@ -1,5 +1,10 @@
 # Brand Asset Production Brief
 
+The authoritative cross-channel identity and production standard is
+[`media-design-guide.md`](media-design-guide.md). This file remains the concise
+asset-production brief and current rollout status; where visual rules conflict,
+the media design guide controls.
+
 Status: the seven episode-specific website thumbnails, 16:9 direct-video
 exports, and 3000 x 3000 podcast episode-art exports are approved. The corrected
 direct-video set is live and verified on YouTube, Vimeo, and Spotify. Rumble's
@@ -24,9 +29,12 @@ exports are committed or hosted deliberately.
 - Host line: `with Dr. David Musnick`
 - Standalone mark: a simple `M`/mountain-path symbol
 - Do not use `DRM` as the primary name
-- Palette direction: charcoal, white, cyan, and amber with strong contrast
-- Preferred portrait: an approved high-resolution real head-and-shoulders photo
-- Interim portrait: the existing sketch only after its usage rights are confirmed
+- Palette direction: deep slate, white, vivid cyan, and warm amber with strong contrast
+- Primary show signal: approved wordmark plus `M`/mountain-path system
+- Preferred host portrait: an approved high-resolution real head-and-shoulders
+  photo, used selectively on host-specific surfaces
+- Interim host portrait: the existing sketch only after its usage rights are
+  confirmed; do not repeat it across the identity system
 
 ## Deliverables
 
@@ -47,7 +55,8 @@ exports are committed or hosted deliberately.
 
 ## Composition Rules
 
-- Podcast cover: real face, large show name, smaller host line, no episode copy.
+- Podcast cover: large show name, smaller host line, and approved mark or
+  mountain/path system; a portrait is optional, not the identity by itself.
 - Website episode thumbnail: inspectable topic image without embedded copy; the
   responsive site supplies the title, number, duration, and state overlays.
 - Direct-video thumbnail: prefer the approved inspectable, text-free topic
@@ -56,8 +65,10 @@ exports are committed or hosted deliberately.
 - Reel cover: hook/topic only; keep face and copy inside the center-safe crop.
 - Long-form video: cold open first, then the short sting.
 - Reels: start with content. Do not add an opening splash slate.
-- Website: no splash gate. Use a real host/recording image in the first viewport
-  and a dedicated Open Graph image for shared links.
+- Website: no splash gate. Lead with art-directed desktop/tablet/mobile brand
+  scenes behind the first-viewport identity, use independently authored depth
+  planes for desktop parallax, reserve portraits for intentional host surfaces
+  such as `Your host`, and use a dedicated Open Graph image for shared links.
 
 ## Approval And Release
 
