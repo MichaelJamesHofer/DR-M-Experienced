@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getContentCatalog } from "@/data/content-catalog";
+import { SHORTS } from "@/data/shorts";
 
 const siteUrl = "https://drmexperienced.com";
 
@@ -34,5 +35,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...episodeRoutes, ...blogRoutes];
+  const shortRoutes: MetadataRoute.Sitemap = SHORTS.map((item) => ({
+    url: `${siteUrl}${item.websitePath}`,
+    lastModified: new Date(item.instagram.publishedAt),
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...episodeRoutes, ...blogRoutes, ...shortRoutes];
 }

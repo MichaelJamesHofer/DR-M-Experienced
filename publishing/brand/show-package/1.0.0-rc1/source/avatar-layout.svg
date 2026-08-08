@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200" role="img" aria-label="Dr. M Experienced avatar">
+  <metadata>version=1.0.0-rc1; status=review_owner_approval_required; circle-safe=true</metadata>
+  <rect width="1200" height="1200" fill="#0A0F1A"/>
+  <g fill="none" stroke="#22D3EE" stroke-width="1.5" opacity="0.13"><path d="M-36 216 C216 24, 384 420, 636 192 S983.9999999999999 24, 1248 240"/><path d="M-60 384 C204.00000000000003 168.00000000000003, 408.00000000000006 576, 672.0000000000001 360 S996 156, 1260 396"/><path d="M-48 576 C216 336.00000000000006, 420 756, 708 528 S1032 336.00000000000006, 1248 612"/><path d="M-72 792 C192 528, 432 960, 732 732 S1056 552, 1272 840"/></g>
+  <circle cx="600" cy="600" r="430" fill="#111827" stroke="#1E293B" stroke-width="12"/>
+  <g transform="translate(292 292) scale(9.625)" aria-label="Cutline M mark">
+    <path d="M11 51V15H20L32 36L44 15H53V51H43V35L32 54L21 35V51ZM17 51H23L48 20H42Z" fill="#22D3EE" fill-rule="evenodd"/>
+    <rect x="42" y="16" width="7" height="7" fill="#F59E0B"/>
+  </g>
+</svg>

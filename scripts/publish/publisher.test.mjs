@@ -976,6 +976,7 @@ test("CLI prepare rejects episodes missing from or drifting from the master cata
 });
 
 test("CLI fails closed on review tampering, bad confirmation, and stale assets", async () => {
+  const { spawn } = await import("node:child_process");
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "drm-publisher-cli-test-"));
   const state = path.join(directory, "state");
   const assetPath = path.join(directory, "video.mp4");
@@ -984,6 +985,23 @@ test("CLI fails closed on review tampering, bad confirmation, and stale assets",
     spawnSync(process.execPath, [cliPath, ...args], {
       encoding: "utf8",
       env: { ...process.env, DRM_PUBLISH_HOME: state, HOME: directory },
+    });
+  const runCliAsync = (...args) =>
+    new Promise((resolve) => {
+      const child = spawn(process.execPath, [cliPath, ...args], {
+        env: { ...process.env, DRM_PUBLISH_HOME: state, HOME: directory },
+      });
+      let stdout = "";
+      let stderr = "";
+      child.stdout.setEncoding("utf8");
+      child.stderr.setEncoding("utf8");
+      child.stdout.on("data", (chunk) => {
+        stdout += chunk;
+      });
+      child.stderr.on("data", (chunk) => {
+        stderr += chunk;
+      });
+      child.on("close", (status) => resolve({ status, stdout, stderr }));
     });
 
   try {
@@ -1094,9 +1112,252 @@ test("CLI fails closed on review tampering, bad confirmation, and stale assets",
     );
     assert.equal(approved.status, 0, approved.stderr);
 
+    const operationId = "youtube-upload-test-1";
+    const receiptConfirmation =
+      `record-receipt ${packet.id} youtube ${packet.approvalHash} ${operationId}`;
+    const rejectedReceipt = runCli(
+      "receipt",
+      packet.id,
+      "--platform",
+      "youtube",
+      "--operation-id",
+      operationId,
+      "--status",
+      "accepted",
+      "--by",
+      "test-adapter",
+      "--confirm",
+      `${receiptConfirmation}-wrong`,
+    );
+    assert.equal(rejectedReceipt.status, 1);
+    assert.match(rejectedReceipt.stderr, /confirmation phrase/i);
+
+    const acceptedReceipt = runCli(
+      "receipt",
+      packet.id,
+      "--platform",
+      "youtube",
+      "--operation-id",
+      operationId,
+      "--status",
+      "accepted",
+      "--by",
+      "test-adapter",
+      "--evidence",
+      "provider_request=accepted",
+      "--confirm",
+      receiptConfirmation,
+    );
+    assert.equal(acceptedReceipt.status, 0, acceptedReceipt.stderr);
+    assert.match(acceptedReceipt.stdout, /Recorded immutable youtube accepted receipt/);
+
+    const publishedReceipt = runCli(
+      "receipt",
+      packet.id,
+      "--platform",
+      "youtube",
+      "--operation-id",
+      operationId,
+      "--status",
+      "published",
+      "--by",
+      "test-adapter",
+      "--remote-id",
+      "video123",
+      "--remote-url",
+      "https://www.youtube.com/watch?v=video123",
+      "--evidence",
+      "public_readback=matched",
+      "--confirm",
+      receiptConfirmation,
+    );
+    assert.equal(publishedReceipt.status, 0, publishedReceipt.stderr);
+
+    const duplicateReceipt = runCli(
+      "receipt",
+      packet.id,
+      "--platform",
+      "youtube",
+      "--operation-id",
+      operationId,
+      "--status",
+      "published",
+      "--by",
+      "test-adapter",
+      "--remote-id",
+      "video123",
+      "--confirm",
+      receiptConfirmation,
+    );
+    assert.equal(duplicateReceipt.status, 1);
+    assert.match(duplicateReceipt.stderr, /already exists/);
+
+    const genericVerification = runCli(
+      "receipt",
+      packet.id,
+      "--platform",
+      "youtube",
+      "--operation-id",
+      operationId,
+      "--status",
+      "verified",
+      "--by",
+      "test-adapter",
+      "--remote-id",
+      "video123",
+      "--remote-url",
+      "https://www.youtube.com/watch?v=video123",
+      "--evidence",
+      "public_readback=matched",
+      "--confirm",
+      receiptConfirmation,
+    );
+    assert.equal(genericVerification.status, 1);
+    assert.match(genericVerification.stderr, /meaningful typed readback/);
+
+    const inconsistentUrl = runCli(
+      "receipt",
+      packet.id,
+      "--platform",
+      "youtube",
+      "--operation-id",
+      operationId,
+      "--status",
+      "verified",
+      "--by",
+      "test-adapter",
+      "--remote-id",
+      "video123",
+      "--remote-url",
+      "https://youtu.be/video123",
+      "--evidence",
+      "public_readback=Title, description, artwork, and video matched",
+      "--confirm",
+      receiptConfirmation,
+    );
+    assert.equal(inconsistentUrl.status, 1);
+    assert.match(inconsistentUrl.stderr, /Remote URL conflicts/);
+
+    const verifiedReceipt = runCli(
+      "receipt",
+      packet.id,
+      "--platform",
+      "youtube",
+      "--operation-id",
+      operationId,
+      "--status",
+      "verified",
+      "--by",
+      "test-adapter",
+      "--remote-id",
+      "video123",
+      "--remote-url",
+      "https://www.youtube.com/watch?v=video123",
+      "--evidence",
+      "public_readback=Title, description, artwork, and video matched",
+      "--confirm",
+      receiptConfirmation,
+    );
+    assert.equal(verifiedReceipt.status, 0, verifiedReceipt.stderr);
+
+    const regressedReceipt = runCli(
+      "receipt",
+      packet.id,
+      "--platform",
+      "youtube",
+      "--operation-id",
+      operationId,
+      "--status",
+      "processing",
+      "--by",
+      "test-adapter",
+      "--confirm",
+      receiptConfirmation,
+    );
+    assert.equal(regressedReceipt.status, 1);
+    assert.match(regressedReceipt.stderr, /cannot transition from verified to processing/);
+
+    const supersededReceipt = runCli(
+      "receipt",
+      packet.id,
+      "--platform",
+      "youtube",
+      "--operation-id",
+      operationId,
+      "--status",
+      "superseded",
+      "--by",
+      "test-adapter",
+      "--remote-id",
+      "video123",
+      "--remote-url",
+      "https://www.youtube.com/watch?v=video123",
+      "--evidence",
+      "supersession=Replacement upload operation was approved",
+      "--confirm",
+      receiptConfirmation,
+    );
+    assert.equal(supersededReceipt.status, 0, supersededReceipt.stderr);
+
+    const terminalReuse = runCli(
+      "receipt",
+      packet.id,
+      "--platform",
+      "youtube",
+      "--operation-id",
+      operationId,
+      "--status",
+      "failed",
+      "--by",
+      "test-adapter",
+      "--evidence",
+      "error=Late failure after terminal state",
+      "--confirm",
+      receiptConfirmation,
+    );
+    assert.equal(terminalReuse.status, 1);
+    assert.match(terminalReuse.stderr, /cannot transition from superseded to failed/);
+
+    const concurrentOperationId = "youtube-upload-test-2";
+    const concurrentConfirmation =
+      `record-receipt ${packet.id} youtube ${packet.approvalHash} ${concurrentOperationId}`;
+    const concurrentArgs = [
+      "receipt",
+      packet.id,
+      "--platform",
+      "youtube",
+      "--operation-id",
+      concurrentOperationId,
+      "--status",
+      "accepted",
+      "--by",
+      "test-adapter",
+      "--evidence",
+      "provider_request=Provider accepted replacement operation",
+      "--confirm",
+      concurrentConfirmation,
+    ];
+    const concurrentResults = await Promise.all([
+      runCliAsync(...concurrentArgs),
+      runCliAsync(...concurrentArgs),
+    ]);
+    assert.equal(concurrentResults.filter((result) => result.status === 0).length, 1);
+    assert.equal(concurrentResults.filter((result) => result.status === 1).length, 1);
+    assert.match(concurrentResults.find((result) => result.status === 1).stderr, /already exists/);
+
+    const receipts = runCli("receipts", packet.id);
+    assert.equal(receipts.status, 0, receipts.stderr);
+    assert.match(receipts.stdout, /youtube\taccepted\tyoutube-upload-test-1/);
+    assert.match(receipts.stdout, /youtube\tpublished\tyoutube-upload-test-1\tvideo123/);
+    assert.match(receipts.stdout, /youtube\tverified\tyoutube-upload-test-1\tvideo123/);
+    assert.match(receipts.stdout, /youtube\tsuperseded\tyoutube-upload-test-1\tvideo123/);
+    assert.match(receipts.stdout, /youtube\taccepted\tyoutube-upload-test-2/);
+
     const status = runCli("status", packet.id);
     assert.equal(status.status, 0, status.stderr);
     assert.match(status.stdout, /Upload\/release authorization: not granted/);
+    assert.match(status.stdout, /Remote delivery receipts: 5/);
+    assert.match(status.stdout, /receipt accepted \(youtube-upload-test-2\)/);
 
     await fs.appendFile(assetPath, "changed");
     const stale = runCli("status", packet.id);

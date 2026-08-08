@@ -1,6 +1,6 @@
 # Publishing platform setup
 
-Last verified: August 7, 2026.
+Last verified: August 8, 2026.
 
 The local publisher uses official upload interfaces where they exist, RSS fan-out for podcast directories, and explicit browser handoffs where a supported public creator-upload API is unavailable. Credentials stay outside the repository under `~/.config/drm-publisher/` with owner-only permissions.
 
@@ -8,16 +8,17 @@ The local publisher uses official upload interfaces where they exist, RSS fan-ou
 
 | Destination | Delivery path | Current setup state |
 |---|---|---|
-| RSS.com | Canonical podcast host | Feed `https://media.rss.com/dr-m-experienced/feed.xml` has seven normalized, remotely decoded and loudness-verified enclosures with the GUIDs captured from Anchor on August 5, exact XML metadata, no XML `RSSVERIFY`, and no stray season value. Apple case `20000130526608` later supplied older historical GUIDs for Episodes 1-2; no live GUID change is approved. The separate public landing-page metadata still exposes a cached `RSSVERIFY` token |
-| Spotify for Creators | RSS audio consumer plus per-episode Spotify video replacement | Existing show `7GGLljxmO0G3FLjPy8vfcw` preserves all seven episode identities; corrected video is attached to 7/7 and public readback verifies video, approved artwork, and approved copy |
-| Apple Podcasts | Episode audio and art directly from RSS.com | Existing show `1870433419` uses the exact RSS.com feed and has exact token-free canonical metadata; the duplicate show now returns 404 and the stale Episode 4 Draft was archived. Only five episodes are Available. Under case `20000130526608`, Apple confirmed that its existing Episode 1-2 records use historical GUIDs different from the current feed. Repair remains blocked while Apple-side remapping, RSS.com in-place capability, and Spotify identity preservation are reviewed. Public JSON-LD/search caches retain legacy wording for Episodes 4-7 |
+| RSS.com | Canonical podcast host | Feed `https://media.rss.com/dr-m-experienced/feed.xml` has seven normalized, remotely decoded and loudness-verified enclosures with the GUIDs captured from Anchor on August 5, exact XML metadata, no XML `RSSVERIFY`, and no stray season value. The in-place GUID-only capability request is submitted and pending; no live GUID change was requested or approved. The separate public landing-page metadata still exposes a cached `RSSVERIFY` token |
+| Spotify for Creators | RSS audio consumer plus per-episode Spotify video replacement | Existing show `7GGLljxmO0G3FLjPy8vfcw` preserves all seven episode identities; corrected video is attached to 7/7 and public readback verifies video, approved artwork, and approved copy. Authenticated support is reviewing identity, attached-video, and analytics preservation across the proposed GUID substitutions; no live change was made |
+| Apple Podcasts | Episode audio and art directly from RSS.com | Existing show `1870433419` uses the exact RSS.com feed and has exact token-free canonical metadata; the duplicate show now returns 404 and the stale Episode 4 Draft was archived. Only five episodes are Available. Under case `20000130526608`, Apple confirmed that its existing Episode 1-2 records use historical GUIDs different from the current feed. The server-side-remap request is submitted and pending; repair remains blocked and no live GUID changed. Public JSON-LD/search caches retain legacy wording for Episodes 4-7 |
 | Amazon Music and Audible | Episode audio from RSS.com after one-time claim | Signed-in dashboard has zero claimed shows; submit the canonical RSS.com feed once, complete ownership verification, and record the stable listing ID/URL |
 | Podcast Index | Automatic RSS indexing | New RSS.com record `7982906` and old Anchor record `7799755` are both live; verify convergence after the 301 is crawled |
 | Production Supabase projection | Guarded SQL migrations plus exact readback | Both August 7 guarded migrations were applied after exact file-hash verification; all seven current RSS audio URLs, YouTube IDs, and `Watch on YouTube` references match catalog revision 10 |
+| Website and PostHog | GitHub Pages plus privacy-sanitized web analytics | Episode 7's corrected page is deployed and verified on desktop plus 320/390-pixel mobile views. A production POST to `https://us.i.posthog.com/e/` returned 200; refreshed Installation Health passes `$pageview`, `$pageleave`, scroll depth, and authorized URLs. Dashboard `1086989` has the privacy-safe `Dr. M Growth Dashboard` configuration and six verified growth views. Reverse proxy is the only explicit configuration recommendation and is not configured; three prepared short routes remain pending |
 | YouTube | Direct full-video upload; OAuth 2 plus resumable Data API for future automation | Seven normalized replacements are public and verified. The prior seven uploads remain Unlisted with replacement links and are retained as rollback records; future API automation still needs OAuth and the applicable compliance audit |
-| Vimeo | Vimeo API tus upload or attended in-place version replacement | All seven corrected videos were replaced in place and verified on their stable existing IDs. App upload access and an upload/edit-scoped token are still required for future API automation |
-| Instagram | Creator professional-account API with resumable local upload | Public profile state independently confirms `@drmexperienced` is a Creator professional account and not a Business account. Name/bio are exact, but the external website link, authenticated Graph API publishing ID, Meta app permissions, and token remain incomplete; no Business-account conversion is required |
-| Rumble | Direct human browser use only | Seven corrected uploads are staged Unlisted with Option C selected but not submitted. The hidden YouTube syndication switch is on for all seven, so submission is blocked on manually disabling it, rechecking every release control, human third-party asset-rights review, and specific acknowledgment of the July 21, 2026 Terms provisions. Automated site interaction is prohibited absent Rumble's prior written permission |
+| Vimeo | Vimeo API tus upload or attended in-place version replacement | All seven corrected episode videos remain verified on their stable IDs. The three Instagram-mapped shorts are verified as `1216695521`, `1216695522`, and `1204939542` with canonical titles, descriptions, and posters. A private API app is prepared; the owner must complete Vimeo's legal-attestation checkbox before creating an upload/edit token |
+| Instagram | Creator professional-account API | Public state confirms `@drmexperienced` is a Creator professional account and not a Business account. Its three public Reels map to verified local masters and Vimeo recovery IDs. Name/bio are exact; adding the website link remains a mobile-app-only action. Meta API setup waits for the owner's Facebook developer login, after which the authenticated publishing ID, permissions, and token can be completed without converting the account to Business |
+| Rumble | Direct human browser use only | The cache reset invalidated the seven staged browser forms, so they require manual restaging. The exact videos and thumbnails remain locally verified. The user accepted the July 21, 2026 Terms provisions on August 8; submission remains blocked on manual restaging with Option C, all syndication off, Premium off, human third-party asset-rights review, and the on-site controls. Automated site interaction is prohibited absent Rumble's prior written permission |
 
 ## Remote rebrand status
 
@@ -28,15 +29,15 @@ The canonical short profile description is `Dr. M Experienced, with Dr. David Mu
 | Spotify and Apple | RSS.com's XML and the authenticated Apple configuration use exact title/description copy with no feed `RSSVERIFY`. Spotify preserves all seven episode identities and now has corrected video with approved art/copy on 7/7. Apple exposes only five Available episodes and has two RSS Draft records; case `20000130526608` confirmed a historical GUID mismatch for Episodes 1-2. Preserve both show identities and follow the blocked repair gates in `publishing/apple-guid-repair.json` rather than creating replacements or changing live GUIDs. Public JSON-LD/search caches retain legacy wording for Episodes 4-7 |
 | Amazon | No claimed show exists in the signed-in account; submit the canonical RSS.com feed once and record the resulting stable identity |
 | YouTube | Canonical episode copy is published on the seven normalized replacement IDs; display name remains `Dr. M Experienced` because the manager-role name save did not persist. Prior episode uploads remain Unlisted and link to the replacements |
-| Instagram | Display name and bio are exact; handle `@drmexperienced` is unchanged and public state confirms Creator professional with Business false. Add the website listening hub and complete authenticated Graph API authorization; do not use the public profile ID as the publishing ID or convert the account to Business |
-| Vimeo | Display name is `Dr. M Experienced, David Musnick`, the closest form allowed by Vimeo's 32-character limit; the bio begins with canonical copy. Seven catalog episodes plus off-catalog public video `Pesto v2` are visible; review that extra video before changing it |
+| Instagram | Display name and bio are exact; handle `@drmexperienced` is unchanged and public state confirms Creator professional with Business false. All three public posts have unique captions and catalog mappings. Add the website listening hub through Instagram's mobile-only link control; Meta API work then waits for Facebook developer login. Do not use the public profile ID as the publishing ID or convert the account to Business |
+| Vimeo | Display name is `Dr. M Experienced, David Musnick`, the closest form allowed by Vimeo's 32-character limit; the bio begins with canonical copy. Seven catalog episodes and all three short-form recovery copies are visible. Short IDs `1216695521`, `1216695522`, and `1204939542` have canonical metadata/posters and must be preserved |
 | Rumble | Channel title is exact and About uses the canonical description; channel name and account username remain `drmexperienced` |
 
 YouTube's seven normalized public replacements, Vimeo's seven in-place corrected
 videos, Spotify's seven corrected video attachments, and the existing Rumble
-videos use approved topic thumbnails. Rumble's seven new corrected uploads are
-staged Unlisted with Option C selected and not submitted; hidden YouTube
-syndication is currently on for all seven. The canonical RSS exposes seven unique
+videos use approved topic thumbnails. Rumble's seven exact corrected video and
+thumbnail pairs remain locally verified and unsubmitted; the cache reset
+invalidated their staged forms. The canonical RSS exposes seven unique
 3000 x 3000 item images.
 YouTube uses a safe plain-text projection that spells out comparison
 operators because Studio rejects angle brackets. Vimeo stores list items as
@@ -45,6 +46,23 @@ rather than byte for byte. Exact assets, remote IDs, and verification state are
 recorded in `publishing/episode-thumbnail-rollout.json`.
 
 Run `drm-publish doctor` for the current local readiness report. It checks tools, RSS metadata, credential-file presence, and stable destination IDs without printing credential values.
+
+The publisher also has an immutable per-job release-receipt ledger:
+
+```bash
+drm-publish receipt <job-id> --platform <platform-id> \
+  --operation-id <operation-id> \
+  --status <accepted|processing|published|verified|failed|superseded> \
+  --by <recorder> [--remote-id <id>] [--remote-url <https-url>] \
+  [--evidence <kind=value>] \
+  --confirm "record-receipt <job-id> <platform-id> <approval-hash> <operation-id>"
+drm-publish receipts <job-id>
+drm-publish status <job-id>
+```
+
+Receipts are hash-bound evidence for an already-approved packet and operation;
+they neither authorize nor perform a remote action. Platform upload adapters,
+automatic receipt writes, and remote reconciliation remain incomplete.
 
 Public profile URLs are navigation aids, not routing authority. Record each verified immutable account and show, playlist, or channel ID in `publishing/platforms.json`. Unknown IDs stay `null`; the publisher blocks preparation from being attested until every required identity is verified.
 
@@ -68,19 +86,19 @@ Premium/exclusive placement off and disable YouTube, Vimeo, Facebook, and every
 other additional-syndication control. Initial visibility is always Unlisted.
 
 Option C remains subject to the Terms' General License, including AI/ML training
-and third-party AI sublicensing provisions. The Terms' third-party-material
-requirements also need a human review of all music, footage, graphics, and other
-incorporated assets. The user has not yet acknowledged these newly surfaced
-provisions in the current record, so do not infer acceptance or rights clearance.
+and third-party AI sublicensing provisions. The user explicitly accepted those
+provisions on August 8, 2026. The Terms' third-party-material requirements still
+need a human review of all music, footage, graphics, and other incorporated
+assets; Terms acceptance is not rights clearance.
 
 The August 7 form audit found 7/7 corrected uploads staged Unlisted with Option
 C and Vimeo/Facebook syndication off, but hidden YouTube syndication on. Premium
-state was not verified and remains an open manual gate. All seven remain
-unsubmitted. For each tab, the user must manually expand Additional Syndication,
-turn YouTube off, reverify Option C and Unlisted, verify Premium is off, review
-asset rights and the July 21 Terms, check the rights and Terms boxes, and submit.
-Record the returned video ID and URL after
-the human action; do not automate a readback from the signed-in site.
+state was not verified. The August 8 cache reset invalidated those forms, and
+all seven remain unsubmitted. Each upload must be manually restaged, all
+syndication disabled, Option C and Unlisted reverified, Premium verified off,
+asset rights reviewed, and the on-site rights and Terms controls completed.
+Record the returned video ID and URL after the human action; do not automate a
+readback from the signed-in site.
 
 Format validation is not account verification. Before a future API adapter can upload, it must query the authenticated account, compare the returned immutable ID with `publishing/platforms.json`, and stop on any mismatch.
 
@@ -127,13 +145,15 @@ complete.
 3. Completed: Apple show `1870433419` was configured directly to the RSS.com
    feed at approximately 18:29 UTC on August 6, 2026. Its authenticated metadata
    is exact and token-free.
-4. Support response received; remote repair blocked: Apple still has five
+4. Follow-up review pending; remote repair blocked: Apple still has five
    Available episodes. The inspected no-feed Draft show `1896845422` and stale
    manual Episode 4 Draft were archived on August 6, 2026, and one feed refresh
    was requested. Apple case `20000130526608` confirmed that its existing
    Episode 1-2 records use historical GUIDs different from the current feed.
-   Follow `publishing/apple-guid-repair.json`; do not change either live GUID
-   while the support-first preservation checks remain open.
+   The Apple remap, RSS.com capability, and Spotify identity-preservation
+   requests are submitted and pending. Follow `publishing/apple-guid-repair.json`;
+   no live GUID changed, and none is authorized to change while the support-first
+   preservation checks remain open.
 5. Pending: submit the RSS.com feed once to Amazon, complete ownership
    verification, and record the stable show ID and public URL.
 6. Completed August 7, 2026: all seven corrected Spotify videos are attached to
@@ -142,10 +162,10 @@ complete.
    existing-episode `Upload video` procedure for future video episodes and leave
    intentionally audio-only episodes as RSS audio only.
 7. YouTube, Vimeo, Spotify video/art, existing Rumble video art, and canonical
-   RSS episode-art updates are complete. Seven corrected Rumble uploads are
-   staged Unlisted with Option C selected but not submitted because hidden
-   YouTube syndication is on for all seven. The user must manually clear that
-   switch and complete the rights/Terms review described above.
+   RSS episode-art updates are complete. Seven corrected Rumble asset pairs are
+   locally verified but need manual restaging after the cache reset. The user
+   must use Option C, disable all syndication and Premium, and complete the
+   rights/Terms controls described above.
    Reconcile Instagram captions where needed
    and use approved covers for future Reels; preserve existing posts because the
    documented post-publication flow does not replace Reel covers. Do not rename
@@ -161,17 +181,21 @@ Apple's exact support crosswalk is:
 | 2 | `1000746628422` | `1e40e02b-b217-477c-9cc3-4271cb304c23` | `26896da2-76cf-4865-93f8-f94ddfb24568` |
 
 This is a catalog identity incident, not a reason to recreate the show or either
-episode. Ask Apple first whether it can remap the two existing episode records
-to the current feed GUIDs server-side. In parallel, ask RSS.com whether import
-engineering can make an in-place GUID-only correction without recreating an
-episode, and ask Spotify whether it can preserve the existing episode IDs and
-attached videos across either substitution. Make no live GUID change, deletion,
-recreation, or two-episode batch while those answers and exact user approval are
-missing. If a feed change remains necessary, capture complete Apple, Spotify,
-RSS, and feed snapshots and use one attended episode as a canary. Independently
-verify its Apple and Spotify identities before considering the second episode.
+episode. Requests are now submitted to Apple for server-side remapping, RSS.com
+for an in-place GUID-only correction, and Spotify for preservation of the
+existing episode IDs, attached videos, and analytics. All three responses are
+pending. Make no live GUID change, deletion, recreation, or two-episode batch
+while those answers and exact user approval are missing. If a feed change
+remains necessary, capture complete Apple, Spotify, RSS, and feed snapshots and
+use one attended episode as a canary. Independently verify its Apple and Spotify
+identities before considering the second episode.
 
 ## Instagram media delivery
+
+Add `https://drmexperienced.com` through the Instagram mobile app because the
+current desktop profile editor exposes external-link management as mobile-only.
+Meta API configuration is separately waiting for the owner's Facebook developer
+login.
 
 Use Meta's resumable upload flow to send the integrity-checked Reel directly from the local file. Meta documents this local-file route for apps using Facebook Login for Business. This keeps the normal path local until an authorized upload begins and avoids maintaining a public media object.
 
@@ -207,6 +231,6 @@ If resumable upload is unavailable for the configured account or API flow, stage
 
 ## Safety boundary
 
-No timer or background service may execute external publication. Automation may ingest, transcode, validate, fingerprint, and prepare a review packet. The local `--by` value is self-reported attribution; it is not identity authentication and must never be consumed as authorization for an external side effect. Future live adapters require a separate user-presence-backed authorization and must use the exact integrity-checked packet. Any changed file, title, description, schedule, disclosure flag, destination, monetization choice, or license choice invalidates prior review.
+No timer or background service may execute external publication. Automation may ingest, transcode, validate, fingerprint, prepare a review packet, and record immutable per-job receipt evidence. A receipt and the local `--by` value are self-reported records, not identity authentication or authorization for an external side effect. Future live adapters require a separate user-presence-backed authorization, must use the exact integrity-checked packet, and must reconcile remote state. Any changed file, title, description, schedule, disclosure flag, destination, monetization choice, or license choice invalidates prior review.
 
 Browser automation may update already-approved profile text and may prepare drafts/private uploads where the platform permits automated access. It must stop for MFA, CAPTCHA, reauthentication, account agreements, content-rights declarations, AI/synthetic-media disclosures, audience settings, paid promotion, monetization, licensing, public visibility, scheduling, and the final publish action unless those exact values received fresh explicit approval. Rumble is stricter: no automated site access or interaction is permitted without Rumble's prior written permission, even for inspection or draft preparation.

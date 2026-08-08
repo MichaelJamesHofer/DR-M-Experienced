@@ -22,7 +22,7 @@
     "platform": { "const": "rumble" },
     "status": {
       "enum": [
-        "blocked_manual_corrections_and_acknowledgment_required",
+        "blocked_manual_restaging_and_rights_review_required",
         "ready_for_manual_submission",
         "submitted_pending_verification",
         "verified"
@@ -146,7 +146,7 @@
         "termsLastModified": { "const": "2026-07-21" },
         "accountId": { "const": "282015440" },
         "channelId": { "const": "7820170" },
-        "policyRevision": { "const": 1 },
+        "policyRevision": { "const": 2 },
         "episodeResults": {
           "type": "array",
           "minItems": 7,
@@ -172,7 +172,7 @@
         "properties": {
           "status": {
             "enum": [
-              "blocked_manual_corrections_and_acknowledgment_required",
+              "blocked_manual_restaging_and_rights_review_required",
               "ready_for_manual_submission"
             ]
           }

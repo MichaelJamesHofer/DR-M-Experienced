@@ -97,7 +97,9 @@
         "accountId": null,
         "containerId": "dr-m-experienced"
       },
-      "requiredDestinationIds": ["containerId"],
+      "requiredDestinationIds": [
+        "containerId"
+      ],
       "asset": "podcastAudio",
       "rssRole": "canonical_host",
       "currentAudioState": "seven_normalized_enclosures_remote_verified",
@@ -115,7 +117,9 @@
         "accountId": null,
         "containerId": "7GGLljxmO0G3FLjPy8vfcw"
       },
-      "requiredDestinationIds": ["containerId"],
+      "requiredDestinationIds": [
+        "containerId"
+      ],
       "asset": "fullVideo",
       "rssRole": "direct_media_destination",
       "currentVideoState": "seven_corrected_videos_public_verified",
@@ -133,7 +137,9 @@
         "accountId": null,
         "containerId": "1870433419"
       },
-      "requiredDestinationIds": ["containerId"],
+      "requiredDestinationIds": [
+        "containerId"
+      ],
       "source": "rss",
       "dependsOn": "rss.com",
       "notes": "Do not upload the episode separately. Apple receives the approved podcast audio and item-level episode artwork from RSS.com's canonical feed. Preserve show ID 1870433419. The duplicate show ID 1896845422 now returns 404 and the stale manual Episode 4 Draft was archived on August 6, 2026. Public show 1870433419 exposes Episodes 3-7. Under case 20000130526608, Apple confirmed its existing Episode 1-2 records use older GUIDs than the current feed; the exact blocked crosswalk is in publishing/apple-guid-repair.json. Do not change the feed, delete, or recreate episodes until RSS.com in-place capability and Spotify identity preservation are confirmed. Apple public JSON-LD/search caches also retain legacy show wording for Episodes 4-7."
@@ -146,7 +152,9 @@
         "accountId": null,
         "containerId": null
       },
-      "requiredDestinationIds": ["containerId"],
+      "requiredDestinationIds": [
+        "containerId"
+      ],
       "source": "rss",
       "dependsOn": "rss.com",
       "notes": "No public Amazon Music or Audible listing was discoverable in the August 7, 2026 audit. Do not upload episodes separately. After the one-time listing claim and ownership verification, Amazon Music and Audible receive the approved podcast audio from RSS.com's canonical feed."
@@ -159,7 +167,10 @@
         "accountId": "UCFA1nVv4lKMBlx81gjMAOFQ",
         "containerId": "UUFA1nVv4lKMBlx81gjMAOFQ"
       },
-      "requiredDestinationIds": ["accountId", "containerId"],
+      "requiredDestinationIds": [
+        "accountId",
+        "containerId"
+      ],
       "asset": "fullVideo",
       "currentVideoState": "seven_normalized_replacements_public_verified",
       "currentPublicVideoCount": 7,
@@ -177,13 +188,25 @@
         "accountId": "253415660",
         "containerId": null
       },
-      "requiredDestinationIds": ["accountId"],
+      "requiredDestinationIds": [
+        "accountId"
+      ],
       "asset": "fullVideo",
       "currentVideoState": "seven_in_place_replacements_verified",
-      "currentVideoCount": 7,
+      "currentVideoCount": 10,
+      "currentEpisodeVideoCount": 7,
+      "currentShortVideoCount": 3,
+      "shortFormCatalog": "publishing/short-form-catalog.json",
+      "catalogedShortVideoIds": [
+        "1216695521",
+        "1216695522",
+        "1204939542"
+      ],
+      "shortMetadataDriftVideoIds": [],
       "stableVideoIdsPreserved": true,
       "replacementStateAuditedAt": "2026-08-07",
-      "notes": "All seven corrected videos were replaced in place and verified on their existing Vimeo IDs. Preserve those stable IDs. Future automation may use the official Vimeo API after app upload access and an upload/edit-scoped token are configured."
+      "shortStateAuditedAt": "2026-08-08T20:43:49Z",
+      "notes": "All seven corrected episode videos were replaced in place and verified on their existing Vimeo IDs. Preserve those stable IDs. The three cataloged Instagram shorts are now also published on Vimeo as 1216695521, 1216695522, and 1204939542 with canonical titles, descriptions, and selected custom posters. Future automation may use the official Vimeo API after the private first-party app is created, upload access is confirmed, and an upload/edit-scoped token is stored locally."
     },
     "instagram": {
       "label": "Instagram",
@@ -199,12 +222,29 @@
       "publicProfessionalAccountVerifiedAt": "2026-08-07",
       "publicBusinessAccount": false,
       "professionalAccountVerified": false,
-      "requiredDestinationIds": ["accountId"],
+      "requiredDestinationIds": [
+        "accountId"
+      ],
       "asset": "instagramReel",
       "fallbackMode": "temporary_public_media_staging",
       "accountType": "creator_professional",
       "accountTypeConfirmedAt": "2026-08-07",
-      "notes": "Public profile data independently confirms this is an Instagram Creator professional account and not a Business account, which is the correct classification for Dr. David Musnick as a creator. The public profile has exact name and bio but no external website link. The separate professionalAccountVerified field remains false until the stable authenticated Graph API publishing ID is read back; do not substitute the public profile ID. Add the website listening hub and complete Meta app authorization before API automation. Prefer Meta's resumable upload from the approved local Reel."
+      "publicPostCount": 3,
+      "publicPostCountVerifiedAt": "2026-08-08T20:05:16Z",
+      "shortFormCatalog": "publishing/short-form-catalog.json",
+      "catalogedPublicMediaIds": [
+        "3818274203859121888",
+        "3818276316521641998",
+        "3928186163131134659"
+      ],
+      "apiSetup": {
+        "preferredFlow": "facebook_login_for_business_local_resumable",
+        "instagramAccountConversionRequired": false,
+        "linkedFacebookPageRequired": true,
+        "authenticatedPublishingIdRequired": true,
+        "directInstagramLoginAlternative": "temporary_public_media_staging"
+      },
+      "notes": "Public profile data independently confirms this is an Instagram Creator professional account and not a Business account, which is the correct classification for Dr. David Musnick as a creator. The public profile has exact name and bio but no external website link. All three public Reels have distinct captions and catalog mappings to verified local masters. The separate professionalAccountVerified field remains false until the stable authenticated Graph API publishing ID is read back; do not substitute the public profile ID. Add the website listening hub and complete Meta app authorization before API automation. Meta's local resumable route requires Facebook Login for Business and a linked Page but does not require converting Instagram to Business; direct Instagram Login instead requires temporary public media staging."
     },
     "rumble": {
       "label": "Rumble",
@@ -214,11 +254,15 @@
         "accountId": "282015440",
         "containerId": "7820170"
       },
-      "requiredDestinationIds": ["containerId"],
+      "requiredDestinationIds": [
+        "containerId"
+      ],
       "asset": "fullVideo",
       "currentVideoState": "seven_verified_local_uploads_require_manual_restaging",
       "currentCatalogDescriptionParity": false,
-      "pendingDescriptionCorrectionEpisodeNumbers": [7],
+      "pendingDescriptionCorrectionEpisodeNumbers": [
+        7
+      ],
       "descriptionCorrectionReceipt": "publishing/episode-description-correction.json",
       "stagedFormsOperational": false,
       "stagedUploadCount": 7,
@@ -245,6 +289,14 @@
         "automationRequiresPriorWrittenPermission": true,
         "submissionMethod": "manual_human_only"
       },
+      "automationPermissionRequest": {
+        "status": "sent_pending_response",
+        "confirmedSentAt": "2026-08-08T19:43:18Z",
+        "sender": "drmexperienced@gmail.com",
+        "recipient": "support@rumble.com",
+        "subject": "Written permission request for supervised upload automation - account 282015440",
+        "requestedScope": "owner_approved_local_browser_assisted_vod_upload_and_submission"
+      },
       "submissionBlockedOn": [
         "apply_episode_7_catalog_revision_11_description_during_manual_reupload",
         "disable_youtube_syndication_on_all_seven_forms",
@@ -253,7 +305,7 @@
         "human_reverify_and_complete_rights_terms_controls"
       ],
       "stagingStateAuditedAt": "2026-08-07",
-      "notes": "The August 7 audit found seven corrected uploads staged Unlisted with Rumble Only Option C (form code 6), the permitted non-exclusive license, and no submissions. Hidden YouTube syndication was enabled on all seven; Vimeo and Facebook were off. The August 8 browser cache reset invalidated those staged forms, so the counts above are retained as historical audit evidence and all seven uploads require manual restaging. Rumble is not in current catalog-description parity: Episode 7 must receive the revision-11 description recorded in publishing/episode-description-correction.json during manual reupload. On August 8 the user explicitly accepted the Terms last modified July 21, 2026, including the general-license AI/ML and third-party AI sublicensing provision. Do not submit until all syndication is disabled, Premium exclusivity is verified off, third-party asset rights are reviewed, and every form is reverified. Rumble's current Terms prohibit automated site interaction without prior written permission, so a human must complete the rights and Terms controls and final submission."
+      "notes": "The August 7 audit found seven corrected uploads staged Unlisted with Rumble Only Option C (form code 6), the permitted non-exclusive license, and no submissions. Hidden YouTube syndication was enabled on all seven; Vimeo and Facebook were off. The August 8 browser cache reset invalidated those staged forms, so the counts above are retained as historical audit evidence and all seven uploads require restaging. Rumble is not in current catalog-description parity: Episode 7 must receive the revision-11 description recorded in publishing/episode-description-correction.json during reupload. On August 8 the user explicitly accepted the Terms last modified July 21, 2026, including the general-license AI/ML and third-party AI sublicensing provision. A written-permission request for owner-supervised upload automation was sent to support@rumble.com and is pending. Leave Rumble untouched until a written response establishes a permitted automated workflow."
     }
   }
 }

@@ -1,0 +1,285 @@
+{
+  "$schema": "./short-form-catalog.schema.json",
+  "schemaVersion": 2,
+  "revision": 2,
+  "lastVerifiedAt": "2026-08-08T20:43:49Z",
+  "authority": {
+    "metadata": "publishing/short-form-catalog.json",
+    "binaryMaster": "fingerprinted_project_dropbox_asset",
+    "videoHost": "vimeo_distribution_and_recovery_copy",
+    "audioDistribution": "not_applicable_use_rss_for_podcast_audio_only"
+  },
+  "items": [
+    {
+      "id": "short-brain-fog-what-it-feels-like",
+      "slug": "what-brain-fog-feels-like",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2025-11-24",
+      "title": "What Brain Fog Really Feels Like",
+      "summary": "Dr. David Musnick explains the slow thinking, low mental energy, word-finding trouble, poor focus, and memory slips people often mean when they describe brain fog.",
+      "body": [
+        "Brain fog is a description of impaired cognitive function, not a diagnosis. Dr. Musnick outlines common signs people notice and explains why persistent or worsening symptoms deserve a careful evaluation.",
+        "This excerpt comes from Brain Fog, Part 1 and is provided for general education. It does not replace individualized medical evaluation or treatment."
+      ],
+      "topics": [
+        "brain-fog",
+        "brain-health",
+        "functional-medicine"
+      ],
+      "relatedEpisodeNumbers": [
+        1
+      ],
+      "provenance": {
+        "sourceType": "episode_excerpt",
+        "sourceAssets": []
+      },
+      "master": {
+        "uri": "dropbox:Dr.M Podcast/Episode 1 - Brain Fog - Part 1/Insta/Dr. M - EP1 - Brain Fog Part 1 - Rev. 1.mov",
+        "status": "verified",
+        "sha256": "b4602d6954b84e27c85ea0561599d59b67c3804a103393ff168d27995fb9a593",
+        "sizeBytes": 45497398,
+        "container": "mov",
+        "durationSeconds": 53.930667,
+        "width": 1920,
+        "height": 1080,
+        "framesPerSecond": 60,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/what-brain-fog-feels-like.jpg",
+        "sha256": "f3383e43421a86ed926008d3d7f44c85c50befa0f498cb1a0385218183b7e00f",
+        "sizeBytes": 30951,
+        "width": 1080,
+        "height": 608,
+        "sourcePlatform": "instagram",
+        "sourceMediaId": "3818274203859121888",
+        "capturedAt": "2026-08-08T20:05:16Z"
+      },
+      "destinationCopy": {
+        "instagramCaption": "Dr. David Musnick (Dr. M), board-certified in Internal Medicine and Sports Medicine with 35+ years in regenerative and functional medicine, dives straight into one of the most common complaints he sees: brain fog. Discover what brain fog really feels like—slow thinking, low mental energy, word-finding trouble, poor focus, memory slips—and why it's not normal at any age.",
+        "vimeoTitle": "What Brain Fog Really Feels Like",
+        "vimeoDescription": "Dr. David Musnick explains common signs people mean when they describe brain fog. This short excerpt is from Brain Fog, Part 1. Learn more at https://drmexperienced.com/shorts/what-brain-fog-feels-like/. Educational content only; not individualized medical advice."
+      },
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "mediaId": "3818274203859121888",
+          "shortcode": "DT9PCiID3bg",
+          "url": "https://www.instagram.com/reel/DT9PCiID3bg/",
+          "publishedAt": "2026-01-26T02:16:49Z",
+          "verifiedAt": "2026-08-08T20:05:16Z",
+          "remoteDurationSeconds": 53.933334,
+          "remoteWidth": 1080,
+          "remoteHeight": 607
+        },
+        "vimeo": {
+          "state": "published",
+          "id": "1216695521",
+          "url": "https://vimeo.com/1216695521",
+          "verifiedAt": "2026-08-08T20:43:49Z",
+          "observedTitle": "What Brain Fog Really Feels Like",
+          "observedDescription": "Dr. David Musnick explains common signs people mean when they describe brain fog. This short excerpt is from Brain Fog, Part 1. Learn more at https://drmexperienced.com/shorts/what-brain-fog-feels-like/. Educational content only; not individualized medical advice.",
+          "metadataParity": true,
+          "selectedThumbnailId": "2188196097",
+          "posterParity": true
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/what-brain-fog-feels-like/"
+        }
+      }
+    },
+    {
+      "id": "short-brain-fog-testing-and-basic-solutions",
+      "slug": "brain-fog-testing-and-basic-solutions",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2025-11-24",
+      "title": "Brain Fog: Testing and Foundational Support",
+      "summary": "Dr. David Musnick discusses tests that may be considered for persistent brain fog and the foundational steps he uses while investigating possible causes.",
+      "body": [
+        "This excerpt covers selected laboratory and exposure questions that may be considered during an evaluation for persistent brain fog, along with basic brain-supportive habits used while the underlying cause is investigated.",
+        "Testing and treatment choices depend on a person's history, examination, and risk factors. This clip is educational and does not recommend a specific test or treatment for every viewer."
+      ],
+      "topics": [
+        "brain-fog",
+        "brain-health",
+        "functional-medicine",
+        "testing"
+      ],
+      "relatedEpisodeNumbers": [
+        2
+      ],
+      "provenance": {
+        "sourceType": "episode_excerpt",
+        "sourceAssets": []
+      },
+      "master": {
+        "uri": "dropbox:Dr.M Podcast/Episode 1 - Brain Fog - Part 2/Insta/Dr. M - EP1 - Brain Fog Part 2 - Insta - Rev. 1.mov",
+        "status": "verified",
+        "sha256": "a6a70987df875ad12c006753eae624d748be556a8743cdd278a4f91feb9b4baf",
+        "sizeBytes": 43206896,
+        "container": "mov",
+        "durationSeconds": 50.986667,
+        "width": 1920,
+        "height": 1080,
+        "framesPerSecond": 60,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/brain-fog-testing-and-basic-solutions.jpg",
+        "sha256": "fe6d758ee13e8789f8bd3ea3369c6ad393353a18050310ef59acae003aa2bec8",
+        "sizeBytes": 35035,
+        "width": 1080,
+        "height": 608,
+        "sourcePlatform": "instagram",
+        "sourceMediaId": "3818276316521641998",
+        "capturedAt": "2026-08-08T20:05:16Z"
+      },
+      "destinationCopy": {
+        "instagramCaption": "Dr. David Musnick (Dr. M) picks up where Part 1 left off and gets specific about which tests make sense for brain fog and which basics help almost everyone. He walks through key labs for inflammation, Epstein-Barr reactivation, mold/mycotoxins, and other blood markers—plus how to layer foundational brain-protective steps while root causes are being investigated.",
+        "vimeoTitle": "Brain Fog: Testing and Foundational Support",
+        "vimeoDescription": "Dr. David Musnick discusses evaluation questions and foundational support for persistent brain fog. This short excerpt is from Brain Fog, Part 2. Learn more at https://drmexperienced.com/shorts/brain-fog-testing-and-basic-solutions/. Educational content only; not individualized medical advice."
+      },
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "mediaId": "3818276316521641998",
+          "shortcode": "DT9PhRsjzgO",
+          "url": "https://www.instagram.com/reel/DT9PhRsjzgO/",
+          "publishedAt": "2026-01-26T02:21:01Z",
+          "verifiedAt": "2026-08-08T20:05:16Z",
+          "remoteDurationSeconds": 50.986668,
+          "remoteWidth": 1080,
+          "remoteHeight": 607
+        },
+        "vimeo": {
+          "state": "published",
+          "id": "1216695522",
+          "url": "https://vimeo.com/1216695522",
+          "verifiedAt": "2026-08-08T20:43:49Z",
+          "observedTitle": "Brain Fog: Testing and Foundational Support",
+          "observedDescription": "Dr. David Musnick discusses evaluation questions and foundational support for persistent brain fog. This short excerpt is from Brain Fog, Part 2. Learn more at https://drmexperienced.com/shorts/brain-fog-testing-and-basic-solutions/. Educational content only; not individualized medical advice.",
+          "metadataParity": true,
+          "selectedThumbnailId": "2188195959",
+          "posterParity": true
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/brain-fog-testing-and-basic-solutions/"
+        }
+      }
+    },
+    {
+      "id": "short-cilantro-basil-pesto",
+      "slug": "cilantro-basil-pesto-with-broccoli-sprouts",
+      "contentType": "recipe",
+      "publicationState": "published",
+      "recordedOn": "2026-06-17",
+      "title": "Cilantro-Basil Pesto with Broccoli Sprouts",
+      "summary": "Dr. David Musnick demonstrates a dairy-free pesto with cilantro, basil, broccoli sprouts, olive oil, pistachios, and simple seasonings, then explains why he chooses those ingredients.",
+      "body": [
+        "Dr. Musnick combines fresh herbs, broccoli sprouts, olive oil, nuts, and seasonings into a dairy-free pesto. He also discusses the ingredients he chooses and practical ways to use the finished pesto with vegetables, eggs, fish, or meat.",
+        "Ingredient amounts are demonstrated in the video rather than presented as a standardized medical nutrition plan. Adjust ingredients for allergies, dietary needs, and clinician guidance."
+      ],
+      "topics": [
+        "brain-health",
+        "nutrition",
+        "recipe"
+      ],
+      "relatedEpisodeNumbers": [],
+      "ingredients": [
+        "Basil",
+        "Cilantro",
+        "Broccoli sprouts",
+        "Organic olive oil",
+        "Pistachios",
+        "Pine nuts",
+        "Garlic salt",
+        "Himalayan salt"
+      ],
+      "provenance": {
+        "sourceType": "multi_clip_edit",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/recipes/Pesto/2026-06-17_healthy-cilantro-basil-pesto-setup-part-1_IMG_2352.MOV",
+            "sha256": "5ce9bbe8732701f4d75c30fd5f35fbe986eeeec87ee8932e2474a3d892ca5b5f",
+            "sizeBytes": 97164534,
+            "durationSeconds": 50.8567
+          },
+          {
+            "uri": "dropbox:Insta Shorts/renamed/recipes/Pesto/2026-06-17_healthy-cilantro-basil-pesto-benefits-part-2_IMG_2353.MOV",
+            "sha256": "002bbbf37dc13e5c924aa35b67443faa75a696f20803b8dd3fd4a3a7fd9b3de0",
+            "sizeBytes": 192043420,
+            "durationSeconds": 100.8217
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Insta Shorts/renamed/recipes/Pesto/Pesto v2.mp4",
+        "status": "verified",
+        "sha256": "ba5d36957d93c26290badd86d7605f57ce9808ed7b3ffb152cee4cf938e72bdb",
+        "sizeBytes": 143566216,
+        "container": "mp4",
+        "durationSeconds": 143.936,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/cilantro-basil-pesto-with-broccoli-sprouts.jpg",
+        "sha256": "5adbecd3ce92b4a39b59d0d280c7bc357f383bf2192c4a4ec5cc3c0fea37293e",
+        "sizeBytes": 113561,
+        "width": 1080,
+        "height": 1920,
+        "sourcePlatform": "instagram",
+        "sourceMediaId": "3928186163131134659",
+        "capturedAt": "2026-08-08T20:05:16Z"
+      },
+      "destinationCopy": {
+        "instagramCaption": "www.DrMExperienced.com\n\nThe healthiest pesto upgrade 🌿\n\nFresh basil, cilantro, organic olive oil, garlic, Himalayan salt, pine nuts, and pistachios blended into a nutrient-packed, dairy-free pesto you can put on almost anything.\n\nTry it on eggs, vegetables, fish, meat, or as an easy way to add more greens and healthy fats to your meals.\n\nSave this one for your next meal prep. 🌱\n\nHashtags/tags:\n\n#HealthyPesto #PestoRecipe #DairyFreePesto #HomemadePesto #HealthyRecipes #FunctionalMedicine #FoodAsMedicine #AntiInflammatoryFoods #OrganicIngredients #HealthyFats #FreshHerbs #BasilPesto #CilantroPesto #MealPrepIdeas #CleanEating #NutrientDense #WellnessRecipes #HealthyCooking #DrMExperienced #SportsMedicine",
+        "vimeoTitle": "Cilantro-Basil Pesto with Broccoli Sprouts",
+        "vimeoDescription": "Dr. David Musnick demonstrates a dairy-free pesto made with cilantro, basil, broccoli sprouts, olive oil, pistachios, pine nuts, and simple seasonings. Recipe details and the Instagram Reel are at https://drmexperienced.com/shorts/cilantro-basil-pesto-with-broccoli-sprouts/. Educational content only; adjust ingredients for allergies and individual dietary needs."
+      },
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "mediaId": "3928186163131134659",
+          "shortcode": "DaDuIDBCTLD",
+          "url": "https://www.instagram.com/reel/DaDuIDBCTLD/",
+          "publishedAt": "2026-06-26T17:52:41Z",
+          "verifiedAt": "2026-08-08T20:05:16Z",
+          "remoteDurationSeconds": 143.936005,
+          "remoteWidth": 1080,
+          "remoteHeight": 1920
+        },
+        "vimeo": {
+          "state": "published",
+          "id": "1204939542",
+          "url": "https://vimeo.com/1204939542",
+          "verifiedAt": "2026-08-08T20:43:49Z",
+          "observedTitle": "Cilantro-Basil Pesto with Broccoli Sprouts",
+          "observedDescription": "Dr. David Musnick demonstrates a dairy-free pesto made with cilantro, basil, broccoli sprouts, olive oil, pistachios, pine nuts, and simple seasonings. Recipe details and the Instagram Reel are at https://drmexperienced.com/shorts/cilantro-basil-pesto-with-broccoli-sprouts/. Educational content only; adjust ingredients for allergies and individual dietary needs.",
+          "metadataParity": true,
+          "selectedThumbnailId": "2188196239",
+          "posterParity": true
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/cilantro-basil-pesto-with-broccoli-sprouts/"
+        }
+      }
+    }
+  ]
+}

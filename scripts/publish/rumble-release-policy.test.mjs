@@ -66,7 +66,7 @@ function submittedPolicy() {
     termsLastModified: "2026-07-21",
     accountId: "282015440",
     channelId: "7820170",
-    policyRevision: 1,
+    policyRevision: 2,
     episodeResults: completeEpisodeResults(),
   };
   return candidate;
@@ -85,10 +85,14 @@ test("checked-in Rumble policy is structurally valid and fail-closed", () => {
   assert.equal(policy.requiredReleaseConfiguration.premiumExclusive, false);
   assert.equal(policy.requiredReleaseConfiguration.submissionMethod, "manual_human_only");
   assert.equal(policy.terms.automatedInteractionAllowed, false);
-  assert.equal(policy.status, "blocked_manual_corrections_and_acknowledgment_required");
+  assert.equal(policy.status, "blocked_manual_restaging_and_rights_review_required");
   assert.equal(policy.currentAudit.youtubeSyndicationEnabledCount, 7);
+  assert.equal(policy.actionGates.optionCSelectedAll, false);
+  assert.equal(policy.actionGates.unlistedAll, false);
   assert.equal(policy.actionGates.youtubeSyndicationDisabledAll, false);
-  assert.equal(policy.actionGates.aiMlGeneralLicenseAcknowledged, false);
+  assert.equal(policy.actionGates.vimeoSyndicationDisabledAll, false);
+  assert.equal(policy.actionGates.facebookSyndicationDisabledAll, false);
+  assert.equal(policy.actionGates.aiMlGeneralLicenseAcknowledged, true);
   assert.equal(policy.actionGates.thirdPartyAssetRightsReviewed, false);
   assert.equal(policy.submissionReceipt, null);
 });

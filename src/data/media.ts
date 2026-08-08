@@ -1,4 +1,5 @@
 import { extractYouTubeVideoId, getYouTubeThumbnail } from "@/lib/youtube";
+import { SHORTS } from "@/data/shorts";
 
 export type MediaFeature = {
   title: string;
@@ -37,14 +38,16 @@ function createMediaFeature(
 }
 
 export const MEDIA_FEATURES: MediaFeature[] = [
-  createMediaFeature(
-    "World's Best Pesto",
-    "Vimeo",
-    "Dr. M Experienced Recipes",
-    "Recipe",
-    "Short recipe clip for Dr. Musnick's pesto, kept separate from numbered podcast episodes while it is not part of the main episode catalog.",
-    "https://vimeo.com/1204939542",
-    "https://i.vimeocdn.com/video/2173399447-b0a98a9b4538e75d46d22cc36239a86d5253c185c37fd43b652ffa3e581db17f-d_590x332?region=us"
+  ...SHORTS.map((item) =>
+    createMediaFeature(
+      item.title,
+      item.vimeo ? "Instagram + Vimeo" : "Instagram",
+      "Dr. M Experienced Shorts",
+      item.contentType === "recipe" ? "Recipe" : "Short",
+      item.summary,
+      item.websitePath,
+      item.posterUrl
+    )
   ),
   createMediaFeature(
     "Autoimmunity Talk",

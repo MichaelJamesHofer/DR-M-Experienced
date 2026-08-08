@@ -41,10 +41,11 @@
       "stableVideoIdsPreserved": true
     },
     "rumble": {
-      "status": "legacy_live_art_verified_corrected_uploads_staged_unlisted",
+      "status": "legacy_live_art_verified_corrected_uploads_require_manual_restaging",
       "updatedCount": 7,
       "variant": "16x9",
-      "verification": "The approved artwork remains verified on the existing public videos. Seven corrected uploads with approved art are staged Unlisted with non-exclusive Option C but remain unsubmitted because hidden YouTube syndication is enabled on all seven. Vimeo/Facebook syndication is off and Premium state remains unverified; publishing/rumble-release-policy.json tracks the direct-human completion gates.",
+      "verification": "The approved artwork remains verified on the existing public videos, and the exact seven corrected video and thumbnail pairs remain hash-verified locally. The August 7 form audit found them staged Unlisted with non-exclusive Option C, hidden YouTube syndication enabled, Vimeo/Facebook off, Premium unverified, and no submissions. The August 8 cache reset invalidated those forms; publishing/rumble-release-policy.json tracks manual restaging and completion gates.",
+      "stagedFormsOperational": false,
       "correctedUploadStagedCount": 7,
       "correctedUploadsSubmitted": false,
       "optionCSelectedCount": 7,
@@ -406,7 +407,7 @@
   "knownUnresolvedMetadataDrift": [
     "The show-level podcast cover remains the prior DRM EXPERIENCED design; this rollout changes episode artwork only.",
     "Apple directly targets the canonical RSS.com feed with exact metadata but still has only five Available episodes; the duplicate records are archived and support is reviewing RSS Episodes 1 and 2.",
-    "Rumble's seven corrected uploads are staged Unlisted with non-exclusive Option C but remain unsubmitted because hidden YouTube syndication is enabled on all seven; Premium state remains unverified and direct-human completion is tracked in publishing/rumble-release-policy.json.",
+    "Rumble's exact seven corrected video and thumbnail pairs remain hash-verified locally and unsubmitted, but the cache reset invalidated their staged forms; manual restaging and completion are tracked in publishing/rumble-release-policy.json.",
     "RSS.com's XML feed and dashboard metadata are exact, but the separate public landing-page metadata still contains a cached RSSVERIFY token.",
     "Amazon is ready for a one-time canonical-feed claim but has not been claimed.",
     "Instagram is verified as a Creator professional account with exact name and bio, but its external website link is still missing."
