@@ -1,6 +1,7 @@
 "use client";
 
 import { useTheme } from "@/components/theme-provider";
+import { Moon, Sun } from "lucide-react";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -10,17 +11,13 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={() => setTheme(next)}
-      className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface text-foreground-muted hover:border-primary hover:text-primary transition-all duration-200"
+      className="flex h-11 w-11 items-center justify-center rounded-lg border border-border bg-surface text-foreground-muted transition-colors duration-200 hover:border-primary hover:text-primary"
       aria-label={`Switch to ${next} mode`}
     >
       {theme === "light" ? (
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-        </svg>
+        <Moon className="h-4 w-4" aria-hidden="true" />
       ) : (
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
+        <Sun className="h-4 w-4" aria-hidden="true" />
       )}
     </button>
   );

@@ -1,103 +1,138 @@
 # PostHog Analytics Setup
 
-PostHog is integrated for analytics tracking. This works with static export and GitHub Pages.
+The site has a privacy-minimized PostHog integration compatible with the static
+Next.js export and GitHub Pages. Local and pull-request builds may remain
+keyless; the production deployment guard requires the configured project token.
+
+## Current Status
+
+Last verified: August 7, 2026.
+
+- `posthog-js` is installed and initialized by
+  `src/components/posthog-provider.tsx`.
+- The configured GitHub Actions secret uses `NEXT_PUBLIC_POSTHOG_API_KEY`, the
+  name currently required by `npm run verify:production-env`. The runtime also
+  accepts `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` as an alias.
+- The apex and `www` production origins are authorized. Authenticated readback
+  confirmed the US project region and enabled `Discard client IP data`.
+  Cookieless server hashing remains disabled because the client uses memory-only
+  identity.
+- Privacy-sanitized page views, page leaves, accepted newsletter/contact
+  conversions, and episode-player opens are implemented. The remaining event
+  taxonomy is defined in `src/lib/analytics-events.ts`.
+- Live production event receipts and the initial growth dashboard remain pending
+  the analytics-enabled deployment.
 
 ## Environment Variables
 
-### For Local Development
-
-Create or update `.env.local`:
+For an attended local test, add one supported token name to ignored `.env.local`:
 
 ```env
-# PostHog Analytics
-NEXT_PUBLIC_POSTHOG_API_KEY=your_posthog_api_key_here
-# Optional: PostHog host (defaults to https://us.i.posthog.com)
-# NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+NEXT_PUBLIC_POSTHOG_API_KEY=your_posthog_project_token
+# Alternatively: NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN=your_posthog_project_token
+NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 ```
 
-**Important:** The variable **must** be prefixed with `NEXT_PUBLIC_` because PostHog runs client-side in the browser.
-
-### For GitHub Pages (GitHub Actions)
-
-In your GitHub repository settings:
-
-1. Go to **Settings** → **Secrets and variables** → **Actions**
-2. Add a new secret:
-   - **Name:** `NEXT_PUBLIC_POSTHOG_API_KEY`
-   - **Value:** Your PostHog API key
+PostHog calls this browser-safe value a **project token**. The current production
+guard still requires `NEXT_PUBLIC_POSTHOG_API_KEY`, so do not remove or rename
+that configured Actions secret unless the guard, workflow, tests, and docs change
+together. Never commit a token or print it into operational logs.
 
 Production deployments run `npm run verify:production-env` and stop before the
-build when this secret is absent or blank. Local and pull-request builds keep
-analytics optional.
+build when the required secret is absent or blank. Local and pull-request builds
+keep analytics optional. A production build inlines `NEXT_PUBLIC_` values, so a
+secret change requires a new deployment.
 
-If you're using `POSTHOG_API_KEY` in your GitHub Actions workflow, you can map it:
+## Privacy Contract
 
-```yaml
-env:
-  NEXT_PUBLIC_POSTHOG_API_KEY: ${{ secrets.POSTHOG_API_KEY }}
-```
+The client is intentionally configured with:
 
-## How It Works
+- manual events only (`autocapture: false`)
+- manual path-only page views (`capture_pageview: false`)
+- explicit page-leave capture (`capture_pageleave: true`)
+- no session recording, surveys, web experiments, or remote dependency loading
+- no person profiles or calls to `identify`
+- memory-only identity and respect for Do Not Track
+- no query strings, fragments, campaign IDs, form values, contact details, or
+  free-text searches in event properties
+- a `before_send` sanitizer as a final outbound guard
 
-- **Pageview tracking** on route changes, without query strings
-- **Privacy-focused**: autocapture and session recording are disabled
-- **Memory-only identity**: analytics does not persist an identifier in cookies or local storage
-- **URL minimization**: URL query strings, fragments, and query-derived campaign properties are removed before send
-- **Browser preference**: Do Not Track is respected
-- **Lazy loading**: the PostHog bundle is not requested when no API key is configured
-- **Development mode**: initialization and capture errors are logged only in development
-- **Static export compatible**: Works with `output: "export"`
+Never attach email addresses, names, messages, health terms, search text,
+affiliate destination URLs, or full form payloads to an event. Use public
+content slugs, platform names, fixed placement names, counts, and booleans.
 
-## Custom Events
+The August 7 authenticated check confirmed that the live project discards client
+IP data. Re-check that remote setting after any project or ingestion change; the
+repository configuration cannot enforce it.
 
-You can track custom events anywhere in your app:
+## Implemented Events
 
-```typescript
-import posthog from 'posthog-js';
+| Event | Trigger | Allowed custom properties |
+| --- | --- | --- |
+| `$pageview` | Client route change | Sanitized path-only `$current_url` |
+| `$pageleave` | PostHog page lifecycle | Sanitized path-only URL properties |
+| `newsletter subscribed` | Backend accepted a real newsletter form | `placement` |
+| `contact form submitted` | Backend accepted a real contact form | fixed `subject` enum |
+| `episode player opened` | Visitor activates the poster and requests the Vimeo iframe | public `video_id` |
 
-// Never include form values, email addresses, or other personal data.
-posthog.capture('newsletter_subscribed', {
-  source: 'homepage',
-});
-```
+Honeypot submissions do not emit conversion events. Failed or invalid forms do
+not emit success events. `episode player opened` records intent to load the
+player; it does not prove that video playback started.
 
-## Configuration
+## Dashboard Setup
 
-The PostHog provider is configured in `src/components/posthog-provider.tsx`. Current settings:
+After the analytics-enabled deployment completes:
 
-- `autocapture: false` - Manual events only
-- `capture_pageview: false` - Pageviews are sent by the route tracker
-- `capture_pageleave: true` - Page-leave events support duration and bounce metrics
-- `capture_performance: false` - Performance telemetry is disabled
-- `disable_session_recording: true` - Session replay is disabled
-- surveys, web experiments, and remote feature-flag configuration are disabled
-- `person_profiles: 'never'` - Person profiles are disabled
-- `persistence: 'memory'` - No persistent analytics identifier
-- `respect_dnt: true` - Browser Do Not Track is honored
-- `before_send` - Query strings, fragments, and campaign parameters are removed
+1. Open the public site in a private browser window with Do Not Track off.
+2. Visit two pages, open one episode player, and submit only a controlled test
+   newsletter/contact record that can be removed afterward.
+3. In PostHog **Live events**, confirm only the five implemented event types and
+   approved properties appear. Confirm URLs have no `?` or `#` content.
+4. Confirm no email, name, message, search phrase, or form field value appears
+   in event properties.
+5. Build the dashboards and funnels specified in
+   `docs/mobile-ux-and-analytics-study.md`.
+6. Re-check the public privacy notice before enabling any additional PostHog
+   product or changing identity, persistence, recording, or autocapture.
 
-Keep any configuration changes consistent with `src/app/legal/privacy/page.tsx`.
+## Measurement Limits
+
+Memory-only identity is a deliberate privacy tradeoff. It supports aggregate
+event counts and most navigation funnels within the current page session, but
+it does not provide reliable returning-visitor, cross-session retention, or
+unique-audience measurement. Campaign parameters are also discarded. Do not
+label those unavailable metrics as confirmed audience growth.
+
+Changing persistence, enabling cookieless identifiers, recording sessions, or
+adding campaign attribution requires a separate privacy decision and an update
+to `src/app/legal/privacy/page.tsx` before deployment.
 
 ## Production Verification
 
-After a deployment, open PostHog Installation Health and verify all of the
-following without exposing the project key:
+After deployment, open PostHog Installation Health and verify all of the
+following without exposing the project token:
 
-1. `$pageview` is received from the production domain.
-2. `$pageleave` and scroll-depth checks pass.
-3. `https://drmexperienced.com` and `https://www.drmexperienced.com` are listed
-   as authorized URLs.
-4. The configured ingestion host and project region match.
-5. IP collection/discard behavior matches the approved privacy policy.
+1. Fresh `$pageview` and `$pageleave` events arrive from both production origins.
+2. The three approved conversion events arrive only after their documented
+   triggers and contain only allowed properties.
+3. `https://drmexperienced.com` and `https://www.drmexperienced.com` remain
+   authorized URLs.
+4. Requests use the US ingestion host and `Discard client IP data` remains on.
+5. Autocapture, session recording, persistent identity, person profiles, surveys,
+   web experiments, and query-string collection remain disabled.
 
-The August 6, 2026 authenticated check initially reported no events, an
-incomplete `$pageview` check, and no authorized URLs. The Actions project key was
-then configured and both production origins were authorized. Page-leave, scroll
-depth, reverse proxy, and performance checks passed. The website has recovered
-from the provider outage, but configuration is not proof of production
-ingestion; repeat this checklist after an analytics-enabled deploy.
+The August 6 authenticated check initially reported no events, an incomplete
+`$pageview` check, and no authorized URLs. The Actions project key was then
+configured and both production origins were authorized. Page-leave,
+scroll-depth, reverse-proxy, and performance checks passed. Authenticated
+readback on August 7 confirmed the US region and IP-discard setting. Those
+configuration checks are not proof of live ingestion; complete the checklist
+above after the analytics-enabled deployment.
 
-On August 7, 2026, authenticated readback confirmed this is the US PostHog
-project and `Discard client IP data` was enabled successfully. Cookieless server
-hash mode remains disabled; the client uses memory-only identity instead. Live
-production event verification remains pending deployment.
+## Official References
+
+- PostHog Next.js guide: <https://posthog.com/docs/libraries/next-js>
+- PostHog manual event capture and `before_send` redaction:
+  <https://posthog.com/docs/libraries/js/usage>
+- PostHog data collection and IP controls:
+  <https://posthog.com/docs/privacy/data-collection>

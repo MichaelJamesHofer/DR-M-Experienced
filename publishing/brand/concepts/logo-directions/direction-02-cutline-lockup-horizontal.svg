@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 160" role="img" aria-labelledby="title desc">
+  <title id="title">DR. M EXPERIENCED with Dr. David Musnick - Cutline concept</title>
+  <desc id="desc">Horizontal concept lockup using a cyan solid M with an ascending cutline, an amber endpoint, the exact show wordmark, and subordinate host line.</desc>
+  <metadata>status=review; wordmark=DR. M EXPERIENCED; host-line=with Dr. David Musnick</metadata>
+  <style>
+    @font-face { font-family: "Geist Review"; src: url("../../../../src/app/fonts/GeistVF.woff") format("woff"); font-weight: 100 900; }
+    text { font-family: "Geist Review", Inter, Arial, sans-serif; letter-spacing: 0; }
+  </style>
+  <g transform="translate(32 32) scale(1.5)">
+    <path d="M11 51V15H20L32 36L44 15H53V51H43V35L32 54L21 35V51ZM17 51H23L48 20H42Z" fill="#22D3EE" fill-rule="evenodd"/>
+    <rect x="42" y="16" width="7" height="7" fill="#F59E0B"/>
+  </g>
+  <text x="160" y="75" fill="#0A0F1A" font-size="44" font-weight="700">DR. M EXPERIENCED</text>
+  <text x="160" y="111" fill="#475569" font-size="20" font-weight="500">with Dr. David Musnick</text>
+</svg>

@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ExternalLink } from "lucide-react";
 import {
   AFFILIATE_DISCLOSURE,
   affiliateDisplayName,
@@ -117,13 +118,13 @@ export default async function BlogDetailPage({
     .slice(0, 3);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 lg:px-6 lg:py-16">
+    <div className="mx-auto max-w-6xl px-4 py-8 lg:px-6 lg:py-14">
       <nav className="mb-8 flex items-center gap-2 text-body-sm text-foreground-muted">
-        <Link href="/" className="transition-colors duration-200 hover:text-foreground">
+        <Link href="/" className="inline-flex min-h-11 items-center px-1 transition-colors duration-200 hover:text-foreground">
           Home
         </Link>
         <span>/</span>
-        <Link href="/blogs" className="transition-colors duration-200 hover:text-foreground">
+        <Link href="/blogs" className="inline-flex min-h-11 items-center px-1 transition-colors duration-200 hover:text-foreground">
           Blogs
         </Link>
         <span>/</span>
@@ -131,8 +132,8 @@ export default async function BlogDetailPage({
       </nav>
 
       <div className="grid gap-12 lg:grid-cols-3">
-        <article className="lg:col-span-2">
-          <header className="mb-10">
+        <article className="min-w-0 lg:col-span-2">
+          <header className="mb-10 min-w-0">
             <div className="mb-4 flex flex-wrap items-center gap-3 text-body-sm text-foreground-muted">
               <span>{publishDate}</span>
               {post.readingMinutes && (
@@ -151,21 +152,26 @@ export default async function BlogDetailPage({
               </p>
             )}
             <p className="text-body-lg text-foreground-muted">{post.excerpt}</p>
-            <div className="mt-6 flex flex-wrap gap-2">
-              {post.topics.map((topic) => (
-                <Link
-                  key={topic}
-                  href={`/blogs?topic=${encodeURIComponent(topic.toLowerCase())}`}
-                  className="rounded-full border border-border bg-surface px-4 py-2 text-body-sm text-foreground-muted transition-all duration-200 hover:border-primary hover:text-primary"
-                >
-                  {blogTopicLabel(topic)}
-                </Link>
-              ))}
+            <div
+              className="-mx-4 mt-6 max-w-[calc(100%+2rem)] overflow-x-auto overscroll-x-contain px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:max-w-full sm:px-0"
+              aria-label="Blog topics"
+            >
+              <div className="flex w-max gap-2">
+                {post.topics.map((topic) => (
+                  <Link
+                    key={topic}
+                    href={`/blogs?topic=${encodeURIComponent(topic.toLowerCase())}`}
+                    className="inline-flex min-h-11 shrink-0 items-center whitespace-nowrap rounded-lg border border-border bg-surface px-4 py-2 text-body-sm text-foreground-muted transition-colors duration-200 hover:border-primary hover:text-primary sm:px-3"
+                  >
+                    {blogTopicLabel(topic)}
+                  </Link>
+                ))}
+              </div>
             </div>
           </header>
 
           {heroImageSrc && (
-            <div className="mb-10 overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="mb-10 overflow-hidden rounded-lg border border-border bg-surface">
               <div className="relative aspect-video">
                 <Image src={heroImageSrc} alt={post.title} fill className="object-cover" />
               </div>
@@ -174,7 +180,7 @@ export default async function BlogDetailPage({
 
           <div className="space-y-8">
             {post.sections.map((section, index) => (
-              <section key={`${section.title}-${index}`} className="rounded-2xl border border-border bg-surface p-6 sm:p-8">
+              <section key={`${section.title}-${index}`} className="rounded-lg border border-border bg-surface p-6 sm:p-8">
                 <h2 className="mb-4 text-heading-lg font-bold text-foreground">
                   {section.title}
                 </h2>
@@ -190,7 +196,7 @@ export default async function BlogDetailPage({
           </div>
 
           {post.references && post.references.length > 0 && (
-            <section className="mt-8 rounded-2xl border border-border bg-surface p-8">
+            <section className="mt-8 rounded-lg border border-border bg-surface p-8">
               <h2 className="mb-6 text-heading-lg font-bold text-foreground">
                 References & resources
               </h2>
@@ -201,11 +207,9 @@ export default async function BlogDetailPage({
                       href={reference.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-body text-primary transition-colors duration-200 hover:text-primary-hover"
+                      className="flex min-h-11 items-center gap-2 text-body text-primary transition-colors duration-200 hover:text-primary-hover"
                     >
-                      <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
+                      <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
                       {reference.label}
                     </a>
                   </li>
@@ -222,7 +226,7 @@ export default async function BlogDetailPage({
             description="Practical frameworks and episode follow-up in your inbox."
           />
 
-          <div className="rounded-2xl border border-dashed border-border bg-surface p-6">
+          <div className="rounded-lg border border-dashed border-border bg-surface p-6">
             <p className="mb-2 text-body-sm font-semibold text-foreground">Educational only</p>
             <p className="text-body-sm text-foreground-muted">
               Blog content is educational and does not provide medical advice. Work with your own
@@ -255,7 +259,7 @@ export default async function BlogDetailPage({
                 <Link
                   key={relatedPost.slug}
                   href={`/blogs/${relatedPost.slug}`}
-                  className="group block rounded-xl border border-border bg-surface p-4 transition-all duration-200 hover:border-primary/50"
+                  className="group block rounded-lg border border-border bg-surface p-4 transition-all duration-200 hover:border-primary/50"
                 >
                   <p className="line-clamp-3 text-body-sm font-medium text-foreground transition-colors duration-200 group-hover:text-primary">
                     {relatedPost.title}
@@ -283,7 +287,7 @@ function EmptyBlogDetailPage() {
         </Link>
       </nav>
 
-      <section className="rounded-3xl border border-dashed border-border bg-surface p-8 text-center sm:p-12">
+      <section className="rounded-lg border border-dashed border-border bg-surface p-8 text-center sm:p-12">
         <p className="mb-2 text-caption font-semibold uppercase tracking-wider text-primary">
           Blog library
         </p>
@@ -294,7 +298,7 @@ function EmptyBlogDetailPage() {
         </p>
         <Link
           href="/blogs"
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-body-sm font-semibold text-background transition-all duration-200 hover:bg-primary-hover"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-body-sm font-semibold text-background transition-colors duration-200 hover:bg-primary-hover"
         >
           Back to blogs
         </Link>
@@ -325,7 +329,7 @@ function RelatedEpisodeLink({ episode }: { episode: Episode }) {
   return (
     <Link
       href={`/episodes/${episode.slug}`}
-      className="group block rounded-xl border border-border bg-surface p-4 transition-all duration-200 hover:border-primary/50"
+      className="group block rounded-lg border border-border bg-surface p-4 transition-all duration-200 hover:border-primary/50"
     >
       <p className="line-clamp-3 text-body-sm font-medium text-foreground transition-colors duration-200 group-hover:text-primary">
         {episodeDisplayTitle(episode)}
@@ -338,7 +342,7 @@ function RelatedProductLink({ product }: { product: AffiliateProduct }) {
   return (
     <Link
       href={`/affiliates#${product.slug}`}
-      className="group block rounded-xl border border-border bg-surface p-4 transition-all duration-200 hover:border-primary/50"
+      className="group block rounded-lg border border-border bg-surface p-4 transition-all duration-200 hover:border-primary/50"
     >
       <p className="mb-1 text-caption font-semibold uppercase tracking-wider text-primary">
         {product.category}

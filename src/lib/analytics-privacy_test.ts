@@ -67,3 +67,31 @@ Deno.test("sanitizes nested objects and URL arrays without changing non-plain va
   );
   assert(sanitized.timestamp === timestamp, "non-plain object was changed");
 });
+
+Deno.test("removes common personal and free-text property values", () => {
+  const sanitized = sanitizeAnalyticsProperties({
+    email: "listener@example.com",
+    $initial_email_address: "listener@example.com",
+    full_name: "Example Listener",
+    message: "Private health details",
+    search_query: "private symptom search",
+    nested: {
+      phone_number: "555-0100",
+      query: "private nested search",
+      product_slug: "example-product",
+    },
+    subject: "podcast",
+  });
+
+  assert(!("email" in sanitized), "email was retained");
+  assert(!("$initial_email_address" in sanitized), "initial email was retained");
+  assert(!("full_name" in sanitized), "full name was retained");
+  assert(!("message" in sanitized), "message was retained");
+  assert(!("search_query" in sanitized), "search query was retained");
+
+  const nested = sanitized.nested as Record<string, unknown>;
+  assert(!("phone_number" in nested), "nested phone number was retained");
+  assert(!("query" in nested), "nested query was retained");
+  assert(nested.product_slug === "example-product", "safe nested slug was removed");
+  assert(sanitized.subject === "podcast", "safe subject enum was removed");
+});

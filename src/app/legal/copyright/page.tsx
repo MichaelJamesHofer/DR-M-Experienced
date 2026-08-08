@@ -54,7 +54,7 @@ export default function CopyrightPage() {
         </p>
       </div>
 
-      <div className="rounded-2xl border border-border bg-surface p-8 mb-8">
+      <div className="rounded-lg border border-border bg-surface p-8 mb-8">
         <h2 className="text-heading font-semibold text-foreground mb-3">
           Short notice
         </h2>
@@ -67,7 +67,7 @@ export default function CopyrightPage() {
         {sections.map((section) => (
           <section
             key={section.title}
-            className="rounded-2xl border border-border bg-surface p-8"
+            className="rounded-lg border border-border bg-surface p-8"
           >
             <h2 className="text-heading font-semibold text-foreground mb-6">
               {section.title}

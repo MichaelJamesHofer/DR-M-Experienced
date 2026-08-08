@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 920" role="img" aria-labelledby="title desc">
+  <title id="title">Dr. M Experienced logo directions - first identity review</title>
+  <desc id="desc">Three distinct M and path logo directions shown as horizontal lockups, dark-field variants, one-color marks, circular crops, and true-size 16, 24, and 64 pixel tests.</desc>
+  <style>
+    @font-face { font-family: "Geist Review"; src: url("../../../../src/app/fonts/GeistVF.woff") format("woff"); font-weight: 100 900; }
+    text { font-family: "Geist Review", Inter, Arial, sans-serif; letter-spacing: 0; }
+    .label { fill: #475569; font-size: 14px; font-weight: 600; }
+    .name { fill: #0A0F1A; font-size: 24px; font-weight: 700; }
+  </style>
+  <defs>
+    <symbol id="switchback-full" viewBox="0 0 64 64">
+      <path d="M13 50V20L32 43L51 20V50" fill="none" stroke="#22D3EE" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"/>
+      <rect x="48" y="16" width="7" height="7" fill="#F59E0B"/>
+    </symbol>
+    <symbol id="switchback-one" viewBox="0 0 64 64">
+      <path d="M13 50V20L32 43L51 20V50" fill="none" stroke="#0A0F1A" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"/>
+      <rect x="48" y="16" width="7" height="7" fill="#0A0F1A"/>
+    </symbol>
+    <symbol id="cutline-full" viewBox="0 0 64 64">
+      <path d="M11 51V15H20L32 36L44 15H53V51H43V35L32 54L21 35V51ZM17 51H23L48 20H42Z" fill="#22D3EE" fill-rule="evenodd"/>
+      <rect x="42" y="16" width="7" height="7" fill="#F59E0B"/>
+    </symbol>
+    <symbol id="cutline-one" viewBox="0 0 64 64">
+      <path d="M11 51V15H20L32 36L44 15H53V51H43V35L32 54L21 35V51ZM17 51H23L48 20H42Z" fill="#0A0F1A" fill-rule="evenodd"/>
+    </symbol>
+    <symbol id="steps-full" viewBox="0 0 64 64">
+      <path d="M10 52V14H18V20H22V26H26V32H30V38H34V32H38V26H42V20H46V14H54V52H46V32H42V38H38V44H34V50H30V44H26V38H22V32H18V52Z" fill="#22D3EE"/>
+      <rect x="30" y="42" width="4" height="6" fill="#F59E0B"/>
+    </symbol>
+    <symbol id="steps-one" viewBox="0 0 64 64">
+      <path d="M10 52V14H18V20H22V26H26V32H30V38H34V32H38V26H42V20H46V14H54V52H46V32H42V38H38V44H34V50H30V44H26V38H22V32H18V52Z" fill="#0A0F1A"/>
+    </symbol>
+  </defs>
+
+  <rect width="1440" height="920" fill="#F8FAFC"/>
+  <text x="40" y="48" fill="#0A0F1A" font-size="30" font-weight="700">DR. M EXPERIENCED - IDENTITY ROUND 01</text>
+  <text x="40" y="76" fill="#475569" font-size="16" font-weight="500">Review concepts only. No direction is an approved master or authorized for production use.</text>
+
+  <g transform="translate(40 104)">
+    <rect width="424" height="756" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <text class="name" x="24" y="42">01 / SWITCHBACK</text>
+    <text class="label" x="24" y="70">Continuous path / widest human gesture</text>
+    <image href="direction-01-switchback-lockup-horizontal.svg" x="24" y="92" width="376" height="84"/>
+    <rect x="24" y="202" width="376" height="138" rx="8" fill="#0A0F1A"/>
+    <use href="#switchback-full" x="42" y="230" width="80" height="80"/>
+    <text x="136" y="264" fill="#F1F5F9" font-size="23" font-weight="700">DR. M EXPERIENCED</text>
+    <text x="136" y="291" fill="#94A3B8" font-size="14" font-weight="500">with Dr. David Musnick</text>
+    <text class="label" x="24" y="378">FULL COLOR</text>
+    <use href="#switchback-full" x="24" y="392" width="96" height="96"/>
+    <text class="label" x="150" y="378">ONE COLOR</text>
+    <use href="#switchback-one" x="150" y="392" width="96" height="96"/>
+    <text class="label" x="276" y="378">CIRCLE CROP</text>
+    <circle cx="324" cy="440" r="48" fill="#0A0F1A"/>
+    <use href="#switchback-full" x="276" y="392" width="96" height="96"/>
+    <text class="label" x="24" y="535">TRUE-SIZE CHECKS</text>
+    <rect x="24" y="552" width="72" height="72" rx="8" fill="#F1F5F9"/>
+    <use href="#switchback-full" x="52" y="580" width="16" height="16"/>
+    <rect x="112" y="552" width="72" height="72" rx="8" fill="#F1F5F9"/>
+    <use href="#switchback-full" x="136" y="576" width="24" height="24"/>
+    <rect x="200" y="552" width="88" height="88" rx="8" fill="#F1F5F9"/>
+    <use href="#switchback-full" x="212" y="564" width="64" height="64"/>
+    <text class="label" x="49" y="648">16</text>
+    <text class="label" x="134" y="648">24</text>
+    <text class="label" x="236" y="664">64</text>
+    <text x="24" y="710" fill="#475569" font-size="14">Most open and conversational; least emblematic.</text>
+  </g>
+
+  <g transform="translate(508 104)">
+    <rect width="424" height="756" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <text class="name" x="24" y="42">02 / CUTLINE</text>
+    <text class="label" x="24" y="70">Solid M / ascending negative-space route</text>
+    <image href="direction-02-cutline-lockup-horizontal.svg" x="24" y="92" width="376" height="84"/>
+    <rect x="24" y="202" width="376" height="138" rx="8" fill="#0A0F1A"/>
+    <use href="#cutline-full" x="42" y="230" width="80" height="80"/>
+    <text x="136" y="264" fill="#F1F5F9" font-size="23" font-weight="700">DR. M EXPERIENCED</text>
+    <text x="136" y="291" fill="#94A3B8" font-size="14" font-weight="500">with Dr. David Musnick</text>
+    <text class="label" x="24" y="378">FULL COLOR</text>
+    <use href="#cutline-full" x="24" y="392" width="96" height="96"/>
+    <text class="label" x="150" y="378">ONE COLOR</text>
+    <use href="#cutline-one" x="150" y="392" width="96" height="96"/>
+    <text class="label" x="276" y="378">CIRCLE CROP</text>
+    <circle cx="324" cy="440" r="48" fill="#0A0F1A"/>
+    <use href="#cutline-full" x="276" y="392" width="96" height="96"/>
+    <text class="label" x="24" y="535">TRUE-SIZE CHECKS</text>
+    <rect x="24" y="552" width="72" height="72" rx="8" fill="#F1F5F9"/>
+    <use href="#cutline-full" x="52" y="580" width="16" height="16"/>
+    <rect x="112" y="552" width="72" height="72" rx="8" fill="#F1F5F9"/>
+    <use href="#cutline-full" x="136" y="576" width="24" height="24"/>
+    <rect x="200" y="552" width="88" height="88" rx="8" fill="#F1F5F9"/>
+    <use href="#cutline-full" x="212" y="564" width="64" height="64"/>
+    <text class="label" x="49" y="648">16</text>
+    <text class="label" x="134" y="648">24</text>
+    <text class="label" x="236" y="664">64</text>
+    <text x="24" y="710" fill="#475569" font-size="14">Strongest emblem; narrow route is the small-size risk.</text>
+  </g>
+
+  <g transform="translate(976 104)">
+    <rect width="424" height="756" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <text class="name" x="24" y="42">03 / WAYPOINT STEPS</text>
+    <text class="label" x="24" y="70">Terraced M / central experience marker</text>
+    <image href="direction-03-waypoint-steps-lockup-horizontal.svg" x="24" y="92" width="376" height="84"/>
+    <rect x="24" y="202" width="376" height="138" rx="8" fill="#0A0F1A"/>
+    <use href="#steps-full" x="42" y="230" width="80" height="80"/>
+    <text x="136" y="264" fill="#F1F5F9" font-size="23" font-weight="700">DR. M EXPERIENCED</text>
+    <text x="136" y="291" fill="#94A3B8" font-size="14" font-weight="500">with Dr. David Musnick</text>
+    <text class="label" x="24" y="378">FULL COLOR</text>
+    <use href="#steps-full" x="24" y="392" width="96" height="96"/>
+    <text class="label" x="150" y="378">ONE COLOR</text>
+    <use href="#steps-one" x="150" y="392" width="96" height="96"/>
+    <text class="label" x="276" y="378">CIRCLE CROP</text>
+    <circle cx="324" cy="440" r="48" fill="#0A0F1A"/>
+    <use href="#steps-full" x="276" y="392" width="96" height="96"/>
+    <text class="label" x="24" y="535">TRUE-SIZE CHECKS</text>
+    <rect x="24" y="552" width="72" height="72" rx="8" fill="#F1F5F9"/>
+    <use href="#steps-full" x="52" y="580" width="16" height="16"/>
+    <rect x="112" y="552" width="72" height="72" rx="8" fill="#F1F5F9"/>
+    <use href="#steps-full" x="136" y="576" width="24" height="24"/>
+    <rect x="200" y="552" width="88" height="88" rx="8" fill="#F1F5F9"/>
+    <use href="#steps-full" x="212" y="564" width="64" height="64"/>
+    <text class="label" x="49" y="648">16</text>
+    <text class="label" x="134" y="648">24</text>
+    <text class="label" x="236" y="664">64</text>
+    <text x="24" y="710" fill="#475569" font-size="14">Most durable small; most technical and least organic.</text>
+  </g>
+
+  <text x="40" y="898" fill="#64748B" font-size="13">Palette: Midnight #0A0F1A / Signal Cyan #22D3EE / Warm Amber #F59E0B / Cloud #F1F5F9. No gradients.</text>
+</svg>

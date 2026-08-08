@@ -1,5 +1,14 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  ChefHat,
+  Clapperboard,
+  LibraryBig,
+  Mic2,
+  Play,
+} from "lucide-react";
 import { MEDIA_FEATURES } from "@/data/media";
 
 export const metadata = {
@@ -7,187 +16,153 @@ export const metadata = {
   description: "Watch and listen to Dr. David Musnick's talks, interviews, podcast appearances, short clips, and recipe media.",
 };
 
-// Group media by type
-const shortRecipeMedia = MEDIA_FEATURES.filter((m) => m.type === "Short" || m.type === "Recipe");
-const videoMedia = MEDIA_FEATURES.filter((m) => m.type === "Video");
-const podcastMedia = MEDIA_FEATURES.filter((m) => m.type === "Podcast");
-const seriesMedia = MEDIA_FEATURES.filter((m) => m.type === "Series");
+const shortRecipeMedia = MEDIA_FEATURES.filter((media) => media.type === "Short" || media.type === "Recipe");
+const videoMedia = MEDIA_FEATURES.filter((media) => media.type === "Video");
+const podcastMedia = MEDIA_FEATURES.filter((media) => media.type === "Podcast");
+const seriesMedia = MEDIA_FEATURES.filter((media) => media.type === "Series");
+
+const mediaSections = [
+  {
+    id: "shorts-recipes",
+    title: "Shorts & recipes",
+    items: shortRecipeMedia,
+    icon: ChefHat,
+  },
+  {
+    id: "video-talks",
+    title: "Video talks",
+    items: videoMedia,
+    icon: Clapperboard,
+  },
+  {
+    id: "podcast-appearances",
+    title: "Podcast appearances",
+    items: podcastMedia,
+    icon: Mic2,
+  },
+  {
+    id: "educational-series",
+    title: "Educational series",
+    items: seriesMedia,
+    icon: LibraryBig,
+  },
+] as const;
 
 export default function MediaPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 lg:px-6 lg:py-16">
-      {/* Header */}
-      <div className="mb-12">
-        <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-2">
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:py-12 lg:px-6 lg:py-16">
+      <header className="mb-10 border-b border-border pb-8 sm:mb-12 sm:pb-10">
+        <p className="mb-2 text-caption font-semibold uppercase text-primary">
           Media & features
         </p>
-        <h1 className="text-display font-bold text-foreground mb-4">
+        <h1 className="mb-4 max-w-3xl text-4xl font-bold leading-tight text-foreground sm:text-display">
           Talks, interviews & series
         </h1>
-        <p className="text-body-lg text-foreground-muted max-w-2xl">
+        <p className="max-w-2xl text-body text-foreground-muted sm:text-body-lg">
           Explore Dr. Musnick&apos;s appearances across short clips, recipe media, podcasts, video talks,
           and educational series covering functional medicine, sports medicine, and integrative health.
         </p>
-      </div>
+      </header>
 
-      {/* Shorts & Recipes */}
-      {shortRecipeMedia.length > 0 && (
-        <section className="mb-16">
-          <h2 className="text-heading-lg font-bold text-foreground mb-6 flex items-center gap-3">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-caption font-bold text-primary">
-              SR
-            </span>
-            Shorts & recipes
-          </h2>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {shortRecipeMedia.map((media) => (
-              <MediaCard key={media.url} media={media} />
-            ))}
-          </div>
-        </section>
+      {mediaSections.map(({ id, title, items, icon: Icon }) =>
+        items.length > 0 ? (
+          <section key={id} aria-labelledby={`${id}-heading`} className="mb-12 sm:mb-16">
+            <div className="mb-5 flex items-center justify-between gap-4 border-b border-border pb-4">
+              <h2
+                id={`${id}-heading`}
+                className="flex min-w-0 items-center gap-3 text-2xl font-bold leading-tight text-foreground sm:text-heading-lg"
+              >
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border-strong bg-surface text-primary">
+                  <Icon className="h-5 w-5" aria-hidden="true" />
+                </span>
+                <span>{title}</span>
+              </h2>
+              <span className="shrink-0 text-body-xs text-foreground-subtle">
+                {items.length} {items.length === 1 ? "feature" : "features"}
+              </span>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+              {items.map((media) => (
+                <MediaCard key={media.url} media={media} />
+              ))}
+            </div>
+          </section>
+        ) : null
       )}
 
-      {/* Video Talks */}
-      {videoMedia.length > 0 && (
-        <section className="mb-16">
-          <h2 className="text-heading-lg font-bold text-foreground mb-6 flex items-center gap-3">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              🎬
-            </span>
-            Video talks
+      <section className="grid gap-6 border-y border-border py-8 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:py-10">
+        <div>
+          <h2 className="mb-2 text-heading-sm font-semibold text-foreground sm:text-heading">
+            Want Dr. Musnick on your show?
           </h2>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {videoMedia.map((media) => (
-              <MediaCard key={media.url} media={media} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Podcasts */}
-      {podcastMedia.length > 0 && (
-        <section className="mb-16">
-          <h2 className="text-heading-lg font-bold text-foreground mb-6 flex items-center gap-3">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              🎙️
-            </span>
-            Podcast appearances
-          </h2>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {podcastMedia.map((media) => (
-              <MediaCard key={media.url} media={media} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Series */}
-      {seriesMedia.length > 0 && (
-        <section className="mb-16">
-          <h2 className="text-heading-lg font-bold text-foreground mb-6 flex items-center gap-3">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              📚
-            </span>
-            Educational series
-          </h2>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {seriesMedia.map((media) => (
-              <MediaCard key={media.url} media={media} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* CTA */}
-      <section className="rounded-2xl border border-border bg-surface p-8 text-center">
-        <h3 className="text-heading font-semibold text-foreground mb-3">
-          Want Dr. Musnick on your show?
-        </h3>
-        <p className="text-body text-foreground-muted mb-6 max-w-lg mx-auto">
-          For interview requests, media features, or collaboration opportunities, 
-          reach out through our contact form.
-        </p>
+          <p className="max-w-2xl text-body-sm text-foreground-muted sm:text-body">
+            For interview requests, media features, or collaboration opportunities, reach out through our contact form.
+          </p>
+        </div>
         <Link
           href="/contact"
-          className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3 text-body font-semibold text-background hover:bg-primary-hover transition-all duration-200"
+          className="inline-flex min-h-11 w-fit items-center justify-center gap-2 rounded-md bg-primary px-5 py-2.5 text-body-sm font-semibold text-background transition-colors hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           Get in touch
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
+          <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </Link>
       </section>
     </div>
   );
 }
 
-function MediaCard({ media }: { media: typeof MEDIA_FEATURES[number] }) {
+function MediaCard({ media }: { media: (typeof MEDIA_FEATURES)[number] }) {
   const external = /^https?:\/\//.test(media.url);
+  const action = media.type === "Podcast" ? "Listen" : "Watch";
   return (
     <Link
       href={media.url}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
-      className="group flex flex-col rounded-2xl border border-border bg-surface overflow-hidden hover:border-primary/50 hover:shadow-glow-sm transition-all duration-300"
+      aria-label={`${action}: ${media.title} on ${media.platform}${external ? " (opens in a new tab)" : ""}`}
+      className="group grid grid-cols-[7.75rem_minmax(0,1fr)] overflow-hidden rounded-lg border border-border bg-surface transition-colors hover:border-border-strong hover:bg-surface-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:flex sm:flex-col"
     >
-      {/* Thumbnail */}
       {media.thumbnailUrl ? (
-        <div className="relative aspect-video w-full overflow-hidden bg-surface-elevated">
+        <div className="relative aspect-[4/3] w-full self-start overflow-hidden bg-surface-elevated sm:aspect-video">
           <Image
             src={media.thumbnailUrl}
-            alt={media.title}
+            alt=""
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 639px) 124px, (max-width: 1023px) 50vw, 33vw"
+            className="object-contain transition-opacity duration-200 group-hover:opacity-90"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-surface/80 via-transparent to-transparent" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-black/50 backdrop-blur text-background group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
-              <svg className="h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </div>
-          </div>
+          <span className="absolute bottom-3 left-3 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-background/90 text-foreground">
+            <Play className="h-4 w-4 fill-current" aria-hidden="true" />
+          </span>
         </div>
       ) : (
-        <div className="aspect-video bg-gradient-to-br from-surface-elevated to-surface flex items-center justify-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/20 text-primary group-hover:bg-primary group-hover:text-background transition-all duration-300">
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z" />
-            </svg>
-          </div>
+        <div className="flex aspect-[4/3] w-full self-start items-center justify-center bg-surface-elevated text-primary sm:aspect-video">
+          <span className="flex h-11 w-11 items-center justify-center rounded-full border border-border-strong bg-background">
+            <Play className="h-5 w-5 fill-current" aria-hidden="true" />
+          </span>
         </div>
       )}
-      <div className="p-5 flex-1 flex flex-col">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="rounded-full bg-primary/10 px-3 py-1 text-caption font-medium text-primary">
-            {media.type}
-          </span>
-          <span className="text-caption text-foreground-subtle">
-            {media.platform}
-          </span>
+
+      <div className="flex min-w-0 flex-1 flex-col p-3 sm:p-4">
+        <div className="mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.6875rem] font-semibold uppercase leading-4">
+          <span className="text-primary">{media.type}</span>
+          <span className="text-foreground-subtle" aria-hidden="true">/</span>
+          <span className="text-foreground-muted">{media.platform}</span>
         </div>
-        <p className="text-caption font-semibold text-foreground-muted mb-1">
+        <p className="mb-1 text-[0.6875rem] font-semibold leading-4 text-foreground-muted sm:text-body-xs">
           {media.show}
         </p>
-        <h3 className="text-body font-semibold text-foreground group-hover:text-primary transition-colors duration-200 mb-2 line-clamp-2">
+        <h3 className="mb-2 text-sm font-semibold leading-5 text-foreground transition-colors group-hover:text-primary sm:text-body sm:leading-6">
           {media.title}
         </h3>
-        <p className="text-body-sm text-foreground-muted line-clamp-2 flex-1">
+        <p className="text-xs leading-[1.45] text-foreground-muted sm:text-body-sm">
           {media.summary}
         </p>
-        <div className="mt-4 pt-4 border-t border-border flex items-center justify-between">
-          <span className="text-body-sm font-medium text-primary group-hover:text-primary-hover transition-colors duration-200">
-            {media.type === "Podcast" ? "Listen" : "Watch"}
-          </span>
-          <svg
-            className="h-4 w-4 text-foreground-muted group-hover:text-primary group-hover:translate-x-1 transition-all duration-200"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-          </svg>
-        </div>
+        <span className="mt-3 flex min-h-11 items-center justify-between gap-3 border-t border-border pt-2 text-body-xs font-semibold text-primary sm:text-body-sm">
+          {action}
+          <ArrowUpRight className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+        </span>
       </div>
     </Link>
   );

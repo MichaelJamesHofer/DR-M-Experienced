@@ -149,7 +149,9 @@ Interpretation on August 8, 2026:
 | Approved seven-episode title-transition evidence | `publishing/episode-title-migration.json` |
 | Approved episode-art assets and remote rollout receipt | `publishing/brand/asset-manifest.json` and `publishing/episode-thumbnail-rollout.json` |
 | Episode approval schema | `publishing/episode.schema.json` |
-| Visual briefs and templates | `publishing/brand/` |
+| Visual identity and media production standard | `publishing/brand/media-design-guide.md` |
+| Visual briefs, templates, and asset rollout status | `publishing/brand/` |
+| Website mobile UX and analytics measurement baseline | `docs/mobile-ux-and-analytics-study.md` |
 | Binary masters | Project-scoped Dropbox folder mapped by `~/.config/drm-publisher/sources.json` |
 | Production website-only editorial content | Supabase project `tdbsuzciwotleualdcjf` |
 | Website source and deployment | This repository and GitHub Actions |
@@ -1032,6 +1034,11 @@ platform.
 
 ## 13. Visual Identity And Media Package
 
+`publishing/brand/media-design-guide.md` is the authoritative visual standard
+for palette, typography, logo use, photography, layout, accessibility, motion,
+and export specifications. This section is the operational summary and current
+rollout state.
+
 Use one visual system with purpose-built compositions. Do not build a website
 splash gate or one universal splash image.
 
@@ -1116,12 +1123,18 @@ npx --yes deno@2.9.2 check --config supabase/functions/deno.json \
   --lock supabase/functions/deno.lock supabase/functions/form-submit/index.ts
 npx --yes deno@2.9.2 lint --config supabase/functions/deno.json \
   supabase/functions/form-submit src/lib/analytics-privacy.ts \
-  src/lib/analytics-privacy_test.ts
+  src/lib/analytics-privacy_test.ts src/lib/posthog-runtime.ts \
+  src/lib/posthog-runtime_test.ts
 npx --yes deno@2.9.2 test --config supabase/functions/deno.json \
   --lock supabase/functions/deno.lock supabase/functions/form-submit \
-  src/lib/analytics-privacy_test.ts
+  src/lib/analytics-privacy_test.ts src/lib/posthog-runtime_test.ts
 CONTENT_CATALOG_STRICT=true npm run build
 ```
+
+For rev2 review, also run the responsive QA matrix in
+`docs/mobile-ux-and-analytics-study.md`. Check the critical journeys in light and
+dark themes, with reduced motion, keyboard-only navigation, 200% zoom, and the
+document-overflow and 44-pixel target assertions recorded there.
 
 Production catalog checks need ignored local Supabase read credentials or the
 configured GitHub Actions secrets. Never expose a service-role key to the browser
@@ -1135,6 +1148,14 @@ identity, person profiles, and query-string collection remain disabled. The
 non-pull-request deployment runs `npm run verify:production-env` and fails before
 the production build if `NEXT_PUBLIC_POSTHOG_API_KEY` is absent or blank. Local
 and pull-request builds may remain keyless.
+
+The approved low-cardinality conversion events are `newsletter subscribed`,
+`contact form submitted`, and `episode player opened`. Form events are emitted
+only after the backend accepts the submission. `episode player opened` means the
+visitor activated the poster and the lazy Vimeo iframe was requested; it is not
+evidence that video playback started. Event properties must remain within the
+privacy contract in `POSTHOG_SETUP.md` and the event plan in
+`docs/mobile-ux-and-analytics-study.md`.
 
 The authenticated Installation Health check on August 6, 2026 initially
 reported no events, an incomplete `$pageview` check, and no authorized URLs.
@@ -1610,6 +1631,14 @@ Quarterly:
 - August 6, 2026: RSS.com confirmed the supported seven-episode import. Exact
   GUID, metadata, byte-identical audio/artwork, byte-range, and full oldest/newest
   decode checks passed before the later redirect.
+- August 5, 2026: established `publishing/brand/media-design-guide.md` as the
+  cross-channel visual authority, restored the original deep-slate, vivid-cyan,
+  and warm-amber system as the brand core, documented production and
+  accessibility rules, and kept unfinished logo and portrait assets behind an
+  explicit approval gate.
+- August 5, 2026: documented the mobile UX QA baseline and privacy-minimized
+  analytics event contract, including backend-accepted form conversions and the
+  conservative `episode player opened` interaction that does not claim playback.
 - August 5, 2026: published seven approved topic thumbnails to YouTube, Vimeo,
   Rumble, Spotify video, and Spotify episode art; verified seven unique square
   images in the canonical RSS; requested one Apple feed refresh; and recorded

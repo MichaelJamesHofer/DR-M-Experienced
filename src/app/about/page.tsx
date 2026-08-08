@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { ArrowRight, ExternalLink, Plus } from "lucide-react";
 import { MEDIA_FEATURES } from "@/data/media";
 import { physicianProfileExperience, physicianProfileYears } from "@/data/physician-profile";
 
@@ -160,47 +161,48 @@ const featuredMedia = MEDIA_FEATURES.slice(0, 4);
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 lg:px-6 lg:py-14">
-      <section className="mb-14">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-12">
-          <div className="lg:pt-6">
-            <p className="mb-3 text-caption font-semibold uppercase tracking-wider text-primary">
+    <div className="mx-auto max-w-6xl px-4 pb-12 pt-8 sm:px-6 sm:pb-16 sm:pt-12">
+      <section className="border-b border-border pb-10 sm:pb-14">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start lg:gap-14">
+          <div>
+            <p className="mb-3 text-caption font-semibold uppercase text-primary">
               Meet the physician
             </p>
-            <h1 className="mb-6 max-w-3xl text-display font-bold text-foreground">
+            <h1 className="mb-5 max-w-3xl text-4xl font-bold leading-[1.08] text-foreground sm:text-5xl">
               Dr. David Musnick, MD
             </h1>
-            <p className="max-w-3xl text-body-lg text-foreground-muted">
+            <p className="max-w-3xl text-body leading-relaxed text-foreground-muted sm:text-body-lg">
               Board-certified in Internal Medicine (ABIM) and Sports Medicine (CAQ), with deep
               Functional Medicine training and {physicianProfileExperience.patientCare} in patient care across concussion,
               brain-based symptoms and conditions, autoimmune conditions, fatigue, arthritis,
               gastrointestinal symptoms and conditions, orthopedics, and sports medicine.
             </p>
 
-            <div className="mt-7 flex flex-wrap gap-3">
+            <nav aria-label="About page sections" className="mt-6 flex flex-wrap gap-3">
               <Link
                 href="#clinical-domains"
-                className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-body-sm font-bold text-background transition-colors duration-200 hover:bg-primary-hover"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-body-sm font-bold text-background transition-colors duration-200 hover:bg-primary-hover"
               >
                 Explore clinical focus
+                <ArrowRight aria-hidden="true" className="h-4 w-4" />
               </Link>
               <Link
                 href="#featured-media"
-                className="inline-flex items-center justify-center rounded-full border border-border px-5 py-3 text-body-sm font-bold text-foreground transition-colors duration-200 hover:border-primary hover:text-primary"
+                className="inline-flex min-h-11 items-center justify-center rounded-lg border border-border px-4 py-2 text-body-sm font-bold text-foreground transition-colors duration-200 hover:border-primary hover:text-primary"
               >
                 View media
               </Link>
-            </div>
+            </nav>
 
-            <div className="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-              <div className="rounded-xl border border-border bg-surface p-4">
+            <div className="mt-8 grid gap-x-6 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="border-t border-border py-4">
                 <p className="text-heading-sm font-bold text-foreground">{physicianProfileExperience.patientCare}</p>
                 <p className="mt-1 text-caption text-foreground-muted">Patient care</p>
               </div>
               {credentials.map((cred) => (
                 <div
                   key={cred.label}
-                  className="rounded-xl border border-border bg-surface p-4"
+                  className="border-t border-border py-4"
                 >
                   <p className="text-heading-sm font-bold text-foreground">{cred.label}</p>
                   <p className="mt-1 text-caption text-foreground-muted">{cred.org}</p>
@@ -209,51 +211,49 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <aside className="order-first lg:order-none">
-            <div className="rounded-2xl border border-border bg-surface p-4 lg:p-6">
-              <div className="flex gap-4 lg:block">
-                <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-surface-elevated to-surface lg:mb-6 lg:aspect-square lg:h-auto lg:w-full">
-                  <Image
-                    src="/images/davidmusnicksketch.jpg"
-                    alt="Dr. David Musnick"
-                    width={520}
-                    height={520}
-                    className="h-full w-full object-cover"
-                    priority
-                  />
-                </div>
-                <dl className="grid flex-1 gap-3 text-body-sm">
-                  <div className="grid gap-1">
-                    <dt className="text-foreground-muted">Location</dt>
-                    <dd className="font-medium text-foreground">Idaho (relocated {physicianProfileYears.idahoRelocation})</dd>
-                  </div>
-                  <div className="grid gap-1">
-                    <dt className="text-foreground-muted">Experience</dt>
-                    <dd className="font-medium text-foreground">{physicianProfileExperience.patientCare}</dd>
-                  </div>
-                  <div className="grid gap-1">
-                    <dt className="text-foreground-muted">Focus</dt>
-                    <dd className="font-medium text-foreground">
-                      Functional Medicine & Sports Medicine
-                    </dd>
-                  </div>
-                </dl>
-              </div>
+          <aside className="grid grid-cols-[112px_minmax(0,1fr)] gap-5 sm:grid-cols-[160px_minmax(0,1fr)] lg:block">
+            <div className="aspect-square overflow-hidden rounded-lg border border-border bg-white lg:mb-5">
+              <Image
+                src="/images/davidmusnicksketch.jpg"
+                alt="Dr. David Musnick"
+                width={520}
+                height={520}
+                className="h-full w-full object-cover"
+                priority
+              />
             </div>
+            <dl className="divide-y divide-border border-y border-border text-body-sm">
+              <div className="py-3">
+                <dt className="text-foreground-muted">Location</dt>
+                <dd className="mt-1 font-medium text-foreground">
+                  Idaho (relocated {physicianProfileYears.idahoRelocation})
+                </dd>
+              </div>
+              <div className="py-3">
+                <dt className="text-foreground-muted">Experience</dt>
+                <dd className="mt-1 font-medium text-foreground">{physicianProfileExperience.patientCare}</dd>
+              </div>
+              <div className="py-3">
+                <dt className="text-foreground-muted">Focus</dt>
+                <dd className="mt-1 font-medium text-foreground">
+                  Functional Medicine &amp; Sports Medicine
+                </dd>
+              </div>
+            </dl>
           </aside>
         </div>
       </section>
 
-      <section className="mb-16 border-t border-border pt-10 lg:grid lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-10">
+      <section className="grid gap-6 border-b border-border py-10 sm:py-14 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-12">
         <div>
-          <p className="mb-3 text-caption font-semibold uppercase tracking-wider text-primary">
+          <p className="mb-3 text-caption font-semibold uppercase text-primary">
             Clinical biography
           </p>
-          <h2 className="text-heading-xl font-bold text-foreground">
+          <h2 className="text-[1.75rem] font-bold leading-tight text-foreground sm:text-3xl">
             The background behind the episodes
           </h2>
         </div>
-        <div className="mt-6 space-y-5 text-body text-foreground-muted lg:mt-0">
+        <div className="space-y-4 text-body leading-relaxed text-foreground-muted">
           <p>
             David Musnick, MD, has dedicated {physicianProfileExperience.patientCare} to patient care, with deep clinical work
             in concussion, brain-based symptoms and conditions, autoimmune conditions, fatigue,
@@ -277,224 +277,254 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section id="clinical-domains" className="mb-16 scroll-mt-28">
-        <div className="mb-6 max-w-3xl">
-          <p className="mb-3 text-caption font-semibold uppercase tracking-wider text-primary">
+      <section id="clinical-domains" className="scroll-mt-28 border-b border-border py-10 sm:py-14">
+        <div className="mb-7 max-w-3xl">
+          <p className="mb-3 text-caption font-semibold uppercase text-primary">
             Clinical focus
           </p>
-          <h2 className="mb-4 text-heading-xl font-bold text-foreground">
-            Specialty domains at a glance
+          <h2 className="mb-3 text-[1.75rem] font-bold leading-tight text-foreground sm:text-3xl">
+            Areas of clinical focus
           </h2>
-          <p className="text-body text-foreground-muted">
+          <p className="text-body leading-relaxed text-foreground-muted">
             A quick index of the clinical areas covered by Dr. Musnick&apos;s background, writing,
             teaching, and educational episodes.
           </p>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid border-b border-border sm:grid-cols-2 sm:gap-x-8">
           {specialtyHighlights.map((item, index) => (
-            <div
-              key={index}
-              className="rounded-xl border border-border bg-surface p-5"
-            >
-              <p className="text-body text-foreground-muted leading-relaxed">{item}</p>
+            <div key={index} className="flex gap-4 border-t border-border py-4">
+              <span className="w-6 shrink-0 text-caption font-semibold text-primary">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <p className="text-body-sm leading-relaxed text-foreground-muted">{item}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="mb-16">
-        <div className="mb-8 max-w-3xl">
-          <p className="mb-3 text-caption font-semibold uppercase tracking-wider text-primary">
+      <section className="border-b border-border py-10 sm:py-14">
+        <div className="mb-7 max-w-3xl">
+          <p className="mb-3 text-caption font-semibold uppercase text-primary">
             Treatment tools
           </p>
-          <h2 className="mb-4 text-heading-xl font-bold text-foreground">
+          <h2 className="mb-3 text-[1.75rem] font-bold leading-tight text-foreground sm:text-3xl">
             Treatments Dr. Musnick administers
           </h2>
-          <p className="text-body text-foreground-muted">
+          <p className="text-body leading-relaxed text-foreground-muted">
             Each plan blends hands-on diagnostics with precise therapeutic tools. Here are the modalities he personally delivers:
           </p>
         </div>
-        <div className="rounded-2xl border border-border bg-surface p-6">
-          <div className="grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
-            {treatmentList.map((treatment, index) => (
-              <p key={index} className="text-body-sm text-foreground-muted py-1">
-                {treatment}
-              </p>
-            ))}
-          </div>
+        <div className="grid border-b border-border sm:grid-cols-2 sm:gap-x-8 lg:grid-cols-3">
+          {treatmentList.map((treatment, index) => (
+            <p key={index} className="border-t border-border py-3 text-body-sm leading-relaxed text-foreground-muted">
+              {treatment}
+            </p>
+          ))}
         </div>
       </section>
 
-      <section className="mb-16">
-        <div className="mb-8 max-w-3xl">
-          <p className="mb-3 text-caption font-semibold uppercase tracking-wider text-primary">
-            Orthopedic & sports medicine
+      <section className="border-b border-border py-10 sm:py-14">
+        <div className="mb-7 max-w-3xl">
+          <p className="mb-3 text-caption font-semibold uppercase text-primary">
+            Orthopedic &amp; sports medicine
           </p>
-          <h2 className="mb-4 text-heading-xl font-bold text-foreground">
-            Decision-order care for every tissue
+          <h2 className="mb-3 text-[1.75rem] font-bold leading-tight text-foreground sm:text-3xl">
+            Care by tissue and condition
           </h2>
-          <p className="text-body text-foreground-muted">
+          <p className="text-body leading-relaxed text-foreground-muted">
             Every evaluation captures the involved tissues, neurologic tone, and pain-processing patterns before layering interventions.
           </p>
         </div>
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid lg:grid-cols-2 lg:gap-x-10">
           {sportsFocus.map((focus, index) => (
-            <div key={index} className="rounded-2xl border border-border bg-surface p-6">
-              <h3 className="text-heading font-semibold text-foreground mb-3">{focus.title}</h3>
-              <p className="text-body-sm text-foreground-muted leading-relaxed">{focus.description}</p>
-            </div>
+            <details key={index} className="group border-t border-border last:border-b lg:[&:nth-last-child(-n+2)]:border-b">
+              <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-left text-body font-semibold text-foreground marker:content-none">
+                {focus.title}
+                <Plus
+                  aria-hidden="true"
+                  className="h-5 w-5 shrink-0 text-primary transition-transform duration-200 group-open:rotate-45"
+                />
+              </summary>
+              <p className="pb-5 pr-9 text-body-sm leading-relaxed text-foreground-muted">
+                {focus.description}
+              </p>
+            </details>
           ))}
         </div>
       </section>
 
-      <section className="mb-16">
-        <div className="mb-8 max-w-3xl">
-          <p className="mb-3 text-caption font-semibold uppercase tracking-wider text-primary">
+      <section className="border-b border-border py-10 sm:py-14">
+        <div className="mb-7 max-w-3xl">
+          <p className="mb-3 text-caption font-semibold uppercase text-primary">
             Functional medicine focus
           </p>
-          <h2 className="mb-4 text-heading-xl font-bold text-foreground">
-            Systems Dr. Musnick evaluates in depth
+          <h2 className="mb-3 text-[1.75rem] font-bold leading-tight text-foreground sm:text-3xl">
+            Functional medicine by system
           </h2>
-          <p className="text-body text-foreground-muted">
+          <p className="text-body leading-relaxed text-foreground-muted">
             His functional immunology and neurology background lets him map how each system interacts with orthopedic complaints.
           </p>
         </div>
-        <div className="grid gap-6 lg:grid-cols-3">
-          {functionalExpertise.map((area, index) => (
-            <div key={index} className="rounded-2xl border border-border bg-surface p-6">
-              <h3 className="text-heading font-semibold text-foreground mb-5">{area.title}</h3>
-              <div className="space-y-4">
-                {area.items.map((item, itemIndex) => (
-                  <div key={itemIndex} className="border-l-2 border-primary/30 pl-4">
-                    <p className="text-body-sm font-semibold text-foreground mb-1">{item.label}</p>
-                    <p className="text-body-sm text-foreground-muted leading-relaxed">{item.detail}</p>
-                  </div>
-                ))}
-              </div>
+        <div className="grid gap-8 lg:grid-cols-3 lg:gap-10">
+          {functionalExpertise.map((area) => (
+            <div key={area.title}>
+              <h3 className="border-t border-border py-4 text-heading font-semibold text-foreground">
+                {area.title}
+              </h3>
+              {area.items.map((item) => (
+                <details key={item.label} className="group border-t border-border last:border-b">
+                  <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 py-3 text-body-sm font-semibold text-foreground marker:content-none">
+                    {item.label}
+                    <Plus
+                      aria-hidden="true"
+                      className="h-4 w-4 shrink-0 text-primary transition-transform duration-200 group-open:rotate-45"
+                    />
+                  </summary>
+                  <p className="pb-4 pr-7 text-body-sm leading-relaxed text-foreground-muted">
+                    {item.detail}
+                  </p>
+                </details>
+              ))}
             </div>
           ))}
         </div>
       </section>
 
-      <section className="mb-16">
-        <div className="mb-8 max-w-3xl">
-          <p className="mb-3 text-caption font-semibold uppercase tracking-wider text-primary">
+      <section className="border-b border-border py-10 sm:py-14">
+        <div className="mb-7 max-w-3xl">
+          <p className="mb-3 text-caption font-semibold uppercase text-primary">
             Evidence trail
           </p>
-          <h2 className="mb-4 text-heading-xl font-bold text-foreground">
+          <h2 className="mb-3 text-[1.75rem] font-bold leading-tight text-foreground sm:text-3xl">
             Publications, lectures, teaching, and training
           </h2>
-          <p className="text-body text-foreground-muted">
-            The page keeps the full proof record visible, but groups it as a clinical evidence trail
-            instead of scattering it across unrelated sections.
+          <p className="text-body leading-relaxed text-foreground-muted">
+            Selected publications, lectures, faculty roles, and recent continuing education.
           </p>
         </div>
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div className="rounded-2xl border border-border bg-surface p-8">
-            <h2 className="text-heading-lg font-bold text-foreground mb-6">Selected publications</h2>
-            <div className="divide-y divide-border">
-              {publications.map((pub, index) => (
-                <div key={index} className="py-4 first:pt-0 last:pb-0">
-                  <p className="text-body font-semibold text-foreground mb-1">{pub.title}</p>
-                  <p className="text-body-sm text-foreground-muted">{pub.source}</p>
+        <div className="grid gap-x-10 lg:grid-cols-2">
+          <details className="group border-t border-border">
+            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-heading-sm font-semibold text-foreground marker:content-none">
+              <span>
+                Selected publications
+                <span className="ml-2 text-caption font-normal text-foreground-subtle">{publications.length}</span>
+              </span>
+              <Plus aria-hidden="true" className="h-5 w-5 shrink-0 text-primary transition-transform duration-200 group-open:rotate-45" />
+            </summary>
+            <div className="divide-y divide-border border-t border-border pb-3">
+              {publications.map((pub) => (
+                <div key={pub.title} className="py-4">
+                  <p className="mb-1 text-body font-semibold text-foreground">{pub.title}</p>
+                  <p className="text-body-sm leading-relaxed text-foreground-muted">{pub.source}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </details>
 
-          <div className="rounded-2xl border border-border bg-surface p-8">
-            <h2 className="text-heading-lg font-bold text-foreground mb-6">Lectures & workshops</h2>
-            <div className="divide-y divide-border">
-              {lectures.map((lecture, index) => (
-                <div key={index} className="py-4 first:pt-0 last:pb-0">
-                  <div className="flex items-start justify-between gap-4 mb-1">
+          <details className="group border-t border-border">
+            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-heading-sm font-semibold text-foreground marker:content-none">
+              <span>
+                Lectures &amp; workshops
+                <span className="ml-2 text-caption font-normal text-foreground-subtle">{lectures.length}</span>
+              </span>
+              <Plus aria-hidden="true" className="h-5 w-5 shrink-0 text-primary transition-transform duration-200 group-open:rotate-45" />
+            </summary>
+            <div className="divide-y divide-border border-t border-border pb-3">
+              {lectures.map((lecture) => (
+                <div key={`${lecture.venue}-${lecture.year}`} className="py-4">
+                  <div className="mb-1 flex items-start justify-between gap-4">
                     <p className="text-body font-semibold text-foreground">{lecture.venue}</p>
-                    <span className="text-caption text-foreground-subtle shrink-0">{lecture.year}</span>
+                    <span className="shrink-0 text-caption text-foreground-subtle">{lecture.year}</span>
                   </div>
-                  <p className="text-body-sm text-foreground-muted">{lecture.topic}</p>
+                  <p className="text-body-sm leading-relaxed text-foreground-muted">{lecture.topic}</p>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-        <div className="mt-6 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-border bg-surface p-8">
-            <h3 className="text-heading font-semibold text-foreground mb-5">Faculty positions</h3>
-            <div className="divide-y divide-border">
-              {facultyTraining.map((item, index) => (
-                <div key={index} className="py-4 first:pt-0 last:pb-0">
-                  <p className="text-body font-semibold text-foreground mb-1">{item.role}</p>
-                  <p className="text-body-sm text-foreground-muted">
+          </details>
+
+          <details className="group border-t border-border lg:border-b">
+            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-heading-sm font-semibold text-foreground marker:content-none">
+              <span>
+                Faculty positions
+                <span className="ml-2 text-caption font-normal text-foreground-subtle">{facultyTraining.length}</span>
+              </span>
+              <Plus aria-hidden="true" className="h-5 w-5 shrink-0 text-primary transition-transform duration-200 group-open:rotate-45" />
+            </summary>
+            <div className="divide-y divide-border border-t border-border pb-3">
+              {facultyTraining.map((item) => (
+                <div key={`${item.role}-${item.org}`} className="py-4">
+                  <p className="mb-1 text-body font-semibold text-foreground">{item.role}</p>
+                  <p className="text-body-sm leading-relaxed text-foreground-muted">
                     {item.org}
                     {item.duration && <span className="text-foreground-subtle"> · {item.duration}</span>}
                   </p>
                 </div>
               ))}
             </div>
-          </div>
+          </details>
 
-          <div className="rounded-2xl border border-border bg-surface p-8">
-            <h3 className="text-heading font-semibold text-foreground mb-5">Recent continuing education</h3>
-            <div className="flex flex-wrap gap-2">
-              {recentCME.map((item, index) => (
-                <span
-                  key={index}
-                  className="rounded-full bg-surface-elevated px-4 py-2 text-body-sm text-foreground-muted"
-                >
-                  {item}
-                </span>
+          <details className="group border-y border-border lg:border-t">
+            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-heading-sm font-semibold text-foreground marker:content-none">
+              <span>
+                Recent continuing education
+                <span className="ml-2 text-caption font-normal text-foreground-subtle">{recentCME.length}</span>
+              </span>
+              <Plus aria-hidden="true" className="h-5 w-5 shrink-0 text-primary transition-transform duration-200 group-open:rotate-45" />
+            </summary>
+            <div className="divide-y divide-border border-t border-border pb-3">
+              {recentCME.map((item) => (
+                <p key={item} className="py-3 text-body-sm text-foreground-muted">{item}</p>
               ))}
             </div>
-          </div>
+          </details>
         </div>
       </section>
 
-      <section id="featured-media" className="mb-16 scroll-mt-28">
-        <div className="flex items-end justify-between mb-6">
-          <h2 className="text-heading-xl font-bold text-foreground">Featured media</h2>
+      <section id="featured-media" className="scroll-mt-28 border-b border-border py-10 sm:py-14">
+        <div className="mb-6 flex items-end justify-between gap-4">
+          <h2 className="text-[1.75rem] font-bold leading-tight text-foreground sm:text-3xl">Featured media</h2>
           <Link
             href="/media"
-            className="hidden sm:inline-flex items-center gap-2 text-body-sm font-semibold text-primary hover:text-primary-hover transition-colors duration-200"
+            className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-lg px-2 text-body-sm font-semibold text-primary transition-colors duration-200 hover:text-primary-hover"
           >
             View all
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+            <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </Link>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid border-b border-border sm:grid-cols-2 sm:gap-x-8">
           {featuredMedia.map((media) => (
             <a
               key={media.url}
               href={media.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group rounded-2xl border border-border bg-surface p-6 hover:border-primary/50 transition-all duration-200"
+              className="group flex min-h-11 gap-4 border-t border-border py-5 transition-colors duration-200 hover:text-primary"
             >
-              <p className="text-caption font-semibold text-primary mb-2">{media.show}</p>
-              <h3 className="text-body font-semibold text-foreground group-hover:text-primary transition-colors duration-200 mb-2">
-                {media.title}
-              </h3>
-              <p className="text-body-sm text-foreground-muted line-clamp-2">{media.summary}</p>
+              <div className="min-w-0 flex-1">
+                <p className="mb-2 text-caption font-semibold text-primary">{media.show}</p>
+                <h3 className="mb-2 text-body font-semibold text-foreground transition-colors duration-200 group-hover:text-primary">
+                  {media.title}
+                </h3>
+                <p className="line-clamp-2 text-body-sm leading-relaxed text-foreground-muted">{media.summary}</p>
+              </div>
+              <ExternalLink aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-foreground-subtle transition-colors group-hover:text-primary" />
             </a>
           ))}
         </div>
       </section>
 
-      <section className="mb-16">
-        <h2 className="text-heading-xl font-bold text-foreground mb-6">Outside the clinic</h2>
-        <div className="rounded-2xl border border-border bg-surface p-8">
-          <p className="text-body text-foreground-muted leading-relaxed">
-            Mountain biking in Sedona, hiking Rainier, skiing, cooking, nature photography, and time
-            with friends and his daughter all keep him grounded. That blend of outdoor life plus
-            constant learning informs the way he approaches every episode and clinical decision tree.
-          </p>
-        </div>
+      <section className="grid gap-5 border-b border-border py-10 sm:py-14 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-12">
+        <h2 className="text-[1.75rem] font-bold leading-tight text-foreground sm:text-3xl">Outside the clinic</h2>
+        <p className="text-body leading-relaxed text-foreground-muted">
+          Mountain biking in Sedona, hiking Rainier, skiing, cooking, nature photography, and time
+          with friends and his daughter all keep him grounded. That blend of outdoor life plus
+          constant learning informs the way he approaches every episode and clinical decision tree.
+        </p>
       </section>
 
-      <section className="rounded-2xl border border-dashed border-border bg-surface p-8">
-        <h2 className="text-heading font-semibold text-foreground mb-4">Educational Only</h2>
-        <div className="space-y-3 text-body text-foreground-muted leading-relaxed">
+      <section className="grid gap-4 pt-8 sm:pt-10 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-12">
+        <h2 className="text-heading font-semibold text-foreground">Educational Only</h2>
+        <div className="space-y-3 text-body-sm leading-relaxed text-foreground-muted">
           <p>
             Dr. M Experienced, with Dr. David Musnick is an educational platform. This page summarizes
             Dr. Musnick&apos;s background to provide context for the podcast and does not create

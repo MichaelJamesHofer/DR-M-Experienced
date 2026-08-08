@@ -1,416 +1,392 @@
-import Link from "next/link";
 import Image from "next/image";
-import { getContentCatalog } from "@/data/content-catalog";
-import { episodeDisplayTitle } from "@/data/episodes";
-import { physicianProfileExperience } from "@/data/physician-profile";
+import Link from "next/link";
+import {
+  ArrowRight,
+  BookOpen,
+  Clock3,
+  Mic2,
+  Play,
+  ShoppingBag,
+} from "lucide-react";
 import { NewsletterCapture } from "@/components/newsletter-capture";
+import { HomeHero } from "@/components/home-hero";
 import { PlatformBadges } from "@/components/platform-badges";
+import { VimeoPlayer } from "@/components/vimeo-player";
+import { getContentCatalog } from "@/data/content-catalog";
+import { episodeDisplayTitle, type Episode } from "@/data/episodes";
+import { physicianProfileExperience } from "@/data/physician-profile";
 import { SITE_HOST_LINE, SITE_NAME, SITE_SHORT_NAME } from "@/lib/site-brand";
+
+const CURATED_TOPICS = [
+  {
+    label: "Brain fog",
+    topic: "brain-fog",
+    description: "Clarity, focus, testing, and common drivers",
+  },
+  {
+    label: "Sleep & insomnia",
+    topic: "insomnia",
+    description: "Why sleep breaks down and how to recover",
+  },
+  {
+    label: "Concussion recovery",
+    topic: "concussion",
+    description: "Injury mechanics, inflammation, and recovery",
+  },
+  {
+    label: "Energy & mitochondria",
+    topic: "energy",
+    description: "Fatigue, metabolism, and cellular energy",
+  },
+  {
+    label: "EMF & health",
+    topic: "emf",
+    description: "Exposure, evidence, and practical steps",
+  },
+] as const;
+
+const homeDateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+function localImageUrl(url?: string) {
+  return url?.replace(/^https:\/\/drmexperienced\.com/, "");
+}
 
 export default async function Home() {
   const { episodes, blogPosts } = await getContentCatalog();
-
-  const allTopics = Array.from(new Set(episodes.flatMap((ep) => ep.topics))).sort();
   const sortedEpisodes = [...episodes].sort((a, b) => {
-    const dateA = new Date(a.publishDate).getTime();
-    const dateB = new Date(b.publishDate).getTime();
-    if (dateB !== dateA) return dateB - dateA;
-    return b.number - a.number;
+    const dateDifference = new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime();
+    return dateDifference || b.number - a.number;
   });
-
   const latestEpisode = sortedEpisodes[0];
+  const latestVimeoId = latestEpisode?.vimeoId?.trim();
+  const latestEpisodeImage = latestEpisode
+    ? localImageUrl(latestEpisode.thumbnailUrl) ??
+      latestEpisode.thumbnailUrl ??
+      "/images/brand/hero-brand-mountain-v1.webp"
+    : "/images/brand/hero-brand-mountain-v1.webp";
   const featuredEpisodes = sortedEpisodes.slice(0, 3);
   const latestBlogPosts = blogPosts.slice(0, 2);
-  const hasLatestVideo = latestEpisode?.vimeoId;
 
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-hero">
-        {/* Background Effects */}
-        <div className="absolute inset-0 bg-grid-pattern bg-grid opacity-50" />
-        <div className="absolute inset-0 bg-gradient-glow" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-radial from-primary/10 via-transparent to-transparent" />
-
-        <div className="relative mx-auto max-w-6xl px-4 py-20 lg:px-6 lg:py-32">
-          <div className="flex flex-col items-center text-center">
-            {/* Main Headline */}
-            <h1 className="text-4xl sm:text-display-lg md:text-display-xl font-bold text-foreground max-w-4xl mb-6">
-              {SITE_SHORT_NAME},{" "}
-              <span className="text-gradient">{SITE_HOST_LINE}</span>
-            </h1>
-
-            {/* Subheadline */}
-            <p className="text-body-lg text-foreground-muted max-w-3xl mb-10">
-              David Musnick MD has dedicated {physicianProfileExperience.patientCare} to patient care,
-              with deep clinical work in Sports Medicine, Internal Medicine, Regenerative Medicine,
-              and {physicianProfileExperience.functionalMedicine} of Functional Medicine. He is a
-              master clinician and teacher. In this Podcast he gets right to the point with highly
-              practical information based on his experience and on the research. No fluff. No long
-              and boring interviews.
+      <HomeHero>
+        <div className="relative mx-auto flex w-full max-w-6xl flex-1 items-center justify-center self-stretch px-4 py-8 lg:px-6">
+          <div className="w-full max-w-[46rem] text-center">
+            <p className="mb-3 text-caption font-bold uppercase text-[#0e7490]">
+              Practical health education
             </p>
-
-            {/* Platform Badges */}
-            <div className="mb-12">
-              <PlatformBadges variant="pill" />
+            <h1 className="break-words text-[2.5rem] font-bold leading-[1.02] text-[#0a0f1a] sm:text-[3.2rem] md:text-[4rem]">
+              {SITE_SHORT_NAME}
+            </h1>
+            <p className="mt-2 text-[1.2rem] font-semibold leading-tight text-[#9a5b05] sm:text-[1.45rem]">
+              {SITE_HOST_LINE}
+            </p>
+            <p className="mx-auto mt-4 max-w-[38rem] text-base leading-7 text-[#334155] md:text-lg">
+              <span className="max-[350px]:hidden xl:hidden">
+                Practical, research-informed guidance from {physicianProfileExperience.patientCare} in medicine.
+              </span>
+              <span className="hidden xl:inline">
+                Clear, research-informed guidance drawn from {physicianProfileExperience.patientCare} of
+                patient care across sports, internal, regenerative, and functional medicine.
+              </span>
+            </p>
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+              {latestEpisode && (
+                <Link
+                  href={latestVimeoId ? "#latest-episode" : `/episodes/${latestEpisode.slug}`}
+                  className="inline-flex min-h-12 items-center gap-2 rounded-lg bg-[#0a0f1a] px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#172554] sm:px-5"
+                >
+                  {latestVimeoId ? (
+                    <Play className="h-4 w-4 fill-current text-[#22d3ee]" aria-hidden="true" />
+                  ) : (
+                    <ArrowRight className="h-4 w-4 text-[#22d3ee]" aria-hidden="true" />
+                  )}
+                  View latest
+                </Link>
+              )}
+              <Link
+                href="/episodes"
+                className="inline-flex min-h-12 items-center gap-2 rounded-lg border border-[#0a0f1a]/25 bg-white/80 px-4 py-3 text-sm font-semibold text-[#0a0f1a] transition-colors hover:border-[#0e7490] hover:text-[#0e7490] sm:px-5"
+              >
+                All episodes
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
             </div>
+            <PlatformBadges variant="hero" className="mt-5 justify-center" />
+          </div>
+        </div>
+      </HomeHero>
 
-            {/* Latest Episode Card */}
-            {latestEpisode && (
+      {latestEpisode && (
+        <section id="latest-episode" className="scroll-mt-24 border-b border-border bg-background">
+          <div className="mx-auto grid w-full min-w-0 max-w-6xl items-center gap-7 px-4 py-8 lg:grid-cols-[minmax(0,1.25fr)_minmax(18rem,0.75fr)] lg:gap-10 lg:px-6 lg:py-14">
+            {latestVimeoId ? (
+              <VimeoPlayer
+                videoId={latestVimeoId}
+                title={episodeDisplayTitle(latestEpisode)}
+                thumbnailUrl={latestEpisodeImage}
+                className="min-w-0 w-full rounded-lg border border-border"
+              />
+            ) : (
               <Link
                 href={`/episodes/${latestEpisode.slug}`}
-                className="group w-full max-w-2xl rounded-2xl border border-border bg-surface/80 backdrop-blur overflow-hidden hover:border-primary/50 hover:shadow-glow transition-all duration-300"
+                className="group relative aspect-video w-full min-w-0 overflow-hidden rounded-lg border border-border bg-surface-elevated"
+                aria-label={`View ${episodeDisplayTitle(latestEpisode)}`}
               >
-                {latestEpisode.thumbnailUrl ? (
-                  <div className="relative aspect-video w-full overflow-hidden">
-                    <Image
-                      src={latestEpisode.thumbnailUrl}
-                      alt={episodeDisplayTitle(latestEpisode)}
-                      fill
-                      className={`object-cover transition-transform duration-300 ${
-                        !hasLatestVideo ? "opacity-50" : "group-hover:scale-105"
-                      }`}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/50 to-transparent" />
-                    {!hasLatestVideo && (
-                      <div className="absolute inset-0 bg-gradient-to-t from-surface/90 via-surface/60 to-transparent" />
-                    )}
-                    <div className="absolute top-4 left-4">
-                      <p className="text-caption font-semibold uppercase tracking-wider text-background/90 mb-2">
-                        Latest Episode
-                      </p>
-                      <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/90 backdrop-blur text-heading font-bold text-background">
-                        {latestEpisode.number.toString().padStart(2, "0")}
-                      </span>
-                    </div>
-                    {!hasLatestVideo ? (
-                      <div className="absolute inset-0 flex items-center justify-center z-10">
-                        <div className="flex flex-col items-center gap-2 px-4">
-                          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/20 backdrop-blur-sm border-2 border-primary/30 text-primary">
-                            <svg className="h-7 w-7" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                          </div>
-                          <p className="text-body font-semibold text-background drop-shadow-lg text-center">
-                            Video Coming Soon
-                          </p>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="absolute bottom-4 left-4 right-4">
-                          <h2 className="text-heading-lg font-bold text-background mb-2 drop-shadow-lg">
-                            {episodeDisplayTitle(latestEpisode)}
-                          </h2>
-                          <p className="text-body-sm text-background/90 line-clamp-2 drop-shadow">
-                            {latestEpisode.summary}
-                          </p>
-                        </div>
-                        {latestEpisode.durationMinutes && (
-                          <div className="absolute top-4 right-4 flex items-center gap-1.5 text-caption text-background bg-black/50 backdrop-blur rounded-full px-3 py-1.5">
-                            <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M8 5v14l11-7z" />
-                            </svg>
-                            <span>{latestEpisode.durationMinutes} min</span>
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </div>
-                ) : (
-                  <div className="p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-background transition-all duration-300">
-                        <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </div>
-                      <div className="flex-1 text-left">
-                        <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-1">
-                          Latest Episode
-                        </p>
-                        <h3 className="text-heading font-semibold text-foreground group-hover:text-primary transition-colors duration-200">
-                          {episodeDisplayTitle(latestEpisode)}
-                        </h3>
-                        <p className="text-body-sm text-foreground-muted mt-1 line-clamp-2">
-                          {latestEpisode.summary}
-                        </p>
-                      </div>
-                      <div className="hidden sm:flex items-center text-foreground-muted group-hover:text-primary transition-colors duration-200">
-                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <Image
+                  src={latestEpisodeImage}
+                  alt=""
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 720px"
+                  className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                />
+                <span className="absolute inset-0 bg-black/30 transition-colors group-hover:bg-black/20" />
+                <span className="absolute bottom-4 left-4 inline-flex min-h-11 items-center gap-2 rounded-lg bg-white px-4 py-2 text-body-sm font-semibold text-[#0a0f1a]">
+                  Episode details
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </span>
               </Link>
             )}
+            <div className="min-w-0 text-center lg:text-left">
+              <p className="mb-3 text-caption font-semibold uppercase text-primary">Latest episode</p>
+              <h2 className="text-heading-xl font-bold text-foreground md:text-[2.25rem] md:leading-tight">
+                {episodeDisplayTitle(latestEpisode)}
+              </h2>
+              <div className="mt-3 flex items-center justify-center gap-3 text-caption text-foreground-subtle lg:justify-start">
+                <span>{homeDateFormatter.format(new Date(latestEpisode.publishDate))}</span>
+                {latestEpisode.durationMinutes && (
+                  <>
+                    <span aria-hidden="true">•</span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Clock3 className="h-3.5 w-3.5" aria-hidden="true" />
+                      {latestEpisode.durationMinutes} min
+                    </span>
+                  </>
+                )}
+              </div>
+              <p className="mt-4 line-clamp-4 text-body leading-7 text-foreground-muted">
+                {latestEpisode.summary}
+              </p>
+              <Link
+                href={`/episodes/${latestEpisode.slug}`}
+                className="mt-5 inline-flex min-h-11 items-center gap-2 text-body-sm font-semibold text-primary hover:text-primary-hover"
+              >
+                Episode notes and references
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section className="border-b border-border bg-surface/45">
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16 lg:px-6 lg:py-16">
+          <div className="text-center lg:pt-2 lg:text-left">
+            <p className="mb-3 text-caption font-semibold uppercase text-primary">Browse by topic</p>
+            <h2 className="mb-4 text-[2rem] font-bold leading-tight text-foreground md:text-[2.5rem]">
+              Start with the question you have.
+            </h2>
+            <p className="mx-auto max-w-md text-body text-foreground-muted lg:mx-0">
+              Five practical paths into the current episode library, organized around real concerns
+              rather than internal tags.
+            </p>
+            <Link
+              href="/episodes"
+              className="mt-6 inline-flex min-h-11 items-center gap-2 text-body-sm font-semibold text-primary hover:text-primary-hover"
+            >
+              View all episodes
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
+
+          <div className="border-t border-border">
+            {CURATED_TOPICS.map((item, index) => {
+              const episodeCount = episodes.filter((episode) =>
+                episode.topics.includes(item.topic)
+              ).length;
+
+              return (
+                <Link
+                  key={item.topic}
+                  href={`/episodes?topic=${encodeURIComponent(item.topic)}`}
+                  className="group grid min-h-16 grid-cols-[2rem_1fr_auto] items-center gap-3 border-b border-border py-3 transition-colors hover:bg-surface-elevated/45 sm:grid-cols-[2.5rem_0.8fr_1.2fr_auto] sm:px-2"
+                >
+                  <span className="text-caption text-foreground-subtle">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-body font-semibold text-foreground group-hover:text-primary">
+                    {item.label}
+                  </span>
+                  <span className="hidden text-body-sm text-foreground-muted sm:block">
+                    {item.description}
+                  </span>
+                  <span className="flex items-center gap-3 text-caption text-foreground-subtle">
+                    <span>
+                      {episodeCount} {episodeCount === 1 ? "episode" : "episodes"}
+                    </span>
+                    <ArrowRight
+                      className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:text-primary"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Topics Section */}
-      <section className="mx-auto max-w-6xl px-4 py-16 lg:px-6">
-        <div className="text-center mb-10">
-          <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-2">
-            Browse by topic
-          </p>
-          <h2 className="text-heading-xl font-bold text-foreground">
-            Find what you need
+      <section className="mx-auto max-w-6xl px-4 py-14 lg:px-6 lg:py-20">
+        <div className="mx-auto mb-8 max-w-2xl text-center md:mx-0 md:text-left">
+          <p className="mb-3 text-caption font-semibold uppercase text-primary">Explore the library</p>
+          <h2 className="text-[2rem] font-bold leading-tight text-foreground md:text-[2.5rem]">
+            Listen, read, then apply.
           </h2>
         </div>
-        <div className="flex flex-wrap justify-center gap-3">
-          <Link
+        <div className="divide-y divide-border border-y border-border md:grid md:grid-cols-3 md:divide-x md:divide-y-0">
+          <FormatLink
             href="/episodes"
-            className="rounded-full border border-primary bg-primary/10 px-5 py-2.5 text-body-sm font-semibold text-primary hover:bg-primary hover:text-background transition-all duration-200"
-          >
-            All Episodes
-          </Link>
-          {allTopics.map((topic) => (
-            <Link
-              key={topic}
-              href={`/episodes?topic=${encodeURIComponent(topic.toLowerCase())}`}
-              className="rounded-full border border-border bg-surface px-5 py-2.5 text-body-sm font-medium text-foreground-muted hover:border-primary hover:text-primary transition-all duration-200"
-            >
-              {topic}
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Learning Formats */}
-      <section className="mx-auto max-w-6xl px-4 py-16 lg:px-6">
-        <div className="mb-10">
-          <p className="mb-2 text-caption font-semibold uppercase tracking-wider text-primary">
-            Choose the format
-          </p>
-          <h2 className="text-heading-xl font-bold text-foreground">
-            Listen, read, then apply
-          </h2>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          <FormatCard
-            href="/episodes"
+            icon={Mic2}
             eyebrow="Podcast"
             title="Episodes"
-            body="Short practical audio and video notes with summaries, references, and order-of-operations takeaways."
+            body="Concise audio and video with summaries, references, and practical takeaways."
           />
-          <FormatCard
+          <FormatLink
             href="/blogs"
+            icon={BookOpen}
             eyebrow="Long-form"
             title="Blogs"
             body={
-              latestBlogPosts.length > 0
-                ? `Read ${latestBlogPosts.length} current note${latestBlogPosts.length === 1 ? "" : "s"} and the longer context behind recurring topics.`
-                : "A home for long-form explainers, episode expansions, and clinic-style frameworks as posts are published."
+              latestBlogPosts.length === 1
+                ? "One current note expands the evidence and context behind recurring topics."
+                : latestBlogPosts.length > 1
+                  ? `${latestBlogPosts.length} current notes expand the evidence and context behind recurring topics.`
+                : "Long-form explainers and episode expansions for topics that need more context."
             }
           />
-          <FormatCard
+          <FormatLink
             href="/affiliates"
+            icon={ShoppingBag}
             eyebrow="Resources"
-            title="Affiliate guide"
-            body="Products, tools, and resource notes connected back to topics and episodes when there is a clear reason."
+            title="Product guide"
+            body="Products Dr. M references, why he uses them, and the episodes where they appear."
           />
         </div>
       </section>
 
-      {/* Featured Episodes */}
-      <section className="mx-auto max-w-6xl px-4 py-16 lg:px-6">
-        <div className="flex items-end justify-between mb-10">
-          <div>
-            <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-2">
-              Featured episodes
-            </p>
-            <h2 className="text-heading-xl font-bold text-foreground">
-              Start here
-            </h2>
+      <section className="border-y border-border bg-surface/45">
+        <div className="mx-auto max-w-6xl px-4 py-14 lg:px-6 lg:py-20">
+          <div className="mb-8 flex items-end justify-center gap-6 text-center sm:justify-between sm:text-left">
+            <div>
+              <p className="mb-3 text-caption font-semibold uppercase text-primary">Featured episodes</p>
+              <h2 className="text-[2rem] font-bold leading-tight text-foreground md:text-[2.5rem]">
+                A good place to start.
+              </h2>
+            </div>
+            <Link
+              href="/episodes"
+              className="hidden min-h-11 items-center gap-2 text-body-sm font-semibold text-primary hover:text-primary-hover sm:inline-flex"
+            >
+              View all
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {featuredEpisodes.map((episode) => (
+              <EpisodeCard key={episode.slug} episode={episode} />
+            ))}
           </div>
           <Link
             href="/episodes"
-            className="hidden sm:inline-flex items-center gap-2 text-body-sm font-semibold text-primary hover:text-primary-hover transition-colors duration-200"
-          >
-            View all
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </Link>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {featuredEpisodes.map((episode, index) => (
-            <Link
-              key={episode.slug}
-              href={`/episodes/${episode.slug}`}
-              className="group rounded-2xl border border-border bg-surface overflow-hidden hover:border-primary/50 hover:shadow-glow-sm transition-all duration-300"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              {/* Thumbnail */}
-              {episode.thumbnailUrl ? (
-                <div className="relative aspect-video w-full overflow-hidden bg-surface-elevated">
-                  <Image
-                    src={episode.thumbnailUrl}
-                    alt={episodeDisplayTitle(episode)}
-                    fill
-                    className={`object-cover transition-transform duration-300 ${
-                      episode.references?.some((ref) => ref.comingSoon === true)
-                        ? "opacity-50"
-                        : "group-hover:scale-105"
-                    }`}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent" />
-                  {episode.references?.some((ref) => ref.comingSoon === true) && (
-                    <div className="absolute inset-0 bg-gradient-to-t from-surface/90 via-surface/50 to-transparent" />
-                  )}
-                  <div className="absolute top-3 left-3">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/90 backdrop-blur text-caption font-bold text-background">
-                      {episode.number.toString().padStart(2, "0")}
-                    </span>
-                  </div>
-                  {episode.references?.some((ref) => ref.comingSoon === true) ? (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="flex flex-col items-center gap-1.5 px-4">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 backdrop-blur-sm border-2 border-primary/30 text-primary">
-                          <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                        </div>
-                        <p className="text-caption font-semibold text-background drop-shadow-lg text-center">
-                          Coming Soon
-                        </p>
-                      </div>
-                    </div>
-                  ) : (
-                    episode.durationMinutes && (
-                      <div className="absolute bottom-3 right-3 flex items-center gap-1.5 text-caption text-background bg-black/50 backdrop-blur rounded-full px-2.5 py-1">
-                        <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                        <span>{episode.durationMinutes} min</span>
-                      </div>
-                    )
-                  )}
-                </div>
-              ) : (
-                <div className="relative aspect-video w-full bg-gradient-to-br from-surface to-surface-elevated flex items-center justify-center">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-body-sm font-bold text-primary">
-                    {episode.number.toString().padStart(2, "0")}
-                  </span>
-                </div>
-              )}
-              <div className="p-6">
-                <h3 className="text-heading font-semibold text-foreground group-hover:text-primary transition-colors duration-200 mb-2">
-                  {episodeDisplayTitle(episode)}
-                </h3>
-                <p className="text-body-sm text-foreground-muted line-clamp-2 mb-4">
-                  {episode.summary}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {episode.topics.slice(0, 2).map((topic) => (
-                    <span
-                      key={topic}
-                      className="rounded-full bg-surface-elevated px-3 py-1 text-caption text-foreground-subtle"
-                    >
-                      {topic}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-        <div className="mt-8 text-center sm:hidden">
-          <Link
-            href="/episodes"
-            className="inline-flex items-center gap-2 rounded-full border border-primary bg-primary/10 px-6 py-3 text-body-sm font-semibold text-primary hover:bg-primary hover:text-background transition-all duration-200"
+            className="mt-6 flex min-h-11 items-center justify-center gap-2 text-body-sm font-semibold text-primary hover:text-primary-hover sm:hidden"
           >
             View all episodes
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </div>
       </section>
 
-      {/* Newsletter Section */}
-      <section className="mx-auto max-w-6xl px-4 py-16 lg:px-6">
-        <div className="relative rounded-3xl border border-border bg-surface overflow-hidden">
-          {/* Background glow */}
-          <div className="absolute inset-0 bg-gradient-glow opacity-50" />
-
-          <div className="relative px-6 py-16 sm:px-12 sm:py-20">
-            <NewsletterCapture
-              variant="hero"
-              heading="Get the latest"
-              description="Weekly insights on functional medicine, sports performance, and actionable health strategies. No spam, unsubscribe anytime."
-              className="mx-auto"
-            />
+      <section className="border-b border-border">
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-14 md:grid-cols-[0.8fr_1.2fr] md:items-center lg:px-6 lg:py-20">
+          <div className="text-center md:text-left">
+            <p className="mb-3 text-caption font-semibold uppercase text-primary">Field notes</p>
+            <h2 className="mb-3 text-[2rem] font-bold leading-tight text-foreground md:text-[2.5rem]">
+              New episodes and practical notes.
+            </h2>
+            <p className="mx-auto max-w-md text-body text-foreground-muted md:mx-0">
+              A concise email when there is something useful to share. No filler.
+            </p>
           </div>
+          <NewsletterCapture
+            variant="hero"
+            heading="Join the email list"
+            description="Episode releases, research notes, and practical follow-ups."
+          />
         </div>
       </section>
 
-      {/* Credibility Section */}
-      <section className="mx-auto max-w-6xl px-4 py-16 lg:px-6">
-        <div className="rounded-3xl border border-border bg-surface p-8 sm:p-12">
-          <div className="grid gap-10 lg:grid-cols-3 lg:gap-12 items-start">
-            {/* Portrait */}
-            <div className="lg:col-span-1">
-              <div className="aspect-square rounded-2xl overflow-hidden border border-border">
-                <Image
-                  src="/images/davidmusnicksketch.jpg"
-                  alt="Dr. David Musnick"
-                  width={300}
-                  height={300}
-                  className="w-full h-full object-cover"
-                />
+      <section id="your-host" className="scroll-mt-24 border-b border-border bg-surface/35">
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-14 lg:grid-cols-[minmax(280px,0.65fr)_minmax(0,1.35fr)] lg:gap-x-14 lg:gap-y-8 lg:px-6 lg:py-20 xl:grid-cols-[minmax(320px,0.65fr)_minmax(0,1.35fr)] xl:gap-x-18">
+          <header className="text-center lg:col-start-2 lg:text-left">
+            <p className="mb-3 text-caption font-semibold uppercase text-primary">Your host</p>
+            <h2 className="text-[2rem] font-bold leading-tight text-foreground md:text-[2.5rem]">
+              Dr. David Musnick, MD
+            </h2>
+          </header>
+
+          <figure className="relative mx-auto aspect-[5/6] w-full max-w-[16rem] overflow-hidden rounded-lg border border-border bg-white lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:max-w-[21rem]">
+            <Image
+              src="/images/davidmusnicksketch.jpg"
+              alt="Portrait illustration of Dr. David Musnick"
+              fill
+              sizes="(min-width: 1280px) 336px, (min-width: 1024px) 300px, 256px"
+              className="object-cover object-center"
+            />
+            <span className="absolute inset-y-0 left-0 w-1 bg-primary" aria-hidden="true" />
+            <span className="absolute bottom-0 left-0 h-1 w-20 bg-accent" aria-hidden="true" />
+          </figure>
+
+          <div className="min-w-0 lg:col-start-2">
+            <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_9rem] md:items-start md:gap-8">
+              <div className="order-2 text-left md:order-1">
+                <p className="text-body leading-7 text-foreground-muted">
+                  Board-certified in Internal Medicine and Sports Medicine, with deep Functional Medicine
+                  training. His work spans concussion, brain-based symptoms, autoimmune conditions,
+                  fatigue, arthritis, and gastrointestinal health.
+                </p>
+              </div>
+              <div className="order-1 border-b border-border pb-5 text-center md:order-2 md:border-b-0 md:border-l md:pb-0 md:pl-7 md:text-left">
+                <p className="text-[3rem] font-bold leading-none text-accent">
+                  {physicianProfileExperience.patientCare}
+                </p>
+                <p className="mt-2 text-body-sm font-semibold text-foreground-muted">in patient care</p>
               </div>
             </div>
-            <div className="lg:col-span-2">
-              <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-3">
-                Your host
-              </p>
-              <h2 className="text-heading-xl font-bold text-foreground mb-4">
-                Dr. David Musnick, MD
-              </h2>
-              <p className="text-body text-foreground-muted mb-6">
-                Board-certified in Internal Medicine (ABIM) and Sports Medicine (CAQ), with deep
-                Functional Medicine training. {physicianProfileExperience.patientCare} in patient care, with deep dives into
-                concussion, brain-based symptoms and conditions, autoimmune conditions, fatigue,
-                arthritis, and gastrointestinal symptoms and conditions.
-              </p>
-              <ul className="space-y-3 mb-8">
-                {[
-                  "Faculty: IFM, Bastyr University, Andrews University, UW",
-                  "Author: Integrative Neurology, Metabolic Orthopedics",
-                  "Pioneer: FSM protocols, integrative concussion rehab",
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-body-sm text-foreground-muted">
-                    <svg className="h-5 w-5 shrink-0 text-primary mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    {item}
-                  </li>
-                ))}
-              </ul>
+
+            <div className="mt-6 divide-y divide-border border-y border-border text-left text-body-sm text-foreground-muted md:grid md:grid-cols-3 md:divide-x md:divide-y-0">
+              <p className="py-4 md:pr-4">Faculty at IFM, Bastyr, Andrews, and UW</p>
+              <p className="py-4 md:px-4">Author of Integrative Neurology and Metabolic Orthopedics</p>
+              <p className="py-4 md:pl-4">Pioneer in FSM protocols and integrative concussion rehab</p>
+            </div>
+
+            <div className="mt-6 flex items-center justify-center lg:justify-start">
               <Link
                 href="/about"
-                className="inline-flex items-center gap-2 text-body-sm font-semibold text-primary hover:text-primary-hover transition-colors duration-200"
+                className="inline-flex min-h-11 items-center gap-2 text-body-sm font-semibold text-primary hover:text-primary-hover"
               >
-                Full credentials
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
+                About Dr. Musnick
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
-              <div className="mt-8 rounded-2xl border border-dashed border-border bg-surface-elevated p-6">
-                <p className="text-body-sm font-semibold text-foreground mb-2">
-                  Educational content only
-                </p>
-                <p className="text-body-sm text-foreground-muted">
-                  {SITE_NAME} is a signal chain—Dr. Musnick&apos;s clinic notes translated into episodes
-                  so athletes, clinicians, and curious humans can think clearly. This is not
-                  medical advice. Work with your own clinician for diagnosis and treatment.
-                </p>
-              </div>
             </div>
+            <p className="mt-6 border-l-2 border-border pl-4 text-left text-caption leading-5 text-foreground-subtle">
+              {SITE_NAME} is for education only and does not replace individualized medical care.
+            </p>
           </div>
         </div>
       </section>
@@ -418,13 +394,15 @@ export default async function Home() {
   );
 }
 
-function FormatCard({
+function FormatLink({
   href,
+  icon: Icon,
   eyebrow,
   title,
   body,
 }: {
   href: string;
+  icon: typeof Mic2;
   eyebrow: string;
   title: string;
   body: string;
@@ -432,25 +410,54 @@ function FormatCard({
   return (
     <Link
       href={href}
-      className="group flex min-h-56 flex-col rounded-2xl border border-border bg-surface p-6 transition-all duration-300 hover:border-primary/50 hover:shadow-glow-sm"
+      className="group grid min-h-44 grid-cols-[2.5rem_1fr_auto] gap-x-4 gap-y-2 py-6 transition-colors hover:bg-surface/45 md:block md:min-h-64 md:px-7 md:py-8"
     >
-      <p className="mb-3 text-caption font-semibold uppercase tracking-wider text-primary">
-        {eyebrow}
-      </p>
-      <h3 className="mb-3 text-heading-lg font-bold text-foreground transition-colors duration-200 group-hover:text-primary">
-        {title}
-      </h3>
-      <p className="flex-1 text-body-sm text-foreground-muted">{body}</p>
-      <div className="mt-5 flex items-center justify-between border-t border-border pt-4">
-        <span className="text-body-sm font-semibold text-primary">Open</span>
-        <svg
-          className="h-4 w-4 text-foreground-muted transition-all duration-200 group-hover:translate-x-1 group-hover:text-primary"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
+      <Icon className="row-span-2 mt-1 h-5 w-5 text-primary md:mb-12" aria-hidden="true" />
+      <div>
+        <p className="mb-1 text-caption font-semibold uppercase text-foreground-subtle">{eyebrow}</p>
+        <h3 className="text-heading font-bold text-foreground group-hover:text-primary">{title}</h3>
+      </div>
+      <ArrowRight
+        className="mt-2 h-4 w-4 text-foreground-subtle transition-transform group-hover:translate-x-1 group-hover:text-primary md:float-right"
+        aria-hidden="true"
+      />
+      <p className="col-start-2 text-body-sm leading-6 text-foreground-muted md:mt-4">{body}</p>
+    </Link>
+  );
+}
+
+function EpisodeCard({ episode }: { episode: Episode }) {
+  return (
+    <Link
+      href={`/episodes/${episode.slug}`}
+      className="group grid min-h-32 grid-cols-[7rem_1fr] overflow-hidden rounded-lg border border-border bg-surface transition-colors hover:border-primary/60 md:block"
+    >
+      <div className="relative min-h-32 overflow-hidden bg-surface-elevated md:aspect-video md:min-h-0">
+        {episode.thumbnailUrl ? (
+          <Image
+            src={localImageUrl(episode.thumbnailUrl) ?? episode.thumbnailUrl}
+            alt=""
+            fill
+            sizes="(min-width: 768px) 33vw, 112px"
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+          />
+        ) : (
+          <div className="flex h-full items-center justify-center text-primary">
+            <Play className="h-6 w-6" aria-hidden="true" />
+          </div>
+        )}
+      </div>
+      <div className="min-w-0 p-4 md:p-5">
+        <div className="mb-2 flex items-center justify-between gap-3 text-caption text-foreground-subtle">
+          <span className="capitalize">{episode.topics[0]?.replaceAll("-", " ")}</span>
+          {episode.durationMinutes && <span>{episode.durationMinutes} min</span>}
+        </div>
+        <h3 className="line-clamp-3 text-body font-semibold leading-6 text-foreground group-hover:text-primary md:line-clamp-2">
+          {episodeDisplayTitle(episode)}
+        </h3>
+        <p className="mt-2 hidden text-body-sm leading-6 text-foreground-muted md:line-clamp-2">
+          {episode.summary}
+        </p>
       </div>
     </Link>
   );

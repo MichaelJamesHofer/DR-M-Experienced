@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 160" role="img" aria-labelledby="title desc">
+  <title id="title">DR. M EXPERIENCED with Dr. David Musnick - Switchback concept</title>
+  <desc id="desc">Horizontal concept lockup using a cyan Switchback M, an amber waypoint, the exact show wordmark, and subordinate host line.</desc>
+  <metadata>status=review; wordmark=DR. M EXPERIENCED; host-line=with Dr. David Musnick</metadata>
+  <style>
+    @font-face { font-family: "Geist Review"; src: url("../../../../src/app/fonts/GeistVF.woff") format("woff"); font-weight: 100 900; }
+    text { font-family: "Geist Review", Inter, Arial, sans-serif; letter-spacing: 0; }
+  </style>
+  <g transform="translate(32 32) scale(1.5)">
+    <path d="M13 50V20L32 43L51 20V50" fill="none" stroke="#22D3EE" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"/>
+    <rect x="48" y="16" width="7" height="7" fill="#F59E0B"/>
+  </g>
+  <text x="160" y="75" fill="#0A0F1A" font-size="44" font-weight="700">DR. M EXPERIENCED</text>
+  <text x="160" y="111" fill="#475569" font-size="20" font-weight="500">with Dr. David Musnick</text>
+</svg>

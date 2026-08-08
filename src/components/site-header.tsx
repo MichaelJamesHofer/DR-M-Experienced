@@ -1,7 +1,9 @@
 'use client';
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { PlatformBadges } from "@/components/platform-badges";
 import { SITE_HOST_LINE, SITE_SHORT_NAME } from "@/lib/site-brand";
@@ -19,30 +21,34 @@ export function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-[var(--header-bg)] backdrop-blur-xl">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 lg:px-6">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent text-lg font-bold text-background shadow-glow-sm group-hover:shadow-glow transition-shadow duration-300">
-            ⛰
-          </span>
-          <div className="hidden sm:block">
-            <p className="text-caption font-semibold uppercase tracking-[0.2em] text-foreground-muted">
-              {SITE_SHORT_NAME},
+    <header className="sticky top-0 z-50 border-b border-border bg-[var(--header-bg)] backdrop-blur-lg">
+      <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-4 lg:px-6">
+        <Link href="/" className="group flex min-h-11 min-w-0 items-center gap-3" aria-label="Dr. M Experienced home">
+          <Image
+            src="/icon.svg"
+            alt=""
+            width={40}
+            height={40}
+            unoptimized
+            className="h-10 w-10 shrink-0 rounded-lg transition-transform duration-200 group-hover:scale-[1.03]"
+          />
+          <div className="min-w-0">
+            <p className="truncate text-sm font-bold text-foreground sm:text-caption sm:font-semibold sm:uppercase">
+              {SITE_SHORT_NAME}<span className="hidden sm:inline">,</span>
             </p>
-            <p className="text-body-sm font-semibold text-foreground leading-tight">
+            <p className="hidden text-body-sm font-semibold leading-tight text-foreground-muted sm:block">
               {SITE_HOST_LINE}
             </p>
           </div>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden items-center gap-8 lg:flex">
+        <nav className="hidden items-center gap-8 xl:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-body-sm font-medium text-foreground-muted hover:text-foreground transition-colors duration-200"
+              className="inline-flex min-h-11 items-center px-1 text-body-sm font-medium text-foreground-muted transition-colors duration-200 hover:text-foreground"
             >
               {link.label}
             </Link>
@@ -50,7 +56,7 @@ export function SiteHeader() {
         </nav>
 
         {/* Desktop Actions */}
-        <div className="hidden items-center gap-4 lg:flex">
+        <div className="hidden items-center gap-4 xl:flex">
           <PlatformBadges variant="compact" />
           <div className="h-5 w-px bg-border" />
           <ThemeToggle />
@@ -60,39 +66,35 @@ export function SiteHeader() {
         <button
           type="button"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="flex h-10 w-10 items-center justify-center rounded-lg text-foreground-muted hover:bg-surface hover:text-foreground transition-colors duration-200 lg:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-lg text-foreground-muted transition-colors duration-200 hover:bg-surface hover:text-foreground xl:hidden"
           aria-label="Toggle menu"
           aria-expanded={mobileMenuOpen}
           aria-controls="mobile-navigation"
         >
           {mobileMenuOpen ? (
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <X className="h-5 w-5" aria-hidden="true" />
           ) : (
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+            <Menu className="h-5 w-5" aria-hidden="true" />
           )}
         </button>
       </div>
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div id="mobile-navigation" className="border-t border-border bg-surface px-4 py-6 lg:hidden animate-fade-in">
-          <nav className="flex flex-col gap-4 mb-6">
+        <div id="mobile-navigation" className="animate-fade-in border-t border-border bg-surface px-4 py-3 xl:hidden">
+          <nav className="divide-y divide-border border-b border-border pb-2">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-body font-medium text-foreground-muted hover:text-foreground transition-colors duration-200"
+                className="flex min-h-12 items-center text-body font-medium text-foreground-muted transition-colors duration-200 hover:text-foreground"
               >
                 {link.label}
               </Link>
             ))}
           </nav>
-          <div className="flex items-center justify-between pt-4 border-t border-border">
+          <div className="flex items-center justify-between py-3">
             <PlatformBadges variant="compact" />
             <ThemeToggle />
           </div>

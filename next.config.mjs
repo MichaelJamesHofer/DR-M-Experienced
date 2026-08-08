@@ -17,6 +17,9 @@ const nextConfig = {
   trailingSlash: true,
   basePath: shouldUseBasePath ? `/${repoName}` : undefined,
   assetPrefix: shouldUseBasePath ? `/${repoName}/` : undefined,
+  env: {
+    NEXT_PUBLIC_SITE_BASE_PATH: shouldUseBasePath ? `/${repoName}` : "",
+  },
   images: {
     unoptimized: true,
   },

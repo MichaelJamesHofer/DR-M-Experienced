@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import { useAnalytics } from '@/components/posthog-provider';
 
 type VimeoPlayerProps = {
   videoId: string;
@@ -18,11 +19,17 @@ export function VimeoPlayer({
   className = '',
   aspectClassName = 'aspect-video',
 }: VimeoPlayerProps) {
+  const { capture } = useAnalytics();
   const [shouldLoad, setShouldLoad] = useState(false);
   const previewImage = thumbnailUrl || `https://vumbnail.com/${videoId}.jpg`;
 
+  function handlePlay() {
+    capture('episode video started', { video_id: videoId });
+    setShouldLoad(true);
+  }
+
   return (
-    <div className={`relative overflow-hidden bg-surface-elevated ${aspectClassName} ${className}`}>
+    <div className={`relative w-full min-w-0 overflow-hidden bg-surface-elevated ${aspectClassName} ${className}`}>
       {shouldLoad ? (
         <iframe
           src={`https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0&badge=0&dnt=1`}
@@ -35,7 +42,7 @@ export function VimeoPlayer({
       ) : (
         <button
           type="button"
-          onClick={() => setShouldLoad(true)}
+          onClick={handlePlay}
           className="group absolute inset-0 flex h-full w-full items-center justify-center bg-surface text-background"
           aria-label={`Play ${title}`}
         >
