@@ -7,9 +7,10 @@ replacement uploads expired before submission and the existing Episode 7 copy
 does not match catalog revision 11; Rumble remains untouched while its written
 automation-permission request is pending. The square set is verified in the
 canonical RSS.com feed and on Spotify. Apple propagation remains pending on the
-directly configured RSS.com listing.
-The logo, show cover, avatar, Reel covers, banners, Open Graph image, and motion
-assets remain planned.
+directly configured RSS.com listing. Show Brand Package `1.0.0-rc1` now contains
+the logo, portrait-free show cover, avatar, YouTube banner, Open Graph image,
+letterhead, lower third, silent sting, and silent end screen as hash-recorded
+review candidates. None is approved or published.
 
 This directory will hold versioned masters, export settings, and a non-secret
 asset manifest for the Dr. M Experienced visual system. Do not commit licensed
@@ -19,7 +20,7 @@ exports are committed or hosted deliberately.
 
 ## Identity
 
-- Primary: `DR. M EXPERIENCED`
+- Primary: `DR. M EXPERIENCED,`
 - Host line: `with Dr. David Musnick`
 - Standalone mark: a simple `M`/mountain-path symbol
 - Do not use `DRM` as the primary name
@@ -81,6 +82,11 @@ exports are committed or hosted deliberately.
 The website catalog, fallback data, and Supabase projection now use the approved
 local artwork. The master catalog remains authoritative, so remote
 `vumbnail.com` URLs cannot overwrite these derivatives during sync or recovery.
+
+The show-level candidate package is documented in
+[`show-package/1.0.0-rc1/README.md`](show-package/1.0.0-rc1/README.md). Its stable
+Dropbox aliases are mounted for integrity checking only; a mount does not grant
+release approval.
 
 Exact website and platform export paths, dimensions, SHA-256 values, generation
 method, and subject concepts are recorded in `asset-manifest.json`. Remote IDs

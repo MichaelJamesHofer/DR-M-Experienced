@@ -1,0 +1,388 @@
+{
+  "schemaVersion": 1,
+  "packageVersion": "1.0.0-rc1",
+  "status": "review_owner_approval_required",
+  "generatedAt": "2026-08-08T20:30:00Z",
+  "show": {
+    "fullTitle": "Dr. M Experienced, with Dr. David Musnick",
+    "shortTitle": "Dr. M Experienced",
+    "displayWordmark": "DR. M EXPERIENCED,",
+    "hostLine": "with Dr. David Musnick"
+  },
+  "direction": {
+    "mark": "Cutline",
+    "rationale": "The strongest premium emblem from Identity Round 01, paired with the approved mountain-path architecture.",
+    "palette": {
+      "midnight": "#0A0F1A",
+      "slate": "#111827",
+      "raised": "#1E293B",
+      "cyan": "#22D3EE",
+      "copper": "#F59E0B",
+      "cloud": "#F1F5F9",
+      "paper": "#F8FAFC",
+      "muted": "#475569"
+    },
+    "wordmark": "Outlined Inter Display geometry for the identity only; Geist remains the product and editorial typeface.",
+    "portraitDependency": false
+  },
+  "sourceArt": {
+    "family": "Layered Cartographic Hero V3",
+    "generationMethod": "Existing OpenAI built-in image generation outputs with documented local restoration and responsive exports.",
+    "sourceBrief": "publishing/brand/concepts/hero-brand-cartography-v3.md"
+  },
+  "approval": {
+    "ownerVisualApprovalRequired": true,
+    "remotePublishingAuthorized": false,
+    "approvedDestinations": [],
+    "decisionRequired": [
+      "Approve or reject the Cutline mark as the show identity.",
+      "Approve or request revision of the exact portrait-free podcast cover.",
+      "Approve the warm amber waypoint as the copper accent.",
+      "Approve the outlined Inter Display wordmark exception to the Geist product type system."
+    ]
+  },
+  "mountedCatalogAssets": {
+    "show-logo-horizontal": {
+      "uri": "dropbox:brand/masters/logo-horizontal.svg",
+      "sizeBytes": 10312,
+      "sha256": "0e2cdac66f4c30240e1fe9d6db0f6ee6f80e4a891c28e746af3c15da3f5d28d9",
+      "width": 1440,
+      "height": 320
+    },
+    "show-logo-stacked": {
+      "uri": "dropbox:brand/masters/logo-stacked.svg",
+      "sizeBytes": 10234,
+      "sha256": "e853d83964198b49c70bad4731cf27fff71748ebf8b4bc763817d6eb56983239",
+      "width": 1000,
+      "height": 1000
+    },
+    "show-logo-mark": {
+      "uri": "dropbox:brand/masters/logo-mark.svg",
+      "sizeBytes": 513,
+      "sha256": "162ea4755a17a356c26b1495a04d96ae58a1985aa86a3065cb3164e90a5ea5b4",
+      "width": 512,
+      "height": 512
+    },
+    "show-avatar": {
+      "uri": "dropbox:brand/masters/avatar.png",
+      "sizeBytes": 66311,
+      "sha256": "13220c2e153700417df901362e5fb9455f88a80effc27fdfcd94b4e557309465",
+      "width": 1200,
+      "height": 1200
+    },
+    "show-podcast-cover": {
+      "uri": "dropbox:brand/masters/podcast-cover-3000x3000.jpg",
+      "sizeBytes": 1067196,
+      "sha256": "fb4a1e2244e7f7d97956043f201d23650e1689f5f30caafdc873207cedcbe596",
+      "width": 3000,
+      "height": 3000
+    },
+    "show-youtube-banner": {
+      "uri": "dropbox:brand/masters/youtube-banner-2560x1440.png",
+      "sizeBytes": 2854854,
+      "sha256": "1ddbfc6a325b1c6b2eb719c6a4015377cd761b5e8b6501c41e8b15a416507797",
+      "width": 2560,
+      "height": 1440
+    },
+    "show-open-graph": {
+      "uri": "dropbox:brand/masters/open-graph-1200x630.jpg",
+      "sizeBytes": 189768,
+      "sha256": "a2494395a02c7682a3214baee87755dedbad4f03d95253c69c7fedf44b576e98",
+      "width": 1200,
+      "height": 630
+    }
+  },
+  "files": [
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/source/avatar-layout.svg",
+      "role": "avatar-layout",
+      "mediaType": "image/svg+xml",
+      "sizeBytes": 1096,
+      "sha256": "cd79efcf88993bbc4cf55f6f29964a9f0bb9515c150cb9f3d3a413abbe1ac07f",
+      "width": 1200,
+      "height": 1200
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/source/end-screen-1920x1080.svg",
+      "role": "end-screen-1920x1080",
+      "mediaType": "image/svg+xml",
+      "sizeBytes": 2091854,
+      "sha256": "aa68532f05a38531312b3bdd096d3959227d62eda096a87e996035426272bf3a",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/source/intro-sting-end-frame.svg",
+      "role": "intro-sting-end-frame",
+      "mediaType": "image/svg+xml",
+      "sizeBytes": 2081545,
+      "sha256": "4b7799bbd1ff9a00c9d22fb5d6b5a3d046858c24a74ccf472c12093d30738737",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/source/letterhead-us-letter.svg",
+      "role": "letterhead-us-letter",
+      "mediaType": "image/svg+xml",
+      "sizeBytes": 31729,
+      "sha256": "11d35f98caa6881d3ddb328603cc0040e2eecf44514e1aa130a1d03683fa738d",
+      "width": 2550,
+      "height": 3300
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/source/logo-horizontal-on-dark.svg",
+      "role": "logo-horizontal-on-dark",
+      "mediaType": "image/svg+xml",
+      "sizeBytes": 10317,
+      "sha256": "760574bc96275b9b643c66cfa074fdc51f0a208eb55672f64e462bfbbd8a2f20",
+      "width": 1440,
+      "height": 320
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/source/logo-horizontal.svg",
+      "role": "logo-horizontal",
+      "mediaType": "image/svg+xml",
+      "sizeBytes": 10312,
+      "sha256": "0e2cdac66f4c30240e1fe9d6db0f6ee6f80e4a891c28e746af3c15da3f5d28d9",
+      "width": 1440,
+      "height": 320
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/source/logo-mark-one-color.svg",
+      "role": "logo-mark-one-color",
+      "mediaType": "image/svg+xml",
+      "sizeBytes": 461,
+      "sha256": "315e6c0f186ae0ccf765ee343bc9d130188b1baa80041b9f5d74c931001cfc9a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/source/logo-mark.svg",
+      "role": "logo-mark",
+      "mediaType": "image/svg+xml",
+      "sizeBytes": 513,
+      "sha256": "162ea4755a17a356c26b1495a04d96ae58a1985aa86a3065cb3164e90a5ea5b4",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/source/logo-stacked-on-dark.svg",
+      "role": "logo-stacked-on-dark",
+      "mediaType": "image/svg+xml",
+      "sizeBytes": 10250,
+      "sha256": "69d3eb18ab6f215f4721cafc9105bf1d010e450e6cbf1d61b7c026d354148556",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/source/logo-stacked.svg",
+      "role": "logo-stacked",
+      "mediaType": "image/svg+xml",
+      "sizeBytes": 10234,
+      "sha256": "e853d83964198b49c70bad4731cf27fff71748ebf8b4bc763817d6eb56983239",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/source/lower-third-1920x1080.svg",
+      "role": "lower-third-1920x1080",
+      "mediaType": "image/svg+xml",
+      "sizeBytes": 11151,
+      "sha256": "cd6140067236757571c96849470087a22235f667156aaf27f5a5e05531edaa00",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/source/open-graph-layout.svg",
+      "role": "open-graph-layout",
+      "mediaType": "image/svg+xml",
+      "sizeBytes": 2094191,
+      "sha256": "7f9b4db26946ca13a2b0e30eb1748e356d1796fe0f93e0e2fc5c753eb84cad54",
+      "width": 1200,
+      "height": 630
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/source/podcast-cover-layout.svg",
+      "role": "podcast-cover-layout",
+      "mediaType": "image/svg+xml",
+      "sizeBytes": 2082065,
+      "sha256": "55304f80e7ddca62c6d328bc514443baded56ad338159bb8af62adff9b848408",
+      "width": 3000,
+      "height": 3000
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/source/youtube-banner-layout.svg",
+      "role": "youtube-banner-layout",
+      "mediaType": "image/svg+xml",
+      "sizeBytes": 2081588,
+      "sha256": "5fc9c8bd870bdad22ef36f4272c2ae7a27612de81a170b19b10e05d90a0c8312",
+      "width": 2560,
+      "height": 1440
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/avatar-1200x1200.png",
+      "role": "avatar-1200x1200",
+      "mediaType": "image/png",
+      "sizeBytes": 66311,
+      "sha256": "13220c2e153700417df901362e5fb9455f88a80effc27fdfcd94b4e557309465",
+      "width": 1200,
+      "height": 1200
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/end-screen-silent-1920x1080.mp4",
+      "role": "end-screen-silent-1920x1080",
+      "mediaType": "video/mp4",
+      "sizeBytes": 595741,
+      "sha256": "10b469acb88f96d3ff49919a596725f338faec982c56c6b435728608cb1af44c"
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/intro-sting-silent-1920x1080.mp4",
+      "role": "intro-sting-silent-1920x1080",
+      "mediaType": "video/mp4",
+      "sizeBytes": 509115,
+      "sha256": "16613826298e6820555e7984f65553d20337f383e8876539f59467999a4ddc9f"
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/letterhead-us-letter.pdf",
+      "role": "letterhead-us-letter",
+      "mediaType": "application/pdf",
+      "sizeBytes": 110832,
+      "sha256": "942a40ca3e5180aaa9e46200b6798f2d38624af94f0c380d403a2a14af5492d0"
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/logo-horizontal-fullcolor-dark-2x.png",
+      "role": "logo-horizontal-fullcolor-dark-2x",
+      "mediaType": "image/png",
+      "sizeBytes": 29001,
+      "sha256": "b4a31736a395f3ad18e475ed7dabb1a995f41ab9b9e09c82863fc9ac40d84fb7",
+      "width": 1440,
+      "height": 320
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/logo-horizontal-fullcolor-light-2x.png",
+      "role": "logo-horizontal-fullcolor-light-2x",
+      "mediaType": "image/png",
+      "sizeBytes": 29015,
+      "sha256": "c4ef72c6a5d7d695bf350037d33f55bbae322f14febf9607cf465ebb51dd2b62",
+      "width": 1440,
+      "height": 320
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/logo-horizontal-fullcolor-light-4x.png",
+      "role": "logo-horizontal-fullcolor-light-4x",
+      "mediaType": "image/png",
+      "sizeBytes": 61376,
+      "sha256": "90beaca88bdffb713f484374428d39acc25a023d61a083a5b1eb6382f759f752",
+      "width": 2880,
+      "height": 640
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/logo-mark-16.png",
+      "role": "logo-mark-16",
+      "mediaType": "image/png",
+      "sizeBytes": 409,
+      "sha256": "1a0483479361f21fde76e74a1d1a72753a57494318f73fec6a4df78ee44f6745",
+      "width": 16,
+      "height": 16
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/logo-mark-180.png",
+      "role": "logo-mark-180",
+      "mediaType": "image/png",
+      "sizeBytes": 3187,
+      "sha256": "23b05374367ea63f923daa69754fe4a22b32d20038988a4910692a8966f7af76",
+      "width": 180,
+      "height": 180
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/logo-mark-24.png",
+      "role": "logo-mark-24",
+      "mediaType": "image/png",
+      "sizeBytes": 597,
+      "sha256": "3912ec13eb04af0bf73a19ce9c56201764a959eac6497461ec8f6e0e01dadadb",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/logo-mark-32.png",
+      "role": "logo-mark-32",
+      "mediaType": "image/png",
+      "sizeBytes": 737,
+      "sha256": "70de9da397aeac60daa0f01ae2ba528493c70ba802624eabe3383dcd68a11fcd",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/logo-mark-48.png",
+      "role": "logo-mark-48",
+      "mediaType": "image/png",
+      "sizeBytes": 1077,
+      "sha256": "bc5eddf6ca92c9c81941dc9d5acd476bcd2d4dd1bd0bff658eff001224b26faa",
+      "width": 48,
+      "height": 48
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/logo-mark-512.png",
+      "role": "logo-mark-512",
+      "mediaType": "image/png",
+      "sizeBytes": 9670,
+      "sha256": "cd65df497134169102e17b3e473f68f44e0f7e676aa25ad2f8ae0ca2a452ae39",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/logo-stacked-fullcolor-dark-2x.png",
+      "role": "logo-stacked-fullcolor-dark-2x",
+      "mediaType": "image/png",
+      "sizeBytes": 35842,
+      "sha256": "9dddf0e23079e86b2da3450d9cc5a5bd363dd6d546d82d86bc5a0a82d3490c18",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/logo-stacked-fullcolor-light-2x.png",
+      "role": "logo-stacked-fullcolor-light-2x",
+      "mediaType": "image/png",
+      "sizeBytes": 35736,
+      "sha256": "6a2d7400206515753cff1508704e462d873983af373a5ae567f91ce643c939f4",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/lower-third-1920x1080.png",
+      "role": "lower-third-1920x1080",
+      "mediaType": "image/png",
+      "sizeBytes": 34020,
+      "sha256": "231eb4c443faef2f67bd426bbf1458a550ae9d8f974a1f121f95d5d10ba86fde",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/open-graph-1200x630.jpg",
+      "role": "open-graph-1200x630",
+      "mediaType": "image/jpeg",
+      "sizeBytes": 189768,
+      "sha256": "a2494395a02c7682a3214baee87755dedbad4f03d95253c69c7fedf44b576e98",
+      "width": 1200,
+      "height": 630
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/podcast-cover-3000x3000.jpg",
+      "role": "podcast-cover-3000x3000",
+      "mediaType": "image/jpeg",
+      "sizeBytes": 1067196,
+      "sha256": "fb4a1e2244e7f7d97956043f201d23650e1689f5f30caafdc873207cedcbe596",
+      "width": 3000,
+      "height": 3000
+    },
+    {
+      "path": "publishing/brand/show-package/1.0.0-rc1/exports/youtube-banner-2560x1440.png",
+      "role": "youtube-banner-2560x1440",
+      "mediaType": "image/png",
+      "sizeBytes": 2854854,
+      "sha256": "1ddbfc6a325b1c6b2eb719c6a4015377cd761b5e8b6501c41e8b15a416507797",
+      "width": 2560,
+      "height": 1440
+    }
+  ]
+}

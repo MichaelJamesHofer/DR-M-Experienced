@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "packageVersion": "1.0.0-rc1",
+  "status": "review_owner_approval_required",
+  "introSting": {
+    "file": "exports/intro-sting-silent-1920x1080.mp4",
+    "durationSeconds": 1.2,
+    "placement": "after the cold open",
+    "audio": "silent",
+    "animation": "0.25 second eased reveal, stable identity hold, 0.25 second exit",
+    "soundVersionGate": "Add only owner-approved, rights-cleared sound in a later revision."
+  },
+  "endScreen": {
+    "file": "exports/end-screen-silent-1920x1080.mp4",
+    "durationSeconds": 7,
+    "overlayRegions": {
+      "nextEpisode": {
+        "x": 320,
+        "y": 390,
+        "width": 700,
+        "height": 394
+      },
+      "subscribe": {
+        "centerX": 1390,
+        "centerY": 585,
+        "diameter": 376
+      }
+    }
+  },
+  "lowerThird": {
+    "file": "exports/lower-third-1920x1080.png",
+    "enterMilliseconds": 220,
+    "exitMilliseconds": 180,
+    "titleSafe": true
+  }
+}
