@@ -1,9 +1,9 @@
 {
   "$schema": "./apple-guid-repair.schema.json",
-  "schemaVersion": 1,
-  "status": "support_mismatch_confirmed_remote_change_blocked",
+  "schemaVersion": 2,
+  "status": "tri_provider_review_pending_remote_change_blocked",
   "discoveredAt": "2026-08-07",
-  "lastVerifiedAt": "2026-08-07",
+  "lastVerifiedAt": "2026-08-08",
   "feedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
   "appleShowId": "1870433419",
   "appleCaseNumber": "20000130526608",
@@ -11,6 +11,32 @@
     "provider": "Apple Podcasts Support",
     "summary": "Apple reported that its existing episode records for Episodes 1 and 2 use historical GUIDs that differ from the current feed GUIDs.",
     "localBaselineLimitation": "The earliest retained Anchor snapshot is from August 5, 2026 and already contains the current feed GUIDs, so it cannot prove the GUIDs Apple ingested when the episodes were first published."
+  },
+  "supportOutreach": {
+    "apple": {
+      "status": "submitted_pending_response",
+      "submittedAt": "2026-08-08T20:18:00Z",
+      "channel": "Apple Podcasts Connect Contact Us",
+      "caseNumber": "20000130526608",
+      "request": "Remap the two existing Apple episode records server-side to the current feed GUIDs while preserving the existing show and episode IDs."
+    },
+    "rssCom": {
+      "status": "sent_pending_response",
+      "submittedAt": "2026-08-08T20:03:00Z",
+      "channel": "email",
+      "recipient": "support@rss.com",
+      "subject": "Apple Episodes 1-2 GUID repair capability - Dr. M Experienced",
+      "request": "Confirm whether import engineering can perform an in-place GUID-only correction without deleting, recreating, or unpublishing either episode."
+    },
+    "spotify": {
+      "status": "advisor_investigating_pending_technical_response",
+      "submittedAt": "2026-08-08T20:08:00Z",
+      "lastFollowedUpAt": "2026-08-08T21:00:00Z",
+      "lastResponseAt": "2026-08-08T21:09:00Z",
+      "channel": "authenticated Spotify support chat",
+      "advisor": "Andrei A.",
+      "request": "Confirm in writing whether the existing Spotify episode IDs, attached videos, and analytics survive either proposed GUID substitution."
+    }
   },
   "episodes": [
     {
@@ -56,9 +82,9 @@
     "Do not toggle GUIDs repeatedly; stop and escalate if any directory creates a duplicate or changes an episode ID."
   ],
   "nextActions": [
-    "Ask Apple whether it can remap the two existing episode records to the current feed GUIDs server-side.",
-    "Ask RSS.com whether import engineering can perform an in-place GUID-only correction without recreating either episode.",
-    "Ask Spotify whether the two existing episode IDs and attached videos can be pinned across the proposed GUID substitutions.",
+    "Await Apple's written response on server-side remapping under case 20000130526608.",
+    "Await RSS.com's written response on a GUID-only in-place correction.",
+    "Await Spotify's written response on preserving episode IDs, attached videos, and analytics.",
     "If a feed change remains necessary, capture a full baseline and use one attended episode as a canary before changing the second."
   ]
 }
