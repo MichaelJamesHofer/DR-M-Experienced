@@ -85,6 +85,11 @@ Interpretation on August 8, 2026:
   remain pending in
   `publishing/episode-description-correction.json`; do not report global parity
   until that receipt is complete.
+- Catalog revision 12 mounts the exact portrait-free Show Brand Package
+  `1.0.0-rc1` binaries in Dropbox for local verification. The package remains
+  `review_owner_approval_required`; no website or platform received these
+  show-level assets, and the existing podcast-cover `publishedUrl` was not
+  changed.
 - Local publishing browser: normally stopped when not in active use.
 - GitHub connector: authenticated with admin/push access to this repository.
   Otto's local `gh` credential currently needs attended reauthentication; use
@@ -840,12 +845,16 @@ platform.
 Use one visual system with purpose-built compositions. Do not build a website
 splash gate or one universal splash image.
 
+The authoritative visual and verbal standard is
+`publishing/brand/media-design-guide.md`. The current show-level review package
+is `publishing/brand/show-package/1.0.0-rc1/`.
+
 ### Required Asset Family
 
 | Asset | Master/output | Use |
 |---|---|---|
 | Master logo | Vector plus transparent PNG | Wordmark, stacked lockup, standalone mark |
-| Social avatar | 1200 x 1200 master | Real approved headshot, circle-safe |
+| Social avatar | 1200 x 1200 master | Standalone identity mark, circle-safe |
 | Podcast show cover | 3000 x 3000 JPG, RGB | RSS.com, Spotify, Apple, Amazon |
 | Long-video thumbnail | 3840 x 2160 master; 1920 x 1080 derivative | YouTube, Vimeo, Rumble, website |
 | Reel cover | 1080 x 1920 master with center-safe focal area | Instagram |
@@ -857,14 +866,14 @@ splash gate or one universal splash image.
 
 ### Direction
 
-- Use `DR. M EXPERIENCED` prominently and `with Dr. David Musnick` as the host
+- Use `DR. M EXPERIENCED,` prominently and `with Dr. David Musnick` as the host
   line. Retire `DRM`, which reads as an unrelated acronym.
-- Prefer an approved high-resolution real head-and-shoulders photograph for
-  medical credibility. The existing sketch is acceptable only as an interim
-  asset.
-- A simplified `M`/mountain-path mark may retain the current motif, but the name
-  and host should carry the identity.
-- Use a restrained charcoal, white, cyan, and amber palette with strong contrast.
+- Use portraits only when Dr. Musnick is the subject, such as the homepage host
+  section or press biography. Do not make his face the show identity.
+- The Cutline `M`/mountain-path mark is the production candidate, but remains
+  unapproved until the owner approves its exact package hashes.
+- Use Midnight `#0A0F1A`, Signal Cyan `#22D3EE`, Warm Amber `#F59E0B`, Cloud
+  `#F1F5F9`, and the documented supporting slate values.
 - Thumbnail copy should be four to seven words focused on the topic/outcome, not
   the full show name. Keep the small episode number only as an index if desired.
 - Start long-form videos with the useful hook, then a very short sting. Reels
@@ -872,17 +881,19 @@ splash gate or one universal splash image.
 
 ### Current Gaps
 
-- Podcast art still uses the retired `DRM EXPERIENCED` design.
-- YouTube uses a generic `D`; Vimeo/Instagram use the sketch; Rumble lacks a
-  verified channel image.
-- Completed for episode artwork: YouTube, Vimeo, Rumble, Spotify video, Spotify
-  episode art, and the canonical RSS all use the seven approved topic images.
-  Apple now points directly to RSS.com, but its episode art and five-to-seven
-  episode convergence remain to be verified. Existing Instagram Reel covers
-  remain unchanged.
+- Live podcast art still uses the retired `DRM EXPERIENCED` design. The
+  portrait-free `1.0.0-rc1` replacement is hash-verified but not owner-approved.
+- YouTube still uses a generic `D`; Vimeo/Instagram use the sketch; Rumble lacks
+  a verified channel image. The candidate avatar/banner package is local only.
+- Completed for episode artwork: YouTube, Vimeo, Spotify video, Spotify episode
+  art, and the canonical RSS all use the seven approved topic images. Rumble's
+  exact files remain verified locally but unsubmitted. Apple now points directly
+  to RSS.com, but its episode art and five-to-seven episode convergence remain
+  to be verified. Existing Instagram Reel covers remain unchanged.
 - Website header/footer use a mountain emoji while favicon SVGs use a different
   mountain treatment.
-- The website has no default Open Graph image.
+- The website has no deployed default Open Graph image; the package now contains
+  a 1200 x 630 candidate.
 - Completed for the website: all seven episodes use checked-in 1600 x 900 WebP
   artwork registered in the master catalog, fallback data, and Supabase
   projection. Production Supabase matches catalog revision 10 for all seven
@@ -1187,10 +1198,13 @@ Quarterly:
    ID/URL.
 6. Reconcile Instagram captions that use old numbered titles, add the missing
    website link, and apply approved covers to future Reels; preserve existing
-   posts and engagement. The RSS.com, website, YouTube, Vimeo, existing Rumble,
-   and Spotify episode-art batch is complete.
-7. Produce and approve the logo, show cover, avatar, Reel, banner, OG, sting,
-   and end-screen system. Website and direct-platform episode art is complete.
+   posts and engagement. The RSS.com, website, YouTube, Vimeo, and Spotify
+   episode-art batch is complete. Rumble remains excluded until its permission
+   and human-rights-review gates are resolved.
+7. Review and approve or revise Show Brand Package `1.0.0-rc1`, then perform a
+   separately authorized coordinated rollout of its logo, cover, avatar,
+   banner, OG, sting, and end-screen system. Website and direct-platform episode
+   art is complete.
 8. Completed for episode art: master-catalog ownership prevents website sync
    scripts from overwriting approved custom thumbnails, and the rollout receipt
    records every direct-platform ID and RSS artwork URL.

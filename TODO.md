@@ -76,7 +76,8 @@ Based on analysis of top-tier health content creators (Huberman Lab, Peter Attia
 ## Remaining Optional Enhancements
 - [x] Add actual YouTube/Spotify/Apple links
 - [ ] Approve one Round 01 logo direction (Switchback, Cutline, Waypoint Steps, or none)
-- [ ] After logo selection, produce and approve the outlined logo family, podcast cover, avatar, banners, Open Graph image, letterhead, lower third, sting, and end-screen exports
+- [x] Produce and hash-verify Cutline Show Brand Package `1.0.0-rc1`, including the outlined logo family, portrait-free podcast cover, avatar, YouTube banner, Open Graph image, letterhead, lower third, silent sting, and silent end screen; keep it review-only
+- [ ] Approve or revise the exact `1.0.0-rc1` package, then record approved hashes and destinations before any coordinated rollout
 - [ ] Approve the V3 layered desktop/tablet/mobile cartographic hero exports and promote their hashes from review status into the brand asset manifest
 - [x] Add explicit PostHog page-leave capture and a tested production deploy guard for a missing project key
 - [x] Configure the production PostHog Actions key and authorize the apex/`www` production URLs
@@ -119,6 +120,8 @@ seven current RSS audio URLs, YouTube IDs, and `Watch on YouTube` references.
 The guarded Episode 7 editorial correction and independent production readback
 match catalog revision 11; the public website deployment and mobile readback are
 verified at merge `a291990`.
+Catalog revision 12 is the current metadata authority and mounts the review-only
+show brand package; revision 11 remains the dated Episode 7 correction receipt.
 The website apex has recovered to HTTP 200 and `www` redirects to it.
 Apple support, Podcast Index convergence, Amazon onboarding, RSS.com's cached
 landing-page token, Instagram's missing website link, Rumble's manual rights/Terms

@@ -8,12 +8,14 @@ The approved cross-platform removal of visible `Episode N:` title prefixes is
 recorded in `publishing/episode-title-migration.json`; that file remains the
 dated revision-10 transition evidence. The later Episode 7 description
 correction is tracked separately in
-`publishing/episode-description-correction.json`. At revision 11, RSS.com,
-Spotify fanout, YouTube, Vimeo, and the production Supabase editorial readback
-are verified current. The public website deployment and 320/390-pixel mobile
-readback are also verified; Apple cache convergence and Rumble's manual reupload
-remain pending. Keep `episodeNumber` required in the manifest and RSS metadata,
-and preserve every GUID and remote content ID.
+`publishing/episode-description-correction.json`. Revision 11 records the dated
+Episode 7 correction: RSS.com, Spotify fanout, YouTube, Vimeo, and the production
+Supabase editorial readback are verified current. The public website deployment
+and 320/390-pixel mobile readback are also verified; Apple cache convergence and
+Rumble's manual reupload remain pending. Catalog revision 12 mounts the exact
+Show Brand Package `1.0.0-rc1` hashes for local review without granting remote
+publishing approval. Keep `episodeNumber` required in the manifest and RSS
+metadata, and preserve every GUID and remote content ID.
 
 ## Master catalog and binary assets
 
