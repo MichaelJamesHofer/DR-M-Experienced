@@ -31,6 +31,7 @@ import {
   normalizeManifest,
   packetIntegrityProblems,
   publisherHome,
+  releaseApprovalProblems,
   renderApprovalPacket,
   resolveAssetPaths,
   reviewDocumentProblems,
@@ -302,6 +303,7 @@ async function approve(jobId, args) {
       "destination_id_required",
       "destination_id_invalid",
       "release_choices_required",
+      "release_policy_violation",
       "host_publish_dependency_missing",
     ].includes(target.readiness)
   );
@@ -311,6 +313,11 @@ async function approve(jobId, args) {
         .map((target) => `${target.label}: ${target.readiness}`)
         .join("\n- ")}`
     );
+  }
+
+  const releaseProblems = releaseApprovalProblems(packet.snapshot.manifest);
+  if (releaseProblems.length) {
+    throw new Error(`Review cannot be attested while release controls remain unresolved or unsafe:\n- ${releaseProblems.join("\n- ")}`);
   }
 
   const assetProblems = await verifySnapshotAssets(packet.snapshot);
@@ -619,7 +626,10 @@ async function doctor() {
         : "configured";
     process.stdout.write(`- ${id} stable destination IDs: ${identityStatus}\n`);
   }
-  process.stdout.write(`- Spotify video replacement: manual browser step\n- Rumble VOD upload: manual browser step\n`);
+  process.stdout.write(
+    "- Spotify video replacement: manual browser step\n" +
+      "- Rumble VOD submission: human-only; automated site interaction is prohibited absent prior written permission; see publishing/rumble-release-policy.json\n"
+  );
 
   const rssHealthy =
     rss.reachable &&

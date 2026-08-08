@@ -69,8 +69,10 @@ Interpretation on August 7, 2026:
   videos are verified in place on their stable IDs. Spotify's seven corrected
   videos are attached to the existing episode IDs, and public readback confirms
   video, approved artwork, and approved copy for 7/7. Rumble's seven corrected
-  uploads are staged Unlisted but not submitted pending user ownership
-  confirmation and updated Terms review.
+  uploads are staged Unlisted with non-exclusive Option C selected but not
+  submitted. All seven have hidden YouTube syndication enabled, so the batch is
+  blocked on manual correction, third-party asset-rights review, and specific
+  acknowledgment of the July 21, 2026 Terms provisions.
   Vimeo represents catalog lists as rich-text bullets;
   YouTube replaces forbidden angle brackets with equivalent comparison words.
 - Local publishing browser: normally stopped when not in active use.
@@ -243,7 +245,7 @@ have been tested against draft/private items.
 | YouTube | channel `UCFA1nVv4lKMBlx81gjMAOFQ`, uploads playlist `UUFA1nVv4lKMBlx81gjMAOFQ` | Seven normalized replacements are public with exact catalog copy and approved thumbnails; the prior seven uploads remain unlisted with replacement links and are retained for rollback. API automation auth/audit remains incomplete |
 | Vimeo | user `253415660` | Seven corrected videos were replaced in place and verified on their stable IDs; off-catalog public video `Pesto v2` still requires owner review; future API upload token remains incomplete |
 | Instagram | `@drmexperienced`, public profile ID `80068141150` | Public state independently confirms the exact name/bio and Creator professional classification, with `is_business_account` false. The website link, authenticated Graph API publishing ID, and API authorization remain incomplete; Business conversion is neither required nor desired |
-| Rumble | account `282015440`, channel `7820170` | Seven corrected uploads are staged Unlisted and not submitted; ownership confirmation, updated Terms review, and exact release choices require attended user approval |
+| Rumble | account `282015440`, channel `7820170` | Seven corrected uploads are staged Unlisted with Option C selected and not submitted. Hidden YouTube syndication is on for all seven. The batch is blocked until the user manually disables it, rechecks every nonexclusive release control, reviews third-party asset rights and the July 21 Terms, completes the rights/Terms attestations, and submits |
 
 Mutable profile URLs are stored in `publishing/platforms.json`; they are not a
 substitute for stable IDs. Unknown IDs remain `null` until authenticated evidence
@@ -270,6 +272,12 @@ For an approved task, it should:
 A logged-in tab is permission to inspect and assist within the user's request.
 It is not permission to publish broadly, delete, subscribe, spend money, accept
 terms, or reuse credentials elsewhere.
+
+Rumble is an exception to the normal browser-assistance workflow. Its Terms last
+modified July 21, 2026 prohibit automated software access or interaction absent
+Rumble's prior written permission. The assistant may prepare local assets,
+metadata, and a manual checklist, but must not connect browser automation to
+Rumble, inspect or edit its forms through scripts, check attestations, or submit.
 
 ## 7. Workstation Tooling
 
@@ -327,8 +335,13 @@ State and log: `~/.local/state/drm-publisher/browser/`
 
 Loopback endpoint: port `9223`, only while `open` is active
 
-Allowed scopes: `rss`, `spotify`, `apple`, `amazon`, `youtube`, `vimeo`,
+Wrapper-recognized scopes: `rss`, `spotify`, `apple`, `amazon`, `youtube`, `vimeo`,
 `instagram`, `rumble`, `supabase`
+
+The wrapper recognizes the `rumble` name only to reject `connect rumble` and
+`reauth rumble`; future wrapper launches do not open Rumble automatically. Keep
+an existing or manually opened Rumble tab in the DRM profile for direct human
+use and leave the bridge disconnected.
 
 `login` and `open` are different modes; both open the assigned dashboards in
 both isolated profiles. Close the sign-in-only browser before using `open`.
@@ -499,8 +512,9 @@ After Spotify, Vimeo, YouTube, and Rumble references are verified:
   an uploaded media file while preserving its ID; the approved YouTube cutover
   therefore published seven new normalized IDs and moved the prior seven to
   Unlisted without deleting them. Rumble's seven corrected uploads are staged
-  Unlisted but not submitted pending user ownership confirmation, updated Terms
-  review, and approval of the exact release choices.
+  Unlisted with Option C selected but not submitted. Hidden YouTube syndication
+  is on for all seven, so they remain blocked on the manual release checklist in
+  the Rumble section below.
 
 ### Apple Podcasts
 
@@ -583,13 +597,35 @@ After Spotify, Vimeo, YouTube, and Rumble references are verified:
 
 ### Rumble
 
-- Direct full-video upload through the attended local browser.
+- Direct human full-video upload only. Do not use browser automation, CDP, or a
+  script against Rumble without Rumble's prior written permission.
 - Preserve channel `7820170`.
-- Seven corrected uploads are staged Unlisted but have not been submitted. Stop
-  until the user confirms ownership, reviews the updated Terms, and approves the
-  exact licensing, visibility, monetization, and distribution choices.
-- Treat license, monetization, distribution rights, and public/unlisted state as
-  explicit release decisions. No supported public creator VOD API is confirmed.
+- Rumble's [Terms](https://rumble.com/s/terms), last modified July 21, 2026,
+  prohibit automated software access or interaction absent prior written
+  permission. This applies to inspection and form preparation as well as
+  checkbox attestation and submission.
+- The only permitted license is Option C, `Rumble Only (non-exclusive, similar
+  to YouTube)` (`rumble_only_option_c`). Rumble's official [licensing
+  explanation](https://rumble.support/help/a-simple-explanation-of-the-differences-between-licensing-options)
+  describes it as non-exclusive. Never use Option A `Video Management` or Option
+  B `Video Management (excluding YouTube)`; both are exclusive agency choices.
+  `Personal Use` is not a permitted project release mode.
+- Initial visibility must be Unlisted. Premium/exclusive placement must be off.
+  YouTube, Vimeo, Facebook, and every other additional-syndication control must
+  be off. The user manually verifies those values on every upload.
+- Option C remains subject to the Terms' separate General License, including
+  AI/ML training and third-party AI sublicensing provisions. The Terms'
+  third-party-material requirements require a human review of all incorporated
+  music, footage, graphics, and other assets. Do not infer that the user has
+  acknowledged the newly surfaced provisions or completed that rights review.
+- Current blocker: 7/7 corrected uploads are staged Unlisted with Option C,
+  Vimeo/Facebook syndication off, and no submission, but hidden YouTube
+  syndication is on for all seven. Premium state was not verified and remains an
+  open manual gate. For each tab, the user must expand Additional Syndication,
+  turn YouTube off, reverify Option C and Unlisted, verify Premium is off, review
+  asset rights and the July 21 Terms, directly check the rights and Terms boxes,
+  and submit. Record the resulting ID and URL without an
+  automated signed-in readback.
 - Current seven titles and descriptions are verified; the existing episode 5
   URL slug remains misleading but must be preserved with the same video ID.
 
@@ -970,7 +1006,8 @@ Chrome.
   available. For initial multi-account setup, use `drm-browser login` instead.
 - The user completes password, MFA, CAPTCHA, agreements, and identity checks.
 - After the authenticated dashboard is visible, connect to that platform; do
-  not restart the browser merely to restore the automation bridge.
+  not restart the browser merely to restore the automation bridge. For Rumble,
+  do not reconnect the bridge; the user continues manually in the open tab.
 - For keyring, follow Section 7; never save the desktop password.
 
 ### Wrong Account Or Stable-ID Mismatch
@@ -1134,7 +1171,8 @@ Quarterly:
     separately validated Spotify derivative. RSS.com normalized audio, Spotify
     7/7 video restoration, YouTube's normalized-video cutover, and Vimeo's
     in-place replacements are complete. Rumble's seven corrected uploads remain
-    staged Unlisted and unsubmitted pending attended confirmations.
+    staged Unlisted with Option C and unsubmitted because hidden YouTube
+    syndication remains on; complete the direct-human checklist in Section 9.
 
 ## 18. Official References
 
@@ -1165,11 +1203,23 @@ Quarterly:
 - YouTube replace/delete limits: <https://support.google.com/youtube/answer/55770>
 - Rumble upload/edit: <https://rumble.support/help/upload-and-edit-content>
 - Rumble video thumbnails: <https://rumble.support/help/changing-a-thumbnail>
+- Rumble licensing choices: <https://rumble.support/help/a-simple-explanation-of-the-differences-between-licensing-options>
+- Rumble licensing comparison: <https://rumble.com/s/licensing-comparison.html>
+- Rumble Terms, last modified July 21, 2026: <https://rumble.com/s/terms>
 - Spotify video thumbnails: <https://support.spotify.com/us/creators/article/thumbnails/>
 - Spotify episode cover art: <https://support.spotify.com/us/creators/article/uploading-cover-art/>
 
 ## 19. Change Log
 
+- August 7, 2026: audited all seven staged Rumble replacements. Each is
+  Unlisted and uses non-exclusive Option C, with Vimeo/Facebook syndication off,
+  but the hidden YouTube syndication switch is on for all seven. Premium state
+  was not verified and remains an open manual gate.
+  No upload was submitted. Recorded a manual-only, fail-closed policy because
+  the July 21 Terms prohibit automated software interaction without prior
+  written permission and include General License AI/ML and third-party AI
+  sublicensing provisions. Human third-party asset review and specific Terms
+  acknowledgment remain open; no acknowledgment was inferred.
 - August 7, 2026: Apple Support case `20000130526608` confirmed that the
   existing Apple records for Episodes 1-2 use historical GUIDs different from
   the current feed. Recorded the exact Apple episode ID/current GUID/historical
@@ -1183,8 +1233,9 @@ Quarterly:
   gates passed. Attached corrected video to all seven existing Spotify episode
   IDs and verified public video, approved art, and approved copy for 7/7.
   Replaced all seven Vimeo videos in place on their stable IDs. Staged seven
-  corrected Rumble uploads Unlisted without submitting them; ownership and
-  updated Terms confirmations remain attended user gates.
+  corrected Rumble uploads Unlisted without submitting them. The later release
+  audit above identified the hidden YouTube-syndication blocker and the remaining
+  human-only rights/Terms gates.
 - August 7, 2026: applied the guarded RSS-audio and YouTube-destination SQL files
   in production Supabase after verifying each exact file hash. Seven-row readback
   matches catalog revision 10 for all current RSS audio URLs, YouTube IDs, and

@@ -1079,7 +1079,7 @@
     "spotifyVideo": "Public readback confirms corrected video, approved artwork, and approved copy for 7/7 existing episode IDs. For a future video episode, attach the approved full video only after RSS ingestion; there is no account-wide video toggle. Leave intentionally audio-only episodes as RSS audio only.",
     "vimeo": "All seven corrected videos were replaced in place and verified on their stable Vimeo IDs; prefer the same in-place version workflow for future corrections when available.",
     "youtube": "All seven normalized replacements are public with exact approved metadata and thumbnails. The prior seven uploads remain unlisted, link to their replacements, and are retained as rollback records; none were deleted.",
-    "rumble": "Seven corrected uploads are staged Unlisted but are not submitted pending user ownership confirmation and updated Terms review. Do not infer publication or submit without those attended confirmations.",
+    "rumble": "Seven corrected uploads are staged Unlisted with non-exclusive Option C but remain unsubmitted. The August 7 form audit found hidden YouTube syndication enabled on all seven, Vimeo/Facebook syndication off, and Premium state unverified. Direct human correction, rights/Terms review, and submission are tracked in publishing/rumble-release-policy.json; do not automate Rumble or infer publication.",
     "instagram": "Existing Reels are outside RSS fan-out and require a separate repost decision if affected."
   },
   "remoteReplacement": {

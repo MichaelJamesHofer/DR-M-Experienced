@@ -65,7 +65,7 @@
         "youtube": { "$ref": "#/$defs/releaseTarget" },
         "vimeo": { "$ref": "#/$defs/releaseTarget" },
         "instagram": { "$ref": "#/$defs/releaseTarget" },
-        "rumble": { "$ref": "#/$defs/releaseTarget" }
+        "rumble": { "$ref": "#/$defs/rumbleReleaseTarget" }
       }
     },
     "targets": {
@@ -152,6 +152,58 @@
         "license": { "type": "string", "minLength": 1, "maxLength": 200, "pattern": "\\S" },
         "monetization": { "enum": ["enabled", "disabled", "unchanged", "not_applicable", "not_selected"] },
         "notifications": { "enum": ["enabled", "disabled", "not_applicable", "not_selected"] }
+      }
+    },
+    "rumbleReleaseTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "releaseMode",
+        "initialVisibility",
+        "finalVisibility",
+        "license",
+        "monetization",
+        "notifications",
+        "syndication",
+        "premiumExclusive",
+        "termsRevision",
+        "humanAttestation"
+      ],
+      "properties": {
+        "releaseMode": { "enum": ["hold", "publish_now", "scheduled"] },
+        "initialVisibility": { "enum": ["unlisted", "not_selected"] },
+        "finalVisibility": { "enum": ["unlisted", "public", "not_selected"] },
+        "license": { "enum": ["rumble_only_option_c", "not_selected"] },
+        "monetization": { "enum": ["enabled", "not_selected"] },
+        "notifications": { "enum": ["enabled", "disabled", "not_selected"] },
+        "syndication": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["youtube", "vimeo", "facebook"],
+          "properties": {
+            "youtube": { "enum": [false, "not_selected"] },
+            "vimeo": { "enum": [false, "not_selected"] },
+            "facebook": { "enum": [false, "not_selected"] }
+          }
+        },
+        "premiumExclusive": { "enum": [false, "not_selected"] },
+        "termsRevision": { "enum": ["2026-07-21", "not_selected"] },
+        "humanAttestation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "termsAcceptance",
+            "rightsConfirmation",
+            "aiMlLicenseAcknowledgement",
+            "thirdPartyRightsConfirmation"
+          ],
+          "properties": {
+            "termsAcceptance": { "const": "human_only_not_recorded" },
+            "rightsConfirmation": { "const": "human_only_not_recorded" },
+            "aiMlLicenseAcknowledgement": { "const": "human_only_not_recorded" },
+            "thirdPartyRightsConfirmation": { "const": "human_only_not_recorded" }
+          }
+        }
       }
     }
   }

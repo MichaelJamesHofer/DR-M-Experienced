@@ -130,7 +130,10 @@ high-bitrate source as its master binding. The audit ledger binds that derivativ
 to its immutable receipt. RSS.com's normalized audio replacement, Spotify's 7/7
 video restoration, YouTube's normalized-video cutover, and Vimeo's seven in-place
 replacements are verified. Rumble's seven corrected uploads remain staged
-Unlisted and unsubmitted pending attended ownership and Terms confirmations.
+Unlisted with Option C selected, but all seven have hidden YouTube syndication
+enabled. They remain unsubmitted and blocked on manual syndication correction,
+third-party asset-rights review, and specific acknowledgment of the July 21,
+2026 Terms provisions described below.
 
 ## Distribution model
 
@@ -140,7 +143,42 @@ Unlisted and unsubmitted pending attended ownership and Terms confirmations.
 - Both guarded Supabase migrations were applied in production on August 7 after exact SQL-file hash verification. Seven-row readback matches catalog revision 10 for current RSS.com audio URLs, YouTube IDs, and `Watch on YouTube` references.
 - YouTube's seven normalized replacements are public and cataloged; the prior seven uploads remain Unlisted with replacement links and explicit rollback records. Vimeo's seven corrected videos are verified in place on their stable IDs. YouTube, Vimeo, and Instagram have official API routes, but each still needs account authorization and platform-specific setup for future automation.
 - Instagram should use resumable upload from the approved local Reel. A short-lived public staging URL is fallback-only and must be removed after Meta finishes processing.
-- Rumble VOD and Spotify's optional replace-with-video action remain manual browser steps because no supported public creator-upload API is available for those flows. Rumble currently has seven corrected uploads staged Unlisted and not submitted pending user ownership confirmation and updated Terms review.
+- Spotify's optional replace-with-video action remains a manual browser step because no supported public creator-upload API is available for that flow. Rumble is human-operated only under the current Terms: seven corrected uploads are staged Unlisted with Option C selected, but all seven have hidden YouTube syndication enabled and remain unsubmitted.
+
+## Rumble manual nonexclusive guard
+
+Rumble's [Terms](https://rumble.com/s/terms), last modified July 21, 2026,
+prohibit automated software access or interaction without Rumble's prior written
+permission. Do not connect the Chrome DevTools bridge to Rumble, drive the site
+with scripts, or automate inspection, editing, checkbox attestations, or
+submission. A logged-in Rumble tab is for direct human use only unless Rumble
+provides written permission.
+
+This project's only permitted Rumble license is Option C, `Rumble Only
+(non-exclusive, similar to YouTube)`, represented in manifests as
+`rumble_only_option_c`. Rumble's official [licensing
+explanation](https://rumble.support/help/a-simple-explanation-of-the-differences-between-licensing-options)
+describes that option as non-exclusive. Never select Option A `Video Management`
+or Option B `Video Management (excluding YouTube)`; both grant exclusive agency
+rights. `Personal Use` is also outside this project's release policy. Keep the
+initial visibility Unlisted, Premium/exclusive placement off, and YouTube,
+Vimeo, Facebook, and every other additional-syndication control off.
+
+Option C does not remove the Terms' separate General License. The July 21 Terms
+include AI/ML training rights and third-party AI sublicensing rights, and their
+third-party-material provisions require a human review of every music, footage,
+graphic, and other incorporated asset. Do not record those provisions as
+acknowledged or the asset rights as cleared until the user explicitly confirms
+both after review.
+
+The August 7 audit found 7/7 corrected uploads staged Unlisted with Option C,
+Vimeo/Facebook syndication off, and no submission. The hidden YouTube syndication
+switch was on for all seven; Premium state was not verified and remains an open
+manual gate. Before each manual submission, the user must expand Additional
+Syndication, turn YouTube off, reverify Option C and Unlisted, verify Premium is
+off, complete the rights review, directly
+check the rights and July 21 Terms boxes, and click submit. Record the resulting
+ID/URL afterward without reopening Rumble through automation.
 
 The live phase must always begin from an unchanged, integrity-checked job. The current local review record is self-reported attribution, not identity authentication, and explicitly grants neither upload nor release authority. Future upload adapters must require a separate user-presence-backed authorization, create private or draft content where supported, record returned IDs and URLs, and require another explicit confirmation before public release.
 
@@ -148,7 +186,15 @@ The live phase must always begin from an unchanged, integrity-checked job. The c
 
 ## Browser bridge
 
-The workstation has a pinned local Chrome DevTools bridge for Spotify, Rumble, and account settings that do not expose a suitable API. It uses the isolated Chrome data directory `~/.local/share/drm-publisher/chrome-profile`; it never attaches to Otto's normal Chrome data. Inside that directory, `Default` is `drmexperienced@gmail.com` for every publishing platform and `Profile 1` is `ottotheautonomous@gmail.com` for GitHub and Supabase. Never sign out the DRM identity or copy authentication material between profiles.
+The workstation has a pinned local Chrome DevTools bridge for Spotify and other
+account settings that permit this access. It uses the isolated Chrome data
+directory `~/.local/share/drm-publisher/chrome-profile`; it never attaches to
+Otto's normal Chrome data. Inside that directory, `Default` is
+`drmexperienced@gmail.com` for every publishing platform and `Profile 1` is
+`ottotheautonomous@gmail.com` for GitHub and Supabase. Never sign out the DRM
+identity or copy authentication material between profiles. Rumble is an explicit
+exception: keep its tabs in the DRM profile but do not connect the automation
+bridge without Rumble's prior written permission.
 
 ```bash
 # One time: sign in to the assigned project dashboards in both isolated
@@ -165,9 +211,9 @@ drm-browser disconnect
 drm-browser close
 ```
 
-The `login` command does not expose a debugging endpoint. The `open` command exposes one only on loopback for this isolated data directory. `identities` validates the exact account-to-profile mapping. `connect` accepts `rss`, `spotify`, `apple`, `amazon`, `youtube`, `vimeo`, `instagram`, `rumble`, or `supabase`; it stops the previous bridge, preserves tabs and sessions in both profiles, activates the requested dashboard in its assigned profile, and restricts the new bridge to that scope. The bridge also redacts sensitive network headers, disables usage statistics and external update/CrUX lookups, and omits network, performance, and extension tooling. Disconnect when unattended. `drm-browser close` closes both isolated-profile windows and verifies that the debugging endpoint is gone without signing either account out.
+The `login` command does not expose a debugging endpoint. The `open` command exposes one only on loopback for this isolated data directory. `identities` validates the exact account-to-profile mapping. For permitted platforms, `connect` stops the previous bridge, preserves tabs and sessions in both profiles, activates the requested dashboard in its assigned profile, and restricts the new bridge to that scope. The wrapper rejects both `connect rumble` and `reauth rumble`, and future wrapper launches do not open Rumble automatically; use an already-open or manually opened tab directly. The bridge also redacts sensitive network headers, disables usage statistics and external update/CrUX lookups, and omits network, performance, and extension tooling. Disconnect when unattended. `drm-browser close` closes both isolated-profile windows and verifies that the debugging endpoint is gone without signing either account out.
 
-Browser access is not a release authorization. Default automation behavior is to inspect, fill, and save a draft/private item where the platform supports one. Instagram has no durable private publishing draft, and Rumble's best documented review state is unlisted; both require an explicit final-action confirmation.
+Browser access is not a release authorization. Default automation behavior is to inspect, fill, and save a draft/private item where the platform permits it. Instagram has no durable private publishing draft and requires an explicit final-action confirmation. Rumble is manual-only under the July 21 Terms; the user performs its site interactions, factual attestations, Terms acceptance, and submission directly.
 
 ## One-time account work
 
@@ -181,7 +227,9 @@ Browser access is not a release authorization. Default automation behavior is to
 6. Create a Google OAuth desktop client, enable YouTube Data API v3, and complete YouTube's upload compliance audit before public API uploads.
 7. Create or confirm a Vimeo API app with upload access and an own-account token carrying `upload` and `edit` scopes.
 8. Confirm Instagram is a professional account, create the Meta app, authorize content-publishing permissions, and configure resumable local upload. Configure temporary public staging only as a fallback.
-9. Keep Rumble and Spotify browser sessions local. Do not export cookies or passwords into this repository.
+9. Keep Rumble and Spotify browser sessions local. Do not export cookies or
+   passwords into this repository. Do not attach automation to Rumble absent
+   written permission; use the manual nonexclusive checklist above.
 10. Completed August 7, 2026: replaced the seven quiet RSS audio masters while
     preserving GUIDs, then restored corrected video to the seven existing Spotify
     episode identities without duplicates. Keep this identity-preserving sequence
