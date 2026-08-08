@@ -60,7 +60,7 @@ Short-form items are never added to the episode catalog or RSS feed. Follow
 `docs/short-form-content-system.md` for reconciliation, API setup, and recovery.
 All three current Instagram shorts now have verified Vimeo IDs: `1216695521`,
 `1216695522`, and `1204939542`. Vimeo title, description, and poster state match
-the canonical catalog; the three website routes are prepared but not deployed.
+the canonical catalog; all three website routes are deployed and verified.
 
 Dropbox stores large binaries; it is not a metadata database. Map only the
 synced Dr. M project folder, never an entire personal Dropbox, in the ignored
@@ -191,7 +191,8 @@ August 8.
   readback match catalog revision 11. GitHub Pages deployment `31276520368` and
   the public-page desktop/mobile readback are verified in
   `publishing/episode-description-correction.json`.
-- The three short-form website routes remain source-ready and await deployment.
+- The three short-form website routes are deployed, sitemap-indexed, and verified
+  at 320, 390, and 1440 pixels with exact Vimeo playback bindings.
 - Production PostHog ingestion is verified: a POST to `https://us.i.posthog.com/e/` returned 200, and refreshed Installation Health passes `$pageview`, `$pageleave`, scroll depth, and authorized URLs. Dashboard `1086989`, `Dr. M Growth Dashboard`, has a privacy-safe description and verified DAU, WAU, growth-accounting, retention, referring-domain, and pageview-funnel tiles. Reverse proxy remains the only explicit configuration recommendation and is not configured.
 - YouTube's seven normalized replacements are public and cataloged; the prior seven uploads remain Unlisted with replacement links and explicit rollback records. Vimeo's seven corrected episode videos are verified in place, and all three short recovery copies are verified as `1216695521`, `1216695522`, and `1204939542` with canonical metadata/posters. Vimeo's private API app still needs the owner's legal-attestation checkbox and an upload/edit token.
 - Instagram should use resumable upload from the approved local Reel. Its website-link editor is mobile-only, and Meta API setup currently waits for the owner's Facebook developer login. A short-lived public staging URL is fallback-only and must be removed after Meta finishes processing.
@@ -294,7 +295,7 @@ Browser access is not a release authorization. Default automation behavior is to
 5. Submit the canonical RSS.com feed once to Amazon and record the stable show ID and URL.
 6. Create a Google OAuth desktop client, enable YouTube Data API v3, and complete YouTube's upload compliance audit before public API uploads.
 7. The private Vimeo API app is prepared. The owner must complete Vimeo's legal-attestation checkbox, then create an own-account token carrying `upload` and `edit` scopes.
-8. Instagram is confirmed as a Creator professional account. Add the website link through its mobile-only editor, then have the owner complete Facebook developer login before Meta app authorization and resumable-upload setup. Configure temporary public staging only as a fallback. All three current Reels already have verified Vimeo recovery IDs and canonical posters; deploy their prepared website routes separately.
+8. Instagram is confirmed as a Creator professional account. Add the website link through its mobile-only editor, then have the owner complete Facebook developer login before Meta app authorization and resumable-upload setup. Configure temporary public staging only as a fallback. All three current Reels have verified Vimeo recovery IDs, canonical posters, and deployed website routes.
 9. Keep Rumble and Spotify browser sessions local. Do not export cookies or
    passwords into this repository. Do not attach automation to Rumble absent
    written permission; use the manual nonexclusive checklist above.

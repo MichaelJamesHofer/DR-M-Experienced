@@ -45,22 +45,21 @@ review before a replacement or new upload.
 
 ## Verified public inventory
 
-| Stable content ID | Canonical title | Instagram | Vimeo | Local master |
-|---|---|---|---|---|
-| `short-brain-fog-what-it-feels-like` | What Brain Fog Really Feels Like | media `3818274203859121888`, Reel `DT9PCiID3bg` | Short not uploaded | `dropbox:Dr.M Podcast/Episode 1 - Brain Fog - Part 1/Insta/Dr. M - EP1 - Brain Fog Part 1 - Rev. 1.mov` |
-| `short-brain-fog-testing-and-basic-solutions` | Brain Fog: Testing and Foundational Support | media `3818276316521641998`, Reel `DT9PhRsjzgO` | Short not uploaded | `dropbox:Dr.M Podcast/Episode 1 - Brain Fog - Part 2/Insta/Dr. M - EP1 - Brain Fog Part 2 - Insta - Rev. 1.mov` |
-| `short-cilantro-basil-pesto` | Cilantro-Basil Pesto with Broccoli Sprouts | media `3928186163131134659`, Reel `DaDuIDBCTLD` | video `1204939542` | `dropbox:Insta Shorts/renamed/recipes/Pesto/Pesto v2.mp4` |
+| Stable content ID | Canonical title | Instagram | Vimeo | Website | Local master |
+|---|---|---|---|---|---|
+| `short-brain-fog-what-it-feels-like` | What Brain Fog Really Feels Like | media `3818274203859121888`, Reel `DT9PCiID3bg` | video `1216695521` | `/shorts/what-brain-fog-feels-like/` | `dropbox:Dr.M Podcast/Episode 1 - Brain Fog - Part 1/Insta/Dr. M - EP1 - Brain Fog Part 1 - Rev. 1.mov` |
+| `short-brain-fog-testing-and-basic-solutions` | Brain Fog: Testing and Foundational Support | media `3818276316521641998`, Reel `DT9PhRsjzgO` | video `1216695522` | `/shorts/brain-fog-testing-and-basic-solutions/` | `dropbox:Dr.M Podcast/Episode 1 - Brain Fog - Part 2/Insta/Dr. M - EP1 - Brain Fog Part 2 - Insta - Rev. 1.mov` |
+| `short-cilantro-basil-pesto` | Cilantro-Basil Pesto with Broccoli Sprouts | media `3928186163131134659`, Reel `DaDuIDBCTLD` | video `1204939542` | `/shorts/cilantro-basil-pesto-with-broccoli-sprouts/` | `dropbox:Insta Shorts/renamed/recipes/Pesto/Pesto v2.mp4` |
 
 The three public Instagram durations match their local masters within normal
 platform-transcode tolerance. Their captions are distinct; no duplicate caption
 was found. The Pesto Reel and Vimeo video are the same 143.936-second vertical
 edit. `Pesto.mp4` is a different prior render and is not the bound master.
 
-The current Vimeo title `Pesto v2` and empty description do not match the
-canonical item. The catalog records those observed values as drift and holds the
-approved target title and description. The checked-in posters were captured from
-the three public Instagram posts so the website does not depend on expiring CDN
-URLs.
+All three Vimeo copies now match the catalog's canonical title, description, and
+selected poster. The checked-in posters were captured from the three public
+Instagram posts so the website does not depend on expiring CDN URLs. All three
+website routes were deployed and independently verified on August 8, 2026.
 
 ## Website behavior
 
@@ -76,8 +75,8 @@ switches from the poster/link state to Vimeo playback without changing its URL.
 
 ## Authenticated actions still required
 
-No remote account was changed during the August 8 reconciliation. Complete
-these attended actions in this order:
+Vimeo reconciliation and website deployment are complete. The remaining setup
+work is for future publishing automation:
 
 1. In Instagram Edit Profile, add `https://drmexperienced.com/` as the external
    website. Leave the account as a Creator professional account.
@@ -92,15 +91,9 @@ these attended actions in this order:
 4. Confirm read-only access first. Instagram has no durable private publishing
    draft, so do not call `media_publish` until the exact asset, caption, and
    public release are approved.
-5. In Vimeo, edit video `1204939542` in place to the catalog's canonical Pesto
-   title and description, then set the checked-in Pesto poster as its thumbnail.
-   Preserve the stable video ID and public/embed behavior.
-6. Upload the two verified Brain Fog short masters to Vimeo using their catalog
-   target copy and posters. Record the returned IDs and URLs; do not replace or
-   duplicate the full podcast episode videos.
-7. Independently read back Vimeo and Instagram, update each destination's
-   verification timestamp and metadata parity, increment the catalog revision,
-   and deploy the website.
+5. In Vimeo's developer portal, the owner must accept the Developer Addendum and
+   Terms before creating the prepared private app. Then create an own-account
+   upload/edit token under `~/.config/drm-publisher/`; never commit the token.
 
 The alternative Meta flow, Instagram API with Instagram Login, does not require
 a linked Facebook Page. It uses an Instagram User token and the

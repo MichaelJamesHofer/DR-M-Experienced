@@ -176,6 +176,12 @@ export function validateShortFormCatalog(catalog) {
     if (website?.path !== `/shorts/${item.slug}/`) {
       errors.push(`${prefix} website path must be /shorts/${item.slug}/`);
     }
+    if (
+      website?.state === "published" &&
+      website.url !== `https://drmexperienced.com${website.path}`
+    ) {
+      errors.push(`${prefix} website URL does not match its canonical path`);
+    }
     if (instagram?.url !== `https://www.instagram.com/reel/${instagram?.shortcode}/`) {
       errors.push(`${prefix} Instagram URL does not match its shortcode`);
     }
@@ -287,10 +293,15 @@ export function validateShortFormPlatformRegistry(catalog, platformRegistry) {
     );
   }
   const registryAuditedAt = Date.parse(vimeo.shortStateAuditedAt);
+  const latestVimeoVerification = Math.max(
+    ...publishedVimeo
+      .map((item) => Date.parse(item.destinations.vimeo.verifiedAt))
+      .filter(Number.isFinite)
+  );
   if (!Number.isFinite(registryAuditedAt)) {
     errors.push("Vimeo registry shortStateAuditedAt must be a valid date-time");
-  } else if (registryAuditedAt < Date.parse(catalog?.lastVerifiedAt)) {
-    errors.push("Vimeo registry shortStateAuditedAt is older than catalog lastVerifiedAt");
+  } else if (registryAuditedAt < latestVimeoVerification) {
+    errors.push("Vimeo registry shortStateAuditedAt is older than the latest Vimeo verification");
   }
 
   return { valid: errors.length === 0, errors };

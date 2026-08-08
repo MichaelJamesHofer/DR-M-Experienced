@@ -1,8 +1,8 @@
 {
   "$schema": "./short-form-catalog.schema.json",
   "schemaVersion": 2,
-  "revision": 2,
-  "lastVerifiedAt": "2026-08-08T20:43:49Z",
+  "revision": 3,
+  "lastVerifiedAt": "2026-08-08T21:49:06Z",
   "authority": {
     "metadata": "publishing/short-form-catalog.json",
     "binaryMaster": "fingerprinted_project_dropbox_asset",
@@ -88,8 +88,10 @@
           "posterParity": true
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/what-brain-fog-feels-like/"
+          "state": "published",
+          "path": "/shorts/what-brain-fog-feels-like/",
+          "url": "https://drmexperienced.com/shorts/what-brain-fog-feels-like/",
+          "verifiedAt": "2026-08-08T21:49:06Z"
         }
       }
     },
@@ -172,8 +174,10 @@
           "posterParity": true
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/brain-fog-testing-and-basic-solutions/"
+          "state": "published",
+          "path": "/shorts/brain-fog-testing-and-basic-solutions/",
+          "url": "https://drmexperienced.com/shorts/brain-fog-testing-and-basic-solutions/",
+          "verifiedAt": "2026-08-08T21:49:06Z"
         }
       }
     },
@@ -276,8 +280,10 @@
           "posterParity": true
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/cilantro-basil-pesto-with-broccoli-sprouts/"
+          "state": "published",
+          "path": "/shorts/cilantro-basil-pesto-with-broccoli-sprouts/",
+          "url": "https://drmexperienced.com/shorts/cilantro-basil-pesto-with-broccoli-sprouts/",
+          "verifiedAt": "2026-08-08T21:49:06Z"
         }
       }
     }
