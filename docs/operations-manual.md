@@ -79,7 +79,8 @@ Interpretation on August 8, 2026:
   Episode 6 copy. RSS.com, Spotify fanout, YouTube video `5UOEvs59hBA`, and
   Vimeo video `1205004739` now match the corrected description. Production
   Supabase also passed the guarded migration and independent editorial readback.
-  Apple cache convergence, Rumble's manual reupload, and the website deployment
+  The public website deployment at merge `a291990` passed GitHub Pages and
+  desktop/mobile readback. Apple cache convergence and Rumble's manual reupload
   remain pending in
   `publishing/episode-description-correction.json`; do not report global parity
   until that receipt is complete.

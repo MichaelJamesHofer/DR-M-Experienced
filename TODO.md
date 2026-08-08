@@ -115,7 +115,8 @@ RSS.com is canonical, the legacy Anchor feed redirects, Apple is configured
 directly to RSS.com, and production Supabase matches catalog revision 10 for all
 seven current RSS audio URLs, YouTube IDs, and `Watch on YouTube` references.
 The guarded Episode 7 editorial correction and independent production readback
-match catalog revision 11; website deployment remains pending.
+match catalog revision 11; the public website deployment and mobile readback are
+verified at merge `a291990`.
 The website apex has recovered to HTTP 200 and `www` redirects to it.
 Apple support, Podcast Index convergence, Amazon onboarding, RSS.com's cached
 landing-page token, Instagram's missing website link, Rumble's manual rights/Terms
