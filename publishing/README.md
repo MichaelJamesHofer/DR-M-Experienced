@@ -138,14 +138,17 @@ Every direct destination needs a `releasePlan` entry. The example deliberately u
 
 `receipt` appends a private, immutable, hash-bound result for one approved job,
 platform, and deterministic operation ID. Use the same operation ID as a request
-moves through `accepted`, `processing`, `published`, `verified`, `failed`, or
-`superseded`; `published` and `verified` require a remote ID or HTTPS URL. The
-command rejects stale packet bindings, duplicate status records, conflicting
-remote IDs, and replacement of an active published/verified operation before a
-`superseded` receipt. `receipts` validates and lists the ledger, while `status`
-shows its latest per-destination state. These commands record evidence only:
-they do not grant upload/release authority, call platform APIs, or perform remote
-reconciliation. Live adapters and automatic reconciliation remain incomplete.
+moves from `accepted` through `processing`, `published`, and `verified`;
+`failed` and `superseded` are terminal. Every nonterminal state blocks a second
+operation for that platform. `published` and `verified` require a remote ID or
+HTTPS URL, while `verified` also requires meaningful typed readback evidence.
+The command rejects stale bindings, invalid platform URLs, remote identity
+drift, duplicate or regressive states, and concurrent duplicate writes. It
+revalidates the entire ledger on every read. `receipts` lists the ledger, while
+`status` shows its latest per-destination state. These commands record evidence
+only: they do not grant upload/release authority, call platform APIs, or perform
+remote reconciliation. Live adapters and automatic reconciliation remain
+incomplete.
 
 The baseline and completed remote loudness audit is recorded in
 `publishing/audio-replacement-audit.json`. The prior seven RSS enclosures were
@@ -182,7 +185,7 @@ August 8.
 
 - The supported RSS.com import is complete at `https://media.rss.com/dr-m-experienced/feed.xml`; all seven GUIDs, media files, and artwork assets passed parity. Preserve every imported identity.
 - The legacy Anchor URL now returns one HTTP 301 hop to RSS.com. Preserve that redirect and Spotify show `7GGLljxmO0G3FLjPy8vfcw` for RSS audio ingestion, video replacement, analytics, and continuity. All seven corrected videos are attached to the existing episode IDs and publicly verified. There is no account-wide video switch; for future video episodes, use the RSS-ingested episode's `Upload video` action after its corrected master is approved, while leaving intentionally audio-only episodes alone.
-- Apple show `1870433419` is configured directly to RSS.com with exact metadata, but still exposes five Available episodes. The duplicate show and stale manual Episode 4 Draft are archived. Apple case `20000130526608` confirmed that its existing Episode 1-2 records use historical GUIDs that differ from the current feed. Follow-up requests to Apple for a server-side remap, RSS.com for in-place GUID-only capability, and Spotify for episode-ID/video/analytics preservation are submitted and pending. `publishing/apple-guid-repair.json` records the blocked crosswalk and gates. No live GUID changed, and no change is authorized while responses are pending. Submit the RSS.com feed once to Amazon and never create duplicate directory listings.
+- Apple show `1870433419` is configured directly to RSS.com with exact metadata, but still exposes five Available episodes. The duplicate show and stale manual Episode 4 Draft are archived. Apple case `20000130526608` confirmed that its existing Episode 1-2 records use historical GUIDs that differ from the current feed. Follow-up requests to Apple for a server-side remap, RSS.com for in-place GUID-only capability, and Spotify for episode-ID/video/analytics preservation are submitted. Spotify has acknowledged the request and is checking internally; Apple and RSS.com remain pending. `publishing/apple-guid-repair.json` records the blocked crosswalk and gates. No live GUID changed, and no change is authorized while responses are pending. Submit the RSS.com feed once to Amazon and never create duplicate directory listings.
 - Both guarded Supabase migrations were applied in production on August 7 after exact SQL-file hash verification. Seven-row readback matches catalog revision 10 for current RSS.com audio URLs, YouTube IDs, and `Watch on YouTube` references.
 - The guarded August 8 Episode 7 editorial migration and independent production
   readback match catalog revision 11. GitHub Pages deployment `31276520368` and
@@ -287,7 +290,7 @@ Browser access is not a release authorization. Default automation behavior is to
    Apple cache,
    as recorded in `publishing/episode-description-correction.json`.
 3. Completed: the supported RSS.com import passed exact GUID, metadata, media, artwork, and edge-audio validation, and the Anchor redirect returns the expected 301.
-4. Apple show `1870433419` is configured directly to RSS.com. Duplicate cleanup and one feed refresh are complete. Apple case `20000130526608` identified a historical GUID mismatch for Episodes 1-2. The Apple, RSS.com, and Spotify support requests are submitted and pending; follow `publishing/apple-guid-repair.json`, make no live GUID change, and do not replace the show or recreate episodes.
+4. Apple show `1870433419` is configured directly to RSS.com. Duplicate cleanup and one feed refresh are complete. Apple case `20000130526608` identified a historical GUID mismatch for Episodes 1-2. Apple and RSS.com support requests are pending; Spotify has acknowledged its request and is investigating internally. Follow `publishing/apple-guid-repair.json`, make no live GUID change, and do not replace the show or recreate episodes.
 5. Submit the canonical RSS.com feed once to Amazon and record the stable show ID and URL.
 6. Create a Google OAuth desktop client, enable YouTube Data API v3, and complete YouTube's upload compliance audit before public API uploads.
 7. The private Vimeo API app is prepared. The owner must complete Vimeo's legal-attestation checkbox, then create an own-account token carrying `upload` and `edit` scopes.

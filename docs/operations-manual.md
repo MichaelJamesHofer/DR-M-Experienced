@@ -61,8 +61,10 @@ Interpretation on August 8, 2026:
   and repair gates are recorded in `publishing/apple-guid-repair.json`; no live
   GUID change is approved. Follow-up requests are now submitted to Apple for a
   server-side remap, RSS.com for in-place GUID-only capability, and Spotify for
-  preservation of episode IDs, attached videos, and analytics. All three are
-  pending; no provider has been asked to perform a live GUID change.
+  preservation of episode IDs, attached videos, and analytics. Apple and
+  RSS.com are pending; Spotify has acknowledged the request and its advisor is
+  checking the ingestion behavior internally. No provider has been asked to
+  perform a live GUID change.
 - Both guarded Supabase migrations were applied in production after exact SQL
   file-hash verification. Seven-row readback matches catalog revision 10 for
   current RSS.com audio URLs, YouTube IDs, and `Watch on YouTube` references.
@@ -349,14 +351,18 @@ changed input or catalog/manifest drift invalidates approval.
 `receipt` writes a new immutable JSON file under the private job's `receipts/`
 directory and binds it to the job, approval hash, catalog, destination plan,
 asset, approved copy, release plan, platform, and deterministic operation ID.
-Use the same operation ID as one request advances through states. `published`
-and `verified` require a remote ID or HTTPS URL; conflicting remote IDs and
-duplicate status receipts fail closed. Record `superseded` before replacing an
-active published/verified operation. `receipts` validates and lists the ledger;
-`status` shows the latest receipt per destination. The self-reported `--by`
-value and confirmation phrase are evidence controls, not identity or release
-authorization. Current live adapters do not yet create these receipts or run
-remote reconciliation automatically.
+Use the same operation ID as one request advances from `accepted` through
+`processing`, `published`, and `verified`; `failed` and `superseded` are
+terminal. Every nonterminal state blocks a second operation for that platform
+until the first is failed or superseded. `published` and `verified` require a
+remote ID or HTTPS URL, and `verified` also requires meaningful typed readback
+evidence. The command validates platform URL origins and stable-ID bindings,
+rejects remote identity drift and duplicate or regressive states, serializes
+writes with a per-job lock, and revalidates the entire ledger on every read.
+`receipts` lists the ledger; `status` shows the latest receipt per destination.
+The self-reported `--by` value and confirmation phrase are evidence controls,
+not identity or release authorization. Current live adapters do not yet create
+these receipts or run remote reconciliation automatically.
 
 ### Isolated Browser
 
