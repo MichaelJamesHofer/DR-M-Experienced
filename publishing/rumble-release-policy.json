@@ -1,8 +1,8 @@
 {
   "$schema": "./rumble-release-policy.schema.json",
-  "revision": 1,
+  "revision": 2,
   "platform": "rumble",
-  "status": "blocked_manual_corrections_and_acknowledgment_required",
+  "status": "blocked_manual_restaging_and_rights_review_required",
   "terms": {
     "url": "https://rumble.com/s/terms",
     "lastModified": "2026-07-21",
@@ -42,13 +42,13 @@
     "july21TermsGeneralAcceptanceConfirmed": true
   },
   "actionGates": {
-    "optionCSelectedAll": true,
-    "unlistedAll": true,
+    "optionCSelectedAll": false,
+    "unlistedAll": false,
     "youtubeSyndicationDisabledAll": false,
-    "vimeoSyndicationDisabledAll": true,
-    "facebookSyndicationDisabledAll": true,
+    "vimeoSyndicationDisabledAll": false,
+    "facebookSyndicationDisabledAll": false,
     "premiumExclusiveDisabledAll": false,
-    "aiMlGeneralLicenseAcknowledged": false,
+    "aiMlGeneralLicenseAcknowledged": true,
     "thirdPartyAssetRightsReviewed": false,
     "allFormsReverified": false,
     "humanRightsAttestationCompletedAll": false,

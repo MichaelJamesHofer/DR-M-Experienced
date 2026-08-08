@@ -68,11 +68,12 @@ Interpretation on August 8, 2026:
   directly playable, and linked to their replacements. Vimeo's seven corrected
   videos are verified in place on their stable IDs. Spotify's seven corrected
   videos are attached to the existing episode IDs, and public readback confirms
-  video, approved artwork, and approved copy for 7/7. Rumble's seven corrected
-  uploads are staged Unlisted with non-exclusive Option C selected but not
-  submitted. All seven have hidden YouTube syndication enabled, so the batch is
-  blocked on manual correction, third-party asset-rights review, and specific
-  acknowledgment of the July 21, 2026 Terms provisions.
+  video, approved artwork, and approved copy for 7/7. Rumble's exact seven
+  corrected videos and thumbnails remain locally verified and unsubmitted. The
+  August 8 cache reset invalidated their staged forms, so the batch is blocked
+  on manual restaging, release-control verification, and third-party asset-rights
+  review. The user explicitly accepted the July 21, 2026 Terms provisions on
+  August 8.
   Vimeo represents catalog lists as rich-text bullets;
   YouTube replaces forbidden angle brackets with equivalent comparison words.
 - Catalog revision 11 corrects Episode 7's description, which had duplicated
@@ -254,7 +255,7 @@ have been tested against draft/private items.
 | YouTube | channel `UCFA1nVv4lKMBlx81gjMAOFQ`, uploads playlist `UUFA1nVv4lKMBlx81gjMAOFQ` | Seven normalized replacements are public with exact catalog copy and approved thumbnails; the prior seven uploads remain unlisted with replacement links and are retained for rollback. API automation auth/audit remains incomplete |
 | Vimeo | user `253415660` | Seven corrected videos were replaced in place and verified on their stable IDs; off-catalog public video `Pesto v2` still requires owner review; future API upload token remains incomplete |
 | Instagram | `@drmexperienced`, public profile ID `80068141150` | Public state independently confirms the exact name/bio and Creator professional classification, with `is_business_account` false. The website link, authenticated Graph API publishing ID, and API authorization remain incomplete; Business conversion is neither required nor desired |
-| Rumble | account `282015440`, channel `7820170` | Seven corrected uploads are staged Unlisted with Option C selected and not submitted. Hidden YouTube syndication is on for all seven. The batch is blocked until the user manually disables it, rechecks every nonexclusive release control, reviews third-party asset rights and the July 21 Terms, completes the rights/Terms attestations, and submits |
+| Rumble | account `282015440`, channel `7820170` | The exact seven corrected videos and thumbnails are locally verified, but the August 8 cache reset invalidated the staged forms. The batch is blocked until a human restages it with Option C, Unlisted, all syndication off, and Premium off; reviews third-party asset rights; completes the on-site rights/Terms controls; and submits |
 
 Mutable profile URLs are stored in `publishing/platforms.json`; they are not a
 substitute for stable IDs. Unknown IDs remain `null` until authenticated evidence
@@ -520,10 +521,10 @@ After Spotify, Vimeo, YouTube, and Rumble references are verified:
   prefer that version workflow for future corrections. YouTube cannot replace
   an uploaded media file while preserving its ID; the approved YouTube cutover
   therefore published seven new normalized IDs and moved the prior seven to
-  Unlisted without deleting them. Rumble's seven corrected uploads are staged
-  Unlisted with Option C selected but not submitted. Hidden YouTube syndication
-  is on for all seven, so they remain blocked on the manual release checklist in
-  the Rumble section below.
+  Unlisted without deleting them. Rumble's exact seven corrected videos and
+  thumbnails remain locally verified, but the cache reset invalidated the
+  staged forms. They remain blocked on the manual restaging and release
+  checklist in the Rumble section below.
 
 ### Apple Podcasts
 
@@ -623,18 +624,17 @@ After Spotify, Vimeo, YouTube, and Rumble references are verified:
   YouTube, Vimeo, Facebook, and every other additional-syndication control must
   be off. The user manually verifies those values on every upload.
 - Option C remains subject to the Terms' separate General License, including
-  AI/ML training and third-party AI sublicensing provisions. The Terms'
-  third-party-material requirements require a human review of all incorporated
-  music, footage, graphics, and other assets. Do not infer that the user has
-  acknowledged the newly surfaced provisions or completed that rights review.
-- Current blocker: 7/7 corrected uploads are staged Unlisted with Option C,
-  Vimeo/Facebook syndication off, and no submission, but hidden YouTube
-  syndication is on for all seven. Premium state was not verified and remains an
-  open manual gate. For each tab, the user must expand Additional Syndication,
-  turn YouTube off, reverify Option C and Unlisted, verify Premium is off, review
-  asset rights and the July 21 Terms, directly check the rights and Terms boxes,
-  and submit. Record the resulting ID and URL without an
-  automated signed-in readback.
+  AI/ML training and third-party AI sublicensing provisions. The user explicitly
+  accepted those provisions on August 8, 2026. The Terms' third-party-material
+  requirements separately require a human review of all incorporated music,
+  footage, graphics, and other assets; Terms acceptance is not rights clearance.
+- Current blocker: the August 7 audit found 7/7 corrected uploads staged
+  Unlisted with Option C, Vimeo/Facebook syndication off, hidden YouTube
+  syndication on, and Premium unverified. The August 8 cache reset invalidated
+  those forms. Each upload now requires direct-human restaging, all syndication
+  off, Option C and Unlisted reverified, Premium off, asset-rights review, and
+  the on-site rights and Terms controls. Record the resulting ID and URL without
+  an automated signed-in readback.
 - The August 5 revision-10 title/description readback remains historical
   evidence. Current Rumble description parity is false: existing Episode 7
   video `v7bvtu4` still needs the revision-11 description during its manual
@@ -1186,9 +1186,9 @@ Quarterly:
     podcast-audio assets after full-file validation, and register Episode 5's
     separately validated Spotify derivative. RSS.com normalized audio, Spotify
     7/7 video restoration, YouTube's normalized-video cutover, and Vimeo's
-    in-place replacements are complete. Rumble's seven corrected uploads remain
-    staged Unlisted with Option C and unsubmitted because hidden YouTube
-    syndication remains on; complete the direct-human checklist in Section 9.
+    in-place replacements are complete. Rumble's exact seven corrected assets
+    remain locally verified and unsubmitted, but require manual restaging after
+    the cache reset; complete the direct-human checklist in Section 9.
 
 ## 18. Official References
 
@@ -1234,8 +1234,14 @@ Quarterly:
   No upload was submitted. Recorded a manual-only, fail-closed policy because
   the July 21 Terms prohibit automated software interaction without prior
   written permission and include General License AI/ML and third-party AI
-  sublicensing provisions. Human third-party asset review and specific Terms
-  acknowledgment remain open; no acknowledgment was inferred.
+  sublicensing provisions. At that audit, human third-party asset review and
+  specific Terms acknowledgment remained open; no acknowledgment was inferred.
+- August 8, 2026: the user explicitly accepted the Rumble Terms last modified
+  July 21, including the General License AI/ML training and third-party AI
+  sublicensing provision, for the exact seven corrected videos. This did not
+  clear third-party asset rights or provide Rumble's written automation
+  permission. The browser cache reset invalidated the staged forms; all seven
+  source videos and thumbnails remain hash-verified locally.
 - August 7, 2026: Apple Support case `20000130526608` confirmed that the
   existing Apple records for Episodes 1-2 use historical GUIDs different from
   the current feed. Recorded the exact Apple episode ID/current GUID/historical

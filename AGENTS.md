@@ -112,15 +112,17 @@ checks now report video, exact copy, and approved artwork for all seven.
   release. Start Unlisted, keep Premium/exclusive placement off, and disable all
   additional syndication, especially the hidden YouTube switch. The August 7
   audit found all seven corrected uploads staged Unlisted with Option C but
-  YouTube syndication enabled, so they remain blocked and unsubmitted.
+  YouTube syndication enabled. The August 8 cache reset invalidated those forms;
+  the exact local assets remain verified, blocked, and unsubmitted.
 - Rumble's Terms last modified July 21, 2026 prohibit automated software access
   or interaction without Rumble's prior written permission. Do not connect a
   browser automation bridge to Rumble or automate form inspection, editing,
   checkbox attestation, or submission. A human must review every episode's
-  original/third-party asset rights, acknowledge the Terms' general-license
-  AI/ML training and third-party AI sublicensing provisions, turn syndication
-  off, check the rights and Terms boxes, and submit. Do not infer that the user
-  has acknowledged a newly surfaced provision.
+  original/third-party asset rights, turn syndication off, check the rights and
+  Terms boxes, and submit. On August 8, 2026, the user explicitly accepted the
+  Terms last modified July 21, including the general-license AI/ML training and
+  third-party AI sublicensing provisions. That acceptance is not an asset-rights
+  attestation and does not grant Rumble's required written automation permission.
 - `publishing/master-catalog.json` revision 11 is the current distribution
   metadata authority. Supabase remains the production authority for website-only
   editorial content; overlapping identity/title/audio fields are verified

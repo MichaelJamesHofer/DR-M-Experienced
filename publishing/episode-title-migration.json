@@ -132,8 +132,8 @@
       "projection": "deterministic plain text",
       "normalizedVideoReplacementStatus": "seven_unlisted_uploads_staged_not_submitted",
       "submissionBlockedBy": [
-        "user ownership attestation",
-        "user acceptance of Rumble Terms updated July 21, 2026"
+        "human third-party asset-rights review and ownership attestation",
+        "manual form restaging and release-control verification after cache reset"
       ]
     }
   },

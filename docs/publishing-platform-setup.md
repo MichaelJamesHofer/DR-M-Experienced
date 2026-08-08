@@ -1,6 +1,6 @@
 # Publishing platform setup
 
-Last verified: August 7, 2026.
+Last verified: August 8, 2026.
 
 The local publisher uses official upload interfaces where they exist, RSS fan-out for podcast directories, and explicit browser handoffs where a supported public creator-upload API is unavailable. Credentials stay outside the repository under `~/.config/drm-publisher/` with owner-only permissions.
 
@@ -17,7 +17,7 @@ The local publisher uses official upload interfaces where they exist, RSS fan-ou
 | YouTube | Direct full-video upload; OAuth 2 plus resumable Data API for future automation | Seven normalized replacements are public and verified. The prior seven uploads remain Unlisted with replacement links and are retained as rollback records; future API automation still needs OAuth and the applicable compliance audit |
 | Vimeo | Vimeo API tus upload or attended in-place version replacement | All seven corrected videos were replaced in place and verified on their stable existing IDs. App upload access and an upload/edit-scoped token are still required for future API automation |
 | Instagram | Creator professional-account API with resumable local upload | Public profile state independently confirms `@drmexperienced` is a Creator professional account and not a Business account. Name/bio are exact, but the external website link, authenticated Graph API publishing ID, Meta app permissions, and token remain incomplete; no Business-account conversion is required |
-| Rumble | Direct human browser use only | Seven corrected uploads are staged Unlisted with Option C selected but not submitted. The hidden YouTube syndication switch is on for all seven, so submission is blocked on manually disabling it, rechecking every release control, human third-party asset-rights review, and specific acknowledgment of the July 21, 2026 Terms provisions. Automated site interaction is prohibited absent Rumble's prior written permission |
+| Rumble | Direct human browser use only | The cache reset invalidated the seven staged browser forms, so they require manual restaging. The exact videos and thumbnails remain locally verified. The user accepted the July 21, 2026 Terms provisions on August 8; submission remains blocked on manual restaging with Option C, all syndication off, Premium off, human third-party asset-rights review, and the on-site controls. Automated site interaction is prohibited absent Rumble's prior written permission |
 
 ## Remote rebrand status
 
@@ -34,9 +34,9 @@ The canonical short profile description is `Dr. M Experienced, with Dr. David Mu
 
 YouTube's seven normalized public replacements, Vimeo's seven in-place corrected
 videos, Spotify's seven corrected video attachments, and the existing Rumble
-videos use approved topic thumbnails. Rumble's seven new corrected uploads are
-staged Unlisted with Option C selected and not submitted; hidden YouTube
-syndication is currently on for all seven. The canonical RSS exposes seven unique
+videos use approved topic thumbnails. Rumble's seven exact corrected video and
+thumbnail pairs remain locally verified and unsubmitted; the cache reset
+invalidated their staged forms. The canonical RSS exposes seven unique
 3000 x 3000 item images.
 YouTube uses a safe plain-text projection that spells out comparison
 operators because Studio rejects angle brackets. Vimeo stores list items as
@@ -68,19 +68,19 @@ Premium/exclusive placement off and disable YouTube, Vimeo, Facebook, and every
 other additional-syndication control. Initial visibility is always Unlisted.
 
 Option C remains subject to the Terms' General License, including AI/ML training
-and third-party AI sublicensing provisions. The Terms' third-party-material
-requirements also need a human review of all music, footage, graphics, and other
-incorporated assets. The user has not yet acknowledged these newly surfaced
-provisions in the current record, so do not infer acceptance or rights clearance.
+and third-party AI sublicensing provisions. The user explicitly accepted those
+provisions on August 8, 2026. The Terms' third-party-material requirements still
+need a human review of all music, footage, graphics, and other incorporated
+assets; Terms acceptance is not rights clearance.
 
 The August 7 form audit found 7/7 corrected uploads staged Unlisted with Option
 C and Vimeo/Facebook syndication off, but hidden YouTube syndication on. Premium
-state was not verified and remains an open manual gate. All seven remain
-unsubmitted. For each tab, the user must manually expand Additional Syndication,
-turn YouTube off, reverify Option C and Unlisted, verify Premium is off, review
-asset rights and the July 21 Terms, check the rights and Terms boxes, and submit.
-Record the returned video ID and URL after
-the human action; do not automate a readback from the signed-in site.
+state was not verified. The August 8 cache reset invalidated those forms, and
+all seven remain unsubmitted. Each upload must be manually restaged, all
+syndication disabled, Option C and Unlisted reverified, Premium verified off,
+asset rights reviewed, and the on-site rights and Terms controls completed.
+Record the returned video ID and URL after the human action; do not automate a
+readback from the signed-in site.
 
 Format validation is not account verification. Before a future API adapter can upload, it must query the authenticated account, compare the returned immutable ID with `publishing/platforms.json`, and stop on any mismatch.
 
@@ -142,10 +142,10 @@ complete.
    existing-episode `Upload video` procedure for future video episodes and leave
    intentionally audio-only episodes as RSS audio only.
 7. YouTube, Vimeo, Spotify video/art, existing Rumble video art, and canonical
-   RSS episode-art updates are complete. Seven corrected Rumble uploads are
-   staged Unlisted with Option C selected but not submitted because hidden
-   YouTube syndication is on for all seven. The user must manually clear that
-   switch and complete the rights/Terms review described above.
+   RSS episode-art updates are complete. Seven corrected Rumble asset pairs are
+   locally verified but need manual restaging after the cache reset. The user
+   must use Option C, disable all syndication and Premium, and complete the
+   rights/Terms controls described above.
    Reconcile Instagram captions where needed
    and use approved covers for future Reels; preserve existing posts because the
    documented post-publication flow does not replace Reel covers. Do not rename

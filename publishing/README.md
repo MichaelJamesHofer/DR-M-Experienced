@@ -134,11 +134,12 @@ Episode 5's separately fingerprinted Spotify derivative while keeping the
 high-bitrate source as its master binding. The audit ledger binds that derivative
 to its immutable receipt. RSS.com's normalized audio replacement, Spotify's 7/7
 video restoration, YouTube's normalized-video cutover, and Vimeo's seven in-place
-replacements are verified. Rumble's seven corrected uploads remain staged
-Unlisted with Option C selected, but all seven have hidden YouTube syndication
-enabled. They remain unsubmitted and blocked on manual syndication correction,
-third-party asset-rights review, and specific acknowledgment of the July 21,
-2026 Terms provisions described below.
+replacements are verified. Rumble's seven corrected uploads require manual
+restaging after the browser cache reset. Their exact source videos and
+thumbnails remain locally verified. They remain unsubmitted and blocked on
+release-control correction, third-party asset-rights review, and on-site human
+controls. The user explicitly accepted the July 21, 2026 Terms provisions on
+August 8.
 
 ## Distribution model
 
@@ -152,7 +153,7 @@ third-party asset-rights review, and specific acknowledgment of the July 21,
   `publishing/episode-description-correction.json`.
 - YouTube's seven normalized replacements are public and cataloged; the prior seven uploads remain Unlisted with replacement links and explicit rollback records. Vimeo's seven corrected videos are verified in place on their stable IDs. YouTube, Vimeo, and Instagram have official API routes, but each still needs account authorization and platform-specific setup for future automation.
 - Instagram should use resumable upload from the approved local Reel. A short-lived public staging URL is fallback-only and must be removed after Meta finishes processing.
-- Spotify's optional replace-with-video action remains a manual browser step because no supported public creator-upload API is available for that flow. Rumble is human-operated only under the current Terms: seven corrected uploads are staged Unlisted with Option C selected, but all seven have hidden YouTube syndication enabled and remain unsubmitted.
+- Spotify's optional replace-with-video action remains a manual browser step because no supported public creator-upload API is available for that flow. Rumble is human-operated only under the current Terms: the exact seven corrected asset pairs remain locally verified and unsubmitted, but require manual restaging after the cache reset.
 
 ## Rumble manual nonexclusive guard
 
@@ -162,6 +163,19 @@ permission. Do not connect the Chrome DevTools bridge to Rumble, drive the site
 with scripts, or automate inspection, editing, checkbox attestations, or
 submission. A logged-in Rumble tab is for direct human use only unless Rumble
 provides written permission.
+
+Generate the private, offline manual handoff before restaging:
+
+```bash
+npm run publish:rumble-manual-packet
+```
+
+The command rehashes every catalog-bound Episode 1-7 video and thumbnail and
+writes a mode-0600 packet under
+`~/.local/state/drm-publisher/rumble/manual-release-episodes-1-7.md`. It stops
+without output if any byte size or SHA-256 differs. The packet contains exact
+copy and paths plus the human-only release checklist; it never opens Rumble or
+authorizes a release.
 
 This project's only permitted Rumble license is Option C, `Rumble Only
 (non-exclusive, similar to YouTube)`, represented in manifests as
@@ -174,20 +188,19 @@ initial visibility Unlisted, Premium/exclusive placement off, and YouTube,
 Vimeo, Facebook, and every other additional-syndication control off.
 
 Option C does not remove the Terms' separate General License. The July 21 Terms
-include AI/ML training rights and third-party AI sublicensing rights, and their
-third-party-material provisions require a human review of every music, footage,
-graphic, and other incorporated asset. Do not record those provisions as
-acknowledged or the asset rights as cleared until the user explicitly confirms
-both after review.
+include AI/ML training rights and third-party AI sublicensing rights, which the
+user explicitly accepted on August 8, 2026. Their third-party-material
+provisions separately require a human review of every music, footage, graphic,
+and other incorporated asset; Terms acceptance does not clear those rights.
 
 The August 7 audit found 7/7 corrected uploads staged Unlisted with Option C,
-Vimeo/Facebook syndication off, and no submission. The hidden YouTube syndication
-switch was on for all seven; Premium state was not verified and remains an open
-manual gate. Before each manual submission, the user must expand Additional
-Syndication, turn YouTube off, reverify Option C and Unlisted, verify Premium is
-off, complete the rights review, directly
-check the rights and July 21 Terms boxes, and click submit. Record the resulting
-ID/URL afterward without reopening Rumble through automation.
+Vimeo/Facebook syndication off, hidden YouTube syndication on, and Premium
+unverified. The August 8 cache reset invalidated those forms. Before each manual
+submission, the user must restage the exact verified assets, disable all
+syndication, reverify Option C and Unlisted, verify Premium is off, complete the
+rights review, directly check the rights and July 21 Terms controls, and click
+submit. Record the resulting ID/URL afterward without reopening Rumble through
+automation.
 
 The live phase must always begin from an unchanged, integrity-checked job. The current local review record is self-reported attribution, not identity authentication, and explicitly grants neither upload nor release authority. Future upload adapters must require a separate user-presence-backed authorization, create private or draft content where supported, record returned IDs and URLs, and require another explicit confirmation before public release.
 
