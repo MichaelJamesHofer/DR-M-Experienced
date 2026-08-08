@@ -66,20 +66,20 @@ export default async function ShortDetailPage({
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 lg:px-6 lg:py-16">
-      <nav className="mb-8 flex items-center gap-2 text-body-sm text-foreground-muted">
-        <Link href="/" className="transition-colors duration-200 hover:text-foreground">
+      <nav className="mb-8 flex min-w-0 items-center gap-2 text-body-sm text-foreground-muted">
+        <Link href="/" className="shrink-0 transition-colors duration-200 hover:text-foreground">
           Home
         </Link>
-        <span>/</span>
-        <Link href="/media" className="transition-colors duration-200 hover:text-foreground">
+        <span className="shrink-0">/</span>
+        <Link href="/media" className="shrink-0 transition-colors duration-200 hover:text-foreground">
           Media
         </Link>
-        <span>/</span>
-        <span className="line-clamp-1 text-foreground">{item.title}</span>
+        <span className="shrink-0">/</span>
+        <span className="line-clamp-1 min-w-0 text-foreground">{item.title}</span>
       </nav>
 
-      <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(280px,420px)] lg:gap-14">
-        <article>
+      <div className="grid min-w-0 items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(280px,420px)] lg:gap-14">
+        <article className="min-w-0">
           <header className="mb-8">
             <div className="mb-4 flex flex-wrap items-center gap-3 text-body-sm text-foreground-muted">
               <span>{item.contentType === "recipe" ? "Recipe" : "Short"}</span>
@@ -88,7 +88,9 @@ export default async function ShortDetailPage({
               <span aria-hidden="true">•</span>
               <span>{publishedDate}</span>
             </div>
-            <h1 className="mb-4 text-heading-xl font-bold text-foreground sm:text-display">{item.title}</h1>
+            <h1 className="mb-4 break-words text-heading-xl font-bold !tracking-normal text-foreground sm:text-display">
+              {item.title}
+            </h1>
             <p className="text-body-lg text-foreground-muted">{item.summary}</p>
             <div className="-mx-4 mt-6 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
               {item.topics.map((topic) => (
@@ -143,7 +145,7 @@ export default async function ShortDetailPage({
           )}
         </article>
 
-        <aside className="hidden lg:sticky lg:top-24 lg:block">
+        <aside className="hidden min-w-0 lg:sticky lg:top-24 lg:block">
           <ShortPlayback item={item} />
         </aside>
       </div>
