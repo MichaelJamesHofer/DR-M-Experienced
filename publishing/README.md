@@ -10,9 +10,10 @@ dated revision-10 transition evidence. The later Episode 7 description
 correction is tracked separately in
 `publishing/episode-description-correction.json`. At revision 11, RSS.com,
 Spotify fanout, YouTube, Vimeo, and the production Supabase editorial readback
-are verified current; Apple cache convergence, Rumble's manual reupload, and
-website deployment remain pending. Keep `episodeNumber` required in the manifest
-and RSS metadata, and preserve every GUID and remote content ID.
+are verified current. The public website deployment and 320/390-pixel mobile
+readback are also verified; Apple cache convergence and Rumble's manual reupload
+remain pending. Keep `episodeNumber` required in the manifest and RSS metadata,
+and preserve every GUID and remote content ID.
 
 ## Master catalog and binary assets
 
@@ -146,8 +147,9 @@ third-party asset-rights review, and specific acknowledgment of the July 21,
 - Apple show `1870433419` is configured directly to RSS.com with exact metadata, but still exposes five Available episodes. The duplicate show and stale manual Episode 4 Draft are archived. Apple case `20000130526608` confirmed that its existing Episode 1-2 records use historical GUIDs that differ from the current feed. `publishing/apple-guid-repair.json` records the exact blocked crosswalk and Spotify-preservation gates. Do not change, delete, or recreate either feed item until the support-first plan clears those gates. Submit the RSS.com feed once to Amazon and never create duplicate directory listings.
 - Both guarded Supabase migrations were applied in production on August 7 after exact SQL-file hash verification. Seven-row readback matches catalog revision 10 for current RSS.com audio URLs, YouTube IDs, and `Watch on YouTube` references.
 - The guarded August 8 Episode 7 editorial migration and independent production
-  readback match catalog revision 11. Website deployment and public-page readback
-  are tracked separately in `publishing/episode-description-correction.json`.
+  readback match catalog revision 11. GitHub Pages deployment `31276520368` and
+  the public-page desktop/mobile readback are verified in
+  `publishing/episode-description-correction.json`.
 - YouTube's seven normalized replacements are public and cataloged; the prior seven uploads remain Unlisted with replacement links and explicit rollback records. Vimeo's seven corrected videos are verified in place on their stable IDs. YouTube, Vimeo, and Instagram have official API routes, but each still needs account authorization and platform-specific setup for future automation.
 - Instagram should use resumable upload from the approved local Reel. A short-lived public staging URL is fallback-only and must be removed after Meta finishes processing.
 - Spotify's optional replace-with-video action remains a manual browser step because no supported public creator-upload API is available for that flow. Rumble is human-operated only under the current Terms: seven corrected uploads are staged Unlisted with Option C selected, but all seven have hidden YouTube syndication enabled and remain unsubmitted.

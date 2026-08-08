@@ -112,13 +112,22 @@
     },
     "website": {
       "role": "published_website_projection",
-      "status": "pending_deployment_live_drift_verified",
-      "verifiedAt": "2026-08-08T18:43:00Z",
+      "status": "complete_verified",
+      "verifiedAt": "2026-08-08T20:19:03Z",
+      "publicUrl": "https://drmexperienced.com/episodes/episode-7-the-brain-on-fire/",
+      "deployedCommit": "a291990cd2256a8f67f4a6853d5aedc5b1788776",
+      "deploymentRunId": 31276520368,
+      "deploymentJobId": 93150962114,
+      "httpStatus": 200,
       "liveReadback": {
-        "currentSummaryPresent": false,
-        "previousSummaryPresent": true,
-        "currentSectionsPresent": false,
-        "previousSectionsPresent": true
+        "currentSummaryPresent": true,
+        "previousSummaryPresent": false,
+        "currentSectionsPresent": true,
+        "previousSectionsPresent": false
+      },
+      "mobileReadback": {
+        "viewportWidthsPx": [320, 390],
+        "horizontalOverflow": false
       }
     }
   },
@@ -128,12 +137,12 @@
       "spotify",
       "youtube",
       "vimeo",
-      "supabase"
+      "supabase",
+      "website"
     ],
     "pending": [
       "rumble",
-      "apple",
-      "website"
+      "apple"
     ],
     "notApplicableOrNotOnboarded": [
       "amazon",

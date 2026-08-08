@@ -44,16 +44,23 @@ test("current platform state points to a fail-closed partial propagation receipt
   ]);
 
   assert.equal(receipt.status, "remote_propagation_partial");
-  assert.deepEqual(receipt.completion.verifiedComplete, ["rss.com", "spotify", "youtube", "vimeo", "supabase"]);
-  assert.deepEqual(receipt.completion.pending, ["rumble", "apple", "website"]);
+  assert.deepEqual(receipt.completion.verifiedComplete, ["rss.com", "spotify", "youtube", "vimeo", "supabase", "website"]);
+  assert.deepEqual(receipt.completion.pending, ["rumble", "apple"]);
   assert.equal(receipt.targets.rumble.status, "pending_manual_reupload");
   assert.equal(receipt.targets.rumble.currentCatalogParity, false);
   assert.equal(receipt.targets.rumble.automationRequiresPriorWrittenPermission, true);
   assert.equal(receipt.targets.rumble.replacementVideoId, null);
   assert.equal(receipt.targets.apple.status, "pending_cache_convergence_verification");
-  assert.equal(receipt.targets.website.status, "pending_deployment_live_drift_verified");
-  assert.equal(receipt.targets.website.liveReadback.currentSummaryPresent, false);
-  assert.equal(receipt.targets.website.liveReadback.previousSummaryPresent, true);
+  assert.equal(receipt.targets.website.status, "complete_verified");
+  assert.equal(receipt.targets.website.deployedCommit, "a291990cd2256a8f67f4a6853d5aedc5b1788776");
+  assert.equal(receipt.targets.website.deploymentRunId, 31276520368);
+  assert.equal(receipt.targets.website.httpStatus, 200);
+  assert.equal(receipt.targets.website.liveReadback.currentSummaryPresent, true);
+  assert.equal(receipt.targets.website.liveReadback.previousSummaryPresent, false);
+  assert.equal(receipt.targets.website.liveReadback.currentSectionsPresent, true);
+  assert.equal(receipt.targets.website.liveReadback.previousSectionsPresent, false);
+  assert.deepEqual(receipt.targets.website.mobileReadback.viewportWidthsPx, [320, 390]);
+  assert.equal(receipt.targets.website.mobileReadback.horizontalOverflow, false);
   assert.equal(receipt.targets.supabase.status, "complete_verified");
   assert.equal(receipt.targets.supabase.readback.takeawayCount, 5);
   assert.equal(receipt.targets.supabase.readback.paragraphCount, 8);

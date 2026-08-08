@@ -12,8 +12,8 @@
     "catalogRevision": 11,
     "episodeNumber": 7,
     "status": "remote_propagation_partial",
-    "verifiedComplete": ["rss.com", "spotify", "youtube", "vimeo", "supabase"],
-    "pending": ["rumble", "apple", "website"]
+    "verifiedComplete": ["rss.com", "spotify", "youtube", "vimeo", "supabase", "website"],
+    "pending": ["rumble", "apple"]
   },
   "downstreamPropagation": {
     "status": "issues_pending",
