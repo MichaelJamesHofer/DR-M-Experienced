@@ -56,11 +56,33 @@ test("systemd timers schedule from activation instead of depending on boot time"
   }
 });
 
-test("Dropbox intake condition preserves the inbox path with spaces", async () => {
+test("Dropbox intake installer creates and passes the exact inbox path with spaces", async () => {
+  const installer = await source("install-publisher-intake.sh");
+  const service = await source("systemd/drm-publisher-intake.service");
+  assert.match(installer, /^inbox="\/home\/otto\/Dropbox\/Dr M Experienced\/publisher-inbox"$/m);
+  assert.match(installer, /install -d -m 0700 "\$inbox"/);
+  assert.match(service, /^Environment="DRM_DELIVERY_INBOX=\/home\/otto\/Dropbox\/Dr M Experienced\/publisher-inbox"$/m);
+  assert.doesNotMatch(service, /^ConditionPathIsDirectory=/m);
+});
+
+test("Dropbox intake uses only sandbox directives supported by Otto's user manager", async () => {
   const contents = await source("systemd/drm-publisher-intake.service");
-  assert.match(
-    contents,
-    /^ConditionPathIsDirectory="\/home\/otto\/Dropbox\/Dr M Experienced\/publisher-inbox"$/m,
-  );
-  assert.doesNotMatch(contents, /Dr\\x20M\\x20Experienced/);
+  for (const unsupported of [
+    "PrivateDevices=true",
+    "ProtectClock=true",
+    "ProtectKernelLogs=true",
+    "ProtectKernelModules=true",
+  ]) {
+    assert.doesNotMatch(contents, new RegExp(`^${unsupported}$`, "m"));
+  }
+  for (const required of [
+    "NoNewPrivileges=true",
+    "ProtectHome=read-only",
+    "ProtectSystem=strict",
+    "ReadOnlyPaths=/home/otto/Dropbox",
+    "ReadWritePaths=/home/otto/.local/state/drm-publisher",
+    "IPAddressDeny=any",
+  ]) {
+    assert.match(contents, new RegExp(`^${required}$`, "m"));
+  }
 });

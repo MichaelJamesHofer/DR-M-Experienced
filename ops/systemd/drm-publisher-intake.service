@@ -1,7 +1,6 @@
 [Unit]
 Description=Validate ready Dr. M Dropbox deliveries and prepare review packets
 Documentation=file:///home/otto/DR-M-Experienced-ops/docs/dropbox-delivery-intake.md
-ConditionPathIsDirectory="/home/otto/Dropbox/Dr M Experienced/publisher-inbox"
 
 [Service]
 Type=oneshot
@@ -18,13 +17,9 @@ Environment="DRM_DELIVERY_INBOX=/home/otto/Dropbox/Dr M Experienced/publisher-in
 Environment=NODE_OPTIONS=--disable-warning=ExperimentalWarning
 UMask=0077
 NoNewPrivileges=true
-PrivateDevices=true
 PrivateTmp=true
-ProtectClock=true
 ProtectControlGroups=true
 ProtectHome=read-only
-ProtectKernelLogs=true
-ProtectKernelModules=true
 ProtectKernelTunables=true
 ProtectSystem=strict
 ReadOnlyPaths=@PROJECT_ROOT@
