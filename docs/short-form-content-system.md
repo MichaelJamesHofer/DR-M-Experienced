@@ -91,9 +91,10 @@ work is for future publishing automation:
 4. Confirm read-only access first. Instagram has no durable private publishing
    draft, so do not call `media_publish` until the exact asset, caption, and
    public release are approved.
-5. In Vimeo's developer portal, the owner must accept the Developer Addendum and
-   Terms before creating the prepared private app. Then create an own-account
-   upload/edit token under `~/.config/drm-publisher/`; never commit the token.
+5. Completed August 8, 2026: the owner accepted Vimeo's Developer Addendum and
+   Terms for private app `540274`. The own-account upload/edit token, exact
+   account binding, and quota are verified under `~/.config/drm-publisher/`;
+   never commit or export the token.
 
 The alternative Meta flow, Instagram API with Instagram Login, does not require
 a linked Facebook Page. It uses an Instagram User token and the

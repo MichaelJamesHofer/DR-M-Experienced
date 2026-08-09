@@ -15,8 +15,8 @@ The local publisher uses official upload interfaces where they exist, RSS fan-ou
 | Podcast Index | Automatic RSS indexing | New RSS.com record `7982906` and old Anchor record `7799755` are both live; verify convergence after the 301 is crawled |
 | Production Supabase projection | Guarded SQL migrations plus exact readback | Both August 7 guarded migrations were applied after exact file-hash verification; all seven current RSS audio URLs, YouTube IDs, and `Watch on YouTube` references match catalog revision 10 |
 | Website and PostHog | GitHub Pages plus privacy-sanitized web analytics | Episode 7's corrected page and all three short-form routes are deployed. The short routes return HTTP 200, appear in the sitemap, load their checked-in posters, bind the exact Vimeo IDs, and have no document overflow at 320, 390, or 1440 pixels. A production POST to `https://us.i.posthog.com/e/` returned 200; refreshed Installation Health passes `$pageview`, `$pageleave`, scroll depth, and authorized URLs. Dashboard `1086989` has the privacy-safe `Dr. M Growth Dashboard` configuration and six verified growth views. Reverse proxy is the only explicit configuration recommendation and is not configured |
-| YouTube | Direct full-video upload through OAuth 2 and the resumable Data API | Seven normalized replacements are public and verified. Google Cloud project `dr-m-experienced-publisher` exists, YouTube Data API v3 is enabled, the desktop client is stored privately, and the external OAuth app is in production. No owner token is stored: `drmexperienced@gmail.com` is a channel Manager, while production owner `michaeljameshofer@gmail.com` must grant the one-time OAuth authorization. The controller also blocks public or unlisted API uploads until the applicable YouTube compliance audit is recorded as verified |
-| Vimeo | Official Vimeo API upload or attended in-place version replacement | All seven corrected episode videos remain verified on their stable IDs. The three Instagram-mapped shorts are verified as `1216695521`, `1216695522`, and `1204939542` with canonical titles, descriptions, and posters. Private first-party app `540274` is configured. An owner-only upload/edit token, exact account `253415660`, and current upload quota were authenticated and verified; the Vimeo adapter is ready for a separately authorized new release |
+| YouTube | Direct full-video upload through OAuth 2 and the resumable Data API | Seven normalized replacements are public and verified. Google Cloud project `dr-m-experienced-publisher` exists, YouTube Data API v3 is enabled, the desktop client is stored privately, and the external OAuth app is in production. The user approved Google Cloud terms on August 8, 2026. No owner token is stored: `drmexperienced@gmail.com` is a channel Manager, while production owner `michaeljameshofer@gmail.com` must grant the separate one-time OAuth authorization. The controller also blocks public or unlisted API uploads until the applicable YouTube compliance audit is recorded as verified |
+| Vimeo | Official Vimeo API upload or attended in-place version replacement | All seven corrected episode videos remain verified on their stable IDs. The three Instagram-mapped shorts are verified as `1216695521`, `1216695522`, and `1204939542` with canonical titles, descriptions, and posters. Private first-party app `540274` is configured, and the user explicitly accepted Vimeo's Developer Addendum and Terms for the Dr. M Experienced Publisher app on August 8, 2026. An owner-only upload/edit token, exact account `253415660`, and current upload quota were authenticated and verified; the Vimeo adapter is ready for a separately authorized new release |
 | Instagram | Creator professional-account API through Facebook Login for Business | Public state confirms `@drmexperienced` is a Creator professional account and not a Business account. Its three public Reels map to verified local masters and Vimeo recovery IDs. Keep the Creator account type. Direct local-file Reel upload requires a linked Facebook Page, authenticated Graph publishing ID, Page tasks, permissions, and an owner-only token; none of those API bindings is yet recorded as verified. Adding the website link remains a mobile-app-only action |
 | Rumble | Direct human browser use only | The cache reset invalidated the seven staged browser forms, so they require manual restaging. The exact videos and thumbnails remain locally verified. The user accepted the July 21, 2026 Terms provisions on August 8; submission remains blocked on manual restaging with Option C, all syndication off, Premium off, human third-party asset-rights review, and the on-site controls. Automated site interaction is prohibited absent Rumble's prior written permission |
 
@@ -58,18 +58,24 @@ reviews a packet and creates a second, exact release authorization.
 | Release authorization | `drm-publish authorize` writes an owner-only immutable record bound to the review hash, exact targets, assets, copy, release plan, timing, visibility, disclosures, and approver |
 | Immutable asset stage | Each adapter copies approved bytes to `~/.local/state/drm-publisher/assets/sha256/<prefix>/<sha256>` using private directories/files, rejects symlinks and source mutation, and verifies a reused staged object before upload |
 | Tracked policy | `publishing/platforms.json` contains a global `publishingAutomation.enabled` gate and per-platform `apiAutomation.enabled` plus `policyRevision`; the reviewed packet snapshots each target's current policy |
-| Machine host control | Owner-only regular file `~/.local/state/drm-publisher/automation-control.json` must be mode `0600`, `running`, and allow the exact platform. Missing, insecure, invalid, or paused state fails closed. It is currently absent, so `host status` reports paused |
+| Machine host control | Owner-only regular file `~/.local/state/drm-publisher/automation-control.json` must be mode `0600`, `running`, and allow the exact platform. Missing, insecure, invalid, or paused state fails closed. Live readback is generation 1, `running`, with only `vimeo` allowlisted |
 | Durable queue | Mode-0600 node:sqlite database at `~/.local/state/drm-publisher/control/publisher.sqlite3` stores deterministic operations, atomic multi-target dependency graphs, leases/heartbeats, provider write intent, hashed checkpoints, create slots, results, and events. The queue is currently empty |
 | Controller | `drm-publish controller --once` revalidates authorization, catalog, assets, tracked gates/policy revision, local allowlist, account identity, and pinned build before adapter execution; it reloads the local host control immediately before every mutating step |
 | Adapters | Official Vimeo, YouTube, and RSS.com adapters stage exact bytes, record write intent, checkpoint provider sessions/identities, poll processing, reconcile only the checkpointed resource, and perform authenticated readback |
 | Receipts | Adapter results append accepted, published, and verified evidence to the existing immutable per-job ledger. A stale receipt lock is recovered only after 15 minutes and only when its recorded owner PID is missing or dead |
-| Deployment | `ops/install-publisher-host.sh` refuses a dirty tree, archives one full Git commit under its SHA, installs production dependencies with Node `22.22.0`, atomically switches the `current` symlink, and pins the service build SHA. Reinstall only after merge/review |
-| Host supervision | Per-user `drm-publisher-controller.timer` is installed with a one-minute cadence, up to 10 seconds of jitter, persistent scheduling, and restrictive service permissions. It is intentionally disabled and inactive until safety review and tests are complete |
+| Deployment | `ops/install-publisher-host.sh` refuses a dirty tree, archives one full Git commit under its SHA, installs production dependencies with Node `22.22.0`, atomically switches the `current` symlink, and pins the service build SHA. The live `current` release is `69f059ce22267f02dc5918492b10066ff9ad704c`. Reinstall only after merge/review |
+| Controller supervision | Per-user `drm-publisher-controller.timer` runs one guarded pass at a one-minute cadence with up to 10 seconds of jitter and persistent scheduling. Live readback is enabled and active |
+| Offline intake supervision | Per-user `drm-publisher-intake.timer` runs every two minutes with network denied and project Dropbox read-only. Live readback is enabled and active; the last observed run succeeded and found no ready deliveries |
 
-Installing the controller did not authorize a release. No real job was queued
-or published during setup. `dispatch` only enqueues targets already named in a
-valid authorization and contacts no remote platform by itself. The timer remains
-disabled and inactive during safety review.
+The explicit enabled installation did not authorize a release. No job was
+queued or published during host activation, and the queue remains empty.
+`dispatch` only enqueues targets already named in a valid authorization and
+contacts no remote platform by itself. Active timers cannot create an approval,
+authorization, or queue operation.
+
+The installer defaults to disabled when run without `--enable`. The current host
+was deliberately installed with its timers enabled; do not confuse that live
+state with the safer default used for a new or replacement machine.
 
 The operator sequence is:
 
@@ -87,7 +93,7 @@ drm-publish queue <job-id>
 drm-publish host status
 drm-publish host pause --confirm "pause-publisher"
 
-# Only after the full safety review; every named tracked platform gate must be open.
+# Only after an intentional pause or allowlist change; current live state is Vimeo-only.
 drm-publish host run \
   --platforms "vimeo" \
   --confirm "run-publisher vimeo"
@@ -429,14 +435,15 @@ real public Reel because this API flow has no unlisted test release.
 
 ## Safety boundary
 
-If enabled after safety review, the user timer may execute an external platform
-action only for a durable queue operation derived from a current, unexpired
-`release-authorization.json`. The timer is currently disabled and inactive. The
+The enabled user timer may execute an external platform action only for a durable
+queue operation derived from a current, unexpired
+`release-authorization.json`. Live host control generation 1 allows only Vimeo;
+the queue is empty. The
 authorization record must bind the exact integrity-checked packet, target set,
 assets, copy, schedule, visibility, disclosure flags, monetization,
 notifications, and license. Any change invalidates review and authorization.
 The timer creates no authorization, does not scan Dropbox for implicit intent,
-and does not enqueue a job; when enabled, it runs one guarded controller pass
+and does not enqueue a job; it runs one guarded controller pass
 against already-authorized work.
 
 Authorization alone is insufficient. Every write also requires: the tracked

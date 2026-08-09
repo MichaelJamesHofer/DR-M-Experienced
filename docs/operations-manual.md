@@ -108,18 +108,21 @@ Interpretation on August 8, 2026:
   records, content-addressed private asset staging, a durable node:sqlite queue,
   official Vimeo/YouTube/RSS.com adapters, provider write intent and hashed
   checkpoints, exact-resource reconciliation, and automatic immutable receipt
-  writes. All authorized targets enqueue atomically or none do. The installed
-  one-minute user timer is intentionally disabled and inactive during the full
-  safety review. `host status` reports fail-closed paused because the machine
-  control file is absent, and the queue is empty. No live release has been
-  queued or published through this controller.
+  writes. All authorized targets enqueue atomically or none do. The live host
+  runs immutable build `69f059ce22267f02dc5918492b10066ff9ad704c`; both the
+  one-minute controller timer and two-minute offline intake timer are enabled and
+  active. Machine control generation 1 is `running` with only Vimeo allowlisted,
+  and the queue is empty. The last observed intake run succeeded with no ready
+  deliveries. Enabling the host created no job and authorized no release.
 - Vimeo app `540274`, account `253415660`, its owner-only upload/edit token, and
-  upload quota are verified. RSS.com podcast ID `397420` is bound, but the v4
-  adapter needs a Max entitlement and API key; free/manual hosting continues.
-  Google Cloud project `dr-m-experienced-publisher`, YouTube Data API v3, and the
-  production desktop OAuth client are configured, but the production channel
-  owner's OAuth token is absent and public/unlisted API upload remains gated on
-  the applicable compliance audit.
+  upload quota are verified. The user accepted Vimeo's Developer Addendum and
+  Terms for the Dr. M Experienced Publisher app on August 8, 2026. RSS.com
+  podcast ID `397420` is bound, but the v4 adapter needs a Max entitlement and
+  API key; free/manual hosting continues. Google Cloud project
+  `dr-m-experienced-publisher`, YouTube Data API v3, and the production desktop
+  OAuth client are configured, and the user approved Google Cloud terms on
+  August 8. The separate production channel-owner OAuth token is absent and
+  public/unlisted API upload remains gated on the applicable compliance audit.
 - Publisher preparation performs a full-file `ffmpeg loudnorm` scan and blocks
   RSS podcast audio and Spotify replacement video outside `-17` through `-15`
   LUFS or above `-1 dBTP`.
@@ -289,10 +292,11 @@ deterministic operations, stages exact bytes, and can run supported official
 adapters with durable provider checkpoints, authenticated readback, and
 automatic receipts. A receipt remains evidence, not authorization. The tracked
 global/per-platform gates and policy revision cannot be overridden by the
-separate local running/paused allowlist. The controller timer is installed but
-disabled during safety review, the local control is fail-closed paused, and no
-live release has exercised it. Spotify video remains attended; Instagram still
-needs Meta prerequisites; Rumble remains excluded.
+separate local running/paused allowlist. The controller and intake timers are
+enabled and active on the pinned build; local control generation 1 is running
+with Vimeo as its only allowed platform, and the queue is empty. Host activation
+created no release. Spotify video remains attended; Instagram still needs Meta
+prerequisites; Rumble remains excluded.
 
 ## 5. Account And Destination Inventory
 
@@ -404,9 +408,11 @@ per-platform gates with unchanged policy revision, a secure running local host
 control that allowlists the exact platform, and the adapter's account/capability
 preflight. Missing or insecure `automation-control.json` means paused. The
 controller reloads that local control immediately before every mutating step.
-The installed timer is disabled and inactive during safety review. Do not create a
-running control file, enable the timer, or run `controller --once` for a real job
-until the exact release and full safety review are complete.
+Live machine control is generation 1, `running`, and allowlists only Vimeo. Both
+publisher timers are enabled and active, but the controller queue is empty and
+the last offline intake run succeeded with no ready delivery. A timer cannot
+prepare its own authorization or enqueue work; every live write still requires
+the exact reviewed release and all tracked gates.
 
 Every adapter copies the approved files to private content-addressed staging
 before upload. Before each provider mutation the controller records write
@@ -445,8 +451,10 @@ published, verified, checkpointed, or ambiguous remote operation.
 commit under `~/.local/share/drm-publisher/releases/<git-sha>/`, installs
 production dependencies with Node `22.22.0`, atomically switches the `current`
 symlink, and pins the systemd service to both that release and build SHA. The
-default installation keeps the timer disabled. Deploy the pinned host only from
-a reviewed merged commit; do not use `--enable` during the current review.
+default installation keeps both timers disabled unless `--enable` is supplied.
+The current host was explicitly enabled and points to immutable build
+`69f059ce22267f02dc5918492b10066ff9ad704c`. Deploy a replacement only from a
+reviewed merged commit; service enablement is a separate, intentional choice.
 
 ### Isolated Browser
 
@@ -577,16 +585,19 @@ in the private resolved job data, never in the catalog.
    audience, disclosure, and warnings.
 8. Record local approval only with the displayed hash and exact phrase.
 9. Obtain separate approval to upload the exact packet to each destination, then
-   use `authorize` to bind those exact targets and release values. Do not
-   `dispatch` during the current controller safety review.
+   use `authorize` to bind those exact targets and release values. Dispatch only
+   the supported direct target set after its tracked gates pass. Current machine
+   control permits Vimeo only; RSS.com and YouTube automation remain disabled at
+   their separate account/policy gates.
 
 ### Upload And Release
 
-1. Keep `host status` paused and work one attended destination at a time while
-   the controller timer and full safety review remain incomplete.
-2. For the future controlled API path, confirm the global tracked gate, the
-   target's tracked enabled gate/policy revision, and the exact local host
-   allowlist before any write.
+1. Confirm `host status` still reports generation 1, `running`, and Vimeo-only
+   before dispatching an approved Vimeo release. Use `host pause` as the immediate
+   kill switch if the queue or release is not exact.
+2. For every controlled API path, confirm the global tracked gate, the target's
+   tracked enabled gate/policy revision, and the exact local host allowlist
+   before any write. An active timer does not override a closed target gate.
 3. Query or inspect the authenticated account and compare its stable ID. Stage
    and rehash the exact approved asset; never stream a changing Dropbox file.
 4. Create a draft/private item where supported. The controller records provider
@@ -734,7 +745,9 @@ After every non-null master-catalog destination has an exact verified website re
   channel feed, exact titles and deterministic YouTube-safe descriptions, no
   retired branding or `RSSVERIFY`, and approved max-resolution thumbnails.
 - Google Cloud project `dr-m-experienced-publisher`, YouTube Data API v3, the
-  desktop client, and the production OAuth app are configured. Run
+  desktop client, and the production OAuth app are configured, and the user
+  approved Google Cloud terms on August 8, 2026. That approval is separate from
+  channel authorization. Run
   `drm-publish auth youtube` once as channel owner
   `michaeljameshofer@gmail.com`; the `drmexperienced@gmail.com` Manager grant
   cannot authorize API uploads for the owner's channel.
@@ -751,8 +764,10 @@ After every non-null master-catalog destination has an exact verified website re
 
 - Direct full-video upload to user `253415660`.
 - Private first-party app `540274`, exact account `253415660`, its owner-only
-  upload/edit token, and current upload quota are verified. The official adapter
-  is credential-ready, but no live release has exercised it.
+  upload/edit token, and current upload quota are verified. The user explicitly
+  accepted Vimeo's Developer Addendum and Terms for the Dr. M Experienced
+  Publisher app on August 8, 2026. The official adapter is credential-ready,
+  but no approved new release has exercised it.
 - Completed August 7: all seven corrected videos were replaced in place and
   verified on the existing stable Vimeo IDs.
 - All three Instagram-mapped shorts now have Vimeo recovery copies with
@@ -1291,6 +1306,9 @@ Chrome.
 
 ### New Machine Or Successor Setup
 
+These are fail-closed bootstrap defaults for a replacement host, not the current
+live Otto-host state.
+
 1. Install Ubuntu/user tooling and clone this repository.
 2. Read `AGENTS.md`, this manual, and both publishing JSON files.
 3. Install Node, ffmpeg/ffprobe, Chrome, GitHub CLI, Deno, and local wrappers.
@@ -1301,7 +1319,8 @@ Chrome.
 6. Verify every stable ID before enabling uploads.
 7. From a clean reviewed commit, run `ops/install-publisher-host.sh` without
    `--enable`. Verify the commit-addressed release, pinned build SHA, Node 22,
-   mode-0600 control database, and disabled/inactive timer.
+   mode-0600 control database, and both replacement-host timers
+   disabled/inactive by default.
 8. Leave `automation-control.json` absent or explicitly paused until asset
    staging, atomic enqueue, tracked gates, local allowlist, write intent,
    checkpoints, reconciliation, stale-lock recovery, and one controlled release
@@ -1401,9 +1420,12 @@ Quarterly:
     control, provider write intent/checkpoints, exact-resource reconciliation,
     Vimeo/YouTube/RSS.com adapters, stale receipt-lock recovery, authenticated
     readback, automatic lifecycle receipts, and clean-commit pinned Node 22 host
-    deployment. The timer is disabled/inactive, host control is fail-closed
-    paused, and the queue is empty during full review. RSS.com automation still
-    needs Max/API-key access; no live release has been queued or published.
+    deployment. The live host points to build
+    `69f059ce22267f02dc5918492b10066ff9ad704c`; both controller and intake timers
+    are enabled/active, generation 1 host control is running for Vimeo only, and
+    the queue is empty. The last intake run succeeded with no ready delivery.
+    RSS.com automation still needs Max/API-key access, and YouTube still needs
+    owner OAuth plus the applicable audit; activation itself created no release.
 12. Version and test workstation-wrapper installation/recovery.
 13. Build a small authenticated Supabase editorial/import tool after the release
     workflow is stable.
@@ -1467,10 +1489,13 @@ Quarterly:
   Git-SHA deployment pinned to Node 22. Verified Vimeo app
   `540274`, account `253415660`, token, and quota; configured Google project
   `dr-m-experienced-publisher` and its desktop OAuth client; and bound RSS.com
-  podcast `397420`. The timer is disabled/inactive, host control fails closed
-  paused, and the queue is empty during full safety review. YouTube owner
-  OAuth/audit and RSS.com Max/API key remain gates. No live release was queued or
-  published.
+  podcast `397420`. Later the same day, installed immutable build
+  `69f059ce22267f02dc5918492b10066ff9ad704c`, enabled both publisher timers, and
+  verified them active. Machine control generation 1 runs Vimeo-only, the queue
+  is empty, and intake completed successfully with no ready delivery. The user
+  accepted Vimeo's Developer Addendum and Terms for app `540274` and approved
+  Google Cloud terms. YouTube owner OAuth/audit and RSS.com Max/API key remain
+  separate closed gates; host activation queued and published nothing.
 - August 8, 2026: verified production PostHog ingestion with an HTTP 200 response
   from `https://us.i.posthog.com/e/`. Refreshed Installation Health passes
   `$pageview`, `$pageleave`, scroll depth, and authorized URLs. Reverse proxy is

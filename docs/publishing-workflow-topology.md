@@ -8,10 +8,12 @@ is now implemented: immutable content-addressed asset staging, a durable queue,
 exact release authorization, layered host/platform policy gates, official
 RSS.com/Vimeo/YouTube adapters, durable provider checkpoints, exact-resource
 reconciliation, automatic receipt writes, and a one-minute user timer unit are
-present. The timer is intentionally disabled and inactive until the full safety
-review and tests are complete. The machine-local host control is fail-closed and
-currently reports paused because no control file exists. No real release is
-queued and none has been published through this controller.
+present. On the verified live Otto host, both the controller and offline intake
+timers are enabled and active on immutable build
+`69f059ce22267f02dc5918492b10066ff9ad704c`. Machine control generation 1 is
+`running` with only Vimeo allowlisted. The durable queue is empty, and the last
+observed intake run succeeded with no ready deliveries. Service activation did
+not create or authorize a release.
 
 Start with `docs/operations-manual.md` for current account state and recovery
 procedures. Machine-readable catalog, routing, and incident files remain more
@@ -59,14 +61,14 @@ flowchart LR
   end
 
   subgraph Host[Otto workstation control plane]
-    Intake[Offline Dropbox intake\nSeal, validate, prepare only\nLOCAL]
+    Intake[Offline Dropbox intake\nTimer enabled and active\nLOCAL]
     QC[drm-publish prepare\nHash, ffprobe, loudness, schema\nLOCAL]
     Packet[Immutable review packet\nLOCAL]
     Approval[Exact review plus release authorization\nLOCAL]
     Stage[Content-addressed asset staging\nSHA-256 and mode 0600\nLOCAL]
-    Control[Host control\nPaused plus platform allowlist\nLOCAL]
+    Control[Host control generation 1\nRunning, Vimeo only\nLOCAL]
     Queue[Atomic multi-target node:sqlite queue\nLOCAL]
-    Dispatch[Pinned Node 22 controller\nTimer installed, disabled\nLOCAL]
+    Dispatch[Pinned Node 22 controller\nTimer enabled and active\nLOCAL]
     Checkpoint[Write intent and provider checkpoint\nLOCAL private state]
     Reconcile[Exact-resource reconciliation\nand authenticated readback\nLOCAL]
     Receipt[Immutable receipt ledger\nLOCAL]
@@ -128,16 +130,17 @@ flowchart LR
 The arrows from `Dispatch` are capability paths, not evidence of a release.
 `dispatch` only enqueues the exact targets in a valid immutable authorization;
 it contacts no platform, and all targets enter one SQLite transaction or none
-do. After safety review, the timer can invoke one controller pass at a one-minute
-cadence with up to 10 seconds of jitter. It is currently disabled and inactive.
+do. The enabled controller timer invokes one guarded pass at a one-minute
+cadence with up to 10 seconds of jitter. The current queue is empty.
 Each controller pass requires a secure running host-control file, its platform
 in the local allowlist, the tracked global gate, the tracked per-platform gate
 and policy revision, and the immutable authorization. The adapter revalidates
 the packet, account identity, copy, and release controls, and the controller
 reloads the local host control immediately before each mutating step. The adapter
 copies approved bytes into private content-addressed staging and verifies them
-again before a provider write. Vimeo is
-credential-ready. RSS.com and YouTube stop before a write at their documented
+again before a provider write. Current machine control allows only Vimeo. Its
+credentials are ready, and the user accepted Vimeo's Developer Addendum and
+Terms for app `540274` on August 8, 2026. RSS.com and YouTube stop before a write at their documented
 account gates. Instagram has no adapter yet, Spotify video stays attended, and
 Rumble is rejected by the controller.
 
@@ -188,8 +191,8 @@ Do not copy the newest-looking value across every store.
 5. `dispatch` places only those exact authorized targets into the durable queue.
    The complete dependency graph is inserted atomically; a collision or invalid
    dependency rolls the entire enqueue back.
-   After safety review, the user timer can run the controller at a one-minute
-   cadence with small jitter. It remains disabled and inactive today. A
+   The enabled user timer runs the controller at a one-minute cadence with small
+   jitter. A
    controller pass also requires the tracked policy gates and the separate
    mode-0600 host allowlist. Each adapter stages immutable content-addressed
    copies before it creates or publishes through a supported official API.
@@ -243,18 +246,18 @@ flowchart TD
 
 | Stage | Current implementation | Gap to exception-only operation |
 |---|---|---|
-| Detect delivery | Offline Dropbox scanner, explicit delivery schema, `READY`-last seal, exact hashes, and idempotent intake claim | Install and exercise the pinned intake timer; catalog/manifest drafting remains attended |
+| Detect delivery | Offline Dropbox scanner, explicit delivery schema, `READY`-last seal, exact hashes, and idempotent intake claim; pinned timer is enabled/active and its last observed empty-inbox run succeeded | Exercise the first sealed production delivery and retain idempotency evidence; catalog/manifest drafting remains attended |
 | Validate binaries | `prepare` runs full-file hashing, `ffprobe`, schema checks, and loudness gates | Automatic derivative generation and a structured remediation report |
 | Stage upload bytes | All three adapters copy approved regular files into private content-addressed storage, reject symlinks/source mutation, and rehash reused entries | Production exercise and retention/cleanup policy |
 | Validate metadata | Master-catalog and manifest drift checks are live | Assisted manifest/catalog drafting without bypassing review |
 | Review | Immutable `approval.md`, exact review confirmation, and separate immutable release authorization are live | Small review UI; the two records must retain separate meanings |
-| Safety gates | Tracked global and per-platform gates/policy revision plus a separate owner-only local paused/running allowlist | Complete safety review before creating a running control file |
+| Safety gates | Tracked global and per-platform gates/policy revision plus owner-only machine control generation 1, currently `running` for Vimeo only | Exercise the exact pause/run and policy-drift paths during the first approved release |
 | Queue | Durable node:sqlite queue, atomic dependency-graph enqueue, leases/heartbeats, restart recovery, create-slot uniqueness, and deterministic operation IDs | Operator dashboard and production exercise |
 | Upload | RSS.com, Vimeo, and YouTube official adapters enforce account-ID preflight and approved release values | Complete credentials/gates and add Instagram; Spotify video remains attended |
 | Poll | Vimeo, YouTube, and RSS adapters poll provider processing | Long-running asynchronous continuation beyond current bounded polls |
 | Reconcile | A write-intent marker plus hashed, sequenced private provider checkpoints force exact-resource resume; adapters perform authenticated readback | Independent public/cache checks and catalog projection remain to be automated |
 | Receipt | Adapter lifecycle writes are integrated with the immutable receipt state machine; stale locks recover only after age and dead-owner checks | Production exercise against one approved new release |
-| Host deployment | Clean Git commit archived into a commit-addressed release, atomically linked, and run with pinned Node 22/build SHA | Run installer after merge; keep timer disabled through full review |
+| Host deployment | Clean commit `69f059ce22267f02dc5918492b10066ff9ad704c` is archived, atomically linked, and running with pinned Node 22/build SHA; both timers are enabled/active | Exercise reboot persistence and the first approved release; future default installs remain disabled without `--enable` |
 | Website | Strict build and GitHub Pages deployment on `main` are live | Automated reviewed catalog/Supabase projection and post-deploy route checks |
 | Notify | Human summary only | Exception inbox plus final release summary |
 
@@ -300,8 +303,8 @@ flowchart LR
 | Spotify video | Replace the RSS-ingested episode through Spotify for Creators | Corrected video verified on all seven existing episode IDs | `ATTENDED`; no supported public creator-upload API in this workflow |
 | Apple Podcasts | RSS fan-out to show `1870433419` | Five episodes public; Episodes 1-2 remain a blocked GUID incident | `LIVE` fan-out, incident `BLOCKED` |
 | Amazon/Audible | RSS fan-out after claim | No claimed listing ID | One-time claim `PENDING`; future audio fan-out needs no episode upload adapter |
-| YouTube | Direct resumable full-video upload | Seven normalized replacements verified; prior seven retained unlisted | Adapter, project, API, desktop client, and production OAuth app configured; owner token `PENDING`; public/unlisted audit `BLOCKED` |
-| Vimeo | Direct episode video and short upload/replacement | Seven episodes and three shorts verified | Adapter and private app `540274` are `READY`; account `253415660`, owner-only upload/edit token, and quota were verified |
+| YouTube | Direct resumable full-video upload | Seven normalized replacements verified; prior seven retained unlisted | Google Cloud terms approved August 8; adapter, project, API, desktop client, and production OAuth app configured; owner token `PENDING`; public/unlisted audit `BLOCKED` |
+| Vimeo | Direct episode video and short upload/replacement | Seven episodes and three shorts verified | Adapter and private app `540274` are `READY`; account `253415660`, owner-only upload/edit token, and quota are verified, and the user's Developer Addendum/Terms acceptance is recorded |
 | Instagram | Direct Reel publish | Creator profile and three Reel mappings verified | Meta app, publishing ID, permissions, and token `PENDING` |
 | Website | Supabase plus repository to GitHub Pages | Episode 7 and all three short routes deployed and verified | Build/deploy `LIVE`; content projection still attended |
 | Rumble | Direct human browser use | Verified local asset pairs are not submitted | Human-only unless written platform permission changes the boundary |
@@ -315,7 +318,7 @@ flowchart LR
 | Binary source map | `~/.config/drm-publisher/sources.json` | Maps portable `dropbox:` references to the project Dropbox root | `LIVE`, private |
 | Job store | `~/.local/state/drm-publisher/jobs/` | Packets, approval records, and immutable receipt files | `LIVE`, private |
 | Immutable asset stage | `~/.local/state/drm-publisher/assets/sha256/` | Private SHA-256-addressed copies used by adapters after source-stability and fingerprint checks | `LOCAL`; empty until an adapter stages an approved release |
-| Machine host control | `~/.local/state/drm-publisher/automation-control.json` | Owner-only mode, generation, and exact platform allowlist | `BLOCKED`; file absent, therefore fail-closed paused |
+| Machine host control | `~/.local/state/drm-publisher/automation-control.json` | Owner-only mode, generation, and exact platform allowlist | `LIVE`; mode `0600`, generation 1, `running`, Vimeo only |
 | Browser session store | `~/.local/share/drm-publisher/chrome-profile` | Isolated saved sessions for attended work | `ATTENDED`, private |
 | Browser wrapper state | `~/.local/state/drm-publisher/browser/` | Narrow bridge state and logs | `ATTENDED`, private |
 | API credential store | `~/.config/drm-publisher/` | Vimeo token/app data, YouTube desktop client/token location, future platform keys | `PARTIAL`; Vimeo ready, YouTube owner token absent, RSS key absent; never commit |
@@ -323,9 +326,9 @@ flowchart LR
 | Platform metadata sync helper | `scripts/sync-episodes.mjs` | Reads Vimeo, Spotify, and YouTube metadata into a checked-in aid | `LOCAL`; optional, not publication |
 | Static website pipeline | `.github/workflows/deploy.yml` | Tests, strict build, artifact, and GitHub Pages deployment | `LIVE` |
 | Control database | `~/.local/state/drm-publisher/control/publisher.sqlite3` | Atomic operation graphs, dependencies, leases/heartbeats, write intent, private hashed provider checkpoints, create slots, results, and audit events | `LOCAL`, mode `0600`, queue empty |
-| Pinned host release | `~/.local/share/drm-publisher/releases/<git-sha>/` plus `current` symlink | Clean-commit archive, production dependencies, build SHA, and Node 22 runtime | Installer implemented; redeploy only after merge and review |
-| Release controller service | `drm-publisher-controller.service` plus `.timer` | When enabled after safety review, runs one guarded queue pass at a one-minute cadence with up to 10 seconds of jitter and restart persistence | `LOCAL`; installed but disabled and inactive; no real release queued or published |
-| Dropbox intake service | `drm-publisher-intake.service` plus `.timer` | Scans sealed bundles every two minutes, with network denied and Dropbox read-only, then invokes only `prepare` | `LOCAL`; implemented and tested, pending pinned host installation |
+| Pinned host release | `~/.local/share/drm-publisher/releases/<git-sha>/` plus `current` symlink | Clean-commit archive, production dependencies, build SHA, and Node 22 runtime | `LIVE`; `current` resolves to `69f059ce22267f02dc5918492b10066ff9ad704c`; redeploy only after merge and review |
+| Release controller service | `drm-publisher-controller.service` plus `.timer` | Runs one guarded queue pass at a one-minute cadence with up to 10 seconds of jitter and restart persistence | `LIVE`; enabled and active; queue empty |
+| Dropbox intake service | `drm-publisher-intake.service` plus `.timer` | Scans sealed bundles every two minutes, with network denied and Dropbox read-only, then invokes only `prepare` | `LIVE`; enabled and active; last observed run succeeded with no ready deliveries |
 | Operator inbox/dashboard | Not created | One approval surface, exceptions, and final release report | `PENDING` |
 
 The current local web development server is not a control-plane component. It
@@ -604,7 +607,7 @@ credential yet:
 | 6 | Add Spotify-video handoff | Wait for the RSS episode, identify its exact existing ID, guide the attended replacement, and reconcile without duplicate creation |
 | 7 | Automate catalog/Supabase projection and site PR | Only verified IDs are written; strict verifier, CI, Pages deploy, and public route check all pass |
 | 8 | Add exception inbox and completion report | The owner sees one approval request and only actionable failures thereafter |
-| 9 | Deploy and exercise the hardened host | After merge, install the clean commit-addressed Node 22 release and offline intake; verify intake idempotency, staging, atomic enqueue, host/gate pauses, checkpoints, reconciliation, stale-lock recovery, reboot behavior, and one approved real release |
+| 9 | Exercise the hardened live host | The clean commit-addressed Node 22 release and both timers are deployed; verify first sealed-delivery intake, staging, atomic enqueue, host/gate pauses, checkpoints, reconciliation, stale-lock recovery, reboot behavior, and one approved real release |
 
 Until the relevant gates pass end to end on a new release, describe the system
 as **implemented approval-first publishing automation with platform-specific
@@ -640,16 +643,16 @@ cd /home/otto/DR-M-Experienced-ops
 /home/otto/.local/bin/drm-publish dispatch <job-id>
 /home/otto/.local/bin/drm-publish queue <job-id>
 
-# Host control is a separate local barrier. Keep it paused during full review.
+# Host control is a separate local barrier. Pause is the immediate kill switch.
 /home/otto/.local/bin/drm-publish host pause \
   --confirm "pause-publisher"
 
-# Only after review: allow the exact tracked-open platform set.
+# Restore only the exact tracked-open platform set after an intentional pause.
 /home/otto/.local/bin/drm-publish host run \
   --platforms "vimeo" \
   --confirm "run-publisher vimeo"
 
-# The disabled timer would run this same guarded pass after safety review.
+# The enabled timer normally runs this same guarded pass.
 /home/otto/.local/bin/drm-publish controller --once
 
 # A post-write operation must resume only its durable provider checkpoint.
@@ -686,9 +689,11 @@ systemctl --user list-timers drm-publisher-controller.timer
 The production installer, `ops/install-publisher-host.sh`, refuses a dirty
 checkout, archives one full Git commit under its SHA, installs production
 dependencies with Node `22.22.0`, atomically switches the `current` link, and
-pins the service to that release and build SHA. Its default leaves the timer
-disabled. Do not use `--enable` until the full review and first controlled
-release have passed.
+pins the service to that release and build SHA. Its default leaves the timers
+disabled unless `--enable` is supplied. This host was explicitly enabled and
+currently runs immutable build
+`69f059ce22267f02dc5918492b10066ff9ad704c`; that live state does not change the
+installer default.
 
 ### Final operator experience
 

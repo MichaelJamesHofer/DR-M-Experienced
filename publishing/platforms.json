@@ -3,7 +3,7 @@
     "enabled": true,
     "hostId": "otto-dr-m-publisher",
     "rumbleExcluded": true,
-    "notes": "The global controller policy is enabled, but the systemd timer remains intentionally disabled until the safety review and deployment pinning are complete. Each direct adapter also requires its own apiAutomation.enabled gate."
+    "notes": "The tracked global controller policy is enabled. Each direct adapter still requires its own apiAutomation.enabled gate; RSS.com and YouTube remain disabled, and Rumble remains hard-excluded. Runtime timer, queue, and machine-control state remains authoritative only in the owner-protected host state. The installer defaults to disabled unless --enable is supplied."
   },
   "pendingHostingMigration": {
     "active": false,
@@ -196,11 +196,13 @@
         "enabled": false,
         "policyRevision": 1,
         "googleCloudProjectId": "dr-m-experienced-publisher",
+        "googleCloudTermsApproved": true,
+        "googleCloudTermsApprovedAt": "2026-08-08",
         "oauthClientConfigured": true,
         "ownerTokenConfigured": false,
         "publicUploadAuditVerified": false
       },
-      "notes": "The seven normalized replacement videos are public with exact catalog titles, YouTube-safe descriptions, and approved thumbnails. Each prior upload remains unlisted and directly playable, and its description links to the corresponding replacement; preserve those prior IDs as rollback evidence. Future API automation still requires OAuth and the applicable YouTube compliance audit."
+      "notes": "The seven normalized replacement videos are public with exact catalog titles, YouTube-safe descriptions, and approved thumbnails. Each prior upload remains unlisted and directly playable, and its description links to the corresponding replacement; preserve those prior IDs as rollback evidence. The user approved the Google Cloud terms on August 8, 2026. That approval does not satisfy the still-missing channel-owner OAuth grant or applicable YouTube compliance audit, so API automation remains disabled."
     },
       "vimeo": {
       "label": "Vimeo",
@@ -234,9 +236,11 @@
         "appId": "540274",
         "accountIdVerified": true,
         "uploadTokenConfigured": true,
-        "uploadQuotaVerified": true
+        "uploadQuotaVerified": true,
+        "developerAddendumAndTermsAccepted": true,
+        "developerAddendumAndTermsAcceptedAt": "2026-08-08"
       },
-      "notes": "All seven corrected episode videos were replaced in place and verified on their existing IDs. Preserve those stable IDs. The three cataloged Instagram shorts are also published on Vimeo as 1216695521, 1216695522, and 1204939542 with canonical metadata and posters. Private first-party app 540274 and an owner-only upload/edit token are configured on this workstation; future approved creates can use the official API."
+      "notes": "All seven corrected episode videos were replaced in place and verified on their existing IDs. Preserve those stable IDs. The three cataloged Instagram shorts are also published on Vimeo as 1216695521, 1216695522, and 1204939542 with canonical metadata and posters. Private first-party app 540274 and an owner-only upload/edit token are configured on this workstation. The user explicitly accepted Vimeo's Developer Addendum and Terms for the Dr. M Experienced Publisher app on August 8, 2026; future approved creates can use the official API."
     },
     "instagram": {
       "label": "Instagram",
