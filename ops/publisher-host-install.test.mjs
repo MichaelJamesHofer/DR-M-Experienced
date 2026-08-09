@@ -46,3 +46,21 @@ test("both systemd services mount the exact pinned project read-only", async () 
     assert.match(contents, /^ReadOnlyPaths=@PROJECT_ROOT@$/m);
   }
 });
+
+test("systemd timers schedule from activation instead of depending on boot time", async () => {
+  for (const timer of ["systemd/drm-publisher-controller.timer", "systemd/drm-publisher-intake.timer"]) {
+    const contents = await source(timer);
+    assert.match(contents, /^OnActiveSec=\S+$/m);
+    assert.match(contents, /^OnUnitActiveSec=\S+$/m);
+    assert.doesNotMatch(contents, /^OnBootSec=/m);
+  }
+});
+
+test("Dropbox intake condition preserves the inbox path with spaces", async () => {
+  const contents = await source("systemd/drm-publisher-intake.service");
+  assert.match(
+    contents,
+    /^ConditionPathIsDirectory="\/home\/otto\/Dropbox\/Dr M Experienced\/publisher-inbox"$/m,
+  );
+  assert.doesNotMatch(contents, /Dr\\x20M\\x20Experienced/);
+});

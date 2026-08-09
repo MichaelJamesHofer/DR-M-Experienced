@@ -2,7 +2,7 @@
 Description=Check the Dr. M approved publishing queue
 
 [Timer]
-OnBootSec=2min
+OnActiveSec=15s
 OnUnitActiveSec=1min
 RandomizedDelaySec=10s
 Persistent=true

@@ -2,7 +2,7 @@
 Description=Check for ready Dr. M Dropbox delivery bundles
 
 [Timer]
-OnBootSec=3min
+OnActiveSec=20s
 OnUnitActiveSec=2min
 RandomizedDelaySec=15s
 Persistent=true

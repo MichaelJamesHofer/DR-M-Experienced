@@ -1,7 +1,7 @@
 [Unit]
 Description=Validate ready Dr. M Dropbox deliveries and prepare review packets
 Documentation=file:///home/otto/DR-M-Experienced-ops/docs/dropbox-delivery-intake.md
-ConditionPathIsDirectory=/home/otto/Dropbox/Dr\x20M\x20Experienced/publisher-inbox
+ConditionPathIsDirectory="/home/otto/Dropbox/Dr M Experienced/publisher-inbox"
 
 [Service]
 Type=oneshot
