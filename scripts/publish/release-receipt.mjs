@@ -407,16 +407,50 @@ export function releaseReceiptLedgerProblems(packet, receipts) {
 export async function withReceiptWriteLock(jobDirectory, callback, options = {}) {
   const timeoutMs = options.timeoutMs ?? 5000;
   const retryMs = options.retryMs ?? 25;
+  const staleMs = options.staleMs ?? 15 * 60_000;
+  const now = options.now ?? Date.now;
+  const isProcessAlive = options.isProcessAlive ?? ((pid) => {
+    try {
+      process.kill(pid, 0);
+      return true;
+    } catch (error) {
+      return error.code === "EPERM";
+    }
+  });
   const lockPath = path.join(jobDirectory, ".receipt-write.lock");
-  const deadline = Date.now() + timeoutMs;
+  const ownerPath = path.join(lockPath, "owner.json");
+  const deadline = now() + timeoutMs;
 
   while (true) {
     try {
       await fs.mkdir(lockPath, { mode: 0o700 });
+      await fs.writeFile(
+        ownerPath,
+        `${JSON.stringify({ pid: process.pid, acquiredAt: new Date(now()).toISOString() })}\n`,
+        { mode: 0o600, flag: "wx" },
+      );
       break;
     } catch (error) {
       if (error.code !== "EEXIST") throw error;
-      if (Date.now() >= deadline) {
+      let removedStale = false;
+      try {
+        const stats = await fs.stat(lockPath);
+        if (now() - stats.mtimeMs >= staleMs) {
+          let owner = null;
+          try {
+            owner = JSON.parse(await fs.readFile(ownerPath, "utf8"));
+          } catch {}
+          if (!Number.isSafeInteger(owner?.pid) || !isProcessAlive(owner.pid)) {
+            await fs.rm(lockPath, { recursive: true, force: true });
+            removedStale = true;
+          }
+        }
+      } catch (staleError) {
+        if (staleError.code !== "ENOENT") throw staleError;
+        removedStale = true;
+      }
+      if (removedStale) continue;
+      if (now() >= deadline) {
         throw new Error(`Timed out waiting for the receipt write lock: ${lockPath}`);
       }
       await new Promise((resolve) => setTimeout(resolve, retryMs));

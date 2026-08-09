@@ -1,62 +1,109 @@
 # New Episode Publishing Process
 
-Use this checklist from approved media through website publication. Preparing or approving a local job never uploads or releases content.
+Last verified: 2026-08-08
 
-If `publishing/hosting-migration.json` has `gates.publishingFreezeActive` set to `true`, stop. Do not publish a new episode until the host cutover validation is complete and the freeze is cleared.
+Use this checklist from the final editor export through public website
+verification. The intended steady-state handoff is one sealed Dropbox delivery,
+one immutable review packet, and one explicit, expiring release authorization.
+Preparing, reviewing, approving, or dispatching a job does not contact a remote
+platform.
 
 RSS.com is the canonical podcast-audio host. Spotify, Apple Podcasts, and, after
-its one-time claim, Amazon Music/Audible receive podcast audio from that feed;
-they are not separate audio uploads. Spotify may replace an already-ingested
-RSS episode with an approved full-video version for Spotify only.
+its one-time claim, Amazon Music/Audible receive audio from that feed. Vimeo,
+YouTube, and RSS.com have official controller adapters. Spotify video remains an
+attended replacement on the RSS-created episode, and Instagram automation is
+not implemented yet. Rumble is optional, human-only, and excluded from the
+intake service and automated controller.
 
-## 1. Register The Episode In The Master Catalog
+If `publishing/hosting-migration.json` has
+`gates.publishingFreezeActive: true`, stop. Do not publish until the migration
+gate is cleared. The controller timer is currently disabled and the machine
+control is intentionally fail-closed; no live release was queued or published
+while this automation was built.
 
-Before creating an approval packet, update `publishing/master-catalog.json`. It
-is the authority for shared show and episode identity, copy, content flags,
-logical asset references, RSS identity, and verified remote IDs/URLs. A private
-episode manifest adds release decisions; it is not a second metadata master.
+## 1. Register The Final Episode
+
+`publishing/master-catalog.json` is the authority for shared show and episode
+identity, copy, content flags, logical asset references, RSS identity, and
+verified remote IDs and URLs. Supabase owns website-only editorial content; a
+private episode manifest owns release decisions. Neither replaces the catalog.
 
 1. Confirm the next immutable, contiguous episode number.
 2. Put the finished binaries under the synced Dr. M project folder, not in git.
-3. Add project-relative entries such as
-   `dropbox:episodes/008-topic/master-video.mp4` to `assetRegistry`, then connect
+3. Add project-relative asset entries such as
+   `dropbox:episodes/008-topic/master-video.mp4` to `assetRegistry`, and connect
    them from the episode's `assetRefs`.
 4. Add the approved unnumbered title, slug, descriptions, website summary,
-   content flags, aliases, and all known stable identities. Start the record
-   with `publicationState: "draft"`; `rssGuid`, `publishDate`,
-   `feedPublishedAt`, and not-yet-created destination identities may be null.
-   Never invent an assigned value. After host publication, record the verified
-   GUID/date/timestamp and change the state to `published`. Never reuse the
-   immutable number of an abandoned draft.
-5. Fully download/sync every asset needed for this release. Record the measured
-   `sha256` and `sizeBytes`, then change its status to `verified`. A Dropbox
-   placeholder or filename match is not sufficient.
-6. Increment the catalog `revision`, update `updatedAt`, and validate with
-   `drm-publish doctor` and `npm run test:publisher`.
+   content flags, aliases, and known stable identities. Start a new episode with
+   `publicationState: "draft"`. Leave unknown values null; never invent a GUID,
+   destination ID, URL, or publication timestamp.
+5. Fully download every selected asset. Record its measured `sha256` and
+   `sizeBytes`, then set its catalog status to `verified`. A Dropbox placeholder
+   or matching filename is not verification.
+6. Increment the catalog revision, update `updatedAt`, and run:
 
-The logical source root is configured outside git at
-`~/.config/drm-publisher/sources.json` and must point directly to the Dr. M
-project folder:
+```bash
+drm-publish doctor
+npm run test:publisher
+```
+
+The private source map at `~/.config/drm-publisher/sources.json` must point only
+to the Dr. M project folder:
 
 ```json
 {
   "schemaVersion": 1,
   "roots": {
-    "dropbox": "/absolute/path/to/the/synced/Dr-M-project-folder"
+    "dropbox": "/home/otto/Dropbox/Dr M Experienced"
   }
 }
 ```
 
-Do not map the whole personal Dropbox, commit this local path, or mark an asset
-verified without both fingerprints.
+Do not map the whole personal Dropbox or commit the machine-specific path.
 
-## 2. Prepare The Approval Packet
+## 2. Seal The Offline Dropbox Delivery
 
-Create a private episode manifest from `publishing/episode.example.json`. Its
-catalog-owned values must exactly match the registered episode; add the exact
-target-specific schedule, visibility, licensing, monetization, notification,
-audience, and disclosure choices. Destination-specific `copy.*` is an explicit
-approval-local exception and does not change canonical catalog copy. Then run:
+Follow [Dropbox Delivery Intake](dropbox-delivery-intake.md). Create one
+permanent delivery directory under:
+
+`/home/otto/Dropbox/Dr M Experienced/publisher-inbox`
+
+The bundle contains `episode.json`, every declared asset, `delivery.json`, and a
+`READY` marker written last. The manifest is based on
+`publishing/episode.example.json` and must match the catalog for all catalog-owned
+values. It also records the exact selected targets, each direct target's release
+choices, and the episode-level audience and disclosure choices.
+
+Seal the bundle as the `otto` user:
+
+```bash
+cd /home/otto/DR-M-Experienced-ops
+/home/otto/.nvm/versions/node/v22.22.0/bin/node \
+  scripts/publish/dropbox-intake.mjs seal \
+  "/home/otto/Dropbox/Dr M Experienced/publisher-inbox/<delivery-id>" \
+  --delivery-id <delivery-id>
+```
+
+Validate it without creating a job:
+
+```bash
+/home/otto/.nvm/versions/node/v22.22.0/bin/node \
+  scripts/publish/dropbox-intake.mjs scan --validate-only
+```
+
+The scanner has no network access. It validates and rehashes the bundle, then
+creates only a prepared review packet. It cannot approve, authorize, dispatch,
+upload, schedule, or publish. A binary or metadata change requires a new
+delivery ID and directory; never replace bytes in a sealed delivery.
+
+Rumble must not appear in an intake bundle. If the owner separately chooses a
+Rumble release, prepare its exact media and copy outside this automated path and
+follow the current human-only procedure in `docs/operations-manual.md`.
+
+## 3. Prepare And Review The Immutable Packet
+
+The offline intake returns the existing job ID after `status=prepared`. For a
+manual local preparation, run `drm-publish prepare` directly:
 
 ```bash
 drm-publish doctor
@@ -64,117 +111,267 @@ drm-publish prepare /absolute/path/to/episode.json
 drm-publish show <job-id>
 ```
 
-Review the exact title, descriptions, media fingerprints, audience and disclosure flags, schedule, targets, and warnings in the packet. Record the local review attestation with the exact hash and confirmation phrase shown in that packet. The `--by` value is attribution, not identity authentication; it grants neither upload nor release authority.
+Review the generated `approval.md` for:
 
-If `prepare` reports catalog/manifest drift, correct the catalog or manifest and
-create a new packet. Do not bypass the catalog by editing only a remote
-dashboard. Select `rss.com` for every podcast-audio release, include a verified
-`assets.podcastAudio`, and add its exact release decision under
-`releasePlan["rss.com"]`. Selecting Apple or Amazon also requires `rss.com` in
-`targets`; neither directory gets its own release-plan entry.
+- exact title, descriptions, tags, and platform-specific copy
+- episode number, slug, catalog revision, and catalog episode hash
+- exact media paths, byte counts, and SHA-256 values
+- target accounts, channel IDs, and routing modes
+- release time, initial/final visibility, license, monetization, notifications,
+  audience, and disclosures
+- every warning and platform readiness result
 
-For Rumble, the only permitted release plan is Option C
-`rumble_only_option_c`, initial
-Unlisted visibility, Premium/exclusive placement disabled, and every additional
-syndication target disabled. Options A/B and `personal_use` are not allowed for
-this project. Any missing or enabled syndication value blocks preparation.
+If any value changes, prepare a new packet. Do not edit generated job files or
+correct only a remote dashboard. With the source map configured, `prepare`
+verifies each supplied binary against its registered logical asset and measured
+fingerprint.
 
-With a configured Dropbox project root, `prepare` verifies that supplied media
-resolves to the registered logical asset; a `verified` catalog asset must also
-match SHA-256 and byte size. Until that root is configured, the packet warns
-that path binding is unverified while still fingerprinting the exact supplied
-media.
+For podcast audio, select `rss.com` and provide `assets.podcastAudio` plus the
+exact `releasePlan["rss.com"]`. Apple and Amazon are RSS fan-out, not direct
+audio uploads. Selecting Apple or Amazon requires `rss.com` in the reviewed
+manifest, but neither receives a direct controller operation.
 
-## 3. Obtain Separate Attended Authorizations
+## 4. Record Review, Then Release Authorization
 
-The local review attestation created in step 2 authorizes neither upload nor release. No live adapter or durable receipt ledger is implemented yet. Stop here unless the user gives a fresh attended authorization for one exact destination and one exact external action.
+The first record is a review attestation only:
 
-For each destination, keep upload and release as separate decisions:
+```bash
+drm-publish approve <job-id> \
+  --hash <approval-hash> \
+  --by "<reviewer>" \
+  --confirm "approve <job-id> <approval-hash>"
+```
 
-- first obtain authorization to upload the exact integrity-checked asset and copy to one named account; this does not authorize public visibility
-- perform only that one attended upload, creating a private or draft item where the platform supports it
-- record the returned ID, URL, processing state, timestamp, and any uncertainty before attempting another destination
-- if a request times out after remote creation may have begun, reconcile the remote account manually and never retry creation blindly
-- after the private/draft item is verified, obtain a separate fresh authorization for its exact visibility, schedule, license, monetization, notification, audience, and disclosure values
+This command rechecks the assets and unresolved release controls. Its immutable
+`approval.json` explicitly authorizes neither upload nor release.
 
-Once those two authorizations exist, use the unchanged assets in this order:
+After the owner reviews the unchanged packet and approves the exact remote side
+effects, create a separate, expiring authorization. List only direct targets
+that this controller will execute: `rss.com`, `youtube`, and/or `vimeo`.
 
-- publish the approved `podcastAudio` through RSS.com first, then verify the new
-  GUID, enclosure, title, structured episode number, description, artwork, and
-  publication date in the canonical feed before treating any directory as done
-- verify existing Apple show `1870433419` ingests that RSS.com item; after
-  Amazon's one-time claim is complete, verify its single listing does the same
-- wait for the RSS.com item to appear in the existing Spotify show. For an
-  approved video episode, use the episode menu in Spotify for Creators to upload
-  `fullVideo` as the replacement for that existing episode. For an audio-only
-  release, do nothing separately in Spotify. Never create a duplicate Spotify
-  episode or upload `podcastAudio` as a direct fallback
-- upload the full video to YouTube and Vimeo through their approved API connections when configured
-- publish the approved vertical Reel through Instagram's resumable upload from the local file when configured; use short-lived public staging only as a fallback and delete the staged object after processing
-- prepare the Rumble media and metadata locally, then hand the unchanged packet to the user for direct manual entry and submission; do not attach browser automation to Rumble without Rumble's prior written permission
+```bash
+drm-publish authorize <job-id> \
+  --hash <approval-hash> \
+  --by "<authorizer>" \
+  --targets "vimeo" \
+  --expires-at "<RFC3339 timestamp with timezone>" \
+  --confirm "authorize-release <job-id> <approval-hash> vimeo"
+```
 
-Rumble's [Terms](https://rumble.com/s/terms), last modified July 21, 2026,
-prohibit automated software access or interaction absent prior written
-permission. The user must manually expand Additional Syndication, turn YouTube,
-Vimeo, Facebook, and any other syndication off, select only Option C `Rumble
-Only (non-exclusive, similar to YouTube)`, keep Premium off and initial
-visibility Unlisted, and then complete the rights and Terms attestations and
-submit. Option C is non-exclusive under Rumble's official [licensing
-explanation](https://rumble.support/help/a-simple-explanation-of-the-differences-between-licensing-options),
-but it remains subject to the Terms' General License, including AI/ML training
-and third-party AI sublicensing provisions. Before checking the rights box, a
-human must review every incorporated music, footage, graphic, and other
-third-party asset. Never infer that this review or the newly surfaced Terms
-provisions have been acknowledged.
+Use the exact same target order in `--targets` and `--confirm`. Authorization is
+bound to the review hash, assets, copy, release choices, schedule, and target
+routing. It defaults to one hour if `--expires-at` is omitted and may not exceed
+24 hours. Prefer an explicit expiry close to the approved release window.
 
-Do not regenerate or edit copy after review; create a new packet if anything changes. Automated live posting remains disabled until the publisher has immutable receipts, deterministic operation IDs, per-target state, and remote reconciliation.
+Do not include Spotify, Apple, Amazon, Instagram, or Rumble in an authorization
+that will be passed to `dispatch`; the controller rejects unsupported targets.
+An attended Spotify or Instagram action needs a separately scoped prepared job
+and release authorization if its authorization must be preserved in this
+ledger. The dashboard action itself remains attended until an official adapter
+is implemented and enabled.
 
-## 4. Reconcile Platform Metadata Into The Catalog
+## 5. Dispatch Atomically
 
-Collect and verify:
+Queue the exact authorized direct target set:
 
-- structured episode number, unnumbered public title, publication date, duration,
-  summary, and thumbnail
-- the same GUID in the current canonical feed and every RSS directory
-- Vimeo ID and URL
-- Spotify ID and URL
-- YouTube ID and URL
-- Rumble URL
+```bash
+drm-publish dispatch <job-id>
+drm-publish queue <job-id>
+drm-publish status <job-id>
+```
 
-Write each verified GUID, ID, and URL back to the same episode in
-`publishing/master-catalog.json`, then increment its revision/date and validate
-again. `npm run sync-episodes` can be used as a metadata aid, but generated
-mirrors, Supabase, and remote responses must not overwrite approved catalog copy.
-The sync command does not update Supabase or publish the website.
+`dispatch` performs no remote I/O. It validates the immutable authorization and
+adds deterministic operations to the private SQLite control database in one
+transaction. A missing dependency, create-slot conflict, or operation-ID
+collision rolls back the whole dispatch instead of leaving a partial target
+set. Repeating the exact dispatch returns the existing operations.
 
-## 5. Add The Episode To Supabase
+The control database is
+`~/.local/state/drm-publisher/control/publisher.sqlite3` with owner-only mode
+`0600`. Do not edit or delete it to clear an error.
 
-Create or update the parent row in `public.episodes`, then add its related rows:
+## 6. Open The Exact Machine Gate
+
+Before allowing a controller pass, confirm all four layers are open for each
+queued platform:
+
+1. The release authorization is valid and unexpired.
+2. `publishing/platforms.json` has the global gate and the platform's exact
+   `apiAutomation.enabled` policy revision open.
+3. The platform credential, account-identity preflight, and provider-specific
+   prerequisites pass.
+4. The owner-only machine control permits only the intended platform list.
+
+Current direct-adapter boundaries are:
+
+| Platform | Controller status |
+| --- | --- |
+| Vimeo | Adapter and credential/account gates are ready for a separately authorized new release. |
+| YouTube | Adapter exists, but the owner OAuth token and the applicable public/unlisted upload compliance gate are still closed. |
+| RSS.com | Adapter exists, but API use requires Max entitlement and a private v4 API key; the free plan remains an attended dashboard path. |
+
+Inspect the host without changing it:
+
+```bash
+drm-publish host status
+```
+
+Only after reviewing the queue and all tracked gates, allow the exact platform
+set and run one controlled pass:
+
+```bash
+drm-publish host run \
+  --platforms "vimeo" \
+  --confirm "run-publisher vimeo"
+
+drm-publish controller --once
+
+drm-publish host pause \
+  --confirm "pause-publisher"
+```
+
+The machine control at
+`~/.local/state/drm-publisher/automation-control.json` must be an owner-owned,
+non-symlink regular file with mode `0600`. Missing, invalid, insecure, paused, or
+non-allowlisted state fails closed. The controller reloads it immediately before
+every provider mutation. Rumble cannot be allowlisted.
+
+Use only the clean, commit-pinned deployment installed by
+`ops/install-publisher-host.sh`. The user timer remains disabled until the full
+safety review and first controlled release are complete; do not enable it as
+part of an ordinary episode release.
+
+## 7. Verify Direct Adapter Results
+
+For every mutating provider step, the controller first records write intent and
+the pinned build SHA. Each adapter stages the exact approved bytes in the private
+content-addressed asset store, rechecks their hash and size, rejects symlinks or
+source mutation, and checkpoints returned provider sessions and identities.
+
+After provider acceptance and authenticated readback, adapters automatically
+append `accepted`, `published`, and `verified` receipts. Inspect both the queue
+and immutable receipt ledger:
+
+```bash
+drm-publish queue <job-id>
+drm-publish receipts <job-id>
+drm-publish status <job-id>
+```
+
+Platform-specific verification:
+
+- **RSS.com:** verify the returned episode ID and GUID, enclosure URL, title,
+  structured episode number, description, artwork, and publication date in the
+  canonical feed. The adapter checkpoints presigned audio/artwork sessions,
+  upload completion, episode-write intent, and the accepted identity. An
+  ambiguous response after episode-write intent blocks a second episode POST.
+- **Vimeo:** verify the returned video belongs to account `253415660`, finished
+  processing, and matches the approved copy, privacy, and media.
+- **YouTube:** verify the returned video belongs to channel
+  `UCFA1nVv4lKMBlx81gjMAOFQ` and matches the approved copy, thumbnail,
+  made-for-kids state, disclosures, license, schedule, notifications, and
+  visibility.
+
+Do not call a provider response alone verified. Completion requires the
+adapter's authenticated readback and verified receipt.
+
+## 8. Complete RSS Fan-Out And Attended Platforms
+
+After RSS.com is verified:
+
+1. Confirm the new GUID and enclosure appear in the canonical feed.
+2. Verify that same item in the existing Spotify and Apple shows. After Amazon's
+   one-time claim, verify it there as well. Do not upload podcast audio separately
+   to any directory.
+3. For an approved video episode, wait for the RSS-created item in Spotify for
+   Creators, then use that exact episode's **Upload video** action with the
+   approved `fullVideo`. Never create a duplicate Spotify episode or upload the
+   audio as a fallback. Audio-only episodes need no Spotify dashboard action.
+4. Instagram is not a controller target yet. Keep `@drmexperienced` as a Creator
+   professional account. Until its Meta app, linked Page, publishing ID, scopes,
+   token, cover controls, checkpointing, and adapter gates are complete, publish
+   only through a separately authorized attended handoff.
+5. Rumble is optional and outside automation. If it is not selected, leave its
+   catalog destination null and do not create a placeholder website link. If it
+   is selected, the owner performs the current manual-only workflow; it must not
+   be added to Dropbox intake, `dispatch`, machine control, or browser automation.
+
+For an independently observed attended action, append receipts with
+`drm-publish receipt` using one stable operation ID and the exact returned ID,
+URL, processing evidence, and verified readback. Follow the receipt lifecycle in
+`docs/operations-manual.md`; never jump directly to `verified` without a valid
+earlier state and meaningful readback evidence.
+
+## 9. Recover Without Duplicating A Release
+
+Never blindly retry after a timeout or uncertain provider response.
+
+```bash
+drm-publish queue <job-id>
+drm-publish receipts <job-id>
+drm-publish status <job-id>
+```
+
+- Use `retry` only for a blocked operation that definitively failed before any
+  provider write.
+- Use `reconcile` only for a post-write operation with durable write intent and
+  a provider checkpoint. It resumes that exact remote session or resource:
+
+```bash
+drm-publish reconcile <operation-id> \
+  --reason "resume exact checkpoint after reviewed interruption" \
+  --confirm "reconcile-operation <operation-id>"
+```
+
+- Use `supersede` only when reviewed evidence proves there was no provider write
+  intent, checkpoint, acceptance, remote ID, or URL. It releases a blocked
+  create slot while preserving the audit trail:
+
+```bash
+drm-publish supersede <operation-id> \
+  --reason "replace invalid pre-write job" \
+  --evidence "reviewed events prove no provider write intent" \
+  --confirm "supersede-no-remote-write <operation-id>"
+```
+
+If Dropbox intake reports `manual_recovery_required`, inspect its private claim
+and the jobs directory. Do not delete the claim until absence of a prepared job
+is proven. See [Dropbox Delivery Intake](dropbox-delivery-intake.md) for the exact
+intake recovery states.
+
+## 10. Reconcile The Catalog And Website
+
+After remote verification, write every verified identity back to the same
+episode in `publishing/master-catalog.json`:
+
+- RSS GUID, publish date, feed timestamp, and hosted audio URL
+- each selected destination's exact stable ID and HTTPS URL
+- any replaced identity in the appropriate archive rather than deleting history
+
+Increment the catalog revision/date and validate it. Unknown or intentionally
+unselected destinations stay null.
+
+Create or update the parent row in `public.episodes` as `draft`, then update its
+related website rows:
 
 - `public.episode_topics`
 - `public.episode_references`
 - `public.episode_key_takeaways`
-- `public.episode_checklist_items`, when an ordered checklist is useful
+- `public.episode_checklist_items`, when useful
 - `public.episode_sections`
 - `public.episode_section_paragraphs`
 
-Keep the episode in `draft` until all four platform references and the editorial sections are complete. Public RLS policies hide both draft parent rows and their child content. Copy overlapping number, slug, title, RSS.com `audio_url`, and destination identities from the master catalog; verify exact catalog readback after the production write. Supabase is authoritative only for the website-specific editorial fields and publication state.
+Website platform requirements follow the catalog, not a fixed list of four
+services. Every non-null destination binding in the master catalog must have one
+exact, published, non-`coming_soon` Supabase reference. A deliberately
+unselected destination remains null and needs no placeholder reference. Do not
+publish a null, guessed, stale, or mismatched platform URL merely to fill a slot.
 
-## 6. Verify Related Products And Blogs
+Review related products and blogs for genuine relevance. Mirror durable website
+recovery content into `supabase/seed.sql` and the checked-in fallback data after
+the editorial change is final; those mirrors do not become the metadata master.
 
-Affiliate resources can be linked manually through `public.affiliate_product_episode_links` or by topic through `public.affiliate_product_auto_topics`. Review the resulting product cards on the episode page and remove broad or inaccurate matches.
-
-Add blog relationships only when the episode is genuinely relevant to the post.
-
-## 7. Maintain Recovery Data
-
-When the editorial change is final, mirror durable website content into
-`supabase/seed.sql` and the checked-in fallback data. These mirrors support local
-recovery; Supabase remains the production source for website-only editorial
-content, while shared episode metadata remains mastered in
-`publishing/master-catalog.json`.
-
-## 8. Verify Locally
+## 11. Verify And Publish The Website
 
 Run:
 
@@ -188,8 +385,12 @@ npm run test:database-security
 CONTENT_CATALOG_STRICT=true npm run build
 ```
 
-Review the homepage, episode detail page, episodes library, related products, related blogs, previous/next navigation, and mobile layout. Confirm all four platform links open the intended episode.
+Review the homepage, episode detail page, episodes library, thumbnail, audio and
+video links, related products, related blogs, previous/next navigation, and
+mobile layout. Confirm every included platform reference opens the exact episode
+and that omitted platforms do not render empty controls.
 
-## 9. Publish The Website
-
-Set the Supabase episode status to `published`, rerun the local checks, then deploy the verified commit through `main`. Confirm the GitHub Pages workflow and live episode URL before announcing the episode.
+Set the Supabase episode status to `published` only after the selected
+destinations and editorial content pass readback. Deploy the reviewed commit
+through `main`, then confirm the GitHub Pages workflow and live episode URL
+before announcing the release.

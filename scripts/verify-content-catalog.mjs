@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadCatalog } from "./publish/catalog.mjs";
+import { requiredEpisodeReferencePlatforms } from "./publish/catalog-platform-policy.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -207,7 +208,7 @@ for (const episode of publishedEpisodes) {
       .map((reference) => episodePlatformForUrl(reference.url))
       .filter(Boolean)
   );
-  for (const platform of ["Vimeo", "Spotify", "YouTube", "Rumble"]) {
+  for (const platform of requiredEpisodeReferencePlatforms(masterEpisode)) {
     if (!availablePlatforms.has(platform)) {
       problems.push(`${slug}: missing published ${platform} reference.`);
     }

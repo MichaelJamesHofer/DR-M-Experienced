@@ -100,7 +100,7 @@ function validPlatformConfig() {
       rssDownstream: ["spotify", "apple", "amazon"],
     },
     platforms: {
-      "rss.com": { label: "RSS.com", mode: "manual_host_upload", asset: "podcastAudio", rssRole: "canonical_host", channelUrl: "https://example.test/rss-com", ...platformIdentity(null, "dr-m-experienced", ["containerId"]), notes: "" },
+      "rss.com": { label: "RSS.com", mode: "api_after_max_auth", apiAutomation: { enabled: false, policyRevision: 1 }, asset: "podcastAudio", rssRole: "canonical_host", channelUrl: "https://example.test/rss-com", ...platformIdentity("397420", "dr-m-experienced", ["accountId", "containerId"]), notes: "" },
       spotify: { label: "Spotify", mode: "manual_video_replacement_after_rss_ingest", asset: "fullVideo", rssRole: "direct_media_destination", channelUrl: "https://example.test/spotify", ...platformIdentity("spotify-account", "abcdefghijklmnopqrstuv", ["containerId"]), notes: "" },
       apple: { label: "Apple", mode: "rss_fanout", source: "rss", dependsOn: "rss.com", channelUrl: "https://example.test/apple", ...platformIdentity(null, "1870433419", ["containerId"]), notes: "" },
       amazon: { label: "Amazon", mode: "rss_fanout", source: "rss", dependsOn: "rss.com", channelUrl: null, ...platformIdentity(null, "amazon-show", ["containerId"]), notes: "" },
@@ -508,7 +508,7 @@ test("target planning models RSS fan-out and account gates", () => {
     instagramReel: null,
   };
   const plan = buildTargetPlan(config, manifest, assets);
-  assert.equal(plan.find((item) => item.id === "rss.com").readiness, "manual_upload_required");
+  assert.equal(plan.find((item) => item.id === "rss.com").readiness, "api_auth_required");
   assert.equal(
     plan.find((item) => item.id === "spotify").readiness,
     "manual_video_replacement_required"

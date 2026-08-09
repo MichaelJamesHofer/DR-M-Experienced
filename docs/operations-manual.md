@@ -104,12 +104,22 @@ Interpretation on August 8, 2026:
 - GitHub connector: authenticated with admin/push access to this repository.
   Otto's local `gh` credential is also authenticated through the Otto Chrome
   profile and stored outside the repository; use `HOME=/home/otto` for CLI work.
-- The publisher now has a general immutable per-job release-receipt ledger for
-  `accepted`, `processing`, `published`, `verified`, `failed`, and `superseded`
-  states. It validates each receipt against the approved packet and operation ID.
-  Upload adapters and automatic remote reconciliation are still incomplete, so
-  receipts currently record independently observed results rather than perform
-  or authorize external actions.
+- The publisher now has separate immutable review and release-authorization
+  records, content-addressed private asset staging, a durable node:sqlite queue,
+  official Vimeo/YouTube/RSS.com adapters, provider write intent and hashed
+  checkpoints, exact-resource reconciliation, and automatic immutable receipt
+  writes. All authorized targets enqueue atomically or none do. The installed
+  one-minute user timer is intentionally disabled and inactive during the full
+  safety review. `host status` reports fail-closed paused because the machine
+  control file is absent, and the queue is empty. No live release has been
+  queued or published through this controller.
+- Vimeo app `540274`, account `253415660`, its owner-only upload/edit token, and
+  upload quota are verified. RSS.com podcast ID `397420` is bound, but the v4
+  adapter needs a Max entitlement and API key; free/manual hosting continues.
+  Google Cloud project `dr-m-experienced-publisher`, YouTube Data API v3, and the
+  production desktop OAuth client are configured, but the production channel
+  owner's OAuth token is absent and public/unlisted API upload remains gated on
+  the applicable compliance audit.
 - Publisher preparation performs a full-file `ffmpeg loudnorm` scan and blocks
   RSS podcast audio and Spotify replacement video outside `-17` through `-15`
   LUFS or above `-1 dBTP`.
@@ -123,6 +133,7 @@ Interpretation on August 8, 2026:
 | Shared show and episode distribution metadata | `publishing/master-catalog.json` |
 | Short-form metadata, local-master fingerprints, and Instagram/Vimeo mappings | `publishing/short-form-catalog.json` |
 | Stable account/show/channel IDs and current routing | `publishing/platforms.json` |
+| Tracked global/per-platform automation gates and policy revisions | `publishing/platforms.json` |
 | Apple Episodes 1-2 GUID incident, crosswalk, and repair gates | `publishing/apple-guid-repair.json` |
 | Approved seven-episode title-transition evidence | `publishing/episode-title-migration.json` |
 | Approved episode-art assets and remote rollout receipt | `publishing/brand/asset-manifest.json` and `publishing/episode-thumbnail-rollout.json` |
@@ -131,7 +142,8 @@ Interpretation on August 8, 2026:
 | Binary masters | Project-scoped Dropbox folder mapped by `~/.config/drm-publisher/sources.json` |
 | Production website-only editorial content | Supabase project `tdbsuzciwotleualdcjf` |
 | Website source and deployment | This repository and GitHub Actions |
-| Private jobs, approvals, immutable release receipts, and feed evidence | `~/.local/state/drm-publisher/` |
+| Private jobs, approvals, queue/checkpoints, staged assets, receipts, and feed evidence | `~/.local/state/drm-publisher/` |
+| Machine-local running/paused state and exact platform allowlist | Mode-0600 `~/.local/state/drm-publisher/automation-control.json` |
 | Credentials | `~/.config/drm-publisher/` and platform-managed browser storage |
 | Current remote truth | Authenticated dashboard plus an independent public check |
 
@@ -193,6 +205,14 @@ this workstation, the direct project root is configured at
 verified. Corrected video and derived podcast audio stay `unmounted` until their
 full-file checks and exact catalog bindings pass.
 
+An adapter never streams the mutable Dropbox path directly through a release.
+After local and account preflight, it copies the approved regular file to
+`~/.local/state/drm-publisher/assets/sha256/<prefix>/<sha256>` through a private
+temporary file, checks that the source identity did not change while copying,
+verifies the digest, and atomically installs a mode-0600 staged object. Reuse
+requires a fresh size and SHA-256 check. Symlinks and changed sources fail before
+provider upload.
+
 ## 3. Brand Contract
 
 Canonical show name:
@@ -239,13 +259,17 @@ DaVinci Resolve exports
   -> project-scoped Dropbox binary folder
   -> repository master catalog
   -> catalog-bound episode manifest and integrity packet
-  -> attended draft/private uploads
-      -> RSS.com podcast audio -> canonical RSS -> Spotify, Apple, Amazon
-      -> Spotify video through Spotify for Creators
-      -> YouTube full video
-      -> Vimeo full video
-      -> Rumble full video
-      -> Instagram Reel
+  -> immutable review plus exact release authorization
+  -> atomic durable operation graph
+  -> tracked policy gates plus mode-0600 local host allowlist
+  -> immutable content-addressed staging
+  -> pinned Node 22 controller, write intent, and provider checkpoint
+      -> RSS.com podcast audio API after Max/key -> canonical RSS -> Spotify, Apple, Amazon
+      -> Vimeo full video API (credential-ready)
+      -> YouTube full video API after owner OAuth/audit gates
+      -> Spotify video through an attended Spotify for Creators handoff
+      -> Instagram Reel after Meta app/Page/publishing-ID setup
+      -> Rumble direct-human handoff only
   -> verified remote IDs and URLs
   -> Supabase episode/catalog rows
   -> strict GitHub Pages build
@@ -259,12 +283,16 @@ distribution. Spotify receives that RSS audio; for an approved video episode,
 the operator may replace the already-ingested episode's audio with video in
 Spotify for Creators.
 
-The current publisher prepares and fingerprints files, validates decisions,
-creates a review packet, and stores hash-bound immutable per-job release
-receipts. The receipt commands do not upload, publish, authorize an external
-action, or reconcile a platform automatically. Browser help remains attended,
-and live adapters plus remote reconciliation must be implemented and tested
-against draft/private items before this is described as fully automated.
+The publisher prepares and fingerprints files, validates decisions, creates a
+review packet, records a separate exact release authorization, atomically queues
+deterministic operations, stages exact bytes, and can run supported official
+adapters with durable provider checkpoints, authenticated readback, and
+automatic receipts. A receipt remains evidence, not authorization. The tracked
+global/per-platform gates and policy revision cannot be overridden by the
+separate local running/paused allowlist. The controller timer is installed but
+disabled during safety review, the local control is fail-closed paused, and no
+live release has exercised it. Spotify video remains attended; Instagram still
+needs Meta prerequisites; Rumble remains excluded.
 
 ## 5. Account And Destination Inventory
 
@@ -273,15 +301,15 @@ against draft/private items before this is described as fully automated.
 | Website | `https://drmexperienced.com` | The apex returns HTTP 200 and `www` redirects to it. The corrected Episode 7 page and all three short-form routes are deployed. The short routes return HTTP 200, are sitemap-indexed, load their checked-in posters, bind the exact Vimeo IDs, and have no document overflow at 320, 390, or 1440 pixels. Production PostHog ingestion and all three tracked event checks are verified. Dashboard `1086989` has six verified growth views |
 | GitHub | `MichaelJamesHofer/DR-M-Experienced` | Public repo; `main` deploys production |
 | Supabase | project `tdbsuzciwotleualdcjf` | Production content catalog and form receiver; the guarded August 7 migrations retain their revision-10 RSS/YouTube readback, and the August 8 Episode 7 editorial correction migration passed independent summary, takeaway, section, paragraph, and topic readback |
-| RSS.com | slug `dr-m-experienced`, feed `https://media.rss.com/dr-m-experienced/feed.xml` | Canonical XML/dashboard copy is exact and token-free; seven normalized enclosures retain the GUIDs captured August 5 and pass remote decode/loudness gates; no season tags. A support request for in-place GUID-only capability is pending, no live GUID change was requested, and the public landing-page cache still exposes `RSSVERIFY` |
+| RSS.com | podcast `397420`, slug `dr-m-experienced`, feed `https://media.rss.com/dr-m-experienced/feed.xml` | Canonical XML/dashboard copy is exact and token-free; seven normalized enclosures retain the GUIDs captured August 5 and pass remote decode/loudness gates; no season tags. The official v4 adapter is implemented, but API access requires Max and no entitlement/key is configured, so free/manual hosting continues. A support request for in-place GUID-only capability is pending, no live GUID change was requested, and the public landing-page cache still exposes `RSSVERIFY` |
 | Spotify | show `7GGLljxmO0G3FLjPy8vfcw` | Corrected video is attached to all seven existing episode IDs; public readback verifies video, approved artwork, and approved copy for 7/7. Authenticated support is reviewing whether both episode identities, videos, and analytics would survive either proposed GUID substitution; no live change was made |
 | Apple | public show `1870433419` | Configured directly to RSS.com with exact canonical metadata; preserve it; five Available and two RSS Draft records remain. Support case `20000130526608` confirmed historical GUID mismatches for Episodes 1-2, and the server-side-remap follow-up is submitted and pending. Remote repair remains blocked by `publishing/apple-guid-repair.json`; no live GUID changed. Public JSON-LD/search caches still use legacy show wording for Episodes 4-7 |
 | Apple Connect | `cfab5caf-554e-4ebe-a28c-2e4748147b82` | Internal identity of the public show |
 | Apple duplicate Draft | public-style ID `1896845422`, internal `949adc0b-c62f-410c-962d-17563cf3b07a` | Inspected nonpublic no-feed show; archived August 6, 2026; public lookup returned 404 on August 7 |
 | Apple stale Episode 4 Draft | Apple episode `1000759096366`, internal `fc3cdd48-13c5-4122-b464-b62376765410` | Inspected manual subscriber episode; archived August 6, 2026 |
 | Amazon | no ID yet | Signed-in account has zero claimed shows; submit the canonical RSS.com feed once, verify ownership, and record its stable identity |
-| YouTube | channel `UCFA1nVv4lKMBlx81gjMAOFQ`, uploads playlist `UUFA1nVv4lKMBlx81gjMAOFQ` | Seven normalized replacements are public with exact catalog copy and approved thumbnails; the prior seven uploads remain unlisted with replacement links and are retained for rollback. API automation auth/audit remains incomplete |
-| Vimeo | user `253415660` | Seven corrected episode videos remain verified on their stable IDs. The three Instagram shorts are verified as `1216695521`, `1216695522`, and `1204939542` with canonical metadata and posters. A private API app is prepared, but the owner must complete Vimeo's legal-attestation checkbox before creating the upload/edit token |
+| YouTube | channel `UCFA1nVv4lKMBlx81gjMAOFQ`, uploads playlist `UUFA1nVv4lKMBlx81gjMAOFQ` | Seven normalized replacements are public with exact catalog copy and approved thumbnails; the prior seven uploads remain unlisted with replacement links and are retained for rollback. Project `dr-m-experienced-publisher`, Data API v3, desktop client, and production OAuth app are ready. Owner `michaeljameshofer@gmail.com` must grant OAuth once; the DRM account is only a Manager. Public/unlisted API uploads also remain blocked pending the applicable compliance audit |
+| Vimeo | user `253415660`, app `540274` | Seven corrected episode videos remain verified on their stable IDs. The three Instagram shorts are verified as `1216695521`, `1216695522`, and `1204939542` with canonical metadata and posters. The private app, exact account, owner-only upload/edit token, and upload quota are verified; the adapter is credential-ready for a separately authorized release |
 | Instagram | `@drmexperienced`, public profile ID `80068141150` | Public state confirms the exact name/bio and Creator professional classification, with `is_business_account` false. All three Reels map to verified local masters and Vimeo IDs. Adding the external website link remains a mobile-app-only action, and Meta API setup is waiting for the owner's Facebook developer login; Business conversion is neither required nor desired |
 | Rumble | account `282015440`, channel `7820170` | The exact seven corrected videos and thumbnails are locally verified, but the August 8 cache reset invalidated the staged forms. Existing Episode 7 video `v7bvtu4` is not in revision-11 description parity. The batch is blocked until a human restages it with the current copy, Option C, Unlisted, all syndication off, and Premium off; reviews third-party asset rights; completes the on-site rights/Terms controls; and submits |
 
@@ -328,6 +356,22 @@ Rumble, inspect or edit its forms through scripts, check attestations, or submit
 /home/otto/.local/bin/drm-publish approve <job-id> \
   --hash <approval-hash> --by "Otto" \
   --confirm "approve <job-id> <approval-hash>"
+/home/otto/.local/bin/drm-publish authorize <job-id> \
+  --hash <approval-hash> --by "Otto" --targets <comma-list> \
+  --confirm "authorize-release <job-id> <approval-hash> <comma-list>"
+/home/otto/.local/bin/drm-publish dispatch <job-id>
+/home/otto/.local/bin/drm-publish queue <job-id>
+/home/otto/.local/bin/drm-publish host status
+/home/otto/.local/bin/drm-publish host pause --confirm "pause-publisher"
+/home/otto/.local/bin/drm-publish host run \
+  --platforms <comma-list> --confirm "run-publisher <comma-list>"
+/home/otto/.local/bin/drm-publish controller --once
+/home/otto/.local/bin/drm-publish reconcile <operation-id> \
+  --reason <text> --confirm "reconcile-operation <operation-id>"
+/home/otto/.local/bin/drm-publish supersede <operation-id> \
+  --reason <text> --evidence <text> \
+  --confirm "supersede-no-remote-write <operation-id>"
+/home/otto/.local/bin/drm-publish auth youtube
 /home/otto/.local/bin/drm-publish receipt <job-id> \
   --platform <platform-id> --operation-id <operation-id> \
   --status <accepted|processing|published|verified|failed|superseded> \
@@ -348,6 +392,30 @@ The approval hash covers normalized copy, decisions, file paths, media metadata,
 SHA-256 fingerprints, and the selected master-catalog revision/binding. Any
 changed input or catalog/manifest drift invalidates approval.
 
+`authorize` is distinct from `approve`: it creates an owner-only immutable
+record bound to the approval hash, exact destinations, assets, copy, release
+plan, timing, visibility, disclosures, and approver. `dispatch` validates that
+record and writes deterministic operations to
+`~/.local/state/drm-publisher/control/publisher.sqlite3`; it contacts no
+platform. A multi-target dispatch is one transaction: dependencies and create
+slots either all enqueue or the entire dispatch rolls back. The controller then
+requires all four barriers: the immutable authorization, tracked global and
+per-platform gates with unchanged policy revision, a secure running local host
+control that allowlists the exact platform, and the adapter's account/capability
+preflight. Missing or insecure `automation-control.json` means paused. The
+controller reloads that local control immediately before every mutating step.
+The installed timer is disabled and inactive during safety review. Do not create a
+running control file, enable the timer, or run `controller --once` for a real job
+until the exact release and full safety review are complete.
+
+Every adapter copies the approved files to private content-addressed staging
+before upload. Before each provider mutation the controller records write
+intent and the pinned build SHA. It then saves each provider session/resource as
+a hashed, sequenced private checkpoint. `reconcile` may resume only that exact
+checkpoint. `retry` is limited to a definite pre-write failure. `supersede`
+releases a blocked/failed create slot only when reason and evidence are supplied
+and no provider write intent, checkpoint, acceptance, remote ID, or URL exists.
+
 `receipt` writes a new immutable JSON file under the private job's `receipts/`
 directory and binds it to the job, approval hash, catalog, destination plan,
 asset, approved copy, release plan, platform, and deterministic operation ID.
@@ -359,10 +427,26 @@ remote ID or HTTPS URL, and `verified` also requires meaningful typed readback
 evidence. The command validates platform URL origins and stable-ID bindings,
 rejects remote identity drift and duplicate or regressive states, serializes
 writes with a per-job lock, and revalidates the entire ledger on every read.
+If a process dies while holding that lock, recovery waits at least 15 minutes
+and removes it only when the recorded PID is invalid or no longer alive.
 `receipts` lists the ledger; `status` shows the latest receipt per destination.
 The self-reported `--by` value and confirmation phrase are evidence controls,
-not identity or release authorization. Current live adapters do not yet create
-these receipts or run remote reconciliation automatically.
+not identity or release authorization. The Vimeo, YouTube, and RSS.com adapters
+perform authenticated account preflight and readback and write lifecycle
+receipts automatically. An ambiguous prior attempt blocks replay so the
+controller cannot blindly create a duplicate.
+
+Do not confuse a historical `superseded` receipt with the `drm-publish
+supersede` queue command. The command releases only a blocked or failed create
+slot proven never to have reached a provider; it cannot supersede an accepted,
+published, verified, checkpointed, or ambiguous remote operation.
+
+`ops/install-publisher-host.sh` deploys only a clean Git commit. It archives that
+commit under `~/.local/share/drm-publisher/releases/<git-sha>/`, installs
+production dependencies with Node `22.22.0`, atomically switches the `current`
+symlink, and pins the systemd service to both that release and build SHA. The
+default installation keeps the timer disabled. Deploy the pinned host only from
+a reviewed merged commit; do not use `--enable` during the current review.
 
 ### Isolated Browser
 
@@ -492,31 +576,48 @@ in the private resolved job data, never in the catalog.
 7. Review copy, fingerprints, visibility, schedule, licensing, monetization,
    audience, disclosure, and warnings.
 8. Record local approval only with the displayed hash and exact phrase.
-9. Obtain separate approval to upload the exact packet to each destination.
+9. Obtain separate approval to upload the exact packet to each destination, then
+   use `authorize` to bind those exact targets and release values. Do not
+   `dispatch` during the current controller safety review.
 
 ### Upload And Release
 
-1. Work one destination at a time.
-2. Query or inspect the authenticated account and compare its stable ID.
-3. Create a draft/private item where supported.
-4. Record the returned operation ID and its `accepted` or `processing` state in
+1. Keep `host status` paused and work one attended destination at a time while
+   the controller timer and full safety review remain incomplete.
+2. For the future controlled API path, confirm the global tracked gate, the
+   target's tracked enabled gate/policy revision, and the exact local host
+   allowlist before any write.
+3. Query or inspect the authenticated account and compare its stable ID. Stage
+   and rehash the exact approved asset; never stream a changing Dropbox file.
+4. Create a draft/private item where supported. The controller records provider
+   write intent first and then checkpoints the returned session/resource before
+   continuing.
+5. Record the returned operation ID and its `accepted` or `processing` state in
    the immutable job receipt ledger, including remote ID/URL and evidence when
    available.
-5. If a request times out after creation may have begun, search the remote
-   account before retrying. Never create blindly.
-6. Preview the processed asset and copy.
-7. Obtain fresh approval for exact public/scheduled settings.
-8. Release once, verify publicly, and append `published` then `verified`
+6. If a request times out after creation may have begun, use `reconcile` only
+   with the durable provider checkpoint. Never repeat a create request. If no
+   safe identity checkpoint exists, stop for review.
+7. Preview the processed asset and copy.
+8. Obtain fresh approval for exact public/scheduled settings.
+9. Release once, verify publicly, and append `published` then `verified`
    receipts for the same operation. On a terminal error, record `failed`; before
    replacing an active operation, record `superseded`. Then run `receipts` and
-   `status` to validate the job ledger. This is still a manual evidence workflow
-   until adapters and remote reconciliation are implemented.
+   `status` to validate the job ledger. Implemented API adapters perform these
+   receipt writes after authenticated readback; Spotify video and other attended
+   paths continue to use the manual evidence workflow.
+
+RSS.com additionally checkpoints each presigned audio/artwork upload session,
+whether its bytes completed, episode-write intent, and the accepted episode
+ID/GUID. If a new-episode POST has an ambiguous response before the episode ID
+can be checkpointed, the adapter refuses a second POST; provider/support
+reconciliation is required.
 
 Detailed checklist: `docs/new-episode-process.md`.
 
 ### Website Publication
 
-After Spotify, Vimeo, YouTube, and Rumble references are verified:
+After every non-null master-catalog destination has an exact verified website reference:
 
 1. Create/update `public.episodes` in Supabase as `draft`.
 2. Add topics, references, takeaways, checklists, sections, and paragraphs.
@@ -632,9 +733,14 @@ After Spotify, Vimeo, YouTube, and Rumble references are verified:
 - The August 7 public readback found exactly the seven replacement IDs in the
   channel feed, exact titles and deterministic YouTube-safe descriptions, no
   retired branding or `RSSVERIFY`, and approved max-resolution thumbnails.
-- API upload needs an OAuth client/token and compliance audit; new unaudited API
-  projects may be restricted to private uploads.
-- Until configured, use the attended creator dashboard. Review made-for-kids,
+- Google Cloud project `dr-m-experienced-publisher`, YouTube Data API v3, the
+  desktop client, and the production OAuth app are configured. Run
+  `drm-publish auth youtube` once as channel owner
+  `michaeljameshofer@gmail.com`; the `drmexperienced@gmail.com` Manager grant
+  cannot authorize API uploads for the owner's channel.
+- The resumable adapter is implemented, but public or unlisted API upload stays
+  blocked until the applicable compliance audit is recorded as verified. Until
+  both gates clear, use the attended creator dashboard. Review made-for-kids,
   altered/synthetic content, paid promotion, notifications, schedule, license,
   and visibility before release.
 - Current seven titles and descriptions are verified. The deterministic
@@ -644,9 +750,9 @@ After Spotify, Vimeo, YouTube, and Rumble references are verified:
 ### Vimeo
 
 - Direct full-video upload to user `253415660`.
-- A private API app is prepared. The owner must personally complete Vimeo's
-  legal-attestation checkbox before an own-account upload/edit token can be
-  created; no token is currently available to automation.
+- Private first-party app `540274`, exact account `253415660`, its owner-only
+  upload/edit token, and current upload quota are verified. The official adapter
+  is credential-ready, but no live release has exercised it.
 - Completed August 7: all seven corrected videos were replaced in place and
   verified on the existing stable Vimeo IDs.
 - All three Instagram-mapped shorts now have Vimeo recovery copies with
@@ -1193,7 +1299,13 @@ Chrome.
 5. Run publisher tests, doctor, feed preflight, site checks, and a draft/private
    browser smoke test.
 6. Verify every stable ID before enabling uploads.
-7. Keep live release disabled until receipts/reconciliation are proven.
+7. From a clean reviewed commit, run `ops/install-publisher-host.sh` without
+   `--enable`. Verify the commit-addressed release, pinned build SHA, Node 22,
+   mode-0600 control database, and disabled/inactive timer.
+8. Leave `automation-control.json` absent or explicitly paused until asset
+   staging, atomic enqueue, tracked gates, local allowlist, write intent,
+   checkpoints, reconciliation, stale-lock recovery, and one controlled release
+   are proven. Then enable only the reviewed platform set.
 
 The current `drm-browser` and `drm-publish` wrappers live under
 `/home/otto/.local/bin`; the browser wrapper is a workstation dependency and is
@@ -1278,14 +1390,20 @@ Quarterly:
    pages. Validate mobile tap targets and every outbound product URL before
    release. This is a separate workstream from the completed episode-thumbnail
    rollout.
-10. Complete YouTube API authorization. For Vimeo, complete the private app's
-    owner legal attestation and create an upload/edit token. For Instagram, have
-    the owner complete Facebook developer login before Meta app authorization.
-11. Completed locally: add the hash-bound immutable per-job receipt ledger and
-    deterministic operation IDs for `accepted`, `processing`, `published`,
-    `verified`, `failed`, and `superseded`. Still required: connect official
-    upload adapters, write receipts automatically, and implement remote
-    reconciliation before calling the workflow unattended.
+10. Complete the one-time YouTube OAuth grant as the production channel owner
+    and the applicable audit for public/unlisted API uploads. Vimeo app `540274`,
+    account `253415660`, token, and quota are complete. For Instagram, have the
+    owner complete Facebook developer login and confirm the linked Page,
+    publishing ID, permissions, and token before Meta adapter work.
+11. Completed in the worktree: immutable review/release authorization,
+    content-addressed private staging, atomic deterministic operation graphs,
+    tracked global/per-platform gates and policy revisions, mode-0600 local host
+    control, provider write intent/checkpoints, exact-resource reconciliation,
+    Vimeo/YouTube/RSS.com adapters, stale receipt-lock recovery, authenticated
+    readback, automatic lifecycle receipts, and clean-commit pinned Node 22 host
+    deployment. The timer is disabled/inactive, host control is fail-closed
+    paused, and the queue is empty during full review. RSS.com automation still
+    needs Max/API-key access; no live release has been queued or published.
 12. Version and test workstation-wrapper installation/recovery.
 13. Build a small authenticated Supabase editorial/import tool after the release
     workflow is stable.
@@ -1312,11 +1430,14 @@ Quarterly:
 - RSS.com imported directory links: <https://help.rss.com/en/support/solutions/articles/44002727331-updating-directory-links-for-imported-podcasts>
 - RSS.com Spotify redirect: <https://help.rss.com/en/support/solutions/articles/44002264641-how-do-i-redirect-my-podcast-from-spotify-for-creators-formerly-anchor->
 - RSS.com replace episode audio: <https://help.rss.com/en/support/solutions/articles/44002246497>
+- RSS.com API access and Max requirement: <https://help.rss.com/en/support/solutions/articles/44002648949-api-access>
 - Spotify redirect: <https://support.spotify.com/us/creators/article/switching-away-from-spotify-for-creators-with-a-301-redirect/>
 - Spotify video for externally hosted shows: <https://support.spotify.com/us/creators/article/video-episodes-for-shows-not-hosted-with-spotify/>
 - Spotify video specifications: <https://support.spotify.com/us/creators/article/video-specs/>
 - Amazon RSS submission: <https://podcasters.amazon.com/submit-rss>
 - YouTube upload API: <https://developers.google.com/youtube/v3/docs/videos/insert>
+- YouTube API compliance audits: <https://developers.google.com/youtube/v3/guides/quota_and_compliance_audits>
+- YouTube channel-permission API limitation: <https://support.google.com/youtube/answer/9367690>
 - YouTube channel branding: <https://support.google.com/youtube/answer/10456525>
 - YouTube video thumbnails: <https://support.google.com/youtube/answer/72431>
 - Instagram publishing: <https://developers.facebook.com/documentation/instagram-platform/content-publishing>
@@ -1335,6 +1456,21 @@ Quarterly:
 
 ## 19. Change Log
 
+- August 8, 2026: implemented the guarded workstation publishing control plane:
+  separate immutable review/release authorization, content-addressed private
+  staging, atomic deterministic node:sqlite operation graphs, tracked global and
+  per-platform policy gates, mode-0600 local host control, provider write
+  intent/checkpoints, exact-resource reconciliation, stale receipt-lock
+  recovery, Vimeo/YouTube/RSS.com adapters, authenticated readback, and automatic
+  lifecycle receipts. RSS.com checkpoints upload sessions and episode identity
+  and blocks a second create POST after an ambiguous response. Added clean-commit
+  Git-SHA deployment pinned to Node 22. Verified Vimeo app
+  `540274`, account `253415660`, token, and quota; configured Google project
+  `dr-m-experienced-publisher` and its desktop OAuth client; and bound RSS.com
+  podcast `397420`. The timer is disabled/inactive, host control fails closed
+  paused, and the queue is empty during full safety review. YouTube owner
+  OAuth/audit and RSS.com Max/API key remain gates. No live release was queued or
+  published.
 - August 8, 2026: verified production PostHog ingestion with an HTTP 200 response
   from `https://us.i.posthog.com/e/`. Refreshed Installation Health passes
   `$pageview`, `$pageleave`, scroll depth, and authorized URLs. Reverse proxy is
@@ -1346,16 +1482,15 @@ Quarterly:
   `a291990` and recorded public/mobile verification in merge `0934f3a`. The page
   returned HTTP 200 with current copy, prior duplicate copy absent, and no
   horizontal overflow at 320 or 390 pixels.
-- August 8, 2026: added a hash-bound immutable per-job release-receipt ledger
-  with `receipt`, `receipts`, and receipt-aware `status` commands. The ledger
-  records six lifecycle states but does not authorize or perform external
-  actions; live adapters and automatic reconciliation remain incomplete.
+- August 8, 2026: added the initial hash-bound immutable per-job release-receipt
+  ledger with `receipt`, `receipts`, and receipt-aware `status` commands. The
+  later control-plane entry above records its adapter integration.
 - August 8, 2026: verified all three Instagram-mapped shorts on Vimeo as
   `1216695521`, `1216695522`, and `1204939542` with canonical metadata and
   posters. Deployed their three website routes and verified HTTP 200, sitemap
   inclusion, checked-in posters, exact Vimeo playback IDs, and no horizontal
-  overflow at 320, 390, or 1440 pixels. Prepared a private Vimeo API app pending
-  the owner's legal attestation and token, and recorded that Instagram link
+  overflow at 320, 390, or 1440 pixels. Prepared the private Vimeo API app that
+  was later authenticated as recorded above, and recorded that Instagram link
   editing requires mobile while Meta setup awaits Facebook developer login.
 - August 8, 2026: submitted support follow-ups to Apple, RSS.com, and Spotify for
   the Episodes 1-2 GUID incident. All three responses remain pending and no live

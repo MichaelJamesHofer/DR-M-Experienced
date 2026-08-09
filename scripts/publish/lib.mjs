@@ -688,7 +688,9 @@ export function buildTargetPlan(platformConfig, manifest, assetRecords, targetEr
     else if (invalidIds.length) readiness = "destination_id_invalid";
     else if (releasePolicyIssues.length) readiness = "release_policy_violation";
     else if (!releasePlan || unresolvedChoices.length) readiness = "release_choices_required";
-    else if (platformId === "rss.com") readiness = "manual_upload_required";
+    else if (platformId === "rss.com") {
+      readiness = platform.mode?.startsWith("api_") ? "api_auth_required" : "manual_upload_required";
+    }
     else if (platformId === "spotify") readiness = "manual_video_replacement_required";
     else if (platformId === "rumble") readiness = "manual_human_submission_required";
     else if (platformId === "youtube") readiness = "oauth_and_audit_required";
@@ -699,6 +701,12 @@ export function buildTargetPlan(platformConfig, manifest, assetRecords, targetEr
       id: platformId,
       label: platform.label,
       mode: platform.mode,
+      automationPolicy: isPlainObject(platform.apiAutomation)
+        ? {
+            enabled: platform.apiAutomation.enabled === true,
+            policyRevision: platform.apiAutomation.policyRevision ?? null,
+          }
+        : null,
       readiness,
       asset: platform.source === "rss" ? "rss_feed" : assetKey,
       assetSha256: asset?.sha256 || null,
@@ -1026,20 +1034,56 @@ export function approvalRecordProblems(packet, approval, reviewDocument) {
   return problems;
 }
 
-async function writePrivateFile(filePath, value, { exclusive = false } = {}) {
-  await fs.mkdir(path.dirname(filePath), { recursive: true, mode: 0o700 });
-  const temporary = `${filePath}.tmp-${process.pid}-${randomUUID()}`;
-  await fs.writeFile(temporary, value, { mode: 0o600, flag: "wx" });
+async function syncDirectory(directory, fileSystem) {
+  const handle = await fileSystem.open(directory, "r");
   try {
-    if (exclusive) {
-      await fs.link(temporary, filePath);
-      await fs.rm(temporary);
-    } else {
-      await fs.rename(temporary, filePath);
+    await handle.sync();
+  } finally {
+    await handle.close();
+  }
+}
+
+export async function writePrivateFile(
+  filePath,
+  value,
+  { exclusive = false, fileSystem = fs, createId = randomUUID } = {}
+) {
+  const directory = path.dirname(filePath);
+  await fileSystem.mkdir(directory, { recursive: true, mode: 0o700 });
+  const temporary = `${filePath}.tmp-${process.pid}-${createId()}`;
+  let temporaryExists = false;
+
+  try {
+    const handle = await fileSystem.open(temporary, "wx", 0o600);
+    temporaryExists = true;
+    try {
+      await handle.chmod(0o600);
+      await handle.writeFile(value);
+      await handle.sync();
+    } finally {
+      await handle.close();
     }
-    await fs.chmod(filePath, 0o600);
+
+    if (exclusive) {
+      await fileSystem.link(temporary, filePath);
+      await syncDirectory(directory, fileSystem);
+      await fileSystem.rm(temporary);
+      temporaryExists = false;
+      await syncDirectory(directory, fileSystem);
+    } else {
+      await fileSystem.rename(temporary, filePath);
+      temporaryExists = false;
+      await syncDirectory(directory, fileSystem);
+    }
   } catch (error) {
-    await fs.rm(temporary, { force: true });
+    if (temporaryExists) {
+      try {
+        await fileSystem.rm(temporary, { force: true });
+        await syncDirectory(directory, fileSystem);
+      } catch {
+        // Preserve the write failure; a same-directory temporary file is safe to clean later.
+      }
+    }
     if (exclusive && error.code === "EEXIST") {
       throw new Error(`Refusing to overwrite existing file: ${filePath}`);
     }

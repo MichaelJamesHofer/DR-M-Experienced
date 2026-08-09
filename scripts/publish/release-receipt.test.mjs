@@ -1,4 +1,7 @@
 import assert from "node:assert/strict";
+import fs from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 import test from "node:test";
 import {
   ACTIVE_RECEIPT_STATUSES,
@@ -7,6 +10,7 @@ import {
   releaseReceiptAppendProblems,
   releaseReceiptLedgerProblems,
   releaseReceiptProblems,
+  withReceiptWriteLock,
 } from "./release-receipt.mjs";
 
 function packet() {
@@ -57,6 +61,35 @@ test("release receipt binds a remote result to the immutable approved destinatio
     receiptFileName(receipt),
     `20260808t200000z-youtube-verified-${receipt.receiptHash.slice(0, 16)}.json`,
   );
+});
+
+test("receipt writes recover a stale lock left by a dead process", async () => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "drm-receipt-lock-"));
+  const lockPath = path.join(directory, ".receipt-write.lock");
+  await fs.mkdir(lockPath, { mode: 0o700 });
+  await fs.writeFile(
+    path.join(lockPath, "owner.json"),
+    `${JSON.stringify({ pid: 999999, acquiredAt: "2026-08-08T20:00:00Z" })}\n`,
+    { mode: 0o600 },
+  );
+  try {
+    let called = false;
+    let clock = Date.now() + 60_000;
+    const result = await withReceiptWriteLock(
+      directory,
+      async () => { called = true; return "recovered"; },
+      {
+        now: () => clock++,
+        staleMs: 1,
+        isProcessAlive: () => false,
+      },
+    );
+    assert.equal(result, "recovered");
+    assert.equal(called, true);
+    await assert.rejects(fs.stat(lockPath), (error) => error.code === "ENOENT");
+  } finally {
+    await fs.rm(directory, { recursive: true, force: true });
+  }
 });
 
 test("release receipt detects tampering and stale approval bindings", () => {

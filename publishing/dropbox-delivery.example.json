@@ -1,0 +1,33 @@
+{
+  "$schema": "./dropbox-delivery.schema.json",
+  "schemaVersion": 1,
+  "deliveryId": "episode-008-example-final",
+  "createdAt": "2026-08-15T15:00:00Z",
+  "episodeNumber": 8,
+  "episodeSlug": "example-episode",
+  "manifest": {
+    "file": "episode.json",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "sizeBytes": 1
+  },
+  "assets": {
+    "fullVideo": {
+      "file": "master-video.mp4",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "sizeBytes": 1
+    },
+    "podcastAudio": {
+      "file": "podcast-audio.mp3",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "sizeBytes": 1
+    },
+    "thumbnail": {
+      "file": "thumbnail.jpg",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "sizeBytes": 1
+    }
+  },
+  "readyForPreparation": true,
+  "authorizesUpload": false,
+  "authorizesRelease": false
+}

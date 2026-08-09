@@ -8,16 +8,16 @@ The local publisher uses official upload interfaces where they exist, RSS fan-ou
 
 | Destination | Delivery path | Current setup state |
 |---|---|---|
-| RSS.com | Canonical podcast host | Feed `https://media.rss.com/dr-m-experienced/feed.xml` has seven normalized, remotely decoded and loudness-verified enclosures with the GUIDs captured from Anchor on August 5, exact XML metadata, no XML `RSSVERIFY`, and no stray season value. The in-place GUID-only capability request is submitted and pending; no live GUID change was requested or approved. The separate public landing-page metadata still exposes a cached `RSSVERIFY` token |
+| RSS.com | Canonical podcast host; official v4 API or attended dashboard | Feed `https://media.rss.com/dr-m-experienced/feed.xml` has seven normalized, remotely decoded and loudness-verified enclosures with the GUIDs captured from Anchor on August 5, exact XML metadata, no XML `RSSVERIFY`, and no stray season value. The official v4 adapter is implemented and bound to podcast ID `397420`, derived from canonical content URLs, but RSS.com limits API access to Max and this account has no configured entitlement/API key. It durably checkpoints presigned audio/artwork sessions, uploaded state, episode-write intent, and the returned episode ID/GUID. If an episode-create response is ambiguous before an ID is checkpointed, it blocks a second POST. The current free/manual hosting path continues. The in-place GUID-only capability request is submitted and pending; no live GUID change was requested or approved. The separate public landing-page metadata still exposes a cached `RSSVERIFY` token |
 | Spotify for Creators | RSS audio consumer plus per-episode Spotify video replacement | Existing show `7GGLljxmO0G3FLjPy8vfcw` preserves all seven episode identities; corrected video is attached to 7/7 and public readback verifies video, approved artwork, and approved copy. Authenticated support is reviewing identity, attached-video, and analytics preservation across the proposed GUID substitutions; no live change was made |
 | Apple Podcasts | Episode audio and art directly from RSS.com | Existing show `1870433419` uses the exact RSS.com feed and has exact token-free canonical metadata; the duplicate show now returns 404 and the stale Episode 4 Draft was archived. Only five episodes are Available. Under case `20000130526608`, Apple confirmed that its existing Episode 1-2 records use historical GUIDs different from the current feed. The server-side-remap request is submitted and pending; repair remains blocked and no live GUID changed. Public JSON-LD/search caches retain legacy wording for Episodes 4-7 |
 | Amazon Music and Audible | Episode audio from RSS.com after one-time claim | Signed-in dashboard has zero claimed shows; submit the canonical RSS.com feed once, complete ownership verification, and record the stable listing ID/URL |
 | Podcast Index | Automatic RSS indexing | New RSS.com record `7982906` and old Anchor record `7799755` are both live; verify convergence after the 301 is crawled |
 | Production Supabase projection | Guarded SQL migrations plus exact readback | Both August 7 guarded migrations were applied after exact file-hash verification; all seven current RSS audio URLs, YouTube IDs, and `Watch on YouTube` references match catalog revision 10 |
 | Website and PostHog | GitHub Pages plus privacy-sanitized web analytics | Episode 7's corrected page and all three short-form routes are deployed. The short routes return HTTP 200, appear in the sitemap, load their checked-in posters, bind the exact Vimeo IDs, and have no document overflow at 320, 390, or 1440 pixels. A production POST to `https://us.i.posthog.com/e/` returned 200; refreshed Installation Health passes `$pageview`, `$pageleave`, scroll depth, and authorized URLs. Dashboard `1086989` has the privacy-safe `Dr. M Growth Dashboard` configuration and six verified growth views. Reverse proxy is the only explicit configuration recommendation and is not configured |
-| YouTube | Direct full-video upload; OAuth 2 plus resumable Data API for future automation | Seven normalized replacements are public and verified. The prior seven uploads remain Unlisted with replacement links and are retained as rollback records; future API automation still needs OAuth and the applicable compliance audit |
-| Vimeo | Vimeo API tus upload or attended in-place version replacement | All seven corrected episode videos remain verified on their stable IDs. The three Instagram-mapped shorts are verified as `1216695521`, `1216695522`, and `1204939542` with canonical titles, descriptions, and posters. A private API app is prepared; the owner must complete Vimeo's legal-attestation checkbox before creating an upload/edit token |
-| Instagram | Creator professional-account API | Public state confirms `@drmexperienced` is a Creator professional account and not a Business account. Its three public Reels map to verified local masters and Vimeo recovery IDs. Name/bio are exact; adding the website link remains a mobile-app-only action. Meta API setup waits for the owner's Facebook developer login, after which the authenticated publishing ID, permissions, and token can be completed without converting the account to Business |
+| YouTube | Direct full-video upload through OAuth 2 and the resumable Data API | Seven normalized replacements are public and verified. Google Cloud project `dr-m-experienced-publisher` exists, YouTube Data API v3 is enabled, the desktop client is stored privately, and the external OAuth app is in production. No owner token is stored: `drmexperienced@gmail.com` is a channel Manager, while production owner `michaeljameshofer@gmail.com` must grant the one-time OAuth authorization. The controller also blocks public or unlisted API uploads until the applicable YouTube compliance audit is recorded as verified |
+| Vimeo | Official Vimeo API upload or attended in-place version replacement | All seven corrected episode videos remain verified on their stable IDs. The three Instagram-mapped shorts are verified as `1216695521`, `1216695522`, and `1204939542` with canonical titles, descriptions, and posters. Private first-party app `540274` is configured. An owner-only upload/edit token, exact account `253415660`, and current upload quota were authenticated and verified; the Vimeo adapter is ready for a separately authorized new release |
+| Instagram | Creator professional-account API through Facebook Login for Business | Public state confirms `@drmexperienced` is a Creator professional account and not a Business account. Its three public Reels map to verified local masters and Vimeo recovery IDs. Keep the Creator account type. Direct local-file Reel upload requires a linked Facebook Page, authenticated Graph publishing ID, Page tasks, permissions, and an owner-only token; none of those API bindings is yet recorded as verified. Adding the website link remains a mobile-app-only action |
 | Rumble | Direct human browser use only | The cache reset invalidated the seven staged browser forms, so they require manual restaging. The exact videos and thumbnails remain locally verified. The user accepted the July 21, 2026 Terms provisions on August 8; submission remains blocked on manual restaging with Option C, all syndication off, Premium off, human third-party asset-rights review, and the on-site controls. Automated site interaction is prohibited absent Rumble's prior written permission |
 
 ## Remote rebrand status
@@ -47,7 +47,67 @@ recorded in `publishing/episode-thumbnail-rollout.json`.
 
 Run `drm-publish doctor` for the current local readiness report. It checks tools, RSS metadata, credential-file presence, and stable destination IDs without printing credential values.
 
-The publisher also has an immutable per-job release-receipt ledger:
+## Host publishing control plane
+
+This workstation now contains the guarded execution layer. It does not watch
+Dropbox or invent a release. It acts only after the operator prepares and
+reviews a packet and creates a second, exact release authorization.
+
+| Component | Current state |
+|---|---|
+| Release authorization | `drm-publish authorize` writes an owner-only immutable record bound to the review hash, exact targets, assets, copy, release plan, timing, visibility, disclosures, and approver |
+| Immutable asset stage | Each adapter copies approved bytes to `~/.local/state/drm-publisher/assets/sha256/<prefix>/<sha256>` using private directories/files, rejects symlinks and source mutation, and verifies a reused staged object before upload |
+| Tracked policy | `publishing/platforms.json` contains a global `publishingAutomation.enabled` gate and per-platform `apiAutomation.enabled` plus `policyRevision`; the reviewed packet snapshots each target's current policy |
+| Machine host control | Owner-only regular file `~/.local/state/drm-publisher/automation-control.json` must be mode `0600`, `running`, and allow the exact platform. Missing, insecure, invalid, or paused state fails closed. It is currently absent, so `host status` reports paused |
+| Durable queue | Mode-0600 node:sqlite database at `~/.local/state/drm-publisher/control/publisher.sqlite3` stores deterministic operations, atomic multi-target dependency graphs, leases/heartbeats, provider write intent, hashed checkpoints, create slots, results, and events. The queue is currently empty |
+| Controller | `drm-publish controller --once` revalidates authorization, catalog, assets, tracked gates/policy revision, local allowlist, account identity, and pinned build before adapter execution; it reloads the local host control immediately before every mutating step |
+| Adapters | Official Vimeo, YouTube, and RSS.com adapters stage exact bytes, record write intent, checkpoint provider sessions/identities, poll processing, reconcile only the checkpointed resource, and perform authenticated readback |
+| Receipts | Adapter results append accepted, published, and verified evidence to the existing immutable per-job ledger. A stale receipt lock is recovered only after 15 minutes and only when its recorded owner PID is missing or dead |
+| Deployment | `ops/install-publisher-host.sh` refuses a dirty tree, archives one full Git commit under its SHA, installs production dependencies with Node `22.22.0`, atomically switches the `current` symlink, and pins the service build SHA. Reinstall only after merge/review |
+| Host supervision | Per-user `drm-publisher-controller.timer` is installed with a one-minute cadence, up to 10 seconds of jitter, persistent scheduling, and restrictive service permissions. It is intentionally disabled and inactive until safety review and tests are complete |
+
+Installing the controller did not authorize a release. No real job was queued
+or published during setup. `dispatch` only enqueues targets already named in a
+valid authorization and contacts no remote platform by itself. The timer remains
+disabled and inactive during safety review.
+
+The operator sequence is:
+
+```bash
+drm-publish prepare /absolute/path/to/episode.json
+drm-publish show <job-id>
+drm-publish approve <job-id> \
+  --hash <approval-hash> --by "Otto" \
+  --confirm "approve <job-id> <approval-hash>"
+drm-publish authorize <job-id> \
+  --hash <approval-hash> --by "Otto" --targets "vimeo" \
+  --confirm "authorize-release <job-id> <approval-hash> vimeo"
+drm-publish dispatch <job-id>
+drm-publish queue <job-id>
+drm-publish host status
+drm-publish host pause --confirm "pause-publisher"
+
+# Only after the full safety review; every named tracked platform gate must be open.
+drm-publish host run \
+  --platforms "vimeo" \
+  --confirm "run-publisher vimeo"
+
+# Resume a post-write operation only through its exact durable checkpoint.
+drm-publish reconcile <operation-id> \
+  --reason "resume exact checkpoint after reviewed interruption" \
+  --confirm "reconcile-operation <operation-id>"
+
+# Release a blocked create slot only with reviewed proof of no provider write.
+drm-publish supersede <operation-id> \
+  --reason "replace invalid pre-write job" \
+  --evidence "operation events prove no provider write intent" \
+  --confirm "supersede-no-remote-write <operation-id>"
+drm-publish receipts <job-id>
+drm-publish status <job-id>
+```
+
+The publisher retains the manual immutable receipt command for independently
+observed attended actions:
 
 ```bash
 drm-publish receipt <job-id> --platform <platform-id> \
@@ -61,8 +121,10 @@ drm-publish status <job-id>
 ```
 
 Receipts are hash-bound evidence for an already-approved packet and operation;
-they neither authorize nor perform a remote action. Platform upload adapters,
-automatic receipt writes, and remote reconciliation remain incomplete.
+they neither authorize nor perform a remote action. The implemented adapters
+write receipts automatically only after authenticated preflight and remote
+readback. A valid `release-authorization.json`, not a receipt, is the separate
+authority for a controller side effect.
 
 Public profile URLs are navigation aids, not routing authority. Record each verified immutable account and show, playlist, or channel ID in `publishing/platforms.json`. Unknown IDs stay `null`; the publisher blocks preparation from being attested until every required identity is verified.
 
@@ -100,7 +162,9 @@ asset rights reviewed, and the on-site rights and Terms controls completed.
 Record the returned video ID and URL after the human action; do not automate a
 readback from the signed-in site.
 
-Format validation is not account verification. Before a future API adapter can upload, it must query the authenticated account, compare the returned immutable ID with `publishing/platforms.json`, and stop on any mismatch.
+Format validation is not account verification. Every implemented adapter queries
+the authenticated account, compares its immutable ID with
+`publishing/platforms.json`, and stops before a write on any mismatch.
 
 The pinned local Chrome bridge uses the isolated data directory
 `~/.local/share/drm-publisher/chrome-profile`, never Otto's normal Chrome data.
@@ -124,6 +188,37 @@ account-work session with `drm-browser close`.
 Rumble is excluded from attended automation under the current Terms. Leave its
 logged-in tabs open for the user, but do not connect a bridge to them without
 Rumble's prior written permission.
+
+## Remaining one-time gates
+
+These are account or product gates, not missing permission for the host to guess
+its way forward:
+
+1. **YouTube owner OAuth:** run `drm-publish auth youtube` while signed into
+   `michaeljameshofer@gmail.com`, the owner of channel
+   `UCFA1nVv4lKMBlx81gjMAOFQ`. The DRM project account is a Manager; YouTube
+   channel-permission delegates cannot authorize API uploads for the owned
+   channel. The helper rejects and removes a grant for the wrong channel.
+2. **YouTube compliance:** complete the applicable YouTube API compliance audit
+   before authorizing `unlisted` or `public` API uploads. The controller enforces
+   that gate from checked-in non-secret platform state.
+3. **RSS.com API access:** either keep the current free plan and use the attended
+   dashboard, or separately approve a Max upgrade and configure the private v4
+   API key. The adapter is implemented, but this tooling does not purchase or
+   upgrade a subscription.
+4. **Instagram API:** complete the linked-Page, Facebook Login for Business,
+   authenticated publishing-ID, permission, token, cover-delivery, and first
+   controlled-release gates in [Instagram media delivery](#instagram-media-delivery).
+   Keep the Instagram account as a Creator professional account.
+5. **Amazon claim:** submit the canonical RSS.com feed once, complete the owner
+   verification, and record the stable listing ID. Future episode audio then
+   arrives through RSS fan-out.
+
+Spotify video remains an attended replacement on the RSS-created episode
+because Spotify exposes no supported creator upload API for this workflow.
+Apple and Amazon podcast audio are RSS fan-out plus readback, not separate
+episode uploads. Rumble remains excluded and untouched pending written platform
+permission.
 
 ## Rebrand And Directory Sequence
 
@@ -194,12 +289,104 @@ identities before considering the second episode.
 
 Add `https://drmexperienced.com` through the Instagram mobile app because the
 current desktop profile editor exposes external-link management as mobile-only.
-Meta API configuration is separately waiting for the owner's Facebook developer
-login.
+Meta API configuration is a separate one-time account gate.
 
-Use Meta's resumable upload flow to send the integrity-checked Reel directly from the local file. Meta documents this local-file route for apps using Facebook Login for Business. This keeps the normal path local until an authorized upload begins and avoids maintaining a public media object.
+### Creator account and login model
 
-If resumable upload is unavailable for the configured account or API flow, stage only the approved Reel at a short-lived public URL, wait for Meta to finish processing the container, and delete the staged object. Public staging is a fallback, not a prerequisite or default.
+Keep `@drmexperienced` as a Creator professional account. Meta supports content
+publishing for Creator and Business professional accounts; this workflow does
+not require conversion to Business. Use **Instagram API with Facebook Login for
+Business** because Meta documents local-file resumable video upload only for
+that login model. The alternative Instagram Login model does not require a
+Facebook Page, but it is not the documented path for uploading a local video
+directly from this workstation. A Meta app uses one login model, not both.
+
+For this single owned and managed account, Meta documents Standard Access with
+no App Review when the account is added to the app in the App Dashboard. Serving
+accounts that the owner does not own or manage would require Advanced Access and
+App Review.
+
+### One-time prerequisites
+
+1. Configure a Meta app with Facebook Login for Business, its basic settings,
+   and an exact approved OAuth redirect URI.
+2. Link a Facebook Page to the Instagram Creator account. The authenticating
+   Facebook user must have the Page's `MANAGE` or `CREATE_CONTENT` task. Complete
+   Page Publishing Authorization and Facebook two-factor authentication if Meta
+   requires either for that Page.
+3. Grant `instagram_basic`, `instagram_content_publish`, and
+   `pages_read_engagement`; use `pages_show_list` to discover the Page through
+   `/me/accounts`. If the Page role was granted through Business Manager, the
+   endpoint reference also requires one of `ads_management` or `ads_read`.
+4. Read back and bind the exact Page ID, Page tasks, stable Instagram Graph user
+   ID, username, and `Media_Creator` account type. Do not substitute a public
+   profile ID for the authenticated publishing ID.
+5. Exchange the initial Facebook user token for a long-lived user token, derive
+   the long-lived Page token, and store it only in the owner-protected workstation
+   credential store. Meta says a long-lived Page token has no time expiration,
+   but it can still be invalidated, so every release must revalidate the account
+   and permissions before a write.
+
+### Conservative Graph v26 Reel flow
+
+After an exact release packet is reviewed and authorized, the adapter should:
+
+1. Query `GET /v26.0/me/accounts` and the bound Instagram account to verify the
+   Page, Page tasks, Instagram Graph ID, username, and Creator account type.
+2. Query `GET /v26.0/<IG_ID>/content_publishing_limit?fields=quota_usage,config`
+   and stop before the provider-reported quota is exhausted.
+3. Create one Reel container with
+   `POST /v26.0/<IG_ID>/media`, `media_type=REELS`,
+   `upload_type=resumable`, the exact approved caption, and the approved cover
+   choice. Durably checkpoint the returned container ID and returned
+   `rupload.facebook.com` URI before continuing.
+4. Send the immutable staged local video to the returned
+   `https://rupload.facebook.com/ig-api-upload/v26.0/<CONTAINER_ID>` URI with
+   the documented OAuth authorization, byte offset, and file size headers.
+5. Poll `GET /v26.0/<CONTAINER_ID>?fields=status_code,status` no more than once
+   per minute for five minutes. Publish only from `FINISHED`; preserve and
+   reconcile `IN_PROGRESS`, and stop on `ERROR` or `EXPIRED`.
+6. Treat `POST /v26.0/<IG_ID>/media_publish` with the checkpointed
+   `creation_id` as the public-release boundary. Instagram exposes no private or
+   unlisted Reel through this flow. A lost response is ambiguous: do not repeat
+   the publish request or create another container without exact reconciliation.
+7. Checkpoint the returned media ID immediately, then read back its owner,
+   username, caption, `media_type`, `media_product_type`, permalink, thumbnail,
+   and timestamp. Require `VIDEO`, `REELS`, the bound account, and exact approved
+   copy before recording a verified receipt.
+
+Containers expire after 24 hours, so scheduled work must create and upload near
+the approved release time. Meta's reference documents a single local binary
+upload request and an initial offset, but no offset-query recovery endpoint.
+After an uncertain upload response, poll and reconcile only the existing
+container; never assume that replaying the upload or container creation is safe.
+
+### Covers, limits, and blockers
+
+A custom Reel cover is not part of the local resumable video body. `cover_url`
+must point to a publicly retrievable JPEG no larger than 8 MB in sRGB; Meta
+recommends 9:16. If both `cover_url` and `thumb_offset` are supplied, the URL
+wins. The adapter must either fetch the approved cover URL and verify that its
+bytes match a distinct approved `instagramCover` hash before container creation,
+or use an explicitly approved `thumb_offset` in milliseconds. Do not reuse a
+16:9 episode thumbnail as an implicit Reel cover.
+
+Meta's current documents disagree on the publish quota: the June 30 content
+guide says 100 API-published posts per rolling 24 hours, while the publishing
+limit and media-publish references document 50 per 86,400 seconds. Query the
+live `config.quota_total` and conservatively cap this publisher at 50 until an
+authenticated response proves a different current limit. Separately, an account
+can create at most 400 containers per rolling 24 hours. The general Reel
+parameter table documents `share_to_feed`, but the resumable request syntax
+omits it; bind an explicit value and validate it during the first controlled
+release before adopting a default.
+
+Current blockers are the unverified Meta app/login configuration, linked Page
+and Page tasks, stable Instagram Graph publishing ID, granted scopes, private
+token, public cover-delivery mechanism, distinct `instagramCover` asset role,
+reviewed `share_to_feed` and cover controls, controller adapter, and per-platform
+automation gate. The first end-to-end exercise must be an explicitly approved
+real public Reel because this API flow has no unlisted test release.
 
 ## Official references
 
@@ -214,11 +401,22 @@ If resumable upload is unavailable for the configured account or API flow, stage
 - Spotify video thumbnails: <https://support.spotify.com/us/creators/article/thumbnails/>
 - Amazon podcast RSS submission: <https://podcasters.amazon.com/submit-rss>
 - Amazon podcaster FAQ: <https://podcasters.amazon.com/frequently-asked-questions>
+- RSS.com API access and Max requirement: <https://help.rss.com/en/support/solutions/articles/44002648949-api-access>
+- RSS.com v4 API documentation: <https://api.rss.com/v4/docs>
 - YouTube video upload endpoint: <https://developers.google.com/youtube/v3/docs/videos/insert>
 - YouTube authentication: <https://developers.google.com/youtube/v3/guides/authentication>
 - YouTube API audit process: <https://developers.google.com/youtube/v3/guides/quota_and_compliance_audits>
+- YouTube channel permissions and API limitation: <https://support.google.com/youtube/answer/9367690>
 - YouTube video thumbnails: <https://support.google.com/youtube/answer/72431>
 - Instagram content publishing: <https://developers.facebook.com/documentation/instagram-platform/content-publishing>
+- Instagram media-container and resumable-upload reference: <https://developers.facebook.com/documentation/instagram-platform/instagram-graph-api/reference/ig-user/media>
+- Instagram media-publish reference: <https://developers.facebook.com/documentation/instagram-platform/instagram-graph-api/reference/ig-user/media_publish>
+- Instagram publishing-limit reference: <https://developers.facebook.com/documentation/instagram-platform/instagram-graph-api/reference/ig-user/content_publishing_limit>
+- Instagram published-media readback: <https://developers.facebook.com/documentation/instagram-platform/reference/instagram-media>
+- Instagram API with Facebook Login setup: <https://developers.facebook.com/documentation/instagram-platform/instagram-api-with-facebook-login/get-started>
+- Instagram App Review and access levels: <https://developers.facebook.com/documentation/instagram-platform/app-review>
+- Meta long-lived user and Page tokens: <https://developers.facebook.com/documentation/facebook-login/guides/access-tokens/get-long-lived>
+- Meta's official Instagram Postman collection: <https://www.postman.com/meta/instagram/documentation/6yqw8pt/instagram-api>
 - Instagram Reel covers: <https://www.facebook.com/help/instagram/1038071743007909>
 - Vimeo video uploads: <https://developer.vimeo.com/api/upload/videos>
 - Vimeo authentication: <https://developer.vimeo.com/api/authentication>
@@ -231,6 +429,33 @@ If resumable upload is unavailable for the configured account or API flow, stage
 
 ## Safety boundary
 
-No timer or background service may execute external publication. Automation may ingest, transcode, validate, fingerprint, prepare a review packet, and record immutable per-job receipt evidence. A receipt and the local `--by` value are self-reported records, not identity authentication or authorization for an external side effect. Future live adapters require a separate user-presence-backed authorization, must use the exact integrity-checked packet, and must reconcile remote state. Any changed file, title, description, schedule, disclosure flag, destination, monetization choice, or license choice invalidates prior review.
+If enabled after safety review, the user timer may execute an external platform
+action only for a durable queue operation derived from a current, unexpired
+`release-authorization.json`. The timer is currently disabled and inactive. The
+authorization record must bind the exact integrity-checked packet, target set,
+assets, copy, schedule, visibility, disclosure flags, monetization,
+notifications, and license. Any change invalidates review and authorization.
+The timer creates no authorization, does not scan Dropbox for implicit intent,
+and does not enqueue a job; when enabled, it runs one guarded controller pass
+against already-authorized work.
+
+Authorization alone is insufficient. Every write also requires: the tracked
+global gate; the target's tracked `apiAutomation.enabled` gate and unchanged
+`policyRevision`; a secure running machine-control file whose allowlist contains
+that platform; an account-ID match; and a controller launched from the pinned
+Git release under Node 22. All authorized targets enqueue in one transaction or
+none do.
+
+A receipt and the local `--by` value remain evidence, not identity
+authentication or authority for an external side effect. Before a write, the
+controller revalidates the authorization and adapter account. Approved source
+bytes are copied into immutable content-addressed private staging before the
+upload. Before every provider mutation, the controller records write intent;
+provider sessions and identities are then checkpointed durably. After a write,
+the adapter reconciles that exact resource before recording `verified`. If a
+prior attempt is ambiguous without a safe checkpoint, automatic replay remains
+blocked. `supersede` can release a create slot only for a blocked/failed
+operation with audited evidence and no write intent, checkpoint, acceptance,
+remote ID, or URL.
 
 Browser automation may update already-approved profile text and may prepare drafts/private uploads where the platform permits automated access. It must stop for MFA, CAPTCHA, reauthentication, account agreements, content-rights declarations, AI/synthetic-media disclosures, audience settings, paid promotion, monetization, licensing, public visibility, scheduling, and the final publish action unless those exact values received fresh explicit approval. Rumble is stricter: no automated site access or interaction is permitted without Rumble's prior written permission, even for inspection or draft preparation.
