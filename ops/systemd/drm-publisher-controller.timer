@@ -1,0 +1,12 @@
+[Unit]
+Description=Check the Dr. M approved publishing queue
+
+[Timer]
+OnActiveSec=15s
+OnUnitActiveSec=1min
+RandomizedDelaySec=10s
+Persistent=true
+Unit=drm-publisher-controller.service
+
+[Install]
+WantedBy=timers.target

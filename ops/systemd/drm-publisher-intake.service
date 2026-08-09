@@ -1,0 +1,32 @@
+[Unit]
+Description=Validate ready Dr. M Dropbox deliveries and prepare review packets
+Documentation=file:///home/otto/DR-M-Experienced-ops/docs/dropbox-delivery-intake.md
+
+[Service]
+Type=oneshot
+WorkingDirectory=@PROJECT_ROOT@
+ExecStart=/home/otto/.nvm/versions/node/v22.22.0/bin/node @PROJECT_ROOT@/scripts/publish/dropbox-intake.mjs scan
+Environment=HOME=/home/otto
+Environment=USER=otto
+Environment=LOGNAME=otto
+Environment=XDG_CONFIG_HOME=/home/otto/.config
+Environment=XDG_STATE_HOME=/home/otto/.local/state
+Environment=DRM_PUBLISH_PROJECT_ROOT=@PROJECT_ROOT@
+Environment=DRM_PUBLISH_BUILD_COMMIT=@BUILD_COMMIT@
+Environment="DRM_DELIVERY_INBOX=/home/otto/Dropbox/Dr M Experienced/publisher-inbox"
+Environment=NODE_OPTIONS=--disable-warning=ExperimentalWarning
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectControlGroups=true
+ProtectHome=read-only
+ProtectKernelTunables=true
+ProtectSystem=strict
+ReadOnlyPaths=@PROJECT_ROOT@
+ReadOnlyPaths=/home/otto/Dropbox
+ReadWritePaths=/home/otto/.local/state/drm-publisher
+IPAddressDeny=any
+LockPersonality=true
+RestrictSUIDSGID=true
+Nice=10
+TimeoutStartSec=5h

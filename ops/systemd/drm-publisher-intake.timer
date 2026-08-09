@@ -1,0 +1,12 @@
+[Unit]
+Description=Check for ready Dr. M Dropbox delivery bundles
+
+[Timer]
+OnActiveSec=20s
+OnUnitActiveSec=2min
+RandomizedDelaySec=15s
+Persistent=true
+Unit=drm-publisher-intake.service
+
+[Install]
+WantedBy=timers.target

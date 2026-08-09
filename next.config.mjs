@@ -5,11 +5,13 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoName = "DR-M-Experienced";
 const isGithubPages = process.env.GITHUB_PAGES === "true";
+const isDevelopment = process.env.NODE_ENV === "development";
 const hasCustomDomain = fs.existsSync("./CNAME");
 const shouldUseBasePath = isGithubPages && !hasCustomDomain;
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  distDir: isDevelopment ? ".next-dev" : ".next",
   output: "export",
   outputFileTracingRoot: __dirname,
   trailingSlash: true,

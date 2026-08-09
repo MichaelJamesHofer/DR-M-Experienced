@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+umask 077
+
+project_root="${DRM_PUBLISH_PROJECT_ROOT:-}"
+if [[ -z "$project_root" ]]; then
+  project_root=/home/otto/.local/share/drm-publisher/current
+fi
+if [[ ! -f "$project_root/scripts/publish/cli.mjs" ]]; then
+  printf 'Dr. M publisher checkout is unavailable: %s\n' "$project_root" >&2
+  exit 1
+fi
+
+if [[ "$(id -u)" -eq 0 ]]; then
+  exec /usr/sbin/runuser -u otto -- env \
+    HOME=/home/otto \
+    USER=otto \
+    LOGNAME=otto \
+    XDG_CONFIG_HOME=/home/otto/.config \
+    XDG_STATE_HOME=/home/otto/.local/state \
+    DRM_PUBLISH_PROJECT_ROOT="$project_root" \
+    PATH=/home/otto/.nvm/versions/node/v22.22.0/bin:/home/otto/.local/bin:/usr/local/bin:/usr/bin:/bin \
+    /home/otto/.local/bin/drm-publish "$@"
+fi
+
+if [[ "$(id -u)" -ne 1002 ]]; then
+  printf '%s\n' "drm-publish must run as the otto user." >&2
+  exit 1
+fi
+
+export HOME=/home/otto
+export USER=otto
+export LOGNAME=otto
+export XDG_CONFIG_HOME=/home/otto/.config
+export XDG_STATE_HOME=/home/otto/.local/state
+export PATH=/home/otto/.nvm/versions/node/v22.22.0/bin:/home/otto/.local/bin:/usr/local/bin:/usr/bin:/bin
+export NODE_OPTIONS="${NODE_OPTIONS:-} --disable-warning=ExperimentalWarning"
+
+exec node "$project_root/scripts/publish/cli.mjs" "$@"

@@ -1,0 +1,24 @@
+[Unit]
+Description=Dr. M approved publishing queue controller
+Documentation=file:///home/otto/DR-M-Experienced-ops/docs/publishing-workflow-topology.md
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=@PROJECT_ROOT@
+ExecStart=/home/otto/.local/bin/drm-publish controller --once
+Environment=HOME=/home/otto
+Environment=USER=otto
+Environment=LOGNAME=otto
+Environment=XDG_CONFIG_HOME=/home/otto/.config
+Environment=XDG_STATE_HOME=/home/otto/.local/state
+Environment=DRM_PUBLISH_PROJECT_ROOT=@PROJECT_ROOT@
+Environment=DRM_PUBLISH_BUILD_COMMIT=@BUILD_COMMIT@
+Environment=NODE_OPTIONS=--disable-warning=ExperimentalWarning
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ReadOnlyPaths=@PROJECT_ROOT@
+Nice=10
+TimeoutStartSec=5h

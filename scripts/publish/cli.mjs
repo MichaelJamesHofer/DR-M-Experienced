@@ -54,6 +54,19 @@ import {
   releaseReceiptProblems,
   withReceiptWriteLock,
 } from "./release-receipt.mjs";
+import {
+  buildReleaseAuthorization,
+  releaseAuthorizationExpired,
+  releaseAuthorizationProblems,
+} from "./release-authorization.mjs";
+import { AUTOMATED_DIRECT_TARGETS, enqueueAuthorizedRelease, runControllerOnce } from "./controller.mjs";
+import { openControlStore } from "./control-store.mjs";
+import { authorizeYouTubeOwner } from "./youtube-oauth.mjs";
+import {
+  loadAutomationControl,
+  requestAutomationPause,
+  setAutomationRunning,
+} from "./automation-control.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDir, "..", "..");
@@ -63,10 +76,21 @@ const hostingMigrationPath = path.join(projectRoot, "publishing", "hosting-migra
 function usage() {
   return `Usage:
   drm-publish doctor
+  drm-publish auth youtube [--timeout-seconds <seconds>]
   drm-publish migration-check [--verify-media] [--verify-artwork] [--decode-edge-audio] [--snapshot]
   drm-publish prepare <episode.json>
   drm-publish show <job-id>
   drm-publish approve <job-id> --hash <sha256> --by <name> --confirm "approve <job-id> <sha256>"
+  drm-publish authorize <job-id> --hash <sha256> --by <name> --targets <comma-list> --confirm "authorize-release <job-id> <sha256> <comma-list>" [--expires-at <RFC3339>]
+  drm-publish dispatch <job-id>
+  drm-publish controller --once
+  drm-publish queue [job-id]
+  drm-publish retry <operation-id> --reason <text> --confirm "retry-operation <operation-id>"
+  drm-publish reconcile <operation-id> --reason <text> --confirm "reconcile-operation <operation-id>"
+  drm-publish supersede <operation-id> --reason <text> --evidence <text> --confirm "supersede-no-remote-write <operation-id>"
+  drm-publish host status
+  drm-publish host pause --confirm "pause-publisher"
+  drm-publish host run --platforms <comma-list> --confirm "run-publisher <comma-list>"
   drm-publish receipt <job-id> --platform <id> --operation-id <id> --status <status> --by <name> [--remote-id <id>] [--remote-url <https-url>] [--evidence <kind=value>] --confirm "record-receipt <job-id> <platform> <sha256> <operation-id>"
   drm-publish receipts <job-id>
   drm-publish status <job-id>
@@ -368,6 +392,90 @@ async function loadApproval(directory, packet, reviewDocument) {
   return approval;
 }
 
+function parseAuthorizationTargets(value) {
+  if (typeof value !== "string" || !value.trim()) {
+    throw new Error("authorize requires --targets with a comma-separated target list.");
+  }
+  const targets = value.split(",").map((target) => target.trim());
+  if (targets.some((target) => !target)) {
+    throw new Error("authorize --targets contains an empty target.");
+  }
+  if (new Set(targets).size !== targets.length) {
+    throw new Error("authorize --targets must not contain duplicates.");
+  }
+  return targets;
+}
+
+function parseAuthorizeOptions(args) {
+  const allowed = new Set(["--hash", "--by", "--targets", "--confirm", "--expires-at"]);
+  const values = new Map();
+
+  for (let index = 0; index < args.length; index += 1) {
+    const option = args[index];
+    if (!allowed.has(option)) {
+      throw new Error(`Unknown authorize option or stray argument: ${option}`);
+    }
+    if (values.has(option)) {
+      throw new Error(`authorize option ${option} may be specified only once.`);
+    }
+    const value = args[index + 1];
+    if (value === undefined || (typeof value === "string" && value.startsWith("--"))) {
+      throw new Error(`authorize ${option} requires a value.`);
+    }
+    values.set(option, value);
+    index += 1;
+  }
+
+  return Object.fromEntries(values);
+}
+
+async function authorizeRelease(jobId, args) {
+  if (!jobId) throw new Error("authorize requires a job id.");
+  const options = parseAuthorizeOptions(args);
+  const expectedHash = options["--hash"];
+  const approver = options["--by"];
+  const targetValue = options["--targets"];
+  const confirmation = options["--confirm"];
+  const expiresAt = options["--expires-at"];
+  if (!expectedHash) throw new Error("authorize requires --hash with the exact approval hash.");
+  if (!approver?.trim()) throw new Error("authorize requires --by with the authorizing person's name.");
+  const targets = parseAuthorizationTargets(targetValue);
+
+  const { directory, packet, reviewDocument } = await loadVerifiedJob(jobId);
+  const approval = await loadApproval(directory, packet, reviewDocument);
+  if (expectedHash !== packet.approvalHash) {
+    throw new Error("Authorization hash does not match this job's reviewed approval hash.");
+  }
+  const packetTargets = new Set(packet.snapshot.manifest.targets);
+  const outsideScope = targets.filter((target) => !packetTargets.has(target));
+  if (outsideScope.length) {
+    throw new Error(`Authorization target(s) were not selected in the reviewed packet: ${outsideScope.join(", ")}.`);
+  }
+  const exactTargetList = targets.join(",");
+  const expectedConfirmation = `authorize-release ${packet.id} ${packet.approvalHash} ${exactTargetList}`;
+  if (confirmation !== expectedConfirmation) {
+    throw new Error("Release authorization confirmation phrase does not exactly match the reviewed job and target scope.");
+  }
+
+  const assetProblems = await verifySnapshotAssets(packet.snapshot);
+  if (assetProblems.length) throw new Error(`Asset verification failed:\n- ${assetProblems.join("\n- ")}`);
+
+  const authorization = buildReleaseAuthorization({
+    packet,
+    approval,
+    reviewDocument,
+    targets,
+    approver,
+    expiresAt,
+  });
+  const destination = path.join(directory, "release-authorization.json");
+  await writePrivateJson(destination, authorization, { exclusive: true });
+  process.stdout.write(`Immutable release authorization recorded for ${jobId}.\n`);
+  process.stdout.write(`Targets: ${exactTargetList}\n`);
+  process.stdout.write(`Authorization SHA-256: ${authorization.authorizationHash}\n`);
+  process.stdout.write(`File: ${destination}\n`);
+}
+
 async function readReceipts(directory, packet) {
   const receiptsDirectory = path.join(directory, "receipts");
   let entries = [];
@@ -491,6 +599,20 @@ async function status(jobId) {
     const problems = approvalRecordProblems(packet, approval, reviewDocument);
     if (problems.length) throw new Error(`Approval record integrity check failed:\n- ${problems.join("\n- ")}`);
   }
+  let authorization = null;
+  try {
+    authorization = await readJson(path.join(directory, "release-authorization.json"));
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+  if (authorization) {
+    const problems = releaseAuthorizationProblems(packet, approval, reviewDocument, authorization, {
+      allowExpired: true,
+    });
+    if (problems.length) {
+      throw new Error(`Release authorization integrity check failed:\n- ${problems.join("\n- ")}`);
+    }
+  }
   const receipts = await readReceipts(directory, packet);
 
   process.stdout.write(`Job: ${packet.id}\n`);
@@ -499,7 +621,19 @@ async function status(jobId) {
   process.stdout.write(
     `Local review: ${approval ? `self-reported by ${approval.approvedBy} at ${approval.approvedAt}` : "pending"}\n`
   );
-  process.stdout.write("Upload/release authorization: not granted\n");
+  if (!authorization) {
+    process.stdout.write("Upload/release authorization: not granted\n");
+  } else if (releaseAuthorizationExpired(authorization)) {
+    process.stdout.write(
+      `Upload/release authorization: expired at ${authorization.expiresAt}; targets ${authorization.targets.join(",")}\n`,
+    );
+  } else {
+    const expiry = authorization.expiresAt ? `; expires ${authorization.expiresAt}` : "";
+    process.stdout.write(
+      `Upload/release authorization: granted for ${authorization.targets.join(",")} by ${authorization.approver} at ${authorization.issuedAt}${expiry}\n`,
+    );
+    process.stdout.write(`Release authorization hash: ${authorization.authorizationHash}\n`);
+  }
   process.stdout.write(`Remote delivery receipts: ${receipts.length}\n`);
   for (const target of packet.snapshot.targets) {
     const targetReceipts = receipts.filter((receipt) => receipt.platformId === target.id);
@@ -521,6 +655,207 @@ async function listJobs() {
   const ids = entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort().reverse();
   if (!ids.length) process.stdout.write("No publishing jobs found.\n");
   else process.stdout.write(`${ids.join("\n")}\n`);
+}
+
+async function dispatchRelease(jobId) {
+  if (!jobId) throw new Error("dispatch requires a job id.");
+  const result = await enqueueAuthorizedRelease(jobId);
+  process.stdout.write(`Release queued from immutable authorization: ${jobId}\n`);
+  process.stdout.write(`Control database: ${result.databasePath}\n`);
+  for (const entry of result.queued) {
+    process.stdout.write(
+      `- ${entry.operation.platformId}: ${entry.created ? "queued" : `already ${entry.operation.state}`} (${entry.operation.operationId})\n`,
+    );
+  }
+  process.stdout.write("No platform was contacted by dispatch. The controller performs the authorized work.\n");
+}
+
+async function controllerCommand(args) {
+  if (args.length !== 1 || args[0] !== "--once") {
+    throw new Error("controller requires exactly --once.");
+  }
+  const result = await runControllerOnce();
+  if (result.state === "idle") {
+    process.stdout.write("Publishing controller: no due operation.\n");
+    return;
+  }
+  if (result.state === "paused") {
+    const code = result.error?.code || "automation_paused";
+    process.stdout.write(`Publishing controller: paused (${code}).\n`);
+    if (code !== "automation_paused") process.exitCode = 2;
+    return;
+  }
+  process.stdout.write(
+    `Publishing controller: ${result.operation.platformId} ${result.state} (${result.operation.operationId}).\n`,
+  );
+  if (result.error) process.stdout.write(`Blocked: ${result.error.code}: ${result.error.message}\n`);
+}
+
+async function listQueue(jobId) {
+  const store = await openControlStore();
+  try {
+    const operations = store.list({ jobId: jobId || null });
+    if (!operations.length) {
+      process.stdout.write("Publishing queue is empty.\n");
+      return;
+    }
+    for (const operation of operations) {
+      const remote = operation.remoteId || operation.remoteUrl || "-";
+      process.stdout.write(
+        `${operation.state}\t${operation.platformId}\t${operation.jobId}\t${operation.operationId}\t${remote}\n`,
+      );
+      if (operation.lastErrorCode) {
+        process.stdout.write(`  ${operation.lastErrorCode}: ${operation.lastErrorMessage}\n`);
+      }
+    }
+  } finally {
+    store.close();
+  }
+}
+
+async function retryOperation(operationId, args) {
+  if (!operationId) throw new Error("retry requires an operation id.");
+  const options = strictOptions("retry", args, new Set(["--reason", "--confirm"]));
+  const reason = options["--reason"];
+  const confirmation = options["--confirm"];
+  if (!reason?.trim()) throw new Error("retry requires --reason.");
+  if (confirmation !== `retry-operation ${operationId}`) {
+    throw new Error("Retry confirmation phrase does not match the operation id.");
+  }
+  const store = await openControlStore();
+  try {
+    const operation = store.requeueBlocked(operationId, { reason });
+    process.stdout.write(`Requeued blocked operation ${operation.operationId}.\n`);
+    process.stdout.write("The controller will revalidate authorization, media, receipts, and account identity.\n");
+  } finally {
+    store.close();
+  }
+}
+
+function strictOptions(command, args, allowed) {
+  const values = new Map();
+  for (let index = 0; index < args.length; index += 1) {
+    const option = args[index];
+    if (!allowed.has(option)) throw new Error(`Unknown ${command} option or stray argument: ${option}`);
+    if (values.has(option)) throw new Error(`${command} option ${option} may be specified only once.`);
+    const value = args[index + 1];
+    if (value === undefined || value.startsWith("--")) throw new Error(`${command} ${option} requires a value.`);
+    values.set(option, value);
+    index += 1;
+  }
+  return Object.fromEntries(values);
+}
+
+async function reconcileOperation(operationId, args) {
+  if (!operationId) throw new Error("reconcile requires an operation id.");
+  const options = strictOptions("reconcile", args, new Set(["--reason", "--confirm"]));
+  if (!options["--reason"]?.trim()) throw new Error("reconcile requires --reason.");
+  if (options["--confirm"] !== `reconcile-operation ${operationId}`) {
+    throw new Error("Reconciliation confirmation phrase does not match the operation id.");
+  }
+  const store = await openControlStore();
+  try {
+    const operation = store.requeueReconciliation(operationId, { reason: options["--reason"] });
+    process.stdout.write(`Queued exact-provider reconciliation for ${operation.operationId}.\n`);
+  } finally {
+    store.close();
+  }
+}
+
+async function supersedeOperation(operationId, args) {
+  if (!operationId) throw new Error("supersede requires an operation id.");
+  const options = strictOptions(
+    "supersede",
+    args,
+    new Set(["--reason", "--evidence", "--confirm"]),
+  );
+  if (!options["--reason"]?.trim()) throw new Error("supersede requires --reason.");
+  if (!options["--evidence"]?.trim()) throw new Error("supersede requires --evidence.");
+  if (options["--confirm"] !== `supersede-no-remote-write ${operationId}`) {
+    throw new Error("Supersede confirmation phrase does not match the operation id.");
+  }
+  const store = await openControlStore();
+  try {
+    const operation = store.supersedeNoRemoteWrite(operationId, {
+      reason: options["--reason"],
+      evidence: options["--evidence"],
+    });
+    process.stdout.write(`Released the proven pre-write create slot for ${operation.operationId}.\n`);
+  } finally {
+    store.close();
+  }
+}
+
+async function hostControl(action, args) {
+  if (action === "status") {
+    if (args.length) throw new Error("host status accepts no options.");
+    try {
+      const control = await loadAutomationControl();
+      process.stdout.write(`Publisher host: ${control.mode}\n`);
+      process.stdout.write(`Generation: ${control.generation}\n`);
+      process.stdout.write(`Allowed platforms: ${control.allowedPlatforms.join(",") || "none"}\n`);
+      process.stdout.write(`Updated: ${control.updatedAt}\n`);
+      if (control.pauseRequestCount) {
+        process.stdout.write(`Pause requests: ${control.pauseRequestCount}\n`);
+      }
+    } catch (error) {
+      process.stdout.write(`Publisher host: paused (${error.code || "automation_control_invalid"})\n`);
+    }
+    return;
+  }
+  if (action === "pause") {
+    const options = strictOptions("host pause", args, new Set(["--confirm"]));
+    if (options["--confirm"] !== "pause-publisher") {
+      throw new Error("Host pause confirmation phrase must be exactly pause-publisher.");
+    }
+    const control = await requestAutomationPause();
+    process.stdout.write(`Publisher host paused at generation ${control.generation}.\n`);
+    return;
+  }
+  if (action === "run") {
+    const options = strictOptions("host run", args, new Set(["--platforms", "--confirm"]));
+    const platforms = parseAuthorizationTargets(options["--platforms"]);
+    const exact = platforms.join(",");
+    if (options["--confirm"] !== `run-publisher ${exact}`) {
+      throw new Error("Host run confirmation phrase does not match the exact platform list.");
+    }
+    const config = await loadPlatformConfig();
+    const unsafe = platforms.filter(
+      (platformId) =>
+        platformId === "rumble" ||
+        !AUTOMATED_DIRECT_TARGETS.has(platformId) ||
+        config.platforms?.[platformId]?.apiAutomation?.enabled !== true,
+    );
+    if (unsafe.length) {
+      throw new Error(`Host run cannot enable platforms whose tracked API gate is closed: ${unsafe.join(", ")}.`);
+    }
+    const control = await setAutomationRunning({ allowedPlatforms: platforms });
+    process.stdout.write(`Publisher host running for ${exact} at generation ${control.generation}.\n`);
+    return;
+  }
+  throw new Error("host requires status, pause, or run.");
+}
+
+async function authenticate(platform, args) {
+  if (platform !== "youtube") {
+    throw new Error("auth currently supports only youtube.");
+  }
+  const allowed = new Set(["--timeout-seconds"]);
+  for (let index = 0; index < args.length; index += 1) {
+    const argument = args[index];
+    if (!allowed.has(argument)) throw new Error(`Unknown auth youtube option: ${argument}`);
+    index += 1;
+    if (!args[index]) throw new Error(`${argument} requires a value.`);
+  }
+  const timeoutValue = flagValue(args, "--timeout-seconds");
+  const timeoutSeconds = timeoutValue === null ? 300 : Number(timeoutValue);
+  if (!Number.isInteger(timeoutSeconds) || timeoutSeconds < 60 || timeoutSeconds > 900) {
+    throw new Error("auth youtube --timeout-seconds must be an integer from 60 through 900.");
+  }
+  return authorizeYouTubeOwner({
+    platformsPath: platformConfigPath,
+    timeoutMs: timeoutSeconds * 1000,
+  });
 }
 
 function executableStatus(command, args = ["-version"]) {
@@ -638,6 +973,9 @@ async function doctor() {
     catalogStatus.error = error.message;
   }
   const setup = {
+    rssApiKey:
+      Boolean(process.env.DRM_RSS_COM_API_KEY) ||
+      (await exists(path.join(credentials, "rss.com", "api-key"))),
     youtubeClient: await exists(path.join(credentials, "youtube", "client_secret.json")),
     youtubeToken: await exists(path.join(credentials, "youtube", "token.json")),
     vimeoToken: Boolean(process.env.VIMEO_ACCESS_TOKEN) || (await exists(path.join(credentials, "vimeo", "token"))),
@@ -753,6 +1091,7 @@ async function doctor() {
     for (const error of migrationState.errors) process.stdout.write(`- state error: ${error}\n`);
   }
   process.stdout.write(`\nAccount setup\n`);
+  process.stdout.write(`- RSS.com Max API key: ${setup.rssApiKey ? "configured" : "needed for unattended audio upload"}\n`);
   process.stdout.write(`- YouTube OAuth client: ${setup.youtubeClient ? "configured" : "needed"}\n`);
   process.stdout.write(`- YouTube OAuth token: ${setup.youtubeToken ? "configured" : "needed"}\n`);
   process.stdout.write(`- Vimeo upload token: ${setup.vimeoToken ? "configured" : "needed"}\n`);
@@ -798,10 +1137,19 @@ async function main() {
     return;
   }
   if (command === "doctor") return doctor();
+  if (command === "auth") return authenticate(first, rest);
   if (command === "migration-check") return migrationCheck([first, ...rest].filter(Boolean));
   if (command === "prepare") return prepare(first);
   if (command === "show") return show(first);
   if (command === "approve") return approve(first, rest);
+  if (command === "authorize") return authorizeRelease(first, rest);
+  if (command === "dispatch") return dispatchRelease(first);
+  if (command === "controller") return controllerCommand([first, ...rest].filter(Boolean));
+  if (command === "queue") return listQueue(first);
+  if (command === "retry") return retryOperation(first, rest);
+  if (command === "reconcile") return reconcileOperation(first, rest);
+  if (command === "supersede") return supersedeOperation(first, rest);
+  if (command === "host") return hostControl(first, rest);
   if (command === "receipt") return recordReceipt(first, rest);
   if (command === "receipts") return listReceipts(first);
   if (command === "status") return status(first);

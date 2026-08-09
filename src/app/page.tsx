@@ -35,7 +35,7 @@ export default async function Home() {
         <div className="relative mx-auto max-w-6xl px-4 py-20 lg:px-6 lg:py-32">
           <div className="flex flex-col items-center text-center">
             {/* Main Headline */}
-            <h1 className="text-display-lg md:text-display-xl font-bold text-foreground max-w-4xl mb-6">
+            <h1 className="text-4xl sm:text-display-lg md:text-display-xl font-bold text-foreground max-w-4xl mb-6">
               {SITE_SHORT_NAME},{" "}
               <span className="text-gradient">{SITE_HOST_LINE}</span>
             </h1>

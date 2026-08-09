@@ -24,11 +24,13 @@ drm-publish doctor
 drm-publish prepare /absolute/path/to/episode.json
 ```
 
-Production builds use `CONTENT_CATALOG_STRICT=true` and fail when required catalog content is incomplete. Published episodes must include active Vimeo, Spotify, YouTube, and Rumble references.
+Production builds use `CONTENT_CATALOG_STRICT=true` and fail when required catalog content is incomplete. Published episodes must include an active, exact website reference for every non-null destination bound in the master catalog. A deliberately unbound destination such as a future `rumble: null` does not block deployment.
 
 See:
 
 - `docs/operations-manual.md` (start here for the whole ecosystem and break/fix procedures)
+- `docs/publishing-workflow-topology.md` (implemented versus target upload-control architecture)
+- `docs/dropbox-delivery-intake.md` (offline creative handoff into a review packet)
 - `docs/new-episode-process.md`
 - `docs/publishing-platform-setup.md`
 - `publishing/README.md`
