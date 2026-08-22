@@ -170,7 +170,7 @@ type BlogRelatedAffiliateProductRow = {
 const ACTIVE_MEDIA_CONTAINMENT = new Map([
   [
     "episode-5-energy",
-    "Corrected Episode 5 media is being uploaded and independently verified.",
+    "The corrected Episode 5 video is live. Podcast and remaining platform copies are being updated and independently verified.",
   ],
 ]);
 
@@ -189,8 +189,6 @@ export function applyActiveMediaContainment(catalog: ContentCatalog): ContentCat
       return {
         ...episode,
         audioUrl: undefined,
-        videoUrl: undefined,
-        vimeoId: undefined,
         spotifyId: undefined,
         transcriptUrl: undefined,
         references: [
