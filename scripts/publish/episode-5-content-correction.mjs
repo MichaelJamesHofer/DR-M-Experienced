@@ -40,6 +40,7 @@ const TARGETS = Object.freeze([
   "vimeo",
   "rumble",
   "apple",
+  "supabase",
   "website",
 ]);
 
@@ -247,6 +248,14 @@ export function episode5ContentCorrectionSemanticErrors(receipt) {
   } else if (declaredPending.size === 0) {
     errors.push("A non-complete receipt must retain at least one pending target.");
   }
+  if (
+    receipt?.status === "remote_propagation_partial" &&
+    (declaredComplete.size === 0 || declaredPending.size === 0)
+  ) {
+    errors.push(
+      "remote_propagation_partial status requires both verified and pending targets.",
+    );
+  }
 
   for (const name of ["rssCom", "spotify", "youtube", "vimeo", "rumble", "apple"]) {
     const target = receipt?.targets?.[name];
@@ -255,7 +264,7 @@ export function episode5ContentCorrectionSemanticErrors(receipt) {
     }
   }
 
-  for (const name of ["rssCom", "spotify", "vimeo", "apple"]) {
+  for (const name of ["rssCom", "spotify", "vimeo", "apple", "supabase"]) {
     const target = receipt?.targets?.[name];
     if (
       target?.status === "complete_verified" &&
@@ -291,6 +300,32 @@ export function episode5ContentCorrectionSemanticErrors(receipt) {
     ) {
       errors.push(`targets.${name}.replacementUrl does not match replacementId.`);
     }
+  }
+
+  const vimeo = receipt?.targets?.vimeo;
+  if (
+    vimeo?.versionReadback != null &&
+    vimeo.versionReadback.verifiedReceiptSha256 !== vimeo.evidenceSha256
+  ) {
+    errors.push(
+      "targets.vimeo.versionReadback.verifiedReceiptSha256 must match targets.vimeo.evidenceSha256.",
+    );
+  }
+  for (const name of TARGETS.filter((target) => target !== "vimeo")) {
+    if (receipt?.targets?.[name]?.versionReadback != null) {
+      errors.push(`targets.${name}.versionReadback is reserved for Vimeo evidence.`);
+    }
+  }
+
+  const containment = receipt?.operationalEvidence?.websiteContainment;
+  const finalProjectionPending = receipt?.targets?.website?.status !== "complete_verified";
+  if (
+    typeof containment?.finalProjectionPending === "boolean" &&
+    containment.finalProjectionPending !== finalProjectionPending
+  ) {
+    errors.push(
+      "operationalEvidence.websiteContainment.finalProjectionPending must match the website target state.",
+    );
   }
 
   return [...new Set(errors)];

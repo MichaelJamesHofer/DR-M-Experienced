@@ -9,6 +9,11 @@ import {
 } from "./episode-5-content-correction.mjs";
 
 const root = new URL("../../", import.meta.url);
+const VIMEO_VERIFIED_RECEIPT_SHA256 =
+  "9524dde7ef26eaa1f4805c77d18f5c16a7e0feffdf4831ffa86715f938f09202";
+const MASTER_VIDEO_SHA256 =
+  "ef25952275c22633e6deb3e1dfd142ed4890ce688301aaba8bef78f04d9f9b58";
+const MASTER_VIDEO_SIZE_BYTES = 8_743_493_742;
 
 async function readJson(path) {
   return JSON.parse(await readFile(new URL(path, root), "utf8"));
@@ -56,6 +61,20 @@ function pendingReceipt() {
       badExchangeRemoved: true,
       fullDecodePassed: true,
     },
+    operationalEvidence: {
+      dropboxSync: {
+        status: "pending",
+        clientRestarted: false,
+      },
+      websiteContainment: {
+        status: "pending",
+        mergeCommit: null,
+        correctedVimeoVideoIdPresent: null,
+        correctionNoticePresent: false,
+        staleRemoteReferencesAbsent: [],
+        finalProjectionPending: true,
+      },
+    },
     targets: {
       rssCom: pendingTarget({
         action: "replace_existing_episode_audio",
@@ -74,12 +93,15 @@ function pendingReceipt() {
         existingId: "N_F0hhHkIQ4",
         existingUrl: "https://www.youtube.com/watch?v=N_F0hhHkIQ4",
       }),
-      vimeo: pendingTarget({
-        action: "replace_existing_video_version",
-        source: "episode-005-master-video",
-        existingId: "1204939658",
-        existingUrl: "https://vimeo.com/1204939658",
-      }),
+      vimeo: {
+        ...pendingTarget({
+          action: "replace_existing_video_version",
+          source: "episode-005-master-video",
+          existingId: "1204939658",
+          existingUrl: "https://vimeo.com/1204939658",
+        }),
+        versionReadback: null,
+      },
       rumble: pendingTarget({
         action: "manual_human_only_reupload",
         source: "episode-005-master-video",
@@ -92,6 +114,11 @@ function pendingReceipt() {
         existingId: "1000774398633",
         status: "pending_rss_fanout",
       }),
+      supabase: pendingTarget({
+        action: "apply_attended_episode_projection_cutover",
+        source: "publishing/master-catalog.json",
+        existingId: "episode-5-energy",
+      }),
       website: pendingTarget({
         action: "deploy_verified_episode_projection",
         source: "publishing/master-catalog.json",
@@ -101,7 +128,16 @@ function pendingReceipt() {
     },
     completion: {
       verifiedComplete: [],
-      pending: ["rssCom", "spotify", "youtube", "vimeo", "rumble", "apple", "website"],
+      pending: [
+        "rssCom",
+        "spotify",
+        "youtube",
+        "vimeo",
+        "rumble",
+        "apple",
+        "supabase",
+        "website",
+      ],
     },
   };
 }
@@ -109,12 +145,28 @@ function pendingReceipt() {
 function completeTarget(receipt, name, { id, url }) {
   const target = receipt.targets[name];
   target.status = "complete_verified";
-  target.sourceSha256 = "a".repeat(64);
-  target.sourceSizeBytes = 1234;
+  target.sourceSha256 = name === "vimeo" ? MASTER_VIDEO_SHA256 : "a".repeat(64);
+  target.sourceSizeBytes = name === "vimeo" ? MASTER_VIDEO_SIZE_BYTES : 1234;
   target.replacementId = id;
   target.replacementUrl = url;
-  target.verifiedAt = "2026-08-22T20:00:00Z";
-  target.evidenceSha256 = "b".repeat(64);
+  target.verifiedAt = name === "vimeo"
+    ? "2026-08-22T20:33:35.937Z"
+    : "2026-08-22T20:00:00Z";
+  target.evidenceSha256 = name === "vimeo"
+    ? VIMEO_VERIFIED_RECEIPT_SHA256
+    : "b".repeat(64);
+  if (name === "vimeo") {
+    target.versionReadback = {
+      kind: "vimeo_version_readback",
+      versionId: "1225722222",
+      publicDurationSeconds: 1786,
+      versionCount: 3,
+      activeVersionId: "1225722222",
+      inactiveVersionCount: 2,
+      allOtherVersionsInactive: true,
+      verifiedReceiptSha256: VIMEO_VERIFIED_RECEIPT_SHA256,
+    };
+  }
   receipt.completion.pending = receipt.completion.pending.filter(
     (candidate) => candidate !== name,
   );
@@ -149,6 +201,55 @@ test("checked-in Episode 5 receipt matches the current catalog and approved asse
 
   assert.equal(receipt.targets.apple.sourceSha256, receipt.targets.rssCom.sourceSha256);
   assert.equal(receipt.targets.apple.sourceSizeBytes, receipt.targets.rssCom.sourceSizeBytes);
+  assert.equal(receipt.status, "remote_propagation_partial");
+  assert.deepEqual(receipt.completion.verifiedComplete, ["vimeo"]);
+  assert.equal(receipt.targets.vimeo.existingId, "1204939658");
+  assert.equal(receipt.targets.vimeo.replacementId, "1204939658");
+  assert.equal(receipt.targets.vimeo.sourceSha256, MASTER_VIDEO_SHA256);
+  assert.equal(receipt.targets.vimeo.sourceSizeBytes, MASTER_VIDEO_SIZE_BYTES);
+  assert.equal(receipt.targets.vimeo.versionReadback.versionId, "1225722222");
+  assert.equal(receipt.targets.vimeo.versionReadback.publicDurationSeconds, 1786);
+  assert.equal(receipt.targets.vimeo.versionReadback.versionCount, 3);
+  assert.equal(receipt.targets.vimeo.versionReadback.activeVersionId, "1225722222");
+  assert.equal(receipt.targets.vimeo.versionReadback.inactiveVersionCount, 2);
+  assert.equal(receipt.targets.vimeo.versionReadback.allOtherVersionsInactive, true);
+  assert.equal(receipt.targets.vimeo.evidenceSha256, VIMEO_VERIFIED_RECEIPT_SHA256);
+  assert.equal(
+    receipt.targets.vimeo.versionReadback.verifiedReceiptSha256,
+    VIMEO_VERIFIED_RECEIPT_SHA256,
+  );
+  assert.deepEqual(receipt.operationalEvidence, {
+    dropboxSync: {
+      status: "up_to_date",
+      clientRestarted: true,
+    },
+    websiteContainment: {
+      status: "deployed_verified",
+      mergeCommit: "0ef3e9ae7170e1b4c79a6dc8400768c5fa974316",
+      correctedVimeoVideoIdPresent: "1204939658",
+      correctionNoticePresent: true,
+      staleRemoteReferencesAbsent: [
+        "N_F0hhHkIQ4",
+        "JyBK6KtOo_k",
+        "6fQAClcR4AAuueHjBNlrJC",
+        "v7bvj32",
+        "1de2f4f3-aeab-457a-a02d-2bf61108132d",
+      ],
+      finalProjectionPending: true,
+    },
+  });
+  for (const targetName of [
+    "rssCom",
+    "spotify",
+    "youtube",
+    "rumble",
+    "apple",
+    "supabase",
+    "website",
+  ]) {
+    assert.notEqual(receipt.targets[targetName].status, "complete_verified");
+    assert.equal(receipt.targets[targetName].verifiedAt, null);
+  }
 });
 
 test("pending Episode 5 receipt pins source and stable identities while remote fields remain null", async () => {
@@ -205,6 +306,36 @@ test("receipt rejects corrected-source or protected-identity drift", async (t) =
         receipt.targets.vimeo.source = "episode-005-spotify-video";
       },
       pattern: /targets\.vimeo\.source.*equal to constant/,
+    },
+    {
+      label: "Vimeo replacement version",
+      mutate(receipt) {
+        completeTarget(receipt, "vimeo", {
+          id: "1204939658",
+          url: "https://vimeo.com/1204939658",
+        });
+        receipt.targets.vimeo.versionReadback.versionId = "1225722223";
+      },
+      pattern: /targets\.vimeo\.versionReadback\.versionId.*equal to constant/,
+    },
+    {
+      label: "site-containment stale-reference proof",
+      mutate(receipt) {
+        receipt.operationalEvidence.websiteContainment = {
+          status: "deployed_verified",
+          mergeCommit: "0ef3e9ae7170e1b4c79a6dc8400768c5fa974316",
+          correctedVimeoVideoIdPresent: "1204939658",
+          correctionNoticePresent: true,
+          staleRemoteReferencesAbsent: [
+            "N_F0hhHkIQ4",
+            "JyBK6KtOo_k",
+            "6fQAClcR4AAuueHjBNlrJC",
+            "v7bvj32",
+          ],
+          finalProjectionPending: true,
+        };
+      },
+      pattern: /staleRemoteReferencesAbsent.*must NOT have fewer than 5 items/,
     },
   ];
 

@@ -14,6 +14,7 @@
     "catalog",
     "episode",
     "correctedSource",
+    "operationalEvidence",
     "targets",
     "completion"
   ],
@@ -35,6 +36,7 @@
     "catalog": { "$ref": "#/$defs/catalog" },
     "episode": { "$ref": "#/$defs/episode" },
     "correctedSource": { "$ref": "#/$defs/correctedSource" },
+    "operationalEvidence": { "$ref": "#/$defs/operationalEvidence" },
     "targets": { "$ref": "#/$defs/targets" },
     "completion": { "$ref": "#/$defs/completion" }
   },
@@ -137,6 +139,152 @@
         "fullDecodePassed": { "const": true }
       }
     },
+    "dropboxSync": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "clientRestarted"],
+      "properties": {
+        "status": { "enum": ["pending", "up_to_date"] },
+        "clientRestarted": { "type": "boolean" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "status": { "const": "up_to_date" } },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": { "clientRestarted": { "const": true } }
+          }
+        },
+        {
+          "if": {
+            "properties": { "status": { "const": "pending" } },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": { "clientRestarted": { "const": false } }
+          }
+        }
+      ]
+    },
+    "websiteContainment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "mergeCommit",
+        "correctedVimeoVideoIdPresent",
+        "correctionNoticePresent",
+        "staleRemoteReferencesAbsent",
+        "finalProjectionPending"
+      ],
+      "properties": {
+        "status": { "enum": ["pending", "deployed_verified"] },
+        "mergeCommit": {
+          "type": ["string", "null"],
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "correctedVimeoVideoIdPresent": {
+          "enum": ["1204939658", null]
+        },
+        "correctionNoticePresent": { "type": "boolean" },
+        "staleRemoteReferencesAbsent": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "N_F0hhHkIQ4",
+              "JyBK6KtOo_k",
+              "6fQAClcR4AAuueHjBNlrJC",
+              "v7bvj32",
+              "1de2f4f3-aeab-457a-a02d-2bf61108132d"
+            ]
+          }
+        },
+        "finalProjectionPending": { "type": "boolean" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "status": { "const": "deployed_verified" } },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "mergeCommit": {
+                "const": "0ef3e9ae7170e1b4c79a6dc8400768c5fa974316"
+              },
+              "correctedVimeoVideoIdPresent": { "const": "1204939658" },
+              "correctionNoticePresent": { "const": true },
+              "staleRemoteReferencesAbsent": {
+                "type": "array",
+                "prefixItems": [
+                  { "const": "N_F0hhHkIQ4" },
+                  { "const": "JyBK6KtOo_k" },
+                  { "const": "6fQAClcR4AAuueHjBNlrJC" },
+                  { "const": "v7bvj32" },
+                  { "const": "1de2f4f3-aeab-457a-a02d-2bf61108132d" }
+                ],
+                "items": false,
+                "minItems": 5,
+                "maxItems": 5
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "status": { "const": "pending" } },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "mergeCommit": { "const": null },
+              "correctedVimeoVideoIdPresent": { "const": null },
+              "correctionNoticePresent": { "const": false },
+              "staleRemoteReferencesAbsent": { "type": "array", "maxItems": 0 },
+              "finalProjectionPending": { "const": true }
+            }
+          }
+        }
+      ]
+    },
+    "operationalEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dropboxSync", "websiteContainment"],
+      "properties": {
+        "dropboxSync": { "$ref": "#/$defs/dropboxSync" },
+        "websiteContainment": { "$ref": "#/$defs/websiteContainment" }
+      }
+    },
+    "vimeoVersionReadback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "versionId",
+        "publicDurationSeconds",
+        "versionCount",
+        "activeVersionId",
+        "inactiveVersionCount",
+        "allOtherVersionsInactive",
+        "verifiedReceiptSha256"
+      ],
+      "properties": {
+        "kind": { "const": "vimeo_version_readback" },
+        "versionId": { "const": "1225722222" },
+        "publicDurationSeconds": { "const": 1786 },
+        "versionCount": { "const": 3 },
+        "activeVersionId": { "const": "1225722222" },
+        "inactiveVersionCount": { "const": 2 },
+        "allOtherVersionsInactive": { "const": true },
+        "verifiedReceiptSha256": {
+          "const": "9524dde7ef26eaa1f4805c77d18f5c16a7e0feffdf4831ffa86715f938f09202"
+        }
+      }
+    },
     "target": {
       "type": "object",
       "additionalProperties": false,
@@ -157,6 +305,7 @@
         "status": {
           "enum": [
             "pending",
+            "pending_attended_cutover",
             "processing",
             "pending_rss_fanout",
             "pending_manual_human_action",
@@ -185,7 +334,13 @@
           "type": ["string", "null"],
           "format": "date-time"
         },
-        "evidenceSha256": { "$ref": "#/$defs/nullableSha256" }
+        "evidenceSha256": { "$ref": "#/$defs/nullableSha256" },
+        "versionReadback": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/vimeoVersionReadback" }
+          ]
+        }
       },
       "allOf": [
         {
@@ -212,7 +367,16 @@
     "targets": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["rssCom", "spotify", "youtube", "vimeo", "rumble", "apple", "website"],
+      "required": [
+        "rssCom",
+        "spotify",
+        "youtube",
+        "vimeo",
+        "rumble",
+        "apple",
+        "supabase",
+        "website"
+      ],
       "properties": {
         "rssCom": {
           "allOf": [
@@ -270,12 +434,46 @@
             { "$ref": "#/$defs/target" },
             {
               "type": "object",
+              "required": ["versionReadback"],
               "properties": {
                 "action": { "const": "replace_existing_video_version" },
                 "source": { "const": "episode-005-master-video" },
                 "existingId": { "const": "1204939658" },
                 "existingUrl": { "const": "https://vimeo.com/1204939658" },
-                "replacementId": { "enum": ["1204939658", null] }
+                "replacementId": { "enum": ["1204939658", null] },
+                "versionReadback": {
+                  "oneOf": [
+                    { "type": "null" },
+                    { "$ref": "#/$defs/vimeoVersionReadback" }
+                  ]
+                }
+              }
+            },
+            {
+              "if": {
+                "type": "object",
+                "properties": { "status": { "const": "complete_verified" } },
+                "required": ["status"]
+              },
+              "then": {
+                "type": "object",
+                "properties": {
+                  "sourceSha256": {
+                    "const": "ef25952275c22633e6deb3e1dfd142ed4890ce688301aaba8bef78f04d9f9b58"
+                  },
+                  "sourceSizeBytes": { "const": 8743493742 },
+                  "replacementId": { "const": "1204939658" },
+                  "replacementUrl": { "const": "https://vimeo.com/1204939658" },
+                  "verifiedAt": { "const": "2026-08-22T20:33:35.937Z" },
+                  "evidenceSha256": {
+                    "const": "9524dde7ef26eaa1f4805c77d18f5c16a7e0feffdf4831ffa86715f938f09202"
+                  },
+                  "versionReadback": { "$ref": "#/$defs/vimeoVersionReadback" }
+                }
+              },
+              "else": {
+                "type": "object",
+                "properties": { "versionReadback": { "const": null } }
               }
             }
           ]
@@ -311,6 +509,27 @@
             }
           ]
         },
+        "supabase": {
+          "allOf": [
+            { "$ref": "#/$defs/target" },
+            {
+              "type": "object",
+              "properties": {
+                "action": { "const": "apply_attended_episode_projection_cutover" },
+                "source": { "const": "publishing/master-catalog.json" },
+                "existingId": { "const": "episode-5-energy" },
+                "existingUrl": { "const": null },
+                "replacementId": { "enum": ["episode-5-energy", null] },
+                "replacementUrl": {
+                  "enum": [
+                    "https://drmexperienced.com/episodes/episode-5-energy/",
+                    null
+                  ]
+                }
+              }
+            }
+          ]
+        },
         "website": {
           "allOf": [
             { "$ref": "#/$defs/target" },
@@ -337,7 +556,16 @@
       }
     },
     "completionTarget": {
-      "enum": ["rssCom", "spotify", "youtube", "vimeo", "rumble", "apple", "website"]
+      "enum": [
+        "rssCom",
+        "spotify",
+        "youtube",
+        "vimeo",
+        "rumble",
+        "apple",
+        "supabase",
+        "website"
+      ]
     },
     "completion": {
       "type": "object",

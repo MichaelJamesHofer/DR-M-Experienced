@@ -2,9 +2,9 @@
   "$schema": "./episode-5-content-correction.schema.json",
   "schemaVersion": 1,
   "correctionId": "episode-5-content-correction-2026-08-22",
-  "status": "local_delivery_validated_pending_remote_replacement",
+  "status": "remote_propagation_partial",
   "recordedAt": "2026-08-22T19:16:20Z",
-  "updatedAt": "2026-08-22T19:54:44Z",
+  "updatedAt": "2026-08-22T20:43:20Z",
   "catalog": {
     "source": "publishing/master-catalog.json",
     "baselineRevision": 12,
@@ -36,9 +36,29 @@
     "badExchangeRemoved": true,
     "fullDecodePassed": true
   },
+  "operationalEvidence": {
+    "dropboxSync": {
+      "status": "up_to_date",
+      "clientRestarted": true
+    },
+    "websiteContainment": {
+      "status": "deployed_verified",
+      "mergeCommit": "0ef3e9ae7170e1b4c79a6dc8400768c5fa974316",
+      "correctedVimeoVideoIdPresent": "1204939658",
+      "correctionNoticePresent": true,
+      "staleRemoteReferencesAbsent": [
+        "N_F0hhHkIQ4",
+        "JyBK6KtOo_k",
+        "6fQAClcR4AAuueHjBNlrJC",
+        "v7bvj32",
+        "1de2f4f3-aeab-457a-a02d-2bf61108132d"
+      ],
+      "finalProjectionPending": true
+    }
+  },
   "targets": {
     "rssCom": {
-      "status": "pending",
+      "status": "pending_attended_cutover",
       "action": "replace_existing_episode_audio",
       "source": "episode-005-podcast-audio",
       "sourceSha256": "3acf88aa7cb25041dbe34eee3242b3f57d9e62cbc42d54624467dc609ef4a7c0",
@@ -51,7 +71,7 @@
       "evidenceSha256": null
     },
     "spotify": {
-      "status": "pending",
+      "status": "pending_attended_cutover",
       "action": "replace_existing_episode_video",
       "source": "episode-005-spotify-video",
       "sourceSha256": "7991618e1649cd32cf07a33459ab52cb8299af4c660d789c1e7da6c1a3d6031c",
@@ -64,7 +84,7 @@
       "evidenceSha256": null
     },
     "youtube": {
-      "status": "pending",
+      "status": "pending_attended_cutover",
       "action": "publish_corrected_video_and_archive_contaminated_uploads",
       "source": "episode-005-master-video",
       "sourceSha256": "ef25952275c22633e6deb3e1dfd142ed4890ce688301aaba8bef78f04d9f9b58",
@@ -77,17 +97,27 @@
       "evidenceSha256": null
     },
     "vimeo": {
-      "status": "pending",
+      "status": "complete_verified",
       "action": "replace_existing_video_version",
       "source": "episode-005-master-video",
       "sourceSha256": "ef25952275c22633e6deb3e1dfd142ed4890ce688301aaba8bef78f04d9f9b58",
       "sourceSizeBytes": 8743493742,
       "existingId": "1204939658",
       "existingUrl": "https://vimeo.com/1204939658",
-      "replacementId": null,
-      "replacementUrl": null,
-      "verifiedAt": null,
-      "evidenceSha256": null
+      "replacementId": "1204939658",
+      "replacementUrl": "https://vimeo.com/1204939658",
+      "verifiedAt": "2026-08-22T20:33:35.937Z",
+      "evidenceSha256": "9524dde7ef26eaa1f4805c77d18f5c16a7e0feffdf4831ffa86715f938f09202",
+      "versionReadback": {
+        "kind": "vimeo_version_readback",
+        "versionId": "1225722222",
+        "publicDurationSeconds": 1786,
+        "versionCount": 3,
+        "activeVersionId": "1225722222",
+        "inactiveVersionCount": 2,
+        "allOtherVersionsInactive": true,
+        "verifiedReceiptSha256": "9524dde7ef26eaa1f4805c77d18f5c16a7e0feffdf4831ffa86715f938f09202"
+      }
     },
     "rumble": {
       "status": "pending_manual_human_action",
@@ -115,6 +145,19 @@
       "verifiedAt": null,
       "evidenceSha256": null
     },
+    "supabase": {
+      "status": "pending_attended_cutover",
+      "action": "apply_attended_episode_projection_cutover",
+      "source": "publishing/master-catalog.json",
+      "sourceSha256": null,
+      "sourceSizeBytes": null,
+      "existingId": "episode-5-energy",
+      "existingUrl": null,
+      "replacementId": null,
+      "replacementUrl": null,
+      "verifiedAt": null,
+      "evidenceSha256": null
+    },
     "website": {
       "status": "pending",
       "action": "deploy_verified_episode_projection",
@@ -130,14 +173,16 @@
     }
   },
   "completion": {
-    "verifiedComplete": [],
+    "verifiedComplete": [
+      "vimeo"
+    ],
     "pending": [
       "rssCom",
       "spotify",
       "youtube",
-      "vimeo",
       "rumble",
       "apple",
+      "supabase",
       "website"
     ]
   }
