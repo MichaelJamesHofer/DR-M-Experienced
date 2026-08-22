@@ -84,7 +84,10 @@ async function setup() {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "drm-controller-"));
   const jobDirectory = path.join(directory, "job");
   await fs.mkdir(jobDirectory, { mode: 0o700 });
-  const store = await openControlStore({ filePath: path.join(directory, "publisher.sqlite3") });
+  const store = await openControlStore({
+    filePath: path.join(directory, "publisher.sqlite3"),
+    now: advancingClock(),
+  });
   const context = fixture(jobDirectory);
   const [queued] = store.enqueueAuthorizedJob(context.packet, context.authorization);
   return { directory, jobDirectory, store, context, operation: queued.operation };
