@@ -233,6 +233,14 @@ export function vimeoReplacementConfirmation(plan) {
   return `execute-vimeo-replacement ${plan.operationId} ${plan.authorizationHash} ${plan.existingVideoId}`;
 }
 
+export function vimeoSessionRecoveryConfirmation(plan, versionId) {
+  const exactVersionId = String(versionId ?? "");
+  if (!VIMEO_ID.test(exactVersionId)) {
+    fail("invalid_vimeo_version_id", "An exact numeric Vimeo version ID is required for recovery.");
+  }
+  return `recover-vimeo-session ${plan.operationId} ${plan.authorizationHash} ${plan.existingVideoId} ${exactVersionId}`;
+}
+
 async function loadPlan({
   jobId,
   existingVideoId,
@@ -345,6 +353,212 @@ export async function statusEpisode5VimeoReplacement({
       events: operation ? ownedStore.events(plan.operationId) : [],
       operation,
       plan,
+    };
+  } finally {
+    if (!store) ownedStore.close();
+  }
+}
+
+function assertRecoverableProviderSession(operation, plan) {
+  assertStoredOperation(operation, plan);
+  const blockedAt = Date.parse(operation?.updatedAt ?? "");
+  const writeStartedAt = Date.parse(operation?.providerWriteStartedAt ?? "");
+  if (
+    operation?.state !== "blocked" ||
+    !Number.isFinite(writeStartedAt) ||
+    !Number.isFinite(blockedAt) ||
+    blockedAt < writeStartedAt ||
+    operation.providerCheckpoint != null ||
+    operation.providerCheckpointSequence !== 0 ||
+    operation.providerAcceptedAt != null ||
+    operation.remoteId != null ||
+    operation.remoteUrl != null
+  ) {
+    fail(
+      "provider_session_not_recoverable",
+      "Vimeo session recovery requires one blocked replacement write intent with no checkpoint, acceptance, or remote identity.",
+    );
+  }
+  if (
+    operation.lastErrorCode !== "INVALID_PROVIDER_RESPONSE" ||
+    !/TUS upload URL outside its documented host family/.test(operation.lastErrorMessage || "")
+  ) {
+    fail(
+      "provider_session_incident_mismatch",
+      "Vimeo session recovery is limited to the rejected TUS-host incident.",
+    );
+  }
+}
+
+function assertRecoveredSessionBinding(result, plan, { versionId, expectedAppId, operation }) {
+  const expectedVersionUri = `/videos/${plan.existingVideoId}/versions/${versionId}`;
+  const recovery = result?.recovery;
+  const checkpointRecovery = result?.checkpoint?.providerRecovery;
+  const problems = [];
+  if (result?.providerAccepted !== true) problems.push("provider acceptance");
+  if (result?.remoteId !== plan.existingVideoId) problems.push("remote id");
+  if (result?.remoteUrl !== plan.remoteUrl) problems.push("remote URL");
+  if (typeof result?.providerSummary !== "string" || !result.providerSummary.trim()) {
+    problems.push("provider evidence");
+  }
+  if (result?.checkpoint?.phase !== "provider_accepted") problems.push("checkpoint phase");
+  if (result?.checkpoint?.operation !== "replace") problems.push("checkpoint operation");
+  if (result?.checkpoint?.videoId !== plan.existingVideoId) problems.push("checkpoint video id");
+  if (result?.checkpoint?.canonicalUrl !== plan.remoteUrl) problems.push("checkpoint URL");
+  if (result?.checkpoint?.versionUri !== expectedVersionUri) problems.push("checkpoint version");
+  if (checkpointRecovery?.kind !== "authenticated_version_readback_and_tus_head") {
+    problems.push("checkpoint recovery kind");
+  }
+  if (checkpointRecovery?.versionId !== versionId) problems.push("checkpoint version id");
+  if (checkpointRecovery?.appId !== expectedAppId) problems.push("checkpoint app id");
+  if (checkpointRecovery?.writeIntentAt !== operation.providerWriteStartedAt) {
+    problems.push("write-intent time");
+  }
+  if (checkpointRecovery?.blockedAt !== operation.updatedAt) problems.push("blocked time");
+  if (checkpointRecovery?.tusHead?.uploadOffset !== 0) problems.push("TUS offset");
+  if (recovery?.versionId !== versionId) problems.push("recovery version id");
+  if (recovery?.versionUri !== expectedVersionUri) problems.push("recovery version URI");
+  if (recovery?.appId !== expectedAppId) problems.push("recovery app id");
+  if (recovery?.accountId !== plan.accountId) problems.push("recovery account id");
+  if (problems.length) {
+    fail(
+      "provider_session_recovery_binding_mismatch",
+      `Authenticated Vimeo recovery does not match the incident binding: ${problems.join(", ")}.`,
+    );
+  }
+}
+
+/**
+ * Recover only the exact authenticated Vimeo version/TUS session created by
+ * the blocked replacement write intent. The adapter path is GET/HEAD-only.
+ * The durable checkpoint is committed before an accepted receipt is claimed.
+ */
+export async function recoverEpisode5VimeoReplacementSession({
+  jobId,
+  existingVideoId,
+  versionId,
+  confirmation,
+  env = process.env,
+  now = new Date(),
+  loadContext = loadAuthorizedJobContext,
+  adapterFactory = () => createVimeoAdapter(),
+  claimAccepted = claimAdapterAccepted,
+  store = null,
+} = {}) {
+  const exactVersionId = String(versionId ?? "");
+  if (!VIMEO_ID.test(exactVersionId)) {
+    fail("invalid_vimeo_version_id", "An exact numeric Vimeo version ID is required for recovery.");
+  }
+  const { context, plan } = await loadPlan({
+    jobId,
+    existingVideoId,
+    env,
+    now,
+    allowExpiredAuthorization: true,
+    loadContext,
+  });
+  if (confirmation !== vimeoSessionRecoveryConfirmation(plan, exactVersionId)) {
+    fail(
+      "provider_session_recovery_confirmation_mismatch",
+      "Vimeo session-recovery confirmation does not match the operation, authorization, video, and version IDs.",
+    );
+  }
+  const expectedAppId = String(
+    context?.platformConfig?.platforms?.vimeo?.apiAutomation?.appId ?? "",
+  );
+  if (!VIMEO_ID.test(expectedAppId)) {
+    fail(
+      "provider_session_recovery_app_id_missing",
+      "Vimeo session recovery requires the exact configured numeric API app ID.",
+    );
+  }
+
+  const ownedStore = store || await openControlStore({
+    filePath: vimeoReplacementDatabasePath(plan, env),
+    env,
+  });
+  try {
+    const storedOperations = ownedStore.list();
+    if (
+      storedOperations.length !== 1 ||
+      storedOperations[0].operationId !== plan.operationId
+    ) {
+      fail(
+        "replacement_store_scope_mismatch",
+        "The isolated Vimeo replacement store does not contain exactly the approved operation.",
+      );
+    }
+    const operation = ownedStore.get(plan.operationId);
+    assertRecoverableProviderSession(operation, plan);
+    const receipts = await readReceiptLedger(context.directory, context.packet);
+    const priorReceipt = latestOperationReceipt(receipts, plan.operationId);
+    if (priorReceipt) {
+      exactReceipt(priorReceipt, plan);
+      fail(
+        "provider_session_recovery_receipt_exists",
+        "Vimeo session recovery requires no existing receipt for the blocked operation.",
+      );
+    }
+
+    const adapter = adapterFactory({ context, plan });
+    if (typeof adapter?.recoverSession !== "function") {
+      fail(
+        "provider_session_recovery_unsupported",
+        "The Vimeo adapter does not expose authenticated session recovery.",
+      );
+    }
+    const recovered = await adapter.recoverSession(plan.adapterInput, {
+      versionId: exactVersionId,
+      providerWriteStartedAt: operation.providerWriteStartedAt,
+      providerBlockedAt: operation.updatedAt,
+      expectedAppId,
+    });
+    assertRecoveredSessionBinding(recovered, plan, {
+      versionId: exactVersionId,
+      expectedAppId,
+      operation,
+    });
+
+    const recordedAt = new Date(now).toISOString();
+    const recoveredOperation = ownedStore.recoverProviderCheckpoint(plan.operationId, {
+      checkpoint: recovered.checkpoint,
+      remoteId: recovered.remoteId,
+      remoteUrl: recovered.remoteUrl,
+      evidenceSummary: recovered.providerSummary,
+      at: recordedAt,
+    });
+    const claimed = await claimAccepted({
+      jobDirectory: context.directory,
+      packet: context.packet,
+      platformId: VIMEO_REPLACEMENT_PLATFORM,
+      operationId: plan.operationId,
+      remoteId: plan.existingVideoId,
+      remoteUrl: plan.remoteUrl,
+      providerSummary: recovered.providerSummary,
+      recordedAt,
+    });
+    exactReceipt(claimed.receipt, plan);
+
+    return {
+      databasePath: ownedStore.path,
+      operationId: plan.operationId,
+      plan,
+      receiptCreated: claimed.created,
+      receiptHash: claimed.receipt.receiptHash,
+      recovery: {
+        versionId: recovered.recovery.versionId,
+        versionUri: recovered.recovery.versionUri,
+        createdTime: recovered.recovery.createdTime,
+        filename: recovered.recovery.filename,
+        sizeBytes: recovered.recovery.sizeBytes,
+        appId: recovered.recovery.appId,
+        accountId: recovered.recovery.accountId,
+        uploadLinkSha256: recovered.recovery.uploadLinkSha256,
+        tusHead: recovered.recovery.tusHead,
+      },
+      remoteId: recovered.remoteId,
+      remoteUrl: recovered.remoteUrl,
+      state: recoveredOperation.state,
     };
   } finally {
     if (!store) ownedStore.close();

@@ -773,6 +773,156 @@ export async function openControlStore({ filePath, env = process.env, now = () =
     });
   }
 
+  function recoverProviderCheckpoint(
+    operationId,
+    {
+      checkpoint,
+      remoteId,
+      remoteUrl,
+      evidenceSummary,
+      at = timestamp(),
+    } = {},
+  ) {
+    assertOperationId(operationId);
+    if (!checkpoint || typeof checkpoint !== "object" || Array.isArray(checkpoint)) {
+      throw new Error("A recovered provider checkpoint object is required.");
+    }
+    if (typeof evidenceSummary !== "string" || !evidenceSummary.trim() ||
+        /(?:https?:\/\/|upload[_ -]?link|tus[_ -]?url)/i.test(evidenceSummary)) {
+      throw new Error("Authenticated provider-session recovery evidence is required.");
+    }
+    if (typeof remoteId !== "string" || !remoteId.trim() ||
+        typeof remoteUrl !== "string" || !remoteUrl.trim()) {
+      throw new Error("Recovered provider identity is required.");
+    }
+    assertTimestamp(at, "Provider checkpoint recovery time");
+    return inTransaction(database, () => {
+      const current = operationFromRow(selectOperation.get(operationId));
+      if (!current) throw new Error(`Unknown operation: ${operationId}`);
+      if (current.kind !== "replace" || current.binding?.action !== "replace") {
+        throw new Error("Only an immutable replacement operation can recover a provider session.");
+      }
+      if (current.state !== "blocked") {
+        throw new Error(`Only a blocked replacement can recover a provider session; ${operationId} is ${current.state}.`);
+      }
+      if (!current.providerWriteStartedAt || current.providerCheckpoint || current.providerAcceptedAt ||
+          current.remoteId || current.remoteUrl || current.providerCheckpointSequence !== 0) {
+        throw new Error("Provider-session recovery requires one ambiguous write intent with no prior checkpoint or remote identity.");
+      }
+      if (
+        current.lastErrorCode !== "INVALID_PROVIDER_RESPONSE" ||
+        !/TUS upload URL outside its documented host family/.test(current.lastErrorMessage || "")
+      ) {
+        throw new Error("Provider-session recovery is limited to the rejected Vimeo TUS-host incident.");
+      }
+      if (
+        checkpoint.phase !== "provider_accepted" ||
+        checkpoint.operation !== "replace" ||
+        checkpoint.providerRecovery?.kind !== "authenticated_version_readback_and_tus_head" ||
+        checkpoint.providerRecovery?.writeIntentAt !== current.providerWriteStartedAt ||
+        checkpoint.providerRecovery?.blockedAt !== current.updatedAt ||
+        checkpoint.providerCreateStatus !== null ||
+        checkpoint.providerRecovery?.tusHead?.httpStatus !== 200 ||
+        checkpoint.providerRecovery?.tusHead?.tusResumable !== "1.0.0" ||
+        checkpoint.providerRecovery?.tusHead?.uploadLength !== current.binding.assetSizeBytes ||
+        checkpoint.providerRecovery?.tusHead?.uploadOffset !== 0 ||
+        checkpoint.videoId !== remoteId ||
+        checkpoint.canonicalUrl !== remoteUrl ||
+        current.binding.remoteId !== remoteId ||
+        current.binding.remoteUrl !== remoteUrl ||
+        checkpoint.approvalHash !== current.binding.approvalHash ||
+        checkpoint.episodeHash !== current.binding.episodeHash ||
+        checkpoint.accountId !== current.binding.destinationAccountId ||
+        checkpoint.assetSha256 !== current.binding.assetSha256 ||
+        checkpoint.sizeBytes !== current.binding.assetSizeBytes ||
+        checkpoint.providerRecovery?.videoId !== remoteId ||
+        checkpoint.providerRecovery?.accountId !== current.binding.destinationAccountId ||
+        checkpoint.providerRecovery?.assetSha256 !== current.binding.assetSha256 ||
+        checkpoint.providerRecovery?.sizeBytes !== current.binding.assetSizeBytes ||
+        checkpoint.providerRecovery?.filename !== path.basename(current.binding.assetPath || "") ||
+        checkpoint.providerRecovery?.versionUri !== checkpoint.versionUri ||
+        !/^\d+$/.test(checkpoint.providerRecovery?.versionId || "") ||
+        checkpoint.versionUri !== `/videos/${remoteId}/versions/${checkpoint.providerRecovery.versionId}` ||
+        typeof checkpoint.providerRecovery?.appId !== "string" ||
+        !/^\d+$/.test(checkpoint.providerRecovery.appId) ||
+        !/^[a-f0-9]{64}$/.test(checkpoint.providerRecovery?.versionReadbackSha256 || "") ||
+        !/^[a-f0-9]{64}$/.test(checkpoint.providerRecovery?.uploadLinkSha256 || "") ||
+        typeof checkpoint.tusUploadUrl !== "string" ||
+        checkpoint.providerRecovery.uploadLinkSha256 !==
+          createHash("sha256").update(checkpoint.tusUploadUrl).digest("hex")
+      ) {
+        throw new Error("Recovered provider checkpoint does not match the blocked replacement binding.");
+      }
+      let tusUrl;
+      try {
+        tusUrl = new URL(checkpoint.tusUploadUrl);
+      } catch {
+        throw new Error("Recovered provider checkpoint has an invalid Vimeo TUS URL.");
+      }
+      const tusHost = tusUrl.hostname.toLowerCase();
+      if (
+        tusUrl.protocol !== "https:" ||
+        tusUrl.username ||
+        tusUrl.password ||
+        (tusHost !== "global.upload.vimeo.com" &&
+          tusHost !== "files.tus.vimeo.com" &&
+          !tusHost.endsWith("-files.tus.vimeo.com"))
+      ) {
+        throw new Error("Recovered provider checkpoint has an invalid Vimeo TUS URL.");
+      }
+
+      const checkpointJson = canonicalJson(checkpoint);
+      const checkpointHash = createHash("sha256").update(checkpointJson).digest("hex");
+      const updated = database
+        .prepare(`
+          UPDATE operations
+          SET state = 'waiting', next_attempt_at = ?, lease_owner = NULL, lease_expires_at = NULL,
+              provider_checkpoint_json = ?, provider_checkpoint_sequence = 1,
+              provider_checkpoint_hash = ?, provider_accepted_at = ?, remote_id = ?, remote_url = ?,
+              last_error_code = NULL, last_error_message = NULL, result_json = ?, updated_at = ?
+          WHERE operation_id = ? AND state = 'blocked' AND provider_checkpoint_json IS NULL
+        `)
+        .run(
+          at,
+          checkpointJson,
+          checkpointHash,
+          at,
+          remoteId,
+          remoteUrl,
+          canonicalJson({
+            recoveredProviderSession: {
+              versionUri: checkpoint.versionUri,
+              evidenceSummary: evidenceSummary.trim(),
+              checkpointHash,
+            },
+          }),
+          at,
+          operationId,
+        );
+      if (updated.changes !== 1) {
+        throw new Error("Blocked provider session changed before its checkpoint could be recovered.");
+      }
+      insertEvent.run(
+        operationId,
+        "blocked",
+        "waiting",
+        at,
+        canonicalJson({
+          reason: "authenticated_provider_checkpoint_recovery",
+          action: "reconcile_exact_provider_checkpoint",
+          phase: checkpoint.phase,
+          sequence: 1,
+          remoteId,
+          remoteUrl,
+          versionUri: checkpoint.versionUri,
+          checkpointHash,
+          evidenceSummary: evidenceSummary.trim(),
+        }),
+      );
+      return operationFromRow(selectOperation.get(operationId));
+    });
+  }
+
   function completeLease(
     operationId,
     {
@@ -1013,6 +1163,7 @@ export async function openControlStore({ filePath, env = process.env, now = () =
     leaseNext,
     beginProviderWrite,
     recordProviderCheckpoint,
+    recoverProviderCheckpoint,
     completeLease,
     get,
     list,

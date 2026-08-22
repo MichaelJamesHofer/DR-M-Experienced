@@ -72,6 +72,7 @@ import {
   enqueueEpisode5VimeoReplacement,
   preflightEpisode5VimeoReplacement,
   reconcileBlockedEpisode5VimeoReplacement,
+  recoverEpisode5VimeoReplacementSession,
   runEpisode5VimeoReplacementOnce,
   statusEpisode5VimeoReplacement,
   vimeoReplacementConfirmation,
@@ -102,6 +103,7 @@ function usage() {
   drm-publish vimeo-replace queue <job-id> --video-id <existing-id>
   drm-publish vimeo-replace run <job-id> --video-id <existing-id> --confirm "execute-vimeo-replacement <operation-id> <authorization-hash> <existing-id>"
   drm-publish vimeo-replace status <job-id> --video-id <existing-id>
+  drm-publish vimeo-replace recover-session <job-id> --video-id <existing-id> --version-id <version-id> --confirm "recover-vimeo-session <operation-id> <authorization-hash> <existing-id> <version-id>"
   drm-publish vimeo-replace reconcile <job-id> --video-id <existing-id> --reason <text> --confirm "reconcile-vimeo-replacement <operation-id> <existing-id>"
   drm-publish host status
   drm-publish host pause --confirm "pause-publisher"
@@ -781,18 +783,31 @@ async function vimeoReplacementCommand(args) {
   if (!action || !jobId) {
     throw new Error("vimeo-replace requires an action and job id.");
   }
-  const allowed = new Set(["dry-run", "preflight", "queue", "run", "status", "reconcile"]);
+  const allowed = new Set([
+    "dry-run",
+    "preflight",
+    "queue",
+    "run",
+    "status",
+    "recover-session",
+    "reconcile",
+  ]);
   if (!allowed.has(action)) {
     throw new Error(`Unknown vimeo-replace action: ${action}`);
   }
   const optionNames = action === "run"
     ? new Set(["--video-id", "--confirm"])
-    : action === "reconcile"
-      ? new Set(["--video-id", "--reason", "--confirm"])
-      : new Set(["--video-id"]);
+    : action === "recover-session"
+      ? new Set(["--video-id", "--version-id", "--confirm"])
+      : action === "reconcile"
+        ? new Set(["--video-id", "--reason", "--confirm"])
+        : new Set(["--video-id"]);
   const options = strictOptions(`vimeo-replace ${action}`, rest, optionNames);
   const existingVideoId = options["--video-id"];
   if (!existingVideoId) throw new Error(`vimeo-replace ${action} requires --video-id.`);
+  if (action === "recover-session" && !options["--version-id"]) {
+    throw new Error("vimeo-replace recover-session requires --version-id.");
+  }
 
   if (action === "dry-run") {
     const output = await dryRunEpisode5VimeoReplacement({ jobId, existingVideoId });
@@ -824,6 +839,22 @@ async function vimeoReplacementCommand(args) {
       operation: output.operation,
       events: output.events,
     }, null, 2)}\n`);
+    return;
+  }
+  if (action === "recover-session") {
+    const output = await recoverEpisode5VimeoReplacementSession({
+      jobId,
+      existingVideoId,
+      versionId: options["--version-id"],
+      confirmation: options["--confirm"],
+    });
+    process.stdout.write(
+      `Recovered authenticated Vimeo version ${output.recovery.versionId} for ${output.remoteId}.\n`,
+    );
+    process.stdout.write(`Operation: ${output.operationId} (${output.state})\n`);
+    process.stdout.write(`App ID: ${output.recovery.appId}\n`);
+    process.stdout.write(`Accepted receipt: ${output.receiptHash}\n`);
+    process.stdout.write("Recovery used Vimeo GET and TUS HEAD only; no provider write was sent.\n");
     return;
   }
   if (action === "reconcile") {

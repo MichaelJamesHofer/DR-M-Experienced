@@ -192,6 +192,133 @@ test("operation ids bind the exact approved platform payload", () => {
   assert.equal(operationBinding(packet, target, authorization).authorizationHash, authorization.authorizationHash);
 });
 
+test("an authenticated Vimeo TUS-host incident can recover exactly one blocked replacement checkpoint", async () => {
+  await withStore(async ({ store }) => {
+    const remoteId = "1204939658";
+    const remoteUrl = `https://vimeo.com/${remoteId}`;
+    const assetSha256 = "e".repeat(64);
+    const binding = {
+      schemaVersion: 1,
+      action: "replace",
+      jobId: "episode-5-energy-incident",
+      approvalHash: "a".repeat(64),
+      authorizationHash: "b".repeat(64),
+      episodeNumber: 5,
+      episodeHash: "c".repeat(64),
+      platformId: "vimeo",
+      remoteId,
+      remoteUrl,
+      destinationAccountId: "253415660",
+      assetPath: "/approved/master-video.mp4",
+      assetSha256,
+      assetSizeBytes: 8_743_493_742,
+    };
+    const operationId = "vimeo-episode-5-replace-recovery-test";
+    store.enqueue({
+      operationId,
+      jobId: binding.jobId,
+      platformId: "vimeo",
+      kind: "replace",
+      binding,
+      authorizationHash: binding.authorizationHash,
+      notBefore: "2026-08-08T23:00:00.000Z",
+    });
+    store.leaseNext({ workerId: "incident-worker" });
+    store.beginProviderWrite(operationId, {
+      workerId: "incident-worker",
+      at: "2026-08-22T20:04:57.303Z",
+      requestSummary: "Vimeo replacement version request is beginning.",
+    });
+    store.completeLease(operationId, {
+      workerId: "incident-worker",
+      state: "blocked",
+      at: "2026-08-22T20:04:58.036Z",
+      errorCode: "INVALID_PROVIDER_RESPONSE",
+      errorMessage: "Vimeo returned a TUS upload URL outside its documented host family.",
+    });
+
+    const checkpoint = {
+      schemaVersion: 1,
+      protocolVersion: 1,
+      platform: "vimeo",
+      phase: "provider_accepted",
+      operation: "replace",
+      accountId: binding.destinationAccountId,
+      approvalHash: binding.approvalHash,
+      episodeHash: binding.episodeHash,
+      assetSha256,
+      sizeBytes: binding.assetSizeBytes,
+      videoId: remoteId,
+      canonicalUrl: remoteUrl,
+      tusUploadUrl: "https://global.upload.vimeo.com/tus/private-session",
+      providerCreateStatus: null,
+      versionUri: `/videos/${remoteId}/versions/1225722222`,
+      providerRecovery: {
+        kind: "authenticated_version_readback_and_tus_head",
+        versionId: "1225722222",
+        versionUri: `/videos/${remoteId}/versions/1225722222`,
+        videoId: remoteId,
+        accountId: binding.destinationAccountId,
+        appId: "540274",
+        filename: "master-video.mp4",
+        assetSha256,
+        sizeBytes: binding.assetSizeBytes,
+        writeIntentAt: "2026-08-22T20:04:57.303Z",
+        blockedAt: "2026-08-22T20:04:58.036Z",
+        createdTime: "2026-08-22T20:04:57+00:00",
+        versionReadbackSha256: "d".repeat(64),
+        uploadLinkSha256: createHash("sha256")
+          .update("https://global.upload.vimeo.com/tus/private-session")
+          .digest("hex"),
+        tusHead: {
+          httpStatus: 200,
+          tusResumable: "1.0.0",
+          uploadLength: binding.assetSizeBytes,
+          uploadOffset: 0,
+        },
+      },
+    };
+
+    assert.throws(
+      () => store.recoverProviderCheckpoint(operationId, {
+        checkpoint: { ...checkpoint, assetSha256: "0".repeat(64) },
+        remoteId,
+        remoteUrl,
+        evidenceSummary: "Authenticated exact-version GET and empty TUS HEAD matched.",
+        at: "2026-08-22T20:05:00.000Z",
+      }),
+      /does not match the blocked replacement binding/,
+    );
+    assert.equal(store.get(operationId).state, "blocked");
+    assert.equal(store.get(operationId).providerCheckpoint, null);
+
+    const recovered = store.recoverProviderCheckpoint(operationId, {
+      checkpoint,
+      remoteId,
+      remoteUrl,
+      evidenceSummary: "Authenticated exact-version GET and empty TUS HEAD matched.",
+      at: "2026-08-22T20:05:00.000Z",
+    });
+    assert.equal(recovered.state, "waiting");
+    assert.equal(recovered.providerAcceptedAt, "2026-08-22T20:05:00.000Z");
+    assert.equal(recovered.providerCheckpointSequence, 1);
+    assert.equal(recovered.providerCheckpoint.versionUri, checkpoint.versionUri);
+    assert.equal(recovered.remoteId, remoteId);
+    assert.deepEqual(store.list()[0].providerCheckpoint, { phase: "provider_accepted", redacted: true });
+    assert.ok(!JSON.stringify(store.list()).includes("private-session"));
+    assert.ok(!JSON.stringify(store.events(operationId)).includes("private-session"));
+    assert.throws(
+      () => store.recoverProviderCheckpoint(operationId, {
+        checkpoint,
+        remoteId,
+        remoteUrl,
+        evidenceSummary: "Duplicate recovery must fail.",
+      }),
+      /Only a blocked replacement/,
+    );
+  });
+});
+
 test("authorized operations enqueue idempotently and honor dependencies", async () => {
   await withStore(async ({ store }) => {
     const { packet, authorization } = fixtures();

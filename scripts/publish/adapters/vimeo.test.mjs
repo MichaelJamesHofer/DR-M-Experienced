@@ -528,6 +528,180 @@ test("replacement requires an exact approval, episode, account, asset, and remot
   );
 });
 
+test("recoverSession authenticates one incident-bound Vimeo version and empty global TUS session without a write", async () => {
+  const videoId = "1204939658";
+  const versionId = "1225722222";
+  const createdTime = "2026-08-22T20:04:57+00:00";
+  const writeIntentAt = "2026-08-22T20:04:57.303Z";
+  const blockedAt = "2026-08-22T20:04:58.036Z";
+  const uploadLink = "https://global.upload.vimeo.com/tus/recovered-session";
+  const calls = [];
+  const binding = {
+    platformId: "vimeo",
+    action: "replace_source",
+    remoteId: videoId,
+    destinationAccountId: ACCOUNT_ID,
+    assetSha256: VIDEO_SHA,
+    approvalHash: APPROVAL_HASH,
+    episodeHash: EPISODE_HASH,
+  };
+  const version = {
+    uri: `/videos/${videoId}/versions/${versionId}`,
+    filename: "episode.mp4",
+    filesize: VIDEO_BYTES.length,
+    upload_date: createdTime,
+    created_time: createdTime,
+    modified_time: createdTime,
+    duration: 0,
+    active: false,
+    is_deleted: false,
+    user: { uri: `/users/${ACCOUNT_ID}` },
+    app: { uri: "/apps/540274" },
+    transcode: { status: "in_progress" },
+    upload: {
+      status: "in_progress",
+      approach: "tus",
+      size: VIDEO_BYTES.length,
+      upload_link: uploadLink,
+    },
+    play: { status: "unavailable" },
+  };
+  const adapter = createVimeoAdapter({
+    env: { VIMEO_ACCESS_TOKEN: TOKEN },
+    fsImpl: memoryFs(),
+    fetchImpl: async (urlValue, init) => {
+      const url = new URL(urlValue);
+      calls.push({ method: init.method, redirect: init.redirect, url: url.href });
+      if (url.hostname === "api.vimeo.com" && url.pathname === "/me") return responseJson(meBody());
+      if (url.hostname === "api.vimeo.com" && url.pathname === `/videos/${videoId}`) {
+        return responseJson(videoBody({ id: videoId }));
+      }
+      if (url.hostname === "api.vimeo.com" && url.pathname === "/oauth/verify") {
+        return responseJson({
+          app: { uri: "/apps/540274" },
+          user: { uri: `/users/${ACCOUNT_ID}` },
+          scope: "private edit upload video_files public",
+        });
+      }
+      if (url.hostname === "api.vimeo.com" && url.pathname === `/videos/${videoId}/versions`) {
+        return responseJson({
+          total: 3,
+          data: [
+            version,
+            { ...version, uri: `/videos/${videoId}/versions/1221215613`, active: true, created_time: "2026-08-01T00:00:00+00:00" },
+            { ...version, uri: `/videos/${videoId}/versions/1208872480`, created_time: "2026-07-01T00:00:00+00:00" },
+          ],
+        });
+      }
+      if (url.hostname === "api.vimeo.com" && url.pathname === version.uri) return responseJson(version);
+      if (url.hostname === "global.upload.vimeo.com" && init.method === "HEAD") {
+        return responseEmpty(200, {
+          "Tus-Resumable": "1.0.0",
+          "Upload-Length": String(VIDEO_BYTES.length),
+          "Upload-Offset": "0",
+        });
+      }
+      throw new Error(`Unexpected ${init.method} ${url.href}`);
+    },
+  });
+
+  const result = await adapter.recoverSession(approvedInput({
+    operation: "replace",
+    existingVideoId: videoId,
+    approvedBinding: binding,
+  }), {
+    versionId,
+    providerWriteStartedAt: writeIntentAt,
+    providerBlockedAt: blockedAt,
+    expectedAppId: "540274",
+  });
+
+  assert.deepEqual([...new Set(calls.map((call) => call.method))].sort(), ["GET", "HEAD"]);
+  assert.equal(calls.some((call) => ["POST", "PATCH", "PUT", "DELETE"].includes(call.method)), false);
+  assert.equal(calls.find((call) => call.method === "HEAD").redirect, "error");
+  assert.equal(result.checkpoint.providerCreateStatus, null);
+  assert.equal(result.checkpoint.providerRecovery.versionId, versionId);
+  assert.equal(result.checkpoint.providerRecovery.tusHead.uploadLength, VIDEO_BYTES.length);
+  assert.equal(result.checkpoint.providerRecovery.tusHead.uploadOffset, 0);
+  assert.equal(result.checkpoint.providerRecovery.blockedAt, blockedAt);
+  assert.equal(
+    result.checkpoint.providerRecovery.uploadLinkSha256,
+    createHash("sha256").update(uploadLink).digest("hex"),
+  );
+  assert.ok(!JSON.stringify(result.recovery).includes(uploadLink));
+});
+
+test("recoverSession rejects a Vimeo-looking redirect host and a non-empty TUS session", async (t) => {
+  const videoId = "1204939658";
+  const versionId = "1225722222";
+  const createdTime = "2026-08-22T20:04:57+00:00";
+  const binding = {
+    platformId: "vimeo",
+    action: "replace_source",
+    remoteId: videoId,
+    destinationAccountId: ACCOUNT_ID,
+    assetSha256: VIDEO_SHA,
+    approvalHash: APPROVAL_HASH,
+    episodeHash: EPISODE_HASH,
+  };
+  for (const scenario of [
+    { label: "lookalike host", uploadLink: "https://global.upload.vimeo.com.attacker.invalid/tus", offset: 0, code: "INVALID_PROVIDER_RESPONSE" },
+    { label: "non-empty session", uploadLink: "https://global.upload.vimeo.com/tus/session", offset: 1, code: "RECOVERY_TUS_BINDING_MISMATCH" },
+  ]) {
+    await t.test(scenario.label, async () => {
+      const version = {
+        uri: `/videos/${videoId}/versions/${versionId}`,
+        filename: "episode.mp4",
+        filesize: VIDEO_BYTES.length,
+        upload_date: createdTime,
+        created_time: createdTime,
+        modified_time: createdTime,
+        duration: 0,
+        active: false,
+        is_deleted: false,
+        user: { uri: `/users/${ACCOUNT_ID}` },
+        app: { uri: "/apps/540274" },
+        transcode: { status: "in_progress" },
+        upload: { status: "in_progress", approach: "tus", size: VIDEO_BYTES.length, upload_link: scenario.uploadLink },
+        play: { status: "unavailable" },
+      };
+      const adapter = createVimeoAdapter({
+        env: { VIMEO_ACCESS_TOKEN: TOKEN },
+        fsImpl: memoryFs(),
+        fetchImpl: async (urlValue, init) => {
+          const url = new URL(urlValue);
+          if (url.hostname === "api.vimeo.com" && url.pathname === "/me") return responseJson(meBody());
+          if (url.hostname === "api.vimeo.com" && url.pathname === `/videos/${videoId}`) return responseJson(videoBody({ id: videoId }));
+          if (url.hostname === "api.vimeo.com" && url.pathname === "/oauth/verify") {
+            return responseJson({ app: { uri: "/apps/540274" }, user: { uri: `/users/${ACCOUNT_ID}` } });
+          }
+          if (url.hostname === "api.vimeo.com" && url.pathname === `/videos/${videoId}/versions`) {
+            return responseJson({ total: 1, data: [version] });
+          }
+          if (url.hostname === "api.vimeo.com" && url.pathname === version.uri) return responseJson(version);
+          if (url.hostname === "global.upload.vimeo.com" && init.method === "HEAD") {
+            return responseEmpty(200, {
+              "Tus-Resumable": "1.0.0",
+              "Upload-Length": String(VIDEO_BYTES.length),
+              "Upload-Offset": String(scenario.offset),
+            });
+          }
+          throw new Error(`Unexpected ${init.method} ${url.href}`);
+        },
+      });
+      await assert.rejects(
+        adapter.recoverSession(approvedInput({ operation: "replace", existingVideoId: videoId, approvedBinding: binding }), {
+          versionId,
+          providerWriteStartedAt: "2026-08-22T20:04:57.303Z",
+          providerBlockedAt: "2026-08-22T20:04:58.036Z",
+          expectedAppId: "540274",
+        }),
+        (error) => error instanceof VimeoAdapterError && error.code === scenario.code,
+      );
+    });
+  }
+});
+
 test("publish replaces the source only on the explicitly bound Vimeo ID and patches approved metadata", async () => {
   const videoId = "1156414707";
   const calls = [];

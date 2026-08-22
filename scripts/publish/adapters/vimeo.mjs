@@ -28,6 +28,8 @@ const MAX_VIDEO_BYTES = 300 * 1024 ** 3;
 const SHA256 = /^[a-f0-9]{64}$/;
 const RESOURCE_ID = /^\d+$/;
 const VIMEO_MEDIA_HOST_SUFFIXES = [".vimeo.com", ".vimeocdn.com", ".akamaized.net"];
+const VIMEO_TUS_EXACT_HOSTS = new Set(["files.tus.vimeo.com", "global.upload.vimeo.com"]);
+const RECOVERY_VERSION_TIME_SKEW_MS = 5_000;
 const CHECKPOINT_PHASES = new Set([
   "provider_accepted",
   "private_staged",
@@ -112,7 +114,7 @@ function safeHttpsUrl(value, label) {
 function safeTusUploadUrl(value) {
   const link = safeHttpsUrl(value, "TUS upload");
   const hostname = new URL(link).hostname.toLowerCase();
-  if (hostname !== "files.tus.vimeo.com" && !hostname.endsWith("-files.tus.vimeo.com")) {
+  if (!VIMEO_TUS_EXACT_HOSTS.has(hostname) && !hostname.endsWith("-files.tus.vimeo.com")) {
     throw new VimeoAdapterError("Vimeo returned a TUS upload URL outside its documented host family.", {
       code: "INVALID_PROVIDER_RESPONSE",
     });
@@ -754,6 +756,287 @@ export function createVimeoAdapter({
     return { ...local, account, credential, existingVideo };
   }
 
+  const RECOVERY_VERSION_FIELDS = [
+    "uri",
+    "filename",
+    "filesize",
+    "upload_date",
+    "created_time",
+    "modified_time",
+    "duration",
+    "active",
+    "is_deleted",
+    "user.uri",
+    "app.uri",
+    "transcode.status",
+    "upload.status",
+    "upload.approach",
+    "upload.size",
+    "upload.upload_link",
+    "play.status",
+  ];
+
+  function recoveryVersionSnapshot(version) {
+    return {
+      uri: version.uri,
+      filename: version.filename,
+      filesize: version.filesize,
+      uploadDate: version.upload_date,
+      createdTime: version.created_time,
+      modifiedTime: version.modified_time,
+      duration: version.duration,
+      active: version.active,
+      isDeleted: version.is_deleted,
+      ownerUri: version.user?.uri,
+      appUri: version.app?.uri,
+      transcodeStatus: version.transcode?.status,
+      uploadStatus: version.upload?.status,
+      uploadApproach: version.upload?.approach,
+      uploadSize: version.upload?.size,
+      playStatus: version.play?.status,
+    };
+  }
+
+  function recoveryVersionMatches(version, {
+    videoId,
+    filename,
+    videoSize,
+    accountId,
+    appId,
+    providerWriteStartedAt,
+    providerBlockedAt,
+    requireUploadBinding = false,
+  }) {
+    const createdMs = Date.parse(version?.created_time);
+    const writeIntentMs = Date.parse(providerWriteStartedAt);
+    const blockedMs = Date.parse(providerBlockedAt);
+    return (
+      isPlainObject(version) &&
+      /^\/videos\/\d+\/versions\/\d+$/.test(version.uri ?? "") &&
+      version.uri.startsWith(`/videos/${videoId}/versions/`) &&
+      version.filename === filename &&
+      Number(version.filesize) === videoSize &&
+      version.active === false &&
+      version.is_deleted === false &&
+      version.user?.uri === `/users/${accountId}` &&
+      version.app?.uri === `/apps/${appId}` &&
+      Number(version.duration) === 0 &&
+      Number.isFinite(createdMs) &&
+      Number.isFinite(writeIntentMs) &&
+      Number.isFinite(blockedMs) &&
+      createdMs >= writeIntentMs - RECOVERY_VERSION_TIME_SKEW_MS &&
+      createdMs <= blockedMs + RECOVERY_VERSION_TIME_SKEW_MS &&
+      Date.parse(version.upload_date) === createdMs &&
+      Date.parse(version.modified_time) === createdMs &&
+      (!requireUploadBinding || (
+        Number(version.upload?.size) === videoSize &&
+        version.transcode?.status === "in_progress" &&
+        version.upload?.status === "in_progress" &&
+        version.upload?.approach === "tus" &&
+        version.play?.status === "unavailable"
+      ))
+    );
+  }
+
+  /**
+   * Recover the exact provider session created by an already-recorded write
+   * intent when the POST response could not be checkpointed. This method is
+   * read-only: authenticated Vimeo GETs plus a TUS HEAD, never a provider POST,
+   * PATCH, PUT, or DELETE.
+   */
+  async function recoverSession(input, {
+    versionId,
+    providerWriteStartedAt,
+    providerBlockedAt,
+    expectedAppId,
+  } = {}) {
+    if (!RESOURCE_ID.test(versionId ?? "")) {
+      throw new VimeoAdapterError("Recovery requires an exact numeric Vimeo version ID.", {
+        code: "INVALID_INPUT",
+      });
+    }
+    if (!RESOURCE_ID.test(expectedAppId ?? "")) {
+      throw new VimeoAdapterError("Recovery requires the exact approved Vimeo API app ID.", {
+        code: "INVALID_INPUT",
+      });
+    }
+    if (typeof providerWriteStartedAt !== "string" || Number.isNaN(Date.parse(providerWriteStartedAt))) {
+      throw new VimeoAdapterError("Recovery requires the durable provider write-intent timestamp.", {
+        code: "INVALID_INPUT",
+      });
+    }
+    if (typeof providerBlockedAt !== "string" || Number.isNaN(Date.parse(providerBlockedAt)) ||
+        Date.parse(providerBlockedAt) < Date.parse(providerWriteStartedAt)) {
+      throw new VimeoAdapterError("Recovery requires the durable blocked-operation timestamp.", {
+        code: "INVALID_INPUT",
+      });
+    }
+
+    const local = await localPlan(input);
+    if (local.plan.operation.kind !== "replace") {
+      throw new VimeoAdapterError("Provider-session recovery is available only for an exact replacement.", {
+        code: "INVALID_INPUT",
+      });
+    }
+    const authenticated = await authenticatedPreflight(local);
+    const { plan, stats, credential } = authenticated;
+    const videoId = plan.operation.existingVideoId;
+    const videoSize = stats.fullVideo.size;
+    const filename = path.basename(plan.fullVideo.path);
+    const credentialReadback = (await apiRequest({
+      method: "GET",
+      uri: withFields("/oauth/verify", ["app.uri", "user.uri", "scope"]),
+      token: credential.token,
+      expected: [200],
+    })).body;
+    if (
+      credentialReadback?.app?.uri !== `/apps/${expectedAppId}` ||
+      credentialReadback?.user?.uri !== `/users/${plan.accountId}`
+    ) {
+      throw new VimeoAdapterError(
+        "The authenticated Vimeo token is not issued to the exact approved app and account.",
+        { code: "RECOVERY_CREDENTIAL_BINDING_MISMATCH" },
+      );
+    }
+    // Vimeo applies collection fields to each row without a `data.` prefix.
+    const collectionFields = ["total", ...RECOVERY_VERSION_FIELDS];
+    const versions = (await apiRequest({
+      method: "GET",
+      uri: withFields(`/videos/${videoId}/versions?per_page=100`, collectionFields),
+      token: credential.token,
+      expected: [200],
+    })).body;
+    if (
+      !isPlainObject(versions) ||
+      !Number.isSafeInteger(versions.total) ||
+      versions.total < 1 ||
+      !Array.isArray(versions.data) ||
+      versions.data.length !== versions.total
+    ) {
+      throw new VimeoAdapterError(
+        "Vimeo version recovery requires one complete, unpaginated authenticated version set.",
+        { code: "RECOVERY_VERSION_SET_INCOMPLETE" },
+      );
+    }
+
+    const candidates = versions.data.filter((version) => recoveryVersionMatches(version, {
+      videoId,
+      filename,
+      videoSize,
+      accountId: plan.accountId,
+      appId: expectedAppId,
+      providerWriteStartedAt,
+      providerBlockedAt,
+      requireUploadBinding: false,
+    }));
+    const expectedVersionUri = `/videos/${videoId}/versions/${versionId}`;
+    if (candidates.length !== 1 || candidates[0].uri !== expectedVersionUri) {
+      throw new VimeoAdapterError(
+        "Vimeo version recovery did not find exactly one incident-bound provider session.",
+        { code: "RECOVERY_SESSION_AMBIGUOUS" },
+      );
+    }
+
+    const exactVersion = (await apiRequest({
+      method: "GET",
+      uri: withFields(expectedVersionUri, RECOVERY_VERSION_FIELDS),
+      token: credential.token,
+      expected: [200],
+    })).body;
+    if (
+      !recoveryVersionMatches(exactVersion, {
+        videoId,
+        filename,
+        videoSize,
+        accountId: plan.accountId,
+        appId: expectedAppId,
+        providerWriteStartedAt,
+        providerBlockedAt,
+        requireUploadBinding: true,
+      }) ||
+      JSON.stringify(recoveryVersionSnapshot(exactVersion), [
+        "uri", "filename", "filesize", "uploadDate", "createdTime", "modifiedTime",
+        "duration", "active", "isDeleted", "ownerUri", "appUri",
+      ]) !== JSON.stringify(recoveryVersionSnapshot(candidates[0]), [
+        "uri", "filename", "filesize", "uploadDate", "createdTime", "modifiedTime",
+        "duration", "active", "isDeleted", "ownerUri", "appUri",
+      ])
+    ) {
+      throw new VimeoAdapterError(
+        "The exact Vimeo version changed between authenticated recovery readbacks.",
+        { code: "RECOVERY_SESSION_CHANGED" },
+      );
+    }
+
+    const tusUploadUrl = safeTusUploadUrl(exactVersion.upload?.upload_link);
+    const tusState = await headTus(tusUploadUrl);
+    if (
+      tusState.status !== 200 ||
+      tusState.tusResumable !== VIMEO_TUS_VERSION ||
+      tusState.length !== videoSize ||
+      tusState.offset !== 0
+    ) {
+      throw new VimeoAdapterError(
+        "The recovered Vimeo TUS session is not the exact empty upload bound to the approved asset.",
+        { code: "RECOVERY_TUS_BINDING_MISMATCH" },
+      );
+    }
+
+    const safeVersionSnapshot = recoveryVersionSnapshot(exactVersion);
+    const providerRecovery = {
+      kind: "authenticated_version_readback_and_tus_head",
+      versionId,
+      versionUri: expectedVersionUri,
+      videoId,
+      accountId: plan.accountId,
+      appId: expectedAppId,
+      filename,
+      assetSha256: plan.fullVideo.sha256,
+      sizeBytes: videoSize,
+      writeIntentAt: providerWriteStartedAt,
+      blockedAt: providerBlockedAt,
+      createdTime: exactVersion.created_time,
+      versionReadbackSha256: createHash("sha256")
+        .update(JSON.stringify(safeVersionSnapshot))
+        .digest("hex"),
+      uploadLinkSha256: createHash("sha256").update(tusUploadUrl).digest("hex"),
+      tusHead: {
+        httpStatus: tusState.status,
+        tusResumable: tusState.tusResumable,
+        uploadLength: tusState.length,
+        uploadOffset: tusState.offset,
+      },
+    };
+    const checkpoint = checkpointBase(plan, videoSize, {
+      phase: "provider_accepted",
+      videoId,
+      tusUploadUrl,
+      providerCreateStatus: null,
+      providerRecovery,
+      versionUri: expectedVersionUri,
+    });
+    validateCheckpoint(checkpoint, plan, videoSize);
+    return {
+      checkpoint,
+      providerAccepted: true,
+      remoteId: videoId,
+      remoteUrl: canonicalVideoUrl(videoId),
+      providerSummary:
+        `Authenticated Vimeo version ${versionId} and its empty ${videoSize}-byte TUS session matched the durable replacement write intent.`,
+      recovery: {
+        versionId,
+        versionUri: expectedVersionUri,
+        createdTime: exactVersion.created_time,
+        filename,
+        sizeBytes: videoSize,
+        appId: expectedAppId,
+        accountId: plan.accountId,
+        uploadLinkSha256: providerRecovery.uploadLinkSha256,
+        tusHead: providerRecovery.tusHead,
+      },
+    };
+  }
+
   function runtimeContract(runtime, { requireCheckpoint = false } = {}) {
     if (!isPlainObject(runtime) || typeof runtime.beforeWrite !== "function" ||
         typeof runtime.onCheckpoint !== "function") {
@@ -780,9 +1063,10 @@ export function createVimeoAdapter({
     videoId,
     tusUploadUrl,
     providerCreateStatus,
+    providerRecovery = null,
     versionUri = null,
   }) {
-    return {
+    const checkpoint = {
       schemaVersion: 1,
       protocolVersion: VIMEO_CHECKPOINT_PROTOCOL_VERSION,
       platform: "vimeo",
@@ -799,11 +1083,53 @@ export function createVimeoAdapter({
       providerCreateStatus,
       versionUri,
     };
+    if (providerRecovery != null) checkpoint.providerRecovery = providerRecovery;
+    return checkpoint;
   }
 
   function checkpointAtLeast(checkpoint, phase) {
     return (CHECKPOINT_PHASE_ORDER.get(checkpoint.phase) ?? -1) >=
       (CHECKPOINT_PHASE_ORDER.get(phase) ?? Number.POSITIVE_INFINITY);
+  }
+
+  function assertRecoveredProviderSession(checkpoint, plan, videoSize) {
+    const recovery = checkpoint.providerRecovery;
+    const head = recovery?.tusHead;
+    const writeIntentMs = Date.parse(recovery?.writeIntentAt);
+    const blockedMs = Date.parse(recovery?.blockedAt);
+    const createdMs = Date.parse(recovery?.createdTime);
+    if (
+      checkpoint.providerCreateStatus !== null ||
+      !isPlainObject(recovery) ||
+      recovery.kind !== "authenticated_version_readback_and_tus_head" ||
+      recovery.versionUri !== checkpoint.versionUri ||
+      recovery.videoId !== checkpoint.videoId ||
+      !RESOURCE_ID.test(recovery.versionId ?? "") ||
+      recovery.versionUri !== `/videos/${checkpoint.videoId}/versions/${recovery.versionId}` ||
+      !RESOURCE_ID.test(recovery.appId ?? "") ||
+      recovery.accountId !== checkpoint.accountId ||
+      recovery.assetSha256 !== checkpoint.assetSha256 ||
+      recovery.sizeBytes !== videoSize ||
+      recovery.filename !== path.basename(plan.fullVideo.sourcePath ?? plan.fullVideo.path) ||
+      !Number.isFinite(writeIntentMs) ||
+      !Number.isFinite(blockedMs) ||
+      blockedMs < writeIntentMs ||
+      !Number.isFinite(createdMs) ||
+      createdMs < writeIntentMs - RECOVERY_VERSION_TIME_SKEW_MS ||
+      createdMs > blockedMs + RECOVERY_VERSION_TIME_SKEW_MS ||
+      !SHA256.test(recovery.versionReadbackSha256 ?? "") ||
+      !SHA256.test(recovery.uploadLinkSha256 ?? "") ||
+      recovery.uploadLinkSha256 !== createHash("sha256").update(checkpoint.tusUploadUrl).digest("hex") ||
+      !isPlainObject(head) ||
+      head.httpStatus !== 200 ||
+      head.tusResumable !== VIMEO_TUS_VERSION ||
+      head.uploadLength !== videoSize ||
+      head.uploadOffset !== 0
+    ) {
+      throw new VimeoAdapterError("Vimeo checkpoint recovery evidence is invalid.", {
+        code: "INVALID_CHECKPOINT",
+      });
+    }
   }
 
   function validateCheckpoint(checkpoint, plan, videoSize) {
@@ -855,10 +1181,14 @@ export function createVimeoAdapter({
       });
     }
     safeTusUploadUrl(checkpoint.tusUploadUrl);
-    if (![200, 201].includes(checkpoint.providerCreateStatus)) {
-      throw new VimeoAdapterError("Vimeo checkpoint provider status is invalid.", {
-        code: "INVALID_CHECKPOINT",
-      });
+    if (checkpoint.providerRecovery == null) {
+      if (![200, 201].includes(checkpoint.providerCreateStatus)) {
+        throw new VimeoAdapterError("Vimeo checkpoint provider status is invalid.", {
+          code: "INVALID_CHECKPOINT",
+        });
+      }
+    } else {
+      assertRecoveredProviderSession(checkpoint, plan, videoSize);
     }
     if (checkpoint.versionUri != null) {
       const versionUri = safeApiUri(checkpoint.versionUri, "checkpoint video version");
@@ -943,6 +1273,7 @@ export function createVimeoAdapter({
       response = await fetchImpl(link, {
         method: "HEAD",
         headers: { Accept: VIMEO_API_ACCEPT, "Tus-Resumable": VIMEO_TUS_VERSION },
+        redirect: "error",
       });
     } catch (error) {
       throw new VimeoAdapterError("Vimeo TUS offset check failed before a response.", {
@@ -966,7 +1297,12 @@ export function createVimeoAdapter({
         code: "INVALID_PROVIDER_RESPONSE",
       });
     }
-    return { length, offset };
+    return {
+      length,
+      offset,
+      status: response.status,
+      tusResumable: response.headers.get("tus-resumable"),
+    };
   }
 
   async function patchTus(uploadLink, offset, chunk, beforeWrite) {
@@ -982,6 +1318,7 @@ export function createVimeoAdapter({
           "Upload-Offset": String(offset),
         },
         body: chunk,
+        redirect: "error",
       });
     } catch (error) {
       throw new VimeoAdapterError("Vimeo TUS chunk upload failed before a response.", {
@@ -1655,6 +1992,7 @@ export function createVimeoAdapter({
     checkpointProtocolVersion: VIMEO_CHECKPOINT_PROTOCOL_VERSION,
     dryRun,
     preflight,
+    recoverSession,
     publish,
     reconcile,
   });

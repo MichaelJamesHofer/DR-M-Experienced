@@ -133,6 +133,9 @@ drm-publish vimeo-replace dry-run <job-id> --video-id <existing-id>
 drm-publish vimeo-replace preflight <job-id> --video-id <existing-id>
 drm-publish vimeo-replace queue <job-id> --video-id <existing-id>
 drm-publish vimeo-replace status <job-id> --video-id <existing-id>
+drm-publish vimeo-replace recover-session <job-id> \
+  --video-id <existing-id> --version-id <version-id> \
+  --confirm "recover-vimeo-session <operation-id> <authorization-hash> <existing-id> <version-id>"
 ```
 
 `queue` performs no provider call and prints the exact execution confirmation.
@@ -142,8 +145,16 @@ new version on the already-cataloged Vimeo ID through the official API, records
 each provider checkpoint durably, and resumes a prior write only through the
 checkpoint-bound adapter reconciliation path. A blocked operation with a valid
 checkpoint can be returned to that path only with the explicit
-`vimeo-replace reconcile` action. Neither the runner nor its command accepts or
-contacts Rumble.
+`vimeo-replace reconcile` action. The incident-only `recover-session` action is
+available solely for the blocked TUS-host response with no durable checkpoint,
+remote identity, acceptance, or receipt. It requires the exact existing video,
+provider version, configured Vimeo app, operation, and authorization IDs. It
+performs authenticated Vimeo GETs and one TUS HEAD only; it never creates a new
+version or sends POST, PATCH, PUT, or DELETE. After exact readback it stores the
+provider checkpoint first, transitions the operation from `blocked` to
+`waiting`, and only then appends the accepted receipt. The next write-capable
+step must use the existing checkpoint-bound run/reconciliation path. Neither
+the runner nor its command accepts or contacts Rumble.
 
 Use `drm-publish migration-check [--verify-media] [--verify-artwork]
 [--decode-edge-audio] [--snapshot]` to audit migration evidence or investigate

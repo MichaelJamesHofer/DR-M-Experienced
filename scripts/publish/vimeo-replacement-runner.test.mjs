@@ -1,11 +1,12 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { readReceiptLedger } from "./adapter-receipts.mjs";
+import { claimAdapterAccepted, readReceiptLedger } from "./adapter-receipts.mjs";
 import { openControlStore } from "./control-store.mjs";
 import {
   VimeoReplacementRunnerError,
@@ -13,12 +14,16 @@ import {
   dryRunEpisode5VimeoReplacement,
   enqueueEpisode5VimeoReplacement,
   preflightEpisode5VimeoReplacement,
+  recoverEpisode5VimeoReplacementSession,
   runEpisode5VimeoReplacementOnce,
   statusEpisode5VimeoReplacement,
   vimeoReplacementConfirmation,
+  vimeoSessionRecoveryConfirmation,
 } from "./vimeo-replacement-runner.mjs";
 
 const VIDEO_ID = "1204939658";
+const VERSION_ID = "1225722222";
+const APP_ID = "540274";
 const ACCOUNT_ID = "253415660";
 const ASSET_SHA = "1".repeat(64);
 const APPROVAL_HASH = "2".repeat(64);
@@ -102,7 +107,7 @@ function contextFixture(directory, overrides = {}) {
       platforms: {
         vimeo: {
           mode: "api_after_auth",
-          apiAutomation: { enabled: true },
+          apiAutomation: { enabled: true, appId: Number(APP_ID) },
         },
       },
     },
@@ -145,6 +150,96 @@ function verifiedResult(plan) {
     asset: {
       sha256: plan.asset.sha256,
       sizeBytes: plan.asset.sizeBytes,
+    },
+  };
+}
+
+function blockAmbiguousReplacement(store, plan) {
+  const workerId = "vimeo-ambiguous-write-worker";
+  const baseMs = Date.now() + 10_000;
+  const leased = store.leaseNext({
+    workerId,
+    leaseMs: 60_000,
+    at: new Date(baseMs).toISOString(),
+  });
+  assert.equal(leased.operationId, plan.operationId);
+  const started = store.beginProviderWrite(plan.operationId, {
+    workerId,
+    at: new Date(baseMs + 1_000).toISOString(),
+    requestSummary: `Vimeo replacement version write for ${VIDEO_ID}.`,
+    buildCommit: "a".repeat(40),
+  });
+  const blocked = store.completeLease(plan.operationId, {
+    workerId,
+    state: "blocked",
+    at: new Date(baseMs + 2_000).toISOString(),
+    errorCode: "INVALID_PROVIDER_RESPONSE",
+    errorMessage: "Vimeo returned a TUS upload URL outside its documented host family.",
+    result: { failure: { code: "INVALID_PROVIDER_RESPONSE" } },
+  });
+  assert.equal(blocked.providerWriteStartedAt, started.providerWriteStartedAt);
+  return blocked;
+}
+
+function recoveredSessionResult(plan, blocked) {
+  const versionUri = `/videos/${VIDEO_ID}/versions/${VERSION_ID}`;
+  const tusUploadUrl = "https://global.upload.vimeo.com/tus/recovered-secret-session";
+  const providerRecovery = {
+    kind: "authenticated_version_readback_and_tus_head",
+    versionId: VERSION_ID,
+    versionUri,
+    videoId: VIDEO_ID,
+    accountId: ACCOUNT_ID,
+    appId: APP_ID,
+    assetSha256: ASSET_SHA,
+    sizeBytes: plan.asset.sizeBytes,
+    filename: path.basename(plan.asset.path),
+    writeIntentAt: blocked.providerWriteStartedAt,
+    blockedAt: blocked.updatedAt,
+    createdTime: blocked.providerWriteStartedAt,
+    versionReadbackSha256: "9".repeat(64),
+    uploadLinkSha256: createHash("sha256").update(tusUploadUrl).digest("hex"),
+    tusHead: {
+      httpStatus: 200,
+      tusResumable: "1.0.0",
+      uploadLength: plan.asset.sizeBytes,
+      uploadOffset: 0,
+    },
+  };
+  return {
+    checkpoint: {
+      schemaVersion: 1,
+      protocolVersion: 1,
+      platform: "vimeo",
+      phase: "provider_accepted",
+      operation: "replace",
+      accountId: ACCOUNT_ID,
+      approvalHash: APPROVAL_HASH,
+      episodeHash: EPISODE_HASH,
+      assetSha256: ASSET_SHA,
+      sizeBytes: plan.asset.sizeBytes,
+      videoId: VIDEO_ID,
+      canonicalUrl: plan.remoteUrl,
+      versionUri,
+      tusUploadUrl,
+      providerCreateStatus: null,
+      providerRecovery,
+    },
+    providerAccepted: true,
+    remoteId: VIDEO_ID,
+    remoteUrl: plan.remoteUrl,
+    providerSummary:
+      `Authenticated Vimeo version ${VERSION_ID} and its empty TUS session matched the durable write intent.`,
+    recovery: {
+      versionId: VERSION_ID,
+      versionUri,
+      createdTime: blocked.providerWriteStartedAt,
+      filename: path.basename(plan.asset.path),
+      sizeBytes: plan.asset.sizeBytes,
+      appId: APP_ID,
+      accountId: ACCOUNT_ID,
+      uploadLinkSha256: providerRecovery.uploadLinkSha256,
+      tusHead: providerRecovery.tusHead,
     },
   };
 }
@@ -238,6 +333,152 @@ test("queue is idempotent, durable, and uses the non-create replacement action",
     assert.equal(status.operation.createSlotActive, false);
     assert.equal(status.operation.bindingHash, first.plan.bindingHash);
     assert.equal(store.list().length, 1);
+  });
+});
+
+test("session recovery checkpoints before its receipt and calls only authenticated recovery", async () => {
+  await withHarness(async ({ context, jobDirectory, store }) => {
+    const loadContext = async () => context;
+    const queued = await enqueueEpisode5VimeoReplacement({
+      jobId: context.packet.id,
+      existingVideoId: VIDEO_ID,
+      loadContext,
+      store,
+    });
+    const blocked = blockAmbiguousReplacement(store, queued.plan);
+    const calls = [];
+    const adapterFactory = () => ({
+      async recoverSession(input, options) {
+        calls.push({ method: "recoverSession", input, options });
+        assert.equal(input.operation.kind, "replace");
+        assert.deepEqual(options, {
+          versionId: VERSION_ID,
+          providerWriteStartedAt: blocked.providerWriteStartedAt,
+          providerBlockedAt: blocked.updatedAt,
+          expectedAppId: APP_ID,
+        });
+        return recoveredSessionResult(queued.plan, blocked);
+      },
+      async publish() {
+        throw new Error("recovery must never publish");
+      },
+      async reconcile() {
+        throw new Error("recovery must never reconcile");
+      },
+    });
+    const claimAccepted = async (input) => {
+      const checkpointed = store.get(queued.plan.operationId);
+      assert.equal(checkpointed.state, "waiting", "checkpoint must be stored first");
+      assert.equal(checkpointed.providerCheckpoint.providerRecovery.versionId, VERSION_ID);
+      assert.equal(checkpointed.providerCheckpointSequence, 1);
+      return claimAdapterAccepted(input);
+    };
+    const recovered = await recoverEpisode5VimeoReplacementSession({
+      jobId: context.packet.id,
+      existingVideoId: VIDEO_ID,
+      versionId: VERSION_ID,
+      confirmation: vimeoSessionRecoveryConfirmation(queued.plan, VERSION_ID),
+      now: new Date(Date.parse(blocked.updatedAt) + 1_000),
+      loadContext,
+      adapterFactory,
+      claimAccepted,
+      store,
+    });
+
+    assert.deepEqual(calls.map((call) => call.method), ["recoverSession"]);
+    assert.equal(recovered.state, "waiting");
+    assert.equal(recovered.remoteId, VIDEO_ID);
+    assert.equal(recovered.recovery.versionId, VERSION_ID);
+    assert.equal(recovered.recovery.appId, APP_ID);
+    assert.equal(recovered.receiptCreated, true);
+    assert.doesNotMatch(JSON.stringify(recovered), /tusUploadUrl|recovered-secret-session/);
+
+    const durable = store.get(queued.plan.operationId);
+    assert.equal(durable.providerAcceptedAt != null, true);
+    assert.equal(durable.providerCheckpoint.providerRecovery.appId, APP_ID);
+    assert.equal(durable.providerCheckpoint.tusUploadUrl.includes("recovered-secret-session"), true);
+    const receipts = await readReceiptLedger(jobDirectory, context.packet);
+    assert.deepEqual(receipts.map((receipt) => receipt.status), ["accepted"]);
+    assert.equal(receipts[0].remote.id, VIDEO_ID);
+  });
+});
+
+test("session recovery fails closed before provider reads on wrong state, IDs, app, confirmation, or receipt", async (t) => {
+  await withHarness(async ({ context, jobDirectory, store }) => {
+    const loadContext = async () => context;
+    const queued = await enqueueEpisode5VimeoReplacement({
+      jobId: context.packet.id,
+      existingVideoId: VIDEO_ID,
+      loadContext,
+      store,
+    });
+    let adapterCalls = 0;
+    const adapterFactory = () => ({
+      async recoverSession() {
+        adapterCalls += 1;
+        throw new Error("must not reach provider recovery");
+      },
+    });
+    const common = {
+      jobId: context.packet.id,
+      existingVideoId: VIDEO_ID,
+      versionId: VERSION_ID,
+      confirmation: vimeoSessionRecoveryConfirmation(queued.plan, VERSION_ID),
+      loadContext,
+      adapterFactory,
+      store,
+    };
+
+    await t.test("operation is not blocked", async () => {
+      await assert.rejects(
+        recoverEpisode5VimeoReplacementSession(common),
+        (error) => error.code === "provider_session_not_recoverable",
+      );
+    });
+
+    const blocked = blockAmbiguousReplacement(store, queued.plan);
+    common.now = new Date(Date.parse(blocked.updatedAt) + 1_000);
+    await t.test("confirmation is not exact", async () => {
+      await assert.rejects(
+        recoverEpisode5VimeoReplacementSession({ ...common, confirmation: "recover-vimeo-session wrong" }),
+        (error) => error.code === "provider_session_recovery_confirmation_mismatch",
+      );
+    });
+    await t.test("version ID is not numeric", async () => {
+      await assert.rejects(
+        recoverEpisode5VimeoReplacementSession({ ...common, versionId: "version-latest" }),
+        (error) => error.code === "invalid_vimeo_version_id",
+      );
+    });
+    await t.test("configured app ID is missing", async () => {
+      const missingApp = structuredClone(context);
+      missingApp.platformConfig.platforms.vimeo.apiAutomation.appId = null;
+      await assert.rejects(
+        recoverEpisode5VimeoReplacementSession({
+          ...common,
+          loadContext: async () => missingApp,
+        }),
+        (error) => error.code === "provider_session_recovery_app_id_missing",
+      );
+    });
+
+    await claimAdapterAccepted({
+      jobDirectory,
+      packet: context.packet,
+      platformId: "vimeo",
+      operationId: queued.plan.operationId,
+      remoteId: VIDEO_ID,
+      remoteUrl: queued.plan.remoteUrl,
+      providerSummary: "Preexisting acceptance receipt for the ambiguous provider response.",
+      recordedAt: new Date(Date.parse(blocked.updatedAt) + 500).toISOString(),
+    });
+    await t.test("an operation receipt already exists", async () => {
+      await assert.rejects(
+        recoverEpisode5VimeoReplacementSession(common),
+        (error) => error.code === "provider_session_recovery_receipt_exists",
+      );
+    });
+    assert.equal(adapterCalls, 0);
   });
 });
 
@@ -363,12 +604,24 @@ test("execution fails before adapter resolution when confirmation or durable bin
   });
 });
 
-test("CLI exposes separate read-only, queue, run, status, and reconciliation actions", () => {
+test("CLI exposes separate read-only, queue, recovery, run, status, and reconciliation actions", () => {
   const cliPath = fileURLToPath(new URL("./cli.mjs", import.meta.url));
   const result = spawnSync(process.execPath, [cliPath, "--help"], { encoding: "utf8" });
   assert.equal(result.status, 0, result.stderr);
-  for (const action of ["dry-run", "preflight", "queue", "run", "status", "reconcile"]) {
+  for (const action of [
+    "dry-run",
+    "preflight",
+    "queue",
+    "run",
+    "status",
+    "recover-session",
+    "reconcile",
+  ]) {
     assert.match(result.stdout, new RegExp(`drm-publish vimeo-replace ${action}`));
   }
   assert.match(result.stdout, /execute-vimeo-replacement <operation-id> <authorization-hash> <existing-id>/);
+  assert.match(
+    result.stdout,
+    /recover-vimeo-session <operation-id> <authorization-hash> <existing-id> <version-id>/,
+  );
 });
