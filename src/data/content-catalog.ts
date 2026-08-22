@@ -167,7 +167,45 @@ type BlogRelatedAffiliateProductRow = {
   display_order: number;
 };
 
-const fallbackCatalog: ContentCatalog = {
+const ACTIVE_MEDIA_CONTAINMENT = new Map([
+  [
+    "episode-5-energy",
+    "Corrected Episode 5 media is being uploaded and independently verified.",
+  ],
+]);
+
+/**
+ * Fail closed during an active media incident. The source catalog remains
+ * intact for strict projection validation, but no public page receives a
+ * playable or outbound media URL for an affected episode.
+ */
+export function applyActiveMediaContainment(catalog: ContentCatalog): ContentCatalog {
+  return {
+    ...catalog,
+    episodes: catalog.episodes.map((episode) => {
+      const notice = ACTIVE_MEDIA_CONTAINMENT.get(episode.slug);
+      if (!notice) return episode;
+
+      return {
+        ...episode,
+        audioUrl: undefined,
+        videoUrl: undefined,
+        vimeoId: undefined,
+        spotifyId: undefined,
+        transcriptUrl: undefined,
+        references: [
+          {
+            label: notice,
+            url: `https://drmexperienced.com/episodes/${episode.slug}/`,
+            comingSoon: true,
+          },
+        ],
+      };
+    }),
+  };
+}
+
+const fallbackCatalog: ContentCatalog = applyActiveMediaContainment({
   episodes: EPISODES.map((episode) => ({
     ...episode,
     thumbnailUrl: siteImageSrc(episode.thumbnailUrl),
@@ -176,7 +214,7 @@ const fallbackCatalog: ContentCatalog = {
   affiliateProducts: AFFILIATE_PRODUCTS,
   blogPosts: BLOG_POSTS,
   source: "fallback",
-};
+});
 
 const strictContentCatalog = process.env.CONTENT_CATALOG_STRICT === "true";
 const POSTGREST_PAGE_SIZE = 1000;
@@ -347,7 +385,7 @@ export const getContentCatalog = cache(async (): Promise<ContentCatalog> => {
       validateSupabaseCatalog(catalog);
     }
 
-    return catalog;
+    return applyActiveMediaContainment(catalog);
   } catch (error) {
     if (strictContentCatalog) {
       throw error;
