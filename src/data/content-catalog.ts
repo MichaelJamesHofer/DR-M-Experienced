@@ -170,34 +170,39 @@ type BlogRelatedAffiliateProductRow = {
 const ACTIVE_MEDIA_CONTAINMENT = new Map([
   [
     "episode-5-energy",
-    "The corrected Episode 5 video is live. Podcast and remaining platform copies are being updated and independently verified.",
+    {
+      blockedReferenceHosts: new Set([
+        "rumble.com",
+        "www.rumble.com",
+      ]),
+    },
   ],
 ]);
 
 /**
- * Fail closed during an active media incident. The source catalog remains
- * intact for strict projection validation, but no public page receives a
- * playable or outbound media URL for an affected episode.
+ * Fail closed around destinations that still expose incident media. Corrected
+ * Vimeo, RSS, and Spotify-audio destinations remain available while unsafe
+ * outbound references and the stale transcript stay hidden.
  */
 export function applyActiveMediaContainment(catalog: ContentCatalog): ContentCatalog {
   return {
     ...catalog,
     episodes: catalog.episodes.map((episode) => {
-      const notice = ACTIVE_MEDIA_CONTAINMENT.get(episode.slug);
-      if (!notice) return episode;
+      const containment = ACTIVE_MEDIA_CONTAINMENT.get(episode.slug);
+      if (!containment) return episode;
+
+      const references = (episode.references ?? []).filter((reference) => {
+        try {
+          return !containment.blockedReferenceHosts.has(new URL(reference.url).hostname);
+        } catch {
+          return false;
+        }
+      });
 
       return {
         ...episode,
-        audioUrl: undefined,
-        spotifyId: undefined,
         transcriptUrl: undefined,
-        references: [
-          {
-            label: notice,
-            url: `https://drmexperienced.com/episodes/${episode.slug}/`,
-            comingSoon: true,
-          },
-        ],
+        references,
       };
     }),
   };
