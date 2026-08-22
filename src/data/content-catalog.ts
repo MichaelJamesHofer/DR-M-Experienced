@@ -174,9 +174,6 @@ const ACTIVE_MEDIA_CONTAINMENT = new Map([
       blockedReferenceHosts: new Set([
         "rumble.com",
         "www.rumble.com",
-        "www.youtube.com",
-        "youtu.be",
-        "youtube.com",
       ]),
     },
   ],

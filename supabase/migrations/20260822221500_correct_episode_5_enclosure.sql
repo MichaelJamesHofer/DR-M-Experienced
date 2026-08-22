@@ -13,6 +13,13 @@ begin
     from public.episodes
    where slug = 'episode-5-energy';
 
+  if episode_count = 0 then
+    if exists (select 1 from public.episodes) then
+      raise exception 'Expected exactly one episode-5-energy row, found 0';
+    end if;
+    return;
+  end if;
+
   if episode_count <> 1 then
     raise exception 'Expected exactly one episode-5-energy row, found %', episode_count;
   end if;
@@ -38,7 +45,8 @@ update public.episodes
 
 do $$
 begin
-  if not exists (
+  if exists (select 1 from public.episodes)
+     and not exists (
     select 1
       from public.episodes
      where slug = 'episode-5-energy'
