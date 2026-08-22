@@ -81,12 +81,19 @@ async function prepareFixture(context) {
   const audit = structuredClone(auditTemplate);
   audit.status = "validated_local_delivery_pending_remote_replacement";
   delete audit.remoteReplacement;
+  const enrichment = structuredClone(enrichmentTemplate);
+  let fixtureSeed = seedTemplate;
   for (const episode of audit.episodes) {
     const target = episode.remoteReplacementTargets.find((entry) => entry.platform === "rssCom");
+    const catalogEpisode = catalog.episodes.find((entry) => entry.number === episode.number);
+    const audio = catalog.assetRegistry[catalogEpisode.assetRefs.podcastAudio];
+    const currentCatalogUrl = audio.publishedUrl;
+    audio.publishedUrl = target.existingUrl;
+    enrichment[catalogEpisode.destinations.vimeo.id].audioUrl = target.existingUrl;
+    fixtureSeed = fixtureSeed.replace(currentCatalogUrl, target.existingUrl);
     target.status = "pending";
     delete target.verification;
   }
-  const enrichment = structuredClone(enrichmentTemplate);
   const baselineUrls = new Map();
   const currentUrls = new Map();
   const baselineDurations = new Map();
@@ -263,7 +270,7 @@ async function prepareFixture(context) {
   await writeJson(paths.audit, audit);
   await writeJson(paths.enrichment, enrichment);
   await fs.mkdir(path.dirname(paths.seed), { recursive: true });
-  await fs.writeFile(paths.seed, seedTemplate);
+  await fs.writeFile(paths.seed, fixtureSeed);
   return { catalog, receipt, receiptSha256, paths };
 }
 
