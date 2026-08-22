@@ -122,6 +122,29 @@ drm-publish receipts <job-id>
 drm-publish status <job-id>
 ```
 
+Episode 5 Vimeo source correction uses the dedicated in-place replacement lane;
+it must never fall back to the ordinary create controller. Prepare and authorize
+the corrected Episode 5 manifest first so the private packet contains the exact
+full-video path, size, and SHA-256. Then use the cataloged stable Vimeo ID for
+read-only validation and durable queueing:
+
+```bash
+drm-publish vimeo-replace dry-run <job-id> --video-id <existing-id>
+drm-publish vimeo-replace preflight <job-id> --video-id <existing-id>
+drm-publish vimeo-replace queue <job-id> --video-id <existing-id>
+drm-publish vimeo-replace status <job-id> --video-id <existing-id>
+```
+
+`queue` performs no provider call and prints the exact execution confirmation.
+The `run` action additionally requires a pinned deployed commit, the active
+Vimeo-only host-control permission, and that exact confirmation. It creates a
+new version on the already-cataloged Vimeo ID through the official API, records
+each provider checkpoint durably, and resumes a prior write only through the
+checkpoint-bound adapter reconciliation path. A blocked operation with a valid
+checkpoint can be returned to that path only with the explicit
+`vimeo-replace reconcile` action. Neither the runner nor its command accepts or
+contacts Rumble.
+
 Use `drm-publish migration-check [--verify-media] [--verify-artwork]
 [--decode-edge-audio] [--snapshot]` to audit migration evidence or investigate
 feed drift. It is not part of routine episode publishing.

@@ -314,12 +314,38 @@
         "platform": { "const": "youtube" },
         "id": { "type": "string", "pattern": "^[A-Za-z0-9_-]{11}$" },
         "url": { "type": "string", "format": "uri", "pattern": "^https://" },
-        "status": { "const": "unlisted" },
+        "status": { "enum": ["unlisted", "private"] },
         "archivedAt": { "type": "string", "format": "date-time" },
-        "reason": { "const": "normalized_video_cutover" },
+        "reason": { "enum": ["normalized_video_cutover", "content_correction"] },
         "supersededById": { "type": "string", "pattern": "^[A-Za-z0-9_-]{11}$" },
-        "rollbackEligible": { "const": true }
-      }
+        "rollbackEligible": { "type": "boolean" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "reason": { "const": "normalized_video_cutover" } },
+            "required": ["reason"]
+          },
+          "then": {
+            "properties": {
+              "status": { "const": "unlisted" },
+              "rollbackEligible": { "const": true }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "reason": { "const": "content_correction" } },
+            "required": ["reason"]
+          },
+          "then": {
+            "properties": {
+              "status": { "enum": ["unlisted", "private"] },
+              "rollbackEligible": { "const": false }
+            }
+          }
+        }
+      ]
     },
     "vimeoIdentity": {
       "allOf": [

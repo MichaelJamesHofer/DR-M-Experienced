@@ -71,7 +71,7 @@ test("master catalog validates and has a deterministic hash", async () => {
   const result = validateCatalog(catalog);
   assert.deepEqual(result, { valid: true, errors: [] });
   assert.equal(catalog.schemaVersion, 1);
-  assert.equal(catalog.revision, 12);
+  assert.equal(catalog.revision, 13);
   assert.equal(catalog.episodes.length, 7);
   assert.match(catalogHash(catalog), /^[a-f0-9]{64}$/);
   assert.equal(catalogHash(catalog), catalogHash(structuredClone(catalog)));
@@ -747,6 +747,60 @@ test("catalog validation rejects a YouTube archive that is active or points at t
   assert.ok(
     successorResult.errors.some((error) => error.includes("must match the active youtube destination")),
     successorResult.errors.join("\n")
+  );
+});
+
+test("content-correction YouTube archives are non-rollback private or pending-unlisted records", async () => {
+  const catalog = await loadCatalog();
+  const changed = structuredClone(catalog);
+  const episode = changed.episodes.find((candidate) => candidate.number === 5);
+  const contaminatedCurrent = episode.destinations.youtube;
+  const correctedId = "Ep5Fix2026A";
+  const correctedUrl = `https://www.youtube.com/watch?v=${correctedId}`;
+
+  episode.destinations.youtube = { id: correctedId, url: correctedUrl };
+  episode.destinationArchives = [
+    ...episode.destinationArchives.map((archive) => ({
+      ...archive,
+      status: "private",
+      reason: "content_correction",
+      supersededById: correctedId,
+      rollbackEligible: false,
+    })),
+    {
+      platform: "youtube",
+      id: contaminatedCurrent.id,
+      url: contaminatedCurrent.url,
+      status: "unlisted",
+      archivedAt: "2026-08-22T19:00:00Z",
+      reason: "content_correction",
+      supersededById: correctedId,
+      rollbackEligible: false,
+    },
+  ];
+
+  assert.deepEqual(validateCatalog(changed), { valid: true, errors: [] });
+
+  const invalidRollback = structuredClone(changed);
+  invalidRollback.episodes[4].destinationArchives.at(-1).rollbackEligible = true;
+  const invalidRollbackResult = validateCatalog(invalidRollback);
+  assert.equal(invalidRollbackResult.valid, false);
+  assert.ok(
+    invalidRollbackResult.errors.some(
+      (error) => error.includes("rollbackEligible") && error.includes("equal to constant"),
+    ),
+    invalidRollbackResult.errors.join("\n"),
+  );
+
+  const invalidNormalizedArchive = structuredClone(catalog);
+  invalidNormalizedArchive.episodes[0].destinationArchives[0].status = "private";
+  const invalidNormalizedResult = validateCatalog(invalidNormalizedArchive);
+  assert.equal(invalidNormalizedResult.valid, false);
+  assert.ok(
+    invalidNormalizedResult.errors.some(
+      (error) => error.includes("status") && error.includes("equal to constant"),
+    ),
+    invalidNormalizedResult.errors.join("\n"),
   );
 });
 

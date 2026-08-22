@@ -1,0 +1,360 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://drmexperienced.com/schemas/episode-5-content-correction.json",
+  "title": "Dr. M Episode 5 content-correction receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "correctionId",
+    "status",
+    "recordedAt",
+    "updatedAt",
+    "catalog",
+    "episode",
+    "correctedSource",
+    "targets",
+    "completion"
+  ],
+  "properties": {
+    "$schema": { "const": "./episode-5-content-correction.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "correctionId": { "const": "episode-5-content-correction-2026-08-22" },
+    "status": {
+      "enum": [
+        "corrected_source_validated",
+        "local_delivery_validated_pending_remote_replacement",
+        "remote_replacement_in_progress",
+        "remote_propagation_partial",
+        "complete_verified"
+      ]
+    },
+    "recordedAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "catalog": { "$ref": "#/$defs/catalog" },
+    "episode": { "$ref": "#/$defs/episode" },
+    "correctedSource": { "$ref": "#/$defs/correctedSource" },
+    "targets": { "$ref": "#/$defs/targets" },
+    "completion": { "$ref": "#/$defs/completion" }
+  },
+  "$defs": {
+    "nonBlank": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "nullableSha256": {
+      "type": ["string", "null"],
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "nullableHttpsUrl": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "catalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "baselineRevision", "currentRevision", "publisherHash"],
+      "properties": {
+        "source": { "const": "publishing/master-catalog.json" },
+        "baselineRevision": { "const": 12 },
+        "currentRevision": {
+          "type": ["integer", "null"],
+          "minimum": 13
+        },
+        "publisherHash": { "$ref": "#/$defs/nullableSha256" }
+      }
+    },
+    "episode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "number",
+        "slug",
+        "title",
+        "rssGuid",
+        "rssComEpisodeId",
+        "appleEpisodeId",
+        "spotifyEpisodeId",
+        "vimeoVideoId",
+        "rumbleVideoId",
+        "contaminatedYouTubeVideoIds"
+      ],
+      "properties": {
+        "number": { "const": 5 },
+        "slug": { "const": "episode-5-energy" },
+        "title": { "const": "Energy - Understanding Fatigue and Mitochondrial Health" },
+        "rssGuid": { "const": "e9f7596f-0333-49ca-8946-bc11e96b2091" },
+        "rssComEpisodeId": { "const": "3050762" },
+        "appleEpisodeId": { "const": "1000774398633" },
+        "spotifyEpisodeId": { "const": "6fQAClcR4AAuueHjBNlrJC" },
+        "vimeoVideoId": { "const": "1204939658" },
+        "rumbleVideoId": { "const": "v7bvj32" },
+        "contaminatedYouTubeVideoIds": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "N_F0hhHkIQ4" },
+            { "const": "JyBK6KtOo_k" }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true
+        }
+      }
+    },
+    "correctedSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "uri",
+        "sha256",
+        "sizeBytes",
+        "mediaType",
+        "durationSeconds",
+        "validatedAt",
+        "badExchangeRemoved",
+        "fullDecodePassed"
+      ],
+      "properties": {
+        "uri": {
+          "const": "dropbox:Dr.M Podcast/Episode 5 - Energy/Dr. M EP5 - Energy.mov"
+        },
+        "sha256": {
+          "const": "3bc88051e125e1ba95a925101bc29a80b3c0a2498f50c086acc25be1c20d2073"
+        },
+        "sizeBytes": { "const": 8757256750 },
+        "mediaType": { "const": "video/quicktime" },
+        "durationSeconds": { "const": 1785.685333 },
+        "validatedAt": { "type": "string", "format": "date-time" },
+        "badExchangeRemoved": { "const": true },
+        "fullDecodePassed": { "const": true }
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "action",
+        "source",
+        "sourceSha256",
+        "sourceSizeBytes",
+        "existingId",
+        "existingUrl",
+        "replacementId",
+        "replacementUrl",
+        "verifiedAt",
+        "evidenceSha256"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "processing",
+            "pending_rss_fanout",
+            "pending_manual_human_action",
+            "blocked",
+            "complete_verified"
+          ]
+        },
+        "action": { "$ref": "#/$defs/nonBlank" },
+        "source": { "$ref": "#/$defs/nonBlank" },
+        "sourceSha256": { "$ref": "#/$defs/nullableSha256" },
+        "sourceSizeBytes": {
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "existingId": {
+          "type": ["string", "null"],
+          "minLength": 1
+        },
+        "existingUrl": { "$ref": "#/$defs/nullableHttpsUrl" },
+        "replacementId": {
+          "type": ["string", "null"],
+          "minLength": 1
+        },
+        "replacementUrl": { "$ref": "#/$defs/nullableHttpsUrl" },
+        "verifiedAt": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "evidenceSha256": { "$ref": "#/$defs/nullableSha256" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "status": { "const": "complete_verified" } },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "sourceSha256": { "$ref": "#/$defs/sha256" },
+              "sourceSizeBytes": { "type": "integer", "minimum": 1 },
+              "replacementUrl": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https://"
+              },
+              "verifiedAt": { "type": "string", "format": "date-time" },
+              "evidenceSha256": { "$ref": "#/$defs/sha256" }
+            }
+          }
+        }
+      ]
+    },
+    "targets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rssCom", "spotify", "youtube", "vimeo", "rumble", "apple", "website"],
+      "properties": {
+        "rssCom": {
+          "allOf": [
+            { "$ref": "#/$defs/target" },
+            {
+              "type": "object",
+              "properties": {
+                "action": { "const": "replace_existing_episode_audio" },
+                "source": { "const": "episode-005-podcast-audio" },
+                "existingId": { "const": "3050762" }
+              }
+            }
+          ]
+        },
+        "spotify": {
+          "allOf": [
+            { "$ref": "#/$defs/target" },
+            {
+              "type": "object",
+              "properties": {
+                "action": { "const": "replace_existing_episode_video" },
+                "source": { "const": "episode-005-spotify-video" },
+                "existingId": { "const": "6fQAClcR4AAuueHjBNlrJC" },
+                "existingUrl": {
+                  "const": "https://open.spotify.com/episode/6fQAClcR4AAuueHjBNlrJC"
+                }
+              }
+            }
+          ]
+        },
+        "youtube": {
+          "allOf": [
+            { "$ref": "#/$defs/target" },
+            {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "const": "publish_corrected_video_and_archive_contaminated_uploads"
+                },
+                "source": { "const": "episode-005-master-video" },
+                "existingId": { "const": "N_F0hhHkIQ4" },
+                "existingUrl": {
+                  "const": "https://www.youtube.com/watch?v=N_F0hhHkIQ4"
+                },
+                "replacementId": {
+                  "type": ["string", "null"],
+                  "pattern": "^[A-Za-z0-9_-]{11}$"
+                }
+              }
+            }
+          ]
+        },
+        "vimeo": {
+          "allOf": [
+            { "$ref": "#/$defs/target" },
+            {
+              "type": "object",
+              "properties": {
+                "action": { "const": "replace_existing_video_version" },
+                "source": { "const": "episode-005-master-video" },
+                "existingId": { "const": "1204939658" },
+                "existingUrl": { "const": "https://vimeo.com/1204939658" },
+                "replacementId": { "enum": ["1204939658", null] }
+              }
+            }
+          ]
+        },
+        "rumble": {
+          "allOf": [
+            { "$ref": "#/$defs/target" },
+            {
+              "type": "object",
+              "properties": {
+                "action": { "const": "manual_human_only_reupload" },
+                "source": { "const": "episode-005-master-video" },
+                "existingId": { "const": "v7bvj32" },
+                "replacementId": {
+                  "type": ["string", "null"],
+                  "pattern": "^v[a-z0-9]+$"
+                }
+              }
+            }
+          ]
+        },
+        "apple": {
+          "allOf": [
+            { "$ref": "#/$defs/target" },
+            {
+              "type": "object",
+              "properties": {
+                "action": { "const": "verify_rss_fanout" },
+                "source": { "const": "rss.com" },
+                "existingId": { "const": "1000774398633" },
+                "replacementId": { "enum": ["1000774398633", null] }
+              }
+            }
+          ]
+        },
+        "website": {
+          "allOf": [
+            { "$ref": "#/$defs/target" },
+            {
+              "type": "object",
+              "properties": {
+                "action": { "const": "deploy_verified_episode_projection" },
+                "source": { "const": "publishing/master-catalog.json" },
+                "existingId": { "const": null },
+                "existingUrl": {
+                  "const": "https://drmexperienced.com/episodes/episode-5-energy/"
+                },
+                "replacementId": { "type": "null" },
+                "replacementUrl": {
+                  "enum": [
+                    "https://drmexperienced.com/episodes/episode-5-energy/",
+                    null
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "completionTarget": {
+      "enum": ["rssCom", "spotify", "youtube", "vimeo", "rumble", "apple", "website"]
+    },
+    "completion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verifiedComplete", "pending"],
+      "properties": {
+        "verifiedComplete": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/completionTarget" }
+        },
+        "pending": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/completionTarget" }
+        }
+      }
+    }
+  }
+}

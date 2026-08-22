@@ -1,0 +1,144 @@
+{
+  "$schema": "./episode-5-content-correction.schema.json",
+  "schemaVersion": 1,
+  "correctionId": "episode-5-content-correction-2026-08-22",
+  "status": "local_delivery_validated_pending_remote_replacement",
+  "recordedAt": "2026-08-22T19:16:20Z",
+  "updatedAt": "2026-08-22T19:54:44Z",
+  "catalog": {
+    "source": "publishing/master-catalog.json",
+    "baselineRevision": 12,
+    "currentRevision": 13,
+    "publisherHash": "7c1875d797e44e0257828a1b20684eb149f3b1bfda4c6519da876f2b2c80e2cf"
+  },
+  "episode": {
+    "number": 5,
+    "slug": "episode-5-energy",
+    "title": "Energy - Understanding Fatigue and Mitochondrial Health",
+    "rssGuid": "e9f7596f-0333-49ca-8946-bc11e96b2091",
+    "rssComEpisodeId": "3050762",
+    "appleEpisodeId": "1000774398633",
+    "spotifyEpisodeId": "6fQAClcR4AAuueHjBNlrJC",
+    "vimeoVideoId": "1204939658",
+    "rumbleVideoId": "v7bvj32",
+    "contaminatedYouTubeVideoIds": [
+      "N_F0hhHkIQ4",
+      "JyBK6KtOo_k"
+    ]
+  },
+  "correctedSource": {
+    "uri": "dropbox:Dr.M Podcast/Episode 5 - Energy/Dr. M EP5 - Energy.mov",
+    "sha256": "3bc88051e125e1ba95a925101bc29a80b3c0a2498f50c086acc25be1c20d2073",
+    "sizeBytes": 8757256750,
+    "mediaType": "video/quicktime",
+    "durationSeconds": 1785.685333,
+    "validatedAt": "2026-08-22T19:16:11Z",
+    "badExchangeRemoved": true,
+    "fullDecodePassed": true
+  },
+  "targets": {
+    "rssCom": {
+      "status": "pending",
+      "action": "replace_existing_episode_audio",
+      "source": "episode-005-podcast-audio",
+      "sourceSha256": "3acf88aa7cb25041dbe34eee3242b3f57d9e62cbc42d54624467dc609ef4a7c0",
+      "sourceSizeBytes": 42857901,
+      "existingId": "3050762",
+      "existingUrl": "https://rss.com/podcasts/dr-m-experienced/3050762/",
+      "replacementId": null,
+      "replacementUrl": null,
+      "verifiedAt": null,
+      "evidenceSha256": null
+    },
+    "spotify": {
+      "status": "pending",
+      "action": "replace_existing_episode_video",
+      "source": "episode-005-spotify-video",
+      "sourceSha256": "7991618e1649cd32cf07a33459ab52cb8299af4c660d789c1e7da6c1a3d6031c",
+      "sourceSizeBytes": 870708871,
+      "existingId": "6fQAClcR4AAuueHjBNlrJC",
+      "existingUrl": "https://open.spotify.com/episode/6fQAClcR4AAuueHjBNlrJC",
+      "replacementId": null,
+      "replacementUrl": null,
+      "verifiedAt": null,
+      "evidenceSha256": null
+    },
+    "youtube": {
+      "status": "pending",
+      "action": "publish_corrected_video_and_archive_contaminated_uploads",
+      "source": "episode-005-master-video",
+      "sourceSha256": "ef25952275c22633e6deb3e1dfd142ed4890ce688301aaba8bef78f04d9f9b58",
+      "sourceSizeBytes": 8743493742,
+      "existingId": "N_F0hhHkIQ4",
+      "existingUrl": "https://www.youtube.com/watch?v=N_F0hhHkIQ4",
+      "replacementId": null,
+      "replacementUrl": null,
+      "verifiedAt": null,
+      "evidenceSha256": null
+    },
+    "vimeo": {
+      "status": "pending",
+      "action": "replace_existing_video_version",
+      "source": "episode-005-master-video",
+      "sourceSha256": "ef25952275c22633e6deb3e1dfd142ed4890ce688301aaba8bef78f04d9f9b58",
+      "sourceSizeBytes": 8743493742,
+      "existingId": "1204939658",
+      "existingUrl": "https://vimeo.com/1204939658",
+      "replacementId": null,
+      "replacementUrl": null,
+      "verifiedAt": null,
+      "evidenceSha256": null
+    },
+    "rumble": {
+      "status": "pending_manual_human_action",
+      "action": "manual_human_only_reupload",
+      "source": "episode-005-master-video",
+      "sourceSha256": "ef25952275c22633e6deb3e1dfd142ed4890ce688301aaba8bef78f04d9f9b58",
+      "sourceSizeBytes": 8743493742,
+      "existingId": "v7bvj32",
+      "existingUrl": "https://rumble.com/v7bvj32-episode-5-electro.magnetic.frequencies.html",
+      "replacementId": null,
+      "replacementUrl": null,
+      "verifiedAt": null,
+      "evidenceSha256": null
+    },
+    "apple": {
+      "status": "pending_rss_fanout",
+      "action": "verify_rss_fanout",
+      "source": "rss.com",
+      "sourceSha256": "3acf88aa7cb25041dbe34eee3242b3f57d9e62cbc42d54624467dc609ef4a7c0",
+      "sourceSizeBytes": 42857901,
+      "existingId": "1000774398633",
+      "existingUrl": "https://podcasts.apple.com/us/podcast/energy-understanding-fatigue-and-mitochondrial-health/id1870433419?i=1000774398633",
+      "replacementId": null,
+      "replacementUrl": null,
+      "verifiedAt": null,
+      "evidenceSha256": null
+    },
+    "website": {
+      "status": "pending",
+      "action": "deploy_verified_episode_projection",
+      "source": "publishing/master-catalog.json",
+      "sourceSha256": null,
+      "sourceSizeBytes": null,
+      "existingId": null,
+      "existingUrl": "https://drmexperienced.com/episodes/episode-5-energy/",
+      "replacementId": null,
+      "replacementUrl": null,
+      "verifiedAt": null,
+      "evidenceSha256": null
+    }
+  },
+  "completion": {
+    "verifiedComplete": [],
+    "pending": [
+      "rssCom",
+      "spotify",
+      "youtube",
+      "vimeo",
+      "rumble",
+      "apple",
+      "website"
+    ]
+  }
+}

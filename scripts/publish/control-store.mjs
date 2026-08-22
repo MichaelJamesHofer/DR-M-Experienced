@@ -16,7 +16,7 @@ export const OPERATION_STATES = new Set([
 const LEASABLE_STATES = ["queued", "waiting", "retry"];
 const TERMINAL_STATES = new Set(["verified", "failed", "blocked"]);
 const CONTROL_STORE_SCHEMA_VERSION = 2;
-const OPERATION_ACTIONS = new Set(["create", "reconcile"]);
+const OPERATION_ACTIONS = new Set(["create", "reconcile", "replace"]);
 
 function assertTimestamp(value, label) {
   if (typeof value !== "string" || Number.isNaN(Date.parse(value))) {
@@ -232,7 +232,7 @@ function legacyOperationClassification(row) {
   }
 
   let createSlotActive = action === "create" ? 1 : 0;
-  let slotResolution = action === "create" ? null : "not_applicable_reconcile";
+  let slotResolution = action === "create" ? null : `not_applicable_${action}`;
   if (action === "create" && row.create_slot_active === 0) {
     const noProviderWrite =
       row.provider_write_started_at == null &&
@@ -446,7 +446,7 @@ export async function openControlStore({ filePath, env = process.env, now = () =
     assertTimestamp(notBefore, "notBefore");
     const resolvedKind = kind ?? binding?.action ?? "create";
     if (!OPERATION_ACTIONS.has(resolvedKind)) {
-      throw new Error("Queued operation action must be create or reconcile.");
+      throw new Error("Queued operation action must be create, reconcile, or replace.");
     }
     if (binding?.action != null && binding.action !== resolvedKind) {
       throw new Error("Queued operation action conflicts with its immutable binding.");

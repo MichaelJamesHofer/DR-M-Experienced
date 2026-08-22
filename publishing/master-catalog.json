@@ -1,8 +1,8 @@
 {
   "$schema": "./master-catalog.schema.json",
   "schemaVersion": 1,
-  "revision": 12,
-  "updatedAt": "2026-08-08T20:24:39Z",
+  "revision": 13,
+  "updatedAt": "2026-08-22T19:53:19Z",
   "show": {
     "names": {
       "full": "Dr. M Experienced, with Dr. David Musnick",
@@ -213,8 +213,8 @@
       "kind": "video",
       "role": "fullVideo",
       "uri": "dropbox:episodes/005-episode-5-energy/master-video.mp4",
-      "sha256": "7d54ec306f76dc665e30336fb0808ecb039a338afbf3e11c31b9322658aa8639",
-      "sizeBytes": 9118424761,
+      "sha256": "ef25952275c22633e6deb3e1dfd142ed4890ce688301aaba8bef78f04d9f9b58",
+      "sizeBytes": 8743493742,
       "mediaType": "video/mp4",
       "status": "verified"
     },
@@ -222,8 +222,8 @@
       "kind": "audio",
       "role": "podcastAudio",
       "uri": "dropbox:episodes/005-episode-5-energy/podcast-audio.mp3",
-      "sha256": "2c6cb7eb2a176a4fdcd2c42cf694305b36290e7844fdeda4104f5d4abcdf1d62",
-      "sizeBytes": 44685549,
+      "sha256": "3acf88aa7cb25041dbe34eee3242b3f57d9e62cbc42d54624467dc609ef4a7c0",
+      "sizeBytes": 42857901,
       "mediaType": "audio/mpeg",
       "status": "verified",
       "publishedUrl": "https://content.rss.com/episodes/397420/3050762/dr-m-experienced/2026_08_07_05_46_23_1de2f4f3-aeab-457a-a02d-2bf61108132d.mp3"
@@ -300,8 +300,8 @@
       "kind": "video",
       "role": "spotifyVideo",
       "uri": "dropbox:episodes/005-episode-5-energy/platform-video.mp4",
-      "sha256": "704e6b6c3137d2d6cdfc68876f651564e3d904a3174902fbe7c73aacae10804c",
-      "sizeBytes": 911564890,
+      "sha256": "7991618e1649cd32cf07a33459ab52cb8299af4c660d789c1e7da6c1a3d6031c",
+      "sizeBytes": 870708871,
       "mediaType": "video/mp4",
       "status": "verified"
     }
@@ -574,7 +574,7 @@
         "full": "<p>In this episode of <strong>Dr. M Experienced, with Dr. David Musnick</strong>, Dr. M takes a deep dive into <strong>energy, fatigue, and mitochondrial health</strong>. He explains why fatigue is often more complex than “just being tired,” exploring possible contributors such as poor sleep, sleep apnea, inflammation, viral reactivation, Lyme and co-infections, mold exposure, heavy metals, hormone imbalances, adrenal and thyroid function, liver and kidney stress, and mitochondrial dysfunction.</p><p>Dr. M also discusses practical ways to support energy production, including grounding, improving sleep, supporting ATP production, methylated B vitamins, magnesium, zinc, copper, CoQ10, NAD support, PQQ, and methylene blue. This episode is packed with functional medicine insights for anyone looking to better understand the many factors that can affect daily energy, vitality, and resilience.</p><p>This episode is for educational purposes only and is not a substitute for personalized medical care. Always consult your own healthcare provider before making changes to your health plan, testing, or supplements.</p>"
       },
       "websiteSummary": "Dr. M takes a functional-medicine look at energy, fatigue, and mitochondrial health, including sleep, inflammation, viral reactivation, infections, mold, heavy metals, hormones, organ stress, and practical supports for ATP production.",
-      "durationMinutes": 31,
+      "durationMinutes": 30,
       "publishDate": "2026-06-26",
       "feedPublishedAt": "2026-06-26T21:24:11.000Z",
       "contentFlags": {

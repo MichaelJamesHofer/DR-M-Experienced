@@ -67,6 +67,15 @@ import {
   requestAutomationPause,
   setAutomationRunning,
 } from "./automation-control.mjs";
+import {
+  dryRunEpisode5VimeoReplacement,
+  enqueueEpisode5VimeoReplacement,
+  preflightEpisode5VimeoReplacement,
+  reconcileBlockedEpisode5VimeoReplacement,
+  runEpisode5VimeoReplacementOnce,
+  statusEpisode5VimeoReplacement,
+  vimeoReplacementConfirmation,
+} from "./vimeo-replacement-runner.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDir, "..", "..");
@@ -88,6 +97,12 @@ function usage() {
   drm-publish retry <operation-id> --reason <text> --confirm "retry-operation <operation-id>"
   drm-publish reconcile <operation-id> --reason <text> --confirm "reconcile-operation <operation-id>"
   drm-publish supersede <operation-id> --reason <text> --evidence <text> --confirm "supersede-no-remote-write <operation-id>"
+  drm-publish vimeo-replace dry-run <job-id> --video-id <existing-id>
+  drm-publish vimeo-replace preflight <job-id> --video-id <existing-id>
+  drm-publish vimeo-replace queue <job-id> --video-id <existing-id>
+  drm-publish vimeo-replace run <job-id> --video-id <existing-id> --confirm "execute-vimeo-replacement <operation-id> <authorization-hash> <existing-id>"
+  drm-publish vimeo-replace status <job-id> --video-id <existing-id>
+  drm-publish vimeo-replace reconcile <job-id> --video-id <existing-id> --reason <text> --confirm "reconcile-vimeo-replacement <operation-id> <existing-id>"
   drm-publish host status
   drm-publish host pause --confirm "pause-publisher"
   drm-publish host run --platforms <comma-list> --confirm "run-publisher <comma-list>"
@@ -746,6 +761,96 @@ function strictOptions(command, args, allowed) {
   return Object.fromEntries(values);
 }
 
+function vimeoReplacementSummary(plan) {
+  return {
+    operationId: plan.operationId,
+    jobId: plan.jobId,
+    episodeNumber: 5,
+    existingVideoId: plan.existingVideoId,
+    remoteUrl: plan.remoteUrl,
+    accountId: plan.accountId,
+    asset: plan.asset,
+    approvalHash: plan.approvalHash,
+    authorizationHash: plan.authorizationHash,
+    episodeHash: plan.episodeHash,
+  };
+}
+
+async function vimeoReplacementCommand(args) {
+  const [action, jobId, ...rest] = args;
+  if (!action || !jobId) {
+    throw new Error("vimeo-replace requires an action and job id.");
+  }
+  const allowed = new Set(["dry-run", "preflight", "queue", "run", "status", "reconcile"]);
+  if (!allowed.has(action)) {
+    throw new Error(`Unknown vimeo-replace action: ${action}`);
+  }
+  const optionNames = action === "run"
+    ? new Set(["--video-id", "--confirm"])
+    : action === "reconcile"
+      ? new Set(["--video-id", "--reason", "--confirm"])
+      : new Set(["--video-id"]);
+  const options = strictOptions(`vimeo-replace ${action}`, rest, optionNames);
+  const existingVideoId = options["--video-id"];
+  if (!existingVideoId) throw new Error(`vimeo-replace ${action} requires --video-id.`);
+
+  if (action === "dry-run") {
+    const output = await dryRunEpisode5VimeoReplacement({ jobId, existingVideoId });
+    process.stdout.write(`${JSON.stringify({ plan: vimeoReplacementSummary(output.plan), adapter: output.result }, null, 2)}\n`);
+    return;
+  }
+  if (action === "preflight") {
+    const output = await preflightEpisode5VimeoReplacement({ jobId, existingVideoId });
+    process.stdout.write(`${JSON.stringify({ plan: vimeoReplacementSummary(output.plan), adapter: output.result }, null, 2)}\n`);
+    return;
+  }
+  if (action === "queue") {
+    const output = await enqueueEpisode5VimeoReplacement({ jobId, existingVideoId });
+    process.stdout.write(
+      `Vimeo Episode 5 replacement ${output.created ? "queued" : `already ${output.operation.state}`}.\n`,
+    );
+    process.stdout.write(`Operation: ${output.plan.operationId}\n`);
+    process.stdout.write(`Control database: ${output.databasePath}\n`);
+    process.stdout.write(`Asset SHA-256: ${output.plan.asset.sha256}\n`);
+    process.stdout.write(`Execution confirmation: ${vimeoReplacementConfirmation(output.plan)}\n`);
+    process.stdout.write("No platform was contacted by queue.\n");
+    return;
+  }
+  if (action === "status") {
+    const output = await statusEpisode5VimeoReplacement({ jobId, existingVideoId });
+    process.stdout.write(`${JSON.stringify({
+      plan: vimeoReplacementSummary(output.plan),
+      databasePath: output.databasePath,
+      operation: output.operation,
+      events: output.events,
+    }, null, 2)}\n`);
+    return;
+  }
+  if (action === "reconcile") {
+    const output = await reconcileBlockedEpisode5VimeoReplacement({
+      jobId,
+      existingVideoId,
+      reason: options["--reason"],
+      confirmation: options["--confirm"],
+    });
+    process.stdout.write(`Queued checkpoint-bound Vimeo reconciliation for ${output.plan.operationId}.\n`);
+    return;
+  }
+
+  const output = await runEpisode5VimeoReplacementOnce({
+    jobId,
+    existingVideoId,
+    confirmation: options["--confirm"],
+  });
+  process.stdout.write(
+    `Vimeo Episode 5 replacement: ${output.state} (${output.operation.operationId}).\n`,
+  );
+  if (output.error) {
+    process.stdout.write(`Blocked: ${output.error.code}: ${output.error.message}\n`);
+    process.exitCode = 2;
+  }
+}
+
 async function reconcileOperation(operationId, args) {
   if (!operationId) throw new Error("reconcile requires an operation id.");
   const options = strictOptions("reconcile", args, new Set(["--reason", "--confirm"]));
@@ -1149,6 +1254,9 @@ async function main() {
   if (command === "retry") return retryOperation(first, rest);
   if (command === "reconcile") return reconcileOperation(first, rest);
   if (command === "supersede") return supersedeOperation(first, rest);
+  if (command === "vimeo-replace") {
+    return vimeoReplacementCommand([first, ...rest].filter((value) => value !== undefined));
+  }
   if (command === "host") return hostControl(first, rest);
   if (command === "receipt") return recordReceipt(first, rest);
   if (command === "receipts") return listReceipts(first);
