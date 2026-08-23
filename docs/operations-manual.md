@@ -1,6 +1,6 @@
 # Dr. M Experienced Ecosystem Operations Manual
 
-Last verified: August 8, 2026.
+Last verified: August 22, 2026.
 
 This is the first-stop instruction manual for the website, podcast host,
 directories, video channels, social publishing, workstation tooling, and brand
@@ -68,12 +68,14 @@ Interpretation on August 8, 2026:
 - Both guarded Supabase migrations were applied in production after exact SQL
   file-hash verification. Seven-row readback matches catalog revision 10 for
   current RSS.com audio URLs, YouTube IDs, and `Watch on YouTube` references.
-- YouTube: all seven normalized replacements are public with exact titles,
-  descriptions, and approved thumbnails; the prior seven uploads are Unlisted,
-  directly playable, and linked to their replacements. Vimeo's seven corrected
-  videos are verified in place on their stable IDs. Spotify's seven corrected
-  videos are attached to the existing episode IDs, and public readback confirms
-  video, approved artwork, and approved copy for 7/7. Rumble's exact seven
+- YouTube: six normalized replacements remain public with exact titles,
+  descriptions, and approved thumbnails; Episode 5 preserves public ID
+  `N_F0hhHkIQ4` after a same-ID emergency trim removed the contaminated interval,
+  and YouTube Studio reports 29:45. Vimeo's seven corrected videos are verified
+  in place on their stable IDs. Spotify preserves all seven episode IDs and the
+  corrected Episode 5 RSS audio, but Episode 5 is currently audio-only after
+  three video attempts reverted; the other six video attachments remain public.
+  A Spotify Creator Support request is staged for owner review. Rumble's exact seven
   corrected videos and thumbnails remain locally verified and unsubmitted. The
   August 8 cache reset invalidated their staged forms, so the batch is blocked
   on manual restaging, release-control verification, and third-party asset-rights
@@ -95,8 +97,10 @@ Interpretation on August 8, 2026:
   `1216695521`, `1216695522`, and `1204939542`. Their canonical titles,
   descriptions, and posters match the short-form catalog. All three website
   short routes are deployed and verified against those exact Vimeo IDs.
-- Catalog revision 12 mounts the exact portrait-free Show Brand Package
-  `1.0.0-rc1` binaries in Dropbox for local verification. The package remains
+- Catalog revision 13 records the corrected Episode 5 master, podcast audio,
+  Spotify derivative, RSS enclosure, and 30-minute runtime while retaining the
+  exact portrait-free Show Brand Package `1.0.0-rc1` binaries in Dropbox for
+  local verification. The package remains
   `review_owner_approval_required`; no website or platform received these
   show-level assets, and the existing podcast-cover `publishedUrl` was not
   changed.
@@ -108,12 +112,16 @@ Interpretation on August 8, 2026:
   records, content-addressed private asset staging, a durable node:sqlite queue,
   official Vimeo/YouTube/RSS.com adapters, provider write intent and hashed
   checkpoints, exact-resource reconciliation, and automatic immutable receipt
-  writes. All authorized targets enqueue atomically or none do. The live host
-  runs immutable build `69f059ce22267f02dc5918492b10066ff9ad704c`; both the
-  one-minute controller timer and two-minute offline intake timer are enabled and
-  active. Machine control generation 1 is `running` with only Vimeo allowlisted,
-  and the queue is empty. The last observed intake run succeeded with no ready
-  deliveries. Enabling the host created no job and authorized no release.
+  writes. All authorized targets enqueue atomically or none do. At the August 22
+  pre-reconciliation snapshot, the installed publisher was immutable build
+  `84f606ca8d899d1c8ac9a6890ecbb073cfd11b8f`. Read `current/release.json` for the
+  authoritative installed commit. The two-minute offline intake timer is enabled and active; the one-minute
+  controller timer is disabled and inactive. Machine control generation 1 is
+  still `running` with only Vimeo allowlisted, and the queue is empty. The last
+  observed intake run succeeded with no ready deliveries. This state created no
+  job and authorized no release. Do not enable the controller merely to stage an
+  episode; reconcile the clean pinned publisher first and open the exact release
+  gates only for an approved immutable job.
 - Vimeo app `540274`, account `253415660`, its owner-only upload/edit token, and
   upload quota are verified. The user accepted Vimeo's Developer Addendum and
   Terms for the Dr. M Experienced Publisher app on August 8, 2026. RSS.com
@@ -292,29 +300,29 @@ deterministic operations, stages exact bytes, and can run supported official
 adapters with durable provider checkpoints, authenticated readback, and
 automatic receipts. A receipt remains evidence, not authorization. The tracked
 global/per-platform gates and policy revision cannot be overridden by the
-separate local running/paused allowlist. The controller and intake timers are
-enabled and active on the pinned build; local control generation 1 is running
-with Vimeo as its only allowed platform, and the queue is empty. Host activation
-created no release. Spotify video remains attended; Instagram still needs Meta
-prerequisites; Rumble remains excluded.
+separate local running/paused allowlist. The intake timer is enabled and active;
+the controller timer is disabled and inactive. Local control generation 1 is
+running with Vimeo as its only allowed platform, and the queue is empty. This
+state created no release. Spotify video remains attended; Instagram still needs
+Meta prerequisites; Rumble remains excluded.
 
 ## 5. Account And Destination Inventory
 
 | Destination | Stable identity | Current delivery and state |
 |---|---|---|
-| Website | `https://drmexperienced.com` | The apex returns HTTP 200 and `www` redirects to it. The corrected Episode 7 page and all three short-form routes are deployed. The short routes return HTTP 200, are sitemap-indexed, load their checked-in posters, bind the exact Vimeo IDs, and have no document overflow at 320, 390, or 1440 pixels. Production PostHog ingestion and all three tracked event checks are verified. Dashboard `1086989` has six verified growth views |
+| Website | `https://drmexperienced.com` | The apex returns HTTP 200 and `www` redirects to it. Episode 5 exposes the corrected 29:45 audio/Vimeo/YouTube references and clearly separates its video and audio regions by 40 pixels at 320px with no horizontal overflow. The corrected Episode 7 page and all three short-form routes are also deployed. Production PostHog ingestion and all three tracked event checks are verified. Dashboard `1086989` has six verified growth views |
 | GitHub | `MichaelJamesHofer/DR-M-Experienced` | Public repo; `main` deploys production |
-| Supabase | project `tdbsuzciwotleualdcjf` | Production content catalog and form receiver; the guarded August 7 migrations retain their revision-10 RSS/YouTube readback, and the August 8 Episode 7 editorial correction migration passed independent summary, takeaway, section, paragraph, and topic readback |
-| RSS.com | podcast `397420`, slug `dr-m-experienced`, feed `https://media.rss.com/dr-m-experienced/feed.xml` | Canonical XML/dashboard copy is exact and token-free; seven normalized enclosures retain the GUIDs captured August 5 and pass remote decode/loudness gates; no season tags. The official v4 adapter is implemented, but API access requires Max and no entitlement/key is configured, so free/manual hosting continues. A support request for in-place GUID-only capability is pending, no live GUID change was requested, and the public landing-page cache still exposes `RSSVERIFY` |
-| Spotify | show `7GGLljxmO0G3FLjPy8vfcw` | Corrected video is attached to all seven existing episode IDs; public readback verifies video, approved artwork, and approved copy for 7/7. Authenticated support is reviewing whether both episode identities, videos, and analytics would survive either proposed GUID substitution; no live change was made |
-| Apple | public show `1870433419` | Configured directly to RSS.com with exact canonical metadata; preserve it; five Available and two RSS Draft records remain. Support case `20000130526608` confirmed historical GUID mismatches for Episodes 1-2, and the server-side-remap follow-up is submitted and pending. Remote repair remains blocked by `publishing/apple-guid-repair.json`; no live GUID changed. Public JSON-LD/search caches still use legacy show wording for Episodes 4-7 |
+| Supabase | project `tdbsuzciwotleualdcjf` | Production content catalog and form receiver; Episode 5 now projects the corrected RSS enclosure and 30-minute duration, and the August 8 Episode 7 editorial correction retains its independent summary, takeaway, section, paragraph, and topic readback |
+| RSS.com | podcast `397420`, slug `dr-m-experienced`, feed `https://media.rss.com/dr-m-experienced/feed.xml` | Canonical XML/dashboard copy is exact and token-free; all seven normalized enclosures retain their GUIDs. Episode 5 preserved episode ID `3050762` and GUID `e9f7596f-0333-49ca-8946-bc11e96b2091` while moving to the corrected 29:45 enclosure on August 22. The official v4 adapter is implemented, but API access requires Max and no entitlement/key is configured, so free/manual hosting continues. The public landing-page cache still exposes `RSSVERIFY` |
+| Spotify | show `7GGLljxmO0G3FLjPy8vfcw` | All seven episode IDs are preserved. Six corrected video attachments remain public; Episode 5 is currently audio-only with the corrected RSS audio after three same-ID video attempts reverted. A Creator Support request is staged for owner review; never create a duplicate episode |
+| Apple | public show `1870433419` | Configured directly to RSS.com with exact canonical metadata. Episode 5 preserved Apple episode ID `1000774398633`, exposes the corrected 29:45 enclosure, and has its generated transcript set to Not Displayed. Five Available and two RSS Draft records remain because Episodes 1-2 use historical GUIDs; case `20000130526608` and `publishing/apple-guid-repair.json` govern that separate blocked repair |
 | Apple Connect | `cfab5caf-554e-4ebe-a28c-2e4748147b82` | Internal identity of the public show |
 | Apple duplicate Draft | public-style ID `1896845422`, internal `949adc0b-c62f-410c-962d-17563cf3b07a` | Inspected nonpublic no-feed show; archived August 6, 2026; public lookup returned 404 on August 7 |
 | Apple stale Episode 4 Draft | Apple episode `1000759096366`, internal `fc3cdd48-13c5-4122-b464-b62376765410` | Inspected manual subscriber episode; archived August 6, 2026 |
 | Amazon | no ID yet | Signed-in account has zero claimed shows; submit the canonical RSS.com feed once, verify ownership, and record its stable identity |
-| YouTube | channel `UCFA1nVv4lKMBlx81gjMAOFQ`, uploads playlist `UUFA1nVv4lKMBlx81gjMAOFQ` | Seven normalized replacements are public with exact catalog copy and approved thumbnails; the prior seven uploads remain unlisted with replacement links and are retained for rollback. Project `dr-m-experienced-publisher`, Data API v3, desktop client, and production OAuth app are ready. Owner `michaeljameshofer@gmail.com` must grant OAuth once; the DRM account is only a Manager. Public/unlisted API uploads also remain blocked pending the applicable compliance audit |
-| Vimeo | user `253415660`, app `540274` | Seven corrected episode videos remain verified on their stable IDs. The three Instagram shorts are verified as `1216695521`, `1216695522`, and `1204939542` with canonical metadata and posters. The private app, exact account, owner-only upload/edit token, and upload quota are verified; the adapter is credential-ready for a separately authorized release |
-| Instagram | `@drmexperienced`, public profile ID `80068141150` | Public state confirms the exact name/bio and Creator professional classification, with `is_business_account` false. All three Reels map to verified local masters and Vimeo IDs. Adding the external website link remains a mobile-app-only action, and Meta API setup is waiting for the owner's Facebook developer login; Business conversion is neither required nor desired |
+| YouTube | channel `UCFA1nVv4lKMBlx81gjMAOFQ`, uploads playlist `UUFA1nVv4lKMBlx81gjMAOFQ` | Six normalized replacements remain public. Episode 5 preserves ID `N_F0hhHkIQ4` after its approved same-ID emergency trim; YouTube Studio reports 29:45. Project `dr-m-experienced-publisher`, Data API v3, desktop client, and production OAuth app are ready. Owner `michaeljameshofer@gmail.com` must grant OAuth once; the DRM account is only a Manager. Public/unlisted API uploads also remain blocked pending the applicable compliance audit |
+| Vimeo | user `253415660`, app `540274` | Seven corrected episode videos remain verified on their stable IDs; Episode 5 was corrected in place again on August 22 while preserving `1204939658`. The three Instagram shorts are verified as `1216695521`, `1216695522`, and `1204939542` with canonical metadata and posters. The private app, exact account, owner-only upload/edit token, and upload quota are verified; the adapter is credential-ready for a separately authorized release |
+| Instagram | `@drmexperienced`, public profile ID `80068141150` | Public state confirms the exact name/bio and Creator professional classification, with `is_business_account` false. The website, affiliate guide, and contact links are live; the profile reports four posts, and all three cataloged Reels map to verified local masters and Vimeo IDs. Meta API setup still needs the authenticated publishing ID and token; Business conversion is neither required nor desired |
 | Rumble | account `282015440`, channel `7820170` | The exact seven corrected videos and thumbnails are locally verified, but the August 8 cache reset invalidated the staged forms. Existing Episode 7 video `v7bvtu4` is not in revision-11 description parity. The batch is blocked until a human restages it with the current copy, Option C, Unlisted, all syndication off, and Premium off; reviews third-party asset rights; completes the on-site rights/Terms controls; and submits |
 
 Mutable profile URLs are stored in `publishing/platforms.json`; they are not a
@@ -408,9 +416,10 @@ per-platform gates with unchanged policy revision, a secure running local host
 control that allowlists the exact platform, and the adapter's account/capability
 preflight. Missing or insecure `automation-control.json` means paused. The
 controller reloads that local control immediately before every mutating step.
-Live machine control is generation 1, `running`, and allowlists only Vimeo. Both
-publisher timers are enabled and active, but the controller queue is empty and
-the last offline intake run succeeded with no ready delivery. A timer cannot
+Live machine control is generation 1, `running`, and allowlists only Vimeo. The
+offline intake timer is enabled and active; the controller timer is disabled and
+inactive. The controller queue is empty and the last offline intake run succeeded
+with no ready delivery. A timer cannot
 prepare its own authorization or enqueue work; every live write still requires
 the exact reviewed release and all tracked gates.
 
@@ -452,9 +461,12 @@ commit under `~/.local/share/drm-publisher/releases/<git-sha>/`, installs
 production dependencies with Node `22.22.0`, atomically switches the `current`
 symlink, and pins the systemd service to both that release and build SHA. The
 default installation keeps both timers disabled unless `--enable` is supplied.
-The current host was explicitly enabled and points to immutable build
-`69f059ce22267f02dc5918492b10066ff9ad704c`. Deploy a replacement only from a
-reviewed merged commit; service enablement is a separate, intentional choice.
+At the August 22 pre-reconciliation snapshot, build
+`84f606ca8d899d1c8ac9a6890ecbb073cfd11b8f` was installed, intake was
+enabled/active, and the controller was disabled/inactive. Read
+`current/release.json` for the authoritative installed commit. Deploy a
+replacement only from a reviewed merged commit; service enablement is a
+separate, intentional choice.
 
 ### Isolated Browser
 
@@ -661,27 +673,29 @@ After every non-null master-catalog destination has an exact verified website re
   use the existing episode's menu in Spotify for Creators, choose `Upload video`,
   upload the approved `fullVideo`, preview, and publish against that exact RSS
   episode. For an audio-only episode, make no separate Spotify upload.
-- Completed August 7: corrected video is attached to all seven existing episode
-  IDs, and public readback verifies video, approved artwork, and approved copy
-  for 7/7. Never create a duplicate episode or upload fallback `podcastAudio`
-  directly.
-- Episode 5's verified master preserves its approximately 39 Mbps source video;
-  do not send that file to Spotify. Its separately validated 3.92 Mbps muxed
-  derivative is `episode-005-spotify-video` in catalog revision 8 and is bound
-  to the immutable receipt in the audit's `platformDerivedVideos` ledger. Use
-  that asset for the existing Episode 5 Spotify identity only.
+- Six corrected video attachments remain public. Episode 5 preserves episode ID
+  `6fQAClcR4AAuueHjBNlrJC` and corrected RSS audio but is currently audio-only
+  after three video attempts reached processing and reverted. The strict MOV met
+  Spotify's published media specifications; the Creator Support request is
+  staged for owner review. Never create a duplicate episode or upload fallback
+  `podcastAudio` directly.
+- Episode 5's verified master preserves its high-bitrate source video; do not
+  send that file to Spotify. Its separately validated 3.90 Mbps muxed derivative
+  is `episode-005-spotify-video` in catalog revision 13. Use only an approved
+  derivative for the existing Episode 5 Spotify identity.
 - Preserve show ID `7GGLljxmO0G3FLjPy8vfcw`.
 
 ### Corrected Audio Replacement
 
-- The full-file loudness audit is `publishing/audio-replacement-audit.json`.
-  The seven prior RSS enclosures measured between `-30.99` and `-28.42` LUFS.
-  The seven local delivery videos and MP3s were fingerprint-verified in catalog
-  revision 7; catalog revision 8 additionally registers Episode 5's validated
-  Spotify derivative. Delivery audio measures between `-16.47` and `-16.05`
-  LUFS with true peak at or below `-1.29` dBTP. All seven normalized remote
-  enclosures now preserve their GUIDs and pass download, full-decode, and
-  loudness gates; downstream directory refresh remains unverified.
+- The historical August 7 full-file loudness audit is
+  `publishing/audio-replacement-audit.json`. The seven prior RSS enclosures
+  measured between `-30.99` and `-28.42` LUFS. The seven August 7 delivery
+  videos and MP3s were fingerprint-verified in catalog revision 7; catalog
+  revision 8 additionally registered Episode 5's validated Spotify derivative.
+  That batch measured between `-16.47` and `-16.05` LUFS with true peak at or
+  below `-1.29` dBTP. Catalog revision 13 supersedes Episode 5 with its August 22
+  audio binary while preserving the existing GUID. Audit every replacement
+  against its own current binary rather than reusing the historical batch range.
 - Hash, fully decode, probe, and measure every supplied audio file and every
   affected video soundtrack before any platform write. Confirm duration and A/V
   sync against the existing release.
@@ -854,10 +868,11 @@ canonical, canonical copy is clean, and the legacy Anchor URL returns one direct
 
 1. Keep the old-host redirect and Spotify account active for at least 90 days.
 2. Verify the canonical feed and redirect periodically while caches converge.
-3. Completed August 7: restored corrected video to all seven existing Spotify
-   episode identities and verified public video, approved art, and approved copy
-   for 7/7. For future video episodes, retain the existing-episode attachment
-   procedure; intentionally audio-only episodes need no direct Spotify upload.
+3. Six corrected Spotify video attachments remain public. Episode 5 preserves
+   its existing identity and corrected RSS audio but is audio-only pending the
+   staged Creator Support request. For future video episodes, retain the
+   existing-episode attachment procedure; intentionally audio-only episodes need
+   no direct Spotify upload.
 4. Resolve Apple Support case `20000130526608` under the fail-closed gates in
    `publishing/apple-guid-repair.json`: request Apple server-side remapping
    first, confirm whether RSS.com can make an in-place GUID-only correction,
@@ -1006,8 +1021,9 @@ or remote content IDs.
    documented post-publication workflow.
 10. Completed for routing: Apple show `1870433419` points directly to RSS.com.
     Pending: repair its Draft/Available and structured-cache discrepancy, submit
-    the feed once to Amazon, and verify Apple/Amazon propagation. Spotify video
-    restoration is complete for 7/7 existing episode IDs.
+    the feed once to Amazon, and verify Apple/Amazon propagation. Spotify audio
+    reaches all seven stable episode IDs; video is present on six, with Episode 5
+    audio-only pending Creator Support.
 11. Run a cross-platform audit and keep the crosswalk as evidence.
 
 Do not try to make the internet change atomically. Make the source changes in a
@@ -1382,15 +1398,15 @@ Quarterly:
    gates, and all seven existing RSS.com enclosures were replaced with normalized
    audio while preserving GUIDs. Remote downloads, full decodes, and loudness
    gates passed for 7/7.
-4. Completed August 7: corrected video is attached to all seven existing Spotify
-   episode IDs and publicly verified with approved art/copy. Episode 5 uses its
-   validated Spotify-specific derivative while preserving the high-bitrate
-   catalog master binding.
+4. Historical August 7 baseline: corrected video was attached to all seven
+   existing Spotify episode IDs with approved art/copy. Current August 22 state:
+   six video attachments remain; Episode 5 preserves its identity and corrected
+   RSS audio but is audio-only pending the staged Creator Support request.
 5. Submit the canonical RSS.com feed once to Amazon and record its stable
    ID/URL.
-6. Reconcile Instagram captions that use old numbered titles, add the missing
-   website link through Instagram's mobile-only control, and apply approved
-   covers to future Reels; preserve existing posts and engagement. The RSS.com,
+6. Reconcile Instagram captions that use old numbered titles and apply approved
+   covers to future Reels; preserve existing posts and engagement. The website,
+   affiliate, and contact profile links are now live. The RSS.com,
    website, YouTube, Vimeo, and Spotify episode-art batch is complete. Rumble
    remains excluded until its permission and human-rights-review gates are
    resolved.
@@ -1420,10 +1436,12 @@ Quarterly:
     control, provider write intent/checkpoints, exact-resource reconciliation,
     Vimeo/YouTube/RSS.com adapters, stale receipt-lock recovery, authenticated
     readback, automatic lifecycle receipts, and clean-commit pinned Node 22 host
-    deployment. The live host points to build
-    `69f059ce22267f02dc5918492b10066ff9ad704c`; both controller and intake timers
-    are enabled/active, generation 1 host control is running for Vimeo only, and
-    the queue is empty. The last intake run succeeded with no ready delivery.
+    deployment. At the August 22 pre-reconciliation snapshot, the installed
+    publisher pointed to immutable build `84f606ca8d899d1c8ac9a6890ecbb073cfd11b8f`;
+    read `current/release.json` for the authoritative installed commit. The intake timer is enabled and
+    active, the controller timer is disabled and inactive, generation 1 host
+    control is running for Vimeo only, and the queue is empty. The last intake
+    run succeeded with no ready delivery.
     RSS.com automation still needs Max/API-key access, and YouTube still needs
     owner OAuth plus the applicable audit; activation itself created no release.
 12. Version and test workstation-wrapper installation/recovery.
@@ -1432,11 +1450,11 @@ Quarterly:
 14. Completed locally: configure the project-scoped Dropbox root, organize 21
     approved episode-art derivatives, bind all seven corrected full-video and
     podcast-audio assets after full-file validation, and register Episode 5's
-    separately validated Spotify derivative. RSS.com normalized audio, Spotify
-    7/7 video restoration, YouTube's normalized-video cutover, and Vimeo's
-    in-place replacements are complete. Rumble's exact seven corrected assets
-    remain locally verified and unsubmitted, but require manual restaging after
-    the cache reset; complete the direct-human checklist in Section 9.
+    separately validated Spotify derivative. RSS.com normalized audio,
+    YouTube's normalized-video cutover, and Vimeo's in-place replacements are
+    complete. Six Spotify video attachments remain; Episode 5 is audio-only
+    pending the staged Creator Support request. Rumble is excluded from the
+    current release target set.
 
 ## 18. Official References
 
@@ -1550,8 +1568,10 @@ Quarterly:
 - August 7, 2026: completed all seven normalized RSS.com audio replacements with
   the August 5 captured feed GUIDs unchanged and 7/7 remote download,
   full-decode, and loudness
-  gates passed. Attached corrected video to all seven existing Spotify episode
-  IDs and verified public video, approved art, and approved copy for 7/7.
+  gates passed. At that time, corrected video was attached to all seven existing
+  Spotify episode IDs. On August 22, Episode 5's RSS enclosure was corrected in
+  place while its GUID and downstream IDs were preserved; Spotify Episode 5 is
+  now audio-only pending support, while the other six video attachments remain.
   Replaced all seven Vimeo videos in place on their stable IDs. Staged seven
   corrected Rumble uploads Unlisted without submitting them. The later release
   audit above identified the hidden YouTube-syndication blocker and the remaining

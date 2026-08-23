@@ -35,10 +35,11 @@ and 2 records contain historical GUIDs that differ from the current feed. The
 blocked repair crosswalk and gates are in `publishing/apple-guid-repair.json`.
 Do not change either live GUID until Apple-side remapping, RSS.com in-place edit
 capability, and Spotify identity preservation have been reviewed. On August 7,
-corrected video was restored against
-all seven existing Spotify episode IDs after the masters passed the loudness and
-sync checks in `publishing/audio-replacement-audit.json`; independent public
-checks now report video, exact copy, and approved artwork for all seven.
+corrected video was restored against all seven existing Spotify episode IDs
+after the masters passed the loudness and sync checks in
+`publishing/audio-replacement-audit.json`. As of August 22, six video
+attachments remain; Episode 5 preserves its episode ID and corrected RSS audio
+but is audio-only pending the staged Creator Support request.
 
 ## Operating Role
 
@@ -95,10 +96,10 @@ checks now report video, exact copy, and approved artwork for all seven.
   despite valid source items and audio. Repair that listing in place through
   the submitted Apple support request; do not recreate or manually upload those
   episodes.
-- The seven current RSS audio enclosures are the August 7 normalized replacements.
-  They measure between `-16.91` and `-16.75` LUFS with true peak no higher than
-  `-1.86 dBTP`; their exact remote bytes fully decode and their captured August 5
-  GUIDs are unchanged. Treat every later render as a new binary: hash and fully decode it,
+- Six current RSS audio enclosures are the August 7 normalized replacements;
+  Episode 5 is the corrected August 22 binary registered in catalog revision 13.
+  All seven retain their captured August 5 GUIDs. Treat every later render as a
+  new binary: hash and fully decode it,
   require `-17` through `-15` LUFS and true peak no higher than `-1 dBTP`, then
   replace the existing RSS.com episode audio without changing its GUID or other
   identity fields.
@@ -123,15 +124,15 @@ checks now report video, exact copy, and approved artwork for all seven.
   Terms last modified July 21, including the general-license AI/ML training and
   third-party AI sublicensing provisions. That acceptance is not an asset-rights
   attestation and does not grant Rumble's required written automation permission.
-- `publishing/master-catalog.json` revision 12 is the current distribution
-  metadata authority. Revision 12 mounts the exact Show Brand Package
-  `1.0.0-rc1` hashes for local verification only; that package still requires
-  owner visual approval and has no remote publishing authorization. Supabase
-  remains the production authority for website-only editorial content;
-  overlapping identity/title/audio fields are verified projections of the
-  master. The August 8 Episode 7 correction passed guarded production migration
-  and independent editorial readback. Current destination parity is recorded in
-  `publishing/episode-description-correction.json`.
+- `publishing/master-catalog.json` revision 13 is the current distribution
+  metadata authority. It records the corrected Episode 5 video, podcast-audio,
+  and Spotify-derivative fingerprints, the corrected RSS enclosure, and the
+  30-minute runtime while preserving all stable episode and show identities.
+  Revision 13 also retains the exact Show Brand Package `1.0.0-rc1` hashes for
+  local verification only; that package still requires owner visual approval
+  and has no remote publishing authorization. Supabase remains the production
+  authority for website-only editorial content; overlapping identity, title,
+  and audio fields are verified projections of the master.
 - Project-scoped Dropbox contains the canonical fingerprinted binary masters;
   it is not metadata authority. Vimeo is a distribution and recovery copy, not
   a co-master. RSS.com is the canonical published-audio host/feed, while the
