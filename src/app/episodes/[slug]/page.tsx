@@ -157,12 +157,20 @@ export default async function EpisodeDetailPage({
           </header>
 
           {/* Video Player */}
-          <div className="rounded-2xl border border-border bg-surface overflow-hidden">
+          <section
+            aria-labelledby={`video-player-${episode.slug}`}
+            className="rounded-2xl border border-border bg-surface overflow-hidden"
+          >
             <div className="flex items-start justify-between gap-4 border-b border-border px-5 py-4 sm:px-6">
               <div>
-                <p className="text-body-sm font-semibold text-foreground">Watch the video</p>
-                <p className="mt-1 text-caption text-foreground-subtle">
-                  Move your pointer over the video to show its playback controls.
+                <h2
+                  id={`video-player-${episode.slug}`}
+                  className="text-body-sm font-semibold text-foreground"
+                >
+                  Watch the video
+                </h2>
+                <p className="mt-1 text-caption text-foreground-muted">
+                  Select play to load the video and access its playback controls.
                 </p>
               </div>
               <span className="shrink-0 rounded-full border border-border bg-background px-3 py-1 text-caption font-semibold uppercase tracking-wider text-foreground-muted">
@@ -266,7 +274,7 @@ export default async function EpisodeDetailPage({
                 </div>
               </div>
             )}
-          </div>
+          </section>
 
           {(episode.audioUrl || episode.spotifyId) && (
             <section
