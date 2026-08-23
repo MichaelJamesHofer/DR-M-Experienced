@@ -158,6 +158,17 @@ export default async function EpisodeDetailPage({
 
           {/* Video Player */}
           <div className="rounded-2xl border border-border bg-surface overflow-hidden">
+            <div className="flex items-start justify-between gap-4 border-b border-border px-5 py-4 sm:px-6">
+              <div>
+                <p className="text-body-sm font-semibold text-foreground">Watch the video</p>
+                <p className="mt-1 text-caption text-foreground-subtle">
+                  Move your pointer over the video to show its playback controls.
+                </p>
+              </div>
+              <span className="shrink-0 rounded-full border border-border bg-background px-3 py-1 text-caption font-semibold uppercase tracking-wider text-foreground-muted">
+                Video
+              </span>
+            </div>
             {episode.vimeoId ? (
               <VimeoPlayer
                 videoId={episode.vimeoId}
@@ -208,26 +219,6 @@ export default async function EpisodeDetailPage({
                 )}
               </div>
             )}
-            {(episode.audioUrl || episode.spotifyId) && (
-              <div className="p-4 border-t border-border">
-                {episode.audioUrl ? (
-                  <audio controls preload="none" className="min-w-0 w-full max-w-full" src={episode.audioUrl}>
-                    Your browser does not support audio.
-                  </audio>
-                ) : episode.spotifyId ? (
-                  <iframe
-                    title={`Listen: ${episodeDisplayTitle(episode)}`}
-                    src={`https://open.spotify.com/embed/episode/${episode.spotifyId}?utm_source=generator`}
-                    width="100%"
-                    height="232"
-                    allowFullScreen
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                    loading="lazy"
-                    className="rounded-lg"
-                  />
-                ) : null}
-              </div>
-            )}
             {hasComingSoonReference && (
               <div className="px-4 pb-4 pt-2 border-t border-border bg-surface">
                 <p className="text-body-xs text-foreground-subtle">
@@ -276,6 +267,59 @@ export default async function EpisodeDetailPage({
               </div>
             )}
           </div>
+
+          {(episode.audioUrl || episode.spotifyId) && (
+            <section
+              aria-labelledby={`audio-player-${episode.slug}`}
+              className="rounded-2xl border border-primary/25 bg-surface-elevated p-5 shadow-sm sm:p-6"
+            >
+              <div className="mb-5 flex items-start justify-between gap-4">
+                <div className="flex min-w-0 items-start gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l11-2v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm11-2c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z" />
+                    </svg>
+                  </span>
+                  <div className="min-w-0">
+                    <h2
+                      id={`audio-player-${episode.slug}`}
+                      className="text-heading font-semibold text-foreground"
+                    >
+                      Listen to the audio edition
+                    </h2>
+                    <p className="mt-1 text-body-sm text-foreground-muted">
+                      This audio player is separate from the video above.
+                    </p>
+                  </div>
+                </div>
+                <span className="shrink-0 rounded-full bg-primary/10 px-3 py-1 text-caption font-semibold uppercase tracking-wider text-primary">
+                  Audio
+                </span>
+              </div>
+              {episode.audioUrl ? (
+                <audio
+                  aria-label={`Audio edition: ${episodeDisplayTitle(episode)}`}
+                  controls
+                  preload="none"
+                  className="min-w-0 w-full max-w-full"
+                  src={episode.audioUrl}
+                >
+                  Your browser does not support audio.
+                </audio>
+              ) : episode.spotifyId ? (
+                <iframe
+                  title={`Listen: ${episodeDisplayTitle(episode)}`}
+                  src={`https://open.spotify.com/embed/episode/${episode.spotifyId}?utm_source=generator`}
+                  width="100%"
+                  height="232"
+                  allowFullScreen
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                  className="rounded-lg"
+                />
+              ) : null}
+            </section>
+          )}
 
           {/* Key Takeaways */}
           <section className="rounded-2xl border border-border bg-surface p-8">
