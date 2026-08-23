@@ -120,8 +120,8 @@
       "currentEpisodeCount": 7,
       "guidsPreserved": true,
       "remoteLoudnessGatesPassed": 7,
-      "remoteReplacementVerifiedAt": "2026-08-07T06:07:40.834Z",
-      "notes": "All seven existing episodes now use remotely verified normalized enclosures with the GUIDs captured from Anchor on August 5 unchanged. RSS.com remains the canonical audio host and feed source for Spotify, Apple Podcasts, and Amazon Music/Audible. For future episodes, publish the approved podcastAudio here first and never use the full-video master as its audio asset. The XML feed is clean; the separate public landing-page metadata still exposes a cached RSSVERIFY token."
+      "remoteReplacementVerifiedAt": "2026-08-22T21:35:08Z",
+      "notes": "All seven existing episodes use remotely verified normalized enclosures with the GUIDs captured from Anchor on August 5 unchanged. Episode 5 was corrected in place on August 22, 2026; episode ID 3050762 and GUID e9f7596f-0333-49ca-8946-bc11e96b2091 were preserved, and the canonical feed now exposes the corrected 29:45 enclosure. RSS.com remains the canonical audio host and feed source for Spotify, Apple Podcasts, and Amazon Music/Audible. For future episodes, publish the approved podcastAudio here first and never use the full-video master as its audio asset. The XML feed is clean; the separate public landing-page metadata still exposes a cached RSSVERIFY token."
     },
     "spotify": {
       "label": "Spotify for Creators",
@@ -136,12 +136,12 @@
       ],
       "asset": "fullVideo",
       "rssRole": "direct_media_destination",
-      "currentVideoState": "seven_corrected_videos_public_verified",
-      "currentVideoEpisodeCount": 7,
-      "videoStateAuditedAt": "2026-08-07",
+      "currentVideoState": "six_corrected_videos_public_verified_episode_5_audio_only_support_pending",
+      "currentVideoEpisodeCount": 6,
+      "videoStateAuditedAt": "2026-08-22",
       "approvedArtworkVerified": true,
       "approvedCopyVerified": true,
-      "notes": "All seven corrected videos are attached to the seven existing Spotify episode IDs and public readback confirms video, approved artwork, and approved copy for 7/7. There is no account-wide video switch. For a future video episode, wait for RSS.com audio to create the episode in this existing show, then use that exact episode's Upload video action with the approved fullVideo. For an audio-only episode, make no separate Spotify upload. Never create a duplicate episode; Spotify does not expose a public creator episode-upload API for this workflow."
+      "notes": "Six episodes retain their corrected Spotify video attachments. Episode 5 preserves its existing Spotify episode ID and corrected RSS audio but is currently audio-only after three same-ID video attempts reached processing and reverted; the strict MOV met Spotify's published media specifications, and a Creator Support request is staged for owner review. There is no account-wide video switch. For a future video episode, wait for RSS.com audio to create the episode in this existing show, then use that exact episode's Upload video action with the approved fullVideo. For an audio-only episode, make no separate Spotify upload. Never create a duplicate episode; Spotify does not expose a public creator episode-upload API for this workflow."
     },
     "apple": {
       "label": "Apple Podcasts",
@@ -156,7 +156,7 @@
       ],
       "source": "rss",
       "dependsOn": "rss.com",
-      "notes": "Do not upload the episode separately. Apple receives the approved podcast audio and item-level episode artwork from RSS.com's canonical feed. Preserve show ID 1870433419. The duplicate show ID 1896845422 now returns 404 and the stale manual Episode 4 Draft was archived on August 6, 2026. Public show 1870433419 exposes Episodes 3-7. Under case 20000130526608, Apple confirmed its existing Episode 1-2 records use older GUIDs than the current feed; the exact blocked crosswalk is in publishing/apple-guid-repair.json. Do not change the feed, delete, or recreate episodes until RSS.com in-place capability and Spotify identity preservation are confirmed. Apple public JSON-LD/search caches also retain legacy show wording for Episodes 4-7."
+      "notes": "Do not upload the episode separately. Apple receives the approved podcast audio and item-level episode artwork from RSS.com's canonical feed. Preserve show ID 1870433419. Apple Podcasts Connect and public readback verified that Episode 5 retained Apple episode ID 1000774398633 and now exposes the corrected 29:45 RSS enclosure; its automatically generated transcript is set to Not Displayed. The duplicate show ID 1896845422 now returns 404 and the stale manual Episode 4 Draft was archived on August 6, 2026. Public show 1870433419 exposes Episodes 3-7. Under case 20000130526608, Apple confirmed its existing Episode 1-2 records use older GUIDs than the current feed; the exact blocked crosswalk is in publishing/apple-guid-repair.json. Do not change the feed, delete, or recreate episodes until RSS.com in-place capability and Spotify identity preservation are confirmed. Apple public JSON-LD/search caches also retain legacy show wording for Episodes 4-7."
     },
     "amazon": {
       "label": "Amazon Music and Audible",
@@ -186,12 +186,12 @@
         "containerId"
       ],
       "asset": "fullVideo",
-      "currentVideoState": "seven_normalized_replacements_public_verified",
+      "currentVideoState": "six_normalized_replacements_plus_episode_5_same_id_trim_public_verified",
       "currentPublicVideoCount": 7,
       "priorVideoState": "seven_prior_uploads_unlisted_with_replacement_links",
       "priorVideoCount": 7,
       "priorVideosDeleted": false,
-      "cutoverVerifiedAt": "2026-08-07T07:46:32Z",
+      "cutoverVerifiedAt": "2026-08-23T00:29:53Z",
       "apiAutomation": {
         "enabled": false,
         "policyRevision": 1,
@@ -202,7 +202,7 @@
         "ownerTokenConfigured": false,
         "publicUploadAuditVerified": false
       },
-      "notes": "The seven normalized replacement videos are public with exact catalog titles, YouTube-safe descriptions, and approved thumbnails. Each prior upload remains unlisted and directly playable, and its description links to the corresponding replacement; preserve those prior IDs as rollback evidence. The user approved the Google Cloud terms on August 8, 2026. That approval does not satisfy the still-missing channel-owner OAuth grant or applicable YouTube compliance audit, so API automation remains disabled."
+      "notes": "Six normalized replacement videos remain public with exact catalog titles, YouTube-safe descriptions, and approved thumbnails. Episode 5 preserves public video ID N_F0hhHkIQ4; its same-ID emergency trim removed the contaminated interval and current YouTube Studio readback reports 29:45. The separate private corrected-upload candidate was deleted after the preserved-ID trim succeeded. Prior normalized-cutover uploads for the other episodes remain unlisted and directly playable with replacement links; preserve those IDs as rollback evidence. The user approved the Google Cloud terms on August 8, 2026. That approval does not satisfy the still-missing channel-owner OAuth grant or applicable YouTube compliance audit, so API automation remains disabled."
     },
       "vimeo": {
       "label": "Vimeo",
@@ -228,7 +228,7 @@
       ],
       "shortMetadataDriftVideoIds": [],
       "stableVideoIdsPreserved": true,
-      "replacementStateAuditedAt": "2026-08-07",
+      "replacementStateAuditedAt": "2026-08-22",
       "shortStateAuditedAt": "2026-08-08T20:43:49Z",
       "apiAutomation": {
         "enabled": true,
@@ -240,7 +240,7 @@
         "developerAddendumAndTermsAccepted": true,
         "developerAddendumAndTermsAcceptedAt": "2026-08-08"
       },
-      "notes": "All seven corrected episode videos were replaced in place and verified on their existing IDs. Preserve those stable IDs. The three cataloged Instagram shorts are also published on Vimeo as 1216695521, 1216695522, and 1204939542 with canonical metadata and posters. Private first-party app 540274 and an owner-only upload/edit token are configured on this workstation. The user explicitly accepted Vimeo's Developer Addendum and Terms for the Dr. M Experienced Publisher app on August 8, 2026; future approved creates can use the official API."
+      "notes": "All seven corrected episode videos are verified on their existing IDs. Episode 5 was replaced in place again on August 22, 2026 and preserved video ID 1204939658; preserve every stable ID. The three cataloged Instagram shorts are also published on Vimeo as 1216695521, 1216695522, and 1204939542 with canonical metadata and posters. Private first-party app 540274 and an owner-only upload/edit token are configured on this workstation. The user explicitly accepted Vimeo's Developer Addendum and Terms for the Dr. M Experienced Publisher app on August 8, 2026; future approved creates can use the official API."
     },
     "instagram": {
       "label": "Instagram",
@@ -251,7 +251,7 @@
         "containerId": null
       },
       "publicProfileId": "80068141150",
-      "publicExternalUrl": null,
+      "publicExternalUrl": "https://www.drmexperienced.com/",
       "publicProfessionalAccountVerified": true,
       "publicProfessionalAccountVerifiedAt": "2026-08-07",
       "publicBusinessAccount": false,
@@ -263,8 +263,8 @@
       "fallbackMode": "temporary_public_media_staging",
       "accountType": "creator_professional",
       "accountTypeConfirmedAt": "2026-08-07",
-      "publicPostCount": 3,
-      "publicPostCountVerifiedAt": "2026-08-08T20:05:16Z",
+      "publicPostCount": 4,
+      "publicPostCountVerifiedAt": "2026-08-23T00:29:53Z",
       "shortFormCatalog": "publishing/short-form-catalog.json",
       "catalogedPublicMediaIds": [
         "3818274203859121888",
@@ -278,7 +278,7 @@
         "authenticatedPublishingIdRequired": true,
         "directInstagramLoginAlternative": "temporary_public_media_staging"
       },
-      "notes": "Public profile data independently confirms this is an Instagram Creator professional account and not a Business account, which is the correct classification for Dr. David Musnick as a creator. The public profile has exact name and bio but no external website link. All three public Reels have distinct captions and catalog mappings to verified local masters. The separate professionalAccountVerified field remains false until the stable authenticated Graph API publishing ID is read back; do not substitute the public profile ID. Add the website listening hub and complete Meta app authorization before API automation. Meta's local resumable route requires Facebook Login for Business and a linked Page but does not require converting Instagram to Business; direct Instagram Login instead requires temporary public media staging."
+      "notes": "Public profile data independently confirms this is an Instagram Creator professional account and not a Business account, which is the correct classification for Dr. David Musnick as a creator. The public profile has the exact name and bio plus links to the website, affiliate guide, and contact page. All three cataloged public Reels retain distinct captions and mappings to verified local masters; the profile currently reports four posts. The separate professionalAccountVerified field remains false until the stable authenticated Graph API publishing ID is read back; do not substitute the public profile ID. Complete Meta app authorization before API automation. Meta's local resumable route requires Facebook Login for Business and a linked Page but does not require converting Instagram to Business; direct Instagram Login instead requires temporary public media staging."
     },
     "rumble": {
       "label": "Rumble",

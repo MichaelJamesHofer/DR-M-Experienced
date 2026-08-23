@@ -164,12 +164,13 @@ immediate feed change. Follow this fail-closed sequence:
    Available episodes.
 6. Pending: submit and claim the RSS.com feed once in Amazon without creating a
    duplicate listing.
-7. Completed August 7, 2026: corrected video is attached to all seven existing
-   Spotify episode IDs and public readback verifies video, approved artwork, and
-   approved copy. Preserve those IDs and attached videos during the blocked
-   Apple GUID incident. For new video episodes, let RSS establish the episode
-   identity, then use that episode's `Upload video` action in Spotify for
-   Creators; there is no show-wide video toggle.
+7. Historical August 7 baseline: corrected video was attached to all seven
+   existing Spotify episode IDs with approved artwork and copy. As of August 22,
+   six video attachments remain; Episode 5 preserves its episode ID and
+   corrected RSS audio but is audio-only pending the staged Creator Support
+   request. For new video episodes, let RSS establish the episode identity, then
+   use that episode's `Upload video` action in Spotify for Creators; there is no
+   show-wide video toggle.
 
 ## Official References
 

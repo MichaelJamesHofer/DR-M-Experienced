@@ -1,6 +1,6 @@
 # Publishing Workflow Topology
 
-Last verified: August 8, 2026.
+Last verified: August 22, 2026.
 
 This document explains how one approved Dr. M release moves from an edit on
 this workstation to every supported destination. The guarded host control plane
@@ -8,12 +8,12 @@ is now implemented: immutable content-addressed asset staging, a durable queue,
 exact release authorization, layered host/platform policy gates, official
 RSS.com/Vimeo/YouTube adapters, durable provider checkpoints, exact-resource
 reconciliation, automatic receipt writes, and a one-minute user timer unit are
-present. On the verified live Otto host, both the controller and offline intake
-timers are enabled and active on immutable build
-`69f059ce22267f02dc5918492b10066ff9ad704c`. Machine control generation 1 is
-`running` with only Vimeo allowlisted. The durable queue is empty, and the last
-observed intake run succeeded with no ready deliveries. Service activation did
-not create or authorize a release.
+present. At the August 22 pre-reconciliation snapshot, the offline intake timer
+is enabled and active, while the controller timer is disabled and inactive.
+Machine control generation 1 is `running` with only Vimeo allowlisted. The
+durable queue is empty, and the last observed intake run succeeded with no ready
+deliveries. This state did not create or authorize a release. Read
+`current/release.json` for the authoritative installed commit.
 
 Start with `docs/operations-manual.md` for current account state and recovery
 procedures. Machine-readable catalog, routing, and incident files remain more
@@ -68,7 +68,7 @@ flowchart LR
     Stage[Content-addressed asset staging\nSHA-256 and mode 0600\nLOCAL]
     Control[Host control generation 1\nRunning, Vimeo only\nLOCAL]
     Queue[Atomic multi-target node:sqlite queue\nLOCAL]
-    Dispatch[Pinned Node 22 controller\nTimer enabled and active\nLOCAL]
+    Dispatch[Pinned Node 22 controller\nTimer disabled and inactive\nLOCAL]
     Checkpoint[Write intent and provider checkpoint\nLOCAL private state]
     Reconcile[Exact-resource reconciliation\nand authenticated readback\nLOCAL]
     Receipt[Immutable receipt ledger\nLOCAL]
@@ -130,7 +130,8 @@ flowchart LR
 The arrows from `Dispatch` are capability paths, not evidence of a release.
 `dispatch` only enqueues the exact targets in a valid immutable authorization;
 it contacts no platform, and all targets enter one SQLite transaction or none
-do. The enabled controller timer invokes one guarded pass at a one-minute
+do. The controller timer is currently disabled and inactive; when explicitly
+enabled for an approved release, it invokes one guarded pass at a one-minute
 cadence with up to 10 seconds of jitter. The current queue is empty.
 Each controller pass requires a secure running host-control file, its platform
 in the local allowlist, the tracked global gate, the tracked per-platform gate
@@ -257,7 +258,7 @@ flowchart TD
 | Poll | Vimeo, YouTube, and RSS adapters poll provider processing | Long-running asynchronous continuation beyond current bounded polls |
 | Reconcile | A write-intent marker plus hashed, sequenced private provider checkpoints force exact-resource resume; adapters perform authenticated readback | Independent public/cache checks and catalog projection remain to be automated |
 | Receipt | Adapter lifecycle writes are integrated with the immutable receipt state machine; stale locks recover only after age and dead-owner checks | Production exercise against one approved new release |
-| Host deployment | Clean commit `69f059ce22267f02dc5918492b10066ff9ad704c` is archived, atomically linked, and running with pinned Node 22/build SHA; both timers are enabled/active | Exercise reboot persistence and the first approved release; future default installs remain disabled without `--enable` |
+| Host deployment | August 22 pre-reconciliation snapshot: immutable build `84f606ca8d899d1c8ac9a6890ecbb073cfd11b8f`, intake enabled/active, controller disabled/inactive; `current/release.json` is authoritative | Reconcile the clean branch-backed publisher before Episode 8, then exercise reboot persistence and the first approved release; default installs remain disabled without `--enable` |
 | Website | Strict build and GitHub Pages deployment on `main` are live | Automated reviewed catalog/Supabase projection and post-deploy route checks |
 | Notify | Human summary only | Exception inbox plus final release summary |
 
@@ -326,8 +327,8 @@ flowchart LR
 | Platform metadata sync helper | `scripts/sync-episodes.mjs` | Reads Vimeo, Spotify, and YouTube metadata into a checked-in aid | `LOCAL`; optional, not publication |
 | Static website pipeline | `.github/workflows/deploy.yml` | Tests, strict build, artifact, and GitHub Pages deployment | `LIVE` |
 | Control database | `~/.local/state/drm-publisher/control/publisher.sqlite3` | Atomic operation graphs, dependencies, leases/heartbeats, write intent, private hashed provider checkpoints, create slots, results, and audit events | `LOCAL`, mode `0600`, queue empty |
-| Pinned host release | `~/.local/share/drm-publisher/releases/<git-sha>/` plus `current` symlink | Clean-commit archive, production dependencies, build SHA, and Node 22 runtime | `LIVE`; `current` resolves to `69f059ce22267f02dc5918492b10066ff9ad704c`; redeploy only after merge and review |
-| Release controller service | `drm-publisher-controller.service` plus `.timer` | Runs one guarded queue pass at a one-minute cadence with up to 10 seconds of jitter and restart persistence | `LIVE`; enabled and active; queue empty |
+| Pinned host release | `~/.local/share/drm-publisher/releases/<git-sha>/` plus `current` symlink | Clean-commit archive, production dependencies, build SHA, and Node 22 runtime | Pre-reconciliation August 22 snapshot resolves to `84f606ca8d899d1c8ac9a6890ecbb073cfd11b8f`; read `current/release.json` for the authoritative installed commit and redeploy only after merge and review |
+| Release controller service | `drm-publisher-controller.service` plus `.timer` | Runs one guarded queue pass at a one-minute cadence with up to 10 seconds of jitter and restart persistence | `LIVE`; installed but disabled and inactive; queue empty |
 | Dropbox intake service | `drm-publisher-intake.service` plus `.timer` | Scans sealed bundles every two minutes, with network denied and Dropbox read-only, then invokes only `prepare` | `LIVE`; enabled and active; last observed run succeeded with no ready deliveries |
 | Operator inbox/dashboard | Not created | One approval surface, exceptions, and final release report | `PENDING` |
 
@@ -607,7 +608,7 @@ credential yet:
 | 6 | Add Spotify-video handoff | Wait for the RSS episode, identify its exact existing ID, guide the attended replacement, and reconcile without duplicate creation |
 | 7 | Automate catalog/Supabase projection and site PR | Only verified IDs are written; strict verifier, CI, Pages deploy, and public route check all pass |
 | 8 | Add exception inbox and completion report | The owner sees one approval request and only actionable failures thereafter |
-| 9 | Exercise the hardened live host | The clean commit-addressed Node 22 release and both timers are deployed; verify first sealed-delivery intake, staging, atomic enqueue, host/gate pauses, checkpoints, reconciliation, stale-lock recovery, reboot behavior, and one approved real release |
+| 9 | Exercise the hardened live host | Reconcile a clean branch-backed Node 22 release, retain intake supervision, and enable the controller only for an exact approved exercise; verify sealed-delivery intake, staging, atomic enqueue, host/gate pauses, checkpoints, reconciliation, stale-lock recovery, reboot behavior, and one approved real release |
 
 Until the relevant gates pass end to end on a new release, describe the system
 as **implemented approval-first publishing automation with platform-specific
@@ -690,10 +691,11 @@ The production installer, `ops/install-publisher-host.sh`, refuses a dirty
 checkout, archives one full Git commit under its SHA, installs production
 dependencies with Node `22.22.0`, atomically switches the `current` link, and
 pins the service to that release and build SHA. Its default leaves the timers
-disabled unless `--enable` is supplied. This host was explicitly enabled and
-currently runs immutable build
-`69f059ce22267f02dc5918492b10066ff9ad704c`; that live state does not change the
-installer default.
+disabled unless `--enable` is supplied. At the August 22 pre-reconciliation
+snapshot, build `84f606ca8d899d1c8ac9a6890ecbb073cfd11b8f` was installed, intake was
+enabled/active, and the controller was disabled/inactive. Read
+`current/release.json` for the authoritative installed commit; this state does
+not change the installer default.
 
 ### Final operator experience
 

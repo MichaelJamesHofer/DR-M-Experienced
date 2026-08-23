@@ -169,12 +169,13 @@ approved artwork derivatives are organized under `dropbox:episodes` and the
 seven catalog thumbnail records are independently fingerprinted. The seven
 corrected videos and seven derived podcast-audio MP3s passed full decode,
 loudness, duration/sync, video-packet, SHA-256, and catalog-binding checks and
-were `verified` in catalog revision 7. Catalog revision 8 additionally registers
-Episode 5's separately fingerprinted Spotify derivative while keeping the
-high-bitrate source as its master binding. The audit ledger binds that derivative
-to its immutable receipt. RSS.com's normalized audio replacement, Spotify's 7/7
-video restoration, YouTube's normalized-video cutover, and Vimeo's seven in-place
-replacements are verified. Rumble's seven corrected uploads require manual
+were `verified` in catalog revision 7. Catalog revision 13 records Episode 5's
+corrected master, podcast audio, Spotify derivative, RSS enclosure, and
+30-minute runtime. RSS.com's seven stable GUIDs, Episode 5's corrected 29:45
+enclosure, YouTube's six normalized replacements plus Episode 5 same-ID trim,
+and Vimeo's seven stable in-place identities are verified. Spotify preserves all
+seven episode IDs and corrected RSS audio, but Episode 5 is audio-only pending
+Creator Support while the other six video attachments remain. Rumble's seven corrected uploads require manual
 restaging after the browser cache reset. Their exact source videos and
 thumbnails remain locally verified. They remain unsubmitted and blocked on
 release-control correction, third-party asset-rights review, and on-site human
@@ -184,7 +185,7 @@ August 8.
 ## Distribution model
 
 - The supported RSS.com import is complete at `https://media.rss.com/dr-m-experienced/feed.xml`; all seven GUIDs, media files, and artwork assets passed parity. Preserve every imported identity.
-- The legacy Anchor URL now returns one HTTP 301 hop to RSS.com. Preserve that redirect and Spotify show `7GGLljxmO0G3FLjPy8vfcw` for RSS audio ingestion, video replacement, analytics, and continuity. All seven corrected videos are attached to the existing episode IDs and publicly verified. There is no account-wide video switch; for future video episodes, use the RSS-ingested episode's `Upload video` action after its corrected master is approved, while leaving intentionally audio-only episodes alone.
+- The legacy Anchor URL now returns one HTTP 301 hop to RSS.com. Preserve that redirect and Spotify show `7GGLljxmO0G3FLjPy8vfcw` for RSS audio ingestion, video replacement, analytics, and continuity. Six corrected video attachments remain public; Episode 5 preserves its existing ID and corrected RSS audio but is audio-only pending the staged Creator Support request. There is no account-wide video switch; for future video episodes, use the RSS-ingested episode's `Upload video` action after its corrected master is approved, while leaving intentionally audio-only episodes alone.
 - Apple show `1870433419` is configured directly to RSS.com with exact metadata, but still exposes five Available episodes. The duplicate show and stale manual Episode 4 Draft are archived. Apple case `20000130526608` confirmed that its existing Episode 1-2 records use historical GUIDs that differ from the current feed. Follow-up requests to Apple for a server-side remap, RSS.com for in-place GUID-only capability, and Spotify for episode-ID/video/analytics preservation are submitted. Spotify has acknowledged the request and is checking internally; Apple and RSS.com remain pending. `publishing/apple-guid-repair.json` records the blocked crosswalk and gates. No live GUID changed, and no change is authorized while responses are pending. Submit the RSS.com feed once to Amazon and never create duplicate directory listings.
 - Both guarded Supabase migrations were applied in production on August 7 after exact SQL-file hash verification. Seven-row readback matches catalog revision 10 for current RSS.com audio URLs, YouTube IDs, and `Watch on YouTube` references.
 - The guarded August 8 Episode 7 editorial migration and independent production

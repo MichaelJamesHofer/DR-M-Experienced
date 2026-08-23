@@ -1,6 +1,6 @@
 # New Episode Publishing Process
 
-Last verified: 2026-08-08
+Last verified: 2026-08-22
 
 Use this checklist from the final editor export through public website
 verification. The intended steady-state handoff is one sealed Dropbox delivery,
@@ -17,12 +17,12 @@ intake service and automated controller.
 
 If `publishing/hosting-migration.json` has
 `gates.publishingFreezeActive: true`, stop. Do not publish until the migration
-gate is cleared. At the August 8 live-host verification, the controller and
-offline Dropbox-intake timers were enabled and active on immutable build
-`69f059ce22267f02dc5918492b10066ff9ad704c`. Machine control generation 1 was
-`running` with only `vimeo` allowlisted, the queue was empty, and intake
-completed successfully with no ready deliveries. Enabling the services did not
-create a job or authorize a release.
+gate is cleared. The August 22 pre-reconciliation readback showed immutable publisher build
+`84f606ca8d899d1c8ac9a6890ecbb073cfd11b8f`: the offline Dropbox-intake timer is
+enabled and active, the controller timer is disabled and inactive, machine
+control generation 1 is `running` with only `vimeo` allowlisted, and the queue
+is empty. Intake completed successfully with no ready deliveries. This state did
+not create a job or authorize a release.
 
 ## 1. Register The Final Episode
 
@@ -219,11 +219,11 @@ Inspect the host without changing it:
 drm-publish host status
 ```
 
-The current expected readback is generation 1, mode `running`, and
-`allowedPlatforms: ["vimeo"]`. The enabled one-minute controller timer will
-process a due Vimeo operation only after an exact approved job is dispatched and
-every other gate passes. Do not rerun `host run` when that state is already
-correct.
+The current expected machine-control readback is generation 1, mode `running`,
+and `allowedPlatforms: ["vimeo"]`. The controller timer itself is disabled and
+inactive. If it is later enabled for an exact approved release, it can process a
+due Vimeo operation only after that job is dispatched and every other gate
+passes. Do not rerun `host run` when machine control is already correct.
 
 Use these commands only for an intentional control change or attended
 diagnostic:
@@ -238,7 +238,7 @@ drm-publish host run \
   --platforms "vimeo" \
   --confirm "run-publisher vimeo"
 
-# Optional attended pass; the active timer normally invokes the same guard path.
+# Optional attended pass; an enabled timer invokes the same guard path.
 drm-publish controller --once
 ```
 
@@ -249,11 +249,12 @@ non-allowlisted state fails closed. The controller reloads it immediately before
 every provider mutation. Rumble cannot be allowlisted.
 
 Use only the clean, commit-pinned deployment installed by
-`ops/install-publisher-host.sh`. The live host currently points to immutable
-build `69f059ce22267f02dc5918492b10066ff9ad704c`, and both publisher timers are
-enabled and active. The installer still defaults to leaving timers disabled
-unless `--enable` is supplied; that default is distinct from this verified live
-state. Do not toggle service enablement as part of an ordinary episode release.
+`ops/install-publisher-host.sh`. The August 22 pre-reconciliation snapshot was
+immutable build `84f606ca8d899d1c8ac9a6890ecbb073cfd11b8f`; read
+`current/release.json` for the authoritative installed commit. Intake is enabled
+and active, while the controller is disabled and inactive. The installer defaults
+to leaving timers disabled unless `--enable` is supplied. Do not toggle service
+enablement as part of ordinary episode staging or release preparation.
 
 ## 7. Verify Direct Adapter Results
 
