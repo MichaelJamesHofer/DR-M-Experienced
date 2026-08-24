@@ -11,10 +11,14 @@
     "lastVerifiedAt",
     "feedUrl",
     "appleShowId",
+    "appleContentProviderId",
     "appleCaseNumber",
+    "relatedAppleCaseNumbers",
     "sourceEvidence",
+    "repairMechanism",
     "supportOutreach",
     "episodes",
+    "beforeState",
     "gates",
     "constraints",
     "nextActions"
@@ -24,10 +28,15 @@
       "const": "./apple-guid-repair.schema.json"
     },
     "schemaVersion": {
-      "const": 2
+      "const": 3
     },
     "status": {
-      "const": "tri_provider_review_pending_remote_change_blocked"
+      "enum": [
+        "apple_only_overlay_approved_pending_deployment",
+        "feed_deployed_pending_apple_switch",
+        "apple_processing",
+        "verified_complete"
+      ]
     },
     "discoveredAt": {
       "type": "string",
@@ -43,8 +52,22 @@
     "appleShowId": {
       "const": "1870433419"
     },
+    "appleContentProviderId": {
+      "const": "128469457"
+    },
     "appleCaseNumber": {
       "const": "20000130526608"
+    },
+    "relatedAppleCaseNumbers": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "const": "20000144016176"
+        }
+      ],
+      "items": false,
+      "minItems": 1,
+      "maxItems": 1
     },
     "sourceEvidence": {
       "type": "object",
@@ -66,6 +89,91 @@
         }
       }
     },
+    "repairMechanism": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "configPath",
+        "sourceFeedUrl",
+        "publicFeedUrl",
+        "appleShowId",
+        "appleContentProviderId",
+        "githubPagesRequiredBuildType",
+        "allowedMutations",
+        "approval"
+      ],
+      "properties": {
+        "type": {
+          "const": "apple_only_guid_overlay"
+        },
+        "configPath": {
+          "const": "publishing/apple-feed-overlay.json"
+        },
+        "sourceFeedUrl": {
+          "const": "https://media.rss.com/dr-m-experienced/feed.xml"
+        },
+        "publicFeedUrl": {
+          "const": "https://drmexperienced.com/apple-podcasts/feed.xml"
+        },
+        "appleShowId": {
+          "const": "1870433419"
+        },
+        "appleContentProviderId": {
+          "const": "128469457"
+        },
+        "githubPagesRequiredBuildType": {
+          "const": "workflow"
+        },
+        "allowedMutations": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "channel.atom:link[rel=self].href"
+            },
+            {
+              "const": "episode-1.guid"
+            },
+            {
+              "const": "episode-2.guid"
+            }
+          ],
+          "items": false,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "approval": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "approvedAt",
+            "approvedBy",
+            "scope",
+            "acceptedRisks"
+          ],
+          "properties": {
+            "approvedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "approvedBy": {
+              "const": "owner"
+            },
+            "scope": {
+              "$ref": "#/$defs/nonBlank"
+            },
+            "acceptedRisks": {
+              "type": "array",
+              "minItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/nonBlank"
+              }
+            }
+          }
+        }
+      }
+    },
     "supportOutreach": {
       "type": "object",
       "additionalProperties": false,
@@ -83,11 +191,12 @@
             "submittedAt",
             "channel",
             "caseNumber",
+            "relatedCaseNumbers",
             "request"
           ],
           "properties": {
             "status": {
-              "const": "submitted_pending_response"
+              "const": "engineering_escalation_pending_response"
             },
             "submittedAt": {
               "type": "string",
@@ -98,6 +207,17 @@
             },
             "caseNumber": {
               "const": "20000130526608"
+            },
+            "relatedCaseNumbers": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "const": "20000144016176"
+                }
+              ],
+              "items": false,
+              "minItems": 1,
+              "maxItems": 1
             },
             "request": {
               "$ref": "#/$defs/nonBlank"
@@ -110,21 +230,26 @@
           "required": [
             "status",
             "submittedAt",
+            "respondedOn",
             "channel",
             "recipient",
             "subject",
-            "request"
+            "request",
+            "responseSummary"
           ],
           "properties": {
             "status": {
-              "const": "sent_pending_response"
+              "const": "responded_no_supported_in_place_guid_edit"
             },
             "submittedAt": {
               "type": "string",
               "format": "date-time"
             },
+            "respondedOn": {
+              "const": "2026-08-10"
+            },
             "channel": {
-              "$ref": "#/$defs/nonBlank"
+              "const": "email"
             },
             "recipient": {
               "const": "support@rss.com"
@@ -133,6 +258,9 @@
               "$ref": "#/$defs/nonBlank"
             },
             "request": {
+              "$ref": "#/$defs/nonBlank"
+            },
+            "responseSummary": {
               "$ref": "#/$defs/nonBlank"
             }
           }
@@ -184,31 +312,52 @@
       "maxItems": 2,
       "uniqueItems": true,
       "items": {
-        "oneOf": [
-          {
-            "$ref": "#/$defs/episode1"
-          },
-          {
-            "$ref": "#/$defs/episode2"
-          }
-        ]
-      },
-      "allOf": [
-        {
-          "contains": {
-            "$ref": "#/$defs/episode1"
-          },
-          "minContains": 1,
-          "maxContains": 1
+        "$ref": "#/$defs/episode"
+      }
+    },
+    "beforeState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capturedAt",
+        "manifestPath",
+        "rawEvidenceDirectory",
+        "sourceFeedSha256",
+        "sourceFeedSizeBytes",
+        "sourceEpisodeCount",
+        "applePublicSha256",
+        "applePublicSizeBytes",
+        "applePublicEpisodeCount"
+      ],
+      "properties": {
+        "capturedAt": {
+          "const": "2026-08-24T19:19:35Z"
         },
-        {
-          "contains": {
-            "$ref": "#/$defs/episode2"
-          },
-          "minContains": 1,
-          "maxContains": 1
+        "manifestPath": {
+          "const": "publishing/evidence/apple-guid-repair-before-20260824T191935Z.json"
+        },
+        "rawEvidenceDirectory": {
+          "const": ".drm-publisher/evidence/apple-guid-repair/20260824T191935Z"
+        },
+        "sourceFeedSha256": {
+          "const": "60f25c3bb1d27784534839a978614984152febdb17b53fe66a5bdec6224e1fdf"
+        },
+        "sourceFeedSizeBytes": {
+          "const": 21702
+        },
+        "sourceEpisodeCount": {
+          "const": 7
+        },
+        "applePublicSha256": {
+          "const": "4976b1e869e6aaefb8ee8b47d6bc9e3d4df3b3d47c3e7d00b44923917529a1c0"
+        },
+        "applePublicSizeBytes": {
+          "const": 225529
+        },
+        "applePublicEpisodeCount": {
+          "const": 5
         }
-      ]
+      }
     },
     "gates": {
       "type": "object",
@@ -216,48 +365,76 @@
       "required": [
         "appleSupportCrosswalkRecorded",
         "appleTitleMappingIndependentlyVerified",
-        "rssComInPlaceEditConfirmed",
+        "rssComInPlaceEditAvailable",
         "spotifyImpactReviewed",
-        "spotifyIdentityPreservationConfirmed",
+        "userAcceptedAppleIdentityRisk",
+        "overlayLocallyValidated",
         "exactRemoteChangeApproved",
         "beforeSnapshotCaptured",
+        "githubPagesWorkflowModeVerified",
         "remoteWritePerformed",
+        "overlayPublished",
         "feedVerified",
-        "appleIdentityPreserved",
-        "spotifyIdentityPreserved"
+        "sourceFeedUnchangedAfterDeploymentVerified",
+        "appleFeedUrlChanged",
+        "appleRefreshRequested",
+        "appleExistingShowPreserved",
+        "applePublicSevenEpisodesVerified",
+        "applePlaybackVerified"
       ],
       "properties": {
         "appleSupportCrosswalkRecorded": {
           "const": true
         },
         "appleTitleMappingIndependentlyVerified": {
-          "type": "boolean"
+          "const": true
         },
-        "rssComInPlaceEditConfirmed": {
-          "type": "boolean"
+        "rssComInPlaceEditAvailable": {
+          "const": false
         },
         "spotifyImpactReviewed": {
           "const": true
         },
-        "spotifyIdentityPreservationConfirmed": {
-          "type": "boolean"
+        "userAcceptedAppleIdentityRisk": {
+          "const": true
+        },
+        "overlayLocallyValidated": {
+          "const": true
         },
         "exactRemoteChangeApproved": {
-          "type": "boolean"
+          "const": true
         },
         "beforeSnapshotCaptured": {
+          "const": true
+        },
+        "githubPagesWorkflowModeVerified": {
           "type": "boolean"
         },
         "remoteWritePerformed": {
           "type": "boolean"
         },
+        "overlayPublished": {
+          "type": "boolean"
+        },
         "feedVerified": {
           "type": "boolean"
         },
-        "appleIdentityPreserved": {
+        "sourceFeedUnchangedAfterDeploymentVerified": {
           "type": "boolean"
         },
-        "spotifyIdentityPreserved": {
+        "appleFeedUrlChanged": {
+          "type": "boolean"
+        },
+        "appleRefreshRequested": {
+          "type": "boolean"
+        },
+        "appleExistingShowPreserved": {
+          "type": "boolean"
+        },
+        "applePublicSevenEpisodesVerified": {
+          "type": "boolean"
+        },
+        "applePlaybackVerified": {
           "type": "boolean"
         }
       }
@@ -282,10 +459,9 @@
   "allOf": [
     {
       "if": {
-        "type": "object",
         "properties": {
           "status": {
-            "const": "tri_provider_review_pending_remote_change_blocked"
+            "const": "apple_only_overlay_approved_pending_deployment"
           }
         },
         "required": [
@@ -298,21 +474,130 @@
           "gates": {
             "type": "object",
             "properties": {
-              "exactRemoteChangeApproved": {
+              "githubPagesWorkflowModeVerified": {
                 "const": false
               },
               "remoteWritePerformed": {
                 "const": false
               },
+              "overlayPublished": {
+                "const": false
+              },
               "feedVerified": {
                 "const": false
               },
-              "appleIdentityPreserved": {
+              "sourceFeedUnchangedAfterDeploymentVerified": {
                 "const": false
               },
-              "spotifyIdentityPreserved": {
+              "appleFeedUrlChanged": {
+                "const": false
+              },
+              "appleRefreshRequested": {
+                "const": false
+              },
+              "appleExistingShowPreserved": {
+                "const": false
+              },
+              "applePublicSevenEpisodesVerified": {
+                "const": false
+              },
+              "applePlaybackVerified": {
                 "const": false
               }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "feed_deployed_pending_apple_switch"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "gates": {
+            "type": "object",
+            "properties": {
+              "githubPagesWorkflowModeVerified": { "const": true },
+              "remoteWritePerformed": { "const": true },
+              "overlayPublished": { "const": true },
+              "feedVerified": { "const": true },
+              "sourceFeedUnchangedAfterDeploymentVerified": { "const": true },
+              "appleFeedUrlChanged": { "const": false },
+              "appleRefreshRequested": { "const": false },
+              "appleExistingShowPreserved": { "const": false },
+              "applePublicSevenEpisodesVerified": { "const": false },
+              "applePlaybackVerified": { "const": false }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "apple_processing"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "gates": {
+            "type": "object",
+            "properties": {
+              "githubPagesWorkflowModeVerified": { "const": true },
+              "remoteWritePerformed": { "const": true },
+              "overlayPublished": { "const": true },
+              "feedVerified": { "const": true },
+              "sourceFeedUnchangedAfterDeploymentVerified": { "const": true },
+              "appleFeedUrlChanged": { "const": true },
+              "appleExistingShowPreserved": { "const": true },
+              "applePublicSevenEpisodesVerified": { "const": false },
+              "applePlaybackVerified": { "const": false }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "verified_complete"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "gates": {
+            "type": "object",
+            "properties": {
+              "githubPagesWorkflowModeVerified": { "const": true },
+              "remoteWritePerformed": { "const": true },
+              "overlayPublished": { "const": true },
+              "feedVerified": { "const": true },
+              "sourceFeedUnchangedAfterDeploymentVerified": { "const": true },
+              "appleFeedUrlChanged": { "const": true },
+              "appleExistingShowPreserved": { "const": true },
+              "applePublicSevenEpisodesVerified": { "const": true },
+              "applePlaybackVerified": { "const": true }
             }
           }
         }
@@ -373,78 +658,6 @@
           "$ref": "#/$defs/uuid"
         }
       }
-    },
-    "episode1": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/episode"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "episodeNumber": {
-              "const": 1
-            },
-            "slug": {
-              "const": "brain-fog-part-1"
-            },
-            "title": {
-              "const": "Brain Fog, Part 1 - Is Your Brain in a Fog?"
-            },
-            "rssComEpisodeId": {
-              "const": "3050766"
-            },
-            "appleEpisodeId": {
-              "const": "1000746628307"
-            },
-            "spotifyEpisodeId": {
-              "const": "7cAdb8GE4khC9EYKAjmYuc"
-            },
-            "currentFeedGuid": {
-              "const": "c9b853b6-a828-4012-9998-217919ff9163"
-            },
-            "appleHistoricalGuid": {
-              "const": "59063e08-e4a6-4e56-b7ec-d2a66d69beb8"
-            }
-          }
-        }
-      ]
-    },
-    "episode2": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/episode"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "episodeNumber": {
-              "const": 2
-            },
-            "slug": {
-              "const": "brain-fog-part-2"
-            },
-            "title": {
-              "const": "Brain Fog, Part 2 - Testing and Basic Solutions"
-            },
-            "rssComEpisodeId": {
-              "const": "3050765"
-            },
-            "appleEpisodeId": {
-              "const": "1000746628422"
-            },
-            "spotifyEpisodeId": {
-              "const": "19Pct0ClX3j1EOwJ3ySVd7"
-            },
-            "currentFeedGuid": {
-              "const": "1e40e02b-b217-477c-9cc3-4271cb304c23"
-            },
-            "appleHistoricalGuid": {
-              "const": "26896da2-76cf-4865-93f8-f94ddfb24568"
-            }
-          }
-        }
-      ]
     }
   }
 }

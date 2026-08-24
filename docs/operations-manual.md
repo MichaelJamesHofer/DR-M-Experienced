@@ -1,6 +1,6 @@
 # Dr. M Experienced Ecosystem Operations Manual
 
-Last verified: August 22, 2026.
+Last verified: August 24, 2026.
 
 This is the first-stop instruction manual for the website, podcast host,
 directories, video channels, social publishing, workstation tooling, and brand
@@ -50,21 +50,15 @@ Interpretation on August 8, 2026:
 - The legacy Anchor feed returns one direct HTTP 301 hop to that exact RSS.com
   URL, which returns HTTP 200. Preserve the Spotify account and redirect while
   directories and caches converge.
-- Apple public show `1870433419` was configured directly to the RSS.com feed at
-  approximately 18:29 UTC. Its authenticated title and description are exact
-  and token-free. Episodes 3-7 are Available; RSS Episodes 1-2 remain Draft, so
-  the public episode count is still five. The duplicate Draft show and stale
-  manual Episode 4 Draft were archived after inspection. Apple still reports the
-  two valid RSS items as `DRAFTING` and `HIDDEN`. On August 7, Apple Support case
-  `20000130526608` confirmed that Apple's existing Episode 1-2 records use older
-  historical GUIDs that differ from the current feed. The fail-closed crosswalk
-  and repair gates are recorded in `publishing/apple-guid-repair.json`; no live
-  GUID change is approved. Follow-up requests are now submitted to Apple for a
-  server-side remap, RSS.com for in-place GUID-only capability, and Spotify for
-  preservation of episode IDs, attached videos, and analytics. Apple and
-  RSS.com are pending; Spotify has acknowledged the request and its advisor is
-  checking the ingestion behavior internally. No provider has been asked to
-  perform a live GUID change.
+- Apple public show `1870433419` still uses the RSS.com URL and exposes five
+  episodes. Apple case `20000130526608` supplied the historical Episode 1-2 GUID
+  crosswalk; case `20000144016176` is the later escalation. RSS.com confirmed
+  that existing episode GUIDs cannot be edited through its dashboard, support,
+  or API. On August 24 the owner approved the exact first-party Apple-only feed
+  overlay in `publishing/apple-feed-overlay.json`. Its implementation and
+  seven-item before-state are locally verified, but GitHub Pages has not been
+  changed, the feed is not deployed, and Apple has not been switched or
+  refreshed. RSS.com, Spotify, Amazon, and the master catalog remain unchanged.
 - Both guarded Supabase migrations were applied in production after exact SQL
   file-hash verification. Seven-row readback matches catalog revision 10 for
   current RSS.com audio URLs, YouTube IDs, and `Watch on YouTube` references.
@@ -146,6 +140,7 @@ Interpretation on August 8, 2026:
 | Stable account/show/channel IDs and current routing | `publishing/platforms.json` |
 | Tracked global/per-platform automation gates and policy revisions | `publishing/platforms.json` |
 | Apple Episodes 1-2 GUID incident, crosswalk, and repair gates | `publishing/apple-guid-repair.json` |
+| Apple-only derived feed rules and exact permitted GUID projection | `publishing/apple-feed-overlay.json` |
 | Approved seven-episode title-transition evidence | `publishing/episode-title-migration.json` |
 | Approved episode-art assets and remote rollout receipt | `publishing/brand/asset-manifest.json` and `publishing/episode-thumbnail-rollout.json` |
 | Episode approval schema | `publishing/episode.schema.json` |
@@ -254,11 +249,12 @@ visual indexing element on artwork, but not as `Episode N:` in the public title.
 
 The seven replacement titles are live in the canonical RSS.com feed. The local
 publisher and website accept unnumbered public titles while continuing to
-require `episodeNumber`. Apple and Spotify ingest the titles from RSS.com;
-Amazon will do so after its one-time claim. Preserve every remote content ID and
-do not change a GUID except through the blocked, support-coordinated Apple
-incident in `publishing/apple-guid-repair.json`. The exact identity, issue, and
-approved-title crosswalk is
+require `episodeNumber`. Spotify ingests the titles from RSS.com; Apple currently
+does so directly and, after the approved cutover, through the exact Apple-only
+overlay. Amazon will do so after its one-time claim. Preserve every remote
+content ID and do not change a canonical GUID. The Apple-only exception is
+isolated and gated by `publishing/apple-guid-repair.json`. The exact identity,
+issue, and approved-title crosswalk is
 `publishing/episode-title-migration.json`.
 
 ## 4. Ecosystem Map
@@ -315,7 +311,7 @@ Meta prerequisites; Rumble remains excluded.
 | Supabase | project `tdbsuzciwotleualdcjf` | Production content catalog and form receiver; Episode 5 now projects the corrected RSS enclosure and 30-minute duration, and the August 8 Episode 7 editorial correction retains its independent summary, takeaway, section, paragraph, and topic readback |
 | RSS.com | podcast `397420`, slug `dr-m-experienced`, feed `https://media.rss.com/dr-m-experienced/feed.xml` | Canonical XML/dashboard copy is exact and token-free; all seven normalized enclosures retain their GUIDs. Episode 5 preserved episode ID `3050762` and GUID `e9f7596f-0333-49ca-8946-bc11e96b2091` while moving to the corrected 29:45 enclosure on August 22. The official v4 adapter is implemented, but API access requires Max and no entitlement/key is configured, so free/manual hosting continues. The public landing-page cache still exposes `RSSVERIFY` |
 | Spotify | show `7GGLljxmO0G3FLjPy8vfcw` | All seven episode IDs are preserved. Six corrected video attachments remain public; Episode 5 is currently audio-only with the corrected RSS audio after three same-ID video attempts reverted. A Creator Support request is staged for owner review; never create a duplicate episode |
-| Apple | public show `1870433419` | Configured directly to RSS.com with exact canonical metadata. Episode 5 preserved Apple episode ID `1000774398633`, exposes the corrected 29:45 enclosure, and has its generated transcript set to Not Displayed. Five Available and two RSS Draft records remain because Episodes 1-2 use historical GUIDs; case `20000130526608` and `publishing/apple-guid-repair.json` govern that separate blocked repair |
+| Apple | public show `1870433419` | Still configured directly to RSS.com and publicly exposes five episodes. The exact Apple-only overlay is approved and locally validated but is not deployed or configured in Apple. Cases `20000130526608` and `20000144016176`, `publishing/apple-guid-repair.json`, and `publishing/apple-feed-overlay.json` govern the rollout |
 | Apple Connect | `cfab5caf-554e-4ebe-a28c-2e4748147b82` | Internal identity of the public show |
 | Apple duplicate Draft | public-style ID `1896845422`, internal `949adc0b-c62f-410c-962d-17563cf3b07a` | Inspected nonpublic no-feed show; archived August 6, 2026; public lookup returned 404 on August 7 |
 | Apple stale Episode 4 Draft | Apple episode `1000759096366`, internal `fc3cdd48-13c5-4122-b464-b62376765410` | Inspected manual subscriber episode; archived August 6, 2026 |
@@ -655,9 +651,9 @@ After every non-null master-catalog destination has an exact verified website re
 ### RSS.com
 
 - Preserve the supported import and the `dr-m-experienced` slug; do not recreate
-  episodes or change their GUIDs. The only pending exception is the blocked
-  Apple identity incident in `publishing/apple-guid-repair.json`; it requires
-  provider confirmation and every recorded gate before any remote write.
+  episodes or change their GUIDs. The approved Apple repair is a separate
+  derived feed governed by `publishing/apple-guid-repair.json`; it never mutates
+  RSS.com.
 - Publish all future canonical podcast audio here.
 - Verify exact copy, no verification token or stray season metadata, the GUID,
   enclosure, artwork, and publication date after every episode publication.
@@ -730,13 +726,13 @@ After every non-null master-catalog destination has an exact verified website re
   7 in case `20000130526608`: its existing Episode 1-2 records use historical
   GUIDs that differ from the current feed values. The exact crosswalk and repair
   gates are in `publishing/apple-guid-repair.json`.
-- On August 8, follow-up requests were submitted to Apple for a server-side
-  remap, RSS.com for in-place GUID-only capability, and Spotify for preservation
-  of the existing episode IDs, attached videos, and analytics. All responses are
-  pending. No provider was authorized to change a live GUID.
-- Do not change either live GUID, delete/recreate either RSS.com item, or create,
-  upload, or publish replacements. Await the three written responses and keep
-  the incident blocked before considering one attended, exactly approved canary.
+- RSS.com later confirmed that existing GUIDs cannot be changed through its
+  dashboard, support, or API. On August 24 the owner accepted the Apple identity
+  and duplicate risk and approved the exact derived-feed rollout recorded in
+  `publishing/apple-guid-repair.json`.
+- Do not change either RSS.com GUID, delete/recreate either RSS.com item, or
+  create a replacement Apple show. Deploy and verify the Apple-only feed, then
+  change only existing show `1870433419` to that URL.
 
 ### Amazon Music And Audible
 
@@ -873,13 +869,10 @@ canonical, canonical copy is clean, and the legacy Anchor URL returns one direct
    staged Creator Support request. For future video episodes, retain the
    existing-episode attachment procedure; intentionally audio-only episodes need
    no direct Spotify upload.
-4. Resolve Apple Support case `20000130526608` under the fail-closed gates in
-   `publishing/apple-guid-repair.json`: request Apple server-side remapping
-   first, confirm whether RSS.com can make an in-place GUID-only correction,
-   and obtain Spotify confirmation that the two existing episode IDs and their
-   attached videos will survive either proposed substitution. Do not change a
-   live GUID until an exact one-episode canary is approved and its before-state
-   and rollback path are captured.
+4. Resolve Apple Support cases `20000130526608` and `20000144016176` through the
+   approved Apple-only overlay lifecycle in `publishing/apple-guid-repair.json`.
+   Preserve RSS.com and Spotify, publish and verify the derived seven-item feed,
+   then change only existing Apple show `1870433419` to the approved URL.
 5. Submit the canonical RSS.com feed to Amazon exactly once, complete ownership
    verification, and record the stable ID and public URL.
 6. Monitor Podcast Index records `7982906` and `7799755` until the redirect crawl
@@ -918,72 +911,49 @@ the current feed GUIDs. It proves the migration baseline, not the GUIDs Apple
 first ingested. Treat Apple's case evidence as the historical crosswalk and
 `publishing/apple-guid-repair.json` as the incident authority.
 
-### Support-Coordinated Repair
+### Approved Apple-Only Feed Repair
 
-1. Leave `1870433419` Published and keep the RSS.com feed and Anchor redirect
-   active.
-2. Verify the RSS.com description, seven titles, structured episode numbers,
-   seven unique current GUIDs, and working enclosures in the public feed. Save
-   the XML, enclosure hashes, RSS.com episode IDs, Apple episode IDs, Spotify
-   episode IDs, attached-video state, artwork, dates, and public URLs as the
-   before-state.
-3. Completed August 6, 2026: recorded Apple status, RSS URL, Last Refresh,
-   analytics, public episode count, and the episode source/catalog states.
-4. In Podcasts Connect, open existing `1870433419`. Confirm it uses
-   `https://media.rss.com/dr-m-experienced/feed.xml`; update and save that field
-   only if it differs.
-5. Completed August 6, 2026: requested one Refresh Feed after duplicate cleanup.
-   Do not submit the URL as a new show or request repeated refreshes.
-6. Submitted August 8: asked Apple Support to remap its two existing episode
-   records to the current feed GUIDs server-side while preserving Apple episode
-   IDs `1000746628307` and `1000746628422`. The response is pending. This remains
-   the preferred repair because it does not mutate the feed consumed by every
-   directory.
-7. Submitted August 8: asked RSS.com support/import engineering whether it can
-   perform a GUID-only, in-place correction on existing RSS.com items `3050766`
-   and `3050765` without deletion, recreation, unpublishing, new URLs, or changes
-   to media, dates, copy, artwork, analytics, or any other identity field. The
-   response is pending; the request did not authorize a change.
-8. Submitted August 8: asked Spotify whether existing episode IDs
-   `7cAdb8GE4khC9EYKAjmYuc` and `19Pct0ClX3j1EOwJ3ySVd7`, including their attached
-   corrected videos and analytics, can be pinned across either proposed GUID
-   substitution. The technical response is pending. A general propagation
-   answer is insufficient; identity and video preservation must be explicit.
-9. Keep the incident blocked until the title-to-episode mapping is independently
-   verified, RSS.com capability and Spotify preservation are confirmed, an
-   exact remote change is approved, and the complete before-state plus a
-   provider-supported rollback path are captured in
-   `publishing/apple-guid-repair.json`.
-10. If a live feed mutation remains necessary after all gates pass, change only
-    one attended episode as a canary. Re-fetch the feed, Apple show, and Spotify
-    show; verify the same RSS.com, Apple, and Spotify episode IDs, enclosure,
-    playback, artwork, copy, date, analytics where exposed, and attached Spotify
-    video. Confirm no duplicate record exists before considering Episode 2.
-11. Hold the second episode until the canary has survived the agreed directory
-    ingestion window. If any ID changes, duplicate appears, video detaches,
-    media fails, or metadata drifts, stop. Do not toggle the GUID repeatedly;
-    use only the captured provider-supported rollback plan, otherwise freeze the
-    feed and escalate with the before/after evidence.
-12. Completed August 6, 2026: archived the inspected, redundant no-feed Draft show
-   `1896845422` (internal `949adc0b-c62f-410c-962d-17563cf3b07a`) and stale
-   manual subscriber Episode 4 Draft `1000759096366` (internal
-   `fc3cdd48-13c5-4122-b464-b62376765410`).
-13. After support acts, confirm the same Apple show ID exposes seven episodes and
-   verify oldest/newest playback. Do not restore archived duplicates merely to
-   change the count.
+1. Preserve published Apple show `1870433419`, the RSS.com feed, the Anchor
+   redirect, and every non-Apple route. Never submit the overlay as a new show.
+2. The immutable August 24 before-state is recorded in
+   `publishing/evidence/apple-guid-repair-before-20260824T191935Z.json` and the
+   ignored raw evidence path referenced by `publishing/apple-guid-repair.json`.
+3. Change GitHub Pages from legacy to workflow build mode and verify that exact
+   readback before merging the deployment workflow.
+4. Deploy `https://drmexperienced.com/apple-podcasts/feed.xml` from the tested
+   overlay. Do not add `itunes:new-feed-url` or a redirect.
+5. Re-fetch the public URL without cache and require seven items, the exact
+   historical GUIDs for Episodes 1-2, the five existing GUIDs for Episodes 3-7,
+   unchanged titles, numbers, dates and enclosures, valid XML, and byte-range
+   playback. Also verify that RSS.com remains unchanged.
+6. Only after step 5 passes, open existing show `1870433419` in Podcasts Connect
+   and change its RSS URL from RSS.com to the exact first-party overlay URL.
+   The final Apple save remains an attended owner action.
+7. Request one Refresh Feed after the saved URL is read back. Do not repeat it.
+8. Monitor that same show until seven episodes are public. Verify titles, show
+   association, artwork and playback; record the resulting Apple episode IDs
+   without assuming the two historical IDs survived.
+9. If exact duplicate records appear, identify them first and use only a
+   documented Apple cleanup mechanism. Do not delete or reset the show.
+10. Mark the incident complete only after the same Apple show publicly exposes
+    seven playable episodes and the source RSS.com feed remains unchanged.
+11. For the later website 2.0 or Cloudflare migration, publish and verify this
+    exact feed path on the new origin before changing site routing. Keep Apple's
+    configured feed URL unchanged.
 
 ### Failure Branches
 
-- Still five episodes while the repair is blocked: this is the current state.
-  Continue the three-provider support sequence with the recorded crosswalk;
-  do not resubmit, refresh repeatedly, mutate the feed, or create a replacement.
-- Duplicate public episodes: stop and compare GUIDs and Draft records. Repair the
-  existing listing without delete/recreate. If this follows a canary, block the
-  second episode and use only the pre-approved provider-supported rollback plan.
+- Still five episodes before deployment or while Apple processes the new URL:
+  compare the incident gates and timestamps; do not submit a replacement show
+  or refresh repeatedly.
+- Duplicate public episodes: stop and compare exact GUIDs and Apple record IDs.
+  Keep the seven-item feed stable and use only a documented Apple cleanup path;
+  do not delete or reset the show.
 - Show disappears: check Availability/status and restore the existing show; do
   not submit a new one.
-- Feed URL is wrong: edit the RSS URL on the existing show to the exact RSS.com
-  feed, save, refresh once, and verify the same show ID.
+- Feed URL is wrong: stop and compare the current incident phase. Before the
+  verified switch it must be RSS.com; afterward it must be the exact approved
+  Apple-only URL. Never improvise a third URL.
 
 Official references are listed at the end of this manual.
 
@@ -1019,9 +989,9 @@ or remote content IDs.
    request one refresh on existing Apple show `1870433419`. Preserve existing
    Instagram posts because their covers cannot be replaced through the
    documented post-publication workflow.
-10. Completed for routing: Apple show `1870433419` points directly to RSS.com.
-    Pending: repair its Draft/Available and structured-cache discrepancy, submit
-    the feed once to Amazon, and verify Apple/Amazon propagation. Spotify audio
+10. Current routing: Apple show `1870433419` still points directly to RSS.com.
+    The approved Apple-only feed deployment and URL switch are pending; Amazon's
+    one-time claim and Apple/Amazon propagation also remain pending. Spotify audio
     reaches all seven stable episode IDs; video is present on six, with Episode 5
     audio-only pending Creator Support.
 11. Run a cross-platform audit and keep the crosswalk as evidence.
@@ -1201,18 +1171,18 @@ receive direct write access to contact/newsletter tables.
 
 ### Apple Missing Or Duplicate Episodes
 
-- Preserve public show ID `1870433419`, the existing Apple and Spotify episode
-  IDs, and the current feed GUIDs while the incident is blocked.
-- Verify the clean RSS.com feed and exact RSS URL. One refresh has already been
-  requested for the current incident; do not repeat it.
-- Compare feed GUIDs before touching Draft records.
+- Preserve public show ID `1870433419`, all Spotify identities, and every
+  canonical RSS.com GUID. Do not submit a replacement show.
+- Verify the clean RSS.com feed and the current incident phase. A historical
+  cleanup refresh was requested on August 6; the approved overlay rollout allows
+  one new refresh only after its public feed URL and Apple URL save are verified.
+- Compare feed GUIDs and exact Apple record IDs before any duplicate cleanup.
 - The known duplicate show and manual Episode 4 Draft are already archived.
   Apple case `20000130526608` confirms a historical GUID mismatch for Episodes
-  1-2. Follow `publishing/apple-guid-repair.json`: request an Apple-side remap,
-  confirm RSS.com in-place capability and Spotify ID/video preservation, then
-  require a captured baseline, rollback path, exact approval, and one attended
-  canary before any live mutation. Do not submit a new show, delete/recreate an
-  episode, or change both GUIDs at once.
+  1-2. Follow `publishing/apple-guid-repair.json`: the owner approved the exact
+  Apple-only derived feed after the baseline and local gates passed. Deploy and
+  verify that feed before switching only the existing show. Do not delete or
+  recreate an RSS.com episode, mutate its GUID, or improvise another feed URL.
 
 ### Spotify/Apple/Amazon Metadata Is Stale
 
@@ -1388,12 +1358,10 @@ Quarterly:
 1. Completed: imported seven episodes to RSS.com, verified parity with the
    retained August 5 source baseline and canonical copy, retained that baseline's
    GUIDs, and activated the approved one-hop Anchor 301.
-2. Resolve Apple case `20000130526608` for RSS Episodes 1-2 in existing show
-   `1870433419` under `publishing/apple-guid-repair.json`. The Apple remap,
-   RSS.com in-place-capability, and Spotify identity/video-preservation requests
-   are submitted and pending. Keep remote changes blocked until the responses,
-   baseline, supported rollback, exact approval, and one-episode attended canary
-   gates pass.
+2. Complete the approved Apple-only overlay for RSS Episodes 1-2 in existing show
+   `1870433419` under `publishing/apple-guid-repair.json`: deploy and verify the
+   seven-item feed, switch only that show's RSS URL, request one refresh, and
+   verify seven public playable episodes without changing RSS.com or Spotify.
 3. Completed August 7: seven corrected video/MP3 delivery pairs passed the local
    gates, and all seven existing RSS.com enclosures were replaced with normalized
    audio while preserving GUIDs. Remote downloads, full decodes, and loudness

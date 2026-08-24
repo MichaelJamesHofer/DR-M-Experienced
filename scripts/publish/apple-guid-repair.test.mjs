@@ -2,7 +2,10 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import {
-  APPLE_GUID_REPAIR_BLOCKED_STATUS,
+  APPLE_GUID_REPAIR_APPROVED_STATUS,
+  APPLE_GUID_REPAIR_COMPLETE_STATUS,
+  APPLE_GUID_REPAIR_DEPLOYED_STATUS,
+  APPLE_GUID_REPAIR_PROCESSING_STATUS,
   validateAppleGuidRepair,
 } from "./apple-guid-repair.mjs";
 
@@ -29,26 +32,51 @@ function assertInvalidMutation(change, pattern) {
   );
 }
 
-test("Apple GUID repair record is valid and remains fail-closed", () => {
+test("Apple GUID repair is approved locally and remains pre-deployment", () => {
   const result = validateAppleGuidRepair(baseline);
 
   assert.deepEqual(result.errors, []);
-  assert.equal(baseline.status, APPLE_GUID_REPAIR_BLOCKED_STATUS);
-  assert.equal(baseline.lastVerifiedAt, "2026-08-08");
-  assert.equal(baseline.supportOutreach.apple.status, "submitted_pending_response");
-  assert.equal(baseline.supportOutreach.rssCom.status, "sent_pending_response");
+  assert.equal(baseline.status, APPLE_GUID_REPAIR_APPROVED_STATUS);
+  assert.equal(baseline.lastVerifiedAt, "2026-08-24");
+  assert.equal(
+    baseline.supportOutreach.apple.status,
+    "engineering_escalation_pending_response",
+  );
+  assert.equal(
+    baseline.supportOutreach.rssCom.status,
+    "responded_no_supported_in_place_guid_edit",
+  );
   assert.equal(
     baseline.supportOutreach.spotify.status,
     "advisor_investigating_pending_technical_response",
   );
   assert.equal(baseline.gates.appleTitleMappingIndependentlyVerified, true);
-  assert.equal(baseline.gates.rssComInPlaceEditConfirmed, false);
-  assert.equal(baseline.gates.spotifyIdentityPreservationConfirmed, false);
-  assert.equal(baseline.gates.exactRemoteChangeApproved, false);
+  assert.equal(baseline.gates.rssComInPlaceEditAvailable, false);
+  assert.equal(baseline.gates.overlayLocallyValidated, true);
+  assert.equal(baseline.gates.exactRemoteChangeApproved, true);
+  assert.equal(baseline.gates.beforeSnapshotCaptured, true);
+  assert.equal(baseline.gates.githubPagesWorkflowModeVerified, false);
   assert.equal(baseline.gates.remoteWritePerformed, false);
+  assert.equal(baseline.gates.overlayPublished, false);
   assert.equal(baseline.gates.feedVerified, false);
-  assert.equal(baseline.gates.appleIdentityPreserved, false);
-  assert.equal(baseline.gates.spotifyIdentityPreserved, false);
+  assert.equal(baseline.gates.appleFeedUrlChanged, false);
+  assert.equal(baseline.gates.applePublicSevenEpisodesVerified, false);
+});
+
+test("approved mechanism and before-state evidence are exact and tracked", async () => {
+  const evidence = await readJson(baseline.beforeState.manifestPath);
+  assert.equal(
+    baseline.repairMechanism.publicFeedUrl,
+    "https://drmexperienced.com/apple-podcasts/feed.xml",
+  );
+  assert.equal(baseline.repairMechanism.configPath, "publishing/apple-feed-overlay.json");
+  assert.equal(baseline.repairMechanism.approval.approvedAt, "2026-08-24T19:44:40Z");
+  assert.equal(evidence.capturedAt, baseline.beforeState.capturedAt);
+  assert.equal(evidence.sourceFeed.sha256, baseline.beforeState.sourceFeedSha256);
+  assert.equal(evidence.sourceFeed.sizeBytes, baseline.beforeState.sourceFeedSizeBytes);
+  assert.equal(evidence.sourceFeed.items.length, 7);
+  assert.equal(evidence.applePublic.sha256, baseline.beforeState.applePublicSha256);
+  assert.equal(evidence.applePublic.episodeIds.length, 5);
 });
 
 test("exact Episode 1-2 crosswalk is order independent", () => {
@@ -81,7 +109,7 @@ test("pending Apple repair crosswalk matches current catalog identities", async 
   assert.equal(
     catalog.episodes.some((episode) => historicalGuids.has(episode.rssGuid)),
     false,
-    "blocked historical GUIDs must not become canonical before remote verification",
+    "Apple historical GUIDs must remain isolated from the canonical RSS catalog",
   );
 });
 
@@ -153,7 +181,7 @@ test("support outreach timestamps cannot predate discovery or outrun verificatio
     {
       label: "submission is newer than verification",
       change(repair) {
-        repair.supportOutreach.rssCom.submittedAt = "2026-08-09T00:00:00Z";
+        repair.supportOutreach.rssCom.submittedAt = "2026-08-25T00:00:00Z";
       },
       pattern: /supportOutreach\.rssCom\.submittedAt is newer than lastVerifiedAt/,
     },
@@ -167,7 +195,7 @@ test("support outreach timestamps cannot predate discovery or outrun verificatio
     {
       label: "follow-up is newer than verification",
       change(repair) {
-        repair.supportOutreach.spotify.lastFollowedUpAt = "2026-08-09T00:00:00Z";
+        repair.supportOutreach.spotify.lastFollowedUpAt = "2026-08-25T00:00:00Z";
       },
       pattern: /lastFollowedUpAt is newer than lastVerifiedAt/,
     },
@@ -181,7 +209,7 @@ test("support outreach timestamps cannot predate discovery or outrun verificatio
     {
       label: "advisor response is newer than verification",
       change(repair) {
-        repair.supportOutreach.spotify.lastResponseAt = "2026-08-09T00:00:00Z";
+        repair.supportOutreach.spotify.lastResponseAt = "2026-08-25T00:00:00Z";
       },
       pattern: /lastResponseAt is newer than lastVerifiedAt/,
     },
@@ -201,31 +229,93 @@ test("support outreach timestamps cannot predate discovery or outrun verificatio
   }
 });
 
-test("blocked state rejects approval, writes, and post-write verification claims", async (t) => {
+test("approved pre-deployment state rejects premature remote claims", async (t) => {
   for (const gate of [
-    "exactRemoteChangeApproved",
+    "githubPagesWorkflowModeVerified",
     "remoteWritePerformed",
+    "overlayPublished",
     "feedVerified",
-    "appleIdentityPreserved",
-    "spotifyIdentityPreserved",
+    "sourceFeedUnchangedAfterDeploymentVerified",
+    "appleFeedUrlChanged",
+    "appleRefreshRequested",
+    "appleExistingShowPreserved",
+    "applePublicSevenEpisodesVerified",
+    "applePlaybackVerified",
   ]) {
     await t.test(gate, () => {
       assertInvalidMutation(
         (repair) => {
           repair.gates[gate] = true;
         },
-        new RegExp(`blocked incident status requires gates\\.${gate}=false`),
+        new RegExp(
+          `${APPLE_GUID_REPAIR_APPROVED_STATUS} requires gates\\.${gate}=false|must be equal to constant`,
+        ),
       );
     });
   }
 });
 
+test("every Apple repair lifecycle status requires coherent gates", () => {
+  const deployed = cloneBaseline();
+  deployed.status = APPLE_GUID_REPAIR_DEPLOYED_STATUS;
+  assert.equal(validateAppleGuidRepair(deployed).valid, false);
+  for (const gate of [
+    "githubPagesWorkflowModeVerified",
+    "remoteWritePerformed",
+    "overlayPublished",
+    "feedVerified",
+    "sourceFeedUnchangedAfterDeploymentVerified",
+  ]) {
+    deployed.gates[gate] = true;
+  }
+  assert.deepEqual(validateAppleGuidRepair(deployed), { valid: true, errors: [] });
+
+  const processing = structuredClone(deployed);
+  processing.status = APPLE_GUID_REPAIR_PROCESSING_STATUS;
+  assert.equal(validateAppleGuidRepair(processing).valid, false);
+  processing.gates.appleFeedUrlChanged = true;
+  processing.gates.appleExistingShowPreserved = true;
+  assert.deepEqual(validateAppleGuidRepair(processing), {
+    valid: true,
+    errors: [],
+  });
+
+  const complete = structuredClone(processing);
+  complete.status = APPLE_GUID_REPAIR_COMPLETE_STATUS;
+  assert.equal(validateAppleGuidRepair(complete).valid, false);
+  complete.gates.applePublicSevenEpisodesVerified = true;
+  complete.gates.applePlaybackVerified = true;
+  assert.deepEqual(validateAppleGuidRepair(complete), { valid: true, errors: [] });
+});
+
+test("Apple repair lifecycle status matches platform and migration records", async () => {
+  const platforms = await readJson("publishing/platforms.json");
+  const migration = await readJson("publishing/hosting-migration.json");
+  assert.equal(platforms.platforms.apple.feedRouting.status, baseline.status);
+  assert.equal(
+    platforms.podcastDistribution.appleFeedOverlay.status,
+    baseline.status,
+  );
+  assert.equal(
+    migration.existingListings.apple.appleFeedRoutingStatus,
+    baseline.status,
+  );
+  const platformDownstream = platforms.downstreamPropagation.issues.find(
+    (issue) => issue.code === "apple_episode_convergence_pending",
+  );
+  assert.equal(platformDownstream?.repairStatus, baseline.status);
+  const migrationDownstream = migration.downstreamPropagation.issues.find(
+    (issue) => issue.code === "apple_episode_historical_guid_mismatch_confirmed",
+  );
+  assert.equal(migrationDownstream?.repairStatus, baseline.status);
+});
+
 test("downstream true gates require every prerequisite", async (t) => {
   const cases = [
     {
-      label: "approval requires provider identity guarantees",
+      label: "approval requires local overlay validation",
       gate: "exactRemoteChangeApproved",
-      prerequisite: "rssComInPlaceEditConfirmed",
+      prerequisite: "overlayLocallyValidated",
     },
     {
       label: "operation snapshot requires exact approval",
@@ -233,9 +323,14 @@ test("downstream true gates require every prerequisite", async (t) => {
       prerequisite: "exactRemoteChangeApproved",
     },
     {
-      label: "write requires exact approval",
-      gate: "remoteWritePerformed",
+      label: "Pages mode requires exact approval",
+      gate: "githubPagesWorkflowModeVerified",
       prerequisite: "exactRemoteChangeApproved",
+    },
+    {
+      label: "write requires verified Pages workflow mode",
+      gate: "remoteWritePerformed",
+      prerequisite: "githubPagesWorkflowModeVerified",
     },
     {
       label: "write requires a before snapshot",
@@ -243,19 +338,19 @@ test("downstream true gates require every prerequisite", async (t) => {
       prerequisite: "beforeSnapshotCaptured",
     },
     {
-      label: "feed verification requires a write",
+      label: "feed verification requires a published overlay",
       gate: "feedVerified",
-      prerequisite: "remoteWritePerformed",
+      prerequisite: "overlayPublished",
     },
     {
-      label: "Apple preservation requires feed verification",
-      gate: "appleIdentityPreserved",
-      prerequisite: "feedVerified",
+      label: "Apple URL change requires unchanged source verification",
+      gate: "appleFeedUrlChanged",
+      prerequisite: "sourceFeedUnchangedAfterDeploymentVerified",
     },
     {
-      label: "Spotify preservation requires prior provider confirmation",
-      gate: "spotifyIdentityPreserved",
-      prerequisite: "spotifyIdentityPreservationConfirmed",
+      label: "public seven verification requires existing-show preservation",
+      gate: "applePublicSevenEpisodesVerified",
+      prerequisite: "appleExistingShowPreserved",
     },
   ];
 
