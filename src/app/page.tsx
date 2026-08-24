@@ -273,7 +273,7 @@ export default async function Home() {
             href="/affiliates"
             icon={ShoppingBag}
             eyebrow="Resources"
-            title="Product guide"
+            title="Affiliate guide"
             body="Products Dr. M references, why he uses them, and the episodes where they appear."
           />
         </div>
