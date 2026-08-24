@@ -134,7 +134,7 @@ export default async function EpisodeDetailPage({
                 </span>
               )}
             </div>
-            <h1 className="break-words text-heading-lg font-bold !tracking-normal text-foreground mb-4 sm:text-heading-xl lg:text-display">
+            <h1 className="mb-4 break-words text-[1.875rem] font-bold !tracking-normal leading-tight text-foreground min-[375px]:text-[2.25rem] sm:text-display">
               {episodeDisplayTitle(episode)}
             </h1>
             <p className="text-body-lg text-foreground-muted">
@@ -146,7 +146,7 @@ export default async function EpisodeDetailPage({
           {/* Video Player */}
           <section
             aria-labelledby={`video-player-${episode.slug}`}
-            className="rounded-2xl border border-border bg-surface overflow-hidden"
+            className="overflow-hidden rounded-lg border border-border bg-surface"
           >
             <div className="flex items-start justify-between gap-4 border-b border-border px-5 py-4 sm:px-6">
               <div>
@@ -265,7 +265,7 @@ export default async function EpisodeDetailPage({
           {(episode.audioUrl || episode.spotifyId) && (
             <section
               aria-labelledby={`audio-player-${episode.slug}`}
-              className="rounded-2xl border border-primary/25 bg-surface-elevated p-5 shadow-sm sm:p-6"
+              className="rounded-lg border border-primary/25 bg-surface-elevated p-5 shadow-sm sm:p-6"
             >
               <div className="mb-5 flex items-start justify-between gap-4">
                 <div className="flex min-w-0 items-start gap-3">

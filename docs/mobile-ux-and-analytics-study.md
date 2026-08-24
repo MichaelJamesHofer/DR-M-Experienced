@@ -49,8 +49,9 @@ route was confirmed in the reviewed mobile widths.
    keep the fuller explanations below the form.
 4. **Conversion instrumentation was incomplete.** Page views alone cannot show
    whether an episode, platform, newsletter, affiliate, or contact journey is
-   working. The first three safe conversion events are now implemented; outbound
-   and content-discovery events remain in the typed event contract.
+   working. The initial safe conversion and player-intent events are now
+   implemented; other outbound and content-discovery events remain in the typed
+   event contract.
 5. **Unbounded taxonomies become visual debris.** Topic/tag collections should
    use one horizontal line with overflow scrolling on mobile. Never allow long
    tag sets to become a multi-row block above the content.
@@ -134,14 +135,14 @@ URLs, external referrers, query strings, fragments, or campaign IDs.
 | `episode opened` | Planned | Episode detail navigation | `episode_slug`, `placement` |
 | `platform outbound clicked` | Planned | Platform link activation | `platform`, `placement` |
 | `affiliate product clicked` | Planned | Merchant link activation | product/brand slugs, `placement` |
-| `media item opened` | Planned | External media activation | `media_type`, `platform` |
+| `media item opened` | Implemented | Short/media poster activated and Vimeo iframe requested | `media_type`, `platform` |
 | `content search used` | Planned | Debounced search commitment | content type, `has_results` only |
 | `content filter applied` | Planned | Filter state committed | content type, facet count only |
 
 Do not emit an event per keystroke or scroll tick. Search/filter events should be
 debounced or emitted when a result is opened so event volume represents intent.
-`episode player opened` measures intent to load the player; it does not prove
-that Vimeo playback started or reached any duration threshold.
+`episode player opened` and `media item opened` measure intent to load a player;
+they do not prove that Vimeo playback started or reached any duration threshold.
 
 ## Funnels And Dashboard
 

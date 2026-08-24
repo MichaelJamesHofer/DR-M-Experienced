@@ -55,11 +55,12 @@ export default function PrivacyPage() {
           <p>
             Optional PostHog analytics records site page views and page leaves when configured. After
             a form is accepted, it also records the newsletter form location or the selected contact
-            subject category. Opening an episode player records the public Vimeo video identifier.
-            Names, email addresses, messages, other form values, external referrers, query strings,
-            campaign identifiers, persistent browser identifiers, person profiles, autocapture, and
-            session recording are excluded by this site&apos;s configuration. The analytics project is
-            configured to discard client IP addresses rather than store them with events.
+            subject category. Opening an episode player records the public Vimeo video identifier;
+            opening a short or media player records only its media type and platform. Names, email
+            addresses, messages, other form values, external referrers, query strings, campaign
+            identifiers, persistent browser identifiers, person profiles, autocapture, and session
+            recording are excluded by this site&apos;s configuration. The analytics project is configured
+            to discard client IP addresses rather than store them with events.
           </p>
         </section>
 

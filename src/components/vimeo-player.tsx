@@ -10,6 +10,9 @@ type VimeoPlayerProps = {
   thumbnailUrl?: string;
   className?: string;
   aspectClassName?: string;
+  analyticsContext?:
+    | { contentType: 'episode' }
+    | { contentType: 'media'; mediaType: string; platform: string };
 };
 
 export function VimeoPlayer({
@@ -18,13 +21,21 @@ export function VimeoPlayer({
   thumbnailUrl,
   className = '',
   aspectClassName = 'aspect-video',
+  analyticsContext = { contentType: 'episode' },
 }: VimeoPlayerProps) {
   const { capture } = useAnalytics();
   const [shouldLoad, setShouldLoad] = useState(false);
   const previewImage = thumbnailUrl || `https://vumbnail.com/${videoId}.jpg`;
 
   function handlePlayerOpen() {
-    capture('episode player opened', { video_id: videoId });
+    if (analyticsContext.contentType === 'media') {
+      capture('media item opened', {
+        media_type: analyticsContext.mediaType,
+        platform: analyticsContext.platform,
+      });
+    } else {
+      capture('episode player opened', { video_id: videoId });
+    }
     setShouldLoad(true);
   }
 

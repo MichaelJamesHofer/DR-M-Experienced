@@ -164,6 +164,11 @@ function ShortPlayback({ item }: { item: ShortFormContent }) {
           title={item.title}
           thumbnailUrl={item.posterUrl}
           aspectClassName={isPortrait ? "aspect-[9/16]" : "aspect-video"}
+          analyticsContext={{
+            contentType: "media",
+            mediaType: item.contentType,
+            platform: "vimeo",
+          }}
         />
       ) : (
         <div className={`relative ${isPortrait ? "aspect-[9/16]" : "aspect-video"}`}>

@@ -6,7 +6,7 @@ keyless; the production deployment guard requires the configured project token.
 
 ## Current Status
 
-Last verified: August 7, 2026.
+Last verified: August 8, 2026.
 
 - `posthog-js` is installed and initialized by
   `src/components/posthog-provider.tsx`.
@@ -18,10 +18,13 @@ Last verified: August 7, 2026.
   Cookieless server hashing remains disabled because the client uses memory-only
   identity.
 - Privacy-sanitized page views, page leaves, accepted newsletter/contact
-  conversions, and episode-player opens are implemented. The remaining event
-  taxonomy is defined in `src/lib/analytics-events.ts`.
-- Live production event receipts and the initial growth dashboard remain pending
-  the analytics-enabled deployment.
+  conversions, episode-player opens, and short/media-player opens are
+  implemented. The remaining event taxonomy is defined in
+  `src/lib/analytics-events.ts`.
+- Production ingestion is verified. Dashboard `1086989`, `Dr. M Growth
+  Dashboard`, has a privacy-safe description and verified DAU, WAU, growth
+  accounting, retention, referring-domain, and pageview-funnel tiles. The
+  reverse proxy remains an unimplemented recommendation.
 
 ## Environment Variables
 
@@ -74,23 +77,26 @@ repository configuration cannot enforce it.
 | `newsletter subscribed` | Backend accepted a real newsletter form | `placement` |
 | `contact form submitted` | Backend accepted a real contact form | fixed `subject` enum |
 | `episode player opened` | Visitor activates the poster and requests the Vimeo iframe | public `video_id` |
+| `media item opened` | Visitor activates a short/media poster and requests the Vimeo iframe | `media_type`, `platform` |
 
 Honeypot submissions do not emit conversion events. Failed or invalid forms do
-not emit success events. `episode player opened` records intent to load the
-player; it does not prove that video playback started.
+not emit success events. Player-opened events record intent to load the player;
+they do not prove that video playback started.
 
-## Dashboard Setup
+## Dashboard Verification
 
-After the analytics-enabled deployment completes:
+Dashboard `1086989`, `Dr. M Growth Dashboard`, is already configured with six
+verified privacy-safe views. After an analytics-enabled deployment:
 
 1. Open the public site in a private browser window with Do Not Track off.
 2. Visit two pages, open one episode player, and submit only a controlled test
    newsletter/contact record that can be removed afterward.
-3. In PostHog **Live events**, confirm only the five implemented event types and
+3. In PostHog **Live events**, confirm only the six implemented event types and
    approved properties appear. Confirm URLs have no `?` or `#` content.
 4. Confirm no email, name, message, search phrase, or form field value appears
    in event properties.
-5. Build the dashboards and funnels specified in
+5. Confirm dashboard `1086989` retains its description and six verified views;
+   add future funnels only within the contract in
    `docs/mobile-ux-and-analytics-study.md`.
 6. Re-check the public privacy notice before enabling any additional PostHog
    product or changing identity, persistence, recording, or autocapture.
@@ -113,8 +119,8 @@ After deployment, open PostHog Installation Health and verify all of the
 following without exposing the project token:
 
 1. Fresh `$pageview` and `$pageleave` events arrive from both production origins.
-2. The three approved conversion events arrive only after their documented
-   triggers and contain only allowed properties.
+2. The four approved conversion and player-intent events arrive only after
+   their documented triggers and contain only allowed properties.
 3. `https://drmexperienced.com` and `https://www.drmexperienced.com` remain
    authorized URLs.
 4. Requests use the US ingestion host and `Discard client IP data` remains on.
@@ -123,11 +129,13 @@ following without exposing the project token:
 
 The August 6 authenticated check initially reported no events, an incomplete
 `$pageview` check, and no authorized URLs. The Actions project key was then
-configured and both production origins were authorized. Page-leave,
-scroll-depth, reverse-proxy, and performance checks passed. Authenticated
-readback on August 7 confirmed the US region and IP-discard setting. Those
-configuration checks are not proof of live ingestion; complete the checklist
-above after the analytics-enabled deployment.
+configured and both production origins were authorized. Authenticated readback
+on August 7 confirmed the US region and IP-discard setting. The deployed probe
+then received HTTP 200 from the US ingestion host; refreshed Installation Health
+passed `$pageview`, `$pageleave`, scroll depth, and authorized URLs. Production
+ingestion and dashboard `1086989` are verified. Repeat the checklist above after
+deploying later instrumentation, including `media item opened`; the reverse
+proxy remains the only explicit unimplemented recommendation.
 
 ## Official References
 

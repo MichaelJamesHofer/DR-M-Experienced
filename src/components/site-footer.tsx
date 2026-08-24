@@ -21,7 +21,7 @@ export function SiteFooter() {
     <footer className="border-t border-border bg-surface">
       <div className="mx-auto max-w-6xl px-4 py-12 lg:px-6 lg:py-14">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.1fr_0.9fr_1fr]">
-          <div className="text-center md:text-left">
+          <div className="min-w-0 text-center md:text-left">
             <div className="mb-4 flex items-center justify-center gap-3 md:justify-start">
               <Image
                 src="/icon.svg"
@@ -55,7 +55,7 @@ export function SiteFooter() {
             </a>
           </div>
 
-          <div>
+          <div className="min-w-0">
             <p className="text-body-sm font-semibold text-foreground mb-4">Navigation</p>
             <nav className="grid grid-cols-2 gap-x-4">
               {footerLinks.map((link) => (
@@ -70,7 +70,7 @@ export function SiteFooter() {
             </nav>
           </div>
 
-          <div>
+          <div className="min-w-0">
             <NewsletterCapture
               variant="footer"
               heading="Join the newsletter"
