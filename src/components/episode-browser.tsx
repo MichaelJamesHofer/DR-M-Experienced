@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -13,7 +13,6 @@ import {
   Play,
   Search,
   SlidersHorizontal,
-  X,
 } from "lucide-react";
 import { Episode, episodeDisplayTitle } from "@/data/episodes";
 
@@ -53,8 +52,6 @@ export function EpisodeBrowser({
   const [topic, setTopic] = useState(normalizedDefault);
   const [sortKey, setSortKey] = useState<EpisodeSortKey>("newest");
   const [viewMode, setViewMode] = useState<EpisodeViewMode>("cards");
-  const [filterPanelOpen, setFilterPanelOpen] = useState(false);
-  const controlsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const paramTopic = (searchParams.get("topic") ?? normalizedDefault).toLowerCase();
@@ -127,7 +124,6 @@ export function EpisodeBrowser({
       .sort((a, b) => compareEpisodes(a, b, sortKey, affiliateProductsByEpisodeSlug));
   }, [affiliateProductsByEpisodeSlug, episodes, query, sortKey, topic]);
 
-  const activeFacetCount = topic === "all" ? 0 : 1;
   const activeTopicLabel = topics.find((topicOption) => topicOption.value === topic)?.label;
   const hasActiveFilters = query !== "" || topic !== "all";
 
@@ -136,25 +132,15 @@ export function EpisodeBrowser({
     updateTopic("all");
   };
 
-  const toggleFilterPanel = () => {
-    const shouldOpen = !filterPanelOpen;
-    setFilterPanelOpen(shouldOpen);
-    if (shouldOpen) {
-      window.setTimeout(() => {
-        controlsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 0);
-    }
-  };
-
   return (
     <div className="min-w-0 space-y-6 sm:space-y-8">
-      <div
-        ref={controlsRef}
-        className="min-w-0 overflow-hidden rounded-lg border border-border bg-surface p-3 sm:p-5"
-      >
-        <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_auto_auto_auto] lg:items-end">
+      <div className="min-w-0 overflow-hidden rounded-lg border border-border bg-surface p-3 sm:p-4">
+        <div className="grid min-w-0 gap-3 min-[900px]:grid-cols-[minmax(0,1fr)_minmax(10rem,12rem)_minmax(10rem,12rem)_10rem] min-[900px]:items-end">
           <div className="min-w-0">
-            <label className="mb-1.5 block text-body-sm font-semibold text-foreground">
+            <label
+              htmlFor="episode-search"
+              className="mb-1.5 block text-body-sm font-semibold text-foreground"
+            >
               Search episodes
             </label>
             <div className="relative min-w-0">
@@ -163,6 +149,7 @@ export function EpisodeBrowser({
                 className="absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-foreground-subtle"
               />
               <input
+                id="episode-search"
                 type="search"
                 placeholder="Search episodes..."
                 value={query}
@@ -172,32 +159,31 @@ export function EpisodeBrowser({
             </div>
           </div>
 
-          <div className="hidden min-w-0 sm:block">
-            <p className="mb-2 text-body-sm font-semibold text-foreground">Filters</p>
-            <button
-              type="button"
-              onClick={toggleFilterPanel}
-              aria-expanded={filterPanelOpen}
-              className={`flex h-[50px] min-w-36 items-center justify-center gap-2 rounded-md border px-4 text-body-sm font-semibold transition-colors duration-200 ${
-                filterPanelOpen || activeFacetCount > 0
-                  ? "border-primary bg-primary/10 text-primary"
-                  : "border-border bg-background text-foreground-muted hover:border-primary/50 hover:text-foreground"
-              }`}
-            >
-              <SlidersHorizontal aria-hidden="true" className="h-4 w-4" />
-              Refine
-              <span className="rounded-sm bg-surface-elevated px-1.5 py-0.5 text-caption text-foreground-subtle">
-                {activeFacetCount}
-              </span>
-            </button>
+          <div className="hidden min-w-0 min-[900px]:block">
+            <TopicSelect
+              id="episode-topic-wide"
+              value={topic}
+              allCount={episodes.length}
+              options={topics.map((topicOption) => ({
+                ...topicOption,
+                count: topicCounts.get(topicOption.value) ?? 0,
+              }))}
+              onChange={updateTopic}
+            />
           </div>
 
-          <div className="hidden min-w-0 sm:block">
-            <label className="text-body-sm font-semibold text-foreground mb-2 block">Sort</label>
+          <div className="hidden min-w-0 min-[900px]:block">
+            <label
+              htmlFor="episode-sort-wide"
+              className="mb-1.5 block text-body-sm font-semibold text-foreground"
+            >
+              Sort
+            </label>
             <select
+              id="episode-sort-wide"
               value={sortKey}
               onChange={(event) => setSortKey(event.target.value as EpisodeSortKey)}
-              className="h-[50px] w-full min-w-0 rounded-md border border-border bg-background px-4 text-body-sm font-medium text-foreground-muted transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 sm:min-w-52 lg:w-auto"
+              className="h-12 w-full min-w-0 rounded-md border border-border bg-background px-3 text-body-sm font-medium text-foreground-muted transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
             >
               <option value="newest">Newest first</option>
               <option value="oldest">Oldest first</option>
@@ -207,16 +193,20 @@ export function EpisodeBrowser({
             </select>
           </div>
 
-          <div className="hidden min-w-0 sm:block">
-            <p className="mb-2 text-body-sm font-semibold text-foreground">View</p>
-            <div className="grid h-[54px] min-w-0 grid-cols-2 rounded-lg border border-border bg-background p-1">
+          <div
+            role="group"
+            aria-label="Episode view"
+            className="hidden min-w-0 min-[900px]:block"
+          >
+            <p className="mb-1.5 text-body-sm font-semibold text-foreground">View</p>
+            <div className="grid h-12 min-w-0 grid-cols-2 rounded-lg border border-border bg-background p-1">
               {(["cards", "list"] as EpisodeViewMode[]).map((mode) => (
                 <button
                   key={mode}
                   type="button"
                   onClick={() => setViewMode(mode)}
                   aria-pressed={viewMode === mode}
-                  className={`flex items-center justify-center gap-2 rounded-md px-3 text-body-sm font-semibold transition-colors duration-200 ${
+                  className={`flex items-center justify-center gap-1.5 rounded-md px-2 text-caption font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 ${
                     viewMode === mode
                       ? "bg-primary text-background"
                       : "text-foreground-muted hover:text-foreground"
@@ -235,54 +225,21 @@ export function EpisodeBrowser({
         </div>
 
         <MobileEpisodeCommandBar
-          activeFacetCount={activeFacetCount}
-          filterPanelOpen={filterPanelOpen}
-          onToggleFilters={toggleFilterPanel}
+          topic={topic}
+          topicOptions={topics.map((topicOption) => ({
+            ...topicOption,
+            count: topicCounts.get(topicOption.value) ?? 0,
+          }))}
+          onTopicChange={updateTopic}
           sortKey={sortKey}
           onSortChange={setSortKey}
           viewMode={viewMode}
           onToggleView={() => setViewMode(viewMode === "cards" ? "list" : "cards")}
         />
-
-        {(activeTopicLabel || filterPanelOpen) && (
-          <div className="mt-4 border-t border-border pt-4">
-            {activeTopicLabel && (
-              <div className="mb-4 flex min-w-0 items-center gap-2">
-                <span className="shrink-0 text-caption font-semibold uppercase text-foreground-subtle">
-                  Topic
-                </span>
-                <AppliedTopicChip label={activeTopicLabel} onRemove={() => updateTopic("all")} />
-              </div>
-            )}
-
-            {filterPanelOpen && (
-              <div className="border-l-2 border-primary/60 pl-3 sm:pl-4">
-                <div className="mb-3 flex min-w-0 items-baseline justify-between gap-3">
-                  <p className="min-w-0 text-body-sm font-semibold text-foreground">
-                    Refine episodes
-                  </p>
-                  <p className="shrink-0 text-caption text-foreground-muted sm:text-body-sm">
-                    {filtered.length} of {episodes.length} episodes
-                  </p>
-                </div>
-
-                <TopicSelect
-                  value={topic}
-                  allCount={episodes.length}
-                  options={topics.map((topicOption) => ({
-                    ...topicOption,
-                    count: topicCounts.get(topicOption.value) ?? 0,
-                  }))}
-                  onChange={updateTopic}
-                />
-              </div>
-            )}
-          </div>
-        )}
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-body-sm text-foreground-muted">
+        <p aria-live="polite" aria-atomic="true" className="text-body-sm text-foreground-muted">
           {filtered.length} episode{filtered.length !== 1 ? "s" : ""}
           {topic !== "all" && ` in "${activeTopicLabel ?? topic}"`}
           {query && ` matching "${query}"`}
@@ -300,12 +257,13 @@ export function EpisodeBrowser({
 
       {filtered.length > 0 ? (
         <div className={viewMode === "cards" ? "grid gap-4 sm:gap-6 md:grid-cols-2" : "space-y-3 sm:space-y-5"}>
-          {filtered.map((episode) => (
+          {filtered.map((episode, index) => (
             <EpisodeCard
               key={episode.slug}
               episode={episode}
               relatedProducts={affiliateProductsByEpisodeSlug[episode.slug] ?? []}
               variant={viewMode}
+              priority={index < 2}
             />
           ))}
         </div>
@@ -326,11 +284,13 @@ export function EpisodeBrowser({
 }
 
 function TopicSelect({
+  id,
   value,
   allCount,
   options,
   onChange,
 }: {
+  id: string;
   value: string;
   allCount: number;
   options: Array<{ value: string; label: string; count: number }>;
@@ -338,11 +298,14 @@ function TopicSelect({
 }) {
   return (
     <div>
-      <label className="mb-2 block text-body-sm font-semibold text-foreground">Topic</label>
+      <label htmlFor={id} className="mb-1.5 block text-body-sm font-semibold text-foreground">
+        Topic
+      </label>
       <select
+        id={id}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-12 w-full min-w-0 rounded-md border border-border bg-surface px-3 text-body-sm font-medium text-foreground-muted transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 sm:h-[50px] sm:px-4"
+        className="h-12 w-full min-w-0 rounded-md border border-border bg-background px-3 text-body-sm font-medium text-foreground-muted transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
       >
         <option value="all">All topics ({allCount})</option>
         {options.map((option) => (
@@ -355,59 +318,44 @@ function TopicSelect({
   );
 }
 
-function AppliedTopicChip({
-  label,
-  onRemove,
-}: {
-  label: string;
-  onRemove: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onRemove}
-      aria-label={`Remove ${label} topic filter`}
-      className="inline-flex min-h-11 min-w-0 max-w-full items-center gap-2 rounded-md border border-primary bg-primary/10 px-3 text-caption font-semibold text-primary transition-colors duration-200 hover:bg-primary/15"
-    >
-      <span className="min-w-0 truncate">{label}</span>
-      <X aria-hidden="true" className="h-4 w-4 shrink-0" />
-    </button>
-  );
-}
-
 function MobileEpisodeCommandBar({
-  activeFacetCount,
-  filterPanelOpen,
-  onToggleFilters,
+  topic,
+  topicOptions,
+  onTopicChange,
   sortKey,
   onSortChange,
   viewMode,
   onToggleView,
 }: {
-  activeFacetCount: number;
-  filterPanelOpen: boolean;
-  onToggleFilters: () => void;
+  topic: string;
+  topicOptions: Array<{ value: string; label: string; count: number }>;
+  onTopicChange: (value: string) => void;
   sortKey: EpisodeSortKey;
   onSortChange: (value: EpisodeSortKey) => void;
   viewMode: EpisodeViewMode;
   onToggleView: () => void;
 }) {
   return (
-    <div className="mt-3 grid min-w-0 grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_3rem] gap-1 border-t border-border pt-3 sm:hidden">
-      <button
-        type="button"
-        onClick={onToggleFilters}
-        aria-expanded={filterPanelOpen}
-        className={`flex h-12 min-w-0 items-center justify-center gap-1.5 rounded-md border px-2 text-caption font-semibold transition-colors duration-200 ${
-          filterPanelOpen || activeFacetCount > 0
-            ? "border-primary bg-primary/10 text-primary"
-            : "border-border bg-background text-foreground-muted"
-        }`}
-      >
-        <SlidersHorizontal aria-hidden="true" className="h-4 w-4 shrink-0" />
-        <span className="truncate">Filter</span>
-        {activeFacetCount > 0 && <span aria-label={`${activeFacetCount} active filter`}>{activeFacetCount}</span>}
-      </button>
+    <div className="mt-3 grid min-w-0 grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)_3rem] gap-1.5 border-t border-border pt-3 min-[900px]:hidden">
+      <label className="relative min-w-0">
+        <span className="sr-only">Filter episodes by topic</span>
+        <SlidersHorizontal
+          aria-hidden="true"
+          className="pointer-events-none absolute left-2 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-foreground-subtle"
+        />
+        <select
+          value={topic}
+          onChange={(event) => onTopicChange(event.target.value)}
+          className="h-12 w-full min-w-0 appearance-none rounded-md border border-border bg-background pl-8 pr-3 text-caption font-semibold text-foreground-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+        >
+          <option value="all">All topics</option>
+          {topicOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label} ({option.count})
+            </option>
+          ))}
+        </select>
+      </label>
       <label className="relative min-w-0">
         <span className="sr-only">Sort episodes</span>
         <ArrowUpDown
@@ -431,7 +379,7 @@ function MobileEpisodeCommandBar({
         onClick={onToggleView}
         aria-label={viewMode === "cards" ? "Switch to list view" : "Switch to card view"}
         title={viewMode === "cards" ? "List view" : "Card view"}
-        className="flex h-12 w-12 items-center justify-center rounded-md border border-border bg-background text-foreground-muted transition-colors duration-200 hover:border-primary/50 hover:text-foreground"
+        className="flex h-12 w-12 items-center justify-center rounded-md border border-border bg-background text-foreground-muted transition-colors duration-200 hover:border-primary/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
       >
         {viewMode === "cards" ? (
           <List aria-hidden="true" className="h-5 w-5" />
@@ -447,10 +395,12 @@ function EpisodeCard({
   episode,
   relatedProducts,
   variant,
+  priority,
 }: {
   episode: Episode;
   relatedProducts: EpisodeProductReference[];
   variant: EpisodeViewMode;
+  priority: boolean;
 }) {
   const dateFormatter = new Intl.DateTimeFormat("en", {
     month: "short",
@@ -481,6 +431,7 @@ function EpisodeCard({
             src={episode.thumbnailUrl}
             alt={episodeDisplayTitle(episode)}
             fill
+            priority={priority}
             className={`object-cover transition-transform duration-300 ${
               !hasEmbeddableVideo ? "opacity-50" : "group-hover:scale-105"
             }`}
