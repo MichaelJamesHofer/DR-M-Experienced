@@ -167,6 +167,84 @@ test("completed cutover retains read-only post-cutover validation", () => {
   assert.doesNotMatch(advice, /Anchor remains canonical/i);
 });
 
+test("completed host migration supports the approved Apple-only feed lifecycle", () => {
+  const migration = clone(baselineMigration);
+  const platforms = clone(baselinePlatforms);
+  migration.existingListings.apple.currentFeedUrl =
+    HOST_MIGRATION_IDENTITIES.appleOverlayFeedUrl;
+  migration.existingListings.apple.appleFeedRoutingStatus = "apple_processing";
+  migration.downstreamPropagation.issues.find(
+    (issue) => issue.code === "apple_episode_historical_guid_mismatch_confirmed",
+  ).repairStatus = "apple_processing";
+  platforms.podcastDistribution.appleFeedOverlay.status = "apple_processing";
+  platforms.downstreamPropagation.issues.find(
+    (issue) => issue.code === "apple_episode_convergence_pending",
+  ).repairStatus = "apple_processing";
+  platforms.platforms.apple.feedRouting.status = "apple_processing";
+  platforms.platforms.apple.feedRouting.currentFeedUrl =
+    HOST_MIGRATION_IDENTITIES.appleOverlayFeedUrl;
+
+  const result = validate(migration, platforms);
+  assert.equal(result.phase, "completed");
+  assert.deepEqual(result.errors, []);
+  assert.equal(platforms.podcastDistribution.canonicalHost, "rss.com");
+  assert.equal(platforms.platforms.apple.dependsOn, "rss.com");
+});
+
+test("Apple overlay lifecycle status projections cannot drift", () => {
+  const cases = [
+    {
+      label: "podcast distribution overlay",
+      change(_migration, platforms) {
+        platforms.podcastDistribution.appleFeedOverlay.status = "apple_processing";
+      },
+      pattern: /podcastDistribution\.appleFeedOverlay\.status/,
+    },
+    {
+      label: "platform downstream issue",
+      change(_migration, platforms) {
+        platforms.downstreamPropagation.issues.find(
+          (issue) => issue.code === "apple_episode_convergence_pending",
+        ).repairStatus = "apple_processing";
+      },
+      pattern: /apple_episode_convergence_pending\.repairStatus/,
+    },
+    {
+      label: "hosting downstream issue",
+      change(migration) {
+        migration.downstreamPropagation.issues.find(
+          (issue) => issue.code === "apple_episode_historical_guid_mismatch_confirmed",
+        ).repairStatus = "apple_processing";
+      },
+      pattern: /apple_episode_historical_guid_mismatch_confirmed\.repairStatus/,
+    },
+  ];
+
+  for (const fixture of cases) {
+    const migration = clone(baselineMigration);
+    const platforms = clone(baselinePlatforms);
+    fixture.change(migration, platforms);
+    const result = validate(migration, platforms);
+    assert.ok(
+      result.errors.some((error) => fixture.pattern.test(error)),
+      `${fixture.label}: ${result.errors.join("\n")}`,
+    );
+  }
+});
+
+test("Apple overlay routing rejects an unapproved feed URL", () => {
+  const migration = clone(baselineMigration);
+  const platforms = clone(baselinePlatforms);
+  platforms.platforms.apple.feedRouting.approvedFeedUrl =
+    "https://example.test/feed.xml";
+  const result = validate(migration, platforms);
+  assert.ok(
+    result.errors.some((error) =>
+      /platforms\.apple\.feedRouting\.approvedFeedUrl/.test(error),
+    ),
+  );
+});
+
 test("post-redirect active state remains frozen until completion", () => {
   const { migration, platforms } = completedFixture();
   migration.status = "redirect_verified_downstream_validation";

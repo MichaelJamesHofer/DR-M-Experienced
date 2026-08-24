@@ -1,0 +1,325 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://drmexperienced.com/schemas/apple-feed-overlay.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "mode",
+    "sourceFeedUrl",
+    "sourceSelfUrl",
+    "publicFeedUrl",
+    "outputPath",
+    "appleShowId",
+    "appleContentProviderId",
+    "minimumEpisodeCount",
+    "guidMappings",
+    "preservedGuidAssertions",
+    "mediaVerification"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "./apple-feed-overlay.schema.json"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "mode": {
+      "const": "apple_only_guid_overlay"
+    },
+    "sourceFeedUrl": {
+      "const": "https://media.rss.com/dr-m-experienced/feed.xml"
+    },
+    "sourceSelfUrl": {
+      "const": "https://media.rss.com/dr-m-experienced/feed.xml"
+    },
+    "publicFeedUrl": {
+      "const": "https://drmexperienced.com/apple-podcasts/feed.xml"
+    },
+    "outputPath": {
+      "const": "out/apple-podcasts/feed.xml"
+    },
+    "appleShowId": {
+      "const": "1870433419"
+    },
+    "appleContentProviderId": {
+      "const": "128469457"
+    },
+    "minimumEpisodeCount": {
+      "const": 7
+    },
+    "guidMappings": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/episode1"
+        },
+        {
+          "$ref": "#/$defs/episode2"
+        }
+      ],
+      "items": false
+    },
+    "preservedGuidAssertions": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/episode3"
+        },
+        {
+          "$ref": "#/$defs/episode4"
+        },
+        {
+          "$ref": "#/$defs/episode5"
+        },
+        {
+          "$ref": "#/$defs/episode6"
+        },
+        {
+          "$ref": "#/$defs/episode7"
+        }
+      ],
+      "items": false
+    },
+    "mediaVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requireHttps",
+        "requireByteRange",
+        "maxAttempts",
+        "retryDelayMs"
+      ],
+      "properties": {
+        "requireHttps": {
+          "const": true
+        },
+        "requireByteRange": {
+          "const": true
+        },
+        "maxAttempts": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "retryDelayMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5000
+        }
+      }
+    }
+  },
+  "$defs": {
+    "guidMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "episodeNumber",
+        "rssComEpisodeId",
+        "link",
+        "title",
+        "sourceGuid",
+        "appleGuid"
+      ],
+      "properties": {
+        "episodeNumber": {
+          "type": "integer"
+        },
+        "rssComEpisodeId": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "link": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceGuid": {
+          "$ref": "#/$defs/uuid"
+        },
+        "appleGuid": {
+          "$ref": "#/$defs/uuid"
+        }
+      }
+    },
+    "preservedGuid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "episodeNumber",
+        "guid"
+      ],
+      "properties": {
+        "episodeNumber": {
+          "type": "integer"
+        },
+        "guid": {
+          "$ref": "#/$defs/uuid"
+        }
+      }
+    },
+    "episode1": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/guidMapping"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "episodeNumber": {
+              "const": 1
+            },
+            "rssComEpisodeId": {
+              "const": "3050766"
+            },
+            "link": {
+              "const": "https://rss.com/podcasts/dr-m-experienced/3050766"
+            },
+            "title": {
+              "const": "Brain Fog, Part 1 - Is Your Brain in a Fog?"
+            },
+            "sourceGuid": {
+              "const": "c9b853b6-a828-4012-9998-217919ff9163"
+            },
+            "appleGuid": {
+              "const": "59063e08-e4a6-4e56-b7ec-d2a66d69beb8"
+            }
+          }
+        }
+      ]
+    },
+    "episode2": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/guidMapping"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "episodeNumber": {
+              "const": 2
+            },
+            "rssComEpisodeId": {
+              "const": "3050765"
+            },
+            "link": {
+              "const": "https://rss.com/podcasts/dr-m-experienced/3050765"
+            },
+            "title": {
+              "const": "Brain Fog, Part 2 - Testing and Basic Solutions"
+            },
+            "sourceGuid": {
+              "const": "1e40e02b-b217-477c-9cc3-4271cb304c23"
+            },
+            "appleGuid": {
+              "const": "26896da2-76cf-4865-93f8-f94ddfb24568"
+            }
+          }
+        }
+      ]
+    },
+    "episode3": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/preservedGuid"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "episodeNumber": {
+              "const": 3
+            },
+            "guid": {
+              "const": "e4bde82f-54e6-43a2-a50a-4044f9cdbe8e"
+            }
+          }
+        }
+      ]
+    },
+    "episode4": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/preservedGuid"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "episodeNumber": {
+              "const": 4
+            },
+            "guid": {
+              "const": "9579ff89-9e16-40db-b84a-00cee25c604a"
+            }
+          }
+        }
+      ]
+    },
+    "episode5": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/preservedGuid"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "episodeNumber": {
+              "const": 5
+            },
+            "guid": {
+              "const": "e9f7596f-0333-49ca-8946-bc11e96b2091"
+            }
+          }
+        }
+      ]
+    },
+    "episode6": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/preservedGuid"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "episodeNumber": {
+              "const": 6
+            },
+            "guid": {
+              "const": "13a0565e-582c-4969-a57d-9700b7babbe4"
+            }
+          }
+        }
+      ]
+    },
+    "episode7": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/preservedGuid"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "episodeNumber": {
+              "const": 7
+            },
+            "guid": {
+              "const": "4a0b3903-b7d1-4ced-967b-079df4004a4e"
+            }
+          }
+        }
+      ]
+    },
+    "uuid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    }
+  }
+}

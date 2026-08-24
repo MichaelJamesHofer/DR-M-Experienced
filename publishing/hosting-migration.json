@@ -167,6 +167,9 @@
       "podcastsConnectClaimed": true,
       "podcastsConnectShowId": "cfab5caf-554e-4ebe-a28c-2e4748147b82",
       "currentFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+      "approvedAppleFeedUrl": "https://drmexperienced.com/apple-podcasts/feed.xml",
+      "appleFeedRoutingStatus": "apple_only_overlay_approved_pending_deployment",
+      "appleFeedOverlayConfig": "publishing/apple-feed-overlay.json",
       "currentFeedEffectiveViaRedirectAt": "2026-08-06T18:02:24Z",
       "directFeedChangedAt": "2026-08-06T18:29:00Z",
       "directFeedChangeTimeApproximate": true,
@@ -232,14 +235,17 @@
         "supportEscalationRequired": true,
         "supportRequestSubmitted": true,
         "supportRequestSubmittedDate": "2026-08-06",
-        "supportRequestStatus": "guid_mismatch_confirmed_remote_change_blocked",
+        "supportRequestStatus": "guid_mismatch_confirmed_overlay_approved_pending_deployment",
         "supportCaseNumber": "20000130526608",
+        "relatedSupportCaseNumbers": [
+          "20000144016176"
+        ],
         "guidRepairRecord": "publishing/apple-guid-repair.json"
       },
       "episodeArtworkPropagationVerified": false,
       "preexistingEpisodeCountDiscrepancyRequiresReview": true,
       "publicLookupTrackCount": 5,
-      "episodeConvergenceStatus": "historical_guid_mismatch_confirmed_remote_change_blocked",
+      "episodeConvergenceStatus": "historical_guid_mismatch_overlay_approved_pending_deployment",
       "verifiedAfterCutover": true,
       "verifiedAfterCutoverAt": "2026-08-07T05:24:00Z"
     },
@@ -280,8 +286,16 @@
         "supportRequestSubmitted": true,
         "supportRequestSubmittedDate": "2026-08-06",
         "supportCaseNumber": "20000130526608",
+        "relatedSupportCaseNumbers": [
+          "20000144016176"
+        ],
         "guidRepairRecord": "publishing/apple-guid-repair.json",
-        "remoteChangeBlocked": true,
+        "repairStatus": "apple_only_overlay_approved_pending_deployment",
+        "repairStrategy": "apple_only_guid_overlay",
+        "repairConfig": "publishing/apple-feed-overlay.json",
+        "approvedAppleFeedUrl": "https://drmexperienced.com/apple-podcasts/feed.xml",
+        "remoteChangeBlocked": false,
+        "exactRemoteChangeApproved": true,
         "deletionAuthorized": false
       },
       {

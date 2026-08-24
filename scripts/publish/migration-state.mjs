@@ -9,6 +9,8 @@ export const HOST_MIGRATION_IDENTITIES = Object.freeze({
   appleConnectShowId: "cfab5caf-554e-4ebe-a28c-2e4748147b82",
   appleChannelUrl:
     "https://podcasts.apple.com/us/podcast/dr-m-experienced-with-dr-david-musnick/id1870433419",
+  appleOverlayFeedUrl: "https://drmexperienced.com/apple-podcasts/feed.xml",
+  appleOverlayConfigPath: "publishing/apple-feed-overlay.json",
 });
 
 const READY_GATES = [
@@ -311,6 +313,89 @@ export function validatePublishingMigrationState({
       );
     }
   } else if (phase === "completed") {
+    const appleRouting = platforms?.platforms?.apple?.feedRouting;
+    const appleRouteStatus = appleRouting?.status;
+    const appleRouteStatuses = [
+      "apple_only_overlay_approved_pending_deployment",
+      "feed_deployed_pending_apple_switch",
+      "apple_processing",
+      "verified_complete",
+    ];
+    if (!appleRouteStatuses.includes(appleRouteStatus)) {
+      errors.push("platforms.apple.feedRouting.status is not a supported Apple overlay state.");
+    }
+    const appleRouteActive = ["apple_processing", "verified_complete"].includes(
+      appleRouteStatus,
+    );
+    const expectedAppleFeedUrl = appleRouteActive
+      ? identities.appleOverlayFeedUrl
+      : identities.targetFeedUrl;
+    const platformAppleIssue = platforms?.downstreamPropagation?.issues?.find(
+      (issue) => issue?.code === "apple_episode_convergence_pending",
+    );
+    const migrationAppleIssue = migration?.downstreamPropagation?.issues?.find(
+      (issue) => issue?.code === "apple_episode_historical_guid_mismatch_confirmed",
+    );
+    requireEqual(
+      errors,
+      platforms?.podcastDistribution?.appleFeedOverlay?.status,
+      appleRouteStatus,
+      "podcastDistribution.appleFeedOverlay.status",
+    );
+    requireEqual(
+      errors,
+      platformAppleIssue?.repairStatus,
+      appleRouteStatus,
+      "downstreamPropagation.apple_episode_convergence_pending.repairStatus",
+    );
+    requireEqual(
+      errors,
+      migrationAppleIssue?.repairStatus,
+      appleRouteStatus,
+      "hostingMigration.downstreamPropagation.apple_episode_historical_guid_mismatch_confirmed.repairStatus",
+    );
+    requireEqual(
+      errors,
+      appleRouting?.upstreamFeedUrl,
+      identities.targetFeedUrl,
+      "platforms.apple.feedRouting.upstreamFeedUrl",
+    );
+    requireEqual(
+      errors,
+      appleRouting?.approvedFeedUrl,
+      identities.appleOverlayFeedUrl,
+      "platforms.apple.feedRouting.approvedFeedUrl",
+    );
+    requireEqual(
+      errors,
+      appleRouting?.configPath,
+      identities.appleOverlayConfigPath,
+      "platforms.apple.feedRouting.configPath",
+    );
+    requireEqual(
+      errors,
+      appleRouting?.currentFeedUrl,
+      expectedAppleFeedUrl,
+      "platforms.apple.feedRouting.currentFeedUrl",
+    );
+    requireEqual(
+      errors,
+      migration?.existingListings?.apple?.appleFeedRoutingStatus,
+      appleRouteStatus,
+      "existingListings.apple.appleFeedRoutingStatus",
+    );
+    requireEqual(
+      errors,
+      migration?.existingListings?.apple?.approvedAppleFeedUrl,
+      identities.appleOverlayFeedUrl,
+      "existingListings.apple.approvedAppleFeedUrl",
+    );
+    requireEqual(
+      errors,
+      migration?.existingListings?.apple?.appleFeedOverlayConfig,
+      identities.appleOverlayConfigPath,
+      "existingListings.apple.appleFeedOverlayConfig",
+    );
     requireEqual(errors, pending?.cutoverReady, true, "pendingHostingMigration.cutoverReady");
     requireEqual(errors, gates.redirectVerified, true, "gates.redirectVerified");
     requireEqual(errors, gates.publishingFreezeActive, false, "gates.publishingFreezeActive");
@@ -324,7 +409,7 @@ export function validatePublishingMigrationState({
     requireEqual(
       errors,
       migration?.existingListings?.apple?.currentFeedUrl,
-      identities.targetFeedUrl,
+      expectedAppleFeedUrl,
       "existingListings.apple.currentFeedUrl"
     );
     requireEqual(

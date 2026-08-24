@@ -39,6 +39,11 @@
         "supportRequestSubmittedDate": "2026-08-06",
         "structuredMetadataCacheDrift": true,
         "structuredMetadataCacheScope": "episode_json_ld_and_search_cache_for_episodes_4_through_7",
+        "repairStatus": "apple_only_overlay_approved_pending_deployment",
+        "repairStrategy": "apple_only_guid_overlay",
+        "repairConfig": "publishing/apple-feed-overlay.json",
+        "approvedFeedUrl": "https://drmexperienced.com/apple-podcasts/feed.xml",
+        "exactRemoteChangeApproved": true,
         "deletionAuthorized": false
       },
       {
@@ -79,7 +84,14 @@
       "spotify",
       "apple",
       "amazon"
-    ]
+    ],
+    "appleFeedOverlay": {
+      "status": "apple_only_overlay_approved_pending_deployment",
+      "sourceFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+      "currentAppleFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+      "approvedAppleFeedUrl": "https://drmexperienced.com/apple-podcasts/feed.xml",
+      "configPath": "publishing/apple-feed-overlay.json"
+    }
   },
   "podcastDirectories": {
     "podcastIndex": {
@@ -156,7 +168,14 @@
       ],
       "source": "rss",
       "dependsOn": "rss.com",
-      "notes": "Do not upload the episode separately. Apple receives the approved podcast audio and item-level episode artwork from RSS.com's canonical feed. Preserve show ID 1870433419. Apple Podcasts Connect and public readback verified that Episode 5 retained Apple episode ID 1000774398633 and now exposes the corrected 29:45 RSS enclosure; its automatically generated transcript is set to Not Displayed. The duplicate show ID 1896845422 now returns 404 and the stale manual Episode 4 Draft was archived on August 6, 2026. Public show 1870433419 exposes Episodes 3-7. Under case 20000130526608, Apple confirmed its existing Episode 1-2 records use older GUIDs than the current feed; the exact blocked crosswalk is in publishing/apple-guid-repair.json. Do not change the feed, delete, or recreate episodes until RSS.com in-place capability and Spotify identity preservation are confirmed. Apple public JSON-LD/search caches also retain legacy show wording for Episodes 4-7."
+      "feedRouting": {
+        "status": "apple_only_overlay_approved_pending_deployment",
+        "upstreamFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+        "currentFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+        "approvedFeedUrl": "https://drmexperienced.com/apple-podcasts/feed.xml",
+        "configPath": "publishing/apple-feed-overlay.json"
+      },
+      "notes": "Do not upload episodes separately or create a replacement show. Apple still receives the feed directly from RSS.com and public show 1870433419 still exposes Episodes 3-7 only. The owner approved a first-party Apple-only feed overlay at https://drmexperienced.com/apple-podcasts/feed.xml; it is locally validated but not deployed, publicly verified, or configured in Apple yet. The overlay changes only its self URL and the Apple-authoritative historical GUIDs for Episodes 1-2 while RSS.com, Spotify, Amazon, and the master catalog remain unchanged. Cases 20000130526608 and 20000144016176 plus publishing/apple-guid-repair.json govern the rollout."
     },
     "amazon": {
       "label": "Amazon Music and Audible",

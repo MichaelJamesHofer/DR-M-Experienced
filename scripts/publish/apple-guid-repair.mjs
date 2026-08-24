@@ -11,8 +11,12 @@ export const APPLE_GUID_REPAIR_SCHEMA_PATH = new URL(
   import.meta.url,
 );
 
-export const APPLE_GUID_REPAIR_BLOCKED_STATUS =
-  "tri_provider_review_pending_remote_change_blocked";
+export const APPLE_GUID_REPAIR_APPROVED_STATUS =
+  "apple_only_overlay_approved_pending_deployment";
+export const APPLE_GUID_REPAIR_DEPLOYED_STATUS =
+  "feed_deployed_pending_apple_switch";
+export const APPLE_GUID_REPAIR_PROCESSING_STATUS = "apple_processing";
+export const APPLE_GUID_REPAIR_COMPLETE_STATUS = "verified_complete";
 
 export const APPLE_GUID_REPAIR_CROSSWALK = Object.freeze([
   Object.freeze({
@@ -42,31 +46,120 @@ const ajv = new Ajv2020({ allErrors: true, strict: true });
 addFormats(ajv, { mode: "full" });
 const validateSchema = ajv.compile(schema);
 
-const BLOCKED_FALSE_GATES = [
-  "exactRemoteChangeApproved",
+const REMOTE_GATES = [
+  "githubPagesWorkflowModeVerified",
   "remoteWritePerformed",
+  "overlayPublished",
   "feedVerified",
-  "appleIdentityPreserved",
-  "spotifyIdentityPreserved",
+  "sourceFeedUnchangedAfterDeploymentVerified",
+  "appleFeedUrlChanged",
+  "appleRefreshRequested",
+  "appleExistingShowPreserved",
+  "applePublicSevenEpisodesVerified",
+  "applePlaybackVerified",
 ];
 
 const GATE_PREREQUISITES = Object.freeze({
   exactRemoteChangeApproved: [
     "appleSupportCrosswalkRecorded",
     "appleTitleMappingIndependentlyVerified",
-    "rssComInPlaceEditConfirmed",
     "spotifyImpactReviewed",
-    "spotifyIdentityPreservationConfirmed",
+    "userAcceptedAppleIdentityRisk",
+    "overlayLocallyValidated",
   ],
   beforeSnapshotCaptured: ["exactRemoteChangeApproved"],
-  remoteWritePerformed: ["exactRemoteChangeApproved", "beforeSnapshotCaptured"],
-  feedVerified: ["remoteWritePerformed"],
-  appleIdentityPreserved: ["remoteWritePerformed", "feedVerified"],
-  spotifyIdentityPreserved: [
-    "spotifyIdentityPreservationConfirmed",
-    "remoteWritePerformed",
-    "feedVerified",
+  githubPagesWorkflowModeVerified: [
+    "exactRemoteChangeApproved",
+    "beforeSnapshotCaptured",
   ],
+  remoteWritePerformed: [
+    "exactRemoteChangeApproved",
+    "beforeSnapshotCaptured",
+    "githubPagesWorkflowModeVerified",
+  ],
+  overlayPublished: ["remoteWritePerformed", "githubPagesWorkflowModeVerified"],
+  feedVerified: ["overlayPublished"],
+  sourceFeedUnchangedAfterDeploymentVerified: ["feedVerified"],
+  appleFeedUrlChanged: [
+    "feedVerified",
+    "sourceFeedUnchangedAfterDeploymentVerified",
+  ],
+  appleRefreshRequested: ["appleFeedUrlChanged"],
+  appleExistingShowPreserved: ["appleFeedUrlChanged"],
+  applePublicSevenEpisodesVerified: [
+    "appleFeedUrlChanged",
+    "appleExistingShowPreserved",
+  ],
+  applePlaybackVerified: [
+    "applePublicSevenEpisodesVerified",
+    "appleExistingShowPreserved",
+  ],
+});
+
+const REPAIR_MECHANISM = Object.freeze({
+  type: "apple_only_guid_overlay",
+  configPath: "publishing/apple-feed-overlay.json",
+  sourceFeedUrl: "https://media.rss.com/dr-m-experienced/feed.xml",
+  publicFeedUrl: "https://drmexperienced.com/apple-podcasts/feed.xml",
+  appleShowId: "1870433419",
+  appleContentProviderId: "128469457",
+  githubPagesRequiredBuildType: "workflow",
+});
+
+const APPROVED_TRUE_GATES = [
+  "appleSupportCrosswalkRecorded",
+  "appleTitleMappingIndependentlyVerified",
+  "spotifyImpactReviewed",
+  "userAcceptedAppleIdentityRisk",
+  "overlayLocallyValidated",
+  "exactRemoteChangeApproved",
+  "beforeSnapshotCaptured",
+];
+
+const DEPLOYED_TRUE_GATES = [
+  "githubPagesWorkflowModeVerified",
+  "remoteWritePerformed",
+  "overlayPublished",
+  "feedVerified",
+  "sourceFeedUnchangedAfterDeploymentVerified",
+];
+
+const APPLE_CUTOVER_TRUE_GATES = [
+  "appleFeedUrlChanged",
+  "appleExistingShowPreserved",
+];
+
+const COMPLETION_TRUE_GATES = [
+  "applePublicSevenEpisodesVerified",
+  "applePlaybackVerified",
+];
+
+const STATUS_GATE_PROFILES = Object.freeze({
+  [APPLE_GUID_REPAIR_APPROVED_STATUS]: Object.freeze({
+    true: APPROVED_TRUE_GATES,
+    false: REMOTE_GATES,
+  }),
+  [APPLE_GUID_REPAIR_DEPLOYED_STATUS]: Object.freeze({
+    true: [...APPROVED_TRUE_GATES, ...DEPLOYED_TRUE_GATES],
+    false: [...APPLE_CUTOVER_TRUE_GATES, ...COMPLETION_TRUE_GATES],
+  }),
+  [APPLE_GUID_REPAIR_PROCESSING_STATUS]: Object.freeze({
+    true: [
+      ...APPROVED_TRUE_GATES,
+      ...DEPLOYED_TRUE_GATES,
+      ...APPLE_CUTOVER_TRUE_GATES,
+    ],
+    false: COMPLETION_TRUE_GATES,
+  }),
+  [APPLE_GUID_REPAIR_COMPLETE_STATUS]: Object.freeze({
+    true: [
+      ...APPROVED_TRUE_GATES,
+      ...DEPLOYED_TRUE_GATES,
+      ...APPLE_CUTOVER_TRUE_GATES,
+      ...COMPLETION_TRUE_GATES,
+    ],
+    false: [],
+  }),
 });
 
 const IDENTITY_FIELDS = [
@@ -231,12 +324,66 @@ export function appleGuidRepairSemanticErrors(record) {
     errors.push("supportOutreach.apple.caseNumber must match appleCaseNumber.");
   }
 
+  if (
+    JSON.stringify(record?.relatedAppleCaseNumbers) !==
+    JSON.stringify(record?.supportOutreach?.apple?.relatedCaseNumbers)
+  ) {
+    errors.push(
+      "supportOutreach.apple.relatedCaseNumbers must match relatedAppleCaseNumbers.",
+    );
+  }
+
+  for (const [field, expected] of Object.entries(REPAIR_MECHANISM)) {
+    if (record?.repairMechanism?.[field] !== expected) {
+      errors.push(
+        `repairMechanism.${field} must remain ${JSON.stringify(expected)}.`,
+      );
+    }
+  }
+  if (record?.repairMechanism?.sourceFeedUrl !== record?.feedUrl) {
+    errors.push("repairMechanism.sourceFeedUrl must match feedUrl.");
+  }
+  if (record?.repairMechanism?.appleShowId !== record?.appleShowId) {
+    errors.push("repairMechanism.appleShowId must match appleShowId.");
+  }
+  if (
+    record?.repairMechanism?.appleContentProviderId !==
+    record?.appleContentProviderId
+  ) {
+    errors.push(
+      "repairMechanism.appleContentProviderId must match appleContentProviderId.",
+    );
+  }
+
+  const approvalAt = timestamp(record?.repairMechanism?.approval?.approvedAt);
+  const beforeCapturedAt = timestamp(record?.beforeState?.capturedAt);
+  if (
+    approvalAt !== null &&
+    verificationWindowEnd !== null &&
+    approvalAt >= verificationWindowEnd
+  ) {
+    errors.push("repairMechanism.approval.approvedAt is newer than lastVerifiedAt.");
+  }
+  if (
+    beforeCapturedAt !== null &&
+    verificationWindowEnd !== null &&
+    beforeCapturedAt >= verificationWindowEnd
+  ) {
+    errors.push("beforeState.capturedAt is newer than lastVerifiedAt.");
+  }
+
   const gates = record?.gates;
   if (gates && typeof gates === "object") {
-    if (record?.status === APPLE_GUID_REPAIR_BLOCKED_STATUS) {
-      for (const gate of BLOCKED_FALSE_GATES) {
+    const profile = STATUS_GATE_PROFILES[record?.status];
+    if (profile) {
+      for (const gate of profile.true) {
+        if (gates[gate] !== true) {
+          errors.push(`${record.status} requires gates.${gate}=true.`);
+        }
+      }
+      for (const gate of profile.false) {
         if (gates[gate] !== false) {
-          errors.push(`blocked incident status requires gates.${gate}=false.`);
+          errors.push(`${record.status} requires gates.${gate}=false.`);
         }
       }
     }

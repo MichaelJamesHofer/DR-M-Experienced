@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "incident": "apple-episodes-1-2-guid-repair",
+  "capturedAt": "2026-08-24T19:19:35Z",
+  "rawEvidenceDirectory": ".drm-publisher/evidence/apple-guid-repair/20260824T191935Z",
+  "sourceFeed": {
+    "url": "https://media.rss.com/dr-m-experienced/feed.xml",
+    "rawFile": "rss-source.xml",
+    "sha256": "60f25c3bb1d27784534839a978614984152febdb17b53fe66a5bdec6224e1fdf",
+    "sizeBytes": 21702,
+    "itemCount": 7,
+    "items": [
+      {
+        "episodeNumber": 1,
+        "title": "Brain Fog, Part 1 - Is Your Brain in a Fog?",
+        "link": "https://rss.com/podcasts/dr-m-experienced/3050766",
+        "guid": "c9b853b6-a828-4012-9998-217919ff9163",
+        "enclosureUrl": "https://content.rss.com/episodes/397420/3050766/dr-m-experienced/2026_08_07_05_37_14_57d1a0c9-5f80-4880-bc5d-57f7eeef7cb5.mp3",
+        "publicationDate": "Tue, 20 Jan 2026 08:40:52 GMT"
+      },
+      {
+        "episodeNumber": 2,
+        "title": "Brain Fog, Part 2 - Testing and Basic Solutions",
+        "link": "https://rss.com/podcasts/dr-m-experienced/3050765",
+        "guid": "1e40e02b-b217-477c-9cc3-4271cb304c23",
+        "enclosureUrl": "https://content.rss.com/episodes/397420/3050765/dr-m-experienced/2026_08_07_05_41_20_c5dc584a-9799-404f-96e5-66fd2958ad94.mp3",
+        "publicationDate": "Tue, 20 Jan 2026 09:39:45 GMT"
+      },
+      {
+        "episodeNumber": 3,
+        "title": "Insomnia - Causes and Practical Sleep Strategies",
+        "link": "https://rss.com/podcasts/dr-m-experienced/3050764",
+        "guid": "e4bde82f-54e6-43a2-a50a-4044f9cdbe8e",
+        "enclosureUrl": "https://content.rss.com/episodes/397420/3050764/dr-m-experienced/2026_08_07_05_42_30_c6bd9b48-095f-4ee9-9eda-ebb0d7956d09.mp3",
+        "publicationDate": "Fri, 03 Apr 2026 00:26:26 GMT"
+      },
+      {
+        "episodeNumber": 4,
+        "title": "Electromagnetic Frequencies (EMF) - Practical Ways to Reduce Exposure",
+        "link": "https://rss.com/podcasts/dr-m-experienced/3050763",
+        "guid": "9579ff89-9e16-40db-b84a-00cee25c604a",
+        "enclosureUrl": "https://content.rss.com/episodes/397420/3050763/dr-m-experienced/2026_08_07_05_43_51_32e2ccc6-04c8-4592-9e50-aa8d48eb9cb8.mp3",
+        "publicationDate": "Fri, 03 Apr 2026 18:45:40 GMT"
+      },
+      {
+        "episodeNumber": 5,
+        "title": "Energy - Understanding Fatigue and Mitochondrial Health",
+        "link": "https://rss.com/podcasts/dr-m-experienced/3050762",
+        "guid": "e9f7596f-0333-49ca-8946-bc11e96b2091",
+        "enclosureUrl": "https://content.rss.com/episodes/397420/3050762/dr-m-experienced/2026_08_22_21_31_50_62730fc1-465f-4df9-9c8a-d721be928586.mp3",
+        "publicationDate": "Fri, 26 Jun 2026 21:24:11 GMT"
+      },
+      {
+        "episodeNumber": 6,
+        "title": "Concussion - What Happens in the Brain",
+        "link": "https://rss.com/podcasts/dr-m-experienced/3050761",
+        "guid": "13a0565e-582c-4969-a57d-9700b7babbe4",
+        "enclosureUrl": "https://content.rss.com/episodes/397420/3050761/dr-m-experienced/2026_08_07_05_55_46_4806f336-163e-4ffb-b446-e4e03bb81013.mp3",
+        "publicationDate": "Fri, 26 Jun 2026 21:32:08 GMT"
+      },
+      {
+        "episodeNumber": 7,
+        "title": "The Brain on Fire - Neuroinflammation After Concussion",
+        "link": "https://rss.com/podcasts/dr-m-experienced/3050760",
+        "guid": "4a0b3903-b7d1-4ced-967b-079df4004a4e",
+        "enclosureUrl": "https://content.rss.com/episodes/397420/3050760/dr-m-experienced/2026_08_07_05_56_36_52e27ebd-6648-4ff7-adf3-f9f7731c1b86.mp3",
+        "publicationDate": "Sat, 27 Jun 2026 00:58:08 GMT"
+      }
+    ]
+  },
+  "applePublic": {
+    "showId": "1870433419",
+    "url": "https://podcasts.apple.com/us/podcast/dr-m-experienced-with-dr-david-musnick/id1870433419",
+    "rawFile": "apple-show.html",
+    "sha256": "4976b1e869e6aaefb8ee8b47d6bc9e3d4df3b3d47c3e7d00b44923917529a1c0",
+    "sizeBytes": 225529,
+    "episodeCount": 5,
+    "episodeIds": [
+      "1000758996992",
+      "1000759098190",
+      "1000774398633",
+      "1000774398728",
+      "1000774415243"
+    ]
+  }
+}

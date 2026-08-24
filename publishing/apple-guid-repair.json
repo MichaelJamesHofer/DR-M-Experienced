@@ -1,32 +1,64 @@
 {
   "$schema": "./apple-guid-repair.schema.json",
-  "schemaVersion": 2,
-  "status": "tri_provider_review_pending_remote_change_blocked",
+  "schemaVersion": 3,
+  "status": "apple_only_overlay_approved_pending_deployment",
   "discoveredAt": "2026-08-07",
-  "lastVerifiedAt": "2026-08-08",
+  "lastVerifiedAt": "2026-08-24",
   "feedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
   "appleShowId": "1870433419",
+  "appleContentProviderId": "128469457",
   "appleCaseNumber": "20000130526608",
+  "relatedAppleCaseNumbers": [
+    "20000144016176"
+  ],
   "sourceEvidence": {
     "provider": "Apple Podcasts Support",
     "summary": "Apple reported that its existing episode records for Episodes 1 and 2 use historical GUIDs that differ from the current feed GUIDs.",
     "localBaselineLimitation": "The earliest retained Anchor snapshot is from August 5, 2026 and already contains the current feed GUIDs, so it cannot prove the GUIDs Apple ingested when the episodes were first published."
   },
+  "repairMechanism": {
+    "type": "apple_only_guid_overlay",
+    "configPath": "publishing/apple-feed-overlay.json",
+    "sourceFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+    "publicFeedUrl": "https://drmexperienced.com/apple-podcasts/feed.xml",
+    "appleShowId": "1870433419",
+    "appleContentProviderId": "128469457",
+    "githubPagesRequiredBuildType": "workflow",
+    "allowedMutations": [
+      "channel.atom:link[rel=self].href",
+      "episode-1.guid",
+      "episode-2.guid"
+    ],
+    "approval": {
+      "approvedAt": "2026-08-24T19:44:40Z",
+      "approvedBy": "owner",
+      "scope": "Publish the exact first-party Apple-only feed overlay, change GitHub Pages to workflow mode, and switch only existing Apple show 1870433419 to that feed after public verification.",
+      "acceptedRisks": [
+        "Apple episode IDs and Apple analytics continuity for Episodes 1 and 2 may change.",
+        "Apple may temporarily expose duplicate episode records that require supported cleanup after their exact identities are known."
+      ]
+    }
+  },
   "supportOutreach": {
     "apple": {
-      "status": "submitted_pending_response",
+      "status": "engineering_escalation_pending_response",
       "submittedAt": "2026-08-08T20:18:00Z",
       "channel": "Apple Podcasts Connect Contact Us",
       "caseNumber": "20000130526608",
+      "relatedCaseNumbers": [
+        "20000144016176"
+      ],
       "request": "Remap the two existing Apple episode records server-side to the current feed GUIDs while preserving the existing show and episode IDs."
     },
     "rssCom": {
-      "status": "sent_pending_response",
+      "status": "responded_no_supported_in_place_guid_edit",
       "submittedAt": "2026-08-08T20:03:00Z",
+      "respondedOn": "2026-08-10",
       "channel": "email",
       "recipient": "support@rss.com",
       "subject": "Apple Episodes 1-2 GUID repair capability - Dr. M Experienced",
-      "request": "Confirm whether import engineering can perform an in-place GUID-only correction without deleting, recreating, or unpublishing either episode."
+      "request": "Confirm whether import engineering can perform an in-place GUID-only correction without deleting, recreating, or unpublishing either episode.",
+      "responseSummary": "RSS.com's head of product confirmed that an existing episode GUID cannot be changed in the dashboard, by support, or through the API."
     },
     "spotify": {
       "status": "advisor_investigating_pending_technical_response",
@@ -60,31 +92,53 @@
       "appleHistoricalGuid": "26896da2-76cf-4865-93f8-f94ddfb24568"
     }
   ],
+  "beforeState": {
+    "capturedAt": "2026-08-24T19:19:35Z",
+    "manifestPath": "publishing/evidence/apple-guid-repair-before-20260824T191935Z.json",
+    "rawEvidenceDirectory": ".drm-publisher/evidence/apple-guid-repair/20260824T191935Z",
+    "sourceFeedSha256": "60f25c3bb1d27784534839a978614984152febdb17b53fe66a5bdec6224e1fdf",
+    "sourceFeedSizeBytes": 21702,
+    "sourceEpisodeCount": 7,
+    "applePublicSha256": "4976b1e869e6aaefb8ee8b47d6bc9e3d4df3b3d47c3e7d00b44923917529a1c0",
+    "applePublicSizeBytes": 225529,
+    "applePublicEpisodeCount": 5
+  },
   "gates": {
     "appleSupportCrosswalkRecorded": true,
     "appleTitleMappingIndependentlyVerified": true,
-    "rssComInPlaceEditConfirmed": false,
+    "rssComInPlaceEditAvailable": false,
     "spotifyImpactReviewed": true,
-    "spotifyIdentityPreservationConfirmed": false,
-    "exactRemoteChangeApproved": false,
-    "beforeSnapshotCaptured": false,
+    "userAcceptedAppleIdentityRisk": true,
+    "overlayLocallyValidated": true,
+    "exactRemoteChangeApproved": true,
+    "beforeSnapshotCaptured": true,
+    "githubPagesWorkflowModeVerified": false,
     "remoteWritePerformed": false,
+    "overlayPublished": false,
     "feedVerified": false,
-    "appleIdentityPreserved": false,
-    "spotifyIdentityPreserved": false
+    "sourceFeedUnchangedAfterDeploymentVerified": false,
+    "appleFeedUrlChanged": false,
+    "appleRefreshRequested": false,
+    "appleExistingShowPreserved": false,
+    "applePublicSevenEpisodesVerified": false,
+    "applePlaybackVerified": false
   },
   "constraints": [
-    "Do not delete, recreate, unpublish, or re-upload either RSS.com episode.",
-    "Do not change the live feed or master-catalog GUIDs while this record is blocked.",
-    "Preserve RSS.com episode IDs, enclosure URLs and bytes, publication dates, episode numbers, copy, artwork, and analytics.",
-    "Preserve Apple show 1870433419 and the two existing Apple episode IDs.",
-    "Preserve Spotify show 7GGLljxmO0G3FLjPy8vfcw, the two existing Spotify episode IDs, and their attached videos.",
-    "Do not toggle GUIDs repeatedly; stop and escalate if any directory creates a duplicate or changes an episode ID."
+    "Preserve existing Apple public show 1870433419; do not submit or create a replacement show.",
+    "Do not alter the canonical RSS.com feed, its existing episode records, or any master-catalog GUID.",
+    "The Apple-only feed may change only its atom self URL and the Episode 1 and Episode 2 GUID values recorded in this incident.",
+    "Preserve every title, episode number, publication date, enclosure URL, enclosure byte, artwork reference, description, and Episodes 3-7 GUID.",
+    "Do not publish an itunes:new-feed-url tag, redirect the RSS.com feed, or change Spotify or Amazon routing.",
+    "Request no Apple refresh until the public overlay independently passes the seven-item exact-delta and enclosure checks; request it at most once for this rollout.",
+    "If Apple creates duplicates, identify their exact records before using a documented Apple cleanup mechanism.",
+    "Do not mark the incident complete until Apple publicly exposes seven associated, playable episodes on show 1870433419."
   ],
   "nextActions": [
-    "Await Apple's written response on server-side remapping under case 20000130526608.",
-    "Await RSS.com's written response on a GUID-only in-place correction.",
-    "Await Spotify's written response on preserving episode IDs, attached videos, and analytics.",
-    "If a feed change remains necessary, capture a full baseline and use one attended episode as a canary before changing the second."
+    "Change GitHub Pages from legacy to workflow build mode under the exact approved scope and verify the readback.",
+    "Deploy the tested overlay through the protected main workflow without changing RSS.com, Spotify, Amazon, or the master catalog.",
+    "Independently verify the public Apple-only feed has seven items, the exact two historical GUIDs, the five preserved GUIDs, unchanged metadata and enclosures, and no itunes:new-feed-url.",
+    "Change only existing Apple show 1870433419 from the RSS.com URL to https://drmexperienced.com/apple-podcasts/feed.xml.",
+    "Request one Apple Refresh Feed only after the corrected public feed is verified, then monitor processing.",
+    "Verify the public Apple show has seven playable episodes and resolve any exact duplicate records through a documented Apple mechanism."
   ]
 }
