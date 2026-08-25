@@ -410,7 +410,7 @@ function FormatLink({
   return (
     <Link
       href={href}
-      className="group grid min-h-44 grid-cols-[2.5rem_1fr_auto] gap-x-4 gap-y-2 py-6 transition-colors hover:bg-surface/45 md:block md:min-h-64 md:px-7 md:py-8"
+      className="group relative z-0 grid min-h-44 grid-cols-[2.5rem_1fr_auto] gap-x-4 gap-y-2 py-6 transition-[background-color,box-shadow] duration-300 hover:z-10 hover:bg-surface/45 hover:shadow-glow-sm focus-visible:z-10 focus-visible:shadow-glow-sm md:block md:min-h-64 md:px-7 md:py-8"
     >
       <Icon className="row-span-2 mt-1 h-5 w-5 text-primary md:mb-12" aria-hidden="true" />
       <div>
@@ -430,7 +430,7 @@ function EpisodeCard({ episode }: { episode: Episode }) {
   return (
     <Link
       href={`/episodes/${episode.slug}`}
-      className="group grid min-h-32 grid-cols-[7rem_1fr] overflow-hidden rounded-lg border border-border bg-surface transition-colors hover:border-primary/60 md:block"
+      className="group grid min-h-32 grid-cols-[7rem_1fr] overflow-hidden rounded-lg border border-border bg-surface transition-[border-color,box-shadow] duration-300 hover:border-primary/60 hover:shadow-glow-sm focus-visible:border-primary/60 focus-visible:shadow-glow-sm md:block"
     >
       <div className="relative min-h-32 overflow-hidden bg-surface-elevated md:aspect-video md:min-h-0">
         {episode.thumbnailUrl ? (

@@ -121,7 +121,7 @@ function MediaCard({ media }: { media: (typeof MEDIA_FEATURES)[number] }) {
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
       aria-label={`${action}: ${media.title} on ${media.platform}${external ? " (opens in a new tab)" : ""}`}
-      className="group grid h-full grid-cols-[7.75rem_minmax(0,1fr)] overflow-hidden rounded-lg border border-border bg-surface transition-colors hover:border-border-strong hover:bg-surface-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:flex sm:flex-col"
+      className="group grid h-full grid-cols-[7.75rem_minmax(0,1fr)] overflow-hidden rounded-lg border border-border bg-surface transition-[border-color,background-color,box-shadow] duration-300 hover:border-primary/50 hover:bg-surface-elevated hover:shadow-glow-sm focus-visible:shadow-glow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:flex sm:flex-col"
     >
       {media.thumbnailUrl ? (
         <div className="relative aspect-[4/3] w-full self-start overflow-hidden bg-surface-elevated sm:aspect-video">

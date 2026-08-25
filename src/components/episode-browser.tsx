@@ -414,7 +414,7 @@ function EpisodeCard({
   return (
     <Link
       href={`/episodes/${episode.slug}`}
-      className={`group flex min-w-0 overflow-hidden rounded-lg border border-border bg-surface transition-colors duration-200 hover:border-primary/50 ${
+      className={`group flex min-w-0 overflow-hidden rounded-lg border border-border bg-surface transition-[border-color,box-shadow] duration-300 hover:border-primary/50 hover:shadow-glow-sm focus-visible:border-primary/60 focus-visible:shadow-glow-sm ${
         variant === "list" ? "flex-row" : "flex-col"
       }`}
     >
