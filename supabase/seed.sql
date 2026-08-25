@@ -22,7 +22,13 @@ insert into public.content_topics (slug, label) values
   ('brain-autoimmunity', 'brain-autoimmunity'),
   ('blood-health', 'blood-health'),
   ('red-cell-function', 'red-cell-function'),
-  ('circulation', 'circulation')
+  ('circulation', 'circulation'),
+  ('nutrition', 'nutrition'),
+  ('food-as-medicine', 'food-as-medicine'),
+  ('microglia', 'microglia'),
+  ('blood-sugar', 'blood-sugar'),
+  ('gut-brain-axis', 'gut-brain-axis'),
+  ('nrf2', 'nrf2')
 on conflict (slug) do update set label = excluded.label;
 
 insert into public.episodes (
@@ -128,6 +134,19 @@ insert into public.episodes (
     '5QJlHSE6JhP3ymSCNzbWxv',
     '5UOEvs59hBA',
     'https://drmexperienced.com/images/episodes/brain-neuroinflammation.webp'
+  ),
+  (
+    'episode-8-food-and-the-brain',
+    8,
+    $$Food and the Brain - Eating for Brain Health and Concussion Recovery$$,
+    '2026-08-25',
+    22,
+    $$Dr. Musnick explains how he approaches eating for brain sharpness and concussion recovery, covering apigenin, choline, omega-3s, Nrf2-supportive foods, turmeric, quercetin, rosemary, protein, blood sugar, the microbiome, and selected elimination strategies.$$,
+    'https://content.rss.com/episodes/397420/3096546/dr-m-experienced/2026_08_25_22_20_41_83110c46-278d-4dc5-96e7-d38abd74172a.mp3',
+    '1221293570',
+    '7oYwjErc5TXpocbRFgzvH0',
+    'ax5BSELnBbo',
+    'https://drmexperienced.com/images/episodes/food-and-the-brain.webp'
   )
 on conflict (slug) do update set
   episode_number = excluded.episode_number,
@@ -141,6 +160,12 @@ on conflict (slug) do update set
   youtube_id = excluded.youtube_id,
   thumbnail_url = excluded.thumbnail_url,
   updated_at = now();
+
+update public.episodes
+   set status = 'published',
+       updated_at = now()
+ where slug = 'episode-8-food-and-the-brain'
+   and status <> 'published';
 
 insert into public.episode_topics (episode_slug, topic_slug) values
   ('brain-fog-part-1', 'brain-fog'),
@@ -170,7 +195,17 @@ insert into public.episode_topics (episode_slug, topic_slug) values
   ('episode-7-the-brain-on-fire', 'brain-health'),
   ('episode-7-the-brain-on-fire', 'neuroinflammation'),
   ('episode-7-the-brain-on-fire', 'blood-brain-barrier'),
-  ('episode-7-the-brain-on-fire', 'functional-medicine')
+  ('episode-7-the-brain-on-fire', 'functional-medicine'),
+  ('episode-8-food-and-the-brain', 'brain-health'),
+  ('episode-8-food-and-the-brain', 'nutrition'),
+  ('episode-8-food-and-the-brain', 'food-as-medicine'),
+  ('episode-8-food-and-the-brain', 'concussion'),
+  ('episode-8-food-and-the-brain', 'neuroinflammation'),
+  ('episode-8-food-and-the-brain', 'functional-medicine'),
+  ('episode-8-food-and-the-brain', 'microglia'),
+  ('episode-8-food-and-the-brain', 'blood-sugar'),
+  ('episode-8-food-and-the-brain', 'gut-brain-axis'),
+  ('episode-8-food-and-the-brain', 'nrf2')
 on conflict (episode_slug, topic_slug) do nothing;
 
 insert into public.episode_references (episode_slug, label, url, display_order) values
@@ -201,9 +236,25 @@ insert into public.episode_references (episode_slug, label, url, display_order) 
   ('episode-7-the-brain-on-fire', 'Watch on Vimeo', 'https://vimeo.com/1205004739', 10),
   ('episode-7-the-brain-on-fire', 'Listen on Spotify', 'https://open.spotify.com/episode/5QJlHSE6JhP3ymSCNzbWxv', 20),
   ('episode-7-the-brain-on-fire', 'Watch on YouTube', 'https://www.youtube.com/watch?v=5UOEvs59hBA', 30),
-  ('episode-7-the-brain-on-fire', 'Watch on Rumble', 'https://rumble.com/v7bvtu4-episode-7-the-brain-on-fire.html', 40)
+  ('episode-7-the-brain-on-fire', 'Watch on Rumble', 'https://rumble.com/v7bvtu4-episode-7-the-brain-on-fire.html', 40),
+  ('episode-8-food-and-the-brain', 'Watch on Vimeo', 'https://vimeo.com/1221293570', 10),
+  ('episode-8-food-and-the-brain', 'Listen on Spotify', 'https://open.spotify.com/episode/7oYwjErc5TXpocbRFgzvH0', 20),
+  ('episode-8-food-and-the-brain', 'Watch on YouTube', 'https://youtu.be/ax5BSELnBbo', 30),
+  ('episode-8-food-and-the-brain', 'Related: The Brain on Fire', 'https://drmexperienced.com/episodes/episode-7-the-brain-on-fire/', 100),
+  ('episode-8-food-and-the-brain', 'Related: Concussion - What Happens in the Brain', 'https://drmexperienced.com/episodes/episode-6-concussion-and-pathophysiology/', 110),
+  ('episode-8-food-and-the-brain', 'Affiliate and product guide', 'https://drmexperienced.com/affiliates/', 120),
+  ('episode-8-food-and-the-brain', 'Dr. M Experienced Supplement Dispensary', 'https://drmexperienced.com/affiliates/#doctors-supplement-store', 130),
+  ('episode-8-food-and-the-brain', 'Request the Healthy Brain Diet handout', 'https://drmexperienced.com/contact/', 140),
+  ('episode-8-food-and-the-brain', 'HumanN Turmeric Chews', 'https://drmexperienced.com/affiliates/#humann-turmeric-chews', 150),
+  ('episode-8-food-and-the-brain', 'FGO Turmeric Ginger Tea', 'https://drmexperienced.com/affiliates/#fgo-turmeric-ginger-tea', 160),
+  ('episode-8-food-and-the-brain', 'Purity Coffee', 'https://drmexperienced.com/affiliates/#purity-coffee', 170),
+  ('episode-8-food-and-the-brain', 'Purity laboratory information', 'https://puritycoffee.com/pages/independent-laboratory-tests', 180)
 on conflict (episode_slug, url) do update set
   label = excluded.label,
+  coming_soon = case
+    when excluded.episode_slug = 'episode-8-food-and-the-brain' then false
+    else episode_references.coming_soon
+  end,
   display_order = excluded.display_order;
 
 insert into public.episode_key_takeaways (episode_slug, display_order, body) values
@@ -239,7 +290,12 @@ insert into public.episode_key_takeaways (episode_slug, display_order, body) val
   ($$episode-7-the-brain-on-fire$$, 20, $$A healing brain needs protection from reinjury even after the most noticeable symptoms begin to improve.$$),
   ($$episode-7-the-brain-on-fire$$, 30, $$Astrocytes support the blood-brain barrier, oligodendrocytes help form myelin, and microglia respond to injury and inflammation.$$),
   ($$episode-7-the-brain-on-fire$$, 40, $$Prolonged pro-inflammatory M1 microglial activity can impair neurons and synapses, while repair-oriented M2 activity supports recovery.$$),
-  ($$episode-7-the-brain-on-fire$$, 50, $$Sleep, selected foods and flavonoids, vitamin D, omega-3s, curcumin, and Nrf2 signaling are discussed as research-informed considerations, not a self-treatment protocol.$$)
+  ($$episode-7-the-brain-on-fire$$, 50, $$Sleep, selected foods and flavonoids, vitamin D, omega-3s, curcumin, and Nrf2 signaling are discussed as research-informed considerations, not a self-treatment protocol.$$),
+  ($$episode-8-food-and-the-brain$$, 10, $$Dr. M organizes brain-focused nutrition around inflammatory balance, neuronal membrane support, steadier blood sugar, and a diverse gut microbiome.$$),
+  ($$episode-8-food-and-the-brain$$, 20, $$Foods discussed include parsley and apigenin, wild blueberries, choline-rich eggs, lower-mercury seafood, broccoli sprouts, green tea, turmeric, quercetin-rich produce, and rosemary.$$),
+  ($$episode-8-food-and-the-brain$$, 30, $$Protein quality, vegetable diversity, fiber, and food preparation are recurring practical themes throughout the episode.$$),
+  ($$episode-8-food-and-the-brain$$, 40, $$The episode discusses limiting heavily browned foods, selected acrylamide and heavy-metal exposures, high-sugar foods, BPA and plastics, MSG, and aspartame.$$),
+  ($$episode-8-food-and-the-brain$$, 50, $$Elimination diets, ketogenic eating, supplements, and fasting are presented as approaches to individualize with a qualified clinician rather than universal instructions.$$)
 on conflict (episode_slug, display_order) do update set body = excluded.body;
 
 insert into public.episode_checklist_items (episode_slug, display_order, body) values
@@ -251,7 +307,12 @@ insert into public.episode_checklist_items (episode_slug, display_order, body) v
   ($$episode-5-energy$$, 10, $$Start with sleep quality and screen for sleep apnea when fatigue persists.$$),
   ($$episode-5-energy$$, 20, $$Look for inflammatory, infectious, mold, heavy-metal, hormone, thyroid, adrenal, liver, kidney, and mitochondrial contributors.$$),
   ($$episode-5-energy$$, 30, $$Support ATP production with clinician-guided nutrition and supplement choices.$$),
-  ($$episode-5-energy$$, 40, $$Use grounding, sleep improvement, and mitochondrial support as part of a broader root-cause plan.$$)
+  ($$episode-5-energy$$, 40, $$Use grounding, sleep improvement, and mitochondrial support as part of a broader root-cause plan.$$),
+  ($$episode-8-food-and-the-brain$$, 10, $$Build a parsley and wild-blueberry smoothie with an individually appropriate protein source.$$),
+  ($$episode-8-food-and-the-brain$$, 20, $$Include varied vegetables and fiber-rich foods to support microbiome diversity.$$),
+  ($$episode-8-food-and-the-brain$$, 30, $$Review choline sources, protein quality, and lower-mercury seafood choices.$$),
+  ($$episode-8-food-and-the-brain$$, 40, $$Pay attention to heavily browned or deep-fried foods, added sugar, large predatory fish, and plastic food packaging.$$),
+  ($$episode-8-food-and-the-brain$$, 50, $$Discuss major elimination, ketogenic, fasting, or supplement changes with an appropriate clinician.$$)
 on conflict (episode_slug, display_order) do update set body = excluded.body;
 
 insert into public.episode_sections (episode_slug, display_order, title) values
@@ -279,7 +340,11 @@ insert into public.episode_sections (episode_slug, display_order, title) values
   ($$episode-7-the-brain-on-fire$$, 10, $$Brain reserve and symptom recovery$$),
   ($$episode-7-the-brain-on-fire$$, 20, $$Protecting a healing brain$$),
   ($$episode-7-the-brain-on-fire$$, 30, $$Glial cells and microglia$$),
-  ($$episode-7-the-brain-on-fire$$, 40, $$Supporting inflammatory balance$$)
+  ($$episode-7-the-brain-on-fire$$, 40, $$Supporting inflammatory balance$$),
+  ($$episode-8-food-and-the-brain$$, 10, $$Food, microglia, and neuronal membranes$$),
+  ($$episode-8-food-and-the-brain$$, 20, $$Phytonutrients and practical recipes$$),
+  ($$episode-8-food-and-the-brain$$, 30, $$Protein, blood sugar, and the microbiome$$),
+  ($$episode-8-food-and-the-brain$$, 40, $$When stricter approaches need individual guidance$$)
 on conflict (episode_slug, display_order) do update set title = excluded.title;
 
 insert into public.episode_section_paragraphs (
@@ -330,7 +395,15 @@ insert into public.episode_section_paragraphs (
   ($$episode-7-the-brain-on-fire$$, 30, 10, $$Astrocytes help support the blood-brain barrier, oligodendrocytes help form myelin, and microglia act as immune-support cells within the brain.$$),
   ($$episode-7-the-brain-on-fire$$, 30, 20, $$Dr. M contrasts prolonged pro-inflammatory M1 microglial activity, which can impair neurons and synapses, with repair-oriented M2 activity.$$),
   ($$episode-7-the-brain-on-fire$$, 40, 10, $$The discussion covers sleep, luteolin and apigenin, vitamin D, Nrf2 signaling, curcumin, and omega-3 fats as research-informed considerations.$$),
-  ($$episode-7-the-brain-on-fire$$, 40, 20, $$These topics are educational and should be evaluated with an appropriate clinician rather than used as a stand-alone treatment or return-to-play protocol.$$)
+  ($$episode-7-the-brain-on-fire$$, 40, 20, $$These topics are educational and should be evaluated with an appropriate clinician rather than used as a stand-alone treatment or return-to-play protocol.$$),
+  ($$episode-8-food-and-the-brain$$, 10, 10, $$Dr. M connects food choices with inflammatory M1 and repair-oriented M2 microglial activity, beginning with apigenin-rich parsley and a wild-blueberry smoothie.$$),
+  ($$episode-8-food-and-the-brain$$, 10, 20, $$The discussion then turns to choline, omega-3 DHA, and other dietary building blocks involved in neuronal membranes.$$),
+  ($$episode-8-food-and-the-brain$$, 20, 10, $$Broccoli sprouts, green tea, turmeric, quercetin-rich capers, red onions and apples, and rosemary appear in the episode's discussion of Nrf2 signaling and brain-focused eating.$$),
+  ($$episode-8-food-and-the-brain$$, 20, 20, $$Dr. M shares practical ideas including a parsley smoothie and a cilantro-parsley pesto, and names HumanN Turmeric Chews and FGO Turmeric Ginger Tea as products listeners may want to research.$$),
+  ($$episode-8-food-and-the-brain$$, 30, 10, $$The episode emphasizes protein quality, lower-mercury fish, vegetable diversity, fiber, steadier blood sugar, and a diverse gut microbiome.$$),
+  ($$episode-8-food-and-the-brain$$, 30, 20, $$It also examines heavily browned foods, advanced glycation end products, acrylamide, plastics, MSG, aspartame, and the sourcing and testing questions Dr. M considers when discussing coffee.$$),
+  ($$episode-8-food-and-the-brain$$, 40, 10, $$Dr. M explains why he may consider gluten-free, cow-dairy-free, low-lectin, ketogenic, fasting, or other selected elimination approaches in some neurological and concussion cases.$$),
+  ($$episode-8-food-and-the-brain$$, 40, 20, $$These approaches are not universal. Major dietary changes, supplements, fasting, and elimination or ketogenic diets should be reviewed with a qualified healthcare professional.$$)
 on conflict (episode_slug, section_display_order, display_order) do update set body = excluded.body;
 
 insert into public.affiliate_categories (slug, label, description, display_order) values
@@ -338,7 +411,8 @@ insert into public.affiliate_categories (slug, label, description, display_order
   ('sleep-light-environment', 'Sleep & Light Environment', $$Light-hygiene and circadian-support tools for sleep, insomnia, and evening routines.$$, 20),
   ('home-environment', 'Home Environment', $$Assessment and mitigation resources for home, bedroom, work, and travel environments.$$, 30),
   ('homeopathics-supplements', 'Homeopathics & Supplements', $$Homeopathic, drainage, detoxification, and supplement resources that need stronger clinical context.$$, 40),
-  ('supplements', 'Supplements', $$Supplement dispensaries and product lines connected to functional-medicine and episode follow-up topics.$$, 50)
+  ('supplements', 'Supplements', $$Supplement dispensaries and product lines connected to functional-medicine and episode follow-up topics.$$, 50),
+  ('food-and-nutrition', 'Food & Nutrition', $$Food and beverage resources connected to Dr. M's nutrition and brain-health discussions.$$, 60)
 on conflict (slug) do update set
   label = excluded.label,
   description = excluded.description,
@@ -487,6 +561,60 @@ insert into public.affiliate_products (
     '2026-06-17',
     '2026-06-17',
     'David Musnick forwarded Abeytu discount and blood-health notes.'
+  ),
+  (
+    'humann-turmeric-chews',
+    'supplements',
+    'HumanN',
+    'Turmeric Chews',
+    $$The turmeric and curcumin chew Dr. M names in Episode 8 as one convenient way to include turmeric.$$,
+    $$Dr. M mentions HumanN Turmeric Chews while discussing practical ways to include turmeric in a brain-focused food plan. This official product page is provided for listeners who want to research the exact item named in the episode.$$,
+    $$Direct official product link; no Dr. M affiliate URL is currently recorded.$$,
+    $$Supplement choices are not one-size-fits-all and should be reviewed with an appropriate clinician when relevant.$$,
+    null,
+    'https://humann.com/products/turmeric-chews',
+    null,
+    null,
+    80,
+    '2026-08-25',
+    '2026-08-25',
+    'Named by Dr. M in Episode 8; official HumanN product page verified 2026-08-25.'
+  ),
+  (
+    'fgo-turmeric-ginger-tea',
+    'food-and-nutrition',
+    'FGO / From Great Origins',
+    'Turmeric Ginger Tea',
+    $$The turmeric, ginger, and cinnamon tea Dr. M names in Episode 8 as a food-and-beverage option for turmeric.$$,
+    $$Dr. M mentions FGO Turmeric Ginger Tea as a practical alternative to using turmeric only as a spice or supplement. This official product page is provided for listeners who want to research the exact tea named in the episode.$$,
+    $$Direct official product link; no Dr. M affiliate URL is currently recorded.$$,
+    $$Food, beverage, and supplement choices should be individualized for allergies, medications, and other health considerations.$$,
+    null,
+    'https://fromgreatorigins.com/products/turmeric-ginger-tea-bags',
+    null,
+    null,
+    90,
+    '2026-08-25',
+    '2026-08-25',
+    'Named by Dr. M in Episode 8; official From Great Origins product page verified 2026-08-25.'
+  ),
+  (
+    'purity-coffee',
+    'food-and-nutrition',
+    'Purity Coffee',
+    'Organic Whole Bean Coffee',
+    $$The organic whole-bean coffee brand Dr. M names in Episode 8 while discussing coffee, acrylamide, mold, and product testing.$$,
+    $$Dr. M points listeners to Purity Coffee while explaining why he pays attention to how coffee is sourced and tested. The brand also publishes laboratory-testing information for listeners who want to review it.$$,
+    $$Direct official product-category link; no Dr. M affiliate URL is currently recorded. Purity's laboratory information is linked in the Episode 8 show notes.$$,
+    $$Coffee and caffeine tolerance vary; consider individual sleep, medication, pregnancy, and medical context.$$,
+    null,
+    'https://puritycoffee.com/collections/whole-bean-coffee',
+    null,
+    null,
+    100,
+    '2026-08-25',
+    '2026-08-25',
+    'Named by Dr. M in Episode 8; official Purity Coffee product and laboratory-information pages verified 2026-08-25.'
   )
 on conflict (slug) do update set
   category_slug = excluded.category_slug,
@@ -526,7 +654,16 @@ insert into public.affiliate_product_reasons (product_slug, display_order, body)
   ('doctors-supplement-store', 30, $$Useful as a central destination when future episodes or webinars mention supplement categories.$$),
   ('abeytu-naturals', 10, $$Connects to the broader functional-medicine lens of oxygen delivery, circulation, and cellular function.$$),
   ('abeytu-naturals', 20, $$The public discount link gives listeners a straightforward way to find the line Dr. M referenced.$$),
-  ('abeytu-naturals', 30, $$A useful category to discuss when red-cell function is part of a larger health plan.$$)
+  ('abeytu-naturals', 30, $$A useful category to discuss when red-cell function is part of a larger health plan.$$),
+  ('humann-turmeric-chews', 10, $$Provides the exact branded turmeric chew named in Episode 8.$$),
+  ('humann-turmeric-chews', 20, $$The direct link goes to HumanN's official product page.$$),
+  ('humann-turmeric-chews', 30, $$A chew format gives listeners another option to compare with turmeric used as a spice or tea.$$),
+  ('fgo-turmeric-ginger-tea', 10, $$Provides the exact branded turmeric tea named in Episode 8.$$),
+  ('fgo-turmeric-ginger-tea', 20, $$The direct link goes to From Great Origins' official product page.$$),
+  ('fgo-turmeric-ginger-tea', 30, $$A tea format gives listeners another way to compare turmeric options.$$),
+  ('purity-coffee', 10, $$Provides the exact coffee brand named in Episode 8.$$),
+  ('purity-coffee', 20, $$The direct link goes to Purity Coffee's official whole-bean collection.$$),
+  ('purity-coffee', 30, $$Purity publishes a separate laboratory-information page for listeners evaluating its testing claims.$$)
 on conflict (product_slug, display_order) do update set body = excluded.body;
 
 insert into public.affiliate_product_use_cases (product_slug, display_order, body) values
@@ -557,7 +694,16 @@ insert into public.affiliate_product_use_cases (product_slug, display_order, bod
   ('abeytu-naturals', 10, $$Blood-health supplement research$$),
   ('abeytu-naturals', 20, $$Red-cell function conversations$$),
   ('abeytu-naturals', 30, $$Oxygen-delivery and circulation support discussions$$),
-  ('abeytu-naturals', 40, $$Clinician-guided supplement planning$$)
+  ('abeytu-naturals', 40, $$Clinician-guided supplement planning$$),
+  ('humann-turmeric-chews', 10, $$Researching the turmeric chew mentioned in Episode 8$$),
+  ('humann-turmeric-chews', 20, $$Comparing turmeric and curcumin formats$$),
+  ('humann-turmeric-chews', 30, $$Following the episode's discussion of Nrf2-supportive foods$$),
+  ('fgo-turmeric-ginger-tea', 10, $$Researching the turmeric tea mentioned in Episode 8$$),
+  ('fgo-turmeric-ginger-tea', 20, $$Comparing food, beverage, and supplement forms of turmeric$$),
+  ('fgo-turmeric-ginger-tea', 30, $$Following the episode's brain-health nutrition discussion$$),
+  ('purity-coffee', 10, $$Researching the coffee brand mentioned in Episode 8$$),
+  ('purity-coffee', 20, $$Comparing organic whole-bean coffee options$$),
+  ('purity-coffee', 30, $$Reviewing a brand's published coffee-testing information$$)
 on conflict (product_slug, display_order) do update set body = excluded.body;
 
 insert into public.affiliate_product_featured_items (product_slug, display_order, label) values
@@ -596,7 +742,11 @@ insert into public.affiliate_product_episode_links (product_slug, episode_slug, 
   ('desbio-dbscript', 'brain-fog-part-1', 'brain fog and root-cause support'),
   ('desbio-dbscript', 'brain-fog-part-2', 'brain fog and root-cause support'),
   ('best365labs', 'brain-fog-part-1', 'brain and energy support'),
-  ('best365labs', 'brain-fog-part-2', 'brain and energy support')
+  ('best365labs', 'brain-fog-part-2', 'brain and energy support'),
+  ('doctors-supplement-store', 'episode-8-food-and-the-brain', 'brain-health nutrition resources'),
+  ('humann-turmeric-chews', 'episode-8-food-and-the-brain', 'turmeric product named in Episode 8'),
+  ('fgo-turmeric-ginger-tea', 'episode-8-food-and-the-brain', 'turmeric tea named in Episode 8'),
+  ('purity-coffee', 'episode-8-food-and-the-brain', 'coffee brand named in Episode 8')
 on conflict (product_slug, episode_slug) do update set link_reason = excluded.link_reason;
 
 insert into public.affiliate_product_auto_topics (product_slug, topic_slug) values
@@ -614,7 +764,10 @@ insert into public.affiliate_product_auto_topics (product_slug, topic_slug) valu
   ('best365labs', 'mitochondria'),
   ('abeytu-naturals', 'blood-health'),
   ('abeytu-naturals', 'red-cell-function'),
-  ('abeytu-naturals', 'circulation')
+  ('abeytu-naturals', 'circulation'),
+  ('humann-turmeric-chews', 'nrf2'),
+  ('fgo-turmeric-ginger-tea', 'nrf2'),
+  ('purity-coffee', 'nutrition')
 on conflict (product_slug, topic_slug) do nothing;
 
 insert into public.affiliate_product_tags (product_slug, tag_slug) values
@@ -648,5 +801,20 @@ insert into public.affiliate_product_tags (product_slug, tag_slug) values
   ('abeytu-naturals', 'blood-health'),
   ('abeytu-naturals', 'red-cell-function'),
   ('abeytu-naturals', 'circulation'),
-  ('abeytu-naturals', 'supplements')
+  ('abeytu-naturals', 'supplements'),
+  ('humann-turmeric-chews', 'brain-health'),
+  ('humann-turmeric-chews', 'nutrition'),
+  ('humann-turmeric-chews', 'turmeric'),
+  ('humann-turmeric-chews', 'curcumin'),
+  ('humann-turmeric-chews', 'supplements'),
+  ('fgo-turmeric-ginger-tea', 'brain-health'),
+  ('fgo-turmeric-ginger-tea', 'nutrition'),
+  ('fgo-turmeric-ginger-tea', 'turmeric'),
+  ('fgo-turmeric-ginger-tea', 'ginger'),
+  ('fgo-turmeric-ginger-tea', 'tea'),
+  ('purity-coffee', 'brain-health'),
+  ('purity-coffee', 'nutrition'),
+  ('purity-coffee', 'coffee'),
+  ('purity-coffee', 'organic'),
+  ('purity-coffee', 'food-quality')
 on conflict (product_slug, tag_slug) do nothing;

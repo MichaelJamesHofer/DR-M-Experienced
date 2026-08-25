@@ -89,5 +89,18 @@
     "slug": "episode-7-the-brain-on-fire",
     "number": 7,
     "thumbnailUrl": "https://drmexperienced.com/images/episodes/brain-neuroinflammation.webp"
+  },
+  {
+    "vimeoId": "1221293570",
+    "spotifyId": "7oYwjErc5TXpocbRFgzvH0",
+    "spotifyUrl": "https://open.spotify.com/episode/7oYwjErc5TXpocbRFgzvH0",
+    "youtubeId": "ax5BSELnBbo",
+    "title": "Food and the Brain - Eating for Brain Health and Concussion Recovery",
+    "publishDate": "2026-08-25",
+    "durationMinutes": 22,
+    "summary": "Dr. Musnick explains how he approaches eating for brain sharpness and concussion recovery, covering apigenin, choline, omega-3s, Nrf2-supportive foods, turmeric, quercetin, rosemary, protein, blood sugar, the microbiome, and selected elimination strategies.",
+    "slug": "episode-8-food-and-the-brain",
+    "number": 8,
+    "thumbnailUrl": "https://drmexperienced.com/images/episodes/food-and-the-brain.webp"
   }
 ]

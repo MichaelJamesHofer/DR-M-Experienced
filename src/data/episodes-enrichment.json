@@ -434,5 +434,114 @@
         ]
       }
     ]
+  },
+  "1221293570": {
+    "audioUrl": "https://content.rss.com/episodes/397420/3096546/dr-m-experienced/2026_08_25_22_20_41_83110c46-278d-4dc5-96e7-d38abd74172a.mp3",
+    "references": [
+      {
+        "label": "Watch on Vimeo",
+        "url": "https://vimeo.com/1221293570"
+      },
+      {
+        "label": "Listen on Spotify",
+        "url": "https://open.spotify.com/episode/7oYwjErc5TXpocbRFgzvH0"
+      },
+      {
+        "label": "Watch on YouTube",
+        "url": "https://youtu.be/ax5BSELnBbo"
+      },
+      {
+        "label": "Related: The Brain on Fire",
+        "url": "https://drmexperienced.com/episodes/episode-7-the-brain-on-fire/"
+      },
+      {
+        "label": "Related: Concussion - What Happens in the Brain",
+        "url": "https://drmexperienced.com/episodes/episode-6-concussion-and-pathophysiology/"
+      },
+      {
+        "label": "Affiliate and product guide",
+        "url": "https://drmexperienced.com/affiliates/"
+      },
+      {
+        "label": "Dr. M Experienced Supplement Dispensary",
+        "url": "https://drmexperienced.com/affiliates/#doctors-supplement-store"
+      },
+      {
+        "label": "Request the Healthy Brain Diet handout",
+        "url": "https://drmexperienced.com/contact/"
+      },
+      {
+        "label": "HumanN Turmeric Chews",
+        "url": "https://drmexperienced.com/affiliates/#humann-turmeric-chews"
+      },
+      {
+        "label": "FGO Turmeric Ginger Tea",
+        "url": "https://drmexperienced.com/affiliates/#fgo-turmeric-ginger-tea"
+      },
+      {
+        "label": "Purity Coffee",
+        "url": "https://drmexperienced.com/affiliates/#purity-coffee"
+      },
+      {
+        "label": "Purity laboratory information",
+        "url": "https://puritycoffee.com/pages/independent-laboratory-tests"
+      }
+    ],
+    "topics": [
+      "brain-health",
+      "nutrition",
+      "food-as-medicine",
+      "concussion",
+      "neuroinflammation",
+      "functional-medicine",
+      "microglia",
+      "blood-sugar",
+      "gut-brain-axis",
+      "nrf2"
+    ],
+    "keyTakeaways": [
+      "Dr. M organizes brain-focused nutrition around inflammatory balance, neuronal membrane support, steadier blood sugar, and a diverse gut microbiome.",
+      "Foods discussed include parsley and apigenin, wild blueberries, choline-rich eggs, lower-mercury seafood, broccoli sprouts, green tea, turmeric, quercetin-rich produce, and rosemary.",
+      "Protein quality, vegetable diversity, fiber, and food preparation are recurring practical themes throughout the episode.",
+      "The episode discusses limiting heavily browned foods, selected acrylamide and heavy-metal exposures, high-sugar foods, BPA and plastics, MSG, and aspartame.",
+      "Elimination diets, ketogenic eating, supplements, and fasting are presented as approaches to individualize with a qualified clinician rather than universal instructions."
+    ],
+    "checklist": [
+      "Build a parsley and wild-blueberry smoothie with an individually appropriate protein source.",
+      "Include varied vegetables and fiber-rich foods to support microbiome diversity.",
+      "Review choline sources, protein quality, and lower-mercury seafood choices.",
+      "Pay attention to heavily browned or deep-fried foods, added sugar, large predatory fish, and plastic food packaging.",
+      "Discuss major elimination, ketogenic, fasting, or supplement changes with an appropriate clinician."
+    ],
+    "sections": [
+      {
+        "title": "Food, microglia, and neuronal membranes",
+        "content": [
+          "Dr. M connects food choices with inflammatory M1 and repair-oriented M2 microglial activity, beginning with apigenin-rich parsley and a wild-blueberry smoothie.",
+          "The discussion then turns to choline, omega-3 DHA, and other dietary building blocks involved in neuronal membranes."
+        ]
+      },
+      {
+        "title": "Phytonutrients and practical recipes",
+        "content": [
+          "Broccoli sprouts, green tea, turmeric, quercetin-rich capers, red onions and apples, and rosemary appear in the episode's discussion of Nrf2 signaling and brain-focused eating.",
+          "Dr. M shares practical ideas including a parsley smoothie and a cilantro-parsley pesto, and names HumanN Turmeric Chews and FGO Turmeric Ginger Tea as products listeners may want to research."
+        ]
+      },
+      {
+        "title": "Protein, blood sugar, and the microbiome",
+        "content": [
+          "The episode emphasizes protein quality, lower-mercury fish, vegetable diversity, fiber, steadier blood sugar, and a diverse gut microbiome.",
+          "It also examines heavily browned foods, advanced glycation end products, acrylamide, plastics, MSG, aspartame, and the sourcing and testing questions Dr. M considers when discussing coffee."
+        ]
+      },
+      {
+        "title": "When stricter approaches need individual guidance",
+        "content": [
+          "Dr. M explains why he may consider gluten-free, cow-dairy-free, low-lectin, ketogenic, fasting, or other selected elimination approaches in some neurological and concussion cases.",
+          "These approaches are not universal. Major dietary changes, supplements, fasting, and elimination or ketogenic diets should be reviewed with a qualified healthcare professional."
+        ]
+      }
+    ]
   }
 }

@@ -73,6 +73,13 @@ export const AFFILIATE_CATEGORIES: AffiliateCategory[] = [
       "Supplement dispensaries and product lines connected to functional-medicine and episode follow-up topics.",
     displayOrder: 50,
   },
+  {
+    slug: "food-and-nutrition",
+    label: "Food & Nutrition",
+    description:
+      "Food and beverage resources connected to Dr. M's nutrition and brain-health discussions.",
+    displayOrder: 60,
+  },
 ];
 
 export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
@@ -281,6 +288,7 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     ],
     directUrl: "https://dssorders.com/DrMExperienced",
     purchaseNote: "This is the Dr. M Experienced dispensary URL.",
+    episodeSlugs: ["episode-8-food-and-the-brain"],
     tags: ["supplements", "dispensary", "brain-health", "immune-support", "orthopedics"],
     sortOrder: 60,
     dateAdded: "2026-06-17",
@@ -318,6 +326,105 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     dateAdded: "2026-06-17",
     lastReviewed: "2026-06-17",
     sourceNote: "David Musnick forwarded Abeytu discount and blood-health notes.",
+  },
+  {
+    slug: "humann-turmeric-chews",
+    name: "Turmeric Chews",
+    brand: "HumanN",
+    categorySlug: "supplements",
+    category: "Supplements",
+    summary:
+      "The turmeric and curcumin chew Dr. M names in Episode 8 as one convenient way to include turmeric.",
+    drmThoughts:
+      "Dr. M mentions HumanN Turmeric Chews while discussing practical ways to include turmeric in a brain-focused food plan. This official product page is provided for listeners who want to research the exact item named in the episode.",
+    reasonsToLike: [
+      "Provides the exact branded turmeric chew named in Episode 8.",
+      "The direct link goes to HumanN's official product page.",
+      "A chew format gives listeners another option to compare with turmeric used as a spice or tea.",
+    ],
+    usedFor: [
+      "Researching the turmeric chew mentioned in Episode 8",
+      "Comparing turmeric and curcumin formats",
+      "Following the episode's discussion of Nrf2-supportive foods",
+    ],
+    directUrl: "https://humann.com/products/turmeric-chews",
+    purchaseNote: "Direct official product link; no Dr. M affiliate URL is currently recorded.",
+    cautionNote:
+      "Supplement choices are not one-size-fits-all and should be reviewed with an appropriate clinician when relevant.",
+    episodeSlugs: ["episode-8-food-and-the-brain"],
+    autoLinkTopicSlugs: ["nrf2"],
+    tags: ["brain-health", "nutrition", "turmeric", "curcumin", "supplements"],
+    sortOrder: 80,
+    dateAdded: "2026-08-25",
+    lastReviewed: "2026-08-25",
+    sourceNote: "Named by Dr. M in Episode 8; official HumanN product page verified 2026-08-25.",
+  },
+  {
+    slug: "fgo-turmeric-ginger-tea",
+    name: "Turmeric Ginger Tea",
+    brand: "FGO / From Great Origins",
+    categorySlug: "food-and-nutrition",
+    category: "Food & Nutrition",
+    summary:
+      "The turmeric, ginger, and cinnamon tea Dr. M names in Episode 8 as a food-and-beverage option for turmeric.",
+    drmThoughts:
+      "Dr. M mentions FGO Turmeric Ginger Tea as a practical alternative to using turmeric only as a spice or supplement. This official product page is provided for listeners who want to research the exact tea named in the episode.",
+    reasonsToLike: [
+      "Provides the exact branded turmeric tea named in Episode 8.",
+      "The direct link goes to From Great Origins' official product page.",
+      "A tea format gives listeners another way to compare turmeric options.",
+    ],
+    usedFor: [
+      "Researching the turmeric tea mentioned in Episode 8",
+      "Comparing food, beverage, and supplement forms of turmeric",
+      "Following the episode's brain-health nutrition discussion",
+    ],
+    directUrl: "https://fromgreatorigins.com/products/turmeric-ginger-tea-bags",
+    purchaseNote: "Direct official product link; no Dr. M affiliate URL is currently recorded.",
+    cautionNote:
+      "Food, beverage, and supplement choices should be individualized for allergies, medications, and other health considerations.",
+    episodeSlugs: ["episode-8-food-and-the-brain"],
+    autoLinkTopicSlugs: ["nrf2"],
+    tags: ["brain-health", "nutrition", "turmeric", "ginger", "tea"],
+    sortOrder: 90,
+    dateAdded: "2026-08-25",
+    lastReviewed: "2026-08-25",
+    sourceNote:
+      "Named by Dr. M in Episode 8; official From Great Origins product page verified 2026-08-25.",
+  },
+  {
+    slug: "purity-coffee",
+    name: "Organic Whole Bean Coffee",
+    brand: "Purity Coffee",
+    categorySlug: "food-and-nutrition",
+    category: "Food & Nutrition",
+    summary:
+      "The organic whole-bean coffee brand Dr. M names in Episode 8 while discussing coffee, acrylamide, mold, and product testing.",
+    drmThoughts:
+      "Dr. M points listeners to Purity Coffee while explaining why he pays attention to how coffee is sourced and tested. The brand also publishes laboratory-testing information for listeners who want to review it.",
+    reasonsToLike: [
+      "Provides the exact coffee brand named in Episode 8.",
+      "The direct link goes to Purity Coffee's official whole-bean collection.",
+      "Purity publishes a separate laboratory-information page for listeners evaluating its testing claims.",
+    ],
+    usedFor: [
+      "Researching the coffee brand mentioned in Episode 8",
+      "Comparing organic whole-bean coffee options",
+      "Reviewing a brand's published coffee-testing information",
+    ],
+    directUrl: "https://puritycoffee.com/collections/whole-bean-coffee",
+    purchaseNote:
+      "Direct official product-category link; no Dr. M affiliate URL is currently recorded. Purity's laboratory information is linked in the Episode 8 show notes.",
+    cautionNote:
+      "Coffee and caffeine tolerance vary; consider individual sleep, medication, pregnancy, and medical context.",
+    episodeSlugs: ["episode-8-food-and-the-brain"],
+    autoLinkTopicSlugs: ["nutrition"],
+    tags: ["brain-health", "nutrition", "coffee", "organic", "food-quality"],
+    sortOrder: 100,
+    dateAdded: "2026-08-25",
+    lastReviewed: "2026-08-25",
+    sourceNote:
+      "Named by Dr. M in Episode 8; official Purity Coffee product and laboratory-information pages verified 2026-08-25.",
   },
 ];
 

@@ -69,7 +69,8 @@ test("checked-in Vimeo platform summary is an exact projection of the short-form
   const result = validateShortFormPlatformRegistry(catalog, platformRegistry);
 
   assert.deepEqual(result, { valid: true, errors: [] });
-  assert.equal(platformRegistry.platforms.vimeo.currentVideoCount, 10);
+  assert.equal(platformRegistry.platforms.vimeo.currentVideoCount, 11);
+  assert.equal(platformRegistry.platforms.vimeo.currentEpisodeVideoCount, 8);
   assert.equal(platformRegistry.platforms.vimeo.currentShortVideoCount, 3);
   assert.deepEqual(platformRegistry.platforms.vimeo.catalogedShortVideoIds, [
     "1216695521",

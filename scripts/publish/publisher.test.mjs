@@ -958,7 +958,10 @@ test("CLI prepare rejects episodes missing from or drifting from the master cata
 
   try {
     const unregisteredPath = path.join(directory, "unregistered.json");
-    await fs.writeFile(unregisteredPath, `${JSON.stringify(example, null, 2)}\n`);
+    await fs.writeFile(
+      unregisteredPath,
+      `${JSON.stringify({ ...example, episodeNumber: 9 }, null, 2)}\n`
+    );
     const unregistered = runCli(unregisteredPath);
     assert.equal(unregistered.status, 1);
     assert.match(unregistered.stderr, /is not in publishing\/master-catalog\.json/);

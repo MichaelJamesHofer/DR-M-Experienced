@@ -24,6 +24,7 @@ export type Episode = {
   videoUrl?: string;
   vimeoId?: string;
   spotifyId?: string;
+  youtubeId?: string;
   thumbnailUrl?: string;
   transcriptUrl?: string;
   references?: EpisodeReference[];
@@ -111,6 +112,7 @@ function mergeEpisode(ep: PlatformEpisode): Episode {
     audioUrl: en.audioUrl,
     vimeoId: vimeoId || undefined,
     spotifyId: ep.spotifyId ?? undefined,
+    youtubeId: ep.youtubeId ?? undefined,
     thumbnailUrl: ep.thumbnailUrl,
     references: buildReferences(ep, en),
     keyTakeaways: en.keyTakeaways ?? [],
