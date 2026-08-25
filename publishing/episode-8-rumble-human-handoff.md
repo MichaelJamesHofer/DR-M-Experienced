@@ -13,8 +13,8 @@ logged-in browser is not authorization for an automated action.
 - Account ID: `282015440`
 - Channel ID: `7820170`
 - Channel: `https://rumble.com/c/c-7820170`
-- Proposed public title: `Food and the Brain - Eating for Brain Health and Concussion Recovery`
-- Exact public-title approval: **PENDING OWNER APPROVAL**
+- Public title: `Food and the Brain - Eating for Brain Health and Concussion Recovery`
+- Exact public-title approval: **APPROVED BY OWNER ON 2026-08-25**
 - Structured internal episode number: `8`
 
 ## Exact Files
@@ -184,7 +184,7 @@ rights attestation and must not be treated as one.
 ## Direct-Human Submission Checklist
 
 - [ ] Rehash the selected video and thumbnail and compare them with this packet.
-- [ ] Obtain exact owner approval for the proposed public title, then verify the approved title character for character.
+- [ ] Verify the owner-approved title character for character.
 - [ ] Paste the exact description and confirm every literal URL.
 - [ ] Upload the exact 1920 x 1080 thumbnail.
 - [ ] Select **Unlisted** initial visibility.

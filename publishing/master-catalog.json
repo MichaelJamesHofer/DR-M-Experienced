@@ -1,8 +1,8 @@
 {
   "$schema": "./master-catalog.schema.json",
   "schemaVersion": 1,
-  "revision": 14,
-  "updatedAt": "2026-08-25T20:00:15Z",
+  "revision": 15,
+  "updatedAt": "2026-08-25T22:41:54Z",
   "show": {
     "names": {
       "full": "Dr. M Experienced, with Dr. David Musnick",
@@ -312,7 +312,8 @@
       "sha256": "10cb7e8e0dde9a5f081123d3bc8f5f2aedbfcb9a1a1ae66a69812b051aa64433",
       "sizeBytes": 31025133,
       "mediaType": "audio/mpeg",
-      "status": "verified"
+      "status": "verified",
+      "publishedUrl": "https://content.rss.com/episodes/397420/3096546/dr-m-experienced/2026_08_25_22_20_41_83110c46-278d-4dc5-96e7-d38abd74172a.mp3"
     },
     "episode-008-thumbnail": {
       "kind": "image",
@@ -321,7 +322,8 @@
       "sha256": "a53a5f85634701c8a7aaf5ba1b6b436202f857428dbfa592b485732f67db5643",
       "sizeBytes": 564787,
       "mediaType": "image/jpeg",
-      "status": "verified"
+      "status": "verified",
+      "publishedUrl": "https://drmexperienced.com/images/episodes/food-and-the-brain.webp"
     },
     "episode-008-captions": {
       "kind": "text",
@@ -792,10 +794,10 @@
       ]
     },
     {
-      "publicationState": "draft",
+      "publicationState": "published",
       "number": 8,
       "slug": "episode-8-food-and-the-brain",
-      "rssGuid": null,
+      "rssGuid": "4587dd48-8a26-4341-b194-8764500d74ef",
       "title": "Food and the Brain - Eating for Brain Health and Concussion Recovery",
       "description": {
         "format": "html",
@@ -803,13 +805,13 @@
       },
       "websiteSummary": "Dr. Musnick explains how he approaches eating for brain sharpness and concussion recovery, covering apigenin, choline, omega-3s, Nrf2-supportive foods, turmeric, quercetin, rosemary, protein, blood sugar, the microbiome, and selected elimination strategies.",
       "durationMinutes": 22,
-      "publishDate": null,
-      "feedPublishedAt": null,
+      "publishDate": "2026-08-25",
+      "feedPublishedAt": "2026-08-25T22:26:24.000Z",
       "contentFlags": {
         "explicit": false,
-        "madeForKids": null,
-        "containsSyntheticMedia": null,
-        "paidPromotion": null
+        "madeForKids": false,
+        "containsSyntheticMedia": false,
+        "paidPromotion": true
       },
       "assetRefs": {
         "fullVideo": "episode-008-master-video",
@@ -823,9 +825,18 @@
         "slugs": []
       },
       "destinations": {
-        "spotify": null,
-        "youtube": null,
-        "vimeo": null,
+        "spotify": {
+          "id": "7oYwjErc5TXpocbRFgzvH0",
+          "url": "https://open.spotify.com/episode/7oYwjErc5TXpocbRFgzvH0"
+        },
+        "youtube": {
+          "id": "ax5BSELnBbo",
+          "url": "https://youtu.be/ax5BSELnBbo"
+        },
+        "vimeo": {
+          "id": "1221293570",
+          "url": "https://vimeo.com/1221293570"
+        },
         "rumble": null
       },
       "destinationArchives": []

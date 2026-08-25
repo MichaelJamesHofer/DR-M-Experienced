@@ -7,6 +7,7 @@ import {
 } from "./affiliates";
 import { BLOG_POSTS, type BlogPost, type BlogReference, type BlogSection } from "./blogs";
 import { EPISODES, type Episode, type EpisodeReference, type EpisodeSection } from "./episodes";
+import { coreEpisodePlatformProblems } from "./episode-platform-validation.mjs";
 import { siteImageSrc } from "@/lib/site-images";
 
 export type ContentCatalog = {
@@ -27,6 +28,7 @@ type EpisodeRow = {
   audio_url: string | null;
   vimeo_id: string | null;
   spotify_id: string | null;
+  youtube_id: string | null;
   thumbnail_url: string | null;
   transcript_url: string | null;
 };
@@ -506,6 +508,7 @@ function mapEpisodes(
         audioUrl: row.audio_url ?? undefined,
         vimeoId: row.vimeo_id ?? undefined,
         spotifyId: row.spotify_id ?? undefined,
+        youtubeId: row.youtube_id ?? undefined,
         thumbnailUrl: siteImageSrc(row.thumbnail_url ?? undefined),
         transcriptUrl: row.transcript_url ?? undefined,
         references,
@@ -783,11 +786,7 @@ function validateSupabaseCatalog(catalog: ContentCatalog) {
         .map((reference) => episodePlatformForUrl(reference.url))
         .filter((platform): platform is string => Boolean(platform))
     );
-    for (const platform of ["Vimeo", "Spotify", "YouTube", "Rumble"]) {
-      if (!availablePlatforms.has(platform)) {
-        problems.push(`${episode.slug} is missing a published ${platform} reference.`);
-      }
-    }
+    problems.push(...coreEpisodePlatformProblems(episode, availablePlatforms));
 
     episode.sections.forEach((section) => {
       if (section.content.length === 0) {

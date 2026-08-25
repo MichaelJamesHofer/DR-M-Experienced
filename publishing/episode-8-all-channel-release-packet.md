@@ -1,7 +1,9 @@
 # Episode 8 All-Channel Copy And Release Packet
 
-Status: prepared copy and verified local media; no upload or public release is
-authorized by this document.
+Status: owner-approved release in progress. RSS.com, YouTube, and Vimeo are
+public and verified; Spotify audio is public on the RSS-created episode and its
+same-ID video attachment is processing. Apple RSS ingestion and the website
+deployment remain pending live readback. Rumble remains a human-only handoff.
 
 This packet is the reusable copy and release-control handoff for Episode 8. It
 does not replace `publishing/master-catalog.json`, the private publisher
@@ -12,8 +14,8 @@ read back or explicitly selected.
 ## Canonical Identity
 
 - Structured episode number: `8`
-- Proposed public title: `Food and the Brain - Eating for Brain Health and Concussion Recovery`
-- Exact public-title approval: **PENDING OWNER APPROVAL**
+- Public title: `Food and the Brain - Eating for Brain Health and Concussion Recovery`
+- Exact public-title approval: **APPROVED BY OWNER ON 2026-08-25**
 - Slug: `episode-8-food-and-the-brain`
 - Planned public page: `https://drmexperienced.com/episodes/episode-8-food-and-the-brain/`
 - Category: `Health & Fitness`
@@ -40,21 +42,22 @@ Only the following canonical files are approved for this release. The earlier
 The video and MP3 pass the project's `-17` through `-15 LUFS` integrated
 loudness gate and the `-1 dBTP` maximum true-peak gate.
 
-## Human Decisions Required Before Release
+## Recorded Owner Decisions
 
-These are deliberately unresolved. Record exact values in the private manifest
-and immutable review packet; do not infer them from this document.
+The owner approved these exact release controls on 2026-08-25. They are bound
+to approval hash
+`a72f9793818c6485ad9a91eab3769fa58a297776be142929db37910b81fe3fb5`.
 
-- Publish now or scheduled date/time: **PENDING HUMAN SELECTION**
-- Exact public title: **PENDING OWNER APPROVAL**
-- Explicit content: **PENDING HUMAN CONFIRMATION**
-- Made for kids / audience: **PENDING HUMAN CONFIRMATION**
-- Altered or synthetic media disclosure: **PENDING HUMAN CONFIRMATION**
-- Paid promotion disclosure: **PENDING HUMAN CONFIRMATION**
-- YouTube license and subscriber notifications: **PENDING HUMAN SELECTION**
-- Vimeo license, visibility, and notifications: **PENDING HUMAN SELECTION**
-- Spotify video replacement confirmation on the RSS-created item: **PENDING HUMAN APPROVAL**
-- Third-party music, footage, graphics, quotations, and trademark review: **PENDING HUMAN RIGHTS REVIEW**
+- Release timing: **PUBLIC NOW**
+- Exact public title: **APPROVED**
+- Explicit content: **NO**
+- Made for kids / audience: **NO**
+- Altered or synthetic media disclosure: **NO**
+- Paid promotion / promotional content: **YES**
+- YouTube: **private first, then public; Standard YouTube License; notifications on; existing monetization unchanged**
+- Vimeo: **nobody/private first, then public; no Creative Commons license**
+- Spotify: **attach video only to the exact RSS-created Episode 8; never create a duplicate**
+- Rights clearance: **OWNER ATTESTED**
 
 Affiliate links and product mentions require the disclosure included below.
 Their presence does not by itself answer a platform's paid-promotion question.
@@ -67,10 +70,10 @@ control, not permission to upload or release.
 
 | Direct target | Release mode / final visibility | Initial visibility | License | Monetization | Notifications |
 | --- | --- | --- | --- | --- | --- |
-| RSS.com | **PENDING HUMAN SELECTION** | **PENDING MANIFEST SELECTION** | **PENDING MANIFEST SELECTION** | **PENDING MANIFEST SELECTION** | **PENDING MANIFEST SELECTION** |
-| Spotify video attachment | **PENDING HUMAN SELECTION**, after same RSS item appears | **PENDING MANIFEST SELECTION** | **PENDING MANIFEST SELECTION** | **PENDING MANIFEST SELECTION** | **PENDING MANIFEST SELECTION** |
-| YouTube | **PENDING HUMAN SELECTION** | `private` | **PENDING HUMAN SELECTION** | **PENDING HUMAN SELECTION** | **PENDING HUMAN SELECTION** |
-| Vimeo | **PENDING HUMAN SELECTION** | `nobody` | **PENDING HUMAN SELECTION** | **PENDING HUMAN SELECTION** | **PENDING HUMAN SELECTION** |
+| RSS.com | `public_now` | Host processing state | Host terms | Affiliate disclosure in copy | Host defaults |
+| Spotify video attachment | `public_now`, exact RSS item only | Existing public audio item | Spotify platform terms | Promotional content `yes` | Platform defaults |
+| YouTube | `public` | `private` | `standard` | Existing monetization unchanged; paid promotion `yes` | `on` |
+| Vimeo | `public` | `nobody` | No Creative Commons license | Contains advertisement `yes` | Platform defaults |
 | Instagram | `hold`; no approved `instagramReel` exists | **PENDING IN A NEW PACKET** | **PENDING IN A NEW PACKET** | **PENDING IN A NEW PACKET** | **PENDING IN A NEW PACKET** |
 | Rumble | **PENDING HUMAN FINAL-VISIBILITY SELECTION** | `unlisted` | `rumble_only_option_c` / form code `6` | **PENDING HUMAN SELECTION** | **PENDING HUMAN SELECTION** |
 
@@ -267,15 +270,15 @@ Approved hashtag set:
 
 | Destination | Media/copy | Required order and pending controls |
 | --- | --- | --- |
-| RSS.com | `podcast-audio.mp3`, 3000 x 3000 podcast art, canonical HTML copy | Create structured Episode 8 in podcast `397420` first. Exact release time and explicit/AI fields remain pending. Capture the returned episode ID, GUID, enclosure, date, and URL. |
-| Spotify | RSS-created episode plus `master-video.mp4` | Wait for the same Episode 8 item in show `7GGLljxmO0G3FLjPy8vfcw`, then use its `Upload video` action. Never create a second episode or upload the MP3 separately. Release confirmation remains pending. |
-| Apple Podcasts | RSS fan-out | Verify the same GUID/item in public show `1870433419`; do not upload separately. |
+| RSS.com | `podcast-audio.mp3`, 3000 x 3000 podcast art, canonical HTML copy | **PUBLIC AND VERIFIED.** Item `3096546`; GUID `4587dd48-8a26-4341-b194-8764500d74ef`; published `2026-08-25T22:26:24Z`. |
+| Spotify | RSS-created episode plus `master-video.mp4` | **AUDIO PUBLIC; VIDEO PROCESSING.** Existing RSS-created episode `7oYwjErc5TXpocbRFgzvH0` was used. Promotional content is `yes`; no duplicate was created. |
+| Apple Podcasts | RSS fan-out | **PROPAGATION PENDING.** Continue verifying GUID/title in public show `1870433419`; do not upload separately. |
 | Amazon Music/Audible | RSS fan-out after one-time show claim | No stable show ID is recorded. Owner verification and claim remain pending; never submit the legacy Anchor feed. |
-| YouTube | `master-video.mp4`, 16:9 thumbnail, SRT, explicit plain-text override, tags/chapters | Upload private first to channel `UCFA1nVv4lKMBlx81gjMAOFQ`. Audience, synthetic-media, paid-promotion, license, notifications, and final visibility remain pending. |
-| Vimeo | `master-video.mp4`, 16:9 thumbnail, explicit plain-text override | Upload with `nobody` privacy first to account `253415660`. License, notifications, and final privacy remain pending. |
+| YouTube | `master-video.mp4`, 16:9 thumbnail, SRT, explicit plain-text override, tags/chapters | **PUBLIC AND VERIFIED.** Video `ax5BSELnBbo`; private-first controls, disclosures, thumbnail, SRT, tags, copy, and checks verified before public release. |
+| Vimeo | `master-video.mp4`, 16:9 thumbnail, SRT, explicit plain-text override | **PUBLIC AND VERIFIED.** Video `1221293570`; private-first controls, advertisement disclosure, all-audiences rating, thumbnail, SRT, tags, copy, and 1080p60 master readback verified. |
 | Instagram | No approved vertical Reel | No long-form Instagram release is represented by this packet. Do not crop or publish the 21-minute horizontal master as a Reel. A separately edited, approved vertical asset and caption require a new packet. |
 | Rumble | See `publishing/episode-8-rumble-human-handoff.md` | Human-only; no browser automation. |
-| Website | 1600 x 900 WebP, MP3, summary, chapters/resources, verified remote references | Keep the Supabase row draft until selected platform IDs and URLs are verified. Publish through reviewed `main`, then verify the live episode page. |
+| Website | 1600 x 900 WebP, MP3, summary, chapters/resources, verified remote references | **SUPABASE PUBLISHED AND VERIFIED.** Production row has the exact RSS, Spotify, YouTube, and Vimeo identities, 12 active references, and complete editorial children. Publish the reviewed branch through `main`, then verify the live episode page. |
 
 ## Website Resource Set
 
@@ -305,13 +308,14 @@ verified public episode identity. Do not invent or publish a placeholder link.
 
 Complete these only after authenticated and independent readback:
 
-- RSS.com episode ID: **PENDING**
-- RSS GUID: **PENDING**
-- RSS enclosure URL: **PENDING**
-- Spotify episode ID/URL: **PENDING**
+- RSS.com episode ID: `3096546` — `https://rss.com/podcasts/dr-m-experienced/3096546`
+- RSS GUID: `4587dd48-8a26-4341-b194-8764500d74ef`
+- RSS enclosure URL: `https://content.rss.com/episodes/397420/3096546/dr-m-experienced/2026_08_25_22_20_41_83110c46-278d-4dc5-96e7-d38abd74172a.mp3`
+- Spotify episode ID/URL: `7oYwjErc5TXpocbRFgzvH0` — `https://open.spotify.com/episode/7oYwjErc5TXpocbRFgzvH0` (audio public; submitted video processing)
 - Apple episode ID/URL: **PENDING**
-- Amazon show and episode ID/URL: **PENDING**
-- YouTube video ID/URL: **PENDING**
-- Vimeo video ID/URL: **PENDING**
+- Amazon show and episode ID/URL: **NOT CURRENTLY CLAIMED OR DISCOVERABLE; NO DIRECT UPLOAD**
+- YouTube video ID/URL: `ax5BSELnBbo` — `https://youtu.be/ax5BSELnBbo`
+- Vimeo video ID/URL: `1221293570` — `https://vimeo.com/1221293570`
+- Supabase production row: **PUBLISHED AND VERIFIED** — 10 topics, 12 active references, 5 takeaways, 5 checklist items, 4 sections, 8 paragraphs, and 4 affiliate-product relationships
 - Website live URL and deployment run: **PENDING**
-- Cross-platform title/copy/art/runtime verification: **PENDING**
+- Cross-platform title/copy/art/runtime verification: **RSS.COM, YOUTUBE, AND VIMEO VERIFIED; SPOTIFY AUDIO/COPY/ART VERIFIED WITH VIDEO PROCESSING; APPLE AND WEBSITE PENDING**

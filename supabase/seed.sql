@@ -134,6 +134,19 @@ insert into public.episodes (
     '5QJlHSE6JhP3ymSCNzbWxv',
     '5UOEvs59hBA',
     'https://drmexperienced.com/images/episodes/brain-neuroinflammation.webp'
+  ),
+  (
+    'episode-8-food-and-the-brain',
+    8,
+    $$Food and the Brain - Eating for Brain Health and Concussion Recovery$$,
+    '2026-08-25',
+    22,
+    $$Dr. Musnick explains how he approaches eating for brain sharpness and concussion recovery, covering apigenin, choline, omega-3s, Nrf2-supportive foods, turmeric, quercetin, rosemary, protein, blood sugar, the microbiome, and selected elimination strategies.$$,
+    'https://content.rss.com/episodes/397420/3096546/dr-m-experienced/2026_08_25_22_20_41_83110c46-278d-4dc5-96e7-d38abd74172a.mp3',
+    '1221293570',
+    '7oYwjErc5TXpocbRFgzvH0',
+    'ax5BSELnBbo',
+    'https://drmexperienced.com/images/episodes/food-and-the-brain.webp'
   )
 on conflict (slug) do update set
   episode_number = excluded.episode_number,
@@ -148,42 +161,11 @@ on conflict (slug) do update set
   thumbnail_url = excluded.thumbnail_url,
   updated_at = now();
 
--- Episode 8 remains a local editorial draft until the release workflow records
--- its exact public date and verified platform identities in a later migration.
-insert into public.episodes (
-  slug,
-  episode_number,
-  title,
-  publish_date,
-  duration_minutes,
-  summary,
-  thumbnail_url,
-  status
-) values (
-  'episode-8-food-and-the-brain',
-  8,
-  $$Food and the Brain - Eating for Brain Health and Concussion Recovery$$,
-  '2026-08-25',
-  22,
-  $$Dr. Musnick explains how he approaches eating for brain sharpness and concussion recovery, covering apigenin, choline, omega-3s, Nrf2-supportive foods, turmeric, quercetin, rosemary, protein, blood sugar, the microbiome, and selected elimination strategies.$$,
-  'https://drmexperienced.com/images/episodes/food-and-the-brain.webp',
-  'draft'
-)
-on conflict (slug) do update set
-  episode_number = excluded.episode_number,
-  title = excluded.title,
-  publish_date = case
-    when episodes.status = 'published' then episodes.publish_date
-    else excluded.publish_date
-  end,
-  duration_minutes = excluded.duration_minutes,
-  summary = excluded.summary,
-  thumbnail_url = excluded.thumbnail_url,
-  status = case
-    when episodes.status = 'published' then episodes.status
-    else excluded.status
-  end,
-  updated_at = now();
+update public.episodes
+   set status = 'published',
+       updated_at = now()
+ where slug = 'episode-8-food-and-the-brain'
+   and status <> 'published';
 
 insert into public.episode_topics (episode_slug, topic_slug) values
   ('brain-fog-part-1', 'brain-fog'),
@@ -255,17 +237,24 @@ insert into public.episode_references (episode_slug, label, url, display_order) 
   ('episode-7-the-brain-on-fire', 'Listen on Spotify', 'https://open.spotify.com/episode/5QJlHSE6JhP3ymSCNzbWxv', 20),
   ('episode-7-the-brain-on-fire', 'Watch on YouTube', 'https://www.youtube.com/watch?v=5UOEvs59hBA', 30),
   ('episode-7-the-brain-on-fire', 'Watch on Rumble', 'https://rumble.com/v7bvtu4-episode-7-the-brain-on-fire.html', 40),
-  ('episode-8-food-and-the-brain', 'Related: The Brain on Fire', 'https://drmexperienced.com/episodes/episode-7-the-brain-on-fire/', 10),
-  ('episode-8-food-and-the-brain', 'Related: Concussion - What Happens in the Brain', 'https://drmexperienced.com/episodes/episode-6-concussion-and-pathophysiology/', 20),
-  ('episode-8-food-and-the-brain', 'Affiliate and product guide', 'https://drmexperienced.com/affiliates/', 30),
-  ('episode-8-food-and-the-brain', 'Dr. M Experienced Supplement Dispensary', 'https://drmexperienced.com/affiliates/#doctors-supplement-store', 40),
-  ('episode-8-food-and-the-brain', 'Request the Healthy Brain Diet handout', 'https://drmexperienced.com/contact/', 50),
-  ('episode-8-food-and-the-brain', 'HumanN Turmeric Chews', 'https://drmexperienced.com/affiliates/#humann-turmeric-chews', 60),
-  ('episode-8-food-and-the-brain', 'FGO Turmeric Ginger Tea', 'https://drmexperienced.com/affiliates/#fgo-turmeric-ginger-tea', 70),
-  ('episode-8-food-and-the-brain', 'Purity Coffee', 'https://drmexperienced.com/affiliates/#purity-coffee', 80),
-  ('episode-8-food-and-the-brain', 'Purity laboratory information', 'https://puritycoffee.com/pages/independent-laboratory-tests', 90)
+  ('episode-8-food-and-the-brain', 'Watch on Vimeo', 'https://vimeo.com/1221293570', 10),
+  ('episode-8-food-and-the-brain', 'Listen on Spotify', 'https://open.spotify.com/episode/7oYwjErc5TXpocbRFgzvH0', 20),
+  ('episode-8-food-and-the-brain', 'Watch on YouTube', 'https://youtu.be/ax5BSELnBbo', 30),
+  ('episode-8-food-and-the-brain', 'Related: The Brain on Fire', 'https://drmexperienced.com/episodes/episode-7-the-brain-on-fire/', 100),
+  ('episode-8-food-and-the-brain', 'Related: Concussion - What Happens in the Brain', 'https://drmexperienced.com/episodes/episode-6-concussion-and-pathophysiology/', 110),
+  ('episode-8-food-and-the-brain', 'Affiliate and product guide', 'https://drmexperienced.com/affiliates/', 120),
+  ('episode-8-food-and-the-brain', 'Dr. M Experienced Supplement Dispensary', 'https://drmexperienced.com/affiliates/#doctors-supplement-store', 130),
+  ('episode-8-food-and-the-brain', 'Request the Healthy Brain Diet handout', 'https://drmexperienced.com/contact/', 140),
+  ('episode-8-food-and-the-brain', 'HumanN Turmeric Chews', 'https://drmexperienced.com/affiliates/#humann-turmeric-chews', 150),
+  ('episode-8-food-and-the-brain', 'FGO Turmeric Ginger Tea', 'https://drmexperienced.com/affiliates/#fgo-turmeric-ginger-tea', 160),
+  ('episode-8-food-and-the-brain', 'Purity Coffee', 'https://drmexperienced.com/affiliates/#purity-coffee', 170),
+  ('episode-8-food-and-the-brain', 'Purity laboratory information', 'https://puritycoffee.com/pages/independent-laboratory-tests', 180)
 on conflict (episode_slug, url) do update set
   label = excluded.label,
+  coming_soon = case
+    when excluded.episode_slug = 'episode-8-food-and-the-brain' then false
+    else episode_references.coming_soon
+  end,
   display_order = excluded.display_order;
 
 insert into public.episode_key_takeaways (episode_slug, display_order, body) values

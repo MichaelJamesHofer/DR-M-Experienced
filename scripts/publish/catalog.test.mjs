@@ -55,6 +55,7 @@ const expectedPodcastAudio = [
   ["episode-5-energy", "1204939658", "https://content.rss.com/episodes/397420/3050762/dr-m-experienced/2026_08_22_21_31_50_62730fc1-465f-4df9-9c8a-d721be928586.mp3"],
   ["episode-6-concussion-and-pathophysiology", "1204939692", "https://content.rss.com/episodes/397420/3050761/dr-m-experienced/2026_08_07_05_55_46_4806f336-163e-4ffb-b446-e4e03bb81013.mp3"],
   ["episode-7-the-brain-on-fire", "1205004739", "https://content.rss.com/episodes/397420/3050760/dr-m-experienced/2026_08_07_05_56_36_52e27ebd-6648-4ff7-adf3-f9f7731c1b86.mp3"],
+  ["episode-8-food-and-the-brain", "1221293570", "https://content.rss.com/episodes/397420/3096546/dr-m-experienced/2026_08_25_22_20_41_83110c46-278d-4dc5-96e7-d38abd74172a.mp3"],
 ];
 
 async function temporarySources() {
@@ -71,7 +72,7 @@ test("master catalog validates and has a deterministic hash", async () => {
   const result = validateCatalog(catalog);
   assert.deepEqual(result, { valid: true, errors: [] });
   assert.equal(catalog.schemaVersion, 1);
-  assert.equal(catalog.revision, 14);
+  assert.equal(catalog.revision, 15);
   assert.equal(catalog.episodes.length, 8);
   assert.match(catalogHash(catalog), /^[a-f0-9]{64}$/);
   assert.equal(catalogHash(catalog), catalogHash(structuredClone(catalog)));
@@ -88,27 +89,30 @@ test("master catalog validates and has a deterministic hash", async () => {
   );
 });
 
-test("episode 8 is a verified draft with canonical local release assets", async () => {
+test("episode 8 records its verified RSS, Spotify, YouTube, and Vimeo publication state", async () => {
   const catalog = await loadCatalog();
   const episode = findEpisode(catalog, 8);
 
-  assert.equal(episode.publicationState, "draft");
+  assert.equal(episode.publicationState, "published");
   assert.equal(episode.title, "Food and the Brain - Eating for Brain Health and Concussion Recovery");
   assert.equal(episode.slug, "episode-8-food-and-the-brain");
   assert.equal(episode.durationMinutes, 22);
-  assert.equal(episode.rssGuid, null);
-  assert.equal(episode.publishDate, null);
-  assert.equal(episode.feedPublishedAt, null);
+  assert.equal(episode.rssGuid, "4587dd48-8a26-4341-b194-8764500d74ef");
+  assert.equal(episode.publishDate, "2026-08-25");
+  assert.equal(episode.feedPublishedAt, "2026-08-25T22:26:24.000Z");
   assert.deepEqual(episode.contentFlags, {
     explicit: false,
-    madeForKids: null,
-    containsSyntheticMedia: null,
-    paidPromotion: null,
+    madeForKids: false,
+    containsSyntheticMedia: false,
+    paidPromotion: true,
   });
   assert.deepEqual(episode.destinations, {
-    spotify: null,
-    youtube: null,
-    vimeo: null,
+    spotify: {
+      id: "7oYwjErc5TXpocbRFgzvH0",
+      url: "https://open.spotify.com/episode/7oYwjErc5TXpocbRFgzvH0",
+    },
+    youtube: { id: "ax5BSELnBbo", url: "https://youtu.be/ax5BSELnBbo" },
+    vimeo: { id: "1221293570", url: "https://vimeo.com/1221293570" },
     rumble: null,
   });
   assert.deepEqual(episode.assetRefs, {
@@ -143,6 +147,7 @@ test("episode 8 is a verified draft with canonical local release assets", async 
         sizeBytes: 31025133,
         mediaType: "audio/mpeg",
         status: "verified",
+        publishedUrl: "https://content.rss.com/episodes/397420/3096546/dr-m-experienced/2026_08_25_22_20_41_83110c46-278d-4dc5-96e7-d38abd74172a.mp3",
       },
       "episode-008-thumbnail": {
         kind: "image",
@@ -152,6 +157,7 @@ test("episode 8 is a verified draft with canonical local release assets", async 
         sizeBytes: 564787,
         mediaType: "image/jpeg",
         status: "verified",
+        publishedUrl: "https://drmexperienced.com/images/episodes/food-and-the-brain.webp",
       },
       "episode-008-captions": {
         kind: "text",
@@ -166,6 +172,9 @@ test("episode 8 is a verified draft with canonical local release assets", async 
   );
   assert.match(episode.description.full, /https:\/\/drmexperienced\.com\/affiliates\//);
   assert.match(episode.description.full, /https:\/\/drmexperienced\.com\/episodes\/episode-7-the-brain-on-fire\//);
+  assert.equal(findEpisode(catalog, { platform: "spotify", id: "7oYwjErc5TXpocbRFgzvH0" })?.number, 8);
+  assert.equal(findEpisode(catalog, { platform: "youtube", id: "ax5BSELnBbo" })?.number, 8);
+  assert.equal(findEpisode(catalog, { platform: "vimeo", id: "1221293570" })?.number, 8);
 });
 
 test("HTML descriptions have a deterministic readable plain-text projection", () => {
@@ -273,7 +282,7 @@ test("published podcast enclosures bind the website and Supabase seed projection
     );
   }
 
-  assert.equal((episodeSeed.match(/https:\/\/content\.rss\.com\/episodes\//g) ?? []).length, 7);
+  assert.equal((episodeSeed.match(/https:\/\/content\.rss\.com\/episodes\//g) ?? []).length, 8);
   assert.doesNotMatch(episodeSeed, /https:\/\/anchor\.fm\/s\/10e1b0328\/podcast\/play\//);
 });
 
@@ -430,8 +439,8 @@ test("published catalog feed comparison passes exact metadata in reverse episode
 
   assert.deepEqual(result, {
     ok: true,
-    expectedEpisodeCount: 7,
-    actualEpisodeCount: 7,
+    expectedEpisodeCount: 8,
+    actualEpisodeCount: 8,
     episodeCountMatches: true,
     guidSetMatches: true,
     uniqueGuids: true,
@@ -441,10 +450,10 @@ test("published catalog feed comparison passes exact metadata in reverse episode
     noSeasonMetadata: true,
     feedOrderMatches: true,
     noLegacyTitlePrefixes: true,
-    expectedStructuredEpisodeNumbers: [1, 2, 3, 4, 5, 6, 7],
-    actualStructuredEpisodeNumbers: [1, 2, 3, 4, 5, 6, 7],
-    expectedFeedOrder: [7, 6, 5, 4, 3, 2, 1],
-    actualFeedOrder: [7, 6, 5, 4, 3, 2, 1],
+    expectedStructuredEpisodeNumbers: [1, 2, 3, 4, 5, 6, 7, 8],
+    actualStructuredEpisodeNumbers: [1, 2, 3, 4, 5, 6, 7, 8],
+    expectedFeedOrder: [8, 7, 6, 5, 4, 3, 2, 1],
+    actualFeedOrder: [8, 7, 6, 5, 4, 3, 2, 1],
     missingGuids: [],
     extraGuids: [],
     duplicateGuids: [],
@@ -462,7 +471,7 @@ test("published catalog feed comparison derives its expectations dynamically and
   const expanded = structuredClone(catalog);
   const draft = structuredClone(expanded.episodes.at(-1));
   draft.publicationState = "draft";
-  draft.number = 8;
+  draft.number = 9;
   draft.rssGuid = null;
   draft.title = "Future Draft - Not Yet in the Feed";
   expanded.episodes.push(draft);
@@ -471,13 +480,13 @@ test("published catalog feed comparison derives its expectations dynamically and
 
   const published = structuredClone(draft);
   published.publicationState = "published";
-  published.rssGuid = "00000000-0000-4000-8000-000000000008";
+  published.rssGuid = "00000000-0000-4000-8000-000000000009";
   expanded.episodes[expanded.episodes.length - 1] = published;
   const result = comparePublishedCatalogFeed(expanded, parsedFeedFromCatalog(expanded));
 
   assert.equal(result.ok, true);
-  assert.equal(result.expectedEpisodeCount, 8);
-  assert.deepEqual(result.expectedStructuredEpisodeNumbers, [1, 2, 3, 4, 5, 6, 7, 8]);
+  assert.equal(result.expectedEpisodeCount, 9);
+  assert.deepEqual(result.expectedStructuredEpisodeNumbers, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
 });
 
 test("published catalog feed comparison rejects count, GUID, and GUID uniqueness drift independently", async () => {
@@ -529,7 +538,7 @@ test("published catalog feed comparison binds exact titles and structured number
   assert.equal(result.structuredNumbersMatch, false);
   assert.equal(result.titleMismatches.length, 2);
   assert.equal(result.episodeNumberMismatches.length, 2);
-  assert.deepEqual(result.actualStructuredEpisodeNumbers, [1, 2, 3, 4, 5, 6, 7]);
+  assert.deepEqual(result.actualStructuredEpisodeNumbers, [1, 2, 3, 4, 5, 6, 7, 8]);
 });
 
 test("published catalog feed comparison rejects missing structured numbers and legacy title prefixes", async () => {
@@ -598,8 +607,8 @@ test("published catalog feed comparison rejects season metadata and noncanonical
   const orderResult = comparePublishedCatalogFeed(catalog, orderDrift);
   assert.equal(orderResult.ok, false);
   assert.equal(orderResult.feedOrderMatches, false);
-  assert.deepEqual(orderResult.expectedFeedOrder, [7, 6, 5, 4, 3, 2, 1]);
-  assert.deepEqual(orderResult.actualFeedOrder, [6, 7, 5, 4, 3, 2, 1]);
+  assert.deepEqual(orderResult.expectedFeedOrder, [8, 7, 6, 5, 4, 3, 2, 1]);
+  assert.deepEqual(orderResult.actualFeedOrder, [7, 8, 6, 5, 4, 3, 2, 1]);
 });
 
 test("published catalog feed comparison validates its collection inputs", () => {
@@ -805,7 +814,7 @@ test("YouTube cutover projects normalized public IDs and retains the prior uploa
     assert.match(migration, new RegExp(archivedYouTubeId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
 
-  assert.equal(platforms.platforms.youtube.currentPublicVideoCount, 7);
+  assert.equal(platforms.platforms.youtube.currentPublicVideoCount, 8);
   assert.equal(platforms.platforms.youtube.priorVideoCount, 7);
   assert.equal(platforms.platforms.youtube.priorVideosDeleted, false);
   assert.equal(thumbnailReceipt.catalog.revision, 10);
@@ -838,6 +847,7 @@ test("checked-in catalog projection migrations are transaction-wrapped and conta
   for (const relativePath of [
     "../../supabase/migrations/20260807061500_publish_normalized_rss_audio.sql",
     "../../supabase/migrations/20260807074632_publish_normalized_youtube_destinations.sql",
+    "../../supabase/migrations/20260825223522_publish_episode8.sql",
   ]) {
     const sql = await fs.readFile(new URL(relativePath, import.meta.url), "utf8");
     assert.doesNotMatch(sql, /^\+/m, `${relativePath} contains a literal patch-marker prefix`);
@@ -845,6 +855,77 @@ test("checked-in catalog projection migrations are transaction-wrapped and conta
     assert.match(sql, /^begin;$/m, `${relativePath} is not transaction-wrapped`);
     assert.match(sql, /^commit;$/m, `${relativePath} is not transaction-wrapped`);
   }
+});
+
+test("platform registry records the exact Episode 8 live and processing state", async () => {
+  const registry = JSON.parse(
+    await fs.readFile(new URL("../../publishing/platforms.json", import.meta.url), "utf8")
+  );
+
+  assert.equal(registry.platforms["rss.com"].currentEpisodeCount, 8);
+  assert.equal(registry.platforms["rss.com"].remoteLoudnessGatesPassed, 8);
+  assert.match(registry.platforms["rss.com"].notes, /item 3096546/);
+  assert.match(registry.platforms["rss.com"].notes, /4587dd48-8a26-4341-b194-8764500d74ef/);
+
+  assert.equal(registry.platforms.spotify.currentVideoEpisodeCount, 6);
+  assert.match(registry.platforms.spotify.currentVideoState, /episode_8_video_processing/);
+  assert.match(registry.platforms.spotify.notes, /eight distinct episode identities/i);
+  assert.match(registry.platforms.spotify.notes, /7oYwjErc5TXpocbRFgzvH0/);
+
+  assert.equal(registry.platforms.youtube.currentPublicVideoCount, 8);
+  assert.match(registry.platforms.youtube.notes, /ax5BSELnBbo/);
+  assert.equal(registry.platforms.vimeo.currentEpisodeVideoCount, 8);
+  assert.equal(registry.platforms.vimeo.currentShortVideoCount, 3);
+  assert.equal(registry.platforms.vimeo.currentVideoCount, 11);
+  assert.match(registry.platforms.vimeo.notes, /1221293570/);
+
+  assert.equal(registry.platforms.rumble.stagedUploadCount, 7);
+  assert.equal(registry.platforms.rumble.submitted, false);
+});
+
+test("Episode 8 seed and publication migration preserve state and fail closed on identity reuse", async () => {
+  const seed = await fs.readFile(new URL("../../supabase/seed.sql", import.meta.url), "utf8");
+  const migration = await fs.readFile(
+    new URL("../../supabase/migrations/20260825223522_publish_episode8.sql", import.meta.url),
+    "utf8"
+  );
+
+  const episodeConflictStart = seed.indexOf("on conflict (slug) do update set");
+  const scopedStatusStart = seed.indexOf("update public.episodes", episodeConflictStart);
+  const topicInsertStart = seed.indexOf("insert into public.episode_topics", scopedStatusStart);
+  assert.ok(episodeConflictStart >= 0 && scopedStatusStart > episodeConflictStart);
+  assert.ok(topicInsertStart > scopedStatusStart);
+  assert.doesNotMatch(
+    seed.slice(episodeConflictStart, scopedStatusStart),
+    /status\s*=/,
+    "the shared episode upsert must not republish legacy rows"
+  );
+  assert.match(
+    seed.slice(scopedStatusStart, topicInsertStart),
+    /set status = 'published',[\s\S]*where slug = 'episode-8-food-and-the-brain'/
+  );
+  assert.match(
+    seed,
+    /when excluded\.episode_slug = 'episode-8-food-and-the-brain' then false[\s\S]*else episode_references\.coming_soon/
+  );
+
+  for (const [column, identity] of [
+    ["audio_url", "2026_08_25_22_20_41_83110c46-278d-4dc5-96e7-d38abd74172a.mp3"],
+    ["vimeo_id", "1221293570"],
+    ["spotify_id", "7oYwjErc5TXpocbRFgzvH0"],
+    ["youtube_id", "ax5BSELnBbo"],
+  ]) {
+    const guardStart = migration.indexOf(`and ${column} =`);
+    assert.ok(guardStart >= 0, `${column} collision guard is missing`);
+    assert.ok(
+      migration.slice(Math.max(0, guardStart - 120), guardStart + 240).includes(identity),
+      `${column} collision guard does not bind the Episode 8 identity`
+    );
+  }
+  assert.match(
+    migration,
+    /on conflict \(slug\) do update set[\s\S]*updated_at = now\(\)[\s\S]*where \([\s\S]*\) is distinct from \(/
+  );
 });
 
 test("source resolver accepts project-relative Dropbox references", async (context) => {

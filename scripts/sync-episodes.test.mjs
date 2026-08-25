@@ -23,30 +23,28 @@ const expectedPublishedEpisodes = [
   [5, "episode-5-energy", "Energy - Understanding Fatigue and Mitochondrial Health"],
   [6, "episode-6-concussion-and-pathophysiology", "Concussion - What Happens in the Brain"],
   [7, "episode-7-the-brain-on-fire", "The Brain on Fire - Neuroinflammation After Concussion"],
-];
-
-const expectedRegistryEpisodes = [
-  ...expectedPublishedEpisodes,
   [8, "episode-8-food-and-the-brain", "Food and the Brain - Eating for Brain Health and Concussion Recovery"],
 ];
 
-test("episode registry preserves published identities and reserves draft Episode 8", () => {
+const expectedRegistryEpisodes = expectedPublishedEpisodes;
+
+test("episode registry preserves all published identities", () => {
   assert.deepEqual(
     registry.entries.map(({ number, slug, title }) => [number, slug, title]),
     expectedRegistryEpisodes,
   );
 
-  for (const episode of registry.entries.filter(({ number }) => number <= 7)) {
+  for (const episode of registry.entries) {
     assert.ok(episode.guid, `episode ${episode.number} is missing its RSS GUID`);
     assert.ok(episode.vimeoId, `episode ${episode.number} is missing its Vimeo ID`);
     assert.ok(episode.spotifyId, `episode ${episode.number} is missing its Spotify ID`);
     assert.ok(episode.youtubeId, `episode ${episode.number} is missing its YouTube ID`);
   }
 
-  const draft = registry.entries.find(({ number }) => number === 8);
+  const episode8 = registry.entries.find(({ number }) => number === 8);
   assert.deepEqual(
-    [draft.guid, draft.vimeoId, draft.spotifyId, draft.youtubeId],
-    [null, null, null, null],
+    [episode8.guid, episode8.vimeoId, episode8.spotifyId, episode8.youtubeId],
+    ["4587dd48-8a26-4341-b194-8764500d74ef", "1221293570", "7oYwjErc5TXpocbRFgzvH0", "ax5BSELnBbo"],
   );
   assert.equal(registry.maxNumber, 8);
 });
@@ -77,7 +75,7 @@ test("multi-platform sync deduplicates punctuation variants and orders same-date
   assert.deepEqual(episodes.map(({ number }) => number), [4, 5, 6, 7]);
   assert.deepEqual(
     episodes.map(({ number, slug, title }) => [number, slug, title]),
-    expectedPublishedEpisodes.slice(3),
+    expectedPublishedEpisodes.slice(3, 7),
   );
   assert.equal(episodes[0].vimeoId, "1179956166");
   assert.equal(episodes[0].spotifyId, "0aDVuIwrRlDKxEylMj2dyw");
@@ -202,7 +200,7 @@ test("Vimeo sync ignores API order and reserves numbers one through eight", () =
   assert.deepEqual(episodes.map(({ number }) => number), [4, 5, 6, 7, 9]);
   assert.deepEqual(
     episodes.slice(0, 4).map(({ number, slug, title }) => [number, slug, title]),
-    expectedPublishedEpisodes.slice(3),
+    expectedPublishedEpisodes.slice(3, 7),
   );
   assert.equal(episodes[4].slug, "a-new-unnumbered-episode");
   assert.equal(episodes[4].title, "A New Unnumbered Episode");

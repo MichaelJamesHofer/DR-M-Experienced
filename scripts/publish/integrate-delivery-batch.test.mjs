@@ -63,7 +63,7 @@ function sha256(value) {
 
 function legacyCatalog() {
   const catalog = structuredClone(catalogTemplate);
-  catalog.episodes = catalog.episodes.filter((episode) => episode.publicationState === "published");
+  catalog.episodes = catalog.episodes.filter((episode) => episode.number <= 7);
   catalog.revision = BASE_CATALOG_REVISION;
   catalog.updatedAt = "2026-08-07T04:30:13Z";
   for (const episode of catalog.episodes) {
