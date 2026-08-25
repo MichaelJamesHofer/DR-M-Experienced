@@ -1196,6 +1196,31 @@ tiles.
 8. Verify title, content, links, mobile layout, and expected 404s on the live site.
 9. Record the deployed commit and update relevant state/runbooks.
 
+### Website Rollback
+
+The pre-2.0 production site is preserved at tag
+`production-rollback-2026-08-25-pre-v2`, branch
+`rollback/pre-v2-production-20260825`, and the matching draft GitHub release.
+Its `artifact.tar` is the exact Pages artifact from successful production run
+`32909671241`; the recovery workflow verifies SHA-256 digest
+`f2d266be0dad124c7a1d3e509e707a8dcc82421daae10c861e6eeffa8425f7d9`
+and the production `CNAME` before deployment.
+
+To restore that exact static site through the protected `github-pages`
+environment:
+
+```bash
+gh workflow run rollback-pre-v2.yml --ref main
+gh run list --workflow rollback-pre-v2.yml --limit 1
+gh run watch RUN_ID --exit-status
+```
+
+This recovery path deliberately does not rebuild or query Supabase; it deploys
+the already-verified static artifact. After completion, verify the deployment
+run, apex and `www` routing, core pages, Episode 8, affiliate links, and `CNAME`.
+Do not dispatch the normal deployment workflow from the rollback branch because
+the Pages environment accepts production deployments from `main` only.
+
 The forms post to `supabase/functions/form-submit`. Anonymous clients must never
 receive direct write access to contact/newsletter tables.
 
