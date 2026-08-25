@@ -857,7 +857,7 @@ test("checked-in catalog projection migrations are transaction-wrapped and conta
   }
 });
 
-test("platform registry records the exact Episode 8 live and processing state", async () => {
+test("platform registry records the exact Episode 8 live state", async () => {
   const registry = JSON.parse(
     await fs.readFile(new URL("../../publishing/platforms.json", import.meta.url), "utf8")
   );
@@ -867,8 +867,8 @@ test("platform registry records the exact Episode 8 live and processing state", 
   assert.match(registry.platforms["rss.com"].notes, /item 3096546/);
   assert.match(registry.platforms["rss.com"].notes, /4587dd48-8a26-4341-b194-8764500d74ef/);
 
-  assert.equal(registry.platforms.spotify.currentVideoEpisodeCount, 6);
-  assert.match(registry.platforms.spotify.currentVideoState, /episode_8_video_processing/);
+  assert.equal(registry.platforms.spotify.currentVideoEpisodeCount, 7);
+  assert.match(registry.platforms.spotify.currentVideoState, /seven_video_episodes_public_verified/);
   assert.match(registry.platforms.spotify.notes, /eight distinct episode identities/i);
   assert.match(registry.platforms.spotify.notes, /7oYwjErc5TXpocbRFgzvH0/);
 

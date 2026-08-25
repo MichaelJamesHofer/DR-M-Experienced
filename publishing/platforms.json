@@ -136,12 +136,12 @@
       ],
       "asset": "fullVideo",
       "rssRole": "direct_media_destination",
-      "currentVideoState": "six_video_episodes_public_verified_episode_8_video_processing_episode_5_audio_only_support_pending",
-      "currentVideoEpisodeCount": 6,
+      "currentVideoState": "seven_video_episodes_public_verified_episode_5_audio_only_support_pending",
+      "currentVideoEpisodeCount": 7,
       "videoStateAuditedAt": "2026-08-25",
       "approvedArtworkVerified": true,
       "approvedCopyVerified": true,
-      "notes": "The existing show now contains eight distinct episode identities. Six episode videos remain public and verified. Episode 8 preserves RSS-created Spotify episode ID 7oYwjErc5TXpocbRFgzvH0; its video was uploaded to that exact item and is currently processing, so it is not included in the verified public video-episode count. Episode 5 preserves its existing Spotify episode ID and corrected RSS audio but remains audio-only after three same-ID video attempts reverted; a Creator Support request is staged for owner review. There is no account-wide video switch. Never create a duplicate episode or upload the MP3 separately in Spotify."
+      "notes": "The existing show contains eight distinct episode identities and seven public video episodes. Episode 8 preserves RSS-created Spotify episode ID 7oYwjErc5TXpocbRFgzvH0; three independent public readbacks returned hasVideo true, playable true, an accessible MP4 preview, and 640x360 and 1280x720 video thumbnails. Its authenticated promotional-content readback is Yes and no duplicate was created. Episode 5 preserves its existing Spotify episode ID and corrected RSS audio but remains audio-only after three same-ID video attempts reverted; a Creator Support request is staged for owner review. There is no account-wide video switch. Never create a duplicate episode or upload the MP3 separately in Spotify."
     },
     "apple": {
       "label": "Apple Podcasts",
