@@ -1,7 +1,71 @@
 import assert from "node:assert/strict";
+import fs from "node:fs";
 import test from "node:test";
 import { coreEpisodePlatformProblems } from "../../src/data/episode-platform-validation.mjs";
+import {
+  episodePlatformForUrl,
+  groupEpisodeReferences,
+} from "../../src/data/episode-reference-groups.mjs";
 import { requiredEpisodeReferencePlatforms } from "./catalog-platform-policy.mjs";
+
+const episodeEnrichment = JSON.parse(
+  fs.readFileSync(new URL("../../src/data/episodes-enrichment.json", import.meta.url), "utf8"),
+);
+const episode8References = episodeEnrichment["1221293570"].references;
+
+test("Episode 8 references group into their intended presentation regions", () => {
+  const grouped = groupEpisodeReferences(
+    episode8References,
+    new Set([
+      "episode-6-concussion-and-pathophysiology",
+      "episode-7-the-brain-on-fire",
+      "episode-8-food-and-the-brain",
+    ]),
+  );
+
+  assert.deepEqual(
+    grouped.platformReferences.map(({ platform }) => platform),
+    ["Vimeo", "Spotify", "YouTube"],
+  );
+  assert.deepEqual(
+    grouped.relatedEpisodeReferences.map(({ episodeSlug }) => episodeSlug),
+    ["episode-7-the-brain-on-fire", "episode-6-concussion-and-pathophysiology"],
+  );
+  assert.equal(grouped.affiliateReferences.length, 5);
+  assert.deepEqual(
+    grouped.resourceReferences.map(({ label }) => label),
+    ["Request the Healthy Brain Diet handout", "Purity laboratory information"],
+  );
+  assert.equal(
+    grouped.platformReferences.length +
+      grouped.relatedEpisodeReferences.length +
+      grouped.affiliateReferences.length +
+      grouped.resourceReferences.length,
+    episode8References.length,
+  );
+});
+
+test("platform hostname matching includes existing channels and rejects deceptive hosts", () => {
+  assert.equal(episodePlatformForUrl("https://player.vimeo.com/video/1"), "Vimeo");
+  assert.equal(episodePlatformForUrl("https://www.youtube.com/watch?v=1"), "YouTube");
+  assert.equal(episodePlatformForUrl("https://rumble.com/v1-example.html"), "Rumble");
+  assert.equal(episodePlatformForUrl("https://youtube.com.evil.test/watch?v=1"), null);
+  assert.equal(episodePlatformForUrl("not a url"), null);
+});
+
+test("unknown and deceptive same-site episode paths remain visible as resources", () => {
+  const grouped = groupEpisodeReferences(
+    [
+      { label: "Unknown episode", url: "https://drmexperienced.com/episodes/not-published/" },
+      { label: "External lookalike", url: "https://drmexperienced.com.evil.test/episodes/episode-7-the-brain-on-fire/" },
+      { label: "Supporting interview", url: "https://youtu.be/research-video" },
+    ],
+    new Set(["episode-7-the-brain-on-fire"]),
+  );
+
+  assert.equal(grouped.relatedEpisodeReferences.length, 0);
+  assert.equal(grouped.resourceReferences.length, 3);
+});
 
 test("published reference requirements follow non-null master-catalog destinations", () => {
   const platforms = requiredEpisodeReferencePlatforms({

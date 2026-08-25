@@ -8,6 +8,7 @@ import {
 import { BLOG_POSTS, type BlogPost, type BlogReference, type BlogSection } from "./blogs";
 import { EPISODES, type Episode, type EpisodeReference, type EpisodeSection } from "./episodes";
 import { coreEpisodePlatformProblems } from "./episode-platform-validation.mjs";
+import { episodePlatformForUrl } from "./episode-reference-groups.mjs";
 import { siteImageSrc } from "@/lib/site-images";
 
 export type ContentCatalog = {
@@ -784,7 +785,7 @@ function validateSupabaseCatalog(catalog: ContentCatalog) {
       (episode.references ?? [])
         .filter((reference) => !reference.comingSoon)
         .map((reference) => episodePlatformForUrl(reference.url))
-        .filter((platform): platform is string => Boolean(platform))
+        .filter((platform) => platform !== null)
     );
     problems.push(...coreEpisodePlatformProblems(episode, availablePlatforms));
 
@@ -833,24 +834,4 @@ function validateSupabaseCatalog(catalog: ContentCatalog) {
   if (problems.length > 0) {
     throw new Error(`Supabase catalog failed validation:\n- ${problems.join("\n- ")}`);
   }
-}
-
-function episodePlatformForUrl(value: string): string | null {
-  try {
-    const hostname = new URL(value).hostname.toLowerCase();
-    if (hostname === "vimeo.com" || hostname.endsWith(".vimeo.com")) return "Vimeo";
-    if (hostname === "open.spotify.com") return "Spotify";
-    if (
-      hostname === "youtu.be" ||
-      hostname === "youtube.com" ||
-      hostname.endsWith(".youtube.com")
-    ) {
-      return "YouTube";
-    }
-    if (hostname === "rumble.com" || hostname.endsWith(".rumble.com")) return "Rumble";
-  } catch {
-    return null;
-  }
-
-  return null;
 }
