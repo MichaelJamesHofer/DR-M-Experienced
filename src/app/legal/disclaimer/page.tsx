@@ -62,7 +62,7 @@ export default function DisclaimerPage() {
         {sections.map((section) => (
           <section
             key={section.title}
-            className="rounded-2xl border border-border bg-surface p-8"
+            className="rounded-lg border border-border bg-surface p-8"
           >
             <h2 className="text-heading font-semibold text-foreground mb-6 flex items-center gap-3">
               <span className="text-2xl">{section.icon}</span>

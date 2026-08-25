@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Switchback M logo concept</title>
+  <desc id="desc">A cyan monoline M with a small amber waypoint at the upper-right turn.</desc>
+  <path d="M13 50V20L32 43L51 20V50" fill="none" stroke="#22D3EE" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"/>
+  <rect x="48" y="16" width="7" height="7" fill="#F59E0B"/>
+</svg>

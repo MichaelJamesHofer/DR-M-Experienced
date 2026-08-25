@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "lastVerified": "2026-08-05",
+  "usage": "Nominative identification of companies already present in the affiliate catalog. Company marks remain the property of their respective owners.",
+  "assets": [
+    {
+      "slug": "airestech",
+      "localFile": "public/images/affiliates/airestech.png",
+      "sha256": "1f034c4a31bd18cffa79e87be1710e5cab4dc009b7202b1ea41b148544e00ba0",
+      "officialPage": "https://airestech.com/",
+      "officialAsset": "https://airestech.com/cdn/shop/files/Aires-Signature_Black.png?v=1736362186&width=660",
+      "accent": "#ab8c52",
+      "accentBasis": "Current official-site palette"
+    },
+    {
+      "slug": "block-blue-light",
+      "localFile": "public/images/affiliates/block-blue-light.png",
+      "sha256": "eb325ec97b454457c6161889ddd1eaa1bd7a978deeac47c04761418e81b65130",
+      "officialPage": "https://www.blockbluelight.com/",
+      "officialAsset": "https://www.blockbluelight.com/cdn/shop/files/image_1_536x.png?v=1676057141",
+      "accent": "#02c4ff",
+      "accentBasis": "Current official-site palette"
+    },
+    {
+      "slug": "safe-living-technologies",
+      "localFile": "public/images/affiliates/safe-living-technologies.png",
+      "sha256": "6a5014771522026f8c1773cc57ade2e5fa2c73d4c8fee22521d8b3cbdad51b9e",
+      "officialPage": "https://safelivingtechnologies.com/",
+      "officialAsset": "https://cdn11.bigcommerce.com/s-rwbd9uo0md/images/stencil/original/slt-logo-2022-swoosh-smaller_1664387667__89253.original.png",
+      "accent": "#08ab53",
+      "accentBasis": "Official logo"
+    },
+    {
+      "slug": "desbio-dbscript",
+      "localFile": "public/images/affiliates/desbio-dbscript.png",
+      "sha256": "0a07590024562667210f14eed733269b47fe8e2a3dcf70f04c6935307fa5fff0",
+      "officialPage": "https://dbscript.com/about/",
+      "officialAsset": "https://dbscript.com/wp-content/uploads/2023/10/cropped-DBScript_Favicon_Blue_500x500px_Web.png",
+      "accent": "#105d94",
+      "accentBasis": "Current official-site palette"
+    },
+    {
+      "slug": "best365labs",
+      "localFile": "public/images/affiliates/best365labs.svg",
+      "sha256": "341b1ffd26ad374a7510bac3300f292cdafd4b11a3c13b247cbe3ee2a0eeb2de",
+      "officialPage": "https://best365labs.com/",
+      "officialAsset": "https://best365labs.com/wp-content/uploads/2025/03/logo.svg",
+      "accent": "#00add7",
+      "accentBasis": "Official logo"
+    },
+    {
+      "slug": "doctors-supplement-store",
+      "localFile": "public/images/affiliates/doctors-supplement-store.png",
+      "sha256": "712d5364a4c2fa3349bb78685bd99b0aa2aa7bde994c0ca873ab27ed73ca6350",
+      "officialPage": "https://www.dssorders.com/",
+      "officialAsset": "https://www.dssorders.com/images/header/Hzntl2lineclearbg.gif",
+      "localTransformation": "Lossless visual conversion from GIF to PNG",
+      "accent": "#88c570",
+      "accentBasis": "Official logo"
+    },
+    {
+      "slug": "abeytu-naturals",
+      "localFile": "public/images/affiliates/abeytu-naturals.png",
+      "sha256": "94f63a0642a8365650d22a75edfc02bb6de900c5201db788f5a72313aa2bdc0c",
+      "officialPage": "https://abeytunaturals.com/",
+      "officialAsset": "https://abeytunaturals.com/cdn/shop/files/abeytu_21a9de2f-b89c-4fd8-8ed9-1e356e349688.png?v=1747339725&width=500",
+      "accent": "#2a533f",
+      "accentBasis": "Current official-site palette"
+    }
+  ]
+}

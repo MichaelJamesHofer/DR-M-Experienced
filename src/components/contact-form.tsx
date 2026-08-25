@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
+import { useAnalytics } from "@/components/posthog-provider";
 import { submitFormSubmission } from "@/lib/form-submissions";
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
@@ -9,6 +10,7 @@ type Status = 'idle' | 'loading' | 'success' | 'error';
 const SUBJECTS = new Set(["podcast", "business", "press", "other"]);
 
 export function ContactForm() {
+  const { capture } = useAnalytics();
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState('');
   const isLoading = status === 'loading';
@@ -90,6 +92,9 @@ export function ContactForm() {
         ...getSubmissionMetadata(),
       });
 
+      capture("contact form submitted", {
+        subject: subject as "business" | "other" | "podcast" | "press",
+      });
       setStatus('success');
       setMessage('Submitted. Thanks - your message was captured.');
       form.reset();
@@ -121,7 +126,7 @@ export function ContactForm() {
             autoComplete="name"
             required
             disabled={isDisabled}
-            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200"
+            className="w-full rounded-lg border border-border bg-background px-4 py-3 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200"
             placeholder="Your name"
           />
         </div>
@@ -136,7 +141,7 @@ export function ContactForm() {
             autoComplete="email"
             required
             disabled={isDisabled}
-            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200"
+            className="w-full rounded-lg border border-border bg-background px-4 py-3 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200"
             placeholder="you@email.com"
           />
         </div>
@@ -152,7 +157,7 @@ export function ContactForm() {
           defaultValue="podcast"
           required
           disabled={isDisabled}
-          className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200"
+          className="w-full rounded-lg border border-border bg-background px-4 py-3 text-body text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200"
         >
           <option value="podcast">Podcast feedback</option>
           <option value="business">Business / speaking</option>
@@ -171,7 +176,7 @@ export function ContactForm() {
           rows={5}
           required
           disabled={isDisabled}
-          className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200 resize-none"
+          className="w-full rounded-lg border border-border bg-background px-4 py-3 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200 resize-none"
           placeholder="What can we help with?"
         />
       </div>
@@ -182,7 +187,7 @@ export function ContactForm() {
           name="consent"
           required
           disabled={isDisabled}
-          className="mt-1 h-5 w-5 rounded border-border text-primary focus:ring-primary/30 disabled:opacity-60"
+          className="mt-1 h-5 w-5 shrink-0 rounded border-border text-primary focus:ring-primary/30 disabled:opacity-60"
         />
         <span className="text-body-sm text-foreground-muted">
           I understand this form is not for medical advice, diagnosis, or emergencies.
@@ -201,7 +206,7 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={isDisabled}
-          className="rounded-xl bg-primary px-8 py-3 text-body font-semibold text-background hover:bg-primary-hover disabled:opacity-60 transition-all duration-200 shadow-glow-sm hover:shadow-glow"
+          className="rounded-lg bg-primary px-8 py-3 text-body font-semibold text-background hover:bg-primary-hover disabled:opacity-60 transition-all duration-200"
         >
           {isLoading ? 'Sending...' : isSubmitted ? 'Message submitted' : 'Send message'}
         </button>
@@ -209,7 +214,7 @@ export function ContactForm() {
           <p
             role="status"
             aria-live="polite"
-            className={`rounded-xl border px-4 py-3 text-body-sm ${
+            className={`rounded-lg border px-4 py-3 text-body-sm ${
               status === 'error'
                 ? 'border-error/30 bg-error/10 text-error'
                 : 'border-success/30 bg-success/10 text-success'

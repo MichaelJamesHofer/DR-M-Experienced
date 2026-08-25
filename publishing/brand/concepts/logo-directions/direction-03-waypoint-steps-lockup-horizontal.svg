@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 160" role="img" aria-labelledby="title desc">
+  <title id="title">DR. M EXPERIENCED with Dr. David Musnick - Waypoint Steps concept</title>
+  <desc id="desc">Horizontal concept lockup using a cyan stepped M, an amber milestone, the exact show wordmark, and subordinate host line.</desc>
+  <metadata>status=review; wordmark=DR. M EXPERIENCED; host-line=with Dr. David Musnick</metadata>
+  <style>
+    @font-face { font-family: "Geist Review"; src: url("../../../../src/app/fonts/GeistVF.woff") format("woff"); font-weight: 100 900; }
+    text { font-family: "Geist Review", Inter, Arial, sans-serif; letter-spacing: 0; }
+  </style>
+  <g transform="translate(32 32) scale(1.5)">
+    <path d="M10 52V14H18V20H22V26H26V32H30V38H34V32H38V26H42V20H46V14H54V52H46V32H42V38H38V44H34V50H30V44H26V38H22V32H18V52Z" fill="#22D3EE"/>
+    <rect x="30" y="42" width="4" height="6" fill="#F59E0B"/>
+  </g>
+  <text x="160" y="75" fill="#0A0F1A" font-size="44" font-weight="700">DR. M EXPERIENCED</text>
+  <text x="160" y="111" fill="#475569" font-size="20" font-weight="500">with Dr. David Musnick</text>
+</svg>

@@ -1,4 +1,5 @@
 import { ContactForm } from "@/components/contact-form";
+import { BriefcaseBusiness, MessageSquareText, Radio } from "lucide-react";
 
 export const metadata = {
   title: "Contact",
@@ -7,17 +8,17 @@ export const metadata = {
 
 const contactReasons = [
   {
-    icon: "🎙️",
+    icon: Radio,
     title: "Podcast feedback",
     description: "Episode ideas, guest suggestions, or general feedback. We read every message.",
   },
   {
-    icon: "💼",
+    icon: BriefcaseBusiness,
     title: "Business & speaking",
     description: "Consulting, course licensing, or speaking engagements. Include dates and scope.",
   },
   {
-    icon: "📝",
+    icon: MessageSquareText,
     title: "Press & media",
     description: "Interview requests, media features, or collaboration opportunities.",
   },
@@ -25,45 +26,40 @@ const contactReasons = [
 
 export default function ContactPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 lg:px-6 lg:py-16">
-      {/* Header */}
-      <div className="mb-12">
-        <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-2">
+    <div className="mx-auto max-w-6xl px-4 py-8 lg:px-6 lg:py-14">
+      <div className="mb-9">
+        <p className="mb-2 text-caption font-semibold uppercase text-primary">
           Get in touch
         </p>
-        <h1 className="text-display font-bold text-foreground mb-4">
+        <h1 className="mb-3 text-[2.25rem] font-bold leading-tight text-foreground sm:text-display">
           Contact us
         </h1>
-        <p className="text-body-lg text-foreground-muted max-w-2xl">
+        <p className="max-w-2xl text-body text-foreground-muted sm:text-body-lg">
           We can&apos;t provide personal medical advice through this form, but we
           love hearing from listeners, partners, and event organizers.
         </p>
       </div>
 
-      <div className="grid gap-12 lg:grid-cols-3">
-        {/* Contact Reasons */}
-        <div className="space-y-4">
+      <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-14">
+        <div className="divide-y divide-border border-y border-border">
           {contactReasons.map((reason) => (
             <div
               key={reason.title}
-              className="rounded-2xl border border-border bg-surface p-6"
+              className="grid grid-cols-[2rem_1fr] gap-x-4 py-5"
             >
-              <span className="text-2xl mb-3 block">{reason.icon}</span>
-              <h2 className="text-body font-semibold text-foreground mb-2">
+              <reason.icon className="mt-1 h-5 w-5 text-primary" aria-hidden="true" />
+              <h2 className="text-body font-semibold text-foreground">
                 {reason.title}
               </h2>
-              <p className="text-body-sm text-foreground-muted">
+              <p className="col-start-2 mt-1 text-body-sm text-foreground-muted">
                 {reason.description}
               </p>
             </div>
           ))}
         </div>
 
-        {/* Contact Form */}
-        <div className="lg:col-span-2">
-          <div className="rounded-2xl border border-border bg-surface p-8">
-            <ContactForm />
-          </div>
+        <div className="lg:border-l lg:border-border lg:pl-14">
+          <ContactForm />
         </div>
       </div>
     </div>

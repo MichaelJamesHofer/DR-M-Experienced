@@ -1,12 +1,15 @@
-const requiredVariables = ["NEXT_PUBLIC_POSTHOG_API_KEY"];
+const postHogTokenVariables = [
+  "NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN",
+  "NEXT_PUBLIC_POSTHOG_API_KEY",
+];
 
-const missingVariables = requiredVariables.filter(
-  (name) => !process.env[name]?.trim(),
+const hasPostHogToken = postHogTokenVariables.some(
+  (name) => process.env[name]?.trim(),
 );
 
-if (missingVariables.length > 0) {
+if (!hasPostHogToken) {
   console.error(
-    `Production environment check failed: missing ${missingVariables.join(", ")}.`,
+    `Production environment check failed: configure ${postHogTokenVariables.join(" or ")}.`,
   );
   process.exitCode = 1;
 } else {

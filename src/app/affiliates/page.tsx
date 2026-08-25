@@ -12,23 +12,24 @@ export default async function AffiliatesPage() {
   const { affiliateCategories, affiliateProducts, episodes } = await getContentCatalog();
 
   return (
-    <div className="mx-auto min-w-0 max-w-6xl px-4 py-12 lg:px-6 lg:py-16">
-      <section className="mb-12">
+    <div className="mx-auto min-w-0 max-w-6xl px-4 py-6 lg:px-6 lg:py-14">
+      <section className="mb-6">
         <p className="mb-2 text-caption font-semibold uppercase tracking-wider text-primary">
           Affiliate guide
         </p>
-        <h1 className="mb-4 text-heading-xl font-bold text-foreground sm:text-display">
+        <h1 className="mb-3 text-[2.25rem] font-bold leading-tight text-foreground sm:text-display">
           Products Dr. M references
         </h1>
-        <p className="max-w-3xl text-body-lg text-foreground-muted">
-          A practical catalog for products, tools, and resources Dr. M discusses across episodes,
-          including why he likes them, where they may fit, and which episodes mention them.
+        <p className="max-w-3xl text-body text-foreground-muted sm:text-body-lg">
+          Products Dr. M discusses, why he uses them, and the episodes where each appears.
         </p>
       </section>
 
-      <section className="mb-10 rounded-2xl border border-border bg-surface p-6">
-        <p className="mb-2 text-body-sm font-semibold text-foreground">Affiliate disclosure</p>
-        <p className="text-body-sm text-foreground-muted">{AFFILIATE_DISCLOSURE}</p>
+      <section className="mb-6 border-y border-border py-3">
+        <p className="text-body-sm leading-6 text-foreground-muted">
+          <span className="font-semibold text-foreground">Affiliate disclosure: </span>
+          {AFFILIATE_DISCLOSURE}
+        </p>
       </section>
 
       <AffiliateBrowser

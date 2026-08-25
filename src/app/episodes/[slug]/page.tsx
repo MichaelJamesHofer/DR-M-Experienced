@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { ArrowLeft, ArrowRight, CheckCircle2, Clock3, ExternalLink, Lightbulb, Play } from "lucide-react";
 import { episodeDisplayTitle } from "@/data/episodes";
 import {
   AFFILIATE_DISCLOSURE,
@@ -11,6 +12,7 @@ import {
 } from "@/data/affiliates";
 import { getContentCatalog } from "@/data/content-catalog";
 import { NewsletterCapture } from "@/components/newsletter-capture";
+import { EpisodeTopicRail } from "@/components/episode-topic-rail";
 import { VimeoPlayer } from "@/components/vimeo-player";
 
 const dateFormatter = new Intl.DateTimeFormat("en", {
@@ -104,14 +106,14 @@ export default async function EpisodeDetailPage({
       : null;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 lg:px-6 lg:py-16">
+    <div className="mx-auto max-w-6xl px-4 py-8 lg:px-6 lg:py-14">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-body-sm text-foreground-muted mb-8">
-        <Link href="/" className="hover:text-foreground transition-colors duration-200">
+      <nav className="mb-6 flex min-h-11 items-center gap-2 text-body-sm text-foreground-muted">
+        <Link href="/" className="inline-flex min-h-11 items-center px-1 transition-colors duration-200 hover:text-foreground">
           Home
         </Link>
         <span>/</span>
-        <Link href="/episodes" className="hover:text-foreground transition-colors duration-200">
+        <Link href="/episodes" className="inline-flex min-h-11 items-center transition-colors duration-200 hover:text-foreground">
           Episodes
         </Link>
         <span>/</span>
@@ -122,44 +124,29 @@ export default async function EpisodeDetailPage({
         {/* Main Content */}
         <div className="min-w-0 space-y-10 lg:col-span-2">
           {/* Header */}
-          <header>
-            <div className="flex items-center gap-3 mb-4">
-              <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-heading font-bold text-primary">
-                {episode.number.toString().padStart(2, "0")}
-              </span>
-              <div className="flex items-center gap-3 text-body-sm text-foreground-muted">
-                <span>{publishDate}</span>
-                {episode.durationMinutes && (
-                  <>
-                    <span>•</span>
-                    <span>{episode.durationMinutes} min</span>
-                  </>
-                )}
-              </div>
+          <header className="min-w-0">
+            <div className="mb-4 flex min-h-11 items-center gap-3 text-body-sm text-foreground-muted">
+              <span>{publishDate}</span>
+              {episode.durationMinutes && (
+                <span className="flex items-center gap-1.5">
+                  <Clock3 className="h-4 w-4" aria-hidden="true" />
+                  {episode.durationMinutes} min
+                </span>
+              )}
             </div>
-            <h1 className="break-words text-heading-lg font-bold !tracking-normal text-foreground mb-4 sm:text-heading-xl lg:text-display">
+            <h1 className="mb-4 break-words text-[1.875rem] font-bold !tracking-normal leading-tight text-foreground min-[375px]:text-[2.25rem] sm:text-display">
               {episodeDisplayTitle(episode)}
             </h1>
             <p className="text-body-lg text-foreground-muted">
               {episode.summary}
             </p>
-            <div className="flex flex-wrap gap-2 mt-6">
-              {episode.topics.map((topic) => (
-                <Link
-                  key={topic}
-                  href={`/episodes?topic=${encodeURIComponent(topic.toLowerCase())}`}
-                  className="rounded-full border border-border bg-surface px-4 py-2 text-body-sm text-foreground-muted hover:border-primary hover:text-primary transition-all duration-200"
-                >
-                  {topic}
-                </Link>
-              ))}
-            </div>
+            <EpisodeTopicRail topics={episode.topics} />
           </header>
 
           {/* Video Player */}
           <section
             aria-labelledby={`video-player-${episode.slug}`}
-            className="rounded-2xl border border-border bg-surface overflow-hidden"
+            className="overflow-hidden rounded-lg border border-border bg-surface"
           >
             <div className="flex items-start justify-between gap-4 border-b border-border px-5 py-4 sm:px-6">
               <div>
@@ -197,10 +184,8 @@ export default async function EpisodeDetailPage({
                     <div className="absolute inset-0 bg-gradient-to-t from-surface/90 via-surface/50 to-transparent" />
                     {hasComingSoonReference && (
                       <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-10">
-                        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/20 backdrop-blur-sm border-2 border-primary/30 text-primary">
-                          <svg className="h-10 w-10" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
+                        <div className="flex h-16 w-16 items-center justify-center rounded-lg border border-primary/30 bg-primary/20 text-primary">
+                          <Clock3 className="h-8 w-8" aria-hidden="true" />
                         </div>
                         <div className="text-center px-4">
                           <p className="text-body font-semibold text-foreground mb-1">
@@ -215,10 +200,8 @@ export default async function EpisodeDetailPage({
                   </>
                 ) : (
                   <>
-                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/20 text-primary">
-                      <svg className="h-10 w-10" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/20 text-primary">
+                      <Play className="h-8 w-8 fill-current" aria-hidden="true" />
                     </div>
                     <p className="text-body-sm text-foreground-muted">
                       Episode player coming soon
@@ -235,51 +218,54 @@ export default async function EpisodeDetailPage({
               </div>
             )}
             {episode.references && episode.references.length > 0 && (
-              <div className="p-4 border-t border-border bg-surface-elevated">
-                <p className="text-body-sm font-semibold text-foreground mb-3">
-                  Listen or watch on:
+              <nav
+                aria-label="Episode listening and viewing platforms"
+                className="border-t border-border bg-surface-elevated p-4 sm:p-5"
+              >
+                <p className="mb-4 text-center text-body-sm font-semibold text-foreground">
+                  Listen or watch
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <ul className="mx-auto grid max-w-3xl grid-cols-1 gap-2 min-[360px]:grid-cols-2 md:grid-cols-4">
                   {episode.references.map((ref, index) => {
                     const isComingSoon = ref.comingSoon === true;
                     if (isComingSoon) {
                       return (
-                        <span
-                          key={index}
-                          className="inline-flex items-center gap-2 rounded-lg border border-dashed border-border bg-surface px-4 py-2 text-body-sm font-medium text-foreground-subtle cursor-not-allowed opacity-60"
-                          title="Coming soon"
-                        >
-                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                          {ref.label}
-                        </span>
+                        <li key={`${ref.label}-${index}`}>
+                          <span
+                            className="flex min-h-14 w-full items-center justify-center gap-2 rounded-md border border-dashed border-border bg-surface px-3 py-2 text-center text-body-sm font-medium leading-snug text-foreground-subtle opacity-60"
+                            title="Coming soon"
+                            aria-disabled="true"
+                          >
+                            <Clock3 className="h-4 w-4 shrink-0" aria-hidden="true" />
+                            {ref.label}
+                          </span>
+                        </li>
                       );
                     }
                     return (
-                      <a
-                        key={index}
-                        href={ref.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-body-sm font-medium text-foreground-muted hover:border-primary hover:text-primary transition-all duration-200"
-                      >
-                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
-                        {ref.label}
-                      </a>
+                      <li key={`${ref.url}-${index}`}>
+                        <a
+                          href={ref.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex min-h-14 w-full items-center justify-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-center text-body-sm font-semibold leading-snug text-foreground-muted transition-all duration-200 hover:-translate-y-0.5 hover:border-primary hover:text-primary focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 motion-reduce:transform-none motion-reduce:transition-none"
+                        >
+                          <span>{ref.label}</span>
+                          <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
+                          <span className="sr-only"> (opens in a new tab)</span>
+                        </a>
+                      </li>
                     );
                   })}
-                </div>
-              </div>
+                </ul>
+              </nav>
             )}
           </section>
 
           {(episode.audioUrl || episode.spotifyId) && (
             <section
               aria-labelledby={`audio-player-${episode.slug}`}
-              className="rounded-2xl border border-primary/25 bg-surface-elevated p-5 shadow-sm sm:p-6"
+              className="rounded-lg border border-primary/25 bg-surface-elevated p-5 shadow-sm sm:p-6"
             >
               <div className="mb-5 flex items-start justify-between gap-4">
                 <div className="flex min-w-0 items-start gap-3">
@@ -330,11 +316,9 @@ export default async function EpisodeDetailPage({
           )}
 
           {/* Key Takeaways */}
-          <section className="rounded-2xl border border-border bg-surface p-8">
+          <section className="border-y border-border py-6 sm:py-8">
             <h2 className="text-heading-lg font-bold text-foreground mb-6 flex items-center gap-3">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                💡
-              </span>
+              <Lightbulb className="h-6 w-6 text-primary" aria-hidden="true" />
               Key takeaways
             </h2>
             <ul className="space-y-4">
@@ -351,19 +335,15 @@ export default async function EpisodeDetailPage({
 
           {/* Checklist */}
           {episode.checklist && episode.checklist.length > 0 && (
-            <section className="rounded-2xl border border-success/30 bg-success/5 p-8">
+            <section className="border-y border-success/30 py-6 sm:py-8">
               <h2 className="text-heading-lg font-bold text-foreground mb-6 flex items-center gap-3">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-success/20 text-success">
-                  ✓
-                </span>
+                <CheckCircle2 className="h-6 w-6 text-success" aria-hidden="true" />
                 Order-of-operations checklist
               </h2>
               <ul className="space-y-3">
                 {episode.checklist.map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <svg className="h-5 w-5 shrink-0 text-success mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-success" aria-hidden="true" />
                     <span className="text-body text-foreground-muted">{item}</span>
                   </li>
                 ))}
@@ -376,7 +356,7 @@ export default async function EpisodeDetailPage({
             <section className="space-y-6">
               <h2 className="text-heading-lg font-bold text-foreground">Show notes</h2>
               {episode.sections.map((section, index) => (
-                <div key={index} className="rounded-2xl border border-border bg-surface p-6">
+                <div key={index} className="border-t border-border pt-6">
                   <h3 className="text-heading font-semibold text-foreground mb-4">
                     {section.title}
                   </h3>
@@ -394,7 +374,7 @@ export default async function EpisodeDetailPage({
 
           {/* Related Affiliate Products */}
           {relatedAffiliateProducts.length > 0 && (
-            <section className="rounded-2xl border border-border bg-surface p-8">
+            <section className="rounded-lg border border-border bg-surface p-8">
               <div className="mb-6">
                 <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-2">
                   Affiliate guide
@@ -414,42 +394,14 @@ export default async function EpisodeDetailPage({
             </section>
           )}
 
-          {/* References */}
-          {episode.references && episode.references.length > 0 && (
-            <section className="rounded-2xl border border-border bg-surface p-8">
-              <h2 className="text-heading-lg font-bold text-foreground mb-6">
-                References & resources
-              </h2>
-              <ul className="space-y-3">
-                {episode.references.map((ref, index) => (
-                  <li key={index}>
-                    <a
-                      href={ref.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-body text-primary hover:text-primary-hover transition-colors duration-200"
-                    >
-                      <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                      {ref.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
           {/* Episode Navigation */}
           <div className="flex items-center justify-between pt-8 border-t border-border">
             {prevEpisode ? (
               <Link
                 href={`/episodes/${prevEpisode.slug}`}
-                className="group flex items-center gap-3 text-foreground-muted hover:text-foreground transition-colors duration-200"
+                className="group flex min-h-12 items-center gap-3 text-foreground-muted transition-colors duration-200 hover:text-foreground"
               >
-                <svg className="h-5 w-5 group-hover:-translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
+                <ArrowLeft className="h-5 w-5 transition-transform duration-200 group-hover:-translate-x-1" aria-hidden="true" />
                 <div className="text-left min-w-0">
                   <p className="text-caption text-foreground-subtle">Previous</p>
                   <p className="text-body-sm font-medium line-clamp-2">{episodeDisplayTitle(prevEpisode)}</p>
@@ -461,15 +413,13 @@ export default async function EpisodeDetailPage({
             {nextEpisode ? (
               <Link
                 href={`/episodes/${nextEpisode.slug}`}
-                className="group flex items-center gap-3 text-foreground-muted hover:text-foreground transition-colors duration-200"
+                className="group flex min-h-12 items-center gap-3 text-foreground-muted transition-colors duration-200 hover:text-foreground"
               >
                 <div className="text-right min-w-0">
                   <p className="text-caption text-foreground-subtle">Next</p>
                   <p className="text-body-sm font-medium line-clamp-2">{episodeDisplayTitle(nextEpisode)}</p>
                 </div>
-                <svg className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
+                <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true" />
               </Link>
             ) : (
               <div />
@@ -487,7 +437,7 @@ export default async function EpisodeDetailPage({
           />
 
           {/* Disclaimer */}
-          <div className="rounded-2xl border border-dashed border-border bg-surface p-6">
+          <div className="rounded-lg border border-dashed border-border bg-surface p-6">
             <p className="text-body-sm font-semibold text-foreground mb-2">
               Educational only
             </p>
@@ -508,7 +458,7 @@ export default async function EpisodeDetailPage({
                   <Link
                     key={ep.slug}
                     href={`/episodes/${ep.slug}`}
-                    className="group block rounded-xl border border-border bg-surface p-4 hover:border-primary/50 transition-all duration-200"
+                    className="group block rounded-lg border border-border bg-surface p-4 hover:border-primary/50 transition-all duration-200"
                   >
                     <p className="text-body-sm font-medium text-foreground group-hover:text-primary transition-colors duration-200 line-clamp-3">
                       {episodeDisplayTitle(ep)}
@@ -530,7 +480,7 @@ export default async function EpisodeDetailPage({
                   <Link
                     key={post.slug}
                     href={`/blogs/${post.slug}`}
-                    className="group block rounded-xl border border-border bg-surface p-4 hover:border-primary/50 transition-all duration-200"
+                    className="group block rounded-lg border border-border bg-surface p-4 hover:border-primary/50 transition-all duration-200"
                   >
                     <p className="text-body-sm font-medium text-foreground group-hover:text-primary transition-colors duration-200 line-clamp-3">
                       {post.title}
@@ -551,7 +501,7 @@ function EpisodeAffiliateCard({ product }: { product: AffiliateProduct }) {
   const companyName = affiliateDisplayName(product);
 
   return (
-    <article className="rounded-xl border border-border bg-background p-5">
+    <article className="rounded-lg border border-border bg-background p-5">
       <div className="mb-4">
         <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-2">
           {product.category}
@@ -563,6 +513,40 @@ function EpisodeAffiliateCard({ product }: { product: AffiliateProduct }) {
           </p>
         )}
         <p className="mt-3 text-body-sm text-foreground-muted">{product.summary}</p>
+      </div>
+
+      <div className="mb-5 flex flex-col gap-3 border-y border-border py-4 sm:flex-row sm:items-center sm:justify-between">
+        {(product.couponCode || product.discountNote || product.purchaseNote) && (
+          <div className="space-y-1 text-body-sm text-foreground-muted">
+            {product.couponCode && (
+              <p>
+                Code: <span className="font-semibold text-foreground">{product.couponCode}</span>
+              </p>
+            )}
+            {product.discountNote && <p>{product.discountNote}</p>}
+            {product.purchaseNote && <p>{product.purchaseNote}</p>}
+          </div>
+        )}
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Link
+            href={`/affiliates#${product.slug}`}
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 text-body-sm font-semibold text-foreground-muted transition-colors duration-200 hover:border-primary hover:text-primary"
+          >
+            Guide notes
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+          {productUrl && (
+            <a
+              href={productUrl}
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-body-sm font-semibold text-background transition-colors duration-200 hover:bg-primary-hover"
+            >
+              View products
+              <ExternalLink className="h-4 w-4" aria-hidden="true" />
+            </a>
+          )}
+        </div>
       </div>
 
       {(product.featuredProducts?.length ?? 0) > 0 && (
@@ -582,7 +566,7 @@ function EpisodeAffiliateCard({ product }: { product: AffiliateProduct }) {
             {product.featuredProducts!.length > 8 && (
               <Link
                 href={`/affiliates#${product.slug}`}
-                className="rounded-lg border border-border bg-surface px-3 py-1.5 text-caption font-semibold text-primary hover:border-primary transition-all duration-200"
+                className="inline-flex min-h-11 items-center rounded-lg border border-border bg-surface px-3 py-2 text-caption font-semibold text-primary transition-colors duration-200 hover:border-primary"
               >
                 +{product.featuredProducts!.length - 8} more
               </Link>
@@ -592,7 +576,7 @@ function EpisodeAffiliateCard({ product }: { product: AffiliateProduct }) {
       )}
 
       {product.cautionNote && (
-        <div className="mb-4 rounded-xl border border-warning/30 bg-warning/5 p-4">
+        <div className="mb-4 border-l-2 border-warning/60 pl-4">
           <p className="text-body-sm font-semibold text-foreground mb-2">Clinical boundary</p>
           <p className="text-body-sm text-foreground-muted">{product.cautionNote}</p>
         </div>
@@ -611,43 +595,6 @@ function EpisodeAffiliateCard({ product }: { product: AffiliateProduct }) {
         </div>
       )}
 
-      <div className="flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
-        {(product.couponCode || product.discountNote || product.purchaseNote) && (
-          <div className="space-y-1 text-body-sm text-foreground-muted">
-            {product.couponCode && (
-              <p>
-                Code: <span className="font-semibold text-foreground">{product.couponCode}</span>
-              </p>
-            )}
-            {product.discountNote && <p>{product.discountNote}</p>}
-            {product.purchaseNote && <p>{product.purchaseNote}</p>}
-          </div>
-        )}
-        <div className="flex flex-col gap-2 sm:flex-row">
-          <Link
-            href={`/affiliates#${product.slug}`}
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-surface px-4 py-2 text-body-sm font-semibold text-foreground-muted hover:border-primary hover:text-primary transition-all duration-200"
-          >
-            Guide notes
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </Link>
-          {productUrl && (
-            <a
-              href={productUrl}
-              target="_blank"
-              rel="sponsored noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2 text-body-sm font-semibold text-background hover:bg-primary-hover transition-all duration-200"
-            >
-              View product
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </a>
-          )}
-        </div>
-      </div>
     </article>
   );
 }

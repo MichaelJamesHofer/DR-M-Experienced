@@ -34,6 +34,58 @@ export type AffiliateProduct = {
   sourceNote: string;
 };
 
+export type AffiliateBrandProfile = {
+  logoSrc: string;
+  logoAlt: string;
+  accent: string;
+  logoSurface: string;
+};
+
+export const AFFILIATE_BRAND_PROFILES: Record<string, AffiliateBrandProfile> = {
+  airestech: {
+    logoSrc: "/images/affiliates/airestech.png",
+    logoAlt: "Aires logo",
+    accent: "#ab8c52",
+    logoSurface: "#ffffff",
+  },
+  "block-blue-light": {
+    logoSrc: "/images/affiliates/block-blue-light.png",
+    logoAlt: "BlockBlueLight logo",
+    accent: "#02c4ff",
+    logoSurface: "#ffffff",
+  },
+  "safe-living-technologies": {
+    logoSrc: "/images/affiliates/safe-living-technologies.png",
+    logoAlt: "Safe Living Technologies logo",
+    accent: "#08ab53",
+    logoSurface: "#ffffff",
+  },
+  "desbio-dbscript": {
+    logoSrc: "/images/affiliates/desbio-dbscript.png",
+    logoAlt: "DBscript logo",
+    accent: "#105d94",
+    logoSurface: "#ffffff",
+  },
+  best365labs: {
+    logoSrc: "/images/affiliates/best365labs.svg",
+    logoAlt: "Best 365 Labs logo",
+    accent: "#00add7",
+    logoSurface: "#ffffff",
+  },
+  "doctors-supplement-store": {
+    logoSrc: "/images/affiliates/doctors-supplement-store.png",
+    logoAlt: "Doctors Supplement Store logo",
+    accent: "#88c570",
+    logoSurface: "#ffffff",
+  },
+  "abeytu-naturals": {
+    logoSrc: "/images/affiliates/abeytu-naturals.png",
+    logoAlt: "Abeytu Naturals logo",
+    accent: "#2a533f",
+    logoSurface: "#2a533f",
+  },
+};
+
 export const AFFILIATE_DISCLOSURE =
   "Some product links may be affiliate links. If you purchase through those links, Dr. M Experienced may earn a commission at no additional cost to you. Product mentions are educational and are not medical advice.";
 
@@ -430,6 +482,10 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
 
 export function affiliateDisplayName(product: AffiliateProduct) {
   return product.brand ?? product.name;
+}
+
+export function affiliateBrandProfile(product: Pick<AffiliateProduct, "slug">) {
+  return AFFILIATE_BRAND_PROFILES[product.slug];
 }
 
 export function affiliateCategoryForSlug(categorySlug: string) {

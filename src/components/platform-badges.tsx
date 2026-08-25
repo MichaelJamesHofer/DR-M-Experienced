@@ -36,7 +36,7 @@ const platforms: Platform[] = [
   },
   {
     name: "Apple Podcasts",
-    url: "https://podcasts.apple.com/us/podcast/dr-ms-experienced-functional-and-sports-medicine/id1870433419",
+    url: "https://podcasts.apple.com/us/podcast/dr-m-experienced-with-dr-david-musnick/id1870433419",
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
         <path d="M12 2a8.5 8.5 0 0 0-4.64 15.63.75.75 0 1 0 .82-1.26A7 7 0 1 1 15.82 16.37a.75.75 0 1 0 .82 1.26A8.5 8.5 0 0 0 12 2Zm0 3.5a5 5 0 0 0-2.76 9.17.75.75 0 1 0 .83-1.25 3.5 3.5 0 1 1 3.86 0 .75.75 0 0 0 .83 1.25A5 5 0 0 0 12 5.5Zm0 3a2 2 0 0 0-1.16 3.63l-1.02 6.76A2.17 2.17 0 0 0 11.97 21h.06a2.17 2.17 0 0 0 2.15-2.11l-1.02-6.76A2 2 0 0 0 12 8.5Z" />
@@ -64,22 +64,50 @@ const platforms: Platform[] = [
 ];
 
 type PlatformBadgesProps = {
-  variant?: "default" | "compact" | "pill";
+  variant?: "default" | "compact" | "pill" | "hero";
   className?: string;
 };
 
 export function PlatformBadges({ variant = "default", className = "" }: PlatformBadgesProps) {
-  if (variant === "compact") {
+  if (variant === "hero") {
     return (
-      <div className={`flex items-center gap-3 ${className}`}>
+      <div
+        className={`-mx-2 flex w-[calc(100%+1rem)] flex-wrap items-center gap-2 min-[360px]:mx-0 min-[360px]:w-auto ${className}`}
+        role="group"
+        aria-label="Find Dr. M Experienced on these platforms"
+      >
         {platforms.map((platform) => (
           <a
             key={platform.name}
             href={platform.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-foreground-muted hover:text-primary transition-colors duration-200"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-[#0a0f1a]/15 bg-white/80 text-[#334155] transition-colors hover:border-[#0e7490] hover:text-[#0e7490] min-[431px]:w-auto min-[431px]:gap-1.5 min-[431px]:px-2 min-[431px]:[&_svg]:h-4 min-[431px]:[&_svg]:w-4"
             aria-label={platform.name}
+            title={platform.name}
+          >
+            {platform.icon}
+            <span className="sr-only min-[431px]:not-sr-only min-[431px]:text-xs min-[431px]:font-semibold">
+              {platform.name}
+            </span>
+          </a>
+        ))}
+      </div>
+    );
+  }
+
+  if (variant === "compact") {
+    return (
+      <div className={`flex flex-wrap items-center gap-1 ${className}`}>
+        {platforms.map((platform) => (
+          <a
+            key={platform.name}
+            href={platform.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex h-11 w-11 items-center justify-center rounded-lg text-foreground-muted transition-colors duration-200 hover:bg-surface-elevated hover:text-primary"
+            aria-label={platform.name}
+            title={platform.name}
           >
             {platform.icon}
           </a>
@@ -97,7 +125,7 @@ export function PlatformBadges({ variant = "default", className = "" }: Platform
             href={platform.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2 text-sm font-medium text-foreground-muted hover:border-primary hover:text-primary transition-all duration-200"
+            className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-foreground-muted transition-colors duration-200 hover:border-primary hover:text-primary"
           >
             {platform.icon}
             <span>{platform.name}</span>
@@ -115,7 +143,7 @@ export function PlatformBadges({ variant = "default", className = "" }: Platform
           href={platform.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="group flex items-center gap-2 text-foreground-muted hover:text-foreground transition-colors duration-200"
+          className="group flex min-h-11 items-center gap-2 text-foreground-muted transition-colors duration-200 hover:text-foreground"
         >
           <span className="group-hover:text-primary transition-colors duration-200">
             {platform.icon}

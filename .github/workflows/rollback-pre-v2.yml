@@ -1,0 +1,47 @@
+name: Roll back website to pre-2.0 snapshot
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: pages-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download and verify preserved site
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ROLLBACK_TAG: production-rollback-2026-08-25-pre-v2
+          ROLLBACK_SHA256: f2d266be0dad124c7a1d3e509e707a8dcc82421daae10c861e6eeffa8425f7d9
+        run: |
+          mkdir -p rollback-package/site
+          gh release download "$ROLLBACK_TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern artifact.tar \
+            --dir rollback-package
+          echo "$ROLLBACK_SHA256  rollback-package/artifact.tar" | sha256sum --check -
+          tar -xf rollback-package/artifact.tar -C rollback-package/site
+          test -f rollback-package/site/CNAME
+          grep -Fxq drmexperienced.com rollback-package/site/CNAME
+
+      - name: Upload preserved site
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+        with:
+          path: rollback-package/site
+
+      - name: Deploy preserved site
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

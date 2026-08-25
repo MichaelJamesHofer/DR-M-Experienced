@@ -16,7 +16,7 @@ export default function PrivacyPage() {
           Legal
         </p>
         <h1 className="mb-4 text-display font-bold text-foreground">Privacy notice</h1>
-        <p className="text-body-sm text-foreground-muted">Last updated August 7, 2026</p>
+        <p className="text-body-sm text-foreground-muted">Last updated August 8, 2026</p>
       </header>
 
       <div className="space-y-10 text-body text-foreground-muted">
@@ -53,10 +53,14 @@ export default function PrivacyPage() {
         <section>
           <h2 className="mb-3 text-heading-lg font-semibold text-foreground">Analytics</h2>
           <p>
-            Optional PostHog analytics records page paths when configured. Query strings, form values,
-            persistent browser identifiers, person profiles, autocapture, and session recording are
-            disabled by this site&apos;s configuration. The analytics project is configured to discard
-            client IP addresses rather than store them with events.
+            Optional PostHog analytics records site page views and page leaves when configured. After
+            a form is accepted, it also records the newsletter form location or the selected contact
+            subject category. Opening an episode player records the public Vimeo video identifier;
+            opening a short or media player records only its media type and platform. Names, email
+            addresses, messages, other form values, external referrers, query strings, campaign
+            identifiers, persistent browser identifiers, person profiles, autocapture, and session
+            recording are excluded by this site&apos;s configuration. The analytics project is configured
+            to discard client IP addresses rather than store them with events.
           </p>
         </section>
 

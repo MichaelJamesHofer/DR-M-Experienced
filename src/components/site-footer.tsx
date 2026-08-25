@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import { Rss } from "lucide-react";
 import { PlatformBadges } from "@/components/platform-badges";
 import { NewsletterCapture } from "@/components/newsletter-capture";
 import { PODCAST_FEED_URL, SITE_DESCRIPTION, SITE_HOST_LINE, SITE_NAME, SITE_SHORT_NAME } from "@/lib/site-brand";
@@ -16,17 +18,21 @@ const footerLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-20 border-t border-border bg-surface">
-      <div className="mx-auto max-w-6xl px-4 py-16 lg:px-6">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
-          {/* Brand Column */}
-          <div className="lg:col-span-1">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent text-lg font-bold text-background">
-                ⛰
-              </span>
+    <footer className="border-t border-border bg-surface">
+      <div className="mx-auto max-w-6xl px-4 py-12 lg:px-6 lg:py-14">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.1fr_0.9fr_1fr]">
+          <div className="min-w-0 text-center md:text-left">
+            <div className="mb-4 flex items-center justify-center gap-3 md:justify-start">
+              <Image
+                src="/icon.svg"
+                alt=""
+                width={40}
+                height={40}
+                unoptimized
+                className="h-10 w-10 rounded-lg"
+              />
               <div>
-                <p className="text-caption font-semibold uppercase tracking-[0.2em] text-foreground-muted">
+                <p className="text-caption font-semibold uppercase text-foreground-muted">
                   {SITE_SHORT_NAME},
                 </p>
                 <p className="text-body-sm font-semibold text-foreground">
@@ -34,32 +40,29 @@ export function SiteFooter() {
                 </p>
               </div>
             </div>
-            <p className="text-body-sm text-foreground-muted mb-6 max-w-xs">
+            <p className="mx-auto mb-6 max-w-xs text-body-sm text-foreground-muted md:mx-0">
               {SITE_DESCRIPTION}
             </p>
-            <PlatformBadges variant="compact" className="mb-6" />
+            <PlatformBadges variant="compact" className="mb-4 justify-center md:justify-start" />
             <a
               href={PODCAST_FEED_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-body-sm text-foreground-muted hover:text-foreground transition-colors duration-200"
+              className="inline-flex min-h-11 items-center gap-2 text-body-sm text-foreground-muted transition-colors duration-200 hover:text-foreground"
             >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z" />
-              </svg>
+              <Rss className="h-4 w-4" aria-hidden="true" />
               RSS Feed
             </a>
           </div>
 
-          {/* Links Column */}
-          <div>
+          <div className="min-w-0">
             <p className="text-body-sm font-semibold text-foreground mb-4">Navigation</p>
-            <nav className="flex flex-col gap-3">
+            <nav className="grid grid-cols-2 gap-x-4">
               {footerLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-body-sm text-foreground-muted hover:text-foreground transition-colors duration-200"
+                  className="flex min-h-11 items-center text-body-sm text-foreground-muted transition-colors duration-200 hover:text-foreground"
                 >
                   {link.label}
                 </Link>
@@ -67,8 +70,7 @@ export function SiteFooter() {
             </nav>
           </div>
 
-          {/* Newsletter Column */}
-          <div>
+          <div className="min-w-0">
             <NewsletterCapture
               variant="footer"
               heading="Join the newsletter"
@@ -77,8 +79,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-10 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-caption text-foreground-subtle">
             © {new Date().getFullYear()} {SITE_NAME}. Educational content only.
           </p>

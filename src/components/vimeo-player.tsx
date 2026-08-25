@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import { useAnalytics } from '@/components/posthog-provider';
 
 type VimeoPlayerProps = {
   videoId: string;
@@ -9,6 +10,9 @@ type VimeoPlayerProps = {
   thumbnailUrl?: string;
   className?: string;
   aspectClassName?: string;
+  analyticsContext?:
+    | { contentType: 'episode' }
+    | { contentType: 'media'; mediaType: string; platform: string };
 };
 
 export function VimeoPlayer({
@@ -17,12 +21,26 @@ export function VimeoPlayer({
   thumbnailUrl,
   className = '',
   aspectClassName = 'aspect-video',
+  analyticsContext = { contentType: 'episode' },
 }: VimeoPlayerProps) {
+  const { capture } = useAnalytics();
   const [shouldLoad, setShouldLoad] = useState(false);
   const previewImage = thumbnailUrl || `https://vumbnail.com/${videoId}.jpg`;
 
+  function handlePlayerOpen() {
+    if (analyticsContext.contentType === 'media') {
+      capture('media item opened', {
+        media_type: analyticsContext.mediaType,
+        platform: analyticsContext.platform,
+      });
+    } else {
+      capture('episode player opened', { video_id: videoId });
+    }
+    setShouldLoad(true);
+  }
+
   return (
-    <div className={`relative overflow-hidden bg-surface-elevated ${aspectClassName} ${className}`}>
+    <div className={`relative w-full min-w-0 overflow-hidden bg-surface-elevated ${aspectClassName} ${className}`}>
       {shouldLoad ? (
         <iframe
           src={`https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0&badge=0&dnt=1`}
@@ -35,9 +53,9 @@ export function VimeoPlayer({
       ) : (
         <button
           type="button"
-          onClick={() => setShouldLoad(true)}
+          onClick={handlePlayerOpen}
           className="group absolute inset-0 flex h-full w-full items-center justify-center bg-surface text-background"
-          aria-label={`Play ${title}`}
+          aria-label={`Open ${title} player`}
         >
           <Image src={previewImage} alt="" fill sizes="(max-width: 1024px) 100vw, 720px" className="object-cover" />
           <span className="absolute inset-0 bg-black/35 transition-colors duration-200 group-hover:bg-black/25" />

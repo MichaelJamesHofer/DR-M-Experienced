@@ -2,6 +2,7 @@
 
 import { FormEvent, useId, useState } from "react";
 import Link from "next/link";
+import { useAnalytics } from "@/components/posthog-provider";
 import { submitFormSubmission } from "@/lib/form-submissions";
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -19,6 +20,7 @@ export function NewsletterCapture({
   description = "Weekly insights on functional medicine, sports performance, and actionable health strategies. No spam. Unsubscribe through the contact page.",
   className = "",
 }: NewsletterCaptureProps) {
+  const { capture } = useAnalytics();
   const [email, setEmail] = useState("");
   const [website, setWebsite] = useState("");
   const [status, setStatus] = useState<Status>("idle");
@@ -87,6 +89,7 @@ export function NewsletterCapture({
         ...getSubmissionMetadata(),
       });
 
+      capture("newsletter subscribed", { placement: variant });
       setStatus("success");
       setEmail("");
       setWebsite("");
@@ -99,15 +102,15 @@ export function NewsletterCapture({
   if (variant === "hero") {
     return (
       <div className={`w-full max-w-xl ${className}`}>
-        <div className="text-center mb-6">
-          <h2 className="text-heading-lg font-semibold text-foreground mb-2">
+        <div className="mb-5">
+          <h2 className="mb-1 text-heading font-semibold text-foreground">
             {heading}
           </h2>
           <p className="text-body text-foreground-muted">
             {description}
           </p>
         </div>
-        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
           <input
             type="text"
             name="website"
@@ -129,12 +132,12 @@ export function NewsletterCapture({
             placeholder="Enter your email"
             required
             disabled={isDisabled}
-            className="flex-1 rounded-xl border border-border bg-surface px-5 py-4 text-body text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200"
+            className="min-h-12 flex-1 rounded-lg border border-border bg-surface px-4 py-3 text-body text-foreground placeholder:text-foreground-subtle transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60"
           />
           <button
             type="submit"
             disabled={isDisabled}
-            className="rounded-xl bg-primary px-8 py-4 text-body font-semibold text-background hover:bg-primary-hover disabled:opacity-60 transition-all duration-200 shadow-glow-sm hover:shadow-glow"
+            className="min-h-12 rounded-lg bg-primary px-7 py-3 text-body font-semibold text-background transition-colors duration-200 hover:bg-primary-hover disabled:opacity-60"
           >
             {isLoading ? "Subscribing..." : isSubmitted ? "Submitted" : "Subscribe"}
           </button>
@@ -143,7 +146,7 @@ export function NewsletterCapture({
           <p
             role="status"
             aria-live="polite"
-            className={`mt-3 rounded-xl border px-4 py-3 text-center text-sm ${feedbackClassName}`}
+            className={`mt-3 rounded-lg border px-4 py-3 text-sm ${feedbackClassName}`}
           >
             {feedbackMessage}
           </p>
@@ -184,12 +187,12 @@ export function NewsletterCapture({
             placeholder="your@email.com"
             required
             disabled={isDisabled}
-            className="flex-1 rounded-lg border border-border bg-surface px-4 py-2.5 text-body-sm text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none disabled:opacity-60 transition-all duration-200"
+            className="h-11 min-w-0 flex-1 rounded-lg border border-border bg-surface px-4 text-body-sm text-foreground placeholder:text-foreground-subtle transition-colors duration-200 focus:border-primary focus:outline-none disabled:opacity-60"
           />
           <button
             type="submit"
             disabled={isDisabled}
-            className="min-w-[4rem] rounded-lg bg-primary px-5 py-2.5 text-body-sm font-semibold text-background hover:bg-primary-hover disabled:opacity-60 transition-all duration-200"
+            className="h-11 min-w-[4rem] rounded-lg bg-primary px-5 text-body-sm font-semibold text-background transition-colors duration-200 hover:bg-primary-hover disabled:opacity-60"
           >
             {isLoading ? "..." : isSubmitted ? "Done" : "Go"}
           </button>
@@ -210,7 +213,7 @@ export function NewsletterCapture({
 
   // Default inline variant
   return (
-    <div className={`rounded-2xl border border-border bg-surface p-6 ${className}`}>
+    <div className={`rounded-lg border border-border bg-surface p-6 ${className}`}>
       <h2 className="text-heading font-semibold text-foreground mb-2">
         {heading}
       </h2>
@@ -239,12 +242,12 @@ export function NewsletterCapture({
           placeholder="Enter your email"
           required
           disabled={isDisabled}
-          className="w-full rounded-lg border border-border bg-surface-elevated px-4 py-3 text-body-sm text-foreground placeholder:text-foreground-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60 transition-all duration-200"
+          className="min-h-12 w-full rounded-lg border border-border bg-surface-elevated px-4 py-3 text-body-sm text-foreground placeholder:text-foreground-subtle transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60"
         />
         <button
           type="submit"
           disabled={isDisabled}
-          className="w-full rounded-lg bg-primary px-6 py-3 text-body-sm font-semibold text-background hover:bg-primary-hover disabled:opacity-60 transition-all duration-200"
+          className="min-h-12 w-full rounded-lg bg-primary px-6 py-3 text-body-sm font-semibold text-background transition-colors duration-200 hover:bg-primary-hover disabled:opacity-60"
         >
           {isLoading ? "Subscribing..." : isSubmitted ? "Submitted" : "Subscribe"}
         </button>

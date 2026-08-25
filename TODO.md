@@ -75,6 +75,9 @@ Based on analysis of top-tier health content creators (Huberman Lab, Peter Attia
 
 ## Remaining Optional Enhancements
 - [x] Add actual YouTube/Spotify/Apple links
+- [x] Restore the original Midnight/Cyan/Amber palette and publish the media design guide
+- [x] Replace the portrait-led homepage hero with the review-version mountain/path brand scene
+- [x] Add official affiliate logos, restrained partner accents, and compact mobile product profiles
 - [ ] Approve one Round 01 logo direction (Switchback, Cutline, Waypoint Steps, or none)
 - [x] Produce and hash-verify Cutline Show Brand Package `1.0.0-rc1`, including the outlined logo family, portrait-free podcast cover, avatar, YouTube banner, Open Graph image, letterhead, lower third, silent sting, and silent end screen; keep it review-only
 - [ ] Approve or revise the exact `1.0.0-rc1` package, then record approved hashes and destinations before any coordinated rollout

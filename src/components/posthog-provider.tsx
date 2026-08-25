@@ -1,30 +1,33 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import type { CaptureResult, PostHog } from 'posthog-js';
 import {
   sanitizeAnalyticsProperties,
   type AnalyticsProperties,
 } from '@/lib/analytics-privacy';
+import type { CaptureAnalyticsEvent } from '@/lib/analytics-events';
+import {
+  buildPathOnlyPageviewUrl,
+  POSTHOG_PRIVACY_OPTIONS,
+  resolvePostHogRuntimeConfig,
+} from '@/lib/posthog-runtime';
 
 type PostHogClient = Pick<PostHog, 'capture'>;
 
+type AnalyticsContextValue = {
+  capture: CaptureAnalyticsEvent;
+  enabled: boolean;
+};
+
+const AnalyticsContext = createContext<AnalyticsContextValue>({
+  capture: () => undefined,
+  enabled: false,
+});
+
 function sanitizePostHogProperties(properties: AnalyticsProperties): AnalyticsProperties {
-  const sanitized = sanitizeAnalyticsProperties(properties);
-
-  return Object.fromEntries(
-    Object.entries(sanitized).filter(([key]) => {
-      // PostHog prefixes session attribution after parsing it from the URL.
-      const unscopedKey = key
-        .toLowerCase()
-        .replace(/^\$/, '')
-        .replace(/^(?:(?:initial|session_entry)_)+/, '');
-      const policyProbe = sanitizeAnalyticsProperties({ [unscopedKey]: true });
-
-      return unscopedKey !== 'ph_keyword' && unscopedKey in policyProbe;
-    }),
-  );
+  return sanitizeAnalyticsProperties(properties);
 }
 
 function sanitizeAnalyticsEvent(event: CaptureResult | null): CaptureResult | null {
@@ -47,7 +50,7 @@ function PostHogTracker({ client }: { client: PostHogClient }) {
     if (pathname && typeof window !== 'undefined') {
       try {
         client.capture('$pageview', {
-          $current_url: window.origin + pathname,
+          $current_url: buildPathOnlyPageviewUrl(window.origin, pathname),
         });
       } catch (error) {
         if (process.env.NODE_ENV === 'development') {
@@ -64,9 +67,12 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
   const [client, setClient] = useState<PostHogClient | null>(null);
 
   useEffect(() => {
-    const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_API_KEY;
-    const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com';
-    if (!posthogKey || typeof window === 'undefined') return;
+    const runtimeConfig = resolvePostHogRuntimeConfig({
+      NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN: process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN,
+      NEXT_PUBLIC_POSTHOG_API_KEY: process.env.NEXT_PUBLIC_POSTHOG_API_KEY,
+      NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+    });
+    if (!runtimeConfig || typeof window === 'undefined') return;
 
     let active = true;
     void import('posthog-js')
@@ -77,23 +83,12 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
           return;
         }
 
-        posthog.init(posthogKey, {
-          api_host: posthogHost,
+        posthog.init(runtimeConfig.projectToken, {
+          ...POSTHOG_PRIVACY_OPTIONS,
+          api_host: runtimeConfig.apiHost,
           loaded: (initializedClient) => {
             if (active) setClient(initializedClient);
           },
-          autocapture: false,
-          capture_pageview: false,
-          capture_pageleave: true,
-          capture_performance: false,
-          disable_session_recording: true,
-          disable_surveys: true,
-          disable_web_experiments: true,
-          disable_external_dependency_loading: true,
-          person_profiles: 'never',
-          persistence: 'memory',
-          respect_dnt: true,
-          advanced_disable_flags: true,
           before_send: sanitizeAnalyticsEvent,
         });
       })
@@ -108,10 +103,31 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
+  const capture = useCallback<CaptureAnalyticsEvent>((eventName, properties) => {
+    if (!client) return;
+
+    try {
+      client.capture(eventName, sanitizePostHogProperties(properties));
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('PostHog capture error:', error);
+      }
+    }
+  }, [client]);
+
+  const contextValue = useMemo<AnalyticsContextValue>(() => ({
+    capture,
+    enabled: client !== null,
+  }), [capture, client]);
+
   return (
-    <>
+    <AnalyticsContext.Provider value={contextValue}>
       {children}
       {client && <PostHogTracker client={client} />}
-    </>
+    </AnalyticsContext.Provider>
   );
+}
+
+export function useAnalytics() {
+  return useContext(AnalyticsContext);
 }

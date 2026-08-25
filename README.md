@@ -48,15 +48,17 @@ See `FORM_SETUP.md` and `SECURITY.md` for deployment and security details.
 Run these checks before deployment:
 
 ```bash
+npm ci
 npm run lint
 npm run typecheck
+npm run test:production-env
 npm run test:publisher
 npm audit --audit-level=high
 npm run verify:catalog
 npm run test:database-security
 npx --yes deno@2.9.2 check --config supabase/functions/deno.json --lock supabase/functions/deno.lock supabase/functions/form-submit/index.ts
-npx --yes deno@2.9.2 lint --config supabase/functions/deno.json supabase/functions/form-submit src/lib/analytics-privacy.ts src/lib/analytics-privacy_test.ts
-npx --yes deno@2.9.2 test --config supabase/functions/deno.json --lock supabase/functions/deno.lock supabase/functions/form-submit src/lib/analytics-privacy_test.ts
+npx --yes deno@2.9.2 lint --config supabase/functions/deno.json supabase/functions/form-submit src/lib/analytics-privacy.ts src/lib/analytics-privacy_test.ts src/lib/posthog-runtime.ts src/lib/posthog-runtime_test.ts
+npx --yes deno@2.9.2 test --config supabase/functions/deno.json --lock supabase/functions/deno.lock supabase/functions/form-submit src/lib/analytics-privacy_test.ts src/lib/posthog-runtime_test.ts
 CONTENT_CATALOG_STRICT=true npm run build
 ```
 
