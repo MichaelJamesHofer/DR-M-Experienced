@@ -11,6 +11,7 @@ import {
   affiliateProductsForEpisode,
 } from "@/data/affiliates";
 import { getContentCatalog } from "@/data/content-catalog";
+import { groupEpisodeReferences } from "@/data/episode-reference-groups.mjs";
 import { NewsletterCapture } from "@/components/newsletter-capture";
 import { EpisodeTopicRail } from "@/components/episode-topic-rail";
 import { VimeoPlayer } from "@/components/vimeo-player";
@@ -81,16 +82,46 @@ export default async function EpisodeDetailPage({
   }
 
   const publishDate = dateFormatter.format(new Date(episode.publishDate));
-  const related = episodes.filter(
+  const knownEpisodeSlugs = new Set(episodes.map((item) => item.slug));
+  const referenceGroups = groupEpisodeReferences(
+    episode.references ?? [],
+    knownEpisodeSlugs,
+  );
+  const topicRelated = episodes.filter(
     (item) =>
       item.slug !== episode.slug && item.topics.some((topic) => episode.topics.includes(topic))
-  ).slice(0, 3);
+  );
+  const curatedRelated = referenceGroups.relatedEpisodeReferences
+    .map(({ episodeSlug }) => episodes.find((item) => item.slug === episodeSlug))
+    .filter((item): item is NonNullable<typeof item> => Boolean(item));
+  const related = (curatedRelated.length > 0 ? curatedRelated : topicRelated).slice(0, 3);
   const relatedAffiliateProducts = affiliateProductsForEpisode(episode, affiliateProducts);
+  const relatedAffiliateProductSlugs = new Set(
+    relatedAffiliateProducts.map((product) => product.slug),
+  );
+  const affiliateGuideReferences = referenceGroups.affiliateReferences.filter(
+    ({ productSlug }) => productSlug === null,
+  );
+  const unmatchedAffiliateReferences = new Set(
+    referenceGroups.affiliateReferences
+      .filter(
+        ({ productSlug }) =>
+          productSlug !== null && !relatedAffiliateProductSlugs.has(productSlug),
+      )
+      .map(({ reference }) => reference),
+  );
+  const supplementalReferences = new Set(referenceGroups.resourceReferences);
+  const resourceReferences = (episode.references ?? []).filter(
+    (reference) =>
+      supplementalReferences.has(reference) || unmatchedAffiliateReferences.has(reference),
+  );
   const relatedBlogPosts = blogPosts
     .filter((post) => post.relatedEpisodeSlugs?.includes(episode.slug))
     .slice(0, 3);
 
-  const hasComingSoonReference = episode.references?.some((ref) => ref.comingSoon === true);
+  const hasComingSoonReference = referenceGroups.platformReferences.some(
+    ({ reference, platform }) => platform === "Vimeo" && reference.comingSoon === true,
+  );
 
   const episodesChronological = [...episodes].sort((a, b) => {
     const dateA = new Date(a.publishDate).getTime();
@@ -217,7 +248,7 @@ export default async function EpisodeDetailPage({
                 </p>
               </div>
             )}
-            {episode.references && episode.references.length > 0 && (
+            {referenceGroups.platformReferences.length > 0 && (
               <nav
                 aria-label="Episode listening and viewing platforms"
                 className="border-t border-border bg-surface-elevated p-4 sm:p-5"
@@ -226,11 +257,11 @@ export default async function EpisodeDetailPage({
                   Listen or watch
                 </p>
                 <ul className="mx-auto grid max-w-3xl grid-cols-1 gap-2 min-[360px]:grid-cols-2 md:grid-cols-4">
-                  {episode.references.map((ref, index) => {
+                  {referenceGroups.platformReferences.map(({ reference: ref }) => {
                     const isComingSoon = ref.comingSoon === true;
                     if (isComingSoon) {
                       return (
-                        <li key={`${ref.label}-${index}`}>
+                        <li key={ref.url}>
                           <span
                             className="flex min-h-14 w-full items-center justify-center gap-2 rounded-md border border-dashed border-border bg-surface px-3 py-2 text-center text-body-sm font-medium leading-snug text-foreground-subtle opacity-60"
                             title="Coming soon"
@@ -243,7 +274,7 @@ export default async function EpisodeDetailPage({
                       );
                     }
                     return (
-                      <li key={`${ref.url}-${index}`}>
+                      <li key={ref.url}>
                         <a
                           href={ref.url}
                           target="_blank"
@@ -373,24 +404,67 @@ export default async function EpisodeDetailPage({
           )}
 
           {/* Related Affiliate Products */}
-          {relatedAffiliateProducts.length > 0 && (
+          {(relatedAffiliateProducts.length > 0 || affiliateGuideReferences.length > 0) && (
             <section className="rounded-lg border border-border bg-surface p-8">
               <div className="mb-6">
                 <p className="text-caption font-semibold uppercase tracking-wider text-primary mb-2">
                   Affiliate guide
                 </p>
                 <h2 className="text-heading-lg font-bold text-foreground">
-                  Products referenced in this episode
+                  {relatedAffiliateProducts.length > 0
+                    ? "Products referenced in this episode"
+                    : "Affiliate and product guide"}
                 </h2>
                 <p className="mt-3 text-body-sm text-foreground-muted">
                   {AFFILIATE_DISCLOSURE}
                 </p>
               </div>
-              <div className="space-y-4">
-                {relatedAffiliateProducts.map((product) => (
-                  <EpisodeAffiliateCard key={product.slug} product={product} />
+              {relatedAffiliateProducts.length > 0 && (
+                <div className="space-y-4">
+                  {relatedAffiliateProducts.map((product) => (
+                    <EpisodeAffiliateCard key={product.slug} product={product} />
+                  ))}
+                </div>
+              )}
+              {affiliateGuideReferences.length > 0 && (
+                <div className="mt-6 border-t border-border pt-5">
+                  {affiliateGuideReferences.map(({ reference }) => (
+                    <Link
+                      key={reference.url}
+                      href="/affiliates/"
+                      className="inline-flex items-center gap-2 text-body-sm font-semibold text-primary hover:text-primary-hover transition-colors duration-200"
+                    >
+                      {reference.label}
+                      <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* References */}
+          {resourceReferences.length > 0 && (
+            <section className="rounded-lg border border-border bg-surface p-8">
+              <h2 className="text-heading-lg font-bold text-foreground mb-6">
+                Episode resources
+              </h2>
+              <ul className="space-y-3">
+                {resourceReferences.map((ref) => (
+                  <li key={ref.url}>
+                    <a
+                      href={ref.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-body text-primary hover:text-primary-hover transition-colors duration-200"
+                    >
+                      <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
+                      {ref.label}
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </section>
           )}
 
