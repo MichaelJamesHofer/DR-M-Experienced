@@ -1,9 +1,9 @@
 # Episode 8 All-Channel Copy And Release Packet
 
-Status: owner-approved release in progress. RSS.com, YouTube, and Vimeo are
-public and verified; Spotify audio is public on the RSS-created episode and its
-same-ID video attachment is processing. Apple RSS ingestion and the website
-deployment remain pending live readback. Rumble remains a human-only handoff.
+Status: owner-approved release in progress. RSS.com, Apple Podcasts, YouTube,
+and Vimeo are public and verified; Spotify audio is public on the RSS-created
+episode and its same-ID video attachment is processing. The website deployment
+remains pending live readback. Rumble remains a human-only handoff.
 
 This packet is the reusable copy and release-control handoff for Episode 8. It
 does not replace `publishing/master-catalog.json`, the private publisher
@@ -272,7 +272,7 @@ Approved hashtag set:
 | --- | --- | --- |
 | RSS.com | `podcast-audio.mp3`, 3000 x 3000 podcast art, canonical HTML copy | **PUBLIC AND VERIFIED.** Item `3096546`; GUID `4587dd48-8a26-4341-b194-8764500d74ef`; published `2026-08-25T22:26:24Z`. |
 | Spotify | RSS-created episode plus `master-video.mp4` | **AUDIO PUBLIC; VIDEO PROCESSING.** Existing RSS-created episode `7oYwjErc5TXpocbRFgzvH0` was used. Promotional content is `yes`; no duplicate was created. |
-| Apple Podcasts | RSS fan-out | **PROPAGATION PENDING.** Continue verifying GUID/title in public show `1870433419`; do not upload separately. |
+| Apple Podcasts | RSS fan-out | **PUBLIC AND VERIFIED.** Episode `1000785842789` preserves RSS GUID `4587dd48-8a26-4341-b194-8764500d74ef`, exact title, clean rating, 21:32 duration, episode art, and the canonical enclosure in show `1870433419`. |
 | Amazon Music/Audible | RSS fan-out after one-time show claim | No stable show ID is recorded. Owner verification and claim remain pending; never submit the legacy Anchor feed. |
 | YouTube | `master-video.mp4`, 16:9 thumbnail, SRT, explicit plain-text override, tags/chapters | **PUBLIC AND VERIFIED.** Video `ax5BSELnBbo`; private-first controls, disclosures, thumbnail, SRT, tags, copy, and checks verified before public release. |
 | Vimeo | `master-video.mp4`, 16:9 thumbnail, SRT, explicit plain-text override | **PUBLIC AND VERIFIED.** Video `1221293570`; private-first controls, advertisement disclosure, all-audiences rating, thumbnail, SRT, tags, copy, and 1080p60 master readback verified. |
@@ -312,10 +312,10 @@ Complete these only after authenticated and independent readback:
 - RSS GUID: `4587dd48-8a26-4341-b194-8764500d74ef`
 - RSS enclosure URL: `https://content.rss.com/episodes/397420/3096546/dr-m-experienced/2026_08_25_22_20_41_83110c46-278d-4dc5-96e7-d38abd74172a.mp3`
 - Spotify episode ID/URL: `7oYwjErc5TXpocbRFgzvH0` — `https://open.spotify.com/episode/7oYwjErc5TXpocbRFgzvH0` (audio public; submitted video processing)
-- Apple episode ID/URL: **PENDING**
+- Apple episode ID/URL: `1000785842789` — `https://podcasts.apple.com/us/podcast/food-and-the-brain-eating-for-brain-health/id1870433419?i=1000785842789`
 - Amazon show and episode ID/URL: **NOT CURRENTLY CLAIMED OR DISCOVERABLE; NO DIRECT UPLOAD**
 - YouTube video ID/URL: `ax5BSELnBbo` — `https://youtu.be/ax5BSELnBbo`
 - Vimeo video ID/URL: `1221293570` — `https://vimeo.com/1221293570`
 - Supabase production row: **PUBLISHED AND VERIFIED** — 10 topics, 12 active references, 5 takeaways, 5 checklist items, 4 sections, 8 paragraphs, and 4 affiliate-product relationships
 - Website live URL and deployment run: **PENDING**
-- Cross-platform title/copy/art/runtime verification: **RSS.COM, YOUTUBE, AND VIMEO VERIFIED; SPOTIFY AUDIO/COPY/ART VERIFIED WITH VIDEO PROCESSING; APPLE AND WEBSITE PENDING**
+- Cross-platform title/copy/art/runtime verification: **RSS.COM, APPLE PODCASTS, YOUTUBE, AND VIMEO VERIFIED; SPOTIFY AUDIO/COPY/ART VERIFIED WITH VIDEO PROCESSING; WEBSITE PENDING**
