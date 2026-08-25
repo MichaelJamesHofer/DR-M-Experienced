@@ -71,8 +71,8 @@ test("master catalog validates and has a deterministic hash", async () => {
   const result = validateCatalog(catalog);
   assert.deepEqual(result, { valid: true, errors: [] });
   assert.equal(catalog.schemaVersion, 1);
-  assert.equal(catalog.revision, 13);
-  assert.equal(catalog.episodes.length, 7);
+  assert.equal(catalog.revision, 14);
+  assert.equal(catalog.episodes.length, 8);
   assert.match(catalogHash(catalog), /^[a-f0-9]{64}$/);
   assert.equal(catalogHash(catalog), catalogHash(structuredClone(catalog)));
   assert.ok(Object.values(catalog.assetRegistry).every((asset) => asset.uri.startsWith("dropbox:")));
@@ -86,6 +86,86 @@ test("master catalog validates and has a deterministic hash", async () => {
       .filter((asset) => asset.status === "verified")
       .every((asset) => /^[a-f0-9]{64}$/.test(asset.sha256) && Number.isInteger(asset.sizeBytes))
   );
+});
+
+test("episode 8 is a verified draft with canonical local release assets", async () => {
+  const catalog = await loadCatalog();
+  const episode = findEpisode(catalog, 8);
+
+  assert.equal(episode.publicationState, "draft");
+  assert.equal(episode.title, "Food and the Brain - Eating for Brain Health and Concussion Recovery");
+  assert.equal(episode.slug, "episode-8-food-and-the-brain");
+  assert.equal(episode.durationMinutes, 22);
+  assert.equal(episode.rssGuid, null);
+  assert.equal(episode.publishDate, null);
+  assert.equal(episode.feedPublishedAt, null);
+  assert.deepEqual(episode.contentFlags, {
+    explicit: false,
+    madeForKids: null,
+    containsSyntheticMedia: null,
+    paidPromotion: null,
+  });
+  assert.deepEqual(episode.destinations, {
+    spotify: null,
+    youtube: null,
+    vimeo: null,
+    rumble: null,
+  });
+  assert.deepEqual(episode.assetRefs, {
+    fullVideo: "episode-008-master-video",
+    podcastAudio: "episode-008-podcast-audio",
+    thumbnail: "episode-008-thumbnail",
+    captions: "episode-008-captions",
+    instagramReel: null,
+  });
+
+  assert.deepEqual(
+    Object.fromEntries(
+      Object.values(episode.assetRefs)
+        .filter(Boolean)
+        .map((assetId) => [assetId, catalog.assetRegistry[assetId]])
+    ),
+    {
+      "episode-008-master-video": {
+        kind: "video",
+        role: "fullVideo",
+        uri: "dropbox:episodes/008-episode-8-food-and-the-brain/master-video.mp4",
+        sha256: "4d126da758c5b1e2908cdfa27f5b4622022202be967d16a08a400c59befc8615",
+        sizeBytes: 1607073706,
+        mediaType: "video/mp4",
+        status: "verified",
+      },
+      "episode-008-podcast-audio": {
+        kind: "audio",
+        role: "podcastAudio",
+        uri: "dropbox:episodes/008-episode-8-food-and-the-brain/podcast-audio.mp3",
+        sha256: "10cb7e8e0dde9a5f081123d3bc8f5f2aedbfcb9a1a1ae66a69812b051aa64433",
+        sizeBytes: 31025133,
+        mediaType: "audio/mpeg",
+        status: "verified",
+      },
+      "episode-008-thumbnail": {
+        kind: "image",
+        role: "thumbnail",
+        uri: "dropbox:episodes/008-episode-8-food-and-the-brain/artwork/video-thumbnail-1920x1080.jpg",
+        sha256: "a53a5f85634701c8a7aaf5ba1b6b436202f857428dbfa592b485732f67db5643",
+        sizeBytes: 564787,
+        mediaType: "image/jpeg",
+        status: "verified",
+      },
+      "episode-008-captions": {
+        kind: "text",
+        role: "captions",
+        uri: "dropbox:episodes/008-episode-8-food-and-the-brain/captions.srt",
+        sha256: "a33793b0968695ca6c26ec187fbf790d11bdf208c44b1ccc7aa53d0951e3d19c",
+        sizeBytes: 27385,
+        mediaType: "application/x-subrip",
+        status: "verified",
+      },
+    }
+  );
+  assert.match(episode.description.full, /https:\/\/drmexperienced\.com\/affiliates\//);
+  assert.match(episode.description.full, /https:\/\/drmexperienced\.com\/episodes\/episode-7-the-brain-on-fire\//);
 });
 
 test("HTML descriptions have a deterministic readable plain-text projection", () => {
@@ -197,13 +277,13 @@ test("published podcast enclosures bind the website and Supabase seed projection
   assert.doesNotMatch(episodeSeed, /https:\/\/anchor\.fm\/s\/10e1b0328\/podcast\/play\//);
 });
 
-test("checked-in episode summaries project exactly from the master catalog", async () => {
+test("checked-in episode summaries project every published master-catalog episode", async () => {
   const catalog = await loadCatalog();
   const projection = JSON.parse(
     await fs.readFile(new URL("../../src/data/episodes-from-platforms.json", import.meta.url), "utf8")
   );
 
-  for (const episode of catalog.episodes) {
+  for (const episode of catalog.episodes.filter((item) => item.publicationState === "published")) {
     const projected = projection.find((item) => item.number === episode.number);
     assert.ok(projected, `episode ${episode.number} is missing from the checked-in site projection`);
     assert.equal(projected.summary, episode.websiteSummary, `episode ${episode.number} summary drifted`);
@@ -266,36 +346,40 @@ test("published episodes require a hosted podcast enclosure", async () => {
   );
 });
 
-test("catalog scales beyond the initial seven episodes with contiguous identities", async () => {
+test("catalog scales beyond the current episode set with contiguous identities", async () => {
   const catalog = await loadCatalog();
   const expanded = structuredClone(catalog);
-  const episode = structuredClone(expanded.episodes.at(-1));
-  episode.number = 8;
+  const nextNumber = Math.max(...expanded.episodes.map((item) => item.number)) + 1;
+  const episode = structuredClone(
+    expanded.episodes.filter((item) => item.publicationState === "published").at(-1)
+  );
+  episode.number = nextNumber;
   episode.slug = "future-episode";
-  episode.rssGuid = "00000000-0000-4000-8000-000000000008";
+  episode.rssGuid = "00000000-0000-4000-8000-000000000009";
   episode.title = "A Future Episode - Ready for Distribution";
   episode.description.full = "<p>A unique approved description for the future distributed episode.</p>";
   episode.websiteSummary = "A unique website summary for the future distributed episode.";
   episode.aliases = { titles: [], slugs: [] };
   episode.destinationArchives = [];
   episode.destinations = {
-    spotify: { id: "AAAAAAAAAAAAAAAAAAAAA8", url: "https://open.spotify.com/episode/AAAAAAAAAAAAAAAAAAAAA8" },
-    youtube: { id: "ep000000008", url: "https://www.youtube.com/watch?v=ep000000008" },
-    vimeo: { id: "9999999998", url: "https://vimeo.com/9999999998" },
-    rumble: { id: "vfuture8", url: "https://rumble.com/vfuture8-a-future-episode.html" },
+    spotify: { id: "AAAAAAAAAAAAAAAAAAAAA9", url: "https://open.spotify.com/episode/AAAAAAAAAAAAAAAAAAAAA9" },
+    youtube: { id: "ep000000009", url: "https://www.youtube.com/watch?v=ep000000009" },
+    vimeo: { id: "9999999999", url: "https://vimeo.com/9999999999" },
+    rumble: { id: "vfuture9", url: "https://rumble.com/vfuture9-a-future-episode.html" },
   };
   expanded.episodes.push(episode);
 
   assert.deepEqual(validateCatalog(expanded), { valid: true, errors: [] });
-  assert.equal(findEpisode(expanded, 8)?.slug, "future-episode");
+  assert.equal(findEpisode(expanded, nextNumber)?.slug, "future-episode");
 });
 
 test("catalog supports draft episodes before hosts assign remote identities", async () => {
   const catalog = await loadCatalog();
   const expanded = structuredClone(catalog);
+  const nextNumber = Math.max(...expanded.episodes.map((item) => item.number)) + 1;
   const episode = structuredClone(expanded.episodes.at(-1));
   episode.publicationState = "draft";
-  episode.number = 8;
+  episode.number = nextNumber;
   episode.slug = "future-draft";
   episode.rssGuid = null;
   episode.title = "A Future Draft - Approved Before Distribution";
@@ -310,7 +394,7 @@ test("catalog supports draft episodes before hosts assign remote identities", as
   expanded.episodes.push(episode);
 
   assert.deepEqual(validateCatalog(expanded), { valid: true, errors: [] });
-  assert.equal(findEpisode(expanded, 8)?.slug, "future-draft");
+  assert.equal(findEpisode(expanded, nextNumber)?.slug, "future-draft");
   assert.equal(findEpisode(expanded, { platform: "spotify", id: "not-created" }), null);
   assert.throws(
     () => findEpisode(expanded, { platform: "spotify" }),

@@ -15,7 +15,7 @@ import { buildEpisodeList } from "./sync-vimeo-episodes.mjs";
 
 const registry = loadEpisodeRegistry();
 
-const expectedEpisodes = [
+const expectedPublishedEpisodes = [
   [1, "brain-fog-part-1", "Brain Fog, Part 1 - Is Your Brain in a Fog?"],
   [2, "brain-fog-part-2", "Brain Fog, Part 2 - Testing and Basic Solutions"],
   [3, "episode-3-insomnia", "Insomnia - Causes and Practical Sleep Strategies"],
@@ -25,18 +25,30 @@ const expectedEpisodes = [
   [7, "episode-7-the-brain-on-fire", "The Brain on Fire - Neuroinflammation After Concussion"],
 ];
 
-test("episode registry preserves the seven canonical identities", () => {
+const expectedRegistryEpisodes = [
+  ...expectedPublishedEpisodes,
+  [8, "episode-8-food-and-the-brain", "Food and the Brain - Eating for Brain Health and Concussion Recovery"],
+];
+
+test("episode registry preserves published identities and reserves draft Episode 8", () => {
   assert.deepEqual(
     registry.entries.map(({ number, slug, title }) => [number, slug, title]),
-    expectedEpisodes,
+    expectedRegistryEpisodes,
   );
 
-  for (const episode of registry.entries) {
+  for (const episode of registry.entries.filter(({ number }) => number <= 7)) {
     assert.ok(episode.guid, `episode ${episode.number} is missing its RSS GUID`);
     assert.ok(episode.vimeoId, `episode ${episode.number} is missing its Vimeo ID`);
     assert.ok(episode.spotifyId, `episode ${episode.number} is missing its Spotify ID`);
     assert.ok(episode.youtubeId, `episode ${episode.number} is missing its YouTube ID`);
   }
+
+  const draft = registry.entries.find(({ number }) => number === 8);
+  assert.deepEqual(
+    [draft.guid, draft.vimeoId, draft.spotifyId, draft.youtubeId],
+    [null, null, null, null],
+  );
+  assert.equal(registry.maxNumber, 8);
 });
 
 test("multi-platform sync deduplicates punctuation variants and orders same-date episodes by identity", () => {
@@ -65,7 +77,7 @@ test("multi-platform sync deduplicates punctuation variants and orders same-date
   assert.deepEqual(episodes.map(({ number }) => number), [4, 5, 6, 7]);
   assert.deepEqual(
     episodes.map(({ number, slug, title }) => [number, slug, title]),
-    expectedEpisodes.slice(3),
+    expectedPublishedEpisodes.slice(3),
   );
   assert.equal(episodes[0].vimeoId, "1179956166");
   assert.equal(episodes[0].spotifyId, "0aDVuIwrRlDKxEylMj2dyw");
@@ -84,7 +96,7 @@ test("stable IDs take precedence over a misleading title", () => {
   assert.equal(episodes.length, 1);
   assert.deepEqual(
     [episodes[0].number, episodes[0].slug, episodes[0].title],
-    expectedEpisodes[4],
+    expectedPublishedEpisodes[4],
   );
 });
 
@@ -101,7 +113,7 @@ test("registered punctuation aliases work when an input has no stable ID", () =>
 
   assert.deepEqual(
     episodes.map(({ number, slug, title }) => [number, slug, title]),
-    [expectedEpisodes[3]],
+    [expectedPublishedEpisodes[3]],
   );
 });
 
@@ -116,7 +128,7 @@ test("empty platform responses retain every published master-catalog episode", (
 
   assert.deepEqual(
     episodes.map(({ number, slug, title }) => [number, slug, title]),
-    expectedEpisodes,
+    expectedPublishedEpisodes,
   );
 });
 
@@ -176,7 +188,7 @@ test("a later Vimeo page failure rejects instead of returning a partial result",
   assert.equal(requests, 2);
 });
 
-test("Vimeo sync ignores API order and reserves numbers one through seven", () => {
+test("Vimeo sync ignores API order and reserves numbers one through eight", () => {
   const videos = [
     { uri: "/videos/9999999999", name: "A New Unnumbered Episode", created_time: "2026-07-10T12:00:00Z" },
     { uri: "/videos/1205004739", name: "The Brain on Fire", created_time: "2026-06-26T12:00:00Z" },
@@ -187,10 +199,10 @@ test("Vimeo sync ignores API order and reserves numbers one through seven", () =
 
   const episodes = buildEpisodeList(videos, registry);
 
-  assert.deepEqual(episodes.map(({ number }) => number), [4, 5, 6, 7, 8]);
+  assert.deepEqual(episodes.map(({ number }) => number), [4, 5, 6, 7, 9]);
   assert.deepEqual(
     episodes.slice(0, 4).map(({ number, slug, title }) => [number, slug, title]),
-    expectedEpisodes.slice(3),
+    expectedPublishedEpisodes.slice(3),
   );
   assert.equal(episodes[4].slug, "a-new-unnumbered-episode");
   assert.equal(episodes[4].title, "A New Unnumbered Episode");

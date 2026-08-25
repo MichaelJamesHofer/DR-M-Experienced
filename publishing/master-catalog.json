@@ -1,8 +1,8 @@
 {
   "$schema": "./master-catalog.schema.json",
   "schemaVersion": 1,
-  "revision": 13,
-  "updatedAt": "2026-08-23T00:27:03Z",
+  "revision": 14,
+  "updatedAt": "2026-08-25T20:00:15Z",
   "show": {
     "names": {
       "full": "Dr. M Experienced, with Dr. David Musnick",
@@ -295,6 +295,42 @@
       "mediaType": "image/jpeg",
       "status": "verified",
       "publishedUrl": "https://drmexperienced.com/images/episodes/brain-neuroinflammation.webp"
+    },
+    "episode-008-master-video": {
+      "kind": "video",
+      "role": "fullVideo",
+      "uri": "dropbox:episodes/008-episode-8-food-and-the-brain/master-video.mp4",
+      "sha256": "4d126da758c5b1e2908cdfa27f5b4622022202be967d16a08a400c59befc8615",
+      "sizeBytes": 1607073706,
+      "mediaType": "video/mp4",
+      "status": "verified"
+    },
+    "episode-008-podcast-audio": {
+      "kind": "audio",
+      "role": "podcastAudio",
+      "uri": "dropbox:episodes/008-episode-8-food-and-the-brain/podcast-audio.mp3",
+      "sha256": "10cb7e8e0dde9a5f081123d3bc8f5f2aedbfcb9a1a1ae66a69812b051aa64433",
+      "sizeBytes": 31025133,
+      "mediaType": "audio/mpeg",
+      "status": "verified"
+    },
+    "episode-008-thumbnail": {
+      "kind": "image",
+      "role": "thumbnail",
+      "uri": "dropbox:episodes/008-episode-8-food-and-the-brain/artwork/video-thumbnail-1920x1080.jpg",
+      "sha256": "a53a5f85634701c8a7aaf5ba1b6b436202f857428dbfa592b485732f67db5643",
+      "sizeBytes": 564787,
+      "mediaType": "image/jpeg",
+      "status": "verified"
+    },
+    "episode-008-captions": {
+      "kind": "text",
+      "role": "captions",
+      "uri": "dropbox:episodes/008-episode-8-food-and-the-brain/captions.srt",
+      "sha256": "a33793b0968695ca6c26ec187fbf790d11bdf208c44b1ccc7aa53d0951e3d19c",
+      "sizeBytes": 27385,
+      "mediaType": "application/x-subrip",
+      "status": "verified"
     },
     "episode-005-spotify-video": {
       "kind": "video",
@@ -754,6 +790,45 @@
           "rollbackEligible": true
         }
       ]
+    },
+    {
+      "publicationState": "draft",
+      "number": 8,
+      "slug": "episode-8-food-and-the-brain",
+      "rssGuid": null,
+      "title": "Food and the Brain - Eating for Brain Health and Concussion Recovery",
+      "description": {
+        "format": "html",
+        "full": "<p>What should you eat when you want a sharper brain—or when the brain is recovering from a concussion or other neurological stress?</p><p>In this episode of <strong>Dr. M Experienced, with Dr. David Musnick</strong>, Dr. M connects food with brain health, neuroinflammation, blood-sugar stability, mitochondria, the gut-brain connection, and neuronal membranes.</p><p><strong>Topics include:</strong></p><ul><li>Apigenin, parsley, and the balance between inflammatory M1 and repair-oriented M2 microglia</li><li>A parsley, wild-blueberry, and protein smoothie</li><li>Choline, omega-3 DHA, plasmalogens, and neuronal membranes</li><li>Nrf2-supportive broccoli sprouts, green tea, turmeric, and rosemary</li><li>Quercetin-rich capers, red onions, and apples</li><li>Protein, lower-mercury fish, vegetable diversity, fiber, and the microbiome</li><li>Advanced glycation end products, acrylamide, heavy metals, BPA, MSG, aspartame, and sugar</li><li>Ketogenic diets, intermittent fasting, and when they may not be appropriate</li></ul><p>Dr. M explains why he may consider gluten-free, cow-dairy-free, or selective short-term elimination strategies in some concussion and neurological cases. These are not universal and should be individualized with an appropriate clinician.</p><p><strong>Related episodes:</strong></p><ul><li>The Brain on Fire - Neuroinflammation After Concussion: <a href=\"https://drmexperienced.com/episodes/episode-7-the-brain-on-fire/\">https://drmexperienced.com/episodes/episode-7-the-brain-on-fire/</a></li><li>Concussion - What Happens in the Brain: <a href=\"https://drmexperienced.com/episodes/episode-6-concussion-and-pathophysiology/\">https://drmexperienced.com/episodes/episode-6-concussion-and-pathophysiology/</a></li></ul><p><strong>Resources mentioned:</strong></p><ul><li>Episode page, video, audio, and notes: <a href=\"https://drmexperienced.com/episodes/episode-8-food-and-the-brain/\">https://drmexperienced.com/episodes/episode-8-food-and-the-brain/</a></li><li>HumanN Turmeric Chews — Dr. M Experienced product guide: <a href=\"https://drmexperienced.com/affiliates/#humann-turmeric-chews\">https://drmexperienced.com/affiliates/#humann-turmeric-chews</a></li><li>FGO Turmeric Ginger Tea — Dr. M Experienced product guide: <a href=\"https://drmexperienced.com/affiliates/#fgo-turmeric-ginger-tea\">https://drmexperienced.com/affiliates/#fgo-turmeric-ginger-tea</a></li><li>Purity Coffee — Dr. M Experienced product guide: <a href=\"https://drmexperienced.com/affiliates/#purity-coffee\">https://drmexperienced.com/affiliates/#purity-coffee</a></li><li>Complete Dr. M Experienced affiliate and product guide: <a href=\"https://drmexperienced.com/affiliates/\">https://drmexperienced.com/affiliates/</a></li><li>Dr. M Experienced Supplement Dispensary: <a href=\"https://drmexperienced.com/affiliates/#doctors-supplement-store\">https://drmexperienced.com/affiliates/#doctors-supplement-store</a></li><li>Request the Healthy Brain Diet handout: <a href=\"https://drmexperienced.com/contact/\">https://drmexperienced.com/contact/</a> — use “Episode 8 brain diet handout” in the message</li></ul><p><em>Some product links may be affiliate links. If you purchase through those links, Dr. M Experienced may earn a commission at no additional cost to you. Product mentions are educational and are not medical advice.</em></p><p><em>This episode is for educational purposes only and is not a substitute for personalized medical care. Nutrition needs, allergies, medications, metabolic conditions, and concussion recovery differ. Consult your own qualified healthcare professional before making major dietary changes, starting supplements, fasting, or using an elimination or ketogenic diet.</em></p><p>#BrainHealth #BrainNutrition #FoodAsMedicine #ConcussionRecovery #Neuroinflammation #FunctionalMedicine #HealthyEating #DrMExperienced</p>"
+      },
+      "websiteSummary": "Dr. Musnick explains how he approaches eating for brain sharpness and concussion recovery, covering apigenin, choline, omega-3s, Nrf2-supportive foods, turmeric, quercetin, rosemary, protein, blood sugar, the microbiome, and selected elimination strategies.",
+      "durationMinutes": 22,
+      "publishDate": null,
+      "feedPublishedAt": null,
+      "contentFlags": {
+        "explicit": false,
+        "madeForKids": null,
+        "containsSyntheticMedia": null,
+        "paidPromotion": null
+      },
+      "assetRefs": {
+        "fullVideo": "episode-008-master-video",
+        "podcastAudio": "episode-008-podcast-audio",
+        "thumbnail": "episode-008-thumbnail",
+        "captions": "episode-008-captions",
+        "instagramReel": null
+      },
+      "aliases": {
+        "titles": [],
+        "slugs": []
+      },
+      "destinations": {
+        "spotify": null,
+        "youtube": null,
+        "vimeo": null,
+        "rumble": null
+      },
+      "destinationArchives": []
     }
   ]
 }

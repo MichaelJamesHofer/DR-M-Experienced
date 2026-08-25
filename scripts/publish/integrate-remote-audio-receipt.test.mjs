@@ -77,6 +77,7 @@ async function prepareFixture(context) {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), "drm-remote-audio-integration-"));
   context.after(() => fs.rm(root, { recursive: true, force: true }));
   const catalog = structuredClone(catalogTemplate);
+  catalog.episodes = catalog.episodes.filter((episode) => episode.publicationState === "published");
   catalog.revision = 8;
   const audit = structuredClone(auditTemplate);
   audit.status = "validated_local_delivery_pending_remote_replacement";
