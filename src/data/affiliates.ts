@@ -84,6 +84,24 @@ export const AFFILIATE_BRAND_PROFILES: Record<string, AffiliateBrandProfile> = {
     accent: "#2a533f",
     logoSurface: "#2a533f",
   },
+  "humann-turmeric-chews": {
+    logoSrc: "/images/affiliates/humann.svg",
+    logoAlt: "Humann logo",
+    accent: "#bc0f0f",
+    logoSurface: "#ffffff",
+  },
+  "fgo-turmeric-ginger-tea": {
+    logoSrc: "/images/affiliates/from-great-origins.png",
+    logoAlt: "From Great Origins logo",
+    accent: "#046a38",
+    logoSurface: "#046a38",
+  },
+  "purity-coffee": {
+    logoSrc: "/images/affiliates/purity-coffee.png",
+    logoAlt: "Purity Coffee logo",
+    accent: "#009f8d",
+    logoSurface: "#ffffff",
+  },
 };
 
 export const AFFILIATE_DISCLOSURE =

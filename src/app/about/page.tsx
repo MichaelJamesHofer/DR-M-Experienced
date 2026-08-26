@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ExternalLink } from "lucide-react";
-import { AnimatedDisclosure } from "@/app/about/animated-disclosure";
+import { AnimatedDisclosure } from "@/components/animated-disclosure";
 import { MEDIA_FEATURES } from "@/data/media";
 import { physicianProfileExperience, physicianProfileYears } from "@/data/physician-profile";
 

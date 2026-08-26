@@ -507,6 +507,12 @@ function ProductCard({
   const accent = brandProfile?.accent ?? "var(--color-primary)";
   const logoSrc = brandProfile?.logoSrc ?? product.imageUrl;
   const logoAlt = brandProfile?.logoAlt ?? product.name;
+  const fallbackMark = companyName
+    .split(/[\s/]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase())
+    .join("");
   const cardStyle = {
     "--affiliate-shift-x": "0px",
     "--affiliate-shift-y": "0px",
@@ -529,18 +535,20 @@ function ProductCard({
         style={{ backgroundColor: accent }}
       />
       <div className="flex min-w-0 flex-1 flex-col p-4 pl-5 sm:p-5 sm:pl-6">
-        <div className={logoSrc ? "grid gap-4 sm:grid-cols-[8.5rem_minmax(0,1fr)]" : ""}>
-          {logoSrc && (
-            <div
-              className="relative mx-auto flex aspect-[16/7] w-full max-w-[13rem] items-center justify-center overflow-hidden rounded-lg border p-3 transition-transform duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none sm:mx-0 sm:aspect-[4/3] sm:max-w-none"
-              style={{
-                backgroundColor: brandProfile?.logoSurface ?? "#ffffff",
-                borderColor: `color-mix(in srgb, ${accent} 48%, transparent)`,
-                boxShadow: `0 12px 28px color-mix(in srgb, ${accent} 14%, transparent)`,
-                transform:
-                  "translate3d(var(--affiliate-shift-x), var(--affiliate-shift-y), 0)",
-              }}
-            >
+        <div className="grid min-h-[15rem] items-center gap-4 sm:min-h-36 sm:grid-cols-[8.5rem_minmax(0,1fr)]">
+          <div
+            className="relative mx-auto flex h-28 w-full max-w-[13rem] items-center justify-center overflow-hidden rounded-lg border p-3 transition-transform duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none sm:max-w-none"
+            style={{
+              backgroundColor:
+                brandProfile?.logoSurface ??
+                `color-mix(in srgb, ${accent} 8%, var(--color-background))`,
+              borderColor: `color-mix(in srgb, ${accent} 48%, transparent)`,
+              boxShadow: `0 12px 28px color-mix(in srgb, ${accent} 14%, transparent)`,
+              transform:
+                "translate3d(var(--affiliate-shift-x), var(--affiliate-shift-y), 0)",
+            }}
+          >
+            {logoSrc ? (
               <Image
                 src={logoSrc}
                 alt={logoAlt}
@@ -549,10 +557,22 @@ function ProductCard({
                 sizes="(min-width: 640px) 136px, 208px"
                 unoptimized={logoSrc.endsWith(".svg")}
               />
-            </div>
-          )}
+            ) : (
+              <span
+                aria-hidden="true"
+                className="flex h-14 w-14 items-center justify-center rounded-full border text-heading font-bold tracking-wide"
+                style={{
+                  color: accent,
+                  borderColor: `color-mix(in srgb, ${accent} 46%, transparent)`,
+                  backgroundColor: `color-mix(in srgb, ${accent} 10%, transparent)`,
+                }}
+              >
+                {fallbackMark || "DR"}
+              </span>
+            )}
+          </div>
 
-          <div className="min-w-0 text-center sm:text-left">
+          <div className="flex min-h-24 min-w-0 flex-col justify-center text-center">
             <p className="mb-1 text-caption font-semibold uppercase text-primary">
               {product.category}
             </p>
