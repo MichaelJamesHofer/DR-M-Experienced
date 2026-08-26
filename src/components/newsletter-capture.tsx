@@ -101,7 +101,7 @@ export function NewsletterCapture({
 
   if (variant === "hero") {
     return (
-      <div className={`w-full max-w-xl ${className}`}>
+      <div className={`mx-auto w-full max-w-xl text-center md:mx-0 md:text-left ${className}`}>
         <div className="mb-5">
           <h2 className="mb-1 text-heading font-semibold text-foreground">
             {heading}
@@ -132,7 +132,7 @@ export function NewsletterCapture({
             placeholder="Enter your email"
             required
             disabled={isDisabled}
-            className="min-h-12 flex-1 rounded-lg border border-border bg-surface px-4 py-3 text-body text-foreground placeholder:text-foreground-subtle transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60"
+            className="min-h-12 flex-1 rounded-lg border border-border bg-surface px-4 py-3 text-left text-body text-foreground placeholder:text-foreground-subtle transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60"
           />
           <button
             type="submit"
