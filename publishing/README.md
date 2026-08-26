@@ -216,10 +216,14 @@ August 8.
   read back in production Supabase. PR 28, guarded workflow `32932213291`, and
   deployment `6097420330` record the initial website launch; the apex, eight
   core routes, migrated Episode 3/4 content, affiliate assets, and 320/390-pixel
-  layouts were publicly verified. RSS.com, Spotify, Apple, YouTube, and Vimeo
-  propagation/readback remain pending; Rumble is excluded from automation and
-  deferred to a future manual restaging. Paid-promotion review remains pending
-  for Episodes 1-7. Track this rollout only in
+  layouts were publicly verified. On August 26, the existing RSS.com,
+  YouTube, and Vimeo records received the standardized descriptions in place;
+  public readback passed 8/8 for RSS.com, Spotify fanout, YouTube, and Vimeo
+  without changing any GUID or destination ID. Apple exposes six public
+  episodes: Episode 8 has converged, Episodes 3-7 remain cached, and Episodes
+  1-2 remain hidden under the known GUID incident. Rumble is excluded from
+  automation and deferred to a future manual restaging. Paid-promotion review
+  remains pending for Episodes 1-7. Track this rollout only in
   `publishing/episode-description-standardization.json`.
 - The three short-form website routes are deployed, sitemap-indexed, and verified
   at 320, 390, and 1440 pixels with exact Vimeo playback bindings.
@@ -318,10 +322,11 @@ Browser access is not a release authorization. Default automation behavior is to
    2026. That is revision-10 historical evidence. The revision-11 Episode 7
    correction is separately preserved in
    `publishing/episode-description-correction.json`. The revision-16
-   all-episode standardization is only prepared: no production application,
-   remote propagation, or destination readback is complete. Follow
-   `publishing/episode-description-standardization.json` and preserve all stable
-   identities during any later authorized rollout.
+   all-episode standardization is now applied to Supabase, the website,
+   RSS.com, YouTube, and Vimeo; Spotify's RSS fanout also passed public readback.
+   Apple cache convergence remains pending as recorded in
+   `publishing/episode-description-standardization.json`. Every stable GUID and
+   destination ID was preserved.
 3. Completed: the supported RSS.com import passed exact GUID, metadata, media, artwork, and edge-audio validation, and the Anchor redirect returns the expected 301.
 4. Apple show `1870433419` is configured directly to RSS.com. Duplicate cleanup and one feed refresh are complete. Apple case `20000130526608` identified a historical GUID mismatch for Episodes 1-2. Apple and RSS.com support requests are pending; Spotify has acknowledged its request and is investigating internally. Follow `publishing/apple-guid-repair.json`, make no live GUID change, and do not replace the show or recreate episodes.
 5. Submit the canonical RSS.com feed once to Amazon and record the stable show ID and URL.
