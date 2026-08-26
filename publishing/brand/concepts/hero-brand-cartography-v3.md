@@ -5,10 +5,10 @@
 - Generation method: OpenAI built-in image generation; local chroma-key extraction;
 local Real-ESRGAN `realesrgan-x4plus` restoration; downsampled WebP production exports
 
-V3 replaces the flattened V2 panorama. The desktop scene now uses an opaque
-distant landscape, a separately transparent foreground ridge, and a vector
-amber route. Tablet and mobile use native static compositions because their
-aspect ratios and touch interaction do not benefit from the desktop plates.
+V3 replaces the flattened V2 panorama. The desktop scene uses an opaque distant
+landscape, a separately transparent foreground ridge, and a vector amber route.
+Tablet and mobile use native flattened compositions with one-plane scroll
+motion because their aspect ratios do not use the separated desktop plates.
 
 ## Production Exports
 
@@ -47,20 +47,20 @@ decorative decode.
 ## Motion Contract
 
 1. Keep all live copy and controls stationary.
-2. At 900 CSS pixels and above, let the far plate, amber route, and foreground
-   lag the page scroll downward by 8, 30, and 64 pixels respectively. Complete
-   that travel over the first 70 percent of the hero scroll interval so the
-   depth change is perceptible while the scene remains on screen.
-3. Ease toward one scroll-progress value. Do not track the cursor and do not
-   snap any layer back on pointer leave.
-4. Keep 24 pixels of authored layout bleed on every desktop layer and use only
-   the downward, viewport-lagging direction. The hero's upward page travel must
-   clear the leading edge before transformed travel exceeds that bleed. Do not
-   use a transform scale that softens the raster.
-5. Disable motion for reduced-motion preferences, hoverless devices, coarse
-   pointers, tablet, and mobile.
-6. Toggle `will-change` only while the hero intersects the viewport.
-7. Request one base image per breakpoint and one foreground image only on
+2. On tablet and mobile, move the flattened far plate through a 64-pixel range.
+   Touch input and coarse pointers are supported; they are not motion opt-outs.
+3. At 900 CSS pixels and above, move the far plate, amber route, and foreground
+   through 44, 72, and 100 pixels respectively so their depth separation is
+   plainly visible.
+4. Begin progress when the hero reaches the sticky-header edge and complete the
+   travel over the first 60 percent of the hero scroll interval. Ease quickly
+   toward one scroll-progress value. Do not track the cursor or snap layers back.
+5. Use modest responsive scale overscan on transformed raster layers so the
+   stronger travel never exposes an edge. Keep live text perfectly sharp and
+   stationary.
+6. Disable motion only for `prefers-reduced-motion: reduce`.
+7. Toggle `will-change` only while the hero intersects the viewport.
+8. Request one base image per breakpoint and one foreground image only on
    desktop. Do not preload every density.
 
 ## Prompt Record
@@ -84,9 +84,9 @@ the live identity.
    CSS pixels.
 2. Confirm the terrain reads as a health-education identity rather than an
    outdoor recreation brand.
-3. Confirm the desktop depth is noticeable during scroll without making the
-   content appear to move.
-4. Confirm tablet and mobile feel like the same scene without hidden brand
-   anchors or text collisions.
+3. Confirm the desktop depth is noticeable from the first scroll movement
+   without making the content appear to move.
+4. Confirm tablet and mobile show clear one-plane movement without hidden brand
+   anchors, exposed image edges, or text collisions.
 5. After owner approval, promote the V3 hashes into `asset-manifest.json` and
    derive the matching Open Graph and channel-banner family.

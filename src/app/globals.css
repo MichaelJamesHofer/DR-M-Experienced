@@ -98,17 +98,9 @@ html {
   background: rgba(246, 242, 225, 0.08);
 }
 
-@media (min-width: 900px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference) {
   .home-hero-layer--far {
-    transform: translate3d(0, calc(var(--hero-progress) * 8px), 0);
-  }
-
-  .home-hero-layer--route {
-    transform: translate3d(0, calc(var(--hero-progress) * 30px), 0);
-  }
-
-  .home-hero-layer--near {
-    transform: translate3d(0, calc(var(--hero-progress) * 64px), 0);
+    transform: translate3d(0, calc(-24px + var(--hero-progress) * 64px), 0) scale(1.08);
   }
 
   .home-hero-scene[data-motion-active="true"] .home-hero-layer {
@@ -116,7 +108,21 @@ html {
   }
 }
 
-@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  .home-hero-layer--far {
+    transform: translate3d(0, calc(-16px + var(--hero-progress) * 44px), 0) scale(1.06);
+  }
+
+  .home-hero-layer--route {
+    transform: translate3d(0, calc(-24px + var(--hero-progress) * 72px), 0) scale(1.02);
+  }
+
+  .home-hero-layer--near {
+    transform: translate3d(0, calc(-36px + var(--hero-progress) * 100px), 0) scale(1.14);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
   .home-hero-layer {
     transform: none !important;
     will-change: auto;
