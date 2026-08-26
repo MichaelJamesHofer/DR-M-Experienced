@@ -20,9 +20,9 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-surface">
       <div className="mx-auto max-w-6xl px-4 py-12 lg:px-6 lg:py-14">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.1fr_0.9fr_1fr]">
-          <div className="min-w-0 text-center md:text-left">
-            <div className="mb-4 flex items-center justify-center gap-3 md:justify-start">
+        <div className="grid gap-10 text-center md:grid-cols-2 lg:grid-cols-[1.1fr_0.9fr_1fr]">
+          <div className="min-w-0">
+            <div className="mb-4 flex items-center justify-center gap-3">
               <Image
                 src="/icon.svg"
                 alt=""
@@ -40,10 +40,10 @@ export function SiteFooter() {
                 </p>
               </div>
             </div>
-            <p className="mx-auto mb-6 max-w-xs text-body-sm text-foreground-muted md:mx-0">
+            <p className="mx-auto mb-6 max-w-xs text-body-sm text-foreground-muted">
               {SITE_DESCRIPTION}
             </p>
-            <PlatformBadges variant="compact" className="mb-4 justify-center md:justify-start" />
+            <PlatformBadges variant="compact" className="mb-4 justify-center" />
             <a
               href={PODCAST_FEED_URL}
               target="_blank"
@@ -55,14 +55,14 @@ export function SiteFooter() {
             </a>
           </div>
 
-          <div className="min-w-0">
+          <div className="min-w-0 text-center">
             <p className="text-body-sm font-semibold text-foreground mb-4">Navigation</p>
-            <nav className="grid grid-cols-2 gap-x-4">
+            <nav className="mx-auto grid max-w-sm grid-cols-2 gap-x-4">
               {footerLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="flex min-h-11 items-center text-body-sm text-foreground-muted transition-colors duration-200 hover:text-foreground"
+                  className="flex min-h-11 items-center justify-center text-body-sm text-foreground-muted transition-colors duration-200 hover:text-foreground"
                 >
                   {link.label}
                 </Link>
@@ -70,16 +70,17 @@ export function SiteFooter() {
             </nav>
           </div>
 
-          <div className="min-w-0">
+          <div className="min-w-0 md:col-span-2 lg:col-span-1">
             <NewsletterCapture
               variant="footer"
               heading="Join the newsletter"
               description="Practical health updates that reduce the noise."
+              className="mx-auto max-w-md text-center"
             />
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-10 flex flex-col items-center gap-2 border-t border-border pt-6 text-center">
           <p className="text-caption text-foreground-subtle">
             © {new Date().getFullYear()} {SITE_NAME}. Educational content only.
           </p>
