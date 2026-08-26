@@ -296,7 +296,7 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     purchaseNote: "Open the DBscript link, then search for the product name.",
     cautionNote:
       "DesBio also makes products for chronic viral, bacterial, and tickborne-infection protocols. Dr. M does not recommend those generically; review them through a consult or your own clinician.",
-    episodeSlugs: ["brain-fog-part-1", "brain-fog-part-2"],
+    episodeSlugs: ["brain-fog-part-1", "brain-fog-part-2", "episode-3-insomnia"],
     autoLinkTopicSlugs: ["brain-fog", "mood", "detox", "drainage", "chronic-infection"],
     tags: ["homeopathics", "desbio", "detox", "drainage", "brain-health"],
     sortOrder: 40,

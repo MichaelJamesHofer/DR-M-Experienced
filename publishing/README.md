@@ -8,14 +8,27 @@ The approved cross-platform removal of visible `Episode N:` title prefixes is
 recorded in `publishing/episode-title-migration.json`; that file remains the
 dated revision-10 transition evidence. The later Episode 7 description
 correction is tracked separately in
-`publishing/episode-description-correction.json`. Revision 11 records the dated
-Episode 7 correction: RSS.com, Spotify fanout, YouTube, Vimeo, and the production
-Supabase editorial readback are verified current. The corrected website page is
-also deployed and verified on desktop plus 320/390-pixel mobile views; Apple
-cache convergence and Rumble's manual reupload remain pending. Catalog revision
-12 mounts the exact Show Brand Package `1.0.0-rc1` hashes for local review
-without granting remote publishing approval. Keep `episodeNumber` required in
-the manifest and RSS metadata, and preserve every GUID and remote content ID.
+`publishing/episode-description-correction.json`. Revision 11 remains the dated
+historical Episode 7 correction: RSS.com, Spotify fanout, YouTube, Vimeo, and the
+production Supabase editorial readback were verified for that correction. The
+corrected website page was also deployed and verified on desktop plus
+320/390-pixel mobile views; Apple cache convergence and Rumble's manual reupload
+remain pending in that historical receipt.
+
+The current all-episode description standardization is tracked separately in
+`publishing/episode-description-standardization.json` for catalog revision 16.
+The catalog and site migration are prepared locally, but they have not been
+applied to production. RSS.com, Spotify, Apple, YouTube, and Vimeo have not
+received or read back the revision-16 descriptions. Rumble is excluded from the
+automated rollout and remains a future human-only restaging task; Episode 8 is
+not onboarded there. Paid-promotion review remains pending for Episodes 1-7.
+Nothing in the preparation receipt authorizes a remote write, production
+deployment, new episode, GUID change, or remote-ID change.
+
+Catalog revision 12 mounted the exact Show Brand Package `1.0.0-rc1` hashes for
+local review without granting remote publishing approval. Keep `episodeNumber`
+required in the manifest and RSS metadata, and preserve every GUID and remote
+content ID.
 
 ## Master catalog and binary assets
 
@@ -41,9 +54,13 @@ The other stores have narrower roles:
   overlapping episode identity fields are a checked projection of the catalog.
 - `publishing/episode-title-migration.json` is transition evidence, not the live
   metadata authority.
-- `publishing/episode-description-correction.json` is the current per-destination
-  propagation receipt for the revision-11 Episode 7 correction. Do not infer
-  cross-platform parity from the older transition receipt.
+- `publishing/episode-description-correction.json` is immutable historical
+  evidence for the revision-11 Episode 7 correction and its partial
+  per-destination propagation. Do not rewrite it to represent later copy.
+- `publishing/episode-description-standardization.json` is the current
+  preparation and propagation-state receipt for the revision-16 all-episode
+  description standardization. A prepared or pending target is not verified
+  production parity.
 
 The fingerprinted Dropbox file is the binary master for each video, audio file,
 and artwork asset. Vimeo is a direct-video destination and useful remote recovery
@@ -191,7 +208,14 @@ August 8.
 - The guarded August 8 Episode 7 editorial migration and independent production
   readback match catalog revision 11. GitHub Pages deployment `31276520368` and
   the public-page desktop/mobile readback are verified in
-  `publishing/episode-description-correction.json`.
+  `publishing/episode-description-correction.json`; that receipt remains
+  historical evidence rather than current all-episode parity.
+- Catalog revision 16 and the corresponding site migration prepare a uniform
+  description structure for Episodes 1-8. They are not applied or deployed.
+  RSS.com, Spotify, Apple, YouTube, and Vimeo propagation/readback remain
+  pending; Rumble is excluded from automation and deferred to a future manual
+  restaging. Paid-promotion review remains pending for Episodes 1-7. Track this
+  rollout only in `publishing/episode-description-standardization.json`.
 - The three short-form website routes are deployed, sitemap-indexed, and verified
   at 320, 390, and 1440 pixels with exact Vimeo playback bindings.
 - Production PostHog ingestion is verified: a POST to `https://us.i.posthog.com/e/` returned 200, and refreshed Installation Health passes `$pageview`, `$pageleave`, scroll depth, and authorized URLs. Dashboard `1086989`, `Dr. M Growth Dashboard`, has a privacy-safe description and verified DAU, WAU, growth-accounting, retention, referring-domain, and pageview-funnel tiles. Reverse proxy remains the only explicit configuration recommendation and is not configured.
@@ -285,12 +309,14 @@ Browser access is not a release authorization. Default automation behavior is to
 
 1. Completed: removed `RSSVERIFY` from the dashboard/XML copy, cleared Episode 3's stray Season 1 value, aligned Episodes 4-7 with the catalog, and verified one Anchor 301 hop to RSS.com. RSS.com's separate public landing-page cache still exposes the token and remains a follow-up item.
 2. YouTube and Vimeo public readback, plus authenticated Rumble persistence,
-   confirms all seven titles and descriptions match deterministic catalog
-   projections as of August 5, 2026. That is revision-10 historical evidence;
-   the current revision-11 Episode 7 correction is complete on RSS.com, Spotify,
-   YouTube, Vimeo, and the website but remains pending on Rumble and downstream
-   Apple cache,
-   as recorded in `publishing/episode-description-correction.json`.
+   confirmed the then-current seven titles and descriptions as of August 5,
+   2026. That is revision-10 historical evidence. The revision-11 Episode 7
+   correction is separately preserved in
+   `publishing/episode-description-correction.json`. The revision-16
+   all-episode standardization is only prepared: no production application,
+   remote propagation, or destination readback is complete. Follow
+   `publishing/episode-description-standardization.json` and preserve all stable
+   identities during any later authorized rollout.
 3. Completed: the supported RSS.com import passed exact GUID, metadata, media, artwork, and edge-audio validation, and the Anchor redirect returns the expected 301.
 4. Apple show `1870433419` is configured directly to RSS.com. Duplicate cleanup and one feed refresh are complete. Apple case `20000130526608` identified a historical GUID mismatch for Episodes 1-2. Apple and RSS.com support requests are pending; Spotify has acknowledged its request and is investigating internally. Follow `publishing/apple-guid-repair.json`, make no live GUID change, and do not replace the show or recreate episodes.
 5. Submit the canonical RSS.com feed once to Amazon and record the stable show ID and URL.

@@ -18,8 +18,23 @@
     "catalogRevision": 11,
     "episodeNumber": 7,
     "status": "remote_propagation_partial",
+    "role": "historical_revision_11_episode_7_receipt",
     "verifiedComplete": ["rss.com", "spotify", "youtube", "vimeo", "supabase", "website"],
-    "pending": ["rumble", "apple"]
+    "pending": ["rumble", "apple"],
+    "supersededAsCurrentCopyBy": "publishing/episode-description-standardization.json"
+  },
+  "episodeDescriptionStandardization": {
+    "stateFile": "publishing/episode-description-standardization.json",
+    "catalogRevision": 16,
+    "episodeNumbers": [1, 2, 3, 4, 5, 6, 7, 8],
+    "status": "catalog_and_site_migration_prepared_remote_propagation_pending",
+    "catalogAndSiteMigrationPrepared": true,
+    "productionApplied": false,
+    "verifiedComplete": [],
+    "pendingRemotePropagationAndReadback": ["rss.com", "spotify", "apple", "youtube", "vimeo"],
+    "manualOrExcluded": ["rumble"],
+    "paidPromotionReviewPendingEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7],
+    "stableIdentitiesMustBePreserved": true
   },
   "downstreamPropagation": {
     "status": "issues_pending",
@@ -67,6 +82,16 @@
         "code": "podcast_index_redirect_crawl_pending",
         "canonicalFeedRecordId": "7982906",
         "legacyFeedRecordId": "7799755"
+      },
+      {
+        "code": "episode_description_standardization_remote_propagation_pending",
+        "stateFile": "publishing/episode-description-standardization.json",
+        "catalogRevision": 16,
+        "scopeEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7, 8],
+        "catalogAndSiteMigrationPrepared": true,
+        "productionApplied": false,
+        "remoteReadbackComplete": false,
+        "paidPromotionReviewPendingEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7]
       }
     ]
   },
@@ -121,7 +146,8 @@
       "guidsPreserved": true,
       "remoteLoudnessGatesPassed": 8,
       "remoteReplacementVerifiedAt": "2026-08-22T21:35:08Z",
-      "notes": "All eight published episodes use remotely verified enclosures. Episodes 1-7 retain their established GUIDs, including Episode 5's same-ID correction on August 22, 2026. Episode 8 is the new RSS.com item 3096546 with GUID 4587dd48-8a26-4341-b194-8764500d74ef and the verified 21:32 enclosure published August 25, 2026. RSS.com remains the canonical audio host and feed source for Spotify, Apple Podcasts, and Amazon Music/Audible. For future episodes, publish the approved podcastAudio here first and never use the full-video master as its audio asset. The XML feed is clean; the separate public landing-page metadata still exposes a cached RSSVERIFY token."
+      "descriptionStandardizationStatus": "revision_16_pending_remote_update_and_feed_readback",
+      "notes": "All eight published episodes use remotely verified enclosures. Episodes 1-7 retain their established GUIDs, including Episode 5's same-ID correction on August 22, 2026. Episode 8 is the new RSS.com item 3096546 with GUID 4587dd48-8a26-4341-b194-8764500d74ef and the verified 21:32 enclosure published August 25, 2026. RSS.com remains the canonical audio host and feed source for Spotify, Apple Podcasts, and Amazon Music/Audible. For future episodes, publish the approved podcastAudio here first and never use the full-video master as its audio asset. The XML feed is clean; the separate public landing-page metadata still exposes a cached RSSVERIFY token. Catalog revision 16 and its site migration are prepared locally, but the standardized descriptions have not been applied to RSS.com or read back from the canonical feed."
     },
     "spotify": {
       "label": "Spotify for Creators",
@@ -141,7 +167,9 @@
       "videoStateAuditedAt": "2026-08-25",
       "approvedArtworkVerified": true,
       "approvedCopyVerified": true,
-      "notes": "The existing show contains eight distinct episode identities and seven public video episodes. Episode 8 preserves RSS-created Spotify episode ID 7oYwjErc5TXpocbRFgzvH0; three independent public readbacks returned hasVideo true, playable true, an accessible MP4 preview, and 640x360 and 1280x720 video thumbnails. Its authenticated promotional-content readback is Yes and no duplicate was created. Episode 5 preserves its existing Spotify episode ID and corrected RSS audio but remains audio-only after three same-ID video attempts reverted; a Creator Support request is staged for owner review. There is no account-wide video switch. Never create a duplicate episode or upload the MP3 separately in Spotify."
+      "descriptionStandardizationStatus": "revision_16_pending_rss_fanout_and_public_readback",
+      "paidPromotionReviewPendingEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7],
+      "notes": "The existing show contains eight distinct episode identities and seven public video episodes. Episode 8 preserves RSS-created Spotify episode ID 7oYwjErc5TXpocbRFgzvH0; three independent public readbacks returned hasVideo true, playable true, an accessible MP4 preview, and 640x360 and 1280x720 video thumbnails. Its authenticated promotional-content readback is Yes and no duplicate was created. Episode 5 preserves its existing Spotify episode ID and corrected RSS audio but remains audio-only after three same-ID video attempts reverted; a Creator Support request is staged for owner review. There is no account-wide video switch. Never create a duplicate episode or upload the MP3 separately in Spotify. Revision-16 description fanout and public readback have not occurred, and paid-promotion review remains pending for Episodes 1-7."
     },
     "apple": {
       "label": "Apple Podcasts",
@@ -156,7 +184,8 @@
       ],
       "source": "rss",
       "dependsOn": "rss.com",
-      "notes": "Do not upload episodes separately. Apple receives the approved podcast audio and item-level episode artwork from RSS.com's canonical feed. Preserve show ID 1870433419. Episode 8 is public at Apple episode ID 1000785842789 and preserves RSS GUID 4587dd48-8a26-4341-b194-8764500d74ef, the exact title, clean rating, 21:32 duration, item artwork, and canonical enclosure. Apple Podcasts Connect and public readback previously verified that Episode 5 retained Apple episode ID 1000774398633 and exposes the corrected 29:45 RSS enclosure; its automatically generated transcript is set to Not Displayed. The duplicate show ID 1896845422 returns 404 and the stale manual Episode 4 Draft was archived on August 6, 2026. Under case 20000130526608, Apple confirmed its existing Episode 1-2 records use older GUIDs than the current feed; the exact blocked crosswalk is in publishing/apple-guid-repair.json. Apple public JSON-LD/search caches also retain legacy show wording for Episodes 4-7."
+      "descriptionStandardizationStatus": "revision_16_pending_rss_fanout_and_public_readback",
+      "notes": "Do not upload episodes separately. Apple receives the approved podcast audio and item-level episode artwork from RSS.com's canonical feed. Preserve show ID 1870433419. Episode 8 is public at Apple episode ID 1000785842789 and preserves RSS GUID 4587dd48-8a26-4341-b194-8764500d74ef, the exact title, clean rating, 21:32 duration, item artwork, and canonical enclosure. Apple Podcasts Connect and public readback previously verified that Episode 5 retained Apple episode ID 1000774398633 and exposes the corrected 29:45 RSS enclosure; its automatically generated transcript is set to Not Displayed. The duplicate show ID 1896845422 returns 404 and the stale manual Episode 4 Draft was archived on August 6, 2026. Under case 20000130526608, Apple confirmed its existing Episode 1-2 records use older GUIDs than the current feed; the exact blocked crosswalk is in publishing/apple-guid-repair.json. Apple public JSON-LD/search caches also retain legacy show wording for Episodes 4-7. Revision-16 descriptions have not propagated from RSS.com or been read back from Apple."
     },
     "amazon": {
       "label": "Amazon Music and Audible",
@@ -192,6 +221,8 @@
       "priorVideoCount": 7,
       "priorVideosDeleted": false,
       "cutoverVerifiedAt": "2026-08-23T00:29:53Z",
+      "descriptionStandardizationStatus": "revision_16_pending_remote_update_and_public_readback",
+      "paidPromotionReviewPendingEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7],
       "apiAutomation": {
         "enabled": false,
         "policyRevision": 1,
@@ -202,7 +233,7 @@
         "ownerTokenConfigured": false,
         "publicUploadAuditVerified": false
       },
-      "notes": "Eight episode videos are public with exact catalog titles, YouTube-safe descriptions, and approved thumbnails. Episode 8 is public at video ID ax5BSELnBbo. Episode 5 preserves public video ID N_F0hhHkIQ4; its same-ID emergency trim removed the contaminated interval and current YouTube Studio readback reports 29:45. The separate private corrected-upload candidate was deleted after the preserved-ID trim succeeded. Seven prior normalized-cutover uploads remain unlisted and directly playable with replacement links; preserve those IDs as rollback evidence. The user approved the Google Cloud terms on August 8, 2026. That approval does not satisfy the still-missing channel-owner OAuth grant or applicable YouTube compliance audit, so API automation remains disabled."
+      "notes": "Eight episode videos are public with the previously verified catalog titles, YouTube-safe descriptions, and approved thumbnails. Episode 8 is public at video ID ax5BSELnBbo. Episode 5 preserves public video ID N_F0hhHkIQ4; its same-ID emergency trim removed the contaminated interval and current YouTube Studio readback reports 29:45. The separate private corrected-upload candidate was deleted after the preserved-ID trim succeeded. Seven prior normalized-cutover uploads remain unlisted and directly playable with replacement links; preserve those IDs as rollback evidence. The user approved the Google Cloud terms on August 8, 2026. That approval does not satisfy the still-missing channel-owner OAuth grant or applicable YouTube compliance audit, so API automation remains disabled. Revision-16 descriptions have not been applied or publicly read back, and paid-promotion review remains pending for Episodes 1-7."
     },
       "vimeo": {
       "label": "Vimeo",
@@ -230,6 +261,7 @@
       "stableVideoIdsPreserved": true,
       "replacementStateAuditedAt": "2026-08-25",
       "shortStateAuditedAt": "2026-08-08T20:43:49Z",
+      "descriptionStandardizationStatus": "revision_16_pending_remote_update_and_public_readback",
       "apiAutomation": {
         "enabled": true,
         "policyRevision": 1,
@@ -240,7 +272,7 @@
         "developerAddendumAndTermsAccepted": true,
         "developerAddendumAndTermsAcceptedAt": "2026-08-08"
       },
-      "notes": "Eight episode videos are public and verified. Episodes 1-7 preserve their established IDs, including Episode 5 video ID 1204939658 after its August 22, 2026 in-place replacement; Episode 8 is public at video ID 1221293570. The three cataloged Instagram shorts are also published on Vimeo as 1216695521, 1216695522, and 1204939542 with canonical metadata and posters, for eleven total videos. Private first-party app 540274 and an owner-only upload/edit token are configured on this workstation. The user explicitly accepted Vimeo's Developer Addendum and Terms for the Dr. M Experienced Publisher app on August 8, 2026; future approved creates can use the official API."
+      "notes": "Eight episode videos are public and previously verified. Episodes 1-7 preserve their established IDs, including Episode 5 video ID 1204939658 after its August 22, 2026 in-place replacement; Episode 8 is public at video ID 1221293570. The three cataloged Instagram shorts are also published on Vimeo as 1216695521, 1216695522, and 1204939542 with canonical metadata and posters, for eleven total videos. Private first-party app 540274 and an owner-only upload/edit token are configured on this workstation. The user explicitly accepted Vimeo's Developer Addendum and Terms for the Dr. M Experienced Publisher app on August 8, 2026; future approved creates can use the official API. Revision-16 episode descriptions have not been applied or publicly read back."
     },
     "instagram": {
       "label": "Instagram",
@@ -298,6 +330,9 @@
         7
       ],
       "descriptionCorrectionReceipt": "publishing/episode-description-correction.json",
+      "descriptionStandardizationReceipt": "publishing/episode-description-standardization.json",
+      "descriptionStandardizationStatus": "excluded_from_automated_rollout_pending_future_manual_restaging",
+      "pendingDescriptionStandardizationEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7],
       "stagedFormsOperational": false,
       "stagedUploadCount": 7,
       "stagedVisibility": "unlisted",
@@ -332,14 +367,14 @@
         "requestedScope": "owner_approved_local_browser_assisted_vod_upload_and_submission"
       },
       "submissionBlockedOn": [
-        "apply_episode_7_catalog_revision_11_description_during_manual_reupload",
+        "apply_catalog_revision_16_descriptions_to_episodes_1_through_7_during_future_manual_restaging",
         "disable_youtube_syndication_on_all_seven_forms",
         "verify_premium_exclusive_disabled_on_all_seven_forms",
         "review_third_party_asset_rights",
         "human_reverify_and_complete_rights_terms_controls"
       ],
       "stagingStateAuditedAt": "2026-08-07",
-      "notes": "The August 7 audit found seven corrected uploads staged Unlisted with Rumble Only Option C (form code 6), the permitted non-exclusive license, and no submissions. Hidden YouTube syndication was enabled on all seven; Vimeo and Facebook were off. The August 8 browser cache reset invalidated those staged forms, so the counts above are retained as historical audit evidence and all seven uploads require restaging. Rumble is not in current catalog-description parity: Episode 7 must receive the revision-11 description recorded in publishing/episode-description-correction.json during reupload. On August 8 the user explicitly accepted the Terms last modified July 21, 2026, including the general-license AI/ML and third-party AI sublicensing provision. A written-permission request for owner-supervised upload automation was sent to support@rumble.com and is pending. Leave Rumble untouched until a written response establishes a permitted automated workflow."
+      "notes": "The August 7 audit found seven corrected uploads staged Unlisted with Rumble Only Option C (form code 6), the permitted non-exclusive license, and no submissions. Hidden YouTube syndication was enabled on all seven; Vimeo and Facebook were off. The August 8 browser cache reset invalidated those forms, so the counts above are retained as historical audit evidence and all seven uploads require restaging. The revision-11 Episode 7 correction remains preserved in publishing/episode-description-correction.json as historical evidence. Rumble is excluded from the automated revision-16 description rollout; Episodes 1-7 must receive the revision-16 copy only during a future attended manual restaging. Episode 8 is not onboarded to Rumble. On August 8 the user explicitly accepted the Terms last modified July 21, 2026, including the general-license AI/ML and third-party AI sublicensing provision. A written-permission request for owner-supervised upload automation was sent to support@rumble.com and is pending. Leave Rumble untouched until a written response establishes a permitted automated workflow."
     }
   }
 }

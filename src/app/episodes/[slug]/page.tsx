@@ -205,7 +205,7 @@ export default async function EpisodeDetailPage({
                 className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-body-sm font-semibold text-primary transition-all duration-300 hover:border-primary/55 hover:bg-primary/15 hover:shadow-glow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:shadow-glow-sm"
               >
                 <ShoppingBag className="h-4 w-4" aria-hidden="true" />
-                Jump to products mentioned
+                Jump to product guide
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </a>
             )}
@@ -483,7 +483,7 @@ export default async function EpisodeDetailPage({
                 </p>
                 <h2 className="text-heading-lg font-bold text-foreground">
                   {relatedAffiliateProducts.length > 0
-                    ? "Products referenced in this episode"
+                    ? "Products and resources for this episode"
                     : "Affiliate and product guide"}
                 </h2>
                 <p className="mt-3 text-body-sm text-foreground-muted">

@@ -58,6 +58,20 @@ const expectedPodcastAudio = [
   ["episode-8-food-and-the-brain", "1221293570", "https://content.rss.com/episodes/397420/3096546/dr-m-experienced/2026_08_25_22_20_41_83110c46-278d-4dc5-96e7-d38abd74172a.mp3"],
 ];
 
+const affiliateDisclosure =
+  "Some links in our product guide are affiliate links. If you purchase through them, Dr. M Experienced may earn a commission at no additional cost to you. Product mentions are educational and are not medical advice.";
+
+const expectedAffiliateGuideAnchors = new Map([
+  [1, ["best365labs", "desbio-dbscript"]],
+  [2, ["best365labs", "desbio-dbscript"]],
+  [3, ["block-blue-light", "desbio-dbscript"]],
+  [4, ["airestech", "block-blue-light", "safe-living-technologies"]],
+  [5, ["best365labs"]],
+  [6, []],
+  [7, []],
+  [8, ["doctors-supplement-store", "fgo-turmeric-ginger-tea", "humann-turmeric-chews", "purity-coffee"]],
+]);
+
 async function temporarySources() {
   const temporary = await fs.mkdtemp(path.join(os.tmpdir(), "drm-catalog-"));
   const root = path.join(temporary, "project-source");
@@ -72,7 +86,7 @@ test("master catalog validates and has a deterministic hash", async () => {
   const result = validateCatalog(catalog);
   assert.deepEqual(result, { valid: true, errors: [] });
   assert.equal(catalog.schemaVersion, 1);
-  assert.equal(catalog.revision, 15);
+  assert.equal(catalog.revision, 16);
   assert.equal(catalog.episodes.length, 8);
   assert.match(catalogHash(catalog), /^[a-f0-9]{64}$/);
   assert.equal(catalogHash(catalog), catalogHash(structuredClone(catalog)));
@@ -234,6 +248,69 @@ test("every catalog HTML description projects without markup", async () => {
     assert.ok(projected.length > 0, `episode ${episode.number} projected to empty copy`);
     assert.doesNotMatch(projected, /<\/?[A-Za-z][^>]*>/, `episode ${episode.number} retained markup`);
     assert.equal(projected, htmlDescriptionToPlainText(episode.description.full));
+  }
+});
+
+test("published episode descriptions follow the canonical resource and disclosure contract", async () => {
+  const catalog = await loadCatalog();
+  const publishedEpisodes = catalog.episodes.filter(
+    (episode) => episode.publicationState === "published"
+  );
+
+  assert.deepEqual(
+    publishedEpisodes.map((episode) => episode.number),
+    [...expectedAffiliateGuideAnchors.keys()]
+  );
+
+  for (const episode of publishedEpisodes) {
+    const description = episode.description.full;
+    const visibleDescription = htmlDescriptionToPlainText(description);
+    const canonicalEpisodeUrl = `https://drmexperienced.com/episodes/${episode.slug}/`;
+    const anchorSlugs = [
+      ...new Set(
+        [...description.matchAll(/https:\/\/drmexperienced\.com\/affiliates\/#([a-z0-9-]+)/g)]
+          .map((match) => match[1])
+      ),
+    ].sort();
+
+    assert.ok(
+      description.length <= 4000,
+      `episode ${episode.number} description exceeds the RSS.com 4,000-character limit`
+    );
+    assert.match(
+      description,
+      new RegExp(`href=["']${canonicalEpisodeUrl.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`),
+      `episode ${episode.number} is missing its canonical episode link`
+    );
+    assert.match(
+      description,
+      /href=["']https:\/\/drmexperienced\.com\/affiliates\/["']/,
+      `episode ${episode.number} is missing the complete affiliate guide link`
+    );
+    assert.ok(
+      visibleDescription.includes(affiliateDisclosure),
+      `episode ${episode.number} is missing the canonical affiliate disclosure`
+    );
+    assert.match(
+      visibleDescription,
+      /This episode is for educational purposes only and is not a substitute for personalized medical care\./,
+      `episode ${episode.number} is missing the canonical medical-disclaimer lead`
+    );
+    assert.deepEqual(
+      anchorSlugs,
+      expectedAffiliateGuideAnchors.get(episode.number),
+      `episode ${episode.number} affiliate guide anchors drifted`
+    );
+    assert.doesNotMatch(
+      description,
+      /<p(?:\s[^>]*)?>\s*(?:<br\s*\/?\s*>)?\s*<\/p>/i,
+      `episode ${episode.number} contains an empty paragraph`
+    );
+    assert.doesNotMatch(
+      visibleDescription,
+      /\b(?:coming soon|pinned comment|FMI Center for Optimal Health|Part 3 or future episodes)\b/i,
+      `episode ${episode.number} contains stale distribution copy`
+    );
   }
 });
 

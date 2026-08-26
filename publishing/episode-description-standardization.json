@@ -1,0 +1,235 @@
+{
+  "schemaVersion": 1,
+  "standardizationId": "all-episode-description-standardization-2026-08-25",
+  "status": "catalog_and_site_migration_prepared_remote_propagation_pending",
+  "recordedAt": "2026-08-26T01:40:44Z",
+  "authorization": {
+    "localPreparationAuthorized": true,
+    "remoteWritesAuthorizedByThisReceipt": false,
+    "productionDeploymentAuthorizedByThisReceipt": false,
+    "notes": "This receipt records local catalog and site-migration preparation only. It is not a release authorization and does not claim that any production or platform description was changed."
+  },
+  "catalog": {
+    "source": "publishing/master-catalog.json",
+    "previousRevision": 15,
+    "targetRevision": 16,
+    "status": "validated_locally_remote_propagation_pending",
+    "fileSha256": "9c77dbc237092a48cc9c0bf0411f0e665a0e1e93d21b5c2479ede27590487261",
+    "publisherHash": "2672672cdf6ed6f46b1d9d582cf4ab1d70813c9708ac5ad407df7668ad7ae51b",
+    "hashStatus": "validated_against_final_revision_16_catalog"
+  },
+  "siteMigration": {
+    "status": "prepared_not_applied",
+    "migrationArtifact": "supabase/migrations/20260826004500_backfill_episode_affiliate_references.sql",
+    "migrationArtifactSha256": "a70e259745dcd792a3684568a6b3b5945b8fcbc0c4beaf790a004573d4ff2dfb",
+    "migrationArtifactStatus": "validated_locally_not_applied",
+    "productionApplied": false,
+    "productionReadbackComplete": false,
+    "websiteDeployed": false,
+    "websiteReadbackComplete": false
+  },
+  "policy": {
+    "scopeEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7, 8],
+    "uniformDescriptionStructureRequired": true,
+    "affiliateDisclosureRequiredNearProductLinks": true,
+    "medicalDisclaimerRequired": true,
+    "preserveRssGuids": true,
+    "preserveRemoteContentIds": true,
+    "preserveEpisodeSlugs": true,
+    "preserveHistoricalReceipts": true,
+    "paidPromotionReviewPendingEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7],
+    "paidPromotionReviewCompleteEpisodeNumbers": [8]
+  },
+  "history": {
+    "episode7CorrectionReceipt": "publishing/episode-description-correction.json",
+    "episode7CorrectionCatalogRevision": 11,
+    "status": "preserved_as_historical_correction_and_propagation_evidence",
+    "notes": "The revision-11 Episode 7 receipt remains immutable historical evidence. Revision 16 standardizes the current description set without erasing that incident or changing Episode 7 identity."
+  },
+  "episodes": [
+    {
+      "number": 1,
+      "slug": "brain-fog-part-1",
+      "rssGuid": "c9b853b6-a828-4012-9998-217919ff9163",
+      "stableDestinationIds": {
+        "spotify": "7cAdb8GE4khC9EYKAjmYuc",
+        "youtube": "5IMYaqnQsFY",
+        "vimeo": "1156414707",
+        "rumble": "v74kzcw"
+      },
+      "targetDescriptionNormalizedLength": 1966,
+      "targetDescriptionNormalizedSha256": "ecf2deba95f3a208881e5721d068b2fa97e1d4e57dddbffc349a05394d3ebabd",
+      "descriptionHashStatus": "validated_revision_16_target",
+      "paidPromotionReview": "pending"
+    },
+    {
+      "number": 2,
+      "slug": "brain-fog-part-2",
+      "rssGuid": "1e40e02b-b217-477c-9cc3-4271cb304c23",
+      "stableDestinationIds": {
+        "spotify": "19Pct0ClX3j1EOwJ3ySVd7",
+        "youtube": "DJe0fPmTf8k",
+        "vimeo": "1159441883",
+        "rumble": "v74l0km"
+      },
+      "targetDescriptionNormalizedLength": 2034,
+      "targetDescriptionNormalizedSha256": "fdb010371d5d2ed03eb63d731d7bf6bbce288bc7708a3c4e584d4cc7de25a30f",
+      "descriptionHashStatus": "validated_revision_16_target",
+      "paidPromotionReview": "pending"
+    },
+    {
+      "number": 3,
+      "slug": "episode-3-insomnia",
+      "rssGuid": "e4bde82f-54e6-43a2-a50a-4044f9cdbe8e",
+      "stableDestinationIds": {
+        "spotify": "07OHz4sfbefOORcNi9xaUK",
+        "youtube": "r5JYtE8Vm9I",
+        "vimeo": "1179740758",
+        "rumble": "v77zlls"
+      },
+      "targetDescriptionNormalizedLength": 1911,
+      "targetDescriptionNormalizedSha256": "e86038ff03b6d0348788ab1dfc2b911a1d9e66a45ca35ee6c650530f61afaee0",
+      "descriptionHashStatus": "validated_revision_16_target",
+      "paidPromotionReview": "pending"
+    },
+    {
+      "number": 4,
+      "slug": "episode-4-emf",
+      "rssGuid": "9579ff89-9e16-40db-b84a-00cee25c604a",
+      "stableDestinationIds": {
+        "spotify": "0aDVuIwrRlDKxEylMj2dyw",
+        "youtube": "binbLcb3f_s",
+        "vimeo": "1179956166",
+        "rumble": "v780pxq"
+      },
+      "targetDescriptionNormalizedLength": 2200,
+      "targetDescriptionNormalizedSha256": "bb71b882aeff37f20aa55ac5b39f748f6e05813dfe9e12196e7d42d9f0ca68fc",
+      "descriptionHashStatus": "validated_revision_16_target",
+      "paidPromotionReview": "pending"
+    },
+    {
+      "number": 5,
+      "slug": "episode-5-energy",
+      "rssGuid": "e9f7596f-0333-49ca-8946-bc11e96b2091",
+      "stableDestinationIds": {
+        "spotify": "6fQAClcR4AAuueHjBNlrJC",
+        "youtube": "N_F0hhHkIQ4",
+        "vimeo": "1204939658",
+        "rumble": "v7bvj32"
+      },
+      "targetDescriptionNormalizedLength": 1735,
+      "targetDescriptionNormalizedSha256": "5257702a0078321b34ca1640e02046c3c761a5b4f2fb9825cea25d452816c4e8",
+      "descriptionHashStatus": "validated_revision_16_target",
+      "paidPromotionReview": "pending"
+    },
+    {
+      "number": 6,
+      "slug": "episode-6-concussion-and-pathophysiology",
+      "rssGuid": "13a0565e-582c-4969-a57d-9700b7babbe4",
+      "stableDestinationIds": {
+        "spotify": "7MbKWgPZN40KEyN5j123JC",
+        "youtube": "8u1Ps_mCpO4",
+        "vimeo": "1204939692",
+        "rumble": "v7bvk8i"
+      },
+      "targetDescriptionNormalizedLength": 1931,
+      "targetDescriptionNormalizedSha256": "057994bfcadc04e484ce0b000e97cdd971bd0f7f579ee1d2ca857c3499d09151",
+      "descriptionHashStatus": "validated_revision_16_target",
+      "paidPromotionReview": "pending"
+    },
+    {
+      "number": 7,
+      "slug": "episode-7-the-brain-on-fire",
+      "rssGuid": "4a0b3903-b7d1-4ced-967b-079df4004a4e",
+      "stableDestinationIds": {
+        "spotify": "5QJlHSE6JhP3ymSCNzbWxv",
+        "youtube": "5UOEvs59hBA",
+        "vimeo": "1205004739",
+        "rumble": "v7bvtu4"
+      },
+      "targetDescriptionNormalizedLength": 1852,
+      "targetDescriptionNormalizedSha256": "d31fa883c49657d6ab7876b304ae2e62e2ea2af76ee7d86a463baf5c05cdb59e",
+      "descriptionHashStatus": "validated_revision_16_target",
+      "paidPromotionReview": "pending",
+      "historicalCorrectionReceipt": "publishing/episode-description-correction.json"
+    },
+    {
+      "number": 8,
+      "slug": "episode-8-food-and-the-brain",
+      "rssGuid": "4587dd48-8a26-4341-b194-8764500d74ef",
+      "stableDestinationIds": {
+        "spotify": "7oYwjErc5TXpocbRFgzvH0",
+        "youtube": "ax5BSELnBbo",
+        "vimeo": "1221293570",
+        "rumble": null
+      },
+      "targetDescriptionNormalizedLength": 2955,
+      "targetDescriptionNormalizedSha256": "0a27aaa602b070ad3e885ab0a70ff8b297194680e3ebc43bef592cc8372e5e5f",
+      "descriptionHashStatus": "validated_revision_16_target",
+      "paidPromotionReview": "complete_preexisting_true"
+    }
+  ],
+  "targets": {
+    "rss.com": {
+      "role": "canonical_published_audio_host",
+      "status": "pending_remote_update_and_feed_readback",
+      "separateEpisodeCreationRequired": false,
+      "stableGuidsMustBePreserved": true
+    },
+    "spotify": {
+      "role": "rss_fanout_and_video_destination",
+      "status": "pending_rss_fanout_and_public_readback",
+      "duplicateEpisodeCreationAllowed": false,
+      "stableEpisodeIdsMustBePreserved": true,
+      "paidPromotionReviewPendingEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7]
+    },
+    "apple": {
+      "role": "rss_fanout",
+      "status": "pending_rss_fanout_and_public_readback",
+      "showId": "1870433419",
+      "separateUploadRequired": false
+    },
+    "youtube": {
+      "role": "direct_video_destination",
+      "status": "pending_remote_update_and_public_readback",
+      "stableVideoIdsMustBePreserved": true,
+      "paidPromotionReviewPendingEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7]
+    },
+    "vimeo": {
+      "role": "direct_video_destination_and_remote_recovery_copy",
+      "status": "pending_remote_update_and_public_readback",
+      "stableVideoIdsMustBePreserved": true
+    },
+    "rumble": {
+      "role": "manual_human_only_direct_video_destination",
+      "status": "excluded_from_automated_rollout_pending_future_manual_restaging",
+      "episodeNumbers": [1, 2, 3, 4, 5, 6, 7],
+      "episode8Status": "not_onboarded",
+      "automationRequiresPriorWrittenPermission": true,
+      "submissionMethod": "manual_human_only"
+    },
+    "supabase": {
+      "role": "website_editorial_authority",
+      "status": "migration_prepared_not_applied",
+      "productionReadbackComplete": false
+    },
+    "website": {
+      "role": "published_website_projection",
+      "status": "source_prepared_not_deployed_or_read_back",
+      "productionReadbackComplete": false
+    },
+    "amazon": {
+      "role": "rss_fanout",
+      "status": "not_claimed",
+      "separateUploadRequired": false
+    }
+  },
+  "completion": {
+    "prepared": ["catalog_revision_16", "site_migration"],
+    "verifiedComplete": [],
+    "pendingRemotePropagationAndReadback": ["rss.com", "spotify", "apple", "youtube", "vimeo"],
+    "manualOrExcluded": ["rumble"],
+    "pendingProductionApplicationAndReadback": ["supabase", "website"],
+    "notOnboarded": ["amazon"]
+  }
+}
