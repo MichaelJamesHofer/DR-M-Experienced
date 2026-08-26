@@ -591,27 +591,6 @@ function ProductCard({
           </p>
         </div>
 
-        {(product.couponCode || product.discountNote || product.purchaseNote) && (
-          <details className="group mt-4 border-t border-border">
-            <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 py-3 text-body-sm font-semibold text-foreground transition-colors hover:text-primary [&::-webkit-details-marker]:hidden">
-              Partner details
-              <ChevronDown
-                className="h-4 w-4 shrink-0 text-foreground-subtle transition-transform group-open:rotate-180"
-                aria-hidden="true"
-              />
-            </summary>
-            <div className="space-y-1 border-t border-border py-4 text-left text-body-sm leading-6 text-foreground-muted">
-              {product.couponCode && (
-                <p>
-                  Code: <span className="font-bold text-foreground">{product.couponCode}</span>
-                </p>
-              )}
-              {product.discountNote && <p>{product.discountNote}</p>}
-              {product.purchaseNote && <p>{product.purchaseNote}</p>}
-            </div>
-          </details>
-        )}
-
         {(product.featuredProducts?.length ?? 0) > 0 && (
           <div className="mt-4 min-w-0 border-t border-border pt-3 text-left">
             <p className="mb-2 text-caption font-semibold uppercase text-foreground-subtle">
@@ -633,6 +612,27 @@ function ProductCard({
               ))}
             </div>
           </div>
+        )}
+
+        {(product.couponCode || product.discountNote || product.purchaseNote) && (
+          <details className="group mt-4 border-t border-border">
+            <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 py-3 text-body-sm font-semibold text-foreground transition-colors hover:text-primary [&::-webkit-details-marker]:hidden">
+              Partner details
+              <ChevronDown
+                className="h-4 w-4 shrink-0 text-foreground-subtle transition-transform group-open:rotate-180"
+                aria-hidden="true"
+              />
+            </summary>
+            <div className="space-y-1 border-t border-border py-4 text-left text-body-sm leading-6 text-foreground-muted">
+              {product.couponCode && (
+                <p>
+                  Code: <span className="font-bold text-foreground">{product.couponCode}</span>
+                </p>
+              )}
+              {product.discountNote && <p>{product.discountNote}</p>}
+              {product.purchaseNote && <p>{product.purchaseNote}</p>}
+            </div>
+          </details>
         )}
 
         <div className="mt-auto pt-4">
