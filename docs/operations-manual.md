@@ -1198,7 +1198,24 @@ tiles.
 
 ### Website Rollback
 
-The pre-2.0 production site is preserved at tag
+The production site serving immediately before the rev2 UI release is preserved
+at tag `production-rollback-2026-08-25-current-v2` and the matching GitHub
+prerelease. Its `artifact.tar` is the exact Pages artifact from guarded
+production run `32911296376` at commit
+`ef80b0a8cfa60ff42ffc899109daa4f5567eaeb8`; the recovery workflow verifies
+SHA-256 digest
+`85e0a9a91702994f38c7a9122708ab8a4f14bf5cfce3caf575804c492650f535`,
+the production `CNAME`, and the Episode 8 route before deployment.
+
+Use this checkpoint first when reverting the rev2 UI release:
+
+```bash
+gh workflow run rollback-current-v2.yml --ref main
+gh run list --workflow rollback-current-v2.yml --limit 1
+gh run watch RUN_ID --exit-status
+```
+
+The older pre-2.0 production site remains preserved at tag
 `production-rollback-2026-08-25-pre-v2`, branch
 `rollback/pre-v2-production-20260825`, and the matching draft GitHub release.
 Its `artifact.tar` is the exact Pages artifact from successful production run
@@ -1206,8 +1223,8 @@ Its `artifact.tar` is the exact Pages artifact from successful production run
 `f2d266be0dad124c7a1d3e509e707a8dcc82421daae10c861e6eeffa8425f7d9`
 and the production `CNAME` before deployment.
 
-To restore that exact static site through the protected `github-pages`
-environment:
+Use the pre-2.0 checkpoint only when the current-v2 checkpoint is not an
+appropriate recovery target:
 
 ```bash
 gh workflow run rollback-pre-v2.yml --ref main
