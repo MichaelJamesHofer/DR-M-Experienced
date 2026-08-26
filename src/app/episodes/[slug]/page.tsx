@@ -216,84 +216,77 @@ export default async function EpisodeDetailPage({
             aria-labelledby={`video-player-${episode.slug}`}
             className="overflow-hidden rounded-lg border border-border bg-surface"
           >
-            <AnimatedDisclosure
-              label={
-                <span className="flex min-w-0 items-center gap-3">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <Video className="h-5 w-5" aria-hidden="true" />
-                  </span>
-                  <span className="min-w-0">
-                    <span
-                      id={`video-player-${episode.slug}`}
-                      className="block text-body font-semibold text-foreground"
-                    >
-                      Watch the video
-                    </span>
-                    <span className="mt-0.5 block text-caption font-normal text-foreground-muted">
-                      Expand the embedded player
-                    </span>
-                  </span>
-                </span>
-              }
-              triggerClassName="min-h-20 gap-4 px-5 py-4 sm:px-6"
-              iconClassName="h-5 w-5"
-            >
-              <div className="border-t border-border">
-                {episode.vimeoId ? (
-                  <VimeoPlayer
-                    videoId={episode.vimeoId}
-                    title={episodeDisplayTitle(episode)}
-                    thumbnailUrl={episode.thumbnailUrl}
-                    className="w-full"
-                  />
-                ) : (
-                  <div className="relative flex aspect-video flex-col items-center justify-center gap-4 overflow-hidden bg-gradient-to-br from-surface to-surface-elevated">
-                    {episode.thumbnailUrl ? (
-                      <>
-                        <Image
-                          src={episode.thumbnailUrl}
-                          alt={episodeDisplayTitle(episode)}
-                          fill
-                          className="object-cover opacity-50"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-surface/90 via-surface/50 to-transparent" />
-                        {hasComingSoonReference && (
-                          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4">
-                            <div className="flex h-16 w-16 items-center justify-center rounded-lg border border-primary/30 bg-primary/20 text-primary">
-                              <Clock3 className="h-8 w-8" aria-hidden="true" />
-                            </div>
-                            <div className="px-4 text-center">
-                              <p className="mb-1 text-body font-semibold text-foreground">
-                                Video coming soon
-                              </p>
-                              <p className="text-body-sm text-foreground-muted">
-                                Vimeo upload in progress
-                              </p>
-                            </div>
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/20 text-primary">
-                          <Play className="h-8 w-8 fill-current" aria-hidden="true" />
-                        </div>
-                        <p className="text-body-sm text-foreground-muted">
-                          Episode player coming soon
-                        </p>
-                      </>
-                    )}
-                  </div>
-                )}
-                {hasComingSoonReference && (
-                  <div className="border-t border-border bg-surface px-4 pb-4 pt-2">
-                    <p className="text-body-xs text-foreground-subtle">
-                      Vimeo video for this episode is <span className="font-semibold">coming soon</span>.
-                    </p>
-                  </div>
-                )}
+            <div className="flex min-h-20 items-center gap-3 px-5 py-4 sm:px-6">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <Video className="h-5 w-5" aria-hidden="true" />
+              </span>
+              <div className="min-w-0">
+                <h2
+                  id={`video-player-${episode.slug}`}
+                  className="text-body font-semibold text-foreground"
+                >
+                  Watch the video
+                </h2>
+                <p className="mt-0.5 text-caption text-foreground-muted">
+                  Embedded episode player
+                </p>
               </div>
-            </AnimatedDisclosure>
+            </div>
+            <div className="border-t border-border">
+              {episode.vimeoId ? (
+                <VimeoPlayer
+                  videoId={episode.vimeoId}
+                  title={episodeDisplayTitle(episode)}
+                  thumbnailUrl={episode.thumbnailUrl}
+                  className="w-full"
+                />
+              ) : (
+                <div className="relative flex aspect-video flex-col items-center justify-center gap-4 overflow-hidden bg-gradient-to-br from-surface to-surface-elevated">
+                  {episode.thumbnailUrl ? (
+                    <>
+                      <Image
+                        src={episode.thumbnailUrl}
+                        alt={episodeDisplayTitle(episode)}
+                        fill
+                        className="object-cover opacity-50"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-surface/90 via-surface/50 to-transparent" />
+                      {hasComingSoonReference && (
+                        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4">
+                          <div className="flex h-16 w-16 items-center justify-center rounded-lg border border-primary/30 bg-primary/20 text-primary">
+                            <Clock3 className="h-8 w-8" aria-hidden="true" />
+                          </div>
+                          <div className="px-4 text-center">
+                            <p className="mb-1 text-body font-semibold text-foreground">
+                              Video coming soon
+                            </p>
+                            <p className="text-body-sm text-foreground-muted">
+                              Vimeo upload in progress
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/20 text-primary">
+                        <Play className="h-8 w-8 fill-current" aria-hidden="true" />
+                      </div>
+                      <p className="text-body-sm text-foreground-muted">
+                        Episode player coming soon
+                      </p>
+                    </>
+                  )}
+                </div>
+              )}
+              {hasComingSoonReference && (
+                <div className="border-t border-border bg-surface px-4 pb-4 pt-2">
+                  <p className="text-body-xs text-foreground-subtle">
+                    Vimeo video for this episode is <span className="font-semibold">coming soon</span>.
+                  </p>
+                </div>
+              )}
+            </div>
             {referenceGroups.platformReferences.length > 0 && (
               <nav
                 aria-label="Episode listening and viewing platforms"
@@ -320,53 +313,46 @@ export default async function EpisodeDetailPage({
               aria-labelledby={`audio-player-${episode.slug}`}
               className="overflow-hidden rounded-lg border border-primary/25 bg-surface-elevated shadow-sm"
             >
-              <AnimatedDisclosure
-                label={
-                  <span className="flex min-w-0 items-center gap-3">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <Volume2 className="h-5 w-5" aria-hidden="true" />
-                  </span>
-                  <span className="min-w-0">
-                    <span
-                      id={`audio-player-${episode.slug}`}
-                      className="block text-body font-semibold text-foreground"
-                    >
-                      Listen to the audio edition
-                    </span>
-                    <span className="mt-0.5 block text-caption font-normal text-foreground-muted">
-                      Expand the standalone audio player
-                    </span>
-                  </span>
+              <div className="flex min-h-20 items-center gap-3 px-5 py-4 sm:px-6">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <Volume2 className="h-5 w-5" aria-hidden="true" />
                 </span>
-                }
-                triggerClassName="min-h-20 gap-4 px-5 py-4 sm:px-6"
-                iconClassName="h-5 w-5"
-              >
-                <div className="border-t border-border p-5 sm:p-6">
-                  {episode.audioUrl ? (
-                    <audio
-                      aria-label={`Audio edition: ${episodeDisplayTitle(episode)}`}
-                      controls
-                      preload="none"
-                      className="min-w-0 w-full max-w-full"
-                      src={episode.audioUrl}
-                    >
-                      Your browser does not support audio.
-                    </audio>
-                  ) : episode.spotifyId ? (
-                    <iframe
-                      title={`Listen: ${episodeDisplayTitle(episode)}`}
-                      src={`https://open.spotify.com/embed/episode/${episode.spotifyId}?utm_source=generator`}
-                      width="100%"
-                      height="232"
-                      allowFullScreen
-                      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                      loading="lazy"
-                      className="rounded-lg"
-                    />
-                  ) : null}
+                <div className="min-w-0">
+                  <h2
+                    id={`audio-player-${episode.slug}`}
+                    className="text-body font-semibold text-foreground"
+                  >
+                    Listen to the audio edition
+                  </h2>
+                  <p className="mt-0.5 text-caption text-foreground-muted">
+                    Standalone episode audio
+                  </p>
                 </div>
-              </AnimatedDisclosure>
+              </div>
+              <div className="border-t border-border p-5 sm:p-6">
+                {episode.audioUrl ? (
+                  <audio
+                    aria-label={`Audio edition: ${episodeDisplayTitle(episode)}`}
+                    controls
+                    preload="none"
+                    className="min-w-0 w-full max-w-full"
+                    src={episode.audioUrl}
+                  >
+                    Your browser does not support audio.
+                  </audio>
+                ) : episode.spotifyId ? (
+                  <iframe
+                    title={`Listen: ${episodeDisplayTitle(episode)}`}
+                    src={`https://open.spotify.com/embed/episode/${episode.spotifyId}?utm_source=generator`}
+                    width="100%"
+                    height="232"
+                    allowFullScreen
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                    className="rounded-lg"
+                  />
+                ) : null}
+              </div>
             </section>
           )}
 
