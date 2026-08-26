@@ -934,27 +934,39 @@ test("checked-in catalog projection migrations are transaction-wrapped and conta
   }
 });
 
-test("platform registry records the exact Episode 8 live state", async () => {
+test("platform registry records the current eight-episode live state", async () => {
   const registry = JSON.parse(
     await fs.readFile(new URL("../../publishing/platforms.json", import.meta.url), "utf8")
   );
 
   assert.equal(registry.platforms["rss.com"].currentEpisodeCount, 8);
   assert.equal(registry.platforms["rss.com"].remoteLoudnessGatesPassed, 8);
-  assert.match(registry.platforms["rss.com"].notes, /item 3096546/);
-  assert.match(registry.platforms["rss.com"].notes, /4587dd48-8a26-4341-b194-8764500d74ef/);
+  assert.equal(registry.platforms["rss.com"].guidsPreserved, true);
+  assert.match(
+    registry.platforms["rss.com"].descriptionStandardizationStatus,
+    /public_feed_verified_8_of_8/
+  );
 
   assert.equal(registry.platforms.spotify.currentVideoEpisodeCount, 7);
   assert.match(registry.platforms.spotify.currentVideoState, /seven_video_episodes_public_verified/);
   assert.match(registry.platforms.spotify.notes, /eight distinct episode identities/i);
-  assert.match(registry.platforms.spotify.notes, /7oYwjErc5TXpocbRFgzvH0/);
+  assert.match(
+    registry.platforms.spotify.descriptionStandardizationStatus,
+    /public_readback_verified_8_of_8/
+  );
 
   assert.equal(registry.platforms.youtube.currentPublicVideoCount, 8);
-  assert.match(registry.platforms.youtube.notes, /ax5BSELnBbo/);
+  assert.match(
+    registry.platforms.youtube.descriptionStandardizationStatus,
+    /public_readback_verified_8_of_8/
+  );
   assert.equal(registry.platforms.vimeo.currentEpisodeVideoCount, 8);
   assert.equal(registry.platforms.vimeo.currentShortVideoCount, 3);
   assert.equal(registry.platforms.vimeo.currentVideoCount, 11);
-  assert.match(registry.platforms.vimeo.notes, /1221293570/);
+  assert.match(
+    registry.platforms.vimeo.descriptionStandardizationStatus,
+    /public_readback_verified_8_of_8/
+  );
 
   assert.equal(registry.platforms.rumble.stagedUploadCount, 7);
   assert.equal(registry.platforms.rumble.submitted, false);

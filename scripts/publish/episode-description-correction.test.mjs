@@ -77,7 +77,7 @@ test("current platform state points to a fail-closed partial propagation receipt
   assert.deepEqual(platformState.platforms.rumble.pendingDescriptionCorrectionEpisodeNumbers, [7]);
 });
 
-test("revision 16 description standardization receipt binds the verified site launch without authorizing distributor writes", async () => {
+test("revision 16 receipt binds verified site and distributor readbacks without granting future writes", async () => {
   const [receipt, platformState, catalog, catalogBytes, migrationBytes] = await Promise.all([
     readJson("publishing/episode-description-standardization.json"),
     readJson("publishing/platforms.json"),
@@ -141,6 +141,10 @@ test("revision 16 description standardization receipt binds the verified site la
   assert.deepEqual(receipt.completion.verifiedComplete, [
     "supabase_website_data_backfill",
     "website_initial_launch",
+    "rss.com_description_rollout",
+    "spotify_description_fanout",
+    "youtube_description_rollout",
+    "vimeo_description_rollout",
   ]);
   assert.deepEqual(receipt.completion.pendingProductionApplicationAndReadback, []);
   assert.equal(platformState.episodeDescriptionStandardization.productionApplied, true);
@@ -153,13 +157,7 @@ test("revision 16 description standardization receipt binds the verified site la
     platformState.episodeDescriptionStandardization.verifiedComplete,
     receipt.completion.verifiedComplete
   );
-  assert.deepEqual(receipt.completion.pendingRemotePropagationAndReadback, [
-    "rss.com",
-    "spotify",
-    "apple",
-    "youtube",
-    "vimeo",
-  ]);
+  assert.deepEqual(receipt.completion.pendingRemotePropagationAndReadback, ["apple"]);
 
   assert.deepEqual(
     receipt.episodes.map((episode) => episode.number),

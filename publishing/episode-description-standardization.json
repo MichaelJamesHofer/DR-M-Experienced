@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
   "standardizationId": "all-episode-description-standardization-2026-08-25",
-  "status": "site_and_initial_website_launch_verified_remote_propagation_pending",
+  "status": "rss_spotify_youtube_vimeo_verified_apple_fanout_pending",
   "recordedAt": "2026-08-26T01:40:44Z",
-  "updatedAt": "2026-08-26T05:06:15Z",
+  "updatedAt": "2026-08-26T13:05:06Z",
   "authorization": {
     "localPreparationAuthorized": true,
     "remoteWritesAuthorizedByThisReceipt": false,
     "productionDeploymentAuthorizedByThisReceipt": false,
-    "notes": "This receipt is evidence, not release authorization. The production website-data backfill was authorized separately in the owner-directed release task and applied on 2026-08-26. It does not authorize or claim description changes on RSS.com, Spotify, Apple, YouTube, Vimeo, or Rumble."
+    "notes": "This receipt is evidence, not release authorization. The production website-data backfill, website release, and 2026-08-26 cross-platform description rollout were each authorized separately in owner-directed tasks. This receipt records the resulting remote state; it does not grant future release authority."
   },
   "catalog": {
     "source": "publishing/master-catalog.json",
     "previousRevision": 15,
     "targetRevision": 16,
-    "status": "validated_locally_remote_propagation_pending",
+    "status": "validated_and_propagated_except_apple_cache_convergence",
     "fileSha256": "9c77dbc237092a48cc9c0bf0411f0e665a0e1e93d21b5c2479ede27590487261",
     "publisherHash": "2672672cdf6ed6f46b1d9d582cf4ab1d70813c9708ac5ad407df7668ad7ae51b",
     "hashStatus": "validated_against_final_revision_16_catalog"
@@ -227,32 +227,33 @@
   "targets": {
     "rss.com": {
       "role": "canonical_published_audio_host",
-      "status": "pending_remote_update_and_feed_readback",
+      "status": "rss_compact_projection_applied_and_public_feed_verified_8_of_8",
       "separateEpisodeCreationRequired": false,
-      "stableGuidsMustBePreserved": true
+      "stableGuidsMustBePreserved": true,
+      "stableGuidsVerified": true
     },
     "spotify": {
       "role": "rss_fanout_and_video_destination",
-      "status": "pending_rss_fanout_and_public_readback",
+      "status": "rss_fanout_public_readback_verified_8_of_8",
       "duplicateEpisodeCreationAllowed": false,
       "stableEpisodeIdsMustBePreserved": true,
       "paidPromotionReviewPendingEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7]
     },
     "apple": {
       "role": "rss_fanout",
-      "status": "pending_rss_fanout_and_public_readback",
+      "status": "rss_fanout_partial_public_readback_episode_8_updated_episodes_3_through_7_pending_episodes_1_and_2_hidden",
       "showId": "1870433419",
       "separateUploadRequired": false
     },
     "youtube": {
       "role": "direct_video_destination",
-      "status": "pending_remote_update_and_public_readback",
+      "status": "revision_16_plain_projection_applied_and_public_readback_verified_8_of_8",
       "stableVideoIdsMustBePreserved": true,
       "paidPromotionReviewPendingEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7]
     },
     "vimeo": {
       "role": "direct_video_destination_and_remote_recovery_copy",
-      "status": "pending_remote_update_and_public_readback",
+      "status": "revision_16_plain_projection_applied_and_authenticated_and_public_readback_verified_8_of_8",
       "stableVideoIdsMustBePreserved": true
     },
     "rumble": {
@@ -282,10 +283,85 @@
       "separateUploadRequired": false
     }
   },
+  "remoteRollout": {
+    "authorizedAt": "2026-08-26T12:31:00Z",
+    "readbackAt": "2026-08-26T13:05:06Z",
+    "scope": "description_fields_on_existing_episode_and_video_identities_only",
+    "identityPolicy": "no_episode_creation_no_guid_changes_no_remote_id_changes",
+    "plainTextProjectionSha256ByEpisode": {
+      "1": "cd6d4ed8b2f0974fe3f19c340c52a3f10f2e48a40127d0cd1c7012bc9af4162d",
+      "2": "2a8cc58585ab220d3ce235b3db177220ab970c019cc5f3e55ef182ca3942e50b",
+      "3": "5bf210ac3771e77fb28b89065b07fcda1e98add3b3559c8ce4daf55ea136a7f7",
+      "4": "b5c4fe0dab98bce2ff48772eed39dd177d0bfe0eec07239fb2cd4f4494b56181",
+      "5": "399991bbaafae12e273fbeb3e112ea9acb2f13329d638847f1b8d0ffe5a745f8",
+      "6": "da11ec3201c9aad07fe4443acc54986575f1dfdddcafed3ab88718c316062c1f",
+      "7": "1e5ca3b8356274918280dd583e306ca929d07d0ee3d063aebc2d36831d9a6440",
+      "8": "f955899394ec484dbce536143158bb8c95ad027f2c60aa5017948fb6c0800710"
+    },
+    "rss.com": {
+      "method": "attended_dashboard_existing_episode_edits",
+      "episodeIds": [3050766, 3050765, 3050764, 3050763, 3050762, 3050761, 3050760, 3096546],
+      "feedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+      "publicFeedItemCount": 8,
+      "publicFeedSemanticMatches": 8,
+      "affiliateLinkCountsByEpisode": [5, 5, 4, 5, 3, 3, 4, 9],
+      "editorCharacterCountsByEpisode": [2503, 2563, 2328, 2726, 2030, 2261, 2316, 3869],
+      "allStableGuidsVerified": true,
+      "projectionNotes": "RSS.com's 4000-character rich-text limit requires one uniform compact projection: list items share paragraphs, the resources heading and repeated guide labels are shortened, and hashtags are omitted. Every substantive sentence, topic, relationship, URL, affiliate disclosure, and medical disclaimer remains semantically exact to catalog revision 16."
+    },
+    "spotify": {
+      "method": "automatic_rss_fanout",
+      "publicEpisodeReadbacks": 8,
+      "publicDescriptionsMatchCanonicalFeed": true,
+      "stableEpisodeIdsVerified": true
+    },
+    "apple": {
+      "method": "automatic_rss_fanout",
+      "publicEpisodeCount": 6,
+      "updatedPublicPrefixEpisodeNumbers": [8],
+      "pendingPublicPrefixEpisodeNumbers": [3, 4, 5, 6, 7],
+      "hiddenEpisodeNumbersUnderKnownGuidIncident": [1, 2],
+      "stableShowIdVerified": true,
+      "notes": "The canonical feed is updated. Apple public JSON-LD truncates descriptions and had converged only for Episode 8 at this readback. The isolated Podcasts Connect session requires reauthentication, so no manual refresh was claimed."
+    },
+    "youtube": {
+      "method": "attended_studio_existing_video_edits",
+      "publicVideoReadbacks": 8,
+      "publicDescriptionsMatchRevision16PlainProjection": true,
+      "stableVideoIdsVerified": true,
+      "channelIdVerified": "UCFA1nVv4lKMBlx81gjMAOFQ",
+      "visibilityVerified": "public"
+    },
+    "vimeo": {
+      "method": "authenticated_description_only_api_patch",
+      "patchBodyKeys": ["description"],
+      "authenticatedReadbacks": 8,
+      "publicOembedReadbacks": 8,
+      "descriptionsMatchRevision16PlainProjection": true,
+      "ownerVerified": "/users/253415660",
+      "allNonDescriptionInvariantsUnchanged": true
+    },
+    "rumble": {
+      "status": "untouched_manual_only",
+      "notes": "No automated inspection or write occurred."
+    },
+    "paidPromotion": {
+      "episode8PreexistingTruePreserved": true,
+      "episodeNumbersPendingExactOwnerDecision": [1, 2, 3, 4, 5, 6, 7],
+      "notes": "The approved affiliate-disclosed text was applied. No paid-promotion control was silently changed."
+    }
+  },
   "completion": {
     "prepared": ["catalog_revision_16", "website_source"],
-    "verifiedComplete": ["supabase_website_data_backfill", "website_initial_launch"],
-    "pendingRemotePropagationAndReadback": ["rss.com", "spotify", "apple", "youtube", "vimeo"],
+    "verifiedComplete": [
+      "supabase_website_data_backfill",
+      "website_initial_launch",
+      "rss.com_description_rollout",
+      "spotify_description_fanout",
+      "youtube_description_rollout",
+      "vimeo_description_rollout"
+    ],
+    "pendingRemotePropagationAndReadback": ["apple"],
     "manualOrExcluded": ["rumble"],
     "pendingProductionApplicationAndReadback": [],
     "notOnboarded": ["amazon"]
