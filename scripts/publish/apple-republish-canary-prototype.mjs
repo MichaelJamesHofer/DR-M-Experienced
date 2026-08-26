@@ -937,6 +937,12 @@ async function assertBuiltArtifactRoot(rootPath, config) {
     REPOSITORY_ROOT,
     config.artifactLayout.productionArtifactRoot,
   );
+  if (
+    config.remoteActionGates.prototypeArtifactMayDeploy === false &&
+    (resolved === productionRoot || resolved.startsWith(`${productionRoot}${path.sep}`))
+  ) {
+    throw new Error("Prototype gate forbids writing the repository production artifact.");
+  }
   const canonicalRoot = await fs.realpath(resolved).catch(() => null);
   if (!canonicalRoot || canonicalRoot !== resolved) {
     throw new Error(

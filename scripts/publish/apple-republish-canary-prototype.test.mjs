@@ -529,6 +529,13 @@ test("prototype generator cannot target production out or run without acknowledg
     }),
     /forbids writing the repository production artifact/,
   );
+  await assert.rejects(
+    generateAppleRepublishCanaryPrototype({
+      artifactRoot: path.resolve("out", "missing-clean-run-artifact"),
+      allowLocalPrototype: true,
+    }),
+    /forbids writing the repository production artifact/,
+  );
 });
 
 test("prototype generator rejects symlink aliases and nested symlink escapes", async () => {
