@@ -66,8 +66,10 @@ The other stores have narrower roles:
 The fingerprinted Dropbox file is the binary master for each video, audio file,
 and artwork asset. Vimeo is a direct-video destination and useful remote recovery
 copy, but it is not a co-master and must never overwrite the local asset binding.
-RSS.com is the canonical published-audio host and feed fanout source; Apple,
-Amazon, and Spotify audio inherit the existing RSS item and GUID. The
+RSS.com is the canonical published-audio host and feed fanout source. Amazon
+and Spotify inherit each canonical RSS item and GUID. Apple alone consumes the
+active overlay generated from RSS.com; that overlay substitutes Apple's
+historical Episode 1-2 GUIDs while preserving every other item field. The
 fingerprinted local MP3 remains the canonical audio binary.
 
 Short-form media has a separate authority at
@@ -150,7 +152,7 @@ the public `title` does not include an `Episode N:` prefix. Keep the real episod
 manifest beside the edited media or in another private working directory. Do
 not place credentials in the manifest or repository.
 
-Every direct destination needs a `releasePlan` entry. The example deliberately uses `hold` with `not_selected` values so it cannot be mistaken for release approval. Fill in the exact initial and final visibility, platform license, monetization, and notification choices before review. Spotify, Apple, and Amazon inherit podcast audio through the canonical RSS feed and do not get separate audio-release entries; an optional Spotify `fullVideo` replacement still needs its exact release decisions.
+Every direct destination needs a `releasePlan` entry. The example deliberately uses `hold` with `not_selected` values so it cannot be mistaken for release approval. Fill in the exact initial and final visibility, platform license, monetization, and notification choices before review. Spotify and Amazon inherit podcast audio through the canonical RSS feed; Apple inherits the same audio through its generated Apple-only overlay. None gets a separate audio-release entry; an optional Spotify `fullVideo` replacement still needs its exact release decisions.
 
 `prepare` creates a job under `~/.local/state/drm-publisher/jobs/`. RSS.com receives `podcastAudio`. After that episode appears in Spotify through RSS, an approved `fullVideo` may replace its audio on Spotify only; audio-only episodes need no direct Spotify upload. The approval hash covers the normalized manifest, platform plan, media paths, media metadata, and media SHA-256 values. `approve` rejects a hash mismatch, a changed review document, any changed source asset, or a missing exact confirmation phrase.
 
@@ -204,7 +206,7 @@ August 8.
 
 - The supported RSS.com import is complete at `https://media.rss.com/dr-m-experienced/feed.xml`; all seven GUIDs, media files, and artwork assets passed parity. Preserve every imported identity.
 - The legacy Anchor URL now returns one HTTP 301 hop to RSS.com. Preserve that redirect and Spotify show `7GGLljxmO0G3FLjPy8vfcw` for RSS audio ingestion, video replacement, analytics, and continuity. Six corrected video attachments remain public; Episode 5 preserves its existing ID and corrected RSS audio but is audio-only pending the staged Creator Support request. There is no account-wide video switch; for future video episodes, use the RSS-ingested episode's `Upload video` action after its corrected master is approved, while leaving intentionally audio-only episodes alone.
-- Apple show `1870433419` is configured directly to RSS.com with exact metadata, but still exposes five Available episodes. The duplicate show and stale manual Episode 4 Draft are archived. Apple case `20000130526608` confirmed that its existing Episode 1-2 records use historical GUIDs that differ from the current feed. Follow-up requests to Apple for a server-side remap, RSS.com for in-place GUID-only capability, and Spotify for episode-ID/video/analytics preservation are submitted. Spotify has acknowledged the request and is checking internally; Apple and RSS.com remain pending. `publishing/apple-guid-repair.json` records the blocked crosswalk and gates. No live GUID changed, and no change is authorized while responses are pending. Submit the RSS.com feed once to Amazon and never create duplicate directory listings.
+- Apple show `1870433419` alone consumes the active Apple-only overlay at `https://drmexperienced.com/apple-podcasts/feed.xml`; RSS.com remains the unchanged canonical source. The overlay restores only Apple's historical Episode 1-2 GUIDs and leaves Spotify identities unchanged. Apple displayed the feed update at 1:04 PM MDT on August 26; a separate refresh was observed complete around 1:06 PM. Authenticated Connect showed six Available and two Draft RSS records with playable audio, while public Apple remained six of eight. The authenticated Missing Podcast(s) escalation referencing case `20000130526608` requests in-place publication with the existing Apple IDs preserved. Outcome is pending. Keep the overlay active; do not point Apple directly at RSS.com, refresh again, mutate either feed, or create replacements. Submit the RSS.com feed once to Amazon and never create duplicate directory listings.
 - Both guarded Supabase migrations were applied in production on August 7 after exact SQL-file hash verification. Seven-row readback matches catalog revision 10 for current RSS.com audio URLs, YouTube IDs, and `Watch on YouTube` references.
 - The guarded August 8 Episode 7 editorial migration and independent production
   readback match catalog revision 11. GitHub Pages deployment `31276520368` and
@@ -328,7 +330,7 @@ Browser access is not a release authorization. Default automation behavior is to
    `publishing/episode-description-standardization.json`. Every stable GUID and
    destination ID was preserved.
 3. Completed: the supported RSS.com import passed exact GUID, metadata, media, artwork, and edge-audio validation, and the Anchor redirect returns the expected 301.
-4. Apple show `1870433419` is configured directly to RSS.com. Duplicate cleanup and one feed refresh are complete. Apple case `20000130526608` identified a historical GUID mismatch for Episodes 1-2. Apple and RSS.com support requests are pending; Spotify has acknowledged its request and is investigating internally. Follow `publishing/apple-guid-repair.json`, make no live GUID change, and do not replace the show or recreate episodes.
+4. Apple show `1870433419` consumes the active Apple-only overlay derived from the unchanged RSS.com feed. The overlay restores Apple's historical Episode 1-2 GUIDs only. Authenticated Connect is six Available/two Draft with playable RSS audio; public Apple is six of eight. Await the authenticated Missing Podcast(s) escalation under case `20000130526608`. Keep routing on the overlay and do not refresh again, mutate either feed, replace the show, or recreate episodes.
 5. Submit the canonical RSS.com feed once to Amazon and record the stable show ID and URL.
 6. Google Cloud project `dr-m-experienced-publisher`, YouTube Data API v3, and the production desktop OAuth client are configured, and the owner approved Google Cloud's terms on August 8, 2026. Complete the one-time OAuth grant as production channel owner `michaeljameshofer@gmail.com`, then record the applicable YouTube upload compliance audit before public or Unlisted API uploads.
 7. Completed August 8, 2026: the owner accepted Vimeo's Developer Addendum and Terms for private app `540274`; its own-account `upload`/`edit` token, exact account `253415660`, and current upload quota are verified. Each future remote write still requires an exact expiring release authorization.

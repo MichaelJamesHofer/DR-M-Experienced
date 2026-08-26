@@ -55,6 +55,8 @@ function activeFixture() {
   migration.destination.canonicalMetadataCleanedAt = "2026-08-06T17:25:00Z";
   migration.destination.episodeMetadataCleanedAt = "2026-08-06T17:35:00Z";
   migration.destination.candidateMetadataVerifiedAt = "2026-08-06T17:36:00Z";
+  delete migration.existingListings.apple.appleOnlyOverlay;
+  delete migration.existingListings.apple.canonicalSourceFeedUrl;
   Object.assign(migration.destination.validation, {
     verifiedAt: "2026-08-06T17:02:27Z",
     fullPreflightPassed: false,
@@ -165,6 +167,54 @@ test("completed cutover retains read-only post-cutover validation", () => {
   assert.match(advice, /Cutover is complete/);
   assert.match(advice, /read-only post-cutover validation/);
   assert.doesNotMatch(advice, /Anchor remains canonical/i);
+});
+
+test("completed cutover permits only the scoped Apple feed overlay exception", () => {
+  const migration = clone(baselineMigration);
+  const platforms = clone(baselinePlatforms);
+  const result = validate(migration, platforms);
+
+  assert.deepEqual(result.errors, []);
+  assert.equal(
+    migration.existingListings.spotify.currentFeedUrl,
+    HOST_MIGRATION_IDENTITIES.targetFeedUrl,
+  );
+  assert.equal(
+    migration.existingListings.apple.currentFeedUrl,
+    HOST_MIGRATION_IDENTITIES.appleOverlayFeedUrl,
+  );
+  assert.equal(
+    migration.existingListings.apple.canonicalSourceFeedUrl,
+    HOST_MIGRATION_IDENTITIES.targetFeedUrl,
+  );
+
+  migration.existingListings.apple.appleOnlyOverlay.publicationOutcome =
+    "available";
+  assert.deepEqual(validate(migration, platforms).errors, []);
+
+  migration.existingListings.spotify.currentFeedUrl =
+    HOST_MIGRATION_IDENTITIES.appleOverlayFeedUrl;
+  migration.existingListings.apple.appleOnlyOverlay.canonicalRssComFeedMutated = true;
+  const drift = validate(migration, platforms);
+  assert.ok(
+    drift.errors.some((error) =>
+      /existingListings\.spotify\.currentFeedUrl/.test(error),
+    ),
+  );
+  assert.ok(
+    drift.errors.some((error) =>
+      /appleOnlyOverlay\.canonicalRssComFeedMutated/.test(error),
+    ),
+  );
+
+  const routingDrift = clone(baselineMigration);
+  routingDrift.existingListings.apple.appleOnlyOverlay.routingStatus = "inactive";
+  const routingResult = validate(routingDrift, clone(baselinePlatforms));
+  assert.ok(
+    routingResult.errors.some((error) =>
+      /appleOnlyOverlay\.routingStatus/.test(error),
+    ),
+  );
 });
 
 test("post-redirect active state remains frozen until completion", () => {

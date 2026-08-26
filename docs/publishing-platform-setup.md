@@ -1,6 +1,7 @@
 # Publishing platform setup
 
-Last verified: August 22, 2026.
+Broader platform inventory last verified: August 22, 2026.
+Apple routing and publication-state receipt last verified: August 26, 2026.
 
 The local publisher uses official upload interfaces where they exist, RSS fan-out for podcast directories, and explicit browser handoffs where a supported public creator-upload API is unavailable. Credentials stay outside the repository under `~/.config/drm-publisher/` with owner-only permissions.
 
@@ -8,9 +9,9 @@ The local publisher uses official upload interfaces where they exist, RSS fan-ou
 
 | Destination | Delivery path | Current setup state |
 |---|---|---|
-| RSS.com | Canonical podcast host; official v4 API or attended dashboard | Feed `https://media.rss.com/dr-m-experienced/feed.xml` has seven normalized, remotely decoded and loudness-verified enclosures with the GUIDs captured from Anchor on August 5, exact XML metadata, no XML `RSSVERIFY`, and no stray season value. The official v4 adapter is implemented and bound to podcast ID `397420`, derived from canonical content URLs, but RSS.com limits API access to Max and this account has no configured entitlement/API key. It durably checkpoints presigned audio/artwork sessions, uploaded state, episode-write intent, and the returned episode ID/GUID. If an episode-create response is ambiguous before an ID is checkpointed, it blocks a second POST. The current free/manual hosting path continues. The in-place GUID-only capability request is submitted and pending; no live GUID change was requested or approved. The separate public landing-page metadata still exposes a cached `RSSVERIFY` token |
+| RSS.com | Canonical podcast host; official v4 API or attended dashboard | Feed `https://media.rss.com/dr-m-experienced/feed.xml` remains the unchanged canonical source. The retained seven-episode migration baseline has normalized, remotely decoded and loudness-verified enclosures with the GUIDs captured from Anchor on August 5, exact XML metadata, no XML `RSSVERIFY`, and no stray season value. The official v4 adapter is implemented and bound to podcast ID `397420`, but RSS.com limits API access to Max and this account has no configured entitlement/API key. The current free/manual hosting path continues. The separate public landing-page metadata still exposes a cached `RSSVERIFY` token |
 | Spotify for Creators | RSS audio consumer plus per-episode Spotify video replacement | Existing show `7GGLljxmO0G3FLjPy8vfcw` preserves all seven episode identities. Six corrected video attachments remain public; Episode 5 is currently audio-only with corrected RSS audio after three same-ID video attempts reverted. A Creator Support request is staged for owner review. Never create a duplicate episode |
-| Apple Podcasts | Episode audio and art directly from RSS.com | Existing show `1870433419` uses the exact RSS.com feed and has exact token-free canonical metadata. Episode 5 preserved Apple episode ID `1000774398633`, now exposes the corrected 29:45 enclosure, and has its generated transcript set to Not Displayed. The duplicate show now returns 404 and the stale Episode 4 Draft was archived. Only five episodes are Available because the separate Episode 1-2 GUID repair remains blocked under case `20000130526608` |
+| Apple Podcasts | RSS fan-out through the Apple-only overlay | Existing show `1870433419` consumes `https://drmexperienced.com/apple-podcasts/feed.xml`, generated from the unchanged RSS.com source. The overlay restores only Apple's historical Episode 1-2 GUIDs. Authenticated Connect shows six Available and two Draft RSS records with playable audio; public Apple shows six of eight. The authenticated Missing Podcast(s) escalation referencing case `20000130526608` requests in-place publication with existing Apple IDs preserved. Routing stays on the overlay while the outcome is pending |
 | Amazon Music and Audible | Episode audio from RSS.com after one-time claim | Signed-in dashboard has zero claimed shows; submit the canonical RSS.com feed once, complete ownership verification, and record the stable listing ID/URL |
 | Podcast Index | Automatic RSS indexing | New RSS.com record `7982906` and old Anchor record `7799755` are both live; verify convergence after the 301 is crawled |
 | Production Supabase projection | Guarded SQL migrations plus exact readback | Episode 5 projects the corrected RSS enclosure and 30-minute duration. The August 8 Episode 7 editorial correction also retains its exact independent readback |
@@ -26,7 +27,7 @@ The canonical short profile description is `Dr. M Experienced, with Dr. David Mu
 
 | Profile | Current public name state |
 |---|---|
-| Spotify and Apple | RSS.com's XML and the authenticated Apple configuration use exact title/description copy with no feed `RSSVERIFY`. Spotify preserves all seven episode identities; six videos remain attached, while Episode 5 is audio-only pending support. Apple preserved Episode 5 ID `1000774398633` and exposes its corrected 29:45 enclosure. Apple still exposes only five Available episodes because the separate Episode 1-2 GUID repair is blocked by `publishing/apple-guid-repair.json` |
+| Spotify and Apple | RSS.com remains canonical and Spotify preserves its episode identities. Apple alone consumes the active overlay derived from RSS.com. Apple Connect is six Available/two Draft with playable RSS audio; public Apple is six of eight. Publication remains pending under `publishing/apple-guid-repair.json`; do not revert Apple to the direct RSS.com URL |
 | Amazon | No claimed show exists in the signed-in account; submit the canonical RSS.com feed once and record the resulting stable identity |
 | YouTube | Canonical episode copy is published on the seven normalized replacement IDs; display name remains `Dr. M Experienced` because the manager-role name save did not persist. Prior episode uploads remain Unlisted and link to the replacements |
 | Instagram | Display name and bio are exact; handle `@drmexperienced` is unchanged and public state confirms Creator professional with Business false. The website, affiliate guide, and contact links are live. All three cataloged Reels have unique captions and mappings; the profile reports four posts. Meta API work still waits for the authenticated publishing ID and token. Do not use the public profile ID as the publishing ID or convert the account to Business |
@@ -240,22 +241,18 @@ complete.
    GUIDs used when Episodes 1-2 were first published; Apple later supplied older
    historical values. The separate public landing-page metadata still has a
    cached token.
-2. Completed: all seven normalized RSS.com enclosures left the captured August
+2. Completed historical baseline: all seven normalized RSS.com enclosures left the captured August
    5 GUID set unchanged and pass remote download, full-decode, and loudness
-   gates; artwork parity remains verified. The Apple identity repair is a
-   separate, blocked incident.
-3. Completed: Apple show `1870433419` was configured directly to the RSS.com
-   feed at approximately 18:29 UTC on August 6, 2026. Its authenticated metadata
-   is exact and token-free.
-4. Follow-up review pending; remote repair blocked: Apple still has five
-   Available episodes. The inspected no-feed Draft show `1896845422` and stale
-   manual Episode 4 Draft were archived on August 6, 2026, and one feed refresh
-   was requested. Apple case `20000130526608` confirmed that its existing
-   Episode 1-2 records use historical GUIDs different from the current feed.
-   The Apple remap, RSS.com capability, and Spotify identity-preservation
-   requests are submitted and pending. Follow `publishing/apple-guid-repair.json`;
-   no live GUID changed, and none is authorized to change while the support-first
-   preservation checks remain open.
+   gates; artwork parity remains verified. Apple now applies its historical
+   Episode 1-2 GUIDs only through the separate overlay.
+3. Historical August 6 routing: Apple show `1870433419` was configured directly
+   to RSS.com. This was superseded on August 26 by the active Apple-only overlay;
+   do not restore the historical feed URL.
+4. Publication pending: authenticated Connect shows six Available and two Draft
+   RSS records with playable audio; public Apple shows six of eight. Keep show
+   `1870433419` on the overlay and await the authenticated Missing Podcast(s)
+   escalation referencing case `20000130526608`. Do not refresh again, mutate
+   either feed, create replacements, or change stable IDs.
 5. Pending: submit the RSS.com feed once to Amazon, complete ownership
    verification, and record the stable show ID and public URL.
 6. Historical August 7 baseline: all seven corrected Spotify videos were
@@ -283,15 +280,14 @@ Apple's exact support crosswalk is:
 | 1 | `1000746628307` | `c9b853b6-a828-4012-9998-217919ff9163` | `59063e08-e4a6-4e56-b7ec-d2a66d69beb8` |
 | 2 | `1000746628422` | `1e40e02b-b217-477c-9cc3-4271cb304c23` | `26896da2-76cf-4865-93f8-f94ddfb24568` |
 
-This is a catalog identity incident, not a reason to recreate the show or either
-episode. Requests are now submitted to Apple for server-side remapping, RSS.com
-for an in-place GUID-only correction, and Spotify for preservation of the
-existing episode IDs, attached videos, and analytics. All three responses are
-pending. Make no live GUID change, deletion, recreation, or two-episode batch
-while those answers and exact user approval are missing. If a feed change
-remains necessary, capture complete Apple, Spotify, RSS, and feed snapshots and
-use one attended episode as a canary. Independently verify its Apple and Spotify
-identities before considering the second episode.
+This was a catalog identity incident, not a reason to recreate the show or
+either episode. The Apple-only overlay now restores the historical Episode 1-2
+GUIDs while RSS.com and Spotify remain unchanged. The current action is to await
+the authenticated Missing Podcast(s) escalation requesting publication of the
+existing Apple records in place. Keep overlay routing active independently of
+the pending outcome. Do not point Apple directly at RSS.com, refresh again,
+mutate either feed, delete or recreate records, or run the superseded canary
+plan.
 
 ## Instagram media delivery
 

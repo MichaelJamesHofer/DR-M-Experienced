@@ -197,7 +197,7 @@ test("overlay config pins the Apple show, destination, and exact crosswalk", () 
   );
 });
 
-test("overlay is authorized while the canonical tri-provider repair remains blocked", () => {
+test("overlay stays authorized while the canonical mutation fallback remains blocked", () => {
   assert.equal(config.sourceFeedUrl, repairAuthority.feedUrl);
   assert.equal(config.sourceSelfUrl, repairAuthority.feedUrl);
   assert.equal(config.appleShowId, repairAuthority.appleShowId);
@@ -220,7 +220,11 @@ test("overlay is authorized while the canonical tri-provider repair remains bloc
 
   assert.equal(
     repairAuthority.status,
-    "tri_provider_review_pending_remote_change_blocked",
+    "apple_overlay_active_catalog_availability_escalation_pending",
+  );
+  assert.equal(
+    repairAuthority.canonicalMutationFallbackStatus,
+    "blocked_not_in_use",
   );
   assert.equal(repairAuthority.gates.exactRemoteChangeApproved, false);
   assert.equal(repairAuthority.gates.remoteWritePerformed, false);

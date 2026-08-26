@@ -7,6 +7,7 @@ export const HOST_MIGRATION_IDENTITIES = Object.freeze({
   spotifyChannelUrl: "https://open.spotify.com/show/7GGLljxmO0G3FLjPy8vfcw",
   appleShowId: "1870433419",
   appleConnectShowId: "cfab5caf-554e-4ebe-a28c-2e4748147b82",
+  appleOverlayFeedUrl: "https://drmexperienced.com/apple-podcasts/feed.xml",
   appleChannelUrl:
     "https://podcasts.apple.com/us/podcast/dr-m-experienced-with-dr-david-musnick/id1870433419",
 });
@@ -321,12 +322,41 @@ export function validatePublishingMigrationState({
       identities.targetFeedUrl,
       "existingListings.spotify.currentFeedUrl"
     );
+    const appleListing = migration?.existingListings?.apple;
+    const appleOverlay = appleListing?.appleOnlyOverlay;
+    const appleOverlayConfigured = appleOverlay !== undefined;
     requireEqual(
       errors,
-      migration?.existingListings?.apple?.currentFeedUrl,
-      identities.targetFeedUrl,
+      appleListing?.currentFeedUrl,
+      appleOverlayConfigured ? identities.appleOverlayFeedUrl : identities.targetFeedUrl,
       "existingListings.apple.currentFeedUrl"
     );
+    if (appleOverlayConfigured) {
+      requireEqual(
+        errors,
+        appleOverlay?.routingStatus,
+        "active",
+        "existingListings.apple.appleOnlyOverlay.routingStatus"
+      );
+      requireEqual(
+        errors,
+        appleListing?.canonicalSourceFeedUrl,
+        identities.targetFeedUrl,
+        "existingListings.apple.canonicalSourceFeedUrl"
+      );
+      requireEqual(
+        errors,
+        appleOverlay?.publicFeedUrl,
+        identities.appleOverlayFeedUrl,
+        "existingListings.apple.appleOnlyOverlay.publicFeedUrl"
+      );
+      requireEqual(
+        errors,
+        appleOverlay?.canonicalRssComFeedMutated,
+        false,
+        "existingListings.apple.appleOnlyOverlay.canonicalRssComFeedMutated"
+      );
+    }
     requireEqual(
       errors,
       migration?.existingListings?.spotify?.verifiedAfterCutover,
