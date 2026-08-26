@@ -77,9 +77,10 @@ test("current platform state points to a fail-closed partial propagation receipt
   assert.deepEqual(platformState.platforms.rumble.pendingDescriptionCorrectionEpisodeNumbers, [7]);
 });
 
-test("revision 16 description standardization receipt binds the applied site-data backfill without authorizing distributor writes", async () => {
-  const [receipt, catalog, catalogBytes, migrationBytes] = await Promise.all([
+test("revision 16 description standardization receipt binds the verified site launch without authorizing distributor writes", async () => {
+  const [receipt, platformState, catalog, catalogBytes, migrationBytes] = await Promise.all([
     readJson("publishing/episode-description-standardization.json"),
+    readJson("publishing/platforms.json"),
     readJson("publishing/master-catalog.json"),
     readFile(new URL("publishing/master-catalog.json", root)),
     readFile(
@@ -115,11 +116,43 @@ test("revision 16 description standardization receipt binds the applied site-dat
   assert.equal(receipt.siteMigration.productionReadback.desbioEpisodeRelationshipVerified, true);
   assert.equal(receipt.siteMigration.productionReadback.episodeReferencesTotal, 57);
   assert.equal(receipt.siteMigration.productionReadback.affiliateProductEpisodeLinksTotal, 13);
-  assert.equal(receipt.siteMigration.websiteDeployed, false);
+  assert.equal(receipt.siteMigration.websiteDeployed, true);
+  assert.equal(receipt.siteMigration.websiteReadbackComplete, true);
+  assert.equal(receipt.siteMigration.initialWebsiteLaunch.sourcePullRequest, 28);
+  assert.equal(
+    receipt.siteMigration.initialWebsiteLaunch.releaseCommit,
+    "5c53aa7e153f848d2956b7384969680d0f6ead0b"
+  );
+  assert.equal(receipt.siteMigration.initialWebsiteLaunch.guardedWorkflowRunId, 32932213291);
+  assert.equal(receipt.siteMigration.initialWebsiteLaunch.guardedDeploymentId, 6097420330);
+  assert.equal(
+    receipt.siteMigration.initialWebsiteLaunch.deploymentStateAtReadback,
+    "success_and_active"
+  );
+  assert.equal(receipt.siteMigration.initialWebsiteLaunch.apexHttpStatus, 200);
+  assert.equal(receipt.siteMigration.initialWebsiteLaunch.wwwHttpStatus, 301);
+  assert.equal(receipt.siteMigration.initialWebsiteLaunch.verifiedRouteCount, 8);
+  assert.equal(
+    receipt.siteMigration.initialWebsiteLaunch.responsiveReadback.horizontalOverflow,
+    false
+  );
   assert.equal(receipt.targets.supabase.productionReadbackComplete, true);
-  assert.equal(receipt.targets.website.productionReadbackComplete, false);
-  assert.deepEqual(receipt.completion.verifiedComplete, ["supabase_website_data_backfill"]);
-  assert.deepEqual(receipt.completion.pendingProductionApplicationAndReadback, ["website"]);
+  assert.equal(receipt.targets.website.productionReadbackComplete, true);
+  assert.deepEqual(receipt.completion.verifiedComplete, [
+    "supabase_website_data_backfill",
+    "website_initial_launch",
+  ]);
+  assert.deepEqual(receipt.completion.pendingProductionApplicationAndReadback, []);
+  assert.equal(platformState.episodeDescriptionStandardization.productionApplied, true);
+  assert.equal(platformState.episodeDescriptionStandardization.websiteDeployed, true);
+  assert.equal(
+    platformState.episodeDescriptionStandardization.initialWebsiteLaunchCommit,
+    receipt.siteMigration.initialWebsiteLaunch.releaseCommit
+  );
+  assert.deepEqual(
+    platformState.episodeDescriptionStandardization.verifiedComplete,
+    receipt.completion.verifiedComplete
+  );
   assert.deepEqual(receipt.completion.pendingRemotePropagationAndReadback, [
     "rss.com",
     "spotify",
