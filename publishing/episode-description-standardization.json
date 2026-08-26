@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "standardizationId": "all-episode-description-standardization-2026-08-25",
-  "status": "site_data_applied_website_deployment_and_remote_propagation_pending",
+  "status": "site_and_initial_website_launch_verified_remote_propagation_pending",
   "recordedAt": "2026-08-26T01:40:44Z",
-  "updatedAt": "2026-08-26T04:53:53Z",
+  "updatedAt": "2026-08-26T05:06:15Z",
   "authorization": {
     "localPreparationAuthorized": true,
     "remoteWritesAuthorizedByThisReceipt": false,
@@ -20,7 +20,7 @@
     "hashStatus": "validated_against_final_revision_16_catalog"
   },
   "siteMigration": {
-    "status": "production_data_postconditions_applied_website_deployment_pending",
+    "status": "production_data_and_initial_website_launch_verified",
     "migrationArtifact": "supabase/migrations/20260826004500_backfill_episode_affiliate_references.sql",
     "migrationArtifactSha256": "a70e259745dcd792a3684568a6b3b5945b8fcbc0c4beaf790a004573d4ff2dfb",
     "migrationArtifactStatus": "exact_data_postconditions_applied_via_idempotent_server_side_api_and_read_back",
@@ -36,8 +36,52 @@
       "affiliateProductEpisodeLinksTotal": 13,
       "catalogVerifier": "passed"
     },
-    "websiteDeployed": false,
-    "websiteReadbackComplete": false
+    "websiteDeployed": true,
+    "websiteReadbackComplete": true,
+    "initialWebsiteLaunch": {
+      "sourcePullRequest": 28,
+      "releaseCommit": "5c53aa7e153f848d2956b7384969680d0f6ead0b",
+      "guardedWorkflowRunId": 32932213291,
+      "guardedDeploymentId": 6097420330,
+      "deploymentStateAtReadback": "success_and_active",
+      "deployedAt": "2026-08-26T04:59:55Z",
+      "publicReadbackAt": "2026-08-26T05:06:15Z",
+      "apexHttpStatus": 200,
+      "wwwHttpStatus": 301,
+      "wwwRedirectTarget": "https://drmexperienced.com/",
+      "verifiedRouteCount": 8,
+      "verifiedRoutes": [
+        "/",
+        "/media/",
+        "/episodes/",
+        "/episodes/episode-3-insomnia/",
+        "/episodes/episode-4-emf/",
+        "/episodes/episode-8-food-and-the-brain/",
+        "/affiliates/",
+        "/about/"
+      ],
+      "affiliateAssetHttpStatuses": {
+        "purity-coffee.png": 200,
+        "desbio-dbscript.png": 200,
+        "best365labs.svg": 200
+      },
+      "contentReadback": {
+        "episode3DesbioLinksPresent": true,
+        "episode3ResourceNoteCorrected": true,
+        "episode4ResourceNoteCorrected": true,
+        "episode8VimeoLinkPresent": true,
+        "episode8SpotifyLinkPresent": true,
+        "episode8MediaOutsideDisclosures": true
+      },
+      "responsiveReadback": {
+        "viewportWidthsPx": [320, 390],
+        "horizontalOverflow": false,
+        "mobileMenuAnimationAndFocusReturn": true,
+        "heroParallaxActivatesImmediately": true,
+        "footerAndNewsletterCentered": true
+      },
+      "notes": "This object records the initial PR 28 launch artifact and public readback. Later evidence-only commits do not invalidate the release evidence."
+    }
   },
   "policy": {
     "scopeEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7, 8],
@@ -226,8 +270,11 @@
     },
     "website": {
       "role": "published_website_projection",
-      "status": "source_prepared_not_deployed_or_read_back",
-      "productionReadbackComplete": false
+      "status": "initial_launch_complete_verified",
+      "productionReadbackComplete": true,
+      "releaseCommit": "5c53aa7e153f848d2956b7384969680d0f6ead0b",
+      "guardedWorkflowRunId": 32932213291,
+      "guardedDeploymentId": 6097420330
     },
     "amazon": {
       "role": "rss_fanout",
@@ -237,10 +284,10 @@
   },
   "completion": {
     "prepared": ["catalog_revision_16", "website_source"],
-    "verifiedComplete": ["supabase_website_data_backfill"],
+    "verifiedComplete": ["supabase_website_data_backfill", "website_initial_launch"],
     "pendingRemotePropagationAndReadback": ["rss.com", "spotify", "apple", "youtube", "vimeo"],
     "manualOrExcluded": ["rumble"],
-    "pendingProductionApplicationAndReadback": ["website"],
+    "pendingProductionApplicationAndReadback": [],
     "notOnboarded": ["amazon"]
   }
 }

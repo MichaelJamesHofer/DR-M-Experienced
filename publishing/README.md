@@ -18,13 +18,13 @@ remain pending in that historical receipt.
 The current all-episode description standardization is tracked separately in
 `publishing/episode-description-standardization.json` for catalog revision 16.
 The website-data backfill is applied and read back in production Supabase; the
-website deployment remains pending at this checkpoint. RSS.com, Spotify, Apple,
-YouTube, and Vimeo have not received or read back the revision-16 descriptions.
-Rumble is excluded from the automated rollout and remains a future human-only
-restaging task; Episode 8 is not onboarded there. Paid-promotion review remains
-pending for Episodes 1-7.
-Nothing in the preparation receipt authorizes a remote write, production
-deployment, new episode, GUID change, or remote-ID change.
+initial website launch from PR 28 is deployed and publicly verified. RSS.com,
+Spotify, Apple, YouTube, and Vimeo have not received or read back the revision-16
+descriptions. Rumble is excluded from the automated rollout and remains a
+future human-only restaging task; Episode 8 is not onboarded there.
+Paid-promotion review remains pending for Episodes 1-7. The receipt records
+evidence only; it does not itself authorize distributor writes, new episodes,
+GUID changes, or remote-ID changes.
 
 Catalog revision 12 mounted the exact Show Brand Package `1.0.0-rc1` hashes for
 local review without granting remote publishing approval. Keep `episodeNumber`
@@ -213,11 +213,13 @@ August 8.
   historical evidence rather than current all-episode parity.
 - Catalog revision 16 prepares a uniform description structure for Episodes
   1-8. The corresponding website-data backfill is applied and independently
-  read back in production Supabase; website deployment remains pending at this
-  checkpoint. RSS.com, Spotify, Apple, YouTube, and Vimeo propagation/readback
-  remain pending; Rumble is excluded from automation and deferred to a future
-  manual restaging. Paid-promotion review remains pending for Episodes 1-7.
-  Track this rollout only in
+  read back in production Supabase. PR 28, guarded workflow `32932213291`, and
+  deployment `6097420330` record the initial website launch; the apex, eight
+  core routes, migrated Episode 3/4 content, affiliate assets, and 320/390-pixel
+  layouts were publicly verified. RSS.com, Spotify, Apple, YouTube, and Vimeo
+  propagation/readback remain pending; Rumble is excluded from automation and
+  deferred to a future manual restaging. Paid-promotion review remains pending
+  for Episodes 1-7. Track this rollout only in
   `publishing/episode-description-standardization.json`.
 - The three short-form website routes are deployed, sitemap-indexed, and verified
   at 320, 390, and 1440 pixels with exact Vimeo playback bindings.
