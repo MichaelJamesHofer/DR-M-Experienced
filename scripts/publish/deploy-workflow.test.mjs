@@ -36,6 +36,9 @@ test("successful deployment is followed by exact public feed verification", () =
     /outputs:\n\s+apple_feed_sha256: \$\{\{ steps\.apple_feed_evidence\.outputs\.sha256 \}\}/,
   );
   assert.match(build, /id: apple_feed_evidence/);
+  assert.match(build, /npm run generate:authorized-apple-subtree/);
+  assert.match(build, /npm run verify:authorized-apple-subtree/);
+  assert.doesNotMatch(build, /npm run generate:apple-feed/);
   assert.match(build, /sha256sum out\/apple-podcasts\/feed\.xml/);
   assert.match(build, /echo "sha256=\$sha256" >> "\$GITHUB_OUTPUT"/);
   assert.match(deploy, /needs: build/);
@@ -50,6 +53,6 @@ test("successful deployment is followed by exact public feed verification", () =
   );
   assert.match(
     verification,
-    /run: npm run verify:apple-feed-deployment/,
+    /run: npm run verify:apple-authorized-subtree-deployment/,
   );
 });

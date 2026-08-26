@@ -1,0 +1,118 @@
+{
+  "$schema": "./apple-republish-canary-prototype.schema.json",
+  "schemaVersion": 1,
+  "mode": "apple_only_single_episode_republish_canary_prototype",
+  "status": "local_artifact_validated_public_path_not_deployed_or_authorized",
+  "catalogRevision": 16,
+  "sourceFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+  "activeOverlayConfigPath": "publishing/apple-feed-overlay.json",
+  "activeOverlayConfigSha256": "9d092e22853789899f6a8528a19c10c1a765118e71082c7310feb5b1e8d3d2ac",
+  "artifactLayout": {
+    "productionArtifactRoot": "out",
+    "requiredBuiltSiteSentinels": ["index.html", "CNAME"],
+    "feedRelativePath": "apple-podcasts/feed.xml",
+    "mediaRelativePath": "apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mp3",
+    "writeMethod": "same_directory_temporary_file_then_atomic_link_no_replace",
+    "overwriteExistingMedia": false,
+    "prototypeRootMustRemainOutsideProductionArtifact": true
+  },
+  "appleShowId": "1870433419",
+  "appleContentProviderId": "128469457",
+  "canary": {
+    "episodeNumber": 1,
+    "rssComEpisodeId": "3050766",
+    "appleEpisodeId": "1000746628307",
+    "spotifyEpisodeId": "7cAdb8GE4khC9EYKAjmYuc",
+    "title": "Brain Fog, Part 1 - Is Your Brain in a Fog?",
+    "link": "https://rss.com/podcasts/dr-m-experienced/3050766",
+    "canonicalGuid": "c9b853b6-a828-4012-9998-217919ff9163",
+    "activeAppleGuid": "59063e08-e4a6-4e56-b7ec-d2a66d69beb8",
+    "candidateGuid": {
+      "algorithm": "rfc4122_uuid_v5",
+      "namespace": "6ba7b811-9dad-11d1-80b4-00c04fd430c8",
+      "name": "https://drmexperienced.com/apple-podcasts/republish-canary/v1/show/1870433419/episode/1/source/c9b853b6-a828-4012-9998-217919ff9163/apple/59063e08-e4a6-4e56-b7ec-d2a66d69beb8",
+      "value": "4111e441-c542-50f8-95de-3031c2b27f56",
+      "automaticRegenerationAllowed": false,
+      "reusableForAnotherEpisode": false
+    },
+    "sourceEnclosure": {
+      "url": "https://content.rss.com/episodes/397420/3050766/dr-m-experienced/2026_08_07_05_37_14_57d1a0c9-5f80-4880-bc5d-57f7eeef7cb5.mp3",
+      "length": 16339867,
+      "mediaType": "audio/mpeg",
+      "sha256": "9f9402d98ec297cd350e6c6859e1d79459ca5e35ba44bbb4797eb4ef09a1c65b"
+    },
+    "candidateEnclosure": {
+      "url": "https://drmexperienced.com/apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mp3",
+      "identityMechanism": "direct_immutable_content_hash_pages_path",
+      "feedUrlDistinctFromSource": true,
+      "finalUrlMustRemainExactWithoutRedirect": true,
+      "publicHttpValidated": false,
+      "length": 16339867,
+      "mediaType": "audio/mpeg",
+      "sha256": "9f9402d98ec297cd350e6c6859e1d79459ca5e35ba44bbb4797eb4ef09a1c65b"
+    }
+  },
+  "validationEvidence": {
+    "validatedAt": "2026-08-26T20:56:57Z",
+    "method": "read_only_source_and_local_candidate_range_full_download_hash_and_decode_validation",
+    "rangeHeader": "bytes=0-4095",
+    "rangeStatus": 206,
+    "rangeProbeByteCount": 4096,
+    "rangeProbeSha256": "aaf0406016a195d88db1ff3f5561e4161f39cf07ef4f9a1cf125a44957249159",
+    "fullDownloadStatus": 200,
+    "sourceFullDownloadByteCount": 16339867,
+    "sourceFullDownloadSha256": "9f9402d98ec297cd350e6c6859e1d79459ca5e35ba44bbb4797eb4ef09a1c65b",
+    "sourceFullDecodePassed": true,
+    "sourceCodec": "mp3",
+    "sourceAudioSampleRateHz": 44100,
+    "sourceAudioChannels": 2,
+    "sourceAudioNominalBitrate": 128000,
+    "sourceContainerBitrate": 128004,
+    "sourceDurationSeconds": "1021.204898",
+    "candidateArtifactBytesAreRequiredToMatchSource": true,
+    "localCandidateArtifactGenerated": true,
+    "localCandidateArtifactByteCount": 16339867,
+    "localCandidateArtifactSha256": "9f9402d98ec297cd350e6c6859e1d79459ca5e35ba44bbb4797eb4ef09a1c65b",
+    "localCandidateArtifactFullDecodePassed": true,
+    "localCandidateOverlaySha256": "fea3c6bf7c2485d93ea9c7768f41b717c1244a8982488053883536343e582af7",
+    "candidatePublicHttpValidated": false,
+    "appleIdentityTreatmentVerified": false
+  },
+  "identityGates": {
+    "singleCanaryEpisodeNumber": 1,
+    "preserveAppleShowId": true,
+    "existingAppleEpisodeRecordPreservation": "not_guaranteed_new_guid_and_enclosure_may_create_a_new_apple_episode_id",
+    "replacementAppleEpisodeIdMayDiffer": true,
+    "expectedReplacementAppleEpisodeId": null,
+    "blockIfAnyOtherEpisodeGuidChanges": true,
+    "blockIfAnyOtherEpisodeEnclosureChanges": true,
+    "canonicalRssComFeedMustRemainUnchanged": true,
+    "spotifyMustRemainUnchanged": true
+  },
+  "reversalGates": {
+    "preActivation": {
+      "restoreGuid": "59063e08-e4a6-4e56-b7ec-d2a66d69beb8",
+      "restoreEnclosureUrl": "https://content.rss.com/episodes/397420/3050766/dr-m-experienced/2026_08_07_05_37_14_57d1a0c9-5f80-4880-bc5d-57f7eeef7cb5.mp3",
+      "requireByteExactActiveOverlayRestoration": true,
+      "candidateMediaRemovalAllowedOnlyIfNeverReferencedByPublishedFeed": true
+    },
+    "postActivation": {
+      "candidateMediaMustRemainLiveIndefinitely": true,
+      "blindHistoricalGuidRestoreProhibited": true,
+      "containmentMethod": "retain_candidate_guid_and_enclosure_add_itunes_block_yes",
+      "containmentRequiresFreshAttendedOwnerApproval": true
+    },
+    "requireFreshActiveOverlaySnapshotBeforeAnyRemoteAction": true,
+    "containmentMayBeTriggeredByDuplicatePublicEpisode": true
+  },
+  "remoteActionGates": {
+    "prototypeArtifactMayDeploy": false,
+    "appleFeedEditApproved": false,
+    "appleFeedRefreshApproved": false,
+    "appleEpisodeDeleteApproved": false,
+    "appleEpisodeArchiveApproved": false,
+    "canonicalRssComMutationApproved": false,
+    "spotifyMutationApproved": false,
+    "requiresFreshAttendedOwnerApproval": true
+  }
+}

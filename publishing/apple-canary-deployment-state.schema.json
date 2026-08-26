@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://drmexperienced.com/schemas/apple-canary-deployment-state.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "mode",
+    "phase",
+    "orderedPhases",
+    "allowedForwardTransitions",
+    "feedSnapshotByPhase",
+    "sealedFeedSnapshots",
+    "sealedMediaAsset",
+    "mediaStagedPublicEvidence",
+    "transitionAuthorization"
+  ],
+  "properties": {
+    "$schema": { "const": "./apple-canary-deployment-state.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "mode": { "const": "apple_canary_authorized_subtree_state_machine" },
+    "phase": { "enum": ["closed", "media_staged", "active", "contained"] },
+    "orderedPhases": { "const": ["closed", "media_staged", "active", "contained"] },
+    "allowedForwardTransitions": {
+      "const": ["closed_to_media_staged", "media_staged_to_active", "active_to_contained"]
+    },
+    "feedSnapshotByPhase": {
+      "const": {
+        "closed": "historical",
+        "media_staged": "historical",
+        "active": "active",
+        "contained": "contained"
+      }
+    },
+    "sealedFeedSnapshots": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["storageEncoding", "historical", "active", "contained"],
+      "properties": {
+        "storageEncoding": {
+          "const": "utf8_with_one_terminal_lf_removed_before_publish"
+        },
+        "historical": { "$ref": "#/$defs/feedSnapshot" },
+        "active": { "$ref": "#/$defs/feedSnapshot" },
+        "contained": { "$ref": "#/$defs/feedSnapshot" }
+      }
+    },
+    "sealedMediaAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "length", "sha256"],
+      "properties": {
+        "path": {
+          "oneOf": [
+            { "type": "null" },
+            { "type": "string", "pattern": "^publishing/apple-republish-canary-assets/[a-z0-9-]+\\.mp3$" }
+          ]
+        },
+        "length": { "const": 16339867 },
+        "sha256": { "const": "9f9402d98ec297cd350e6c6859e1d79459ca5e35ba44bbb4797eb4ef09a1c65b" }
+      }
+    },
+    "mediaStagedPublicEvidence": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/publicMediaEvidence" }
+      ]
+    },
+    "transitionAuthorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approvedTargetPhase", "recordedAt", "authorizedBy", "approvalBasis"],
+      "properties": {
+        "approvedTargetPhase": { "enum": ["closed", "media_staged", "active", "contained"] },
+        "recordedAt": { "type": ["string", "null"], "format": "date-time" },
+        "authorizedBy": { "type": ["string", "null"], "minLength": 1 },
+        "approvalBasis": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "phase": { "const": "closed" } },
+        "required": ["phase"]
+      },
+      "then": {
+        "properties": { "mediaStagedPublicEvidence": { "type": "null" } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "phase": { "enum": ["active", "contained"] } },
+        "required": ["phase"]
+      },
+      "then": {
+        "properties": {
+          "mediaStagedPublicEvidence": { "$ref": "#/$defs/publicMediaEvidence" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "feedSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "storedSha256", "publishedSha256"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^publishing/apple-republish-canary-snapshots/[a-z-]+\\.xml$"
+        },
+        "storedSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "publishedSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "publicMediaEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verifiedAt",
+        "publicUrl",
+        "directNoRedirect",
+        "headStatus",
+        "acceptRanges",
+        "verifiedRangeCount",
+        "fullStatus",
+        "bytes",
+        "sha256",
+        "historicalFeedSha256"
+      ],
+      "properties": {
+        "verifiedAt": { "type": "string", "format": "date-time" },
+        "publicUrl": {
+          "const": "https://drmexperienced.com/apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mp3"
+        },
+        "directNoRedirect": { "const": true },
+        "headStatus": { "const": 200 },
+        "acceptRanges": { "const": true },
+        "verifiedRangeCount": { "const": 3 },
+        "fullStatus": { "const": 200 },
+        "bytes": { "const": 16339867 },
+        "sha256": {
+          "const": "9f9402d98ec297cd350e6c6859e1d79459ca5e35ba44bbb4797eb4ef09a1c65b"
+        },
+        "historicalFeedSha256": {
+          "const": "8ca7b219593efee9920fbe2267f7e11796e72a3b8865f46865b06f36257b103b"
+        }
+      }
+    }
+  }
+}

@@ -12,7 +12,7 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 25
     permissions:
       contents: read
       pages: write
@@ -21,6 +21,21 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Checkout current Apple feed authority
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Download and verify preserved site
         env:
           GH_TOKEN: ${{ github.token }}
@@ -37,6 +52,25 @@ jobs:
           test -f rollback-package/site/CNAME
           grep -Fxq drmexperienced.com rollback-package/site/CNAME
 
+      - name: Generate and verify current authorized Apple subtree
+        run: |
+          npm run generate:authorized-apple-subtree
+          npm run verify:authorized-apple-subtree
+
+      - name: Inject and verify current authorized Apple subtree
+        id: apple_feed_evidence
+        run: |
+          set -euo pipefail
+          rm -rf rollback-package/site/apple-podcasts
+          cp -a out/apple-podcasts rollback-package/site/apple-podcasts
+          npm run verify:authorized-apple-subtree -- --site-root=rollback-package/site
+          sha256="$(sha256sum rollback-package/site/apple-podcasts/feed.xml | cut -d ' ' -f 1)"
+          if ! [[ "$sha256" =~ ^[a-f0-9]{64}$ ]]; then
+            echo "::error::Could not calculate the rollback Apple feed SHA-256."
+            exit 1
+          fi
+          echo "sha256=$sha256" >> "$GITHUB_OUTPUT"
+
       - name: Upload preserved site
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
@@ -45,3 +79,8 @@ jobs:
       - name: Deploy preserved site
         id: deployment
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+
+      - name: Verify public Apple feed after rollback
+        env:
+          EXPECTED_APPLE_FEED_SHA256: ${{ steps.apple_feed_evidence.outputs.sha256 }}
+        run: npm run verify:apple-authorized-subtree-deployment
