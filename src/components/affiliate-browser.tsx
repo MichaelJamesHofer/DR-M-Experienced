@@ -585,25 +585,31 @@ function ProductCard({
           </div>
         </div>
 
-        <div className="mt-4 border-t border-border pt-4 xl:min-h-[6.5rem]">
-          <p className="text-left text-body-sm leading-6 text-foreground-muted">
+        <div className="mt-4 flex items-center justify-center border-t border-border pt-4 xl:min-h-[6.5rem]">
+          <p className="w-full text-center text-body-sm leading-6 text-foreground-muted">
             {product.summary}
           </p>
         </div>
 
         {(product.couponCode || product.discountNote || product.purchaseNote) && (
-          <div className="mt-4 border-t border-border pt-3 text-left text-body-sm leading-6 text-foreground-muted xl:min-h-[5.25rem]">
-            <p className="mb-1 text-caption font-semibold uppercase text-foreground-subtle">
+          <details className="group mt-4 border-t border-border">
+            <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 py-3 text-body-sm font-semibold text-foreground transition-colors hover:text-primary [&::-webkit-details-marker]:hidden">
               Partner details
-            </p>
-            {product.couponCode && (
-              <p>
-                Code: <span className="font-bold text-foreground">{product.couponCode}</span>
-              </p>
-            )}
-            {product.discountNote && <p>{product.discountNote}</p>}
-            {product.purchaseNote && <p>{product.purchaseNote}</p>}
-          </div>
+              <ChevronDown
+                className="h-4 w-4 shrink-0 text-foreground-subtle transition-transform group-open:rotate-180"
+                aria-hidden="true"
+              />
+            </summary>
+            <div className="space-y-1 border-t border-border py-4 text-left text-body-sm leading-6 text-foreground-muted">
+              {product.couponCode && (
+                <p>
+                  Code: <span className="font-bold text-foreground">{product.couponCode}</span>
+                </p>
+              )}
+              {product.discountNote && <p>{product.discountNote}</p>}
+              {product.purchaseNote && <p>{product.purchaseNote}</p>}
+            </div>
+          </details>
         )}
 
         {(product.featuredProducts?.length ?? 0) > 0 && (
@@ -631,26 +637,30 @@ function ProductCard({
 
         <div className="mt-auto pt-4">
           {relatedEpisodes.length > 0 && (
-            <div className="border-t border-border pt-3">
-              <p className="mb-1 text-caption font-semibold uppercase text-foreground-subtle">
+            <details className="group border-t border-border">
+              <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 py-3 text-body-sm font-semibold text-foreground transition-colors hover:text-primary [&::-webkit-details-marker]:hidden">
                 Referenced in
-              </p>
-              <div className="divide-y divide-border">
+                <ChevronDown
+                  className="h-4 w-4 shrink-0 text-foreground-subtle transition-transform group-open:rotate-180"
+                  aria-hidden="true"
+                />
+              </summary>
+              <div className="divide-y divide-border border-t border-border py-1">
                 {relatedEpisodes.map((episode) => (
                   <Link
                     key={episode.slug}
                     href={`/episodes/${episode.slug}`}
-                    className="group flex min-h-11 items-center justify-between gap-4 py-2 text-body-sm text-foreground-muted transition-colors duration-200 hover:text-primary"
+                    className="group/episode flex min-h-11 items-center justify-between gap-4 py-2 text-body-sm text-foreground-muted transition-colors duration-200 hover:text-primary"
                   >
                     <span className="line-clamp-1">{episodeDisplayTitle(episode)}</span>
                     <ArrowRight
-                      className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-1"
+                      className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover/episode:translate-x-1"
                       aria-hidden="true"
                     />
                   </Link>
                 ))}
               </div>
-            </div>
+            </details>
           )}
 
           <details className="group border-t border-border">
