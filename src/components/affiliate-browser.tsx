@@ -507,6 +507,12 @@ function ProductCard({
   const accent = brandProfile?.accent ?? "var(--color-primary)";
   const logoSrc = brandProfile?.logoSrc ?? product.imageUrl;
   const logoAlt = brandProfile?.logoAlt ?? product.name;
+  const fallbackMark = companyName
+    .split(/[\s/]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase())
+    .join("");
   const cardStyle = {
     "--affiliate-shift-x": "0px",
     "--affiliate-shift-y": "0px",
@@ -529,18 +535,20 @@ function ProductCard({
         style={{ backgroundColor: accent }}
       />
       <div className="flex min-w-0 flex-1 flex-col p-4 pl-5 sm:p-5 sm:pl-6">
-        <div className={logoSrc ? "grid gap-4 sm:grid-cols-[8.5rem_minmax(0,1fr)]" : ""}>
-          {logoSrc && (
-            <div
-              className="relative mx-auto flex aspect-[16/7] w-full max-w-[13rem] items-center justify-center overflow-hidden rounded-lg border p-3 transition-transform duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none sm:mx-0 sm:aspect-[4/3] sm:max-w-none"
-              style={{
-                backgroundColor: brandProfile?.logoSurface ?? "#ffffff",
-                borderColor: `color-mix(in srgb, ${accent} 48%, transparent)`,
-                boxShadow: `0 12px 28px color-mix(in srgb, ${accent} 14%, transparent)`,
-                transform:
-                  "translate3d(var(--affiliate-shift-x), var(--affiliate-shift-y), 0)",
-              }}
-            >
+        <div className="grid min-h-[15rem] items-center gap-4 sm:min-h-36 sm:grid-cols-[8.5rem_minmax(0,1fr)]">
+          <div
+            className="relative mx-auto flex h-28 w-full max-w-[13rem] items-center justify-center overflow-hidden rounded-lg border p-3 transition-transform duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none sm:max-w-none"
+            style={{
+              backgroundColor:
+                brandProfile?.logoSurface ??
+                `color-mix(in srgb, ${accent} 8%, var(--color-background))`,
+              borderColor: `color-mix(in srgb, ${accent} 48%, transparent)`,
+              boxShadow: `0 12px 28px color-mix(in srgb, ${accent} 14%, transparent)`,
+              transform:
+                "translate3d(var(--affiliate-shift-x), var(--affiliate-shift-y), 0)",
+            }}
+          >
+            {logoSrc ? (
               <Image
                 src={logoSrc}
                 alt={logoAlt}
@@ -549,10 +557,22 @@ function ProductCard({
                 sizes="(min-width: 640px) 136px, 208px"
                 unoptimized={logoSrc.endsWith(".svg")}
               />
-            </div>
-          )}
+            ) : (
+              <span
+                aria-hidden="true"
+                className="flex h-14 w-14 items-center justify-center rounded-full border text-heading font-bold tracking-wide"
+                style={{
+                  color: accent,
+                  borderColor: `color-mix(in srgb, ${accent} 46%, transparent)`,
+                  backgroundColor: `color-mix(in srgb, ${accent} 10%, transparent)`,
+                }}
+              >
+                {fallbackMark || "DR"}
+              </span>
+            )}
+          </div>
 
-          <div className="min-w-0 text-center sm:text-left">
+          <div className="flex min-h-24 min-w-0 flex-col justify-center text-center">
             <p className="mb-1 text-caption font-semibold uppercase text-primary">
               {product.category}
             </p>
@@ -565,26 +585,11 @@ function ProductCard({
           </div>
         </div>
 
-        <div className="mt-4 border-t border-border pt-4 xl:min-h-[6.5rem]">
-          <p className="text-left text-body-sm leading-6 text-foreground-muted">
+        <div className="mt-4 flex items-center justify-center border-t border-border pt-4 xl:min-h-[6.5rem]">
+          <p className="w-full text-center text-body-sm leading-6 text-foreground-muted">
             {product.summary}
           </p>
         </div>
-
-        {(product.couponCode || product.discountNote || product.purchaseNote) && (
-          <div className="mt-4 border-t border-border pt-3 text-left text-body-sm leading-6 text-foreground-muted xl:min-h-[5.25rem]">
-            <p className="mb-1 text-caption font-semibold uppercase text-foreground-subtle">
-              Partner details
-            </p>
-            {product.couponCode && (
-              <p>
-                Code: <span className="font-bold text-foreground">{product.couponCode}</span>
-              </p>
-            )}
-            {product.discountNote && <p>{product.discountNote}</p>}
-            {product.purchaseNote && <p>{product.purchaseNote}</p>}
-          </div>
-        )}
 
         {(product.featuredProducts?.length ?? 0) > 0 && (
           <div className="mt-4 min-w-0 border-t border-border pt-3 text-left">
@@ -609,28 +614,53 @@ function ProductCard({
           </div>
         )}
 
+        {(product.couponCode || product.discountNote || product.purchaseNote) && (
+          <details className="group mt-4 border-t border-border">
+            <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 py-3 text-body-sm font-semibold text-foreground transition-colors hover:text-primary [&::-webkit-details-marker]:hidden">
+              Partner details
+              <ChevronDown
+                className="h-4 w-4 shrink-0 text-foreground-subtle transition-transform group-open:rotate-180"
+                aria-hidden="true"
+              />
+            </summary>
+            <div className="space-y-1 border-t border-border py-4 text-left text-body-sm leading-6 text-foreground-muted">
+              {product.couponCode && (
+                <p>
+                  Code: <span className="font-bold text-foreground">{product.couponCode}</span>
+                </p>
+              )}
+              {product.discountNote && <p>{product.discountNote}</p>}
+              {product.purchaseNote && <p>{product.purchaseNote}</p>}
+            </div>
+          </details>
+        )}
+
         <div className="mt-auto pt-4">
           {relatedEpisodes.length > 0 && (
-            <div className="border-t border-border pt-3">
-              <p className="mb-1 text-caption font-semibold uppercase text-foreground-subtle">
+            <details className="group border-t border-border">
+              <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 py-3 text-body-sm font-semibold text-foreground transition-colors hover:text-primary [&::-webkit-details-marker]:hidden">
                 Referenced in
-              </p>
-              <div className="divide-y divide-border">
+                <ChevronDown
+                  className="h-4 w-4 shrink-0 text-foreground-subtle transition-transform group-open:rotate-180"
+                  aria-hidden="true"
+                />
+              </summary>
+              <div className="divide-y divide-border border-t border-border py-1">
                 {relatedEpisodes.map((episode) => (
                   <Link
                     key={episode.slug}
                     href={`/episodes/${episode.slug}`}
-                    className="group flex min-h-11 items-center justify-between gap-4 py-2 text-body-sm text-foreground-muted transition-colors duration-200 hover:text-primary"
+                    className="group/episode flex min-h-11 items-center justify-between gap-4 py-2 text-body-sm text-foreground-muted transition-colors duration-200 hover:text-primary"
                   >
                     <span className="line-clamp-1">{episodeDisplayTitle(episode)}</span>
                     <ArrowRight
-                      className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-1"
+                      className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover/episode:translate-x-1"
                       aria-hidden="true"
                     />
                   </Link>
                 ))}
               </div>
-            </div>
+            </details>
           )}
 
           <details className="group border-t border-border">

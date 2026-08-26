@@ -24,19 +24,18 @@ export function HeroParallaxArt() {
     const sectionElement: HTMLElement = section;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const coarsePointer = window.matchMedia("(hover: none), (pointer: coarse)");
-    let sectionTop = 0;
+    let motionStart = 0;
     let motionRange = 1;
     let currentProgress = 0;
     let targetProgress = 0;
     let frame = 0;
     let isVisible = false;
 
-    const motionAllowed = () => !reducedMotion.matches && !coarsePointer.matches;
+    const motionAllowed = () => !reducedMotion.matches;
 
     function renderFrame() {
       frame = 0;
-      currentProgress += (targetProgress - currentProgress) * 0.2;
+      currentProgress += (targetProgress - currentProgress) * 0.3;
 
       if (Math.abs(targetProgress - currentProgress) < 0.001) {
         currentProgress = targetProgress;
@@ -57,14 +56,16 @@ export function HeroParallaxArt() {
       if (!motionAllowed() || !isVisible) return;
       targetProgress = Math.min(
         1,
-        Math.max(0, (window.scrollY - sectionTop) / motionRange)
+        Math.max(0, (window.scrollY - motionStart) / motionRange)
       );
       queueFrame();
     }
 
     function measureScene() {
-      sectionTop = sectionElement.getBoundingClientRect().top + window.scrollY;
-      motionRange = Math.max(1, sectionElement.offsetHeight * 0.7);
+      const sectionTop = sectionElement.getBoundingClientRect().top + window.scrollY;
+      const stickyHeaderHeight = document.querySelector<HTMLElement>("header")?.offsetHeight ?? 0;
+      motionStart = Math.max(0, sectionTop - stickyHeaderHeight);
+      motionRange = Math.max(1, sectionElement.offsetHeight * 0.6);
       updateTarget();
     }
 
@@ -97,7 +98,6 @@ export function HeroParallaxArt() {
     window.addEventListener("scroll", updateTarget, { passive: true });
     window.addEventListener("resize", measureScene, { passive: true });
     reducedMotion.addEventListener("change", updateMotionPolicy);
-    coarsePointer.addEventListener("change", updateMotionPolicy);
     measureScene();
 
     return () => {
@@ -105,7 +105,6 @@ export function HeroParallaxArt() {
       window.removeEventListener("scroll", updateTarget);
       window.removeEventListener("resize", measureScene);
       reducedMotion.removeEventListener("change", updateMotionPolicy);
-      coarsePointer.removeEventListener("change", updateMotionPolicy);
       if (frame) window.cancelAnimationFrame(frame);
     };
   }, []);

@@ -13,6 +13,59 @@ const episodeEnrichment = JSON.parse(
 );
 const episode8References = episodeEnrichment["1221293570"].references;
 
+const expectedOlderAffiliateReferences = new Map([
+  ["1156414707", [
+    ["Affiliate and product guide", "https://drmexperienced.com/affiliates/"],
+    ["Related product guide: DesBio / DBscript", "https://drmexperienced.com/affiliates/#desbio-dbscript"],
+    ["Related product guide: Best365Labs", "https://drmexperienced.com/affiliates/#best365labs"],
+  ]],
+  ["1159441883", [
+    ["Affiliate and product guide", "https://drmexperienced.com/affiliates/"],
+    ["Related product guide: DesBio / DBscript", "https://drmexperienced.com/affiliates/#desbio-dbscript"],
+    ["Related product guide: Best365Labs", "https://drmexperienced.com/affiliates/#best365labs"],
+  ]],
+  ["1179740758", [
+    ["Affiliate and product guide", "https://drmexperienced.com/affiliates/"],
+    ["Mentioned product guide: BlockBlueLight", "https://drmexperienced.com/affiliates/#block-blue-light"],
+    ["Mentioned product guide: DesBio / DBscript", "https://drmexperienced.com/affiliates/#desbio-dbscript"],
+  ]],
+  ["1179956166", [
+    ["Affiliate and product guide", "https://drmexperienced.com/affiliates/"],
+    ["Mentioned product guide: Airestech", "https://drmexperienced.com/affiliates/#airestech"],
+    ["Related product guide: BlockBlueLight", "https://drmexperienced.com/affiliates/#block-blue-light"],
+    ["Related product guide: Safe Living Technologies", "https://drmexperienced.com/affiliates/#safe-living-technologies"],
+  ]],
+  ["1204939658", [
+    ["Affiliate and product guide", "https://drmexperienced.com/affiliates/"],
+    ["Related product guide: Best365Labs", "https://drmexperienced.com/affiliates/#best365labs"],
+  ]],
+  ["1204939692", [
+    ["Affiliate and product guide", "https://drmexperienced.com/affiliates/"],
+  ]],
+  ["1205004739", [
+    ["Affiliate and product guide", "https://drmexperienced.com/affiliates/"],
+  ]],
+]);
+
+test("older episode resources distinguish mentioned products from related guide material", () => {
+  for (const [vimeoId, expected] of expectedOlderAffiliateReferences) {
+    const actual = episodeEnrichment[vimeoId].references
+      .filter(({ url }) => url.startsWith("https://drmexperienced.com/affiliates/"))
+      .map(({ label, url }) => [label, url]);
+    assert.deepEqual(actual, expected, `affiliate references drifted for Vimeo ${vimeoId}`);
+  }
+});
+
+test("older website notes do not direct listeners to stale pinned comments", () => {
+  for (const [vimeoId] of expectedOlderAffiliateReferences) {
+    assert.doesNotMatch(
+      JSON.stringify(episodeEnrichment[vimeoId]),
+      /pinned comment|coming soon|FMI Center for Optimal Health/i,
+      `stale editorial note remains for Vimeo ${vimeoId}`,
+    );
+  }
+});
+
 test("Episode 8 references group into their intended presentation regions", () => {
   const grouped = groupEpisodeReferences(
     episode8References,

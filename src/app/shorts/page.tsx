@@ -29,7 +29,7 @@ export default function ShortsPage() {
             <Link
               key={item.id}
               href={item.websitePath}
-              className="group overflow-hidden rounded-lg border border-border bg-surface transition-colors hover:border-primary"
+              className="group overflow-hidden rounded-lg border border-border bg-surface transition-[border-color,box-shadow] duration-300 hover:border-primary hover:shadow-glow-sm focus-visible:border-primary focus-visible:shadow-glow-sm"
             >
               <div className={`relative w-full overflow-hidden bg-surface-elevated ${portrait ? "aspect-[9/16]" : "aspect-video"}`}>
                 <Image

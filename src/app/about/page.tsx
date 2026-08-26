@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ExternalLink } from "lucide-react";
-import { AnimatedDisclosure } from "@/app/about/animated-disclosure";
+import { AnimatedDisclosure } from "@/components/animated-disclosure";
 import { MEDIA_FEATURES } from "@/data/media";
 import { physicianProfileExperience, physicianProfileYears } from "@/data/physician-profile";
 
@@ -164,7 +164,7 @@ export default function AboutPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 pb-12 pt-8 sm:px-6 sm:pb-16 sm:pt-12">
       <section className="border-b border-border pb-10 sm:pb-14">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start lg:gap-14">
+        <div className="grid gap-10 min-[900px]:grid-cols-[minmax(0,1fr)_280px] min-[900px]:items-start min-[900px]:gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-14">
           <div>
             <p className="mb-3 text-caption font-semibold uppercase text-primary">
               Meet the physician
@@ -195,7 +195,7 @@ export default function AboutPage() {
               </Link>
             </nav>
 
-            <div className="mt-8 grid gap-x-6 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="mt-8 grid gap-x-6 sm:grid-cols-2">
               <div className="border-t border-border py-4">
                 <p className="text-heading-sm font-bold text-foreground">{physicianProfileExperience.patientCare}</p>
                 <p className="mt-1 text-caption text-foreground-muted">Patient care</p>
@@ -212,8 +212,8 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <aside className="grid grid-cols-[112px_minmax(0,1fr)] gap-5 sm:grid-cols-[160px_minmax(0,1fr)] lg:block">
-            <div className="aspect-square overflow-hidden rounded-lg border border-border bg-white lg:mb-5">
+          <aside className="grid grid-cols-[112px_minmax(0,1fr)] gap-5 sm:grid-cols-[160px_minmax(0,1fr)] min-[900px]:block">
+            <div className="aspect-square overflow-hidden rounded-lg border border-border bg-white min-[900px]:mb-5">
               <Image
                 src="/images/davidmusnicksketch.jpg"
                 alt="Dr. David Musnick"
@@ -245,7 +245,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="grid gap-6 border-b border-border py-10 sm:py-14 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-12">
+      <section className="grid gap-7 border-b border-border py-10 sm:py-14 min-[900px]:grid-cols-[220px_minmax(0,1fr)] min-[900px]:gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-12">
         <div>
           <p className="mb-3 text-caption font-semibold uppercase text-primary">
             Clinical biography
@@ -278,8 +278,11 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section id="clinical-domains" className="scroll-mt-28 border-b border-border py-10 sm:py-14">
-        <div className="mb-7 max-w-3xl">
+      <section
+        id="clinical-domains"
+        className="grid scroll-mt-28 gap-7 border-b border-border py-10 sm:py-14 min-[900px]:grid-cols-[220px_minmax(0,1fr)] min-[900px]:gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-12"
+      >
+        <div>
           <p className="mb-3 text-caption font-semibold uppercase text-primary">
             Clinical focus
           </p>
@@ -291,20 +294,20 @@ export default function AboutPage() {
             teaching, and educational episodes.
           </p>
         </div>
-        <div className="grid border-b border-border sm:grid-cols-2 sm:gap-x-8">
+        <ol className="grid border-b border-border sm:grid-cols-2 sm:gap-x-8">
           {specialtyHighlights.map((item, index) => (
-            <div key={index} className="flex gap-4 border-t border-border py-4">
+            <li key={item} className="flex gap-4 border-t border-border py-4">
               <span className="w-6 shrink-0 text-caption font-semibold text-primary">
                 {String(index + 1).padStart(2, "0")}
               </span>
               <p className="text-body-sm leading-relaxed text-foreground-muted">{item}</p>
-            </div>
+            </li>
           ))}
-        </div>
+        </ol>
       </section>
 
-      <section className="border-b border-border py-10 sm:py-14">
-        <div className="mb-7 max-w-3xl">
+      <section className="grid gap-7 border-b border-border py-10 sm:py-14 min-[900px]:grid-cols-[220px_minmax(0,1fr)] min-[900px]:gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-12">
+        <div>
           <p className="mb-3 text-caption font-semibold uppercase text-primary">
             Treatment tools
           </p>
@@ -315,17 +318,17 @@ export default function AboutPage() {
             Each plan blends hands-on diagnostics with precise therapeutic tools. Here are the modalities he personally delivers:
           </p>
         </div>
-        <div className="grid border-b border-border sm:grid-cols-2 sm:gap-x-8 lg:grid-cols-3">
-          {treatmentList.map((treatment, index) => (
-            <p key={index} className="border-t border-border py-3 text-body-sm leading-relaxed text-foreground-muted">
+        <ul className="grid border-b border-border sm:grid-cols-2 sm:gap-x-8">
+          {treatmentList.map((treatment) => (
+            <li key={treatment} className="border-t border-border py-3 text-body-sm leading-relaxed text-foreground-muted">
               {treatment}
-            </p>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
 
-      <section className="border-b border-border py-10 sm:py-14">
-        <div className="mb-7 max-w-3xl">
+      <section className="grid gap-7 border-b border-border py-10 sm:py-14 min-[900px]:grid-cols-[220px_minmax(0,1fr)] min-[900px]:gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-12">
+        <div>
           <p className="mb-3 text-caption font-semibold uppercase text-primary">
             Orthopedic &amp; sports medicine
           </p>
@@ -336,12 +339,12 @@ export default function AboutPage() {
             Every evaluation captures the involved tissues, neurologic tone, and pain-processing patterns before layering interventions.
           </p>
         </div>
-        <div className="grid lg:grid-cols-2 lg:gap-x-10">
+        <div className="grid sm:grid-cols-2 sm:gap-x-8">
           {sportsFocus.map((focus) => (
             <AnimatedDisclosure
               key={focus.title}
               label={focus.title}
-              className="border-t border-border last:border-b lg:[&:nth-last-child(-n+2)]:border-b"
+              className="border-t border-border last:border-b sm:[&:nth-last-child(-n+2)]:border-b"
               triggerClassName="min-h-14 gap-4 py-3 text-body font-semibold text-foreground"
             >
               <p className="pb-5 pr-9 text-body-sm leading-relaxed text-foreground-muted">
@@ -352,8 +355,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="border-b border-border py-10 sm:py-14">
-        <div className="mb-7 max-w-3xl">
+      <section className="grid gap-7 border-b border-border py-10 sm:py-14 min-[900px]:grid-cols-[220px_minmax(0,1fr)] min-[900px]:gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-12">
+        <div>
           <p className="mb-3 text-caption font-semibold uppercase text-primary">
             Functional medicine focus
           </p>
@@ -364,32 +367,47 @@ export default function AboutPage() {
             His functional immunology and neurology background lets him map how each system interacts with orthopedic complaints.
           </p>
         </div>
-        <div className="grid gap-8 lg:grid-cols-3 lg:gap-10">
-          {functionalExpertise.map((area) => (
-            <div key={area.title}>
+        <div className="grid gap-x-8 gap-y-7 sm:grid-cols-2">
+          {functionalExpertise.map((area, areaIndex) => (
+            <div
+              key={area.title}
+              className={areaIndex === functionalExpertise.length - 1 ? "sm:col-span-2" : ""}
+            >
               <h3 className="border-t border-border py-4 text-heading font-semibold text-foreground">
                 {area.title}
               </h3>
-              {area.items.map((item) => (
-                <AnimatedDisclosure
-                  key={item.label}
-                  label={item.label}
-                  className="border-t border-border last:border-b"
-                  triggerClassName="min-h-12 gap-3 py-3 text-body-sm font-semibold text-foreground"
-                  iconClassName="h-4 w-4"
-                >
-                  <p className="pb-4 pr-7 text-body-sm leading-relaxed text-foreground-muted">
-                    {item.detail}
-                  </p>
-                </AnimatedDisclosure>
-              ))}
+              <div
+                className={
+                  areaIndex === functionalExpertise.length - 1
+                    ? "sm:grid sm:grid-cols-2 sm:gap-x-8"
+                    : ""
+                }
+              >
+                {area.items.map((item) => (
+                  <AnimatedDisclosure
+                    key={item.label}
+                    label={item.label}
+                    className={
+                      areaIndex === functionalExpertise.length - 1
+                        ? "border-t border-border last:border-b sm:[&:nth-last-child(-n+2)]:border-b"
+                        : "border-t border-border last:border-b"
+                    }
+                    triggerClassName="min-h-12 gap-3 py-3 text-body-sm font-semibold text-foreground"
+                    iconClassName="h-4 w-4"
+                  >
+                    <p className="pb-4 pr-7 text-body-sm leading-relaxed text-foreground-muted">
+                      {item.detail}
+                    </p>
+                  </AnimatedDisclosure>
+                ))}
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="border-b border-border py-10 sm:py-14">
-        <div className="mb-7 max-w-3xl">
+      <section className="grid gap-7 border-b border-border py-10 sm:py-14 min-[900px]:grid-cols-[220px_minmax(0,1fr)] min-[900px]:gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-12">
+        <div>
           <p className="mb-3 text-caption font-semibold uppercase text-primary">
             Evidence trail
           </p>
@@ -400,14 +418,19 @@ export default function AboutPage() {
             Selected publications, lectures, faculty roles, and recent continuing education.
           </p>
         </div>
-        <div className="grid gap-x-10 lg:grid-cols-2">
+        <div className="grid gap-x-8 sm:grid-cols-2">
           <AnimatedDisclosure
             className="border-t border-border"
             triggerClassName="min-h-14 gap-4 py-3 text-heading-sm font-semibold text-foreground"
             label={
               <span>
                 Selected publications
-                <span className="ml-2 text-caption font-normal text-foreground-subtle">{publications.length}</span>
+                <span
+                  className="ml-2 text-caption font-normal text-foreground-subtle"
+                  aria-label={`${publications.length} items`}
+                >
+                  {publications.length}
+                </span>
               </span>
             }
           >
@@ -427,7 +450,12 @@ export default function AboutPage() {
             label={
               <span>
                 Lectures &amp; workshops
-                <span className="ml-2 text-caption font-normal text-foreground-subtle">{lectures.length}</span>
+                <span
+                  className="ml-2 text-caption font-normal text-foreground-subtle"
+                  aria-label={`${lectures.length} items`}
+                >
+                  {lectures.length}
+                </span>
               </span>
             }
           >
@@ -445,12 +473,17 @@ export default function AboutPage() {
           </AnimatedDisclosure>
 
           <AnimatedDisclosure
-            className="border-t border-border lg:border-b"
+            className="border-t border-border sm:border-b"
             triggerClassName="min-h-14 gap-4 py-3 text-heading-sm font-semibold text-foreground"
             label={
               <span>
                 Faculty positions
-                <span className="ml-2 text-caption font-normal text-foreground-subtle">{facultyTraining.length}</span>
+                <span
+                  className="ml-2 text-caption font-normal text-foreground-subtle"
+                  aria-label={`${facultyTraining.length} items`}
+                >
+                  {facultyTraining.length}
+                </span>
               </span>
             }
           >
@@ -468,12 +501,17 @@ export default function AboutPage() {
           </AnimatedDisclosure>
 
           <AnimatedDisclosure
-            className="border-y border-border lg:border-t"
+            className="border-y border-border sm:border-t"
             triggerClassName="min-h-14 gap-4 py-3 text-heading-sm font-semibold text-foreground"
             label={
               <span>
                 Recent continuing education
-                <span className="ml-2 text-caption font-normal text-foreground-subtle">{recentCME.length}</span>
+                <span
+                  className="ml-2 text-caption font-normal text-foreground-subtle"
+                  aria-label={`${recentCME.length} items`}
+                >
+                  {recentCME.length}
+                </span>
               </span>
             }
           >
@@ -486,40 +524,52 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section id="featured-media" className="scroll-mt-28 border-b border-border py-10 sm:py-14">
-        <div className="mb-6 flex items-end justify-between gap-4">
+      <section
+        id="featured-media"
+        className="grid scroll-mt-28 gap-7 border-b border-border py-10 sm:py-14 min-[900px]:grid-cols-[220px_minmax(0,1fr)] min-[900px]:gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-12"
+      >
+        <div>
           <h2 className="text-[1.75rem] font-bold leading-tight text-foreground sm:text-3xl">Featured media</h2>
           <Link
             href="/media"
-            className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-lg px-2 text-body-sm font-semibold text-primary transition-colors duration-200 hover:text-primary-hover"
+            className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-lg text-body-sm font-semibold text-primary transition-colors duration-200 hover:text-primary-hover"
           >
             View all
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </Link>
         </div>
         <div className="grid border-b border-border sm:grid-cols-2 sm:gap-x-8">
-          {featuredMedia.map((media) => (
-            <a
-              key={media.url}
-              href={media.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex min-h-11 gap-4 border-t border-border py-5 transition-colors duration-200 hover:text-primary"
-            >
-              <div className="min-w-0 flex-1">
-                <p className="mb-2 text-caption font-semibold text-primary">{media.show}</p>
-                <h3 className="mb-2 text-body font-semibold text-foreground transition-colors duration-200 group-hover:text-primary">
-                  {media.title}
-                </h3>
-                <p className="line-clamp-2 text-body-sm leading-relaxed text-foreground-muted">{media.summary}</p>
-              </div>
-              <ExternalLink aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-foreground-subtle transition-colors group-hover:text-primary" />
-            </a>
-          ))}
+          {featuredMedia.map((media) => {
+            const isExternal = media.url.startsWith("http");
+
+            return (
+              <a
+                key={media.url}
+                href={media.url}
+                target={isExternal ? "_blank" : undefined}
+                rel={isExternal ? "noopener noreferrer" : undefined}
+                className="group flex min-h-11 gap-4 border-t border-border py-5 transition-colors duration-200 hover:text-primary"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="mb-2 text-caption font-semibold text-primary">{media.show}</p>
+                  <h3 className="mb-2 text-body font-semibold text-foreground transition-colors duration-200 group-hover:text-primary">
+                    {media.title}
+                    {isExternal && <span className="sr-only"> (opens in a new tab)</span>}
+                  </h3>
+                  <p className="line-clamp-2 text-body-sm leading-relaxed text-foreground-muted">{media.summary}</p>
+                </div>
+                {isExternal ? (
+                  <ExternalLink aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-foreground-subtle transition-colors group-hover:text-primary" />
+                ) : (
+                  <ArrowRight aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-foreground-subtle transition-colors group-hover:text-primary" />
+                )}
+              </a>
+            );
+          })}
         </div>
       </section>
 
-      <section className="grid gap-5 border-b border-border py-10 sm:py-14 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-12">
+      <section className="grid gap-7 border-b border-border py-10 sm:py-14 min-[900px]:grid-cols-[220px_minmax(0,1fr)] min-[900px]:gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-12">
         <h2 className="text-[1.75rem] font-bold leading-tight text-foreground sm:text-3xl">Outside the clinic</h2>
         <p className="text-body leading-relaxed text-foreground-muted">
           Mountain biking in Sedona, hiking Rainier, skiing, cooking, nature photography, and time
@@ -528,7 +578,7 @@ export default function AboutPage() {
         </p>
       </section>
 
-      <section className="grid gap-4 pt-8 sm:pt-10 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-12">
+      <section className="grid gap-7 pt-8 sm:pt-10 min-[900px]:grid-cols-[220px_minmax(0,1fr)] min-[900px]:gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-12">
         <h2 className="text-heading font-semibold text-foreground">Educational Only</h2>
         <div className="space-y-3 text-body-sm leading-relaxed text-foreground-muted">
           <p>

@@ -5,6 +5,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadCatalog } from "./publish/catalog.mjs";
 import { requiredEpisodeReferencePlatforms } from "./publish/catalog-platform-policy.mjs";
+import {
+  validateEpisodeAffiliatePostconditions,
+  validateProductionSupabaseUrl,
+} from "./content-catalog-postconditions.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -23,6 +27,14 @@ if (!supabaseUrl || !supabaseCatalogKey) {
   fail([
     "Missing Supabase catalog env vars.",
     "Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_CATALOG_KEY in .env.local, then rerun npm run verify:catalog.",
+  ]);
+}
+
+const supabaseConfigurationProblems = validateProductionSupabaseUrl(supabaseUrl);
+if (supabaseConfigurationProblems.length > 0) {
+  fail([
+    "Supabase catalog configuration failed:",
+    ...supabaseConfigurationProblems.map((problem) => `- ${problem}`),
   ]);
 }
 
@@ -159,6 +171,8 @@ const productSlugs = new Set(publishedProducts.map((product) => product.slug));
 if (publishedEpisodes.length === 0) problems.push("No published episodes returned.");
 if (publishedProducts.length === 0) problems.push("No published affiliate products returned.");
 if (tables.affiliate_categories.length === 0) problems.push("No affiliate categories returned.");
+
+problems.push(...validateEpisodeAffiliatePostconditions(tables));
 
 for (const episode of publishedEpisodes) {
   const slug = episode.slug;
@@ -317,7 +331,7 @@ async function fetchPaginatedRows(table, params, optional) {
   const rows = [];
   while (rows.length < requestedLimit) {
     const pageSize = Math.min(POSTGREST_PAGE_SIZE, requestedLimit - rows.length);
-    const response = await fetch(url, {
+    const response = await fetchWithTransientRetry(url, {
       headers: {
         apikey: supabaseCatalogKey,
         Authorization: `Bearer ${supabaseCatalogKey}`,
@@ -335,6 +349,21 @@ async function fetchPaginatedRows(table, params, optional) {
   }
 
   return rows;
+}
+
+async function fetchWithTransientRetry(url, options) {
+  const transientStatuses = new Set([401, 408, 425, 429, 500, 502, 503, 504]);
+  let response;
+
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    response = await fetch(url, options);
+    if (!transientStatuses.has(response.status) || attempt === 2) return response;
+
+    await response.arrayBuffer().catch(() => undefined);
+    await new Promise((resolve) => setTimeout(resolve, 250 * 2 ** attempt));
+  }
+
+  return response;
 }
 
 function episodePlatformForUrl(value) {
