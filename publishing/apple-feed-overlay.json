@@ -1,0 +1,72 @@
+{
+  "$schema": "./apple-feed-overlay.schema.json",
+  "schemaVersion": 1,
+  "mode": "apple_only_guid_overlay",
+  "catalogRevision": 16,
+  "sourceFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+  "sourceSelfUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+  "publicFeedUrl": "https://drmexperienced.com/apple-podcasts/feed.xml",
+  "outputPath": "out/apple-podcasts/feed.xml",
+  "appleShowId": "1870433419",
+  "appleContentProviderId": "128469457",
+  "minimumEpisodeCount": 8,
+  "deploymentAuthorization": {
+    "scope": "publish_apple_only_overlay",
+    "recordedAt": "2026-08-26T17:17:40Z",
+    "authorizedBy": "show_owner",
+    "basis": "The show owner explicitly directed the Apple repair and authorized production deployment after all gates pass.",
+    "publicOverlayDeploymentApproved": true,
+    "canonicalFeedMutationApproved": false,
+    "appleConnectFeedSwitchRequiresAttendedConfirmation": true
+  },
+  "guidMappings": [
+    {
+      "episodeNumber": 1,
+      "rssComEpisodeId": "3050766",
+      "link": "https://rss.com/podcasts/dr-m-experienced/3050766",
+      "title": "Brain Fog, Part 1 - Is Your Brain in a Fog?",
+      "sourceGuid": "c9b853b6-a828-4012-9998-217919ff9163",
+      "appleGuid": "59063e08-e4a6-4e56-b7ec-d2a66d69beb8"
+    },
+    {
+      "episodeNumber": 2,
+      "rssComEpisodeId": "3050765",
+      "link": "https://rss.com/podcasts/dr-m-experienced/3050765",
+      "title": "Brain Fog, Part 2 - Testing and Basic Solutions",
+      "sourceGuid": "1e40e02b-b217-477c-9cc3-4271cb304c23",
+      "appleGuid": "26896da2-76cf-4865-93f8-f94ddfb24568"
+    }
+  ],
+  "preservedGuidAssertions": [
+    {
+      "episodeNumber": 3,
+      "guid": "e4bde82f-54e6-43a2-a50a-4044f9cdbe8e"
+    },
+    {
+      "episodeNumber": 4,
+      "guid": "9579ff89-9e16-40db-b84a-00cee25c604a"
+    },
+    {
+      "episodeNumber": 5,
+      "guid": "e9f7596f-0333-49ca-8946-bc11e96b2091"
+    },
+    {
+      "episodeNumber": 6,
+      "guid": "13a0565e-582c-4969-a57d-9700b7babbe4"
+    },
+    {
+      "episodeNumber": 7,
+      "guid": "4a0b3903-b7d1-4ced-967b-079df4004a4e"
+    },
+    {
+      "episodeNumber": 8,
+      "guid": "4587dd48-8a26-4341-b194-8764500d74ef"
+    }
+  ],
+  "mediaVerification": {
+    "requireHttps": true,
+    "requireByteRange": true,
+    "maxAttempts": 3,
+    "retryDelayMs": 500
+  }
+}

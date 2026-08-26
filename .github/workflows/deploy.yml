@@ -8,6 +8,8 @@ on:
     branches:
       - main
   workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
 
 permissions: {}
 
@@ -19,6 +21,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    outputs:
+      apple_feed_sha256: ${{ steps.apple_feed_evidence.outputs.sha256 }}
     permissions:
       contents: read
     steps:
@@ -99,6 +103,22 @@ jobs:
           NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
         run: npm run build
 
+      - name: Generate Apple Podcasts feed overlay
+        if: github.event_name != 'pull_request'
+        run: npm run generate:apple-feed
+
+      - name: Bind deployment to the generated Apple feed
+        if: github.event_name != 'pull_request'
+        id: apple_feed_evidence
+        run: |
+          set -euo pipefail
+          sha256="$(sha256sum out/apple-podcasts/feed.xml | cut -d ' ' -f 1)"
+          if ! [[ "$sha256" =~ ^[a-f0-9]{64}$ ]]; then
+            echo "::error::Could not calculate the Apple feed artifact SHA-256."
+            exit 1
+          fi
+          echo "sha256=$sha256" >> "$GITHUB_OUTPUT"
+
       - name: Upload artifact
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
@@ -120,3 +140,32 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+
+  verify-apple-feed:
+    if: github.event_name != 'pull_request'
+    needs:
+      - build
+      - deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify public Apple Podcasts feed
+        env:
+          EXPECTED_APPLE_FEED_SHA256: ${{ needs.build.outputs.apple_feed_sha256 }}
+        run: npm run verify:apple-feed-deployment
