@@ -1,10 +1,11 @@
 {
   "$schema": "./apple-guid-repair.schema.json",
-  "schemaVersion": 2,
-  "status": "tri_provider_review_pending_remote_change_blocked",
+  "schemaVersion": 3,
+  "status": "apple_overlay_active_catalog_availability_escalation_pending",
   "discoveredAt": "2026-08-07",
-  "lastVerifiedAt": "2026-08-08",
+  "lastVerifiedAt": "2026-08-26",
   "feedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+  "feedUrlRole": "canonical_source_not_apple_delivery",
   "appleShowId": "1870433419",
   "appleCaseNumber": "20000130526608",
   "sourceEvidence": {
@@ -12,13 +13,83 @@
     "summary": "Apple reported that its existing episode records for Episodes 1 and 2 use historical GUIDs that differ from the current feed GUIDs.",
     "localBaselineLimitation": "The earliest retained Anchor snapshot is from August 5, 2026 and already contains the current feed GUIDs, so it cannot prove the GUIDs Apple ingested when the episodes were first published."
   },
+  "appleOnlyOverlay": {
+    "routingStatus": "active",
+    "publicFeedUrl": "https://drmexperienced.com/apple-podcasts/feed.xml",
+    "deployment": {
+      "commit": "31badf1da18ac1d0a36aa83b742e9d8741d4aadb",
+      "workflowRunId": 32993932012,
+      "workflowUrl": "https://github.com/MichaelJamesHofer/DR-M-Experienced/actions/runs/32993932012",
+      "deploymentVerifiedAt": "2026-08-26T17:26:24.245Z",
+      "completedAt": "2026-08-26T17:26:27Z",
+      "latestIndependentPublicFeedReadbackAt": "2026-08-26T19:17:38Z",
+      "publicFeedSha256": "8ca7b219593efee9920fbe2267f7e11796e72a3b8865f46865b06f36257b103b",
+      "canonicalRssComFeedMutated": false
+    },
+    "guidState": {
+      "episodeNumbers": [1, 2],
+      "appleHistoricalGuidsRestored": true,
+      "canonicalRssComGuidsUnchanged": true
+    },
+    "appleConnectReadback": {
+      "verifiedOn": "2026-08-26",
+      "authenticated": true,
+      "feedUrl": "https://drmexperienced.com/apple-podcasts/feed.xml",
+      "appleFeedSwitchObservedAt": "2026-08-26T19:04:00Z",
+      "appleFeedSwitchObservedAtApproximateToMinute": true,
+      "dashboardLastUpdateAt": "2026-08-26T19:04:00Z",
+      "dashboardLastUpdateLocal": "2026-08-26 1:04 PM MDT",
+      "feedRefreshObservedCompleteAt": "2026-08-26T19:06:00Z",
+      "feedRefreshObservedCompleteAtApproximateToMinute": true,
+      "availableEpisodeCount": 6,
+      "draftEpisodeCount": 2,
+      "totalEpisodeCount": 8,
+      "draftEpisodeNumbers": [1, 2],
+      "draftEpisodesHavePlayableRssAudio": true
+    },
+    "publicCatalogReadback": {
+      "verifiedAt": "2026-08-26T19:14:24Z",
+      "visibleEpisodeCount": 6,
+      "expectedEpisodeCount": 8,
+      "visibleEpisodeNumbers": [3, 4, 5, 6, 7, 8],
+      "missingEpisodeNumbers": [1, 2]
+    },
+    "canonicalMutationFallbackStatus": "blocked_not_in_use",
+    "publicationOutcome": "pending_apple_catalog_availability"
+  },
   "supportOutreach": {
     "apple": {
-      "status": "submitted_pending_response",
-      "submittedAt": "2026-08-08T20:18:00Z",
-      "channel": "Apple Podcasts Connect Contact Us",
+      "status": "missing_podcasts_escalation_submitted_pending_response",
       "caseNumber": "20000130526608",
-      "request": "Remap the two existing Apple episode records server-side to the current feed GUIDs while preserving the existing show and episode IDs."
+      "initialReprocessingRequest": {
+        "status": "submitted",
+        "submittedOn": "2026-08-06",
+        "submittedOnPrecision": "date"
+      },
+      "historicalGuidCrosswalkReply": {
+        "status": "received",
+        "receivedOn": "2026-08-07",
+        "receivedOnPrecision": "date",
+        "caseReference": "20000130526608"
+      },
+      "serverSideRemapFollowUp": {
+        "status": "superseded_by_apple_only_overlay",
+        "submittedAt": "2026-08-08T20:18:00Z",
+        "channel": "Apple Podcasts Connect Contact Us",
+        "request": "Remap the two existing Apple episode records server-side to the current feed GUIDs while preserving the existing show and episode IDs."
+      },
+      "latestEscalation": {
+        "status": "submitted_pending_response",
+        "submittedOn": "2026-08-26",
+        "submittedOnPrecision": "date",
+        "submittedAfter": "2026-08-26T19:17:38Z",
+        "submittedBefore": "2026-08-26T19:19:01Z",
+        "authenticated": true,
+        "channel": "Apple Podcasts Connect Contact Us",
+        "category": "Missing Podcast(s)",
+        "caseReference": "20000130526608",
+        "request": "Publish the two existing RSS-sourced Episode 1-2 records in place on show 1870433419 while preserving Apple episode IDs 1000746628307 and 1000746628422; do not create replacement records."
+      }
     },
     "rssCom": {
       "status": "sent_pending_response",
@@ -60,6 +131,8 @@
       "appleHistoricalGuid": "26896da2-76cf-4865-93f8-f94ddfb24568"
     }
   ],
+  "canonicalMutationFallbackStatus": "blocked_not_in_use",
+  "gateScope": "canonical_rss_com_guid_mutation_fallback_only",
   "gates": {
     "appleSupportCrosswalkRecorded": true,
     "appleTitleMappingIndependentlyVerified": true,
@@ -75,16 +148,16 @@
   },
   "constraints": [
     "Do not delete, recreate, unpublish, or re-upload either RSS.com episode.",
-    "Do not change the live feed or master-catalog GUIDs while this record is blocked.",
+    "Do not mutate the canonical RSS.com feed, the Apple-only overlay, or the master-catalog GUIDs while the Apple catalog outcome is pending.",
     "Preserve RSS.com episode IDs, enclosure URLs and bytes, publication dates, episode numbers, copy, artwork, and analytics.",
     "Preserve Apple show 1870433419 and the two existing Apple episode IDs.",
     "Preserve Spotify show 7GGLljxmO0G3FLjPy8vfcw, the two existing Spotify episode IDs, and their attached videos.",
     "Do not toggle GUIDs repeatedly; stop and escalate if any directory creates a duplicate or changes an episode ID."
   ],
   "nextActions": [
-    "Await Apple's written response on server-side remapping under case 20000130526608.",
-    "Await RSS.com's written response on a GUID-only in-place correction.",
-    "Await Spotify's written response on preserving episode IDs, attached videos, and analytics.",
-    "If a feed change remains necessary, capture a full baseline and use one attended episode as a canary before changing the second."
+    "Await Apple's response to the authenticated Missing Podcast(s) escalation referencing case 20000130526608.",
+    "Do not change the Apple-only overlay, mutate the canonical RSS.com feed, request another refresh, or create replacement records while publication remains pending.",
+    "Mark the repair complete only after authenticated Connect readback shows eight Available episodes and independent public readback shows all eight existing episode identities.",
+    "Keep the canonical tri-provider mutation fallback blocked unless a separately approved repair becomes necessary."
   ]
 }
