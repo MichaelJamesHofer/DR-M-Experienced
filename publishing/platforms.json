@@ -27,10 +27,13 @@
     "stateFile": "publishing/episode-description-standardization.json",
     "catalogRevision": 16,
     "episodeNumbers": [1, 2, 3, 4, 5, 6, 7, 8],
-    "status": "catalog_and_site_migration_prepared_remote_propagation_pending",
+    "status": "site_data_applied_website_deployment_and_remote_propagation_pending",
     "catalogAndSiteMigrationPrepared": true,
     "productionApplied": false,
-    "verifiedComplete": [],
+    "supabaseProductionApplied": true,
+    "websiteDeployed": false,
+    "verifiedComplete": ["supabase_website_data_backfill"],
+    "pendingProductionApplicationAndReadback": ["website"],
     "pendingRemotePropagationAndReadback": ["rss.com", "spotify", "apple", "youtube", "vimeo"],
     "manualOrExcluded": ["rumble"],
     "paidPromotionReviewPendingEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7],
@@ -147,7 +150,7 @@
       "remoteLoudnessGatesPassed": 8,
       "remoteReplacementVerifiedAt": "2026-08-22T21:35:08Z",
       "descriptionStandardizationStatus": "revision_16_pending_remote_update_and_feed_readback",
-      "notes": "All eight published episodes use remotely verified enclosures. Episodes 1-7 retain their established GUIDs, including Episode 5's same-ID correction on August 22, 2026. Episode 8 is the new RSS.com item 3096546 with GUID 4587dd48-8a26-4341-b194-8764500d74ef and the verified 21:32 enclosure published August 25, 2026. RSS.com remains the canonical audio host and feed source for Spotify, Apple Podcasts, and Amazon Music/Audible. For future episodes, publish the approved podcastAudio here first and never use the full-video master as its audio asset. The XML feed is clean; the separate public landing-page metadata still exposes a cached RSSVERIFY token. Catalog revision 16 and its site migration are prepared locally, but the standardized descriptions have not been applied to RSS.com or read back from the canonical feed."
+      "notes": "All eight published episodes use remotely verified enclosures. Episodes 1-7 retain their established GUIDs, including Episode 5's same-ID correction on August 22, 2026. Episode 8 is the new RSS.com item 3096546 with GUID 4587dd48-8a26-4341-b194-8764500d74ef and the verified 21:32 enclosure published August 25, 2026. RSS.com remains the canonical audio host and feed source for Spotify, Apple Podcasts, and Amazon Music/Audible. For future episodes, publish the approved podcastAudio here first and never use the full-video master as its audio asset. The XML feed is clean; the separate public landing-page metadata still exposes a cached RSSVERIFY token. Catalog revision 16 is prepared, and its website-data backfill is applied and read back in production Supabase; the standardized descriptions have not been applied to RSS.com or read back from the canonical feed."
     },
     "spotify": {
       "label": "Spotify for Creators",

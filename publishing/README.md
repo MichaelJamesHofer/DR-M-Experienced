@@ -17,11 +17,12 @@ remain pending in that historical receipt.
 
 The current all-episode description standardization is tracked separately in
 `publishing/episode-description-standardization.json` for catalog revision 16.
-The catalog and site migration are prepared locally, but they have not been
-applied to production. RSS.com, Spotify, Apple, YouTube, and Vimeo have not
-received or read back the revision-16 descriptions. Rumble is excluded from the
-automated rollout and remains a future human-only restaging task; Episode 8 is
-not onboarded there. Paid-promotion review remains pending for Episodes 1-7.
+The website-data backfill is applied and read back in production Supabase; the
+website deployment remains pending at this checkpoint. RSS.com, Spotify, Apple,
+YouTube, and Vimeo have not received or read back the revision-16 descriptions.
+Rumble is excluded from the automated rollout and remains a future human-only
+restaging task; Episode 8 is not onboarded there. Paid-promotion review remains
+pending for Episodes 1-7.
 Nothing in the preparation receipt authorizes a remote write, production
 deployment, new episode, GUID change, or remote-ID change.
 
@@ -210,12 +211,14 @@ August 8.
   the public-page desktop/mobile readback are verified in
   `publishing/episode-description-correction.json`; that receipt remains
   historical evidence rather than current all-episode parity.
-- Catalog revision 16 and the corresponding site migration prepare a uniform
-  description structure for Episodes 1-8. They are not applied or deployed.
-  RSS.com, Spotify, Apple, YouTube, and Vimeo propagation/readback remain
-  pending; Rumble is excluded from automation and deferred to a future manual
-  restaging. Paid-promotion review remains pending for Episodes 1-7. Track this
-  rollout only in `publishing/episode-description-standardization.json`.
+- Catalog revision 16 prepares a uniform description structure for Episodes
+  1-8. The corresponding website-data backfill is applied and independently
+  read back in production Supabase; website deployment remains pending at this
+  checkpoint. RSS.com, Spotify, Apple, YouTube, and Vimeo propagation/readback
+  remain pending; Rumble is excluded from automation and deferred to a future
+  manual restaging. Paid-promotion review remains pending for Episodes 1-7.
+  Track this rollout only in
+  `publishing/episode-description-standardization.json`.
 - The three short-form website routes are deployed, sitemap-indexed, and verified
   at 320, 390, and 1440 pixels with exact Vimeo playback bindings.
 - Production PostHog ingestion is verified: a POST to `https://us.i.posthog.com/e/` returned 200, and refreshed Installation Health passes `$pageview`, `$pageleave`, scroll depth, and authorized URLs. Dashboard `1086989`, `Dr. M Growth Dashboard`, has a privacy-safe description and verified DAU, WAU, growth-accounting, retention, referring-domain, and pageview-funnel tiles. Reverse proxy remains the only explicit configuration recommendation and is not configured.

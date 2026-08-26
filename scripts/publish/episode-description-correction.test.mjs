@@ -77,7 +77,7 @@ test("current platform state points to a fail-closed partial propagation receipt
   assert.deepEqual(platformState.platforms.rumble.pendingDescriptionCorrectionEpisodeNumbers, [7]);
 });
 
-test("revision 16 description standardization receipt binds the prepared artifacts without authorizing release", async () => {
+test("revision 16 description standardization receipt binds the applied site-data backfill without authorizing distributor writes", async () => {
   const [receipt, catalog, catalogBytes, migrationBytes] = await Promise.all([
     readJson("publishing/episode-description-standardization.json"),
     readJson("publishing/master-catalog.json"),
@@ -104,8 +104,29 @@ test("revision 16 description standardization receipt binds the prepared artifac
 
   assert.equal(receipt.authorization.remoteWritesAuthorizedByThisReceipt, false);
   assert.equal(receipt.authorization.productionDeploymentAuthorizedByThisReceipt, false);
-  assert.equal(receipt.siteMigration.productionApplied, false);
+  assert.equal(receipt.siteMigration.productionApplied, true);
+  assert.equal(receipt.siteMigration.productionReadbackComplete, true);
+  assert.equal(
+    receipt.siteMigration.productionApplicationMethod,
+    "server_side_postgrest_idempotent_upsert_equivalent_to_migration_data_changes"
+  );
+  assert.equal(receipt.siteMigration.productionReadback.expectedAffiliateReferencesVerified, 17);
+  assert.equal(receipt.siteMigration.productionReadback.correctedResourceParagraphsVerified, 2);
+  assert.equal(receipt.siteMigration.productionReadback.desbioEpisodeRelationshipVerified, true);
+  assert.equal(receipt.siteMigration.productionReadback.episodeReferencesTotal, 57);
+  assert.equal(receipt.siteMigration.productionReadback.affiliateProductEpisodeLinksTotal, 13);
   assert.equal(receipt.siteMigration.websiteDeployed, false);
+  assert.equal(receipt.targets.supabase.productionReadbackComplete, true);
+  assert.equal(receipt.targets.website.productionReadbackComplete, false);
+  assert.deepEqual(receipt.completion.verifiedComplete, ["supabase_website_data_backfill"]);
+  assert.deepEqual(receipt.completion.pendingProductionApplicationAndReadback, ["website"]);
+  assert.deepEqual(receipt.completion.pendingRemotePropagationAndReadback, [
+    "rss.com",
+    "spotify",
+    "apple",
+    "youtube",
+    "vimeo",
+  ]);
 
   assert.deepEqual(
     receipt.episodes.map((episode) => episode.number),

@@ -1,13 +1,14 @@
 {
   "schemaVersion": 1,
   "standardizationId": "all-episode-description-standardization-2026-08-25",
-  "status": "catalog_and_site_migration_prepared_remote_propagation_pending",
+  "status": "site_data_applied_website_deployment_and_remote_propagation_pending",
   "recordedAt": "2026-08-26T01:40:44Z",
+  "updatedAt": "2026-08-26T04:53:53Z",
   "authorization": {
     "localPreparationAuthorized": true,
     "remoteWritesAuthorizedByThisReceipt": false,
     "productionDeploymentAuthorizedByThisReceipt": false,
-    "notes": "This receipt records local catalog and site-migration preparation only. It is not a release authorization and does not claim that any production or platform description was changed."
+    "notes": "This receipt is evidence, not release authorization. The production website-data backfill was authorized separately in the owner-directed release task and applied on 2026-08-26. It does not authorize or claim description changes on RSS.com, Spotify, Apple, YouTube, Vimeo, or Rumble."
   },
   "catalog": {
     "source": "publishing/master-catalog.json",
@@ -19,12 +20,22 @@
     "hashStatus": "validated_against_final_revision_16_catalog"
   },
   "siteMigration": {
-    "status": "prepared_not_applied",
+    "status": "production_data_postconditions_applied_website_deployment_pending",
     "migrationArtifact": "supabase/migrations/20260826004500_backfill_episode_affiliate_references.sql",
     "migrationArtifactSha256": "a70e259745dcd792a3684568a6b3b5945b8fcbc0c4beaf790a004573d4ff2dfb",
-    "migrationArtifactStatus": "validated_locally_not_applied",
-    "productionApplied": false,
-    "productionReadbackComplete": false,
+    "migrationArtifactStatus": "exact_data_postconditions_applied_via_idempotent_server_side_api_and_read_back",
+    "productionApplied": true,
+    "productionAppliedAt": "2026-08-26T04:53:53Z",
+    "productionApplicationMethod": "server_side_postgrest_idempotent_upsert_equivalent_to_migration_data_changes",
+    "productionReadbackComplete": true,
+    "productionReadback": {
+      "expectedAffiliateReferencesVerified": 17,
+      "correctedResourceParagraphsVerified": 2,
+      "desbioEpisodeRelationshipVerified": true,
+      "episodeReferencesTotal": 57,
+      "affiliateProductEpisodeLinksTotal": 13,
+      "catalogVerifier": "passed"
+    },
     "websiteDeployed": false,
     "websiteReadbackComplete": false
   },
@@ -210,8 +221,8 @@
     },
     "supabase": {
       "role": "website_editorial_authority",
-      "status": "migration_prepared_not_applied",
-      "productionReadbackComplete": false
+      "status": "migration_data_postconditions_applied_and_read_back",
+      "productionReadbackComplete": true
     },
     "website": {
       "role": "published_website_projection",
@@ -225,11 +236,11 @@
     }
   },
   "completion": {
-    "prepared": ["catalog_revision_16", "site_migration"],
-    "verifiedComplete": [],
+    "prepared": ["catalog_revision_16", "website_source"],
+    "verifiedComplete": ["supabase_website_data_backfill"],
     "pendingRemotePropagationAndReadback": ["rss.com", "spotify", "apple", "youtube", "vimeo"],
     "manualOrExcluded": ["rumble"],
-    "pendingProductionApplicationAndReadback": ["supabase", "website"],
+    "pendingProductionApplicationAndReadback": ["website"],
     "notOnboarded": ["amazon"]
   }
 }
