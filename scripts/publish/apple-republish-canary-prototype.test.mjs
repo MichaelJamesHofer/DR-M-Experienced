@@ -92,15 +92,28 @@ test("prototype config is schema-pinned, deterministic, and remote-fail-closed",
   );
   assert.equal(config.canary.candidateGuid.automaticRegenerationAllowed, false);
   assert.equal(config.canary.candidateGuid.reusableForAnotherEpisode, false);
-  assert.equal(deploymentState.phase, "closed");
-  assert.equal(deploymentState.sealedMediaAsset.path, null);
-  assert.equal(deploymentState.mediaStagedPublicEvidence, null);
   assert.deepEqual(deploymentState.orderedPhases, [
     "closed",
     "media_staged",
     "active",
     "contained",
   ]);
+  assert.ok(deploymentState.orderedPhases.includes(deploymentState.phase));
+  assert.equal(
+    deploymentState.transitionAuthorization.approvedTargetPhase,
+    deploymentState.phase,
+  );
+  if (deploymentState.phase === "closed") {
+    assert.equal(deploymentState.sealedMediaAsset.path, null);
+    assert.equal(deploymentState.mediaStagedPublicEvidence, null);
+  } else {
+    assert.equal(
+      deploymentState.sealedMediaAsset.path,
+      "publishing/apple-republish-canary-assets/brain-fog-part-1-9f9402d98ec297cd.mp3",
+    );
+    assert.ok(deploymentState.transitionAuthorization.recordedAt);
+    assert.ok(deploymentState.transitionAuthorization.authorizedBy);
+  }
   assert.equal("incidentAuthorityPath" in config, false);
   assert.equal("incidentAuthoritySha256" in config, false);
   assert.equal("deploymentState" in config, false);
@@ -142,6 +155,9 @@ test("operational phase state rejects unknown or unauthorized open phases", asyn
     const unauthorized = structuredClone(deploymentState);
     unauthorized.phase = "active";
     unauthorized.transitionAuthorization.approvedTargetPhase = "active";
+    unauthorized.transitionAuthorization.recordedAt = null;
+    unauthorized.transitionAuthorization.authorizedBy = null;
+    unauthorized.sealedMediaAsset.path = null;
     unauthorized.mediaStagedPublicEvidence = {
       verifiedAt: "2026-08-26T22:30:00Z",
       publicUrl: config.canary.candidateEnclosure.url,
