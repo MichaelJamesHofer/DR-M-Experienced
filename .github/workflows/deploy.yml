@@ -103,9 +103,11 @@ jobs:
           NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
         run: npm run build
 
-      - name: Generate Apple Podcasts feed overlay
+      - name: Materialize and verify checked-in Apple phase
         if: github.event_name != 'pull_request'
-        run: npm run generate:apple-feed
+        run: |
+          npm run generate:authorized-apple-subtree
+          npm run verify:authorized-apple-subtree
 
       - name: Bind deployment to the generated Apple feed
         if: github.event_name != 'pull_request'
@@ -168,4 +170,4 @@ jobs:
       - name: Verify public Apple Podcasts feed
         env:
           EXPECTED_APPLE_FEED_SHA256: ${{ needs.build.outputs.apple_feed_sha256 }}
-        run: npm run verify:apple-feed-deployment
+        run: npm run verify:apple-authorized-subtree-deployment

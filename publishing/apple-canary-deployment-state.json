@@ -1,0 +1,48 @@
+{
+  "$schema": "./apple-canary-deployment-state.schema.json",
+  "schemaVersion": 1,
+  "mode": "apple_canary_authorized_subtree_state_machine",
+  "phase": "closed",
+  "orderedPhases": ["closed", "media_staged", "active", "contained"],
+  "allowedForwardTransitions": [
+    "closed_to_media_staged",
+    "media_staged_to_active",
+    "active_to_contained"
+  ],
+  "feedSnapshotByPhase": {
+    "closed": "historical",
+    "media_staged": "historical",
+    "active": "active",
+    "contained": "contained"
+  },
+  "sealedFeedSnapshots": {
+    "storageEncoding": "utf8_with_one_terminal_lf_removed_before_publish",
+    "historical": {
+      "path": "publishing/apple-republish-canary-snapshots/historical.xml",
+      "storedSha256": "f18b0e09a2212389c901675329d5bd3d2f23db758b8d38c2e7854ad73c7b9216",
+      "publishedSha256": "8ca7b219593efee9920fbe2267f7e11796e72a3b8865f46865b06f36257b103b"
+    },
+    "active": {
+      "path": "publishing/apple-republish-canary-snapshots/active.xml",
+      "storedSha256": "cfc9a64bae89f211f3627b43977582865b6a3a7abd43d5126d555f8a6339aa20",
+      "publishedSha256": "fea3c6bf7c2485d93ea9c7768f41b717c1244a8982488053883536343e582af7"
+    },
+    "contained": {
+      "path": "publishing/apple-republish-canary-snapshots/contained.xml",
+      "storedSha256": "2548d10196d53b4fefdad10c8e984ded6a3b3ef7253ced0d9a1956a60274abef",
+      "publishedSha256": "2df8ef48b7aeef318c113e889b039401c5685639d1755622903c3c82c8971377"
+    }
+  },
+  "sealedMediaAsset": {
+    "path": null,
+    "length": 16339867,
+    "sha256": "9f9402d98ec297cd350e6c6859e1d79459ca5e35ba44bbb4797eb4ef09a1c65b"
+  },
+  "mediaStagedPublicEvidence": null,
+  "transitionAuthorization": {
+    "approvedTargetPhase": "closed",
+    "recordedAt": null,
+    "authorizedBy": null,
+    "approvalBasis": "No canary deployment transition is currently approved."
+  }
+}
