@@ -2,7 +2,7 @@
   "$schema": "./apple-canary-deployment-state.schema.json",
   "schemaVersion": 1,
   "mode": "apple_canary_authorized_subtree_state_machine",
-  "phase": "closed",
+  "phase": "media_staged",
   "orderedPhases": ["closed", "media_staged", "active", "contained"],
   "allowedForwardTransitions": [
     "closed_to_media_staged",
@@ -34,15 +34,15 @@
     }
   },
   "sealedMediaAsset": {
-    "path": null,
+    "path": "publishing/apple-republish-canary-assets/brain-fog-part-1-9f9402d98ec297cd.mp3",
     "length": 16339867,
     "sha256": "9f9402d98ec297cd350e6c6859e1d79459ca5e35ba44bbb4797eb4ef09a1c65b"
   },
   "mediaStagedPublicEvidence": null,
   "transitionAuthorization": {
-    "approvedTargetPhase": "closed",
-    "recordedAt": null,
-    "authorizedBy": null,
-    "approvalBasis": "No canary deployment transition is currently approved."
+    "approvedTargetPhase": "media_staged",
+    "recordedAt": "2026-08-27T04:36:14Z",
+    "authorizedBy": "Otto",
+    "approvalBasis": "Owner explicitly approved both canary phases with rollback on failure in Codex on 2026-08-26; this transition stages only the exact hash-bound Episode 1 media while preserving the byte-identical historical Apple feed."
   }
 }
