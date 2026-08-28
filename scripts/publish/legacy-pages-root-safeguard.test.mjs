@@ -9,13 +9,20 @@ const controlPath = path.join(
   repositoryRoot,
   "publishing/legacy-pages-root-safeguard.json",
 );
+const deploymentStatePath = path.join(
+  repositoryRoot,
+  "publishing/apple-canary-deployment-state.json",
+);
 
 function sha256(value) {
   return createHash("sha256").update(value).digest("hex");
 }
 
-test("legacy Pages root safeguard is complete, exact, and media staged", async () => {
+test("legacy Pages root safeguard is complete and matches the authorized Apple phase", async () => {
   const control = JSON.parse(await fs.readFile(controlPath, "utf8"));
+  const deploymentState = JSON.parse(
+    await fs.readFile(deploymentStatePath, "utf8"),
+  );
   assert.equal(control.schemaVersion, 1);
   assert.equal(control.mode, "temporary_legacy_pages_root_safeguard");
   assert.equal(control.sourceArtifact.workflowRunId, 33141504981);
@@ -69,16 +76,34 @@ test("legacy Pages root safeguard is complete, exact, and media staged", async (
 
   const appleDirectory = path.join(repositoryRoot, "apple-podcasts");
   assert.deepEqual((await fs.readdir(appleDirectory)).sort(), ["feed.xml", "media"]);
+  const mediaDirectory = path.join(appleDirectory, "media");
+  assert.deepEqual(await fs.readdir(mediaDirectory), [
+    "brain-fog-part-1-9f9402d98ec297cd.mpga",
+  ]);
+
+  const phase = deploymentState.phase;
+  const snapshotName = deploymentState.feedSnapshotByPhase[phase];
+  assert.equal(control.applePhaseState.phase, phase);
+  assert.equal(control.applePhaseState.feedSnapshot, snapshotName);
+  assert.equal(control.composition.materializedPhase, phase);
+  const snapshot = deploymentState.sealedFeedSnapshots[snapshotName];
+  const storedFeed = await fs.readFile(path.join(repositoryRoot, snapshot.path));
+  assert.equal(sha256(storedFeed), snapshot.storedSha256);
+  assert.equal(storedFeed.at(-1), 0x0a);
+  const expectedPublishedFeed = storedFeed.subarray(0, -1);
+  assert.equal(sha256(expectedPublishedFeed), snapshot.publishedSha256);
   const feed = await fs.readFile(path.join(appleDirectory, "feed.xml"));
-  assert.equal(sha256(feed), control.appleMediaStagedState.feedSha256);
-  assert.equal(control.appleMediaStagedState.phase, "media_staged");
+  assert.deepEqual(feed, expectedPublishedFeed);
+  assert.equal(sha256(feed), control.applePhaseState.feedSha256);
   const mediaPath = path.join(
     repositoryRoot,
-    control.appleMediaStagedState.candidateMediaPath,
+    control.applePhaseState.candidateMediaPath,
   );
   const media = await fs.readFile(mediaPath);
-  assert.equal(media.length, control.appleMediaStagedState.candidateMediaBytes);
-  assert.equal(sha256(media), control.appleMediaStagedState.candidateMediaSha256);
-  assert.equal(control.appleMediaStagedState.candidateMediaContentType, "audio/mpeg");
-  assert.equal(control.appleMediaStagedState.candidateMediaIncluded, true);
+  assert.equal(media.length, control.applePhaseState.candidateMediaBytes);
+  assert.equal(media.length, deploymentState.sealedMediaAsset.length);
+  assert.equal(sha256(media), control.applePhaseState.candidateMediaSha256);
+  assert.equal(sha256(media), deploymentState.sealedMediaAsset.sha256);
+  assert.equal(control.applePhaseState.candidateMediaContentType, "audio/mpeg");
+  assert.equal(control.applePhaseState.candidateMediaIncluded, true);
 });
