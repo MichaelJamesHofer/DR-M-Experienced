@@ -184,7 +184,7 @@ test("operational phase state rejects unknown or unauthorized open phases", asyn
       "2026-08-26T22:30:00Z";
     wrongContentType.transitionAuthorization.authorizedBy = "test_owner";
     wrongContentType.sealedMediaAsset.path =
-      "publishing/apple-republish-canary-assets/brain-fog-part-1-9f9402d98ec297cd.mp3";
+      "publishing/apple-republish-canary-assets/brain-fog-part-1-9f9402d98ec297cd.mpga";
     wrongContentType.mediaStagedPublicEvidence.contentType =
       "application/octet-stream";
     const wrongContentTypePath = path.join(temporary, "wrong-content-type.json");
@@ -293,7 +293,7 @@ test("candidate enclosure is a path-distinct immutable content-hash URL", () => 
   );
   assert.equal(config.canary.candidateEnclosure.mediaType, "audio/mpeg");
   assert.equal(
-    new URL(config.canary.candidateEnclosure.url).pathname.endsWith(".mp3"),
+    new URL(config.canary.candidateEnclosure.url).pathname.endsWith(".mpga"),
     true,
   );
   assert.notEqual(
@@ -306,7 +306,6 @@ test("candidate enclosure is a path-distinct immutable content-hash URL", () => 
   );
   assert.equal(config.canary.candidateEnclosure.publicHttpValidated, false);
   assert.equal(path.extname(config.artifactLayout.mediaRelativePath), ".mpga");
-  assert.equal(config.canary.candidateEnclosure.mediaType, "audio/mpeg");
   assert.equal(config.validationEvidence.candidatePublicHttpValidated, false);
   assert.equal(config.validationEvidence.appleIdentityTreatmentVerified, false);
 
@@ -317,7 +316,7 @@ test("candidate enclosure is a path-distinct immutable content-hash URL", () => 
 
   const wrongExtension = structuredClone(config);
   wrongExtension.canary.candidateEnclosure.url =
-    wrongExtension.canary.candidateEnclosure.url.replace(/\.mp3$/, ".bin");
+    wrongExtension.canary.candidateEnclosure.url.replace(/\.mpga$/, ".bin");
   assert.equal(validateAppleRepublishCanaryConfig(wrongExtension).valid, false);
 });
 
