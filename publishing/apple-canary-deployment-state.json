@@ -2,7 +2,7 @@
   "$schema": "./apple-canary-deployment-state.schema.json",
   "schemaVersion": 1,
   "mode": "apple_canary_authorized_subtree_state_machine",
-  "phase": "media_staged",
+  "phase": "active",
   "orderedPhases": ["closed", "media_staged", "active", "contained"],
   "allowedForwardTransitions": [
     "closed_to_media_staged",
@@ -52,9 +52,9 @@
     "historicalFeedSha256": "8ca7b219593efee9920fbe2267f7e11796e72a3b8865f46865b06f36257b103b"
   },
   "transitionAuthorization": {
-    "approvedTargetPhase": "media_staged",
-    "recordedAt": "2026-08-27T04:36:14Z",
+    "approvedTargetPhase": "active",
+    "recordedAt": "2026-08-28T04:30:43Z",
     "authorizedBy": "Otto",
-    "approvalBasis": "Owner explicitly approved both canary phases with rollback on failure in Codex on 2026-08-26; this transition stages only the exact hash-bound Episode 1 media while preserving the byte-identical historical Apple feed."
+    "approvalBasis": "Owner explicitly approved both Apple canary phases with rollback on failure in Codex on 2026-08-26; exact public media-staging evidence was recorded from successful deployment 33141504981 before this single-episode activation."
   }
 }

@@ -10,25 +10,34 @@
     "artifactApiDigest": "sha256:8429b5ff9127862c2f42bca342b429a788e0621c5c28238ffbe804d24c51f731",
     "downloadedArtifactTarSha256": "e9bf850201626f2c8445ee5921805a44eb7241b3d25d509387a85e7f190188f7"
   },
+  "composition": {
+    "method": "base_artifact_plus_authorized_apple_subtree",
+    "basePhase": "media_staged",
+    "materializedPhase": "active",
+    "authorizedStatePath": "publishing/apple-canary-deployment-state.json",
+    "materializedAt": "2026-08-28T04:30:43Z"
+  },
   "inventory": {
     "manifestPath": "publishing/legacy-pages-root-safeguard-files.sha256",
     "fileCount": 141,
-    "manifestSha256": "d9cfbc71811c922acc53604a5f6b98c4f300c5af23989c37b574b2ffa28d2f50",
+    "manifestSha256": "13105a2756b145ae72c8ee109542e4fc358d0b953623f58e63d661273b7a7e32",
     "preExistingTrackedPathsToPreserve": [
       ".nojekyll",
       "CNAME"
     ]
   },
-  "appleMediaStagedState": {
-    "phase": "media_staged",
+  "applePhaseState": {
+    "phase": "active",
+    "feedSnapshot": "active",
     "feedPath": "apple-podcasts/feed.xml",
-    "feedSha256": "8ca7b219593efee9920fbe2267f7e11796e72a3b8865f46865b06f36257b103b",
+    "feedSha256": "caa85ee126729629036aba67cc37ef132fad79055f56c77ba6b999e830d2a96a",
     "candidateMediaPath": "apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mpga",
     "candidateMediaSha256": "9f9402d98ec297cd350e6c6859e1d79459ca5e35ba44bbb4797eb4ef09a1c65b",
     "candidateMediaBytes": 16339867,
     "candidateMediaContentType": "audio/mpeg",
     "candidateMediaIncluded": true,
-    "publiclyVerifiedAt": "2026-08-28T04:22:12Z"
+    "mediaPubliclyVerifiedAt": "2026-08-28T04:22:12Z",
+    "phaseFeedPubliclyVerifiedAt": null
   },
   "cleanupPrecondition": "Switch Pages build_type to workflow, complete and verify an Actions deployment, then remove only manifest-listed generated paths while preserving the pre-existing tracked paths."
 }
