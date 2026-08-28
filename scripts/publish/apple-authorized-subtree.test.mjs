@@ -28,7 +28,7 @@ function replaceEpisodeOneLength(xml, url, length) {
 async function fixtureAuthorities(temporary, phase) {
   const bytes = Buffer.alloc(12_288);
   for (let index = 0; index < bytes.length; index += 1) bytes[index] = index % 251;
-  const assetPath = path.join(temporary, "sealed.mp3");
+  const assetPath = path.join(temporary, "sealed.mpga");
   await fs.writeFile(assetPath, bytes);
   const authorities = structuredClone(loaded);
   authorities.config.canary.sourceEnclosure.length = bytes.length;
@@ -45,7 +45,7 @@ async function fixtureAuthorities(temporary, phase) {
   authorities.deploymentState.transitionAuthorization.authorizedBy =
     phase === "closed" ? null : "test_owner";
   authorities.deploymentState.sealedMediaAsset.path =
-    phase === "closed" ? null : "publishing/apple-republish-canary-assets/test.mp3";
+    phase === "closed" ? null : "publishing/apple-republish-canary-assets/test.mpga";
   authorities.deploymentState.sealedMediaAsset.length = bytes.length;
   authorities.deploymentState.sealedMediaAsset.sha256 = sha256(bytes);
   authorities.deploymentState.mediaStagedPublicEvidence =
@@ -156,7 +156,7 @@ const phaseCases = [
     block: false,
     inventory: [
       "feed.xml",
-      "media/brain-fog-part-1-9f9402d98ec297cd.mp3",
+      "media/brain-fog-part-1-9f9402d98ec297cd.mpga",
     ],
   },
   {
@@ -166,7 +166,7 @@ const phaseCases = [
     block: false,
     inventory: [
       "feed.xml",
-      "media/brain-fog-part-1-9f9402d98ec297cd.mp3",
+      "media/brain-fog-part-1-9f9402d98ec297cd.mpga",
     ],
   },
   {
@@ -176,7 +176,7 @@ const phaseCases = [
     block: true,
     inventory: [
       "feed.xml",
-      "media/brain-fog-part-1-9f9402d98ec297cd.mp3",
+      "media/brain-fog-part-1-9f9402d98ec297cd.mpga",
     ],
   },
 ];

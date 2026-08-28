@@ -109,7 +109,7 @@ test("prototype config is schema-pinned, deterministic, and remote-fail-closed",
   } else {
     assert.equal(
       deploymentState.sealedMediaAsset.path,
-      "publishing/apple-republish-canary-assets/brain-fog-part-1-9f9402d98ec297cd.mp3",
+      "publishing/apple-republish-canary-assets/brain-fog-part-1-9f9402d98ec297cd.mpga",
     );
     assert.ok(deploymentState.transitionAuthorization.recordedAt);
     assert.ok(deploymentState.transitionAuthorization.authorizedBy);
@@ -181,7 +181,7 @@ test("operational phase state rejects unknown or unauthorized open phases", asyn
     const noPublicEvidence = structuredClone(deploymentState);
     noPublicEvidence.phase = "active";
     noPublicEvidence.sealedMediaAsset.path =
-      "publishing/apple-republish-canary-assets/brain-fog-part-1-9f9402d98ec297cd.mp3";
+      "publishing/apple-republish-canary-assets/brain-fog-part-1-9f9402d98ec297cd.mpga";
     noPublicEvidence.transitionAuthorization = {
       approvedTargetPhase: "active",
       recordedAt: "2026-08-26T22:30:00Z",
@@ -266,11 +266,11 @@ test("sealed four-phase projections are exact and fail closed", () => {
 test("candidate enclosure is a path-distinct immutable content-hash URL", () => {
   assert.equal(
     config.canary.candidateEnclosure.url,
-    "https://drmexperienced.com/apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mp3",
+    "https://drmexperienced.com/apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mpga",
   );
   assert.equal(
     config.artifactLayout.mediaRelativePath,
-    "apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mp3",
+    "apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mpga",
   );
   assert.notEqual(
     config.canary.candidateEnclosure.url,
@@ -281,6 +281,8 @@ test("candidate enclosure is a path-distinct immutable content-hash URL", () => 
     config.canary.sourceEnclosure.sha256,
   );
   assert.equal(config.canary.candidateEnclosure.publicHttpValidated, false);
+  assert.equal(path.extname(config.artifactLayout.mediaRelativePath), ".mpga");
+  assert.equal(config.canary.candidateEnclosure.mediaType, "audio/mpeg");
   assert.equal(config.validationEvidence.candidatePublicHttpValidated, false);
   assert.equal(config.validationEvidence.appleIdentityTreatmentVerified, false);
 });
@@ -373,7 +375,7 @@ test("reversal policy is phase-aware and never removes used canary media", () =>
 
 test("immutable media staging hashes before no-replace install, reuses exact bytes, and refuses drift", async () => {
   const temporary = await fs.mkdtemp(path.join(os.tmpdir(), "drm-canary-media-"));
-  const destination = path.join(temporary, "media", "tiny.mp3");
+  const destination = path.join(temporary, "media", "tiny.mpga");
   const bytes = Buffer.from("tiny exact media");
   const tiny = structuredClone(config);
   tiny.canary.sourceEnclosure.length = bytes.length;
@@ -420,7 +422,7 @@ test("immutable media staging hashes before no-replace install, reuses exact byt
 
 test("media staging never removes a lock owned by another process", async () => {
   const temporary = await fs.mkdtemp(path.join(os.tmpdir(), "drm-canary-lock-"));
-  const destination = path.join(temporary, "media", "tiny.mp3");
+  const destination = path.join(temporary, "media", "tiny.mpga");
   const lockPath = `${destination}.lock`;
   try {
     await fs.mkdir(path.dirname(destination), { recursive: true });

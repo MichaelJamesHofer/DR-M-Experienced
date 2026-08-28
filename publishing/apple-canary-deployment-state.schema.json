@@ -54,7 +54,7 @@
         "path": {
           "oneOf": [
             { "type": "null" },
-            { "type": "string", "pattern": "^publishing/apple-republish-canary-assets/[a-z0-9-]+\\.mp3$" }
+            { "type": "string", "pattern": "^publishing/apple-republish-canary-assets/[a-z0-9-]+\\.mpga$" }
           ]
         },
         "length": { "const": 16339867 },
@@ -133,7 +133,7 @@
       "properties": {
         "verifiedAt": { "type": "string", "format": "date-time" },
         "publicUrl": {
-          "const": "https://drmexperienced.com/apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mp3"
+          "const": "https://drmexperienced.com/apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mpga"
         },
         "directNoRedirect": { "const": true },
         "headStatus": { "const": 200 },

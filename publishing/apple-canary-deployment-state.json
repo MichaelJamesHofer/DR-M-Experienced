@@ -24,17 +24,17 @@
     },
     "active": {
       "path": "publishing/apple-republish-canary-snapshots/active.xml",
-      "storedSha256": "cfc9a64bae89f211f3627b43977582865b6a3a7abd43d5126d555f8a6339aa20",
-      "publishedSha256": "fea3c6bf7c2485d93ea9c7768f41b717c1244a8982488053883536343e582af7"
+      "storedSha256": "6e5d41e366ee3d13ec3e25a272989bed97d1e249843b451ed98ac3fd44528fa6",
+      "publishedSha256": "caa85ee126729629036aba67cc37ef132fad79055f56c77ba6b999e830d2a96a"
     },
     "contained": {
       "path": "publishing/apple-republish-canary-snapshots/contained.xml",
-      "storedSha256": "2548d10196d53b4fefdad10c8e984ded6a3b3ef7253ced0d9a1956a60274abef",
-      "publishedSha256": "2df8ef48b7aeef318c113e889b039401c5685639d1755622903c3c82c8971377"
+      "storedSha256": "6437fdc6827c321135ca89fae0eb8b6bdf41d4e9d563988e41ba0270b9bb645e",
+      "publishedSha256": "31b7b21a60d567f43c0fa402add70df7a945f7446ae76cc222c51b36502bd99c"
     }
   },
   "sealedMediaAsset": {
-    "path": "publishing/apple-republish-canary-assets/brain-fog-part-1-9f9402d98ec297cd.mp3",
+    "path": "publishing/apple-republish-canary-assets/brain-fog-part-1-9f9402d98ec297cd.mpga",
     "length": 16339867,
     "sha256": "9f9402d98ec297cd350e6c6859e1d79459ca5e35ba44bbb4797eb4ef09a1c65b"
   },
