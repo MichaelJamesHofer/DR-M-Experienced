@@ -161,6 +161,7 @@ test("operational phase state rejects unknown or unauthorized open phases", asyn
     unauthorized.mediaStagedPublicEvidence = {
       verifiedAt: "2026-08-26T22:30:00Z",
       publicUrl: config.canary.candidateEnclosure.url,
+      contentType: config.canary.candidateEnclosure.mediaType,
       directNoRedirect: true,
       headStatus: 200,
       acceptRanges: true,
@@ -176,6 +177,24 @@ test("operational phase state rejects unknown or unauthorized open phases", asyn
     await assert.rejects(
       loadAppleRepublishCanaryAuthorities(undefined, unauthorizedPath),
       /require a sealed media asset and attended authorization record/,
+    );
+
+    const wrongContentType = structuredClone(unauthorized);
+    wrongContentType.transitionAuthorization.recordedAt =
+      "2026-08-26T22:30:00Z";
+    wrongContentType.transitionAuthorization.authorizedBy = "test_owner";
+    wrongContentType.sealedMediaAsset.path =
+      "publishing/apple-republish-canary-assets/brain-fog-part-1-9f9402d98ec297cd.mp3";
+    wrongContentType.mediaStagedPublicEvidence.contentType =
+      "application/octet-stream";
+    const wrongContentTypePath = path.join(temporary, "wrong-content-type.json");
+    await fs.writeFile(
+      wrongContentTypePath,
+      JSON.stringify(wrongContentType),
+    );
+    await assert.rejects(
+      loadAppleRepublishCanaryAuthorities(undefined, wrongContentTypePath),
+      /Apple canary deployment state is invalid/,
     );
 
     const noPublicEvidence = structuredClone(deploymentState);
@@ -272,6 +291,11 @@ test("candidate enclosure is a path-distinct immutable content-hash URL", () => 
     config.artifactLayout.mediaRelativePath,
     "apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mpga",
   );
+  assert.equal(config.canary.candidateEnclosure.mediaType, "audio/mpeg");
+  assert.equal(
+    new URL(config.canary.candidateEnclosure.url).pathname.endsWith(".mp3"),
+    true,
+  );
   assert.notEqual(
     config.canary.candidateEnclosure.url,
     config.canary.sourceEnclosure.url,
@@ -285,6 +309,16 @@ test("candidate enclosure is a path-distinct immutable content-hash URL", () => 
   assert.equal(config.canary.candidateEnclosure.mediaType, "audio/mpeg");
   assert.equal(config.validationEvidence.candidatePublicHttpValidated, false);
   assert.equal(config.validationEvidence.appleIdentityTreatmentVerified, false);
+
+  const wrongMediaType = structuredClone(config);
+  wrongMediaType.canary.candidateEnclosure.mediaType =
+    "application/octet-stream";
+  assert.equal(validateAppleRepublishCanaryConfig(wrongMediaType).valid, false);
+
+  const wrongExtension = structuredClone(config);
+  wrongExtension.canary.candidateEnclosure.url =
+    wrongExtension.canary.candidateEnclosure.url.replace(/\.mp3$/, ".bin");
+  assert.equal(validateAppleRepublishCanaryConfig(wrongExtension).valid, false);
 });
 
 test("prototype changes only Episode 1 GUID and enclosure and reverses byte-exactly", () => {
@@ -513,6 +547,7 @@ test("public media verifier requires direct HEAD, three ranges, and full hash", 
 
   const report = await verifyDirectAppleCanaryMedia(tiny, { fetchImpl });
   assert.equal(report.directNoRedirect, true);
+  assert.equal(report.contentType, "audio/mpeg");
   assert.equal(report.verifiedRangeCount, 3);
   assert.equal(report.bytes, bytes.length);
   assert.equal(report.sha256, sha256(bytes));
@@ -531,6 +566,28 @@ test("public media verifier requires direct HEAD, three ranges, and full hash", 
     }),
     /must not redirect/,
   );
+
+  for (const invalidContentType of [
+    "application/octet-stream",
+    "audio/mpeg; charset=binary",
+  ]) {
+    await assert.rejects(
+      verifyDirectAppleCanaryMedia(tiny, {
+        fetchImpl: async (url, options) => {
+          if (options.method !== "HEAD") return fetchImpl(url, options);
+          return responseAt(url, null, {
+            status: 200,
+            headers: {
+              "accept-ranges": "bytes",
+              "content-length": String(bytes.length),
+              "content-type": invalidContentType,
+            },
+          });
+        },
+      }),
+      /Canary media HEAD returned/,
+    );
+  }
 });
 
 test("prototype generator cannot target production out or run without acknowledgment", async () => {

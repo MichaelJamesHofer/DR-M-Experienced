@@ -121,6 +121,7 @@
       "required": [
         "verifiedAt",
         "publicUrl",
+        "contentType",
         "directNoRedirect",
         "headStatus",
         "acceptRanges",
@@ -135,6 +136,7 @@
         "publicUrl": {
           "const": "https://drmexperienced.com/apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mpga"
         },
+        "contentType": { "const": "audio/mpeg" },
         "directNoRedirect": { "const": true },
         "headStatus": { "const": 200 },
         "acceptRanges": { "const": true },
