@@ -148,6 +148,6 @@
       <pubDate>Tue, 20 Jan 2026 08:40:52 GMT</pubDate>
       <itunes:explicit>false</itunes:explicit>
       <itunes:image href="https://media.rss.com/dr-m-experienced/cover_ed187890cfcabb6ebf04711e0e14b8cf.jpg"/>
-    </item>
+    <itunes:block>yes</itunes:block></item>
   </channel>
 </rss>

@@ -13,24 +13,24 @@
   "composition": {
     "method": "base_artifact_plus_authorized_apple_subtree",
     "basePhase": "media_staged",
-    "materializedPhase": "active",
+    "materializedPhase": "contained",
     "authorizedStatePath": "publishing/apple-canary-deployment-state.json",
-    "materializedAt": "2026-08-28T04:30:43Z"
+    "materializedAt": "2026-08-28T04:34:27Z"
   },
   "inventory": {
     "manifestPath": "publishing/legacy-pages-root-safeguard-files.sha256",
     "fileCount": 141,
-    "manifestSha256": "13105a2756b145ae72c8ee109542e4fc358d0b953623f58e63d661273b7a7e32",
+    "manifestSha256": "8d1efbb9fd8df56cd37d5ecbbd618feec1797e98138783be81fb514630e0a527",
     "preExistingTrackedPathsToPreserve": [
       ".nojekyll",
       "CNAME"
     ]
   },
   "applePhaseState": {
-    "phase": "active",
-    "feedSnapshot": "active",
+    "phase": "contained",
+    "feedSnapshot": "contained",
     "feedPath": "apple-podcasts/feed.xml",
-    "feedSha256": "caa85ee126729629036aba67cc37ef132fad79055f56c77ba6b999e830d2a96a",
+    "feedSha256": "31b7b21a60d567f43c0fa402add70df7a945f7446ae76cc222c51b36502bd99c",
     "candidateMediaPath": "apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mpga",
     "candidateMediaSha256": "9f9402d98ec297cd350e6c6859e1d79459ca5e35ba44bbb4797eb4ef09a1c65b",
     "candidateMediaBytes": 16339867,
