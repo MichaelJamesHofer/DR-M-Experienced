@@ -207,6 +207,7 @@ test("operational phase state rejects unknown or unauthorized open phases", asyn
       authorizedBy: "test_owner",
       approvalBasis: "Test fixture only.",
     };
+    noPublicEvidence.mediaStagedPublicEvidence = null;
     const noPublicEvidencePath = path.join(temporary, "no-evidence.json");
     await fs.writeFile(
       noPublicEvidencePath,

@@ -14,14 +14,14 @@ function sha256(value) {
   return createHash("sha256").update(value).digest("hex");
 }
 
-test("legacy Pages root safeguard is complete, exact, and closed", async () => {
+test("legacy Pages root safeguard is complete, exact, and media staged", async () => {
   const control = JSON.parse(await fs.readFile(controlPath, "utf8"));
   assert.equal(control.schemaVersion, 1);
   assert.equal(control.mode, "temporary_legacy_pages_root_safeguard");
-  assert.equal(control.sourceArtifact.workflowRunId, 33039789366);
+  assert.equal(control.sourceArtifact.workflowRunId, 33141504981);
   assert.equal(
     control.sourceArtifact.sourceCommit,
-    "08afdab4e4618dbc013e7d7ab2c544abd6a382f9",
+    "71fcbf9bd93a493d7960883d26c86a7261882db6",
   );
 
   const manifestPath = path.join(
@@ -60,6 +60,7 @@ test("legacy Pages root safeguard is complete, exact, and closed", async () => {
     "index.html",
     "404.html",
     "apple-podcasts/feed.xml",
+    "apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mpga",
   ]) {
     assert.equal(inventory.has(required), true, `${required} is required`);
   }
@@ -67,8 +68,17 @@ test("legacy Pages root safeguard is complete, exact, and closed", async () => {
   assert.equal((await fs.readFile(path.join(repositoryRoot, ".nojekyll"))).length, 0);
 
   const appleDirectory = path.join(repositoryRoot, "apple-podcasts");
-  assert.deepEqual((await fs.readdir(appleDirectory)).sort(), ["feed.xml"]);
+  assert.deepEqual((await fs.readdir(appleDirectory)).sort(), ["feed.xml", "media"]);
   const feed = await fs.readFile(path.join(appleDirectory, "feed.xml"));
-  assert.equal(sha256(feed), control.appleClosedState.feedSha256);
-  assert.equal(control.appleClosedState.candidateMediaIncluded, false);
+  assert.equal(sha256(feed), control.appleMediaStagedState.feedSha256);
+  assert.equal(control.appleMediaStagedState.phase, "media_staged");
+  const mediaPath = path.join(
+    repositoryRoot,
+    control.appleMediaStagedState.candidateMediaPath,
+  );
+  const media = await fs.readFile(mediaPath);
+  assert.equal(media.length, control.appleMediaStagedState.candidateMediaBytes);
+  assert.equal(sha256(media), control.appleMediaStagedState.candidateMediaSha256);
+  assert.equal(control.appleMediaStagedState.candidateMediaContentType, "audio/mpeg");
+  assert.equal(control.appleMediaStagedState.candidateMediaIncluded, true);
 });
