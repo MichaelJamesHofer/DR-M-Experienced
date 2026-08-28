@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+
+Host: https://drmexperienced.com
+Sitemap: https://drmexperienced.com/sitemap.xml
