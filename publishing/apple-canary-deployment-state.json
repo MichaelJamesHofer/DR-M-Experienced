@@ -38,7 +38,19 @@
     "length": 16339867,
     "sha256": "9f9402d98ec297cd350e6c6859e1d79459ca5e35ba44bbb4797eb4ef09a1c65b"
   },
-  "mediaStagedPublicEvidence": null,
+  "mediaStagedPublicEvidence": {
+    "verifiedAt": "2026-08-28T04:22:12Z",
+    "publicUrl": "https://drmexperienced.com/apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mpga",
+    "contentType": "audio/mpeg",
+    "directNoRedirect": true,
+    "headStatus": 200,
+    "acceptRanges": true,
+    "verifiedRangeCount": 3,
+    "fullStatus": 200,
+    "bytes": 16339867,
+    "sha256": "9f9402d98ec297cd350e6c6859e1d79459ca5e35ba44bbb4797eb4ef09a1c65b",
+    "historicalFeedSha256": "8ca7b219593efee9920fbe2267f7e11796e72a3b8865f46865b06f36257b103b"
+  },
   "transitionAuthorization": {
     "approvedTargetPhase": "media_staged",
     "recordedAt": "2026-08-27T04:36:14Z",
