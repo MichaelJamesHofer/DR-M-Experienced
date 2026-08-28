@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "mode": "temporary_legacy_pages_root_safeguard",
+  "reason": "GitHub Pages is still configured for the legacy main:/ source while the production site is deployed by Actions. The checked-in static export prevents a legacy branch deployment from publishing a 404.",
+  "sourceArtifact": {
+    "workflowRunId": 33039789366,
+    "workflowRunAttempt": 3,
+    "sourceCommit": "08afdab4e4618dbc013e7d7ab2c544abd6a382f9",
+    "artifactId": 9673565467,
+    "artifactApiDigest": "sha256:5492b1952b25fb989287e10bfa567fbe36aaa05592ebee17b0b9e0a0184caf27",
+    "downloadedArtifactTarSha256": "69f36e8b6349dd1a23132ae4839f1b371da71b19f2ce66871332401dff4374bf"
+  },
+  "inventory": {
+    "manifestPath": "publishing/legacy-pages-root-safeguard-files.sha256",
+    "fileCount": 140,
+    "manifestSha256": "b576ffb98ffb08a26910c99cae353af95de54cec074c16131fac003b1a2ea5ea",
+    "preExistingTrackedPathsToPreserve": [
+      ".nojekyll",
+      "CNAME"
+    ]
+  },
+  "appleClosedState": {
+    "feedPath": "apple-podcasts/feed.xml",
+    "feedSha256": "8ca7b219593efee9920fbe2267f7e11796e72a3b8865f46865b06f36257b103b",
+    "candidateMediaIncluded": false
+  },
+  "cleanupPrecondition": "Switch Pages build_type to workflow, complete and verify an Actions deployment, then remove only manifest-listed generated paths while preserving the pre-existing tracked paths."
+}

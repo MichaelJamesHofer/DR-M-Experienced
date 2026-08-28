@@ -109,7 +109,7 @@ test("prototype config is schema-pinned, deterministic, and remote-fail-closed",
   } else {
     assert.equal(
       deploymentState.sealedMediaAsset.path,
-      "publishing/apple-republish-canary-assets/brain-fog-part-1-9f9402d98ec297cd.mp3",
+      "publishing/apple-republish-canary-assets/brain-fog-part-1-9f9402d98ec297cd.mpga",
     );
     assert.ok(deploymentState.transitionAuthorization.recordedAt);
     assert.ok(deploymentState.transitionAuthorization.authorizedBy);
@@ -161,6 +161,7 @@ test("operational phase state rejects unknown or unauthorized open phases", asyn
     unauthorized.mediaStagedPublicEvidence = {
       verifiedAt: "2026-08-26T22:30:00Z",
       publicUrl: config.canary.candidateEnclosure.url,
+      contentType: config.canary.candidateEnclosure.mediaType,
       directNoRedirect: true,
       headStatus: 200,
       acceptRanges: true,
@@ -178,10 +179,28 @@ test("operational phase state rejects unknown or unauthorized open phases", asyn
       /require a sealed media asset and attended authorization record/,
     );
 
+    const wrongContentType = structuredClone(unauthorized);
+    wrongContentType.transitionAuthorization.recordedAt =
+      "2026-08-26T22:30:00Z";
+    wrongContentType.transitionAuthorization.authorizedBy = "test_owner";
+    wrongContentType.sealedMediaAsset.path =
+      "publishing/apple-republish-canary-assets/brain-fog-part-1-9f9402d98ec297cd.mpga";
+    wrongContentType.mediaStagedPublicEvidence.contentType =
+      "application/octet-stream";
+    const wrongContentTypePath = path.join(temporary, "wrong-content-type.json");
+    await fs.writeFile(
+      wrongContentTypePath,
+      JSON.stringify(wrongContentType),
+    );
+    await assert.rejects(
+      loadAppleRepublishCanaryAuthorities(undefined, wrongContentTypePath),
+      /Apple canary deployment state is invalid/,
+    );
+
     const noPublicEvidence = structuredClone(deploymentState);
     noPublicEvidence.phase = "active";
     noPublicEvidence.sealedMediaAsset.path =
-      "publishing/apple-republish-canary-assets/brain-fog-part-1-9f9402d98ec297cd.mp3";
+      "publishing/apple-republish-canary-assets/brain-fog-part-1-9f9402d98ec297cd.mpga";
     noPublicEvidence.transitionAuthorization = {
       approvedTargetPhase: "active",
       recordedAt: "2026-08-26T22:30:00Z",
@@ -266,11 +285,16 @@ test("sealed four-phase projections are exact and fail closed", () => {
 test("candidate enclosure is a path-distinct immutable content-hash URL", () => {
   assert.equal(
     config.canary.candidateEnclosure.url,
-    "https://drmexperienced.com/apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mp3",
+    "https://drmexperienced.com/apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mpga",
   );
   assert.equal(
     config.artifactLayout.mediaRelativePath,
-    "apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mp3",
+    "apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mpga",
+  );
+  assert.equal(config.canary.candidateEnclosure.mediaType, "audio/mpeg");
+  assert.equal(
+    new URL(config.canary.candidateEnclosure.url).pathname.endsWith(".mpga"),
+    true,
   );
   assert.notEqual(
     config.canary.candidateEnclosure.url,
@@ -281,8 +305,19 @@ test("candidate enclosure is a path-distinct immutable content-hash URL", () => 
     config.canary.sourceEnclosure.sha256,
   );
   assert.equal(config.canary.candidateEnclosure.publicHttpValidated, false);
+  assert.equal(path.extname(config.artifactLayout.mediaRelativePath), ".mpga");
   assert.equal(config.validationEvidence.candidatePublicHttpValidated, false);
   assert.equal(config.validationEvidence.appleIdentityTreatmentVerified, false);
+
+  const wrongMediaType = structuredClone(config);
+  wrongMediaType.canary.candidateEnclosure.mediaType =
+    "application/octet-stream";
+  assert.equal(validateAppleRepublishCanaryConfig(wrongMediaType).valid, false);
+
+  const wrongExtension = structuredClone(config);
+  wrongExtension.canary.candidateEnclosure.url =
+    wrongExtension.canary.candidateEnclosure.url.replace(/\.mpga$/, ".bin");
+  assert.equal(validateAppleRepublishCanaryConfig(wrongExtension).valid, false);
 });
 
 test("prototype changes only Episode 1 GUID and enclosure and reverses byte-exactly", () => {
@@ -373,7 +408,7 @@ test("reversal policy is phase-aware and never removes used canary media", () =>
 
 test("immutable media staging hashes before no-replace install, reuses exact bytes, and refuses drift", async () => {
   const temporary = await fs.mkdtemp(path.join(os.tmpdir(), "drm-canary-media-"));
-  const destination = path.join(temporary, "media", "tiny.mp3");
+  const destination = path.join(temporary, "media", "tiny.mpga");
   const bytes = Buffer.from("tiny exact media");
   const tiny = structuredClone(config);
   tiny.canary.sourceEnclosure.length = bytes.length;
@@ -420,7 +455,7 @@ test("immutable media staging hashes before no-replace install, reuses exact byt
 
 test("media staging never removes a lock owned by another process", async () => {
   const temporary = await fs.mkdtemp(path.join(os.tmpdir(), "drm-canary-lock-"));
-  const destination = path.join(temporary, "media", "tiny.mp3");
+  const destination = path.join(temporary, "media", "tiny.mpga");
   const lockPath = `${destination}.lock`;
   try {
     await fs.mkdir(path.dirname(destination), { recursive: true });
@@ -511,6 +546,7 @@ test("public media verifier requires direct HEAD, three ranges, and full hash", 
 
   const report = await verifyDirectAppleCanaryMedia(tiny, { fetchImpl });
   assert.equal(report.directNoRedirect, true);
+  assert.equal(report.contentType, "audio/mpeg");
   assert.equal(report.verifiedRangeCount, 3);
   assert.equal(report.bytes, bytes.length);
   assert.equal(report.sha256, sha256(bytes));
@@ -529,6 +565,28 @@ test("public media verifier requires direct HEAD, three ranges, and full hash", 
     }),
     /must not redirect/,
   );
+
+  for (const invalidContentType of [
+    "application/octet-stream",
+    "audio/mpeg; charset=binary",
+  ]) {
+    await assert.rejects(
+      verifyDirectAppleCanaryMedia(tiny, {
+        fetchImpl: async (url, options) => {
+          if (options.method !== "HEAD") return fetchImpl(url, options);
+          return responseAt(url, null, {
+            status: 200,
+            headers: {
+              "accept-ranges": "bytes",
+              "content-length": String(bytes.length),
+              "content-type": invalidContentType,
+            },
+          });
+        },
+      }),
+      /Canary media HEAD returned/,
+    );
+  }
 });
 
 test("prototype generator cannot target production out or run without acknowledgment", async () => {

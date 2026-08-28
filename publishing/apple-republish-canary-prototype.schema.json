@@ -51,7 +51,7 @@
         "productionArtifactRoot": "out",
         "requiredBuiltSiteSentinels": ["index.html", "CNAME"],
         "feedRelativePath": "apple-podcasts/feed.xml",
-        "mediaRelativePath": "apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mp3",
+        "mediaRelativePath": "apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mpga",
         "writeMethod": "same_directory_temporary_file_then_atomic_link_no_replace",
         "overwriteExistingMedia": false,
         "prototypeRootMustRemainOutsideProductionArtifact": true
@@ -88,7 +88,7 @@
           "sha256": "9f9402d98ec297cd350e6c6859e1d79459ca5e35ba44bbb4797eb4ef09a1c65b"
         },
         "candidateEnclosure": {
-          "url": "https://drmexperienced.com/apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mp3",
+          "url": "https://drmexperienced.com/apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mpga",
           "identityMechanism": "direct_immutable_content_hash_pages_path",
           "feedUrlDistinctFromSource": true,
           "finalUrlMustRemainExactWithoutRedirect": true,
@@ -122,7 +122,7 @@
         "localCandidateArtifactByteCount": 16339867,
         "localCandidateArtifactSha256": "9f9402d98ec297cd350e6c6859e1d79459ca5e35ba44bbb4797eb4ef09a1c65b",
         "localCandidateArtifactFullDecodePassed": true,
-        "localCandidateOverlaySha256": "fea3c6bf7c2485d93ea9c7768f41b717c1244a8982488053883536343e582af7",
+        "localCandidateOverlaySha256": "caa85ee126729629036aba67cc37ef132fad79055f56c77ba6b999e830d2a96a",
         "candidatePublicHttpValidated": false,
         "appleIdentityTreatmentVerified": false
       }

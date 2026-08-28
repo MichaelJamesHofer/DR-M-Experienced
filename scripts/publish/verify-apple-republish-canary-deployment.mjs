@@ -23,13 +23,14 @@ function assertExactDirectResponse(response, requestedUrl, label) {
   }
 }
 
-function mediaType(response) {
-  return response.headers.get("content-type")?.split(";")[0] ?? null;
+function contentType(response) {
+  return response.headers.get("content-type");
 }
 
 function assertDirectHeaders(response, enclosure, label) {
-  if (mediaType(response) !== enclosure.mediaType) {
-    throw new Error(`${label} returned ${mediaType(response) ?? "no content type"}.`);
+  const observedContentType = contentType(response);
+  if (observedContentType !== enclosure.mediaType) {
+    throw new Error(`${label} returned ${observedContentType ?? "no content type"}.`);
   }
   const declared = response.headers.get("content-length");
   if (declared !== null && !/^\d+$/.test(declared)) {
@@ -188,6 +189,7 @@ export async function verifyDirectAppleCanaryMedia(
 
   return {
     publicUrl: enclosure.url,
+    contentType: contentType(head),
     directNoRedirect: true,
     headStatus: head.status,
     acceptRanges: true,

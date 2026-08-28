@@ -117,6 +117,8 @@ function assertKnownPhase(deploymentState, config) {
     if (
       !evidence ||
       evidence.publicUrl !== config.canary.candidateEnclosure.url ||
+      evidence.contentType !== config.canary.candidateEnclosure.mediaType ||
+      evidence.contentType !== "audio/mpeg" ||
       evidence.bytes !== config.canary.candidateEnclosure.length ||
       evidence.sha256 !== config.canary.candidateEnclosure.sha256 ||
       evidence.historicalFeedSha256 !== historical.publishedSha256 ||

@@ -28,7 +28,7 @@ function replaceEpisodeOneLength(xml, url, length) {
 async function fixtureAuthorities(temporary, phase) {
   const bytes = Buffer.alloc(12_288);
   for (let index = 0; index < bytes.length; index += 1) bytes[index] = index % 251;
-  const assetPath = path.join(temporary, "sealed.mp3");
+  const assetPath = path.join(temporary, "sealed.mpga");
   await fs.writeFile(assetPath, bytes);
   const authorities = structuredClone(loaded);
   authorities.config.canary.sourceEnclosure.length = bytes.length;
@@ -45,7 +45,7 @@ async function fixtureAuthorities(temporary, phase) {
   authorities.deploymentState.transitionAuthorization.authorizedBy =
     phase === "closed" ? null : "test_owner";
   authorities.deploymentState.sealedMediaAsset.path =
-    phase === "closed" ? null : "publishing/apple-republish-canary-assets/test.mp3";
+    phase === "closed" ? null : "publishing/apple-republish-canary-assets/test.mpga";
   authorities.deploymentState.sealedMediaAsset.length = bytes.length;
   authorities.deploymentState.sealedMediaAsset.sha256 = sha256(bytes);
   authorities.deploymentState.mediaStagedPublicEvidence =
@@ -53,6 +53,7 @@ async function fixtureAuthorities(temporary, phase) {
       ? {
           verifiedAt: "2026-08-26T22:30:00Z",
           publicUrl: authorities.config.canary.candidateEnclosure.url,
+          contentType: authorities.config.canary.candidateEnclosure.mediaType,
           directNoRedirect: true,
           headStatus: 200,
           acceptRanges: true,
@@ -156,7 +157,7 @@ const phaseCases = [
     block: false,
     inventory: [
       "feed.xml",
-      "media/brain-fog-part-1-9f9402d98ec297cd.mp3",
+      "media/brain-fog-part-1-9f9402d98ec297cd.mpga",
     ],
   },
   {
@@ -166,7 +167,7 @@ const phaseCases = [
     block: false,
     inventory: [
       "feed.xml",
-      "media/brain-fog-part-1-9f9402d98ec297cd.mp3",
+      "media/brain-fog-part-1-9f9402d98ec297cd.mpga",
     ],
   },
   {
@@ -176,7 +177,7 @@ const phaseCases = [
     block: true,
     inventory: [
       "feed.xml",
-      "media/brain-fog-part-1-9f9402d98ec297cd.mp3",
+      "media/brain-fog-part-1-9f9402d98ec297cd.mpga",
     ],
   },
 ];
@@ -264,6 +265,7 @@ for (const phaseCase of phaseCases) {
       assert.equal(report.candidateMediaRequired, phaseCase.phase !== "closed");
       assert.equal(report.media === null, phaseCase.phase === "closed");
       if (report.media) {
+        assert.equal(report.media.contentType, "audio/mpeg");
         assert.equal(report.media.verifiedRangeCount, 3);
         assert.equal(report.media.sha256, sha256(bytes));
       }
@@ -272,6 +274,31 @@ for (const phaseCase of phaseCases) {
     }
   });
 }
+
+test("active promotion requires exact audio/mpeg public evidence before writes", async () => {
+  const temporary = await fs.mkdtemp(path.join(os.tmpdir(), "drm-apple-mime-"));
+  try {
+    const { authorities } = await fixtureAuthorities(temporary, "active");
+    authorities.deploymentState.mediaStagedPublicEvidence.contentType =
+      "application/octet-stream";
+    const site = await makeSite(temporary, "site");
+    await assert.rejects(
+      generateAuthorizedAppleSubtree({
+        siteRoot: site,
+        authorities,
+        fetchImpl: async () => {
+          throw new Error("public feed must not be read after MIME evidence fails");
+        },
+      }),
+      /requires exact public media-staging evidence/,
+    );
+    await assert.rejects(fs.lstat(path.join(site, "apple-podcasts")), {
+      code: "ENOENT",
+    });
+  } finally {
+    await fs.rm(temporary, { recursive: true, force: true });
+  }
+});
 
 test("active and contained baselines allow only exact previous or current projections", () => {
   const activePrevious = assertPublicApplePhaseBaseline(
