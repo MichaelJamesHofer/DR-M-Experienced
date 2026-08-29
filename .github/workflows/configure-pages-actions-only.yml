@@ -1,0 +1,34 @@
+name: Configure GitHub Pages for Actions-only publishing
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pages: write
+    steps:
+      - name: Disable legacy branch publishing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          endpoint="repos/${GITHUB_REPOSITORY}/pages"
+          before="$(gh api "$endpoint" --jq '.build_type')"
+          if [[ "$before" != "workflow" ]]; then
+            gh api --method PUT \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "$endpoint" \
+              -f build_type=workflow
+          fi
+          after="$(gh api "$endpoint" --jq '.build_type')"
+          if [[ "$after" != "workflow" ]]; then
+            echo "::error::GitHub Pages remains configured for $after publishing."
+            exit 1
+          fi
+          echo "GitHub Pages publishing source is Actions-only."
