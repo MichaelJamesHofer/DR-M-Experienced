@@ -10,7 +10,7 @@ source prepare the title locally. The local preview is
 
 | Destination | Public name at last check | Next action |
 |---|---|---|
-| [Website](https://drmexperienced.com/) | `Dr. M Experienced, with Dr. David Musnick` in title, hero, and footer | Deploy the reviewed branch and independently read back; Pages currently reports legacy source and the Actions workflow is disabled |
+| [Website](https://drmexperienced.com/) | `Dr. M Experienced, with Dr. David Musnick` in title, hero, and footer | Deploy the reviewed branch and independently read back; Pages still reports legacy `main:/` source, but the Actions workflow was re-enabled September 14 |
 | [RSS.com](https://rss.com/podcasts/dr-m-experienced/) | `Dr. M Experienced, with Dr. David Musnick` in the canonical feed | Saved dashboard login expired in both isolated and normal Otto Chrome; owner must sign in before the existing podcast title/description can be edited |
 | [Spotify](https://open.spotify.com/show/7GGLljxmO0G3FLjPy8vfcw) | `Dr. M Experienced, with Dr. David Musnick` | Verify RSS.com propagation on the existing show ID |
 | [Apple](https://podcasts.apple.com/us/podcast/dr-m-experienced-with-dr-david-musnick/id1870433419) | `Dr. M Experienced, with Dr. David Musnick` | A hash-bound Apple-only show-metadata projection is prepared, not deployed; verify the public feed and catalog after deployment |
