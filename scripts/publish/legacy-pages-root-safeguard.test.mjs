@@ -32,7 +32,15 @@ test("legacy Pages root safeguard is complete and matches the authorized Apple p
   assert.equal(control.pagesSourceReadback.sourceBranch, "main");
   assert.equal(control.pagesSourceReadback.sourcePath, "/");
   assert.equal(control.pagesSourceReadback.customDomain, "drmexperienced.com");
-  assert.equal(control.pagesSourceReadback.postSwitchActionsDeploymentVerified, false);
+  assert.equal(control.pagesSourceReadback.postSwitchActionsDeploymentVerified, true);
+  assert.equal(control.pagesSourceReadback.postSwitchActionsDeployment.workflowRunId, 34907411432);
+  assert.equal(control.pagesSourceReadback.postSwitchActionsDeployment.buildPassed, true);
+  assert.equal(control.pagesSourceReadback.postSwitchActionsDeployment.deployPassed, true);
+  assert.equal(control.pagesSourceReadback.postSwitchActionsDeployment.publicAppleFeedVerificationPassed, true);
+  assert.equal(
+    control.pagesSourceReadback.postSwitchActionsDeployment.publicAppleFeedSha256,
+    control.applePhaseState.feedSha256,
+  );
   assert.equal(control.sourceArtifact.workflowRunId, 34897205655);
   assert.equal(
     control.sourceArtifact.sourceCommit,

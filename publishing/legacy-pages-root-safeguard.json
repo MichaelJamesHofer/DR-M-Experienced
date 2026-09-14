@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "mode": "temporary_legacy_pages_root_safeguard",
-  "reason": "The checked-in static export protected production while GitHub Pages used the legacy main:/ source. Pages Source was switched to GitHub Actions on September 14; retain the safeguard until a post-switch Actions deployment and public readback pass, then remove it through a separate guarded change.",
+  "reason": "The checked-in static export protected production while GitHub Pages used the legacy main:/ source. Pages Source switched to GitHub Actions and the post-switch deployment and public readback passed on September 14. The safeguard remains checked in pending a separate guarded cleanup.",
   "pagesSourceReadback": {
     "verifiedOn": "2026-09-14",
     "updateMethod": "PUT",
@@ -13,7 +13,17 @@
     "customDomain": "drmexperienced.com",
     "status": "built",
     "httpsEnforced": false,
-    "postSwitchActionsDeploymentVerified": false
+    "postSwitchActionsDeploymentVerified": true,
+    "postSwitchActionsDeployment": {
+      "mergeCommit": "34023f4167245a1372aa98538f7e6e566131d477",
+      "workflowRunId": 34907411432,
+      "buildPassed": true,
+      "deployPassed": true,
+      "publicAppleFeedVerificationPassed": true,
+      "independentPublicReadbackOn": "2026-09-14",
+      "publicWebsiteTitle": "DR M Experienced, with Dr. David Musnick MD",
+      "publicAppleFeedSha256": "3b2266bdb8cfcc048ce24b0461f557784974b8fc9b0b0733f8975844e6f62b47"
+    }
   },
   "sourceArtifact": {
     "workflowRunId": 34897205655,
