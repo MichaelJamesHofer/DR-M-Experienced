@@ -1184,8 +1184,9 @@ GitHub Pages Source is `GitHub Actions` (`build_type=workflow`), saved and
 authenticated-read-back on September 14, 2026. The custom domain remains
 `drmexperienced.com`. The Pages API still returns the retained `main:/` source
 field, but the selected build mode is `workflow`. The former branch-root static
-export safeguard remains checked in until a post-switch Actions deployment and
-independent public site and Apple-feed readback pass. See
+export safeguard remains checked in, although the post-switch Actions deployment
+and independent public site and Apple-feed readback passed on September 14 in
+run `34907411432`. Clean it up only through a separate guarded change. See
 `publishing/legacy-pages-root-safeguard.json` and
 `docs/show-name-rollout-20260914.md`; do not remove `CNAME` or `.nojekyll`.
 
