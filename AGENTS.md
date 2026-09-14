@@ -33,8 +33,10 @@ Apple catalog availability, Amazon's one-time claim, and directory cache
 convergence are downstream work, not reasons to recreate a show, revert Apple's
 feed URL, or switch the canonical host.
 
-The September 14 show-name correction is prepared locally in catalog revision
-17. The requested exact title is `DR M Experienced, with Dr. David Musnick MD`.
+The September 14 show-name correction is deployed in catalog revision 17, and
+the existing RSS.com podcast title and opening description were saved and
+verified in its public feed and page. The requested exact title is
+`DR M Experienced, with Dr. David Musnick MD`.
 The owner explicitly authorized a coordinated website and channel rename,
 superseding the prior feed-change hold for show-level title and description
 only. Preserve the RSS.com and Apple feed URLs, all episode GUIDs, enclosures,
