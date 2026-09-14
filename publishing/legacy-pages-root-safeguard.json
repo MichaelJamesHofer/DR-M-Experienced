@@ -3,24 +3,23 @@
   "mode": "temporary_legacy_pages_root_safeguard",
   "reason": "GitHub Pages is still configured for the legacy main:/ source while the production site is deployed by Actions. The checked-in static export prevents a legacy branch deployment from publishing a 404.",
   "sourceArtifact": {
-    "workflowRunId": 33141504981,
+    "workflowRunId": 34897205655,
     "workflowRunAttempt": 1,
-    "sourceCommit": "71fcbf9bd93a493d7960883d26c86a7261882db6",
-    "artifactId": 9674124130,
-    "artifactApiDigest": "sha256:8429b5ff9127862c2f42bca342b429a788e0621c5c28238ffbe804d24c51f731",
-    "downloadedArtifactTarSha256": "e9bf850201626f2c8445ee5921805a44eb7241b3d25d509387a85e7f190188f7"
+    "sourceCommit": "945c28faf1c4eb1f217d388ca60e6dc57b064bd5",
+    "artifactId": 10368782628,
+    "artifactApiDigest": "sha256:7fa6d2460378c48ce2f1e7b5e1a1feebba31b280514046b8651adc4fdd3f7bed",
+    "downloadedArtifactTarSha256": "7c6ec2775eced4f28f8b9705370f89ab57dc4f359c3eac167593c2a4a37a450d"
   },
   "composition": {
-    "method": "base_artifact_plus_authorized_apple_subtree",
-    "basePhase": "media_staged",
+    "method": "verified_strict_production_actions_artifact",
     "materializedPhase": "active",
     "authorizedStatePath": "publishing/apple-canary-deployment-state.json",
-    "materializedAt": "2026-08-28T04:30:43Z"
+    "materializedAt": "2026-09-14T21:15:17Z"
   },
   "inventory": {
     "manifestPath": "publishing/legacy-pages-root-safeguard-files.sha256",
     "fileCount": 141,
-    "manifestSha256": "13105a2756b145ae72c8ee109542e4fc358d0b953623f58e63d661273b7a7e32",
+    "manifestSha256": "2623998d6c9bd0d0c625381158bdcca74dce079dd286ddce7409cb06349f176c",
     "preExistingTrackedPathsToPreserve": [
       ".nojekyll",
       "CNAME"
@@ -29,15 +28,16 @@
   "applePhaseState": {
     "phase": "active",
     "feedSnapshot": "active",
+    "feedProjection": "active+show-name-md-v1",
     "feedPath": "apple-podcasts/feed.xml",
-    "feedSha256": "caa85ee126729629036aba67cc37ef132fad79055f56c77ba6b999e830d2a96a",
+    "feedSha256": "3b2266bdb8cfcc048ce24b0461f557784974b8fc9b0b0733f8975844e6f62b47",
     "candidateMediaPath": "apple-podcasts/media/brain-fog-part-1-9f9402d98ec297cd.mpga",
     "candidateMediaSha256": "9f9402d98ec297cd350e6c6859e1d79459ca5e35ba44bbb4797eb4ef09a1c65b",
     "candidateMediaBytes": 16339867,
     "candidateMediaContentType": "audio/mpeg",
     "candidateMediaIncluded": true,
-    "mediaPubliclyVerifiedAt": "2026-08-28T04:22:12Z",
-    "phaseFeedPubliclyVerifiedAt": null
+    "mediaPubliclyVerifiedAt": "2026-09-14T21:15:28Z",
+    "phaseFeedPubliclyVerifiedAt": "2026-09-14T21:18:41Z"
   },
   "cleanupPrecondition": "Switch Pages build_type to workflow, complete and verify an Actions deployment, then remove only manifest-listed generated paths while preserving the pre-existing tracked paths."
 }

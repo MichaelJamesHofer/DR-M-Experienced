@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import test from "node:test";
+import { loadAppleAuthorizedAuthorities, selectedAppleFeed } from "./apple-show-name-md-v1.mjs";
 
 const repositoryRoot = path.resolve(import.meta.dirname, "../..");
 const controlPath = path.join(
@@ -25,11 +26,21 @@ test("legacy Pages root safeguard is complete and matches the authorized Apple p
   );
   assert.equal(control.schemaVersion, 1);
   assert.equal(control.mode, "temporary_legacy_pages_root_safeguard");
-  assert.equal(control.sourceArtifact.workflowRunId, 33141504981);
+  assert.equal(control.sourceArtifact.workflowRunId, 34897205655);
   assert.equal(
     control.sourceArtifact.sourceCommit,
-    "71fcbf9bd93a493d7960883d26c86a7261882db6",
+    "945c28faf1c4eb1f217d388ca60e6dc57b064bd5",
   );
+  assert.equal(control.sourceArtifact.artifactId, 10368782628);
+  assert.equal(
+    control.sourceArtifact.artifactApiDigest,
+    "sha256:7fa6d2460378c48ce2f1e7b5e1a1feebba31b280514046b8651adc4fdd3f7bed",
+  );
+  assert.equal(
+    control.sourceArtifact.downloadedArtifactTarSha256,
+    "7c6ec2775eced4f28f8b9705370f89ab57dc4f359c3eac167593c2a4a37a450d",
+  );
+  assert.equal(control.composition.method, "verified_strict_production_actions_artifact");
 
   const manifestPath = path.join(
     repositoryRoot,
@@ -86,6 +97,9 @@ test("legacy Pages root safeguard is complete and matches the authorized Apple p
   assert.equal(control.applePhaseState.phase, phase);
   assert.equal(control.applePhaseState.feedSnapshot, snapshotName);
   assert.equal(control.composition.materializedPhase, phase);
+  const authorities = await loadAppleAuthorizedAuthorities();
+  const selectedFeed = selectedAppleFeed(authorities, phase);
+  assert.equal(control.applePhaseState.feedProjection, selectedFeed.name);
   const snapshot = deploymentState.sealedFeedSnapshots[snapshotName];
   const storedFeed = await fs.readFile(path.join(repositoryRoot, snapshot.path));
   assert.equal(sha256(storedFeed), snapshot.storedSha256);
@@ -93,7 +107,8 @@ test("legacy Pages root safeguard is complete and matches the authorized Apple p
   const expectedPublishedFeed = storedFeed.subarray(0, -1);
   assert.equal(sha256(expectedPublishedFeed), snapshot.publishedSha256);
   const feed = await fs.readFile(path.join(appleDirectory, "feed.xml"));
-  assert.deepEqual(feed, expectedPublishedFeed);
+  assert.deepEqual(feed, Buffer.from(selectedFeed.xml, "utf8"));
+  assert.equal(sha256(feed), selectedFeed.sha256);
   assert.equal(sha256(feed), control.applePhaseState.feedSha256);
   const mediaPath = path.join(
     repositoryRoot,

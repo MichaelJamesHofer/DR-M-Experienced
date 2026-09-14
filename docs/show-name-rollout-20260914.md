@@ -5,15 +5,16 @@ Last public check: September 14, 2026.
 The owner requested the exact show title `DR M Experienced, with Dr. David
 Musnick MD` across the website and channels, and explicitly authorized a
 coordinated correction on September 14. Catalog revision 17 and the website
-source prepare the title locally. The local preview is
-`http://127.0.0.1:3000/`; it is not the public site.
+source were deployed from commit `945c28faf1c4eb1f217d388ca60e6dc57b064bd5`
+by guarded Actions run `34897205655`. The local preview at
+`http://127.0.0.1:3000/` is separate from the public site.
 
 | Destination | Public name at last check | Next action |
 |---|---|---|
-| [Website](https://drmexperienced.com/) | `Dr. M Experienced, with Dr. David Musnick` in title, hero, and footer | Deploy the reviewed branch and independently read back; Pages still reports legacy `main:/` source, but the Actions workflow was re-enabled September 14 |
+| [Website](https://drmexperienced.com/) | Exact full title in public title, hero, and footer | Actions build, deployment, and public Apple-feed verification passed; the legacy `main:/` Pages source still needs an owner settings change or a current checked-in safeguard |
 | [RSS.com](https://rss.com/podcasts/dr-m-experienced/) | `Dr. M Experienced, with Dr. David Musnick` in the canonical feed | Saved dashboard login expired in both isolated and normal Otto Chrome; owner must sign in before the existing podcast title/description can be edited |
 | [Spotify](https://open.spotify.com/show/7GGLljxmO0G3FLjPy8vfcw) | `Dr. M Experienced, with Dr. David Musnick` | Verify RSS.com propagation on the existing show ID |
-| [Apple](https://podcasts.apple.com/us/podcast/dr-m-experienced-with-dr-david-musnick/id1870433419) | `Dr. M Experienced, with Dr. David Musnick` | A hash-bound Apple-only show-metadata projection is prepared, not deployed; verify the public feed and catalog after deployment |
+| [Apple](https://podcasts.apple.com/us/podcast/dr-m-experienced-with-dr-david-musnick/id1870433419) | Exact full title in public page and iTunes lookup at about 21:16 UTC | Apple-only feed title projection is live and hash-verified; Episodes 1-2 publication remains a separate unresolved issue |
 | [YouTube](https://www.youtube.com/channel/UCFA1nVv4lKMBlx81gjMAOFQ) | Exact full title in anonymous public metadata at 21:02 UTC | Studio saved exact channel name and description prefix on existing channel; handle unchanged |
 | [Vimeo](https://vimeo.com/drmexperienced) | `DR M Experienced, Dr. Musnick MD` after edit | The editor rejected 43 characters (32-character limit); exact full title starts the bio and About text, and public metadata readback passed |
 | [Instagram](https://www.instagram.com/drmexperienced/) | Exact full title in anonymous public metadata at 21:02 UTC | Account name and bio prefix saved; handle and Creator account preserved |
@@ -24,9 +25,12 @@ The legacy Anchor URL redirects to RSS.com. That feed had eight episodes on
 September 14. RSS.com is the canonical podcast metadata source; Apple alone
 uses the Apple-only overlay. The owner's September 14 direction supersedes the
 earlier hold only for this show-name correction, not for episode-identity
-repair. The current public Apple feed is the sealed `active` canary, with eight
-items and SHA-256 `caa85ee126729629036aba67cc37ef132fad79055f56c77ba6b999e830d2a96a`.
-The prepared title-only successor is documented in `docs/apple-show-name-md-v1.md`.
+repair. The current public Apple feed is the title-only projection of the sealed
+`active` canary, with eight items and SHA-256
+`3b2266bdb8cfcc048ce24b0461f557784974b8fc9b0b0733f8975844e6f62b47`.
+The original sealed snapshots remain unchanged; the projection is documented in
+`docs/apple-show-name-md-v1.md`. Apple show-name convergence does not establish
+that Episodes 1-2 are available in its public catalog.
 Do not let a show-name update alter GUIDs, enclosures, episode metadata, feed
 URLs, or stable show IDs. The old
 `publishing/hosting-migration.json` target metadata and existing show-art

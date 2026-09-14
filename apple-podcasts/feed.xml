@@ -2,11 +2,11 @@
 <?xml-stylesheet type="text/xsl" href="https://media.rss.com/style.xsl"?>
 <rss xmlns:podcast="https://podcastindex.org/namespace/1.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:psc="http://podlove.org/simple-chapters" xmlns:atom="http://www.w3.org/2005/Atom" xml:lang="en" version="2.0">
   <channel>
-    <title><![CDATA[Dr. M Experienced, with Dr. David Musnick]]></title>
+    <title><![CDATA[DR M Experienced, with Dr. David Musnick MD]]></title>
     <link>https://drmexperienced.com/</link>
     <atom:link href="https://drmexperienced.com/apple-podcasts/feed.xml" rel="self" type="application/rss+xml"/>
     <atom:link rel="hub" href="https://pubsubhubbub.appspot.com/"/>
-    <description><![CDATA[<p>Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine.</p>]]></description>
+    <description><![CDATA[<p>DR M Experienced, with Dr. David Musnick MD. Practical insights from decades in sports, regenerative, internal, and functional medicine.</p>]]></description>
     <generator>RSS.com 2026.817.133114</generator>
     <lastBuildDate>Wed, 26 Aug 2026 12:54:31 GMT</lastBuildDate>
     <language>en</language>
@@ -15,7 +15,7 @@
     <podcast:guid>e591f9e8-5029-53e1-ac9d-24440fb3fd7a</podcast:guid>
     <image>
       <url>https://media.rss.com/dr-m-experienced/podcast_cover.jpg</url>
-      <title>Dr. M Experienced, with Dr. David Musnick</title>
+      <title>DR M Experienced, with Dr. David Musnick MD</title>
       <link>https://drmexperienced.com/</link>
     </image>
     <podcast:locked>yes</podcast:locked>
