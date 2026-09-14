@@ -1,0 +1,25 @@
+{
+  "$schema": "./apple-show-name-md-v1.schema.json",
+  "schemaVersion": 1,
+  "mode": "apple_show_metadata_projection",
+  "status": "active",
+  "baseFeedSha256BySnapshot": {
+    "historical": "8ca7b219593efee9920fbe2267f7e11796e72a3b8865f46865b06f36257b103b",
+    "active": "caa85ee126729629036aba67cc37ef132fad79055f56c77ba6b999e830d2a96a",
+    "contained": "31b7b21a60d567f43c0fa402add70df7a945f7446ae76cc222c51b36502bd99c"
+  },
+  "targetFeedSha256BySnapshot": {
+    "historical": "4c748221c1a9daf83bb3cc6008371a426fa000c65910ff95eabe424068fae2d6",
+    "active": "3b2266bdb8cfcc048ce24b0461f557784974b8fc9b0b0733f8975844e6f62b47",
+    "contained": "fc8feb97b6da9a864b91c85b75c5b1de74cdc8858a15e50995a22fbc7c89602b"
+  },
+  "publicFeedUrl": "https://drmexperienced.com/apple-podcasts/feed.xml",
+  "sourceShowName": "Dr. M Experienced, with Dr. David Musnick",
+  "targetShowName": "DR M Experienced, with Dr. David Musnick MD",
+  "sourceDescription": "Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine.",
+  "targetDescription": "DR M Experienced, with Dr. David Musnick MD. Practical insights from decades in sports, regenerative, internal, and functional medicine.",
+  "authorization": {
+    "authorizedBy": "Otto",
+    "basis": "Owner requested the exact show name system-wide on 2026-09-14, including the MD credential."
+  }
+}

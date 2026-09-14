@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { SHORTS, shortDurationLabel } from "@/data/shorts";
+import { SITE_SHORT_NAME } from "@/lib/site-brand";
 
 export const metadata: Metadata = {
   title: "Shorts",
-  description: "Browse short Dr. M Experienced videos, practical clips, and recipes.",
+  description: `Browse short ${SITE_SHORT_NAME} videos, practical clips, and recipes.`,
   alternates: { canonical: "/shorts/" },
 };
 

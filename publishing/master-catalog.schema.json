@@ -55,10 +55,10 @@
           "additionalProperties": false,
           "required": ["full", "short", "host", "hostLine"],
           "properties": {
-            "full": { "const": "Dr. M Experienced, with Dr. David Musnick" },
-            "short": { "const": "Dr. M Experienced" },
-            "host": { "const": "Dr. David Musnick" },
-            "hostLine": { "const": "with Dr. David Musnick" }
+            "full": { "const": "DR M Experienced, with Dr. David Musnick MD" },
+            "short": { "const": "DR M Experienced" },
+            "host": { "const": "Dr. David Musnick MD" },
+            "hostLine": { "const": "with Dr. David Musnick MD" }
           }
         },
         "profileCopy": {
@@ -67,7 +67,7 @@
           "required": ["short", "long"],
           "properties": {
             "short": {
-              "const": "Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine."
+              "const": "DR M Experienced, with Dr. David Musnick MD. Practical insights from decades in sports, regenerative, internal, and functional medicine."
             },
             "long": {
               "type": "string",

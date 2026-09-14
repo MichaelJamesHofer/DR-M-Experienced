@@ -5,9 +5,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   APPLE_REPUBLISH_CANARY_PHASES,
-  loadAppleRepublishCanaryAuthorities,
   parseAppleRepublishFeed,
 } from "./apple-republish-canary-prototype.mjs";
+import {
+  loadAppleAuthorizedAuthorities,
+  selectedAppleFeed,
+} from "./apple-show-name-md-v1.mjs";
 import { fetchPublishedAppleFeed } from "./verify-apple-feed-deployment.mjs";
 
 const REPOSITORY_ROOT = fileURLToPath(new URL("../../", import.meta.url));
@@ -145,20 +148,17 @@ function expectedInventory(config, phase) {
 }
 
 function sealedProjection(authorities, phase) {
-  const snapshotName = authorities.deploymentState.feedSnapshotByPhase[phase];
-  const xml = authorities.sealedFeeds[snapshotName];
-  if (!snapshotName || typeof xml !== "string") {
-    throw new Error(`Apple ${phase} phase has no sealed feed projection.`);
-  }
+  const selected = selectedAppleFeed(authorities, phase);
+  const xml = selected.xml;
   const episodes = parseAppleRepublishFeed(xml, `Sealed Apple ${phase} feed`).episodes;
   return {
     xml,
     episodes,
     report: {
       phase,
-      outputSha256: sha256(xml),
+      outputSha256: selected.sha256,
       episodeCount: episodes.length,
-      sealedSnapshot: snapshotName,
+      sealedSnapshot: selected.name,
     },
   };
 }
@@ -178,13 +178,25 @@ export function assertPublicApplePhaseBaseline(
   authorities,
   targetPhase = authorities.deploymentState.phase,
 ) {
-  const allowed = BASELINE_PHASES[targetPhase];
+  const allowed = authorities.showNameMdRelease && targetPhase === "active"
+    ? ["active"]
+    : BASELINE_PHASES[targetPhase];
   if (!allowed) {
     throw new Error(`Apple ${targetPhase} phase does not use a sealed public transition baseline.`);
   }
-  const matches = allowed.filter(
-    (phase) => sealedProjection(authorities, phase).xml === publicXml,
-  );
+  const candidates = allowed.map((phase) => [
+    phase,
+    sealedProjection(authorities, phase).xml,
+  ]);
+  if (authorities.showNameMdRelease) {
+    for (const phase of allowed) {
+      const name = authorities.deploymentState.feedSnapshotByPhase[phase];
+      candidates.push([`${phase}_pre_show_name`, authorities.sealedFeeds[name]]);
+    }
+  }
+  const matches = candidates
+    .filter(([, xml]) => xml === publicXml)
+    .map(([phase]) => phase);
   if (matches.length === 0) {
     throw new Error(
       `Public Apple feed SHA-256 ${sha256(publicXml)} is neither the exact previous nor current ${targetPhase} projection.`,
@@ -300,7 +312,7 @@ async function acquireArtifactLock(root) {
 
 async function authoritiesFrom({ authorities, configPath, deploymentStatePath }) {
   return authorities ??
-    loadAppleRepublishCanaryAuthorities(configPath, deploymentStatePath);
+    loadAppleAuthorizedAuthorities({ configPath, deploymentStatePath });
 }
 
 export async function generateAuthorizedAppleSubtree({

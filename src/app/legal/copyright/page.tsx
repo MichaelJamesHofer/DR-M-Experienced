@@ -2,15 +2,15 @@ import { SITE_NAME } from "@/lib/site-brand";
 
 export const metadata = {
   title: "Copyright Notice",
-  description: "Copyright notice and permissions policy for Dr. M Experienced, with Dr. David Musnick.",
+  description: `Copyright notice and permissions policy for ${SITE_NAME}.`,
 };
 
 const sections = [
   {
     title: "What is protected",
     items: [
-      "Episodes, show notes, articles, page copy, graphics, downloads, audio, video, and other original materials published by Dr. M Experienced, with Dr. David Musnick are protected by copyright unless otherwise noted.",
-      "The Dr. M Experienced name, presentation, and site materials may not be copied, mirrored, republished, sold, or used to imply endorsement without written permission.",
+      `Episodes, show notes, articles, page copy, graphics, downloads, audio, video, and other original materials published by ${SITE_NAME} are protected by copyright unless otherwise noted.`,
+      `The ${SITE_NAME} name, presentation, and site materials may not be copied, mirrored, republished, sold, or used to imply endorsement without written permission.`,
     ],
   },
   {
@@ -32,7 +32,7 @@ const sections = [
     title: "Third-party materials",
     items: [
       "Product names, trademarks, platform logos, embedded media, and third-party materials belong to their respective owners.",
-      "Affiliate links and product references do not transfer ownership of third-party marks or materials to Dr. M Experienced, with Dr. David Musnick.",
+      `Affiliate links and product references do not transfer ownership of third-party marks or materials to ${SITE_NAME}.`,
     ],
   },
 ];

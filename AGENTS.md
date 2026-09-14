@@ -1,8 +1,8 @@
 # Dr. M Ecosystem Operating Contract
 
 This repository is the operating home for the website, podcast distribution,
-social publishing, brand identity, and recovery procedures for Dr. M
-Experienced, with Dr. David Musnick.
+social publishing, brand identity, and recovery procedures for DR M
+Experienced, with Dr. David Musnick MD.
 
 ## Read First
 
@@ -33,18 +33,33 @@ Apple catalog availability, Amazon's one-time claim, and directory cache
 convergence are downstream work, not reasons to recreate a show, revert Apple's
 feed URL, or switch the canonical host.
 
+The September 14 show-name correction is prepared locally in catalog revision
+17. The requested exact title is `DR M Experienced, with Dr. David Musnick MD`.
+The owner explicitly authorized a coordinated website and channel rename,
+superseding the prior feed-change hold for show-level title and description
+only. Preserve the RSS.com and Apple feed URLs, all episode GUIDs, enclosures,
+dates, content, artwork, and stable platform IDs. Review
+`docs/show-name-rollout-20260914.md` and `docs/apple-show-name-md-v1.md` before
+any feed edit, Apple refresh, or website deployment. A prepared artifact or
+account-side save is not a public readback.
+
 Apple replied on August 7 under case `20000130526608`: its existing Episode 1
 and 2 records contain historical GUIDs that differ from the canonical feed. The
-active overlay restores only those two historical Apple GUIDs; it does not
-mutate RSS.com or Spotify. Apple displayed the overlay feed update at 1:04 PM
-MDT on August 26, and a separate refresh was observed complete around 1:06 PM.
+historical overlay restored those GUIDs without mutating RSS.com or Spotify.
+The current public Apple feed is the sealed August 28 `active` canary: Episode 1
+uses GUID `4111e441-c542-50f8-95de-3031c2b27f56` and an immutable Apple-only
+enclosure, while Episode 2 retains historical GUID
+`26896da2-76cf-4865-93f8-f94ddfb24568`. Apple displayed the historical
+overlay feed update at 1:04 PM MDT on August 26, and a separate refresh was
+observed complete around 1:06 PM.
 Authenticated Connect then showed six Available and two Draft RSS records with
 playable audio; public Apple remained six of eight. An authenticated Missing
 Podcast(s) escalation referencing the same case requests in-place publication
 with the existing Apple episode IDs preserved. The outcome is pending in
-`publishing/apple-guid-repair.json`. Do not request another refresh, point Apple
-back to RSS.com, change either feed, or create replacement records while the
-escalation is pending. On August 7,
+`publishing/apple-guid-repair.json`. Outside the specifically authorized
+show-level name correction, do not request another refresh, change episode
+identities or media, or create replacement records while the escalation is
+pending. On August 7,
 corrected video was restored against all seven existing Spotify episode IDs
 after the masters passed the loudness and sync checks in
 `publishing/audio-replacement-audit.json`. As of August 22, six video

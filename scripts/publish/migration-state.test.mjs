@@ -35,6 +35,8 @@ function validate(migration, platforms, canonicalFeedUrl = catalog.show.canonica
 function activeFixture() {
   const migration = clone(baselineMigration);
   const platforms = clone(baselinePlatforms);
+  migration.targetMetadata.title = catalog.show.names.full;
+  migration.targetMetadata.description = catalog.show.profileCopy.short;
   migration.status = "destination_clean_source_cleanup_in_progress";
   migration.decision.active = true;
   migration.decision.resumeRequiresExplicitApproval = false;
@@ -127,6 +129,7 @@ test("checked-in migration records are semantically consistent", () => {
   assert.deepEqual(result.errors, []);
   assert.notEqual(result.phase, "invalid");
   assert.notEqual(result.phase, "missing");
+  assert.notEqual(baselineMigration.targetMetadata.title, catalog.show.names.full);
 });
 
 test("active pre-redirect state remains distinct and runnable", () => {

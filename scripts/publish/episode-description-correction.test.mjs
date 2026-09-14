@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { catalogHash, normalizeDescriptionForComparison } from "./catalog.mjs";
+import { normalizeDescriptionForComparison } from "./catalog.mjs";
 
 const root = new URL("../../", import.meta.url);
 
@@ -78,11 +78,10 @@ test("current platform state points to a fail-closed partial propagation receipt
 });
 
 test("revision 16 receipt binds verified site and distributor readbacks without granting future writes", async () => {
-  const [receipt, platformState, catalog, catalogBytes, migrationBytes] = await Promise.all([
+  const [receipt, platformState, catalog, migrationBytes] = await Promise.all([
     readJson("publishing/episode-description-standardization.json"),
     readJson("publishing/platforms.json"),
     readJson("publishing/master-catalog.json"),
-    readFile(new URL("publishing/master-catalog.json", root)),
     readFile(
       new URL(
         "supabase/migrations/20260826004500_backfill_episode_affiliate_references.sql",
@@ -91,13 +90,10 @@ test("revision 16 receipt binds verified site and distributor readbacks without 
     ),
   ]);
 
-  assert.equal(catalog.revision, 16);
-  assert.equal(receipt.catalog.targetRevision, catalog.revision);
-  assert.equal(
-    receipt.catalog.fileSha256,
-    createHash("sha256").update(catalogBytes).digest("hex")
-  );
-  assert.equal(receipt.catalog.publisherHash, catalogHash(catalog));
+  assert.ok(catalog.revision > receipt.catalog.targetRevision);
+  assert.equal(receipt.catalog.targetRevision, 16);
+  assert.equal(receipt.catalog.fileSha256, "9c77dbc237092a48cc9c0bf0411f0e665a0e1e93d21b5c2479ede27590487261");
+  assert.equal(receipt.catalog.publisherHash, "2672672cdf6ed6f46b1d9d582cf4ab1d70813c9708ac5ad407df7668ad7ae51b");
   assert.equal(
     receipt.siteMigration.migrationArtifactSha256,
     createHash("sha256").update(migrationBytes).digest("hex")

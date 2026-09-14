@@ -2,10 +2,11 @@
 
 Broader ecosystem inventory last verified: August 22, 2026.
 Apple routing and publication-state receipt last verified: August 26, 2026.
+Show-name audit last verified: September 14, 2026.
 
 This is the first-stop instruction manual for the website, podcast host,
 directories, video channels, social publishing, workstation tooling, and brand
-assets for **Dr. M Experienced, with Dr. David Musnick**. It is written for Otto,
+assets for **DR M Experienced, with Dr. David Musnick MD**. It is written for Otto,
 future assistants, and any operator taking over after a failure.
 
 The manual describes both the intended system and the verified current state.
@@ -228,15 +229,24 @@ provider upload.
 
 Canonical show name:
 
-> Dr. M Experienced, with Dr. David Musnick
+> DR M Experienced, with Dr. David Musnick MD
 
 Canonical short description and mandatory opening for longer profiles:
 
-> Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine.
+> DR M Experienced, with Dr. David Musnick MD. Practical insights from decades in sports, regenerative, internal, and functional medicine.
 
 Short display name when a platform length limit prevents the full form:
 
-> Dr. M Experienced
+> DR M Experienced
+
+Catalog revision 17 prepares this exact name for the website and future channel
+metadata. It is not a public rollout receipt. On September 14 the owner
+authorized a coordinated show-level name and description correction on the
+existing website, feeds, and profiles. The earlier Apple feed-change hold still
+applies to episode identities, media, and refreshes outside this title-only
+rollout. Preserve feed URLs, GUIDs, enclosures, dates, artwork, and stable show
+IDs. See `docs/show-name-rollout-20260914.md` for live channel readbacks and
+`docs/apple-show-name-md-v1.md` for the pinned Apple-only projection.
 
 Do not use the retired name, `Dr. M's Experienced Functional and Sports
 Medicine`, in newly published copy or artwork. Do not change stable handles or

@@ -4,6 +4,7 @@ import { ArrowRight, ExternalLink } from "lucide-react";
 import { AnimatedDisclosure } from "@/components/animated-disclosure";
 import { MEDIA_FEATURES } from "@/data/media";
 import { physicianProfileExperience, physicianProfileYears } from "@/data/physician-profile";
+import { SITE_NAME } from "@/lib/site-brand";
 
 export const metadata = {
   title: "About Dr. David Musnick",
@@ -582,7 +583,7 @@ export default function AboutPage() {
         <h2 className="text-heading font-semibold text-foreground">Educational Only</h2>
         <div className="space-y-3 text-body-sm leading-relaxed text-foreground-muted">
           <p>
-            Dr. M Experienced, with Dr. David Musnick is an educational platform. This page summarizes
+            {SITE_NAME} is an educational platform. This page summarizes
             Dr. Musnick&apos;s background to provide context for the podcast and does not create
             a doctor–patient relationship.
           </p>

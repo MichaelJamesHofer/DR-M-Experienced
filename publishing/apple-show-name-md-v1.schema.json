@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "mode",
+    "status",
+    "baseFeedSha256BySnapshot",
+    "targetFeedSha256BySnapshot",
+    "publicFeedUrl",
+    "sourceShowName",
+    "targetShowName",
+    "sourceDescription",
+    "targetDescription",
+    "authorization"
+  ],
+  "properties": {
+    "$schema": { "const": "./apple-show-name-md-v1.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "mode": { "const": "apple_show_metadata_projection" },
+    "status": { "const": "active" },
+    "baseFeedSha256BySnapshot": { "$ref": "#/$defs/snapshotHashes" },
+    "targetFeedSha256BySnapshot": { "$ref": "#/$defs/snapshotHashes" },
+    "publicFeedUrl": { "const": "https://drmexperienced.com/apple-podcasts/feed.xml" },
+    "sourceShowName": { "const": "Dr. M Experienced, with Dr. David Musnick" },
+    "targetShowName": { "const": "DR M Experienced, with Dr. David Musnick MD" },
+    "sourceDescription": { "type": "string", "minLength": 1 },
+    "targetDescription": { "type": "string", "minLength": 1 },
+    "authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authorizedBy", "basis"],
+      "properties": {
+        "authorizedBy": { "const": "Otto" },
+        "basis": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "snapshotHashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["historical", "active", "contained"],
+      "properties": {
+        "historical": { "$ref": "#/$defs/sha256" },
+        "active": { "$ref": "#/$defs/sha256" },
+        "contained": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  }
+}
