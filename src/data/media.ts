@@ -1,5 +1,6 @@
 import { extractYouTubeVideoId, getYouTubeThumbnail } from "@/lib/youtube";
 import { SHORTS } from "@/data/shorts";
+import { SITE_SHORT_NAME } from "@/lib/site-brand";
 
 export type MediaFeature = {
   title: string;
@@ -42,7 +43,7 @@ export const MEDIA_FEATURES: MediaFeature[] = [
     createMediaFeature(
       item.title,
       item.vimeo ? "Instagram + Vimeo" : "Instagram",
-      "Dr. M Experienced Shorts",
+      `${SITE_SHORT_NAME} Shorts`,
       item.contentType === "recipe" ? "Recipe" : "Short",
       item.summary,
       item.websitePath,

@@ -1,5 +1,7 @@
 'use client';
 
+import { SITE_SHORT_NAME } from "@/lib/site-brand";
+
 type Platform = {
   name: string;
   url: string;
@@ -74,7 +76,7 @@ export function PlatformBadges({ variant = "default", className = "" }: Platform
       <div
         className={`-mx-2 flex w-[calc(100%+1rem)] flex-wrap items-center gap-2 min-[360px]:mx-0 min-[360px]:w-auto ${className}`}
         role="group"
-        aria-label="Find Dr. M Experienced on these platforms"
+        aria-label={`Find ${SITE_SHORT_NAME} on these platforms`}
       >
         {platforms.map((platform) => (
           <a

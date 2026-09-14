@@ -245,10 +245,11 @@ export function validatePublishingMigrationState({
     "platforms.apple.channelUrl"
   );
 
-  if (expectedTitle !== undefined) {
+  // Completed and parked migrations retain the metadata that was approved at cutover.
+  if (hostingMigrationIsActive(migration, pending) && expectedTitle !== undefined) {
     requireEqual(errors, migration?.targetMetadata?.title, expectedTitle, "targetMetadata.title");
   }
-  if (expectedDescription !== undefined) {
+  if (hostingMigrationIsActive(migration, pending) && expectedDescription !== undefined) {
     requireEqual(
       errors,
       migration?.targetMetadata?.description,

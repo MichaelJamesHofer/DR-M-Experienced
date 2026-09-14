@@ -1,8 +1,9 @@
 import Link from "next/link";
+import { SITE_NAME } from "@/lib/site-brand";
 
 export const metadata = {
   title: "Privacy notice",
-  description: "How Dr. M Experienced, with Dr. David Musnick handles form submissions, analytics, and embedded media.",
+  description: `How ${SITE_NAME} handles form submissions, analytics, and embedded media.`,
   alternates: {
     canonical: "/legal/privacy/",
   },

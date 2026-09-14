@@ -1,9 +1,10 @@
 import { ContactForm } from "@/components/contact-form";
 import { BriefcaseBusiness, MessageSquareText, Radio } from "lucide-react";
+import { SITE_NAME } from "@/lib/site-brand";
 
 export const metadata = {
   title: "Contact",
-  description: "Get in touch with the Dr. M Experienced, with Dr. David Musnick team for podcast feedback, business inquiries, or speaking engagements.",
+  description: `Get in touch with the ${SITE_NAME} team for podcast feedback, business inquiries, or speaking engagements.`,
 };
 
 const contactReasons = [

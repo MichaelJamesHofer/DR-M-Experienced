@@ -5,10 +5,11 @@ import {
 } from "@/data/affiliates";
 import { getContentCatalog } from "@/data/content-catalog";
 import { EpisodeBrowser } from "@/components/episode-browser";
+import { SITE_NAME } from "@/lib/site-brand";
 
 export const metadata = {
   title: "Episodes",
-  description: "Browse all Dr. M Experienced, with Dr. David Musnick episodes. Search by topic, skim summaries, and dive into detailed show notes.",
+  description: `Browse all ${SITE_NAME} episodes. Search by topic, skim summaries, and dive into detailed show notes.`,
 };
 
 export default async function EpisodesPage() {

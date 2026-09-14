@@ -1,7 +1,10 @@
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { loadAppleRepublishCanaryAuthorities } from "./apple-republish-canary-prototype.mjs";
+import {
+  loadAppleAuthorizedAuthorities,
+  selectedAppleFeed,
+} from "./apple-show-name-md-v1.mjs";
 import { fetchPublishedAppleFeed } from "./verify-apple-feed-deployment.mjs";
 import { verifyDirectAppleCanaryMedia } from "./verify-apple-republish-canary-deployment.mjs";
 
@@ -15,16 +18,6 @@ function sha256(value) {
 
 function sleep(milliseconds) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
-}
-
-function selectedFeed(authorities) {
-  const { deploymentState, sealedFeeds } = authorities;
-  const name = deploymentState.feedSnapshotByPhase[deploymentState.phase];
-  const xml = sealedFeeds[name];
-  if (!name || typeof xml !== "string") {
-    throw new Error(`Apple ${deploymentState.phase} phase has no sealed feed projection.`);
-  }
-  return { name, xml, sha256: sha256(xml) };
 }
 
 export async function verifyAppleAuthorizedSubtreeDeployment({
@@ -56,8 +49,8 @@ export async function verifyAppleAuthorizedSubtreeDeployment({
     throw new TypeError("expectedFeedSha256 must be a lowercase SHA-256.");
   }
 
-  const loaded = authorities ?? (await loadAppleRepublishCanaryAuthorities());
-  const expected = selectedFeed(loaded);
+  const loaded = authorities ?? (await loadAppleAuthorizedAuthorities());
+  const expected = selectedAppleFeed(loaded);
   if (expected.sha256 !== expectedFeedSha256) {
     throw new Error(
       `Deployment artifact SHA-256 ${expectedFeedSha256} is not the sealed ${loaded.deploymentState.phase} phase feed ${expected.sha256}.`,

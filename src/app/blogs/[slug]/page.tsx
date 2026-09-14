@@ -14,6 +14,7 @@ import { getContentCatalog } from "@/data/content-catalog";
 import { episodeDisplayTitle, type Episode } from "@/data/episodes";
 import { NewsletterCapture } from "@/components/newsletter-capture";
 import { siteImageSrc } from "@/lib/site-images";
+import { SITE_SHORT_NAME } from "@/lib/site-brand";
 
 const dateFormatter = new Intl.DateTimeFormat("en", {
   month: "long",
@@ -44,7 +45,7 @@ export async function generateMetadata({
   if (!post && slug === BLOG_EMPTY_STATIC_SLUG) {
     return {
       title: "Blogs coming soon",
-      description: "The Dr. M Experienced blog library is ready for published posts.",
+      description: `The ${SITE_SHORT_NAME} blog library is ready for published posts.`,
       robots: {
         index: false,
         follow: false,

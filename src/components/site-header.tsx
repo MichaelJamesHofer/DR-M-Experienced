@@ -78,7 +78,7 @@ export function SiteHeader() {
       className="sticky top-0 z-50 border-b border-border bg-[var(--header-bg)] backdrop-blur-lg"
     >
       <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-4 lg:px-6">
-        <Link href="/" className="group flex min-h-11 min-w-0 items-center gap-3" aria-label="Dr. M Experienced home">
+        <Link href="/" className="group flex min-h-11 min-w-0 items-center gap-3" aria-label={`${SITE_SHORT_NAME} home`}>
           <Image
             src="/icon.svg"
             alt=""

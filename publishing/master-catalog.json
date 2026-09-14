@@ -1,18 +1,18 @@
 {
   "$schema": "./master-catalog.schema.json",
   "schemaVersion": 1,
-  "revision": 16,
-  "updatedAt": "2026-08-26T01:30:33Z",
+  "revision": 17,
+  "updatedAt": "2026-09-14T20:19:38Z",
   "show": {
     "names": {
-      "full": "Dr. M Experienced, with Dr. David Musnick",
-      "short": "Dr. M Experienced",
-      "host": "Dr. David Musnick",
-      "hostLine": "with Dr. David Musnick"
+      "full": "DR M Experienced, with Dr. David Musnick MD",
+      "short": "DR M Experienced",
+      "host": "Dr. David Musnick MD",
+      "hostLine": "with Dr. David Musnick MD"
     },
     "profileCopy": {
-      "short": "Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine.",
-      "long": "Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine. Dr. Musnick is board-certified in Internal Medicine and Sports Medicine and brings more than 35 years of patient-care experience to focused conversations about brain health, concussion, sleep, fatigue, inflammation, recovery, and whole-person medicine. Episodes are educational and are not a substitute for individualized medical advice, diagnosis, or treatment."
+      "short": "DR M Experienced, with Dr. David Musnick MD. Practical insights from decades in sports, regenerative, internal, and functional medicine.",
+      "long": "DR M Experienced, with Dr. David Musnick MD. Practical insights from decades in sports, regenerative, internal, and functional medicine. Dr. Musnick is board-certified in Internal Medicine and Sports Medicine and brings more than 35 years of patient-care experience to focused conversations about brain health, concussion, sleep, fatigue, inflammation, recovery, and whole-person medicine. Episodes are educational and are not a substitute for individualized medical advice, diagnosis, or treatment."
     },
     "canonicalPodcastFeed": {
       "provider": "rss_com",

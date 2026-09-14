@@ -2,6 +2,7 @@
 
 Broader platform inventory last verified: August 22, 2026.
 Apple routing and publication-state receipt last verified: August 26, 2026.
+Show-name public audit last verified: September 14, 2026.
 
 The local publisher uses official upload interfaces where they exist, RSS fan-out for podcast directories, and explicit browser handoffs where a supported public creator-upload API is unavailable. Credentials stay outside the repository under `~/.config/drm-publisher/` with owner-only permissions.
 
@@ -23,7 +24,7 @@ The local publisher uses official upload interfaces where they exist, RSS fan-ou
 
 ## Remote rebrand status
 
-The canonical short profile description is `Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine.` Platform-specific long biographies may add detail after this exact opening.
+The proposed canonical short profile description is `DR M Experienced, with Dr. David Musnick MD. Practical insights from decades in sports, regenerative, internal, and functional medicine.` Catalog revision 17 prepares this wording locally, but the public profiles still carry the prior name. Platform-specific long biographies may add detail after this exact opening once remote changes are authorized and verified. The current title audit and release gates are in `docs/show-name-rollout-20260914.md`.
 
 | Profile | Current public name state |
 |---|---|

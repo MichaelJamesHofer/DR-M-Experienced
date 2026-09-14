@@ -1,6 +1,6 @@
-# Dr. M Experienced, with Dr. David Musnick
+# DR M Experienced, with Dr. David Musnick MD
 
-Static Next.js site for Dr. M Experienced, with Dr. David Musnick. Production content is read from Supabase during the build and exported to GitHub Pages at `drmexperienced.com`.
+Static Next.js site for DR M Experienced, with Dr. David Musnick MD. Production content is read from Supabase during the build and exported to GitHub Pages at `drmexperienced.com`.
 
 ## Local Development
 

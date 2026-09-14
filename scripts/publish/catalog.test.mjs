@@ -86,7 +86,10 @@ test("master catalog validates and has a deterministic hash", async () => {
   const result = validateCatalog(catalog);
   assert.deepEqual(result, { valid: true, errors: [] });
   assert.equal(catalog.schemaVersion, 1);
-  assert.equal(catalog.revision, 16);
+  assert.equal(catalog.revision, 17);
+  assert.equal(catalog.show.names.full, "DR M Experienced, with Dr. David Musnick MD");
+  assert.equal(catalog.show.names.short, "DR M Experienced");
+  assert.equal(catalog.show.names.hostLine, "with Dr. David Musnick MD");
   assert.equal(catalog.episodes.length, 8);
   assert.match(catalogHash(catalog), /^[a-f0-9]{64}$/);
   assert.equal(catalogHash(catalog), catalogHash(structuredClone(catalog)));
@@ -224,7 +227,7 @@ test("HTML descriptions have a deterministic readable plain-text projection", ()
 
 test("doctor accepts RSS.com single-paragraph markup for the canonical show description", () => {
   const canonical =
-    "Dr. M Experienced, with Dr. David Musnick. Practical insights from decades in sports, regenerative, internal, and functional medicine.";
+    "DR M Experienced, with Dr. David Musnick MD. Practical insights from decades in sports, regenerative, internal, and functional medicine.";
   const rssCom = `<p>${canonical}</p>`;
 
   assert.equal(
