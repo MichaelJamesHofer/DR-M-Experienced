@@ -193,7 +193,18 @@
       "remoteLoudnessGatesPassed": 8,
       "remoteReplacementVerifiedAt": "2026-08-22T21:35:08Z",
       "descriptionStandardizationStatus": "revision_16_rss_compact_projection_applied_and_public_feed_verified_8_of_8",
-      "notes": "All eight published episodes use remotely verified enclosures and preserve their established GUIDs. On August 26, 2026, the standardized descriptions were applied in place through the attended dashboard and read back from the canonical feed. RSS.com's 4000-character editor limit uses the uniform compact projection documented in publishing/episode-description-standardization.json; every substantive topic, URL, affiliate disclosure, and medical disclaimer remains semantically exact. RSS.com remains the canonical audio host and feed source for Spotify, Apple Podcasts, and Amazon Music/Audible. The separate public landing-page metadata still exposes a cached RSSVERIFY token. On September 14, 2026, the requested show-name correction remained blocked by expired dashboard sessions in isolated and normal Otto Chrome; the canonical feed title and all eight item identities were unchanged."
+      "showNameCorrection": {
+        "verifiedAt": "2026-09-14T22:28:00Z",
+        "title": "DR M Experienced, with Dr. David Musnick MD",
+        "description": "DR M Experienced, with Dr. David Musnick MD. Practical insights from decades in sports, regenerative, internal, and functional medicine.",
+        "canonicalFeedUrl": "https://media.rss.com/dr-m-experienced/feed.xml",
+        "canonicalFeedSha256": "436ae091e28bd69f804a06d151a4b502586568b085a202b846b8180e7ab6d373",
+        "episodeItemBlocksSha256": "c3e064fe2f4a9800b95907f36cb28809491fbc1b2b9fe9f0e680f91c33e1f2da",
+        "episodeItemBlocksUnchanged": true,
+        "episodeCount": 8,
+        "publicLandingPageTitleVerified": true
+      },
+      "notes": "All eight published episodes use remotely verified enclosures and preserve their established GUIDs. On August 26, 2026, the standardized descriptions were applied in place through the attended dashboard and read back from the canonical feed. RSS.com's 4000-character editor limit uses the uniform compact projection documented in publishing/episode-description-standardization.json; every substantive topic, URL, affiliate disclosure, and medical disclaimer remains semantically exact. RSS.com remains the canonical audio host and feed source for Spotify, Apple Podcasts, and Amazon Music/Audible. On September 14, 2026, the existing show title and opening description were saved through the authenticated dashboard using the isolated DRM Chrome profile. The bare and cache-busted canonical feeds and the public podcast page show the exact requested title; all eight raw XML item blocks are byte-identical before and after the save. The separate public landing-page metadata previously exposed a cached RSSVERIFY token; its current status was not rechecked."
     },
     "spotify": {
       "label": "Spotify for Creators",
@@ -215,7 +226,13 @@
       "approvedCopyVerified": true,
       "descriptionStandardizationStatus": "revision_16_rss_fanout_public_readback_verified_8_of_8",
       "paidPromotionReviewPendingEpisodeNumbers": [1, 2, 3, 4, 5, 6, 7],
-      "notes": "The existing show contains eight distinct episode identities and seven public video episodes. Episode 8 preserves RSS-created Spotify episode ID 7oYwjErc5TXpocbRFgzvH0 and its preexisting promotional-content Yes state. Episode 5 preserves its existing Spotify episode ID and corrected RSS audio but remains audio-only pending Creator Support. On August 26, 2026, public SSR readback matched the canonical RSS description for all eight stable episode IDs. No duplicate was created and no MP3 was uploaded directly. Paid-promotion review remains pending for Episodes 1-7. The public show title still omitted MD on September 14, 2026; the existing RSS.com podcast title is its source."
+      "showNameCorrection": {
+        "verifiedAt": "2026-09-14T22:31:05Z",
+        "title": "DR M Experienced, with Dr. David Musnick MD",
+        "descriptionPrefix": "DR M Experienced, with Dr. David Musnick MD. Practical insights from decades in sports, regenerative, internal, and functional medicine.",
+        "publicTitleAndOpenGraphVerified": true
+      },
+      "notes": "The existing show contains eight distinct episode identities and seven public video episodes. Episode 8 preserves RSS-created Spotify episode ID 7oYwjErc5TXpocbRFgzvH0 and its preexisting promotional-content Yes state. Episode 5 preserves its existing Spotify episode ID and corrected RSS audio but remains audio-only pending Creator Support. On August 26, 2026, public SSR readback matched the canonical RSS description for all eight stable episode IDs. No duplicate was created and no MP3 was uploaded directly. Paid-promotion review remains pending for Episodes 1-7. After the RSS.com show-name save on September 14, the existing public Spotify show's HTML title, Open Graph title, and Open Graph description converged to the exact requested name and description prefix."
     },
     "apple": {
       "label": "Apple Podcasts",

@@ -239,14 +239,18 @@ Short display name when a platform length limit prevents the full form:
 
 > DR M Experienced
 
-Catalog revision 17 prepares this exact name for the website and future channel
-metadata. It is not a public rollout receipt. On September 14 the owner
-authorized a coordinated show-level name and description correction on the
-existing website, feeds, and profiles. The earlier Apple feed-change hold still
-applies to episode identities, media, and refreshes outside this title-only
-rollout. Preserve feed URLs, GUIDs, enclosures, dates, artwork, and stable show
-IDs. See `docs/show-name-rollout-20260914.md` for live channel readbacks and
-`docs/apple-show-name-md-v1.md` for the pinned Apple-only projection.
+Catalog revision 17 is deployed for the website and Apple-only title projection.
+On September 14 the owner authorized a coordinated show-level name and
+description correction on the existing website, feeds, and profiles. The
+existing RSS.com podcast title and opening description were saved later that
+day and independently verified in its public feed and page; its eight episode
+item blocks remained byte-identical. Spotify's existing listing then reflected
+the exact title and description prefix in a public readback. The earlier Apple
+feed-change hold still applies to episode identities, media, and refreshes
+outside this title-only rollout. Preserve feed URLs, GUIDs, enclosures, dates,
+artwork, and stable show IDs. See `docs/show-name-rollout-20260914.md` for live
+channel readbacks and `docs/apple-show-name-md-v1.md` for the pinned Apple-only
+projection.
 
 Do not use the retired name, `Dr. M's Experienced Functional and Sports
 Medicine`, in newly published copy or artwork. Do not change stable handles or
