@@ -1,7 +1,20 @@
 {
   "schemaVersion": 1,
   "mode": "temporary_legacy_pages_root_safeguard",
-  "reason": "GitHub Pages is still configured for the legacy main:/ source while the production site is deployed by Actions. The checked-in static export prevents a legacy branch deployment from publishing a 404.",
+  "reason": "The checked-in static export protected production while GitHub Pages used the legacy main:/ source. Pages Source was switched to GitHub Actions on September 14; retain the safeguard until a post-switch Actions deployment and public readback pass, then remove it through a separate guarded change.",
+  "pagesSourceReadback": {
+    "verifiedOn": "2026-09-14",
+    "updateMethod": "PUT",
+    "updateBody": { "build_type": "workflow" },
+    "updateHttpStatus": 204,
+    "buildType": "workflow",
+    "sourceBranch": "main",
+    "sourcePath": "/",
+    "customDomain": "drmexperienced.com",
+    "status": "built",
+    "httpsEnforced": false,
+    "postSwitchActionsDeploymentVerified": false
+  },
   "sourceArtifact": {
     "workflowRunId": 34897205655,
     "workflowRunAttempt": 1,

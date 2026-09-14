@@ -3,6 +3,7 @@
 Broader ecosystem inventory last verified: August 22, 2026.
 Apple routing and publication-state receipt last verified: August 26, 2026.
 Show-name audit last verified: September 14, 2026.
+GitHub Pages Source last verified: September 14, 2026.
 
 This is the first-stop instruction manual for the website, podcast host,
 directories, video channels, social publishing, workstation tooling, and brand
@@ -1178,6 +1179,15 @@ tiles.
    description after future analytics changes.
 
 ### Change And Deploy
+
+GitHub Pages Source is `GitHub Actions` (`build_type=workflow`), saved and
+authenticated-read-back on September 14, 2026. The custom domain remains
+`drmexperienced.com`. The Pages API still returns the retained `main:/` source
+field, but the selected build mode is `workflow`. The former branch-root static
+export safeguard remains checked in until a post-switch Actions deployment and
+independent public site and Apple-feed readback pass. See
+`publishing/legacy-pages-root-safeguard.json` and
+`docs/show-name-rollout-20260914.md`; do not remove `CNAME` or `.nojekyll`.
 
 1. Fetch without discarding local changes.
 2. Create a focused branch from current `main`.

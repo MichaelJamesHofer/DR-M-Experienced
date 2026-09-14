@@ -11,7 +11,7 @@ by guarded Actions run `34897205655`. The local preview at
 
 | Destination | Public name at last check | Next action |
 |---|---|---|
-| [Website](https://drmexperienced.com/) | Exact full title in public title, hero, and footer | Actions build, deployment, and public Apple-feed verification passed; PR #40 refreshed the checked-in legacy Pages root safeguard. The requested Pages Source switch remains pending: Otto has write but not manage-Pages permission, and the exact API update returned 404 |
+| [Website](https://drmexperienced.com/) | Exact full title in public title, hero, and footer | Actions build, deployment, and public Apple-feed verification passed; PR #40 refreshed the checked-in legacy Pages root safeguard. Pages Source is now GitHub Actions; the custom domain is unchanged. The first post-switch Actions deployment remains to be verified |
 | [RSS.com](https://rss.com/podcasts/dr-m-experienced/) | Exact full title in dashboard, public page, and canonical feed at 22:28 UTC | Existing show title and opening description saved through authenticated isolated DRM Chrome; eight episode items unchanged |
 | [Spotify](https://open.spotify.com/show/7GGLljxmO0G3FLjPy8vfcw) | Exact full title and description prefix in public HTML/Open Graph at 22:31 UTC | RSS.com change propagated to the existing show ID without creating another listing |
 | [Apple](https://podcasts.apple.com/us/podcast/dr-m-experienced-with-dr-david-musnick/id1870433419) | Exact full title in public page and iTunes lookup at about 21:16 UTC | Apple-only feed title projection is live and hash-verified; Episodes 1-2 publication remains a separate unresolved issue |
@@ -28,6 +28,17 @@ earlier hold only for this show-name correction, not for episode-identity
 repair. The current public Apple feed is the title-only projection of the sealed
 `active` canary, with eight items and SHA-256
 `3b2266bdb8cfcc048ce24b0461f557784974b8fc9b0b0733f8975844e6f62b47`.
+
+On September 14, the Pages API accepted a minimal `PUT` body of
+`{"build_type":"workflow"}` with HTTP 204. Authenticated readback returned
+`build_type=workflow`, `source=main:/`, `cname=drmexperienced.com`, and
+`status=built`; the retained source field is not the active build mode. The
+prior 404 reflected the earlier credential's insufficient Pages-setting
+permission, not a continuing deployment block. Keep the checked-in legacy root
+safeguard until a post-switch Actions deployment and independent public site/feed
+readback pass. Remove only its manifest-listed generated paths in a separate
+guarded change, preserving `CNAME` and `.nojekyll`.
+
 The original sealed snapshots remain unchanged; the projection is documented in
 `docs/apple-show-name-md-v1.md`. Apple show-name convergence does not establish
 that Episodes 1-2 are available in its public catalog.

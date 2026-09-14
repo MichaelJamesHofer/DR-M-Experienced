@@ -26,6 +26,13 @@ test("legacy Pages root safeguard is complete and matches the authorized Apple p
   );
   assert.equal(control.schemaVersion, 1);
   assert.equal(control.mode, "temporary_legacy_pages_root_safeguard");
+  assert.equal(control.pagesSourceReadback.updateHttpStatus, 204);
+  assert.deepEqual(control.pagesSourceReadback.updateBody, { build_type: "workflow" });
+  assert.equal(control.pagesSourceReadback.buildType, "workflow");
+  assert.equal(control.pagesSourceReadback.sourceBranch, "main");
+  assert.equal(control.pagesSourceReadback.sourcePath, "/");
+  assert.equal(control.pagesSourceReadback.customDomain, "drmexperienced.com");
+  assert.equal(control.pagesSourceReadback.postSwitchActionsDeploymentVerified, false);
   assert.equal(control.sourceArtifact.workflowRunId, 34897205655);
   assert.equal(
     control.sourceArtifact.sourceCommit,
