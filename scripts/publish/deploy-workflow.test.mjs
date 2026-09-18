@@ -6,6 +6,13 @@ const workflow = await readFile(
   new URL("../../.github/workflows/deploy.yml", import.meta.url),
   "utf8",
 );
+const pagesRecoveryWorkflow = await readFile(
+  new URL(
+    "../../.github/workflows/configure-pages-actions-only.yml",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 function jobSection(name, nextName) {
   const start = workflow.indexOf(`\n  ${name}:`);
@@ -55,4 +62,19 @@ test("successful deployment is followed by exact public feed verification", () =
     verification,
     /run: npm run verify:apple-authorized-subtree-deployment/,
   );
+});
+
+test("Pages recovery disables the legacy publisher with scoped permission and readback", () => {
+  assert.match(pagesRecoveryWorkflow, /workflow_dispatch:/);
+  assert.match(
+    pagesRecoveryWorkflow,
+    /permissions:\n\s+pages: write/,
+  );
+  assert.doesNotMatch(pagesRecoveryWorkflow, /contents:\s*write/);
+  assert.match(pagesRecoveryWorkflow, /-f build_type=workflow/);
+  assert.match(
+    pagesRecoveryWorkflow,
+    /after="\$\(gh api "\$endpoint" --jq '\.build_type'\)"/,
+  );
+  assert.match(pagesRecoveryWorkflow, /\[\[ "\$after" != "workflow" \]\]/);
 });
