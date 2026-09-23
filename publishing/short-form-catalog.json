@@ -1,8 +1,8 @@
 {
   "$schema": "./short-form-catalog.schema.json",
   "schemaVersion": 2,
-  "revision": 6,
-  "lastVerifiedAt": "2026-09-23T17:57:17.128091+00:00",
+  "revision": 7,
+  "lastVerifiedAt": "2026-09-23T18:12:03.286915+00:00",
   "authority": {
     "metadata": "publishing/short-form-catalog.json",
     "binaryMaster": "fingerprinted_project_dropbox_asset",
@@ -394,8 +394,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/nrf2-sprouts-turmeric-green-tea/"
+          "state": "published",
+          "path": "/shorts/nrf2-sprouts-turmeric-green-tea/",
+          "url": "https://drmexperienced.com/shorts/nrf2-sprouts-turmeric-green-tea/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         },
         "tiktok": {
           "state": "published",
@@ -499,8 +501,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/blue-light-glasses-amber-red-fit-over/"
+          "state": "published",
+          "path": "/shorts/blue-light-glasses-amber-red-fit-over/",
+          "url": "https://drmexperienced.com/shorts/blue-light-glasses-amber-red-fit-over/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         }
       },
       "affiliateDisclosure": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you."
@@ -597,8 +601,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/amber-reading-light-evening-routine/"
+          "state": "published",
+          "path": "/shorts/amber-reading-light-evening-routine/",
+          "url": "https://drmexperienced.com/shorts/amber-reading-light-evening-routine/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         }
       },
       "affiliateDisclosure": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you."
@@ -695,8 +701,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/capers-apples-onions-quercetin/"
+          "state": "published",
+          "path": "/shorts/capers-apples-onions-quercetin/",
+          "url": "https://drmexperienced.com/shorts/capers-apples-onions-quercetin/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         },
         "tiktok": {
           "state": "published",
@@ -799,8 +807,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/emf-rf-sources-around-you/"
+          "state": "published",
+          "path": "/shorts/emf-rf-sources-around-you/",
+          "url": "https://drmexperienced.com/shorts/emf-rf-sources-around-you/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         },
         "tiktok": {
           "state": "published",
@@ -904,8 +914,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/whole-bean-coffee-shopping-freshness/"
+          "state": "published",
+          "path": "/shorts/whole-bean-coffee-shopping-freshness/",
+          "url": "https://drmexperienced.com/shorts/whole-bean-coffee-shopping-freshness/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         },
         "tiktok": {
           "state": "published",
@@ -1009,8 +1021,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/shiitake-mushrooms-and-extracts/"
+          "state": "published",
+          "path": "/shorts/shiitake-mushrooms-and-extracts/",
+          "url": "https://drmexperienced.com/shorts/shiitake-mushrooms-and-extracts/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         },
         "tiktok": {
           "state": "published",
@@ -1121,8 +1135,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/olive-oil-and-polyphenols/"
+          "state": "published",
+          "path": "/shorts/olive-oil-and-polyphenols/",
+          "url": "https://drmexperienced.com/shorts/olive-oil-and-polyphenols/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         },
         "tiktok": {
           "state": "published",
@@ -1226,8 +1242,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/kombucha-sugar-caffeine-labels/"
+          "state": "published",
+          "path": "/shorts/kombucha-sugar-caffeine-labels/",
+          "url": "https://drmexperienced.com/shorts/kombucha-sugar-caffeine-labels/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         },
         "tiktok": {
           "state": "published",
@@ -1331,8 +1349,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/whole-bean-french-press-routine/"
+          "state": "published",
+          "path": "/shorts/whole-bean-french-press-routine/",
+          "url": "https://drmexperienced.com/shorts/whole-bean-french-press-routine/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         },
         "tiktok": {
           "state": "published",
@@ -1466,8 +1486,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/rosemary-herb-and-tincture/"
+          "state": "published",
+          "path": "/shorts/rosemary-herb-and-tincture/",
+          "url": "https://drmexperienced.com/shorts/rosemary-herb-and-tincture/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         },
         "tiktok": {
           "state": "published",
@@ -1569,8 +1591,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/dishwasher-gel-demonstration/"
+          "state": "published",
+          "path": "/shorts/dishwasher-gel-demonstration/",
+          "url": "https://drmexperienced.com/shorts/dishwasher-gel-demonstration/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         },
         "tiktok": {
           "state": "published",
@@ -1674,8 +1698,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/grinding-dried-rosemary-for-cooking/"
+          "state": "published",
+          "path": "/shorts/grinding-dried-rosemary-for-cooking/",
+          "url": "https://drmexperienced.com/shorts/grinding-dried-rosemary-for-cooking/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         },
         "tiktok": {
           "state": "published",
@@ -1804,8 +1830,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/parsley-chamomile-and-apigenin/"
+          "state": "published",
+          "path": "/shorts/parsley-chamomile-and-apigenin/",
+          "url": "https://drmexperienced.com/shorts/parsley-chamomile-and-apigenin/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         },
         "tiktok": {
           "state": "published",
@@ -1917,8 +1945,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/clove-coffee-flavor-variation/"
+          "state": "published",
+          "path": "/shorts/clove-coffee-flavor-variation/",
+          "url": "https://drmexperienced.com/shorts/clove-coffee-flavor-variation/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         },
         "tiktok": {
           "state": "published",
@@ -2046,8 +2076,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/desbio-emotional-formulas/"
+          "state": "published",
+          "path": "/shorts/desbio-emotional-formulas/",
+          "url": "https://drmexperienced.com/shorts/desbio-emotional-formulas/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         }
       },
       "affiliateDisclosure": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you."
@@ -2141,8 +2173,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/desbio-glp-support-discussion/"
+          "state": "published",
+          "path": "/shorts/desbio-glp-support-discussion/",
+          "url": "https://drmexperienced.com/shorts/desbio-glp-support-discussion/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         }
       },
       "affiliateDisclosure": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you."
@@ -2239,8 +2273,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/five-extracts-in-water/"
+          "state": "published",
+          "path": "/shorts/five-extracts-in-water/",
+          "url": "https://drmexperienced.com/shorts/five-extracts-in-water/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         },
         "tiktok": {
           "state": "published",
@@ -2352,8 +2388,10 @@
           "posterParity": false
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/plasmalogens-and-cell-membranes/"
+          "state": "published",
+          "path": "/shorts/plasmalogens-and-cell-membranes/",
+          "url": "https://drmexperienced.com/shorts/plasmalogens-and-cell-membranes/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         },
         "tiktok": {
           "state": "published",

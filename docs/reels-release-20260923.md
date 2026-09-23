@@ -1,6 +1,6 @@
 # September 23 short-form release
 
-Release integration verified September 23, 2026. The local catalog contains the three historical shorts plus 19 newly verified Instagram reels and 15 verified TikTok destinations. Public website deployment remains pending until the workflow and live readback complete.
+Release publication verified September 23, 2026. The public catalog contains the three historical shorts plus 19 newly verified Instagram reels and 15 verified TikTok destinations. [PR #44](https://github.com/MichaelJamesHofer/DR-M-Experienced/pull/44) deployed commit `6e6976b17f0628ccb8646abd858e62cc07f0d103`; [workflow run 35899980456](https://github.com/MichaelJamesHofer/DR-M-Experienced/actions/runs/35899980456) passed its build, Pages deployment and public Apple-feed verification jobs. Independent browser readback verified all 22 routes, exact platform/resource links and the recipe view. All 22 served posters and six guide files match their catalog SHA256 values. The 19 website destinations now carry actual published URLs and verification timestamps.
 
 The active website is the current `main` application, deployed by GitHub Actions to `drmexperienced.com`. Pages reports `build_type=workflow`; the retained `source=main:/` field is not a second selected deployment mode. Preserve the existing root safeguard, `CNAME`, `.nojekyll`, Apple overlay and sealed rollback artifacts.
 
