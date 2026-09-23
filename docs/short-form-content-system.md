@@ -128,6 +128,6 @@ published item.
 - Vimeo authentication: <https://developer.vimeo.com/api/authentication>
 - Vimeo thumbnail management: <https://help.vimeo.com/hc/en-us/articles/12426471350289-How-to-change-the-thumbnail-image-for-my-video>
 
-## September 23 release preparation
+## September 23 verified release
 
-See [the scoped release runbook](reels-release-20260923.md) for the 19-reel primary batch, verified TikTok links, local-master poster provenance, recipe/method view and existing mushroom-coffee website backfill. The historical inventory above remains the last completed catalog release; the new branch must not claim unverified remote identities.
+See [the scoped release runbook](reels-release-20260923.md) for the published 19-reel primary batch, 15 verified TikTok links, local-master poster provenance and recipe/method view. The current catalog contains 22 verified website routes and six illustrated guides. The historical inventory above preserves the original three entries; the existing mushroom-coffee post remains a separate website-backfill candidate and must not be reuploaded to Instagram.
