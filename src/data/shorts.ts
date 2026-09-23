@@ -1,6 +1,11 @@
 import shortFormCatalog from "../../publishing/short-form-catalog.json";
 
-export type ShortContentType = "educational_clip" | "recipe";
+export type ShortContentType = "educational_clip" | "recipe" | "kitchen_method";
+
+type ShortMethod = { title: string; steps: string[]; tools?: string[]; note: string };
+type ShortResource = { label: string; url: string; affiliate: boolean };
+type ShortVariation = { title: string; body: string[] };
+type ShortGuide = { websitePath: string; width: number; height: number; alt: string };
 
 export type ShortFormContent = {
   id: string;
@@ -13,6 +18,11 @@ export type ShortFormContent = {
   topics: string[];
   relatedEpisodeNumbers: number[];
   ingredients?: string[];
+  method?: ShortMethod;
+  variations?: ShortVariation[];
+  resources?: ShortResource[];
+  affiliateDisclosure?: string;
+  guide?: ShortGuide;
   durationSeconds: number;
   posterUrl: string;
   posterWidth: number;
@@ -27,6 +37,7 @@ export type ShortFormContent = {
     id: string;
     url: string;
   };
+  tiktok?: { id: string; url: string };
   websitePath: string;
 };
 
@@ -41,6 +52,11 @@ type CatalogItem = {
   topics: string[];
   relatedEpisodeNumbers: number[];
   ingredients?: string[];
+  method?: ShortMethod;
+  variations?: ShortVariation[];
+  resources?: ShortResource[];
+  affiliateDisclosure?: string;
+  guide?: ShortGuide;
   master: { durationSeconds: number };
   poster: { websitePath: string; width: number; height: number };
   destinations: {
@@ -56,6 +72,7 @@ type CatalogItem = {
       url: string | null;
     };
     website: { path: string };
+    tiktok?: { state: "published"; id: string; url: string };
   };
 };
 
@@ -78,17 +95,29 @@ function projectShort(item: CatalogItem): ShortFormContent {
     topics: item.topics,
     relatedEpisodeNumbers: item.relatedEpisodeNumbers,
     ingredients: item.ingredients,
+    method: item.method,
+    variations: item.variations,
+    resources: item.resources,
+    affiliateDisclosure: item.affiliateDisclosure,
+    guide: item.guide,
     durationSeconds: item.master.durationSeconds,
     posterUrl: item.poster.websitePath,
     posterWidth: item.poster.width,
     posterHeight: item.poster.height,
     instagram: item.destinations.instagram,
     vimeo,
+    tiktok: item.destinations.tiktok,
     websitePath: item.destinations.website.path,
   };
 }
 
-export const SHORTS: ShortFormContent[] = (shortFormCatalog.items as CatalogItem[]).map(projectShort);
+export const SHORTS: ShortFormContent[] = (shortFormCatalog.items as CatalogItem[])
+  .map(projectShort)
+  .sort((left, right) => Date.parse(right.instagram.publishedAt) - Date.parse(left.instagram.publishedAt));
+
+export function shortTypeLabel(type: ShortContentType): string {
+  return type === "recipe" ? "Recipe" : type === "kitchen_method" ? "Kitchen method" : "Short";
+}
 
 export function shortDurationLabel(durationSeconds: number): string {
   const rounded = Math.round(durationSeconds);

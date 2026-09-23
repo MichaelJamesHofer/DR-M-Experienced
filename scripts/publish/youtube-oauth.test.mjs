@@ -4,6 +4,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 
 import {
   YOUTUBE_OAUTH_SCOPES,
@@ -219,7 +220,7 @@ test("missing force-ssl scope is revoked before channel verification", async (t)
 });
 
 test("CLI exposes the attended YouTube auth bootstrap without running it from help", () => {
-  const cliPath = path.join(path.dirname(new URL(import.meta.url).pathname), "cli.mjs");
+  const cliPath = fileURLToPath(new URL("./cli.mjs", import.meta.url));
   const result = spawnSync(process.execPath, [cliPath, "--help"], { encoding: "utf8" });
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /drm-publish auth youtube \[--timeout-seconds <seconds>\]/);

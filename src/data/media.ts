@@ -42,7 +42,7 @@ export const MEDIA_FEATURES: MediaFeature[] = [
   ...SHORTS.map((item) =>
     createMediaFeature(
       item.title,
-      item.vimeo ? "Instagram + Vimeo" : "Instagram",
+      ["Instagram", ...(item.vimeo ? ["Vimeo"] : []), ...(item.tiktok ? ["TikTok"] : [])].join(" + "),
       `${SITE_SHORT_NAME} Shorts`,
       item.contentType === "recipe" ? "Recipe" : "Short",
       item.summary,

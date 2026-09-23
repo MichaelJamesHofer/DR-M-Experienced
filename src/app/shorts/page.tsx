@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { SHORTS, shortDurationLabel } from "@/data/shorts";
+import { SHORTS, shortDurationLabel, shortTypeLabel } from "@/data/shorts";
 import { SITE_SHORT_NAME } from "@/lib/site-brand";
 
 export const metadata: Metadata = {
@@ -21,6 +21,7 @@ export default function ShortsPage() {
         <p className="text-body-lg text-foreground-muted">
           Practical excerpts and recipes from Dr. David Musnick.
         </p>
+        <Link href="/recipes/" className="mt-5 inline-flex min-h-11 items-center text-body font-medium text-primary underline underline-offset-4">Recipes & kitchen methods →</Link>
       </header>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -42,7 +43,7 @@ export default function ShortsPage() {
               </div>
               <div className="p-5">
                 <div className="mb-2 flex items-center gap-2 text-caption text-foreground-muted">
-                  <span>{item.contentType === "recipe" ? "Recipe" : "Short"}</span>
+                  <span>{shortTypeLabel(item.contentType)}</span>
                   <span aria-hidden="true">/</span>
                   <span>{shortDurationLabel(item.durationSeconds)}</span>
                 </div>

@@ -62,6 +62,10 @@ export default function MediaPage() {
           Explore Dr. Musnick&apos;s appearances across short clips, recipe media, podcasts, video talks,
           and educational series covering functional medicine, sports medicine, and integrative health.
         </p>
+        <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-body-sm font-medium text-primary">
+          <Link href="/shorts/" className="inline-flex min-h-11 items-center underline underline-offset-4">All shorts →</Link>
+          <Link href="/recipes/" className="inline-flex min-h-11 items-center underline underline-offset-4">Recipes & kitchen methods →</Link>
+        </div>
       </header>
 
       {mediaSections.map(({ id, title, items, icon: Icon }) =>

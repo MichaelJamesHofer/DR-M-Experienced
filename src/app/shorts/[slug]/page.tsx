@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { VimeoPlayer } from "@/components/vimeo-player";
 import { getContentCatalog } from "@/data/content-catalog";
 import { episodeDisplayTitle } from "@/data/episodes";
-import { SHORTS, shortDurationLabel, type ShortFormContent } from "@/data/shorts";
+import { SHORTS, shortDurationLabel, shortTypeLabel, type ShortFormContent } from "@/data/shorts";
 
 const dateFormatter = new Intl.DateTimeFormat("en", {
   month: "long",
@@ -82,7 +82,7 @@ export default async function ShortDetailPage({
         <article className="min-w-0">
           <header className="mb-8">
             <div className="mb-4 flex flex-wrap items-center gap-3 text-body-sm text-foreground-muted">
-              <span>{item.contentType === "recipe" ? "Recipe" : "Short"}</span>
+              <span>{shortTypeLabel(item.contentType)}</span>
               <span aria-hidden="true">•</span>
               <span>{shortDurationLabel(item.durationSeconds)}</span>
               <span aria-hidden="true">•</span>
@@ -92,6 +92,7 @@ export default async function ShortDetailPage({
               {item.title}
             </h1>
             <p className="text-body-lg text-foreground-muted">{item.summary}</p>
+            {item.affiliateDisclosure && <p className="mt-4 text-body-sm text-foreground-muted">{item.affiliateDisclosure}</p>}
             <div className="-mx-4 mt-6 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
               {item.topics.map((topic) => (
                 <span
@@ -109,7 +110,7 @@ export default async function ShortDetailPage({
           </div>
 
           <div className="space-y-4 text-body text-foreground-muted">
-            {item.body.map((paragraph) => (
+            {item.body.filter((paragraph) => paragraph.trim() !== item.summary.trim()).map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
@@ -125,6 +126,44 @@ export default async function ShortDetailPage({
                   </li>
                 ))}
               </ul>
+            </section>
+          )}
+
+          {item.method && (
+            <section className="mt-8 border-t border-border pt-8">
+              <h2 className="mb-4 text-heading font-semibold text-foreground">{item.method.title}</h2>
+              {item.method.tools && <p className="mb-4 text-body text-foreground-muted">What he uses: {item.method.tools.join(", ")}.</p>}
+              <ol className="list-decimal space-y-3 pl-6 text-body text-foreground-muted">
+                {item.method.steps.map((step) => <li key={step} className="pl-2">{step}</li>)}
+              </ol>
+              <p className="mt-5 text-body-sm text-foreground-muted">{item.method.note}</p>
+            </section>
+          )}
+
+          {item.variations?.map((variation) => (
+            <section key={variation.title} className="mt-8 border-t border-border pt-8">
+              <h2 className="mb-4 text-heading font-semibold text-foreground">{variation.title}</h2>
+              <div className="space-y-4 text-body text-foreground-muted">{variation.body.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>
+            </section>
+          ))}
+
+          {item.guide && (
+            <details className="mt-8 border-t border-border pt-6">
+              <summary className="cursor-pointer py-2 text-body font-semibold text-primary">View and save the illustrated guide</summary>
+              <div className="mt-4 max-w-md">
+                <a href={item.guide.websitePath} target="_blank" rel="noopener noreferrer"><Image src={item.guide.websitePath} alt={item.guide.alt} width={item.guide.width} height={item.guide.height} className="h-auto w-full rounded-lg" /></a>
+                <a href={item.guide.websitePath} download className="mt-3 inline-flex min-h-11 items-center text-body-sm text-primary underline underline-offset-4">Save the full-size guide</a>
+              </div>
+            </details>
+          )}
+
+          {item.resources && item.resources.length > 0 && (
+            <section className="mt-8 border-t border-border pt-8">
+              <h2 className="mb-4 text-heading font-semibold text-foreground">Resources from this reel</h2>
+              {item.affiliateDisclosure && <p className="mb-4 text-body-sm text-foreground-muted">{item.affiliateDisclosure}</p>}
+              <ul className="space-y-3">{item.resources.map((resource) => (
+                <li key={resource.url}><a href={resource.url} className="inline-flex min-h-11 items-center text-body font-medium text-primary underline underline-offset-4 hover:text-primary-hover">{resource.label}<span aria-hidden="true" className="ml-2">→</span></a></li>
+              ))}</ul>
             </section>
           )}
 
@@ -180,7 +219,7 @@ function ShortPlayback({ item }: { item: ShortFormContent }) {
           href={item.instagram.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg bg-primary px-4 py-2 text-body-sm font-semibold text-background transition-colors hover:bg-primary-hover"
+          className="inline-flex min-h-11 flex-1 whitespace-nowrap items-center justify-center rounded-lg bg-primary px-4 py-2 text-body-sm font-semibold text-background transition-colors hover:bg-primary-hover"
         >
           Watch on Instagram
         </a>
@@ -189,9 +228,14 @@ function ShortPlayback({ item }: { item: ShortFormContent }) {
             href={item.vimeo.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg border border-border px-4 py-2 text-body-sm font-semibold text-foreground transition-colors hover:border-primary hover:text-primary"
+            className="inline-flex min-h-11 flex-1 whitespace-nowrap items-center justify-center rounded-lg border border-border px-4 py-2 text-body-sm font-semibold text-foreground transition-colors hover:border-primary hover:text-primary"
           >
             Open on Vimeo
+          </a>
+        )}
+        {item.tiktok && (
+          <a href={item.tiktok.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 flex-1 whitespace-nowrap items-center justify-center rounded-lg border border-border px-4 py-2 text-body-sm font-semibold text-foreground transition-colors hover:border-primary hover:text-primary">
+            Watch on TikTok
           </a>
         )}
       </div>

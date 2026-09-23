@@ -1,0 +1,17 @@
+# September 23 short-form release
+
+Release integration verified September 23, 2026. The local catalog contains the three historical shorts plus 19 newly verified Instagram reels and 15 verified TikTok destinations. Public website deployment remains pending until the workflow and live readback complete.
+
+The active website is the current `main` application, deployed by GitHub Actions to `drmexperienced.com`. Pages reports `build_type=workflow`; the retained `source=main:/` field is not a second selected deployment mode. Preserve the existing root safeguard, `CNAME`, `.nojekyll`, Apple overlay and sealed rollback artifacts.
+
+Short metadata belongs in `publishing/short-form-catalog.json`. Supabase remains the authority for episode and affiliate editorial content; its current REST schema has no shorts table. The new short routes extend the existing template and use verified Instagram/TikTok destinations. No new Vimeo upload, podcast episode, RSS GUID or Supabase table is required.
+
+The release contains 19 primary reels. Three legacy reels remain parked, and S25 remains a reserve. S21, S24 and S26 are bound to their completed corrected v005 masters; the other 16 retain their sealed v004 masters. Every new entry binds its exact media hash, observed Instagram shortcode, caption, publication time and served-video metadata to its verified receipt. The 15 TikTok links likewise use verified post receipts. S23 and S24 await platform terms approval; S26 and S27 remain excluded from TikTok under its policy. These four entries have no invented TikTok destination. Observed minute-only TikTok publication times retain their explicit minute precision.
+
+Local-frame posters are supported with an explicit source-master hash. Existing Instagram-captured posters retain their original media-ID binding. TikTok links require the verified `@drmexperienced` account and video ID. Product resources link through the established affiliate guide and require visible disclosure; no unverified Prodrome referral is added.
+
+`/recipes/` is a view of existing short records. Source-backed methods and their original videos remain on canonical `/shorts/<slug>/` URLs. A parsley variation belongs on the existing cilantro-basil pesto page, while S12 is a distinct July 6 apigenin/chamomile recording. Kitchen methods state when weights, quantities or times were not supplied. Mushroom and tincture references should not be converted into invented supplement recipes.
+
+The existing Instagram mushroom-coffee post `Db4LJdlv8fg` is missing from the live three-item website catalog and requires a website-only backfill. Do not reupload it to Instagram. Its historical public HTML observes numeric media ID `3960964901031102432`; publication-time precision and current video metadata must be recorded honestly. A local `Mushroom Coffee v4.mp4` filename alone does not prove equality to the current Instagram edit.
+
+Before deployment, run the short catalog and full publisher tests, lint, typecheck, strict Supabase-backed build, and the existing Apple subtree guards. After merging a verified branch, confirm the live short routes, recipe view, exact destination links, resource links, new post count, and unchanged Apple overlay hash. A successful build is not a deployment receipt.

@@ -30,6 +30,7 @@ const schema = JSON.parse(await fs.readFile(DEFAULT_SHORT_FORM_SCHEMA_PATH, "utf
 const ajv = new Ajv2020({ allErrors: true, strict: true });
 addFormats(ajv, { mode: "full" });
 const validateSchema = ajv.compile(schema);
+const validateTimestamp = ajv.compile({ type: "string", format: "date-time" });
 
 export class ShortFormCatalogValidationError extends Error {
   constructor(errors) {
@@ -117,6 +118,7 @@ export function validateShortFormCatalog(catalog) {
 
   errors.push(...duplicateProblems(catalog.items, (item) => item.id, "short ID"));
   errors.push(...duplicateProblems(catalog.items, (item) => item.slug, "short slug"));
+  errors.push(...duplicateProblems(catalog.items, (item) => item.destinations?.tiktok?.id, "TikTok video ID"));
   errors.push(
     ...duplicateProblems(
       catalog.items,
@@ -185,8 +187,29 @@ export function validateShortFormCatalog(catalog) {
     if (instagram?.url !== `https://www.instagram.com/reel/${instagram?.shortcode}/`) {
       errors.push(`${prefix} Instagram URL does not match its shortcode`);
     }
-    if (item.poster?.sourceMediaId !== instagram?.mediaId) {
+    if (item.poster?.sourcePlatform === "instagram" && item.poster?.sourceMediaId !== instagram?.mediaId) {
       errors.push(`${prefix} poster source does not match its Instagram media ID`);
+    }
+    if (item.poster?.sourcePlatform === "local_master" && item.poster.sourceMasterSha256 !== item.master?.sha256) {
+      errors.push(`${prefix} local poster must reference the exact verified master`);
+    }
+    const tiktok = item.destinations?.tiktok;
+    if (tiktok?.publishedAtPrecision === "minute" &&
+        (typeof tiktok.publishedAt !== "string" ||
+         !validateTimestamp(tiktok.publishedAt.replace(/(T\d{2}:\d{2})(Z|[+-]\d{2}:\d{2})$/, "$1:00$2")))) {
+      errors.push(`${prefix} TikTok publication minute must be a valid calendar timestamp`);
+    }
+    if (tiktok && tiktok.url !== `https://www.tiktok.com/@drmexperienced/video/${tiktok.id}`) {
+      errors.push(`${prefix} TikTok URL does not match its verified account and video ID`);
+    }
+    if (tiktok && !item.destinationCopy?.tiktokCaption) {
+      errors.push(`${prefix} published TikTok destination requires its exact caption`);
+    }
+    if (item.resources?.some((resource) => resource.affiliate) && !item.affiliateDisclosure) {
+      errors.push(`${prefix} affiliate resources require a visible disclosure`);
+    }
+    if (item.contentType === "kitchen_method" && !item.method?.steps?.length) {
+      errors.push(`${prefix} kitchen method requires source-backed steps`);
     }
     if (item.destinationCopy?.vimeoTitle !== item.title) {
       errors.push(`${prefix} Vimeo target title must match the canonical title`);
@@ -234,8 +257,8 @@ export function validateShortFormCatalog(catalog) {
     if (item.contentType === "recipe" && !(item.ingredients?.length > 0)) {
       errors.push(`${prefix} recipe must include an ingredient list`);
     }
-    if (item.provenance?.sourceType === "multi_clip_edit" && !(item.provenance.sourceAssets?.length > 0)) {
-      errors.push(`${prefix} multi-clip edit must fingerprint its source assets`);
+    if (["multi_clip_edit", "single_take"].includes(item.provenance?.sourceType) && !(item.provenance.sourceAssets?.length > 0)) {
+      errors.push(`${prefix} ${item.provenance.sourceType} must fingerprint its source assets`);
     }
     if (Object.hasOwn(item.destinations ?? {}, "rumble")) {
       errors.push(`${prefix} short-form catalog must not add an unreviewed Rumble destination`);
@@ -374,6 +397,16 @@ export async function verifyShortFormCatalogFiles({
       problems.push(`${item.id} poster escapes the public directory`);
     } else {
       await verifyFile(posterPath, item.poster, `${item.id} poster`, problems);
+    }
+
+    if (item.guide) {
+      const guidePath = path.resolve(publicRoot, item.guide.websitePath.replace(/^\//, ""));
+      const guideRelative = path.relative(path.resolve(publicRoot), guidePath);
+      if (guideRelative.startsWith("..") || path.isAbsolute(guideRelative)) {
+        problems.push(`${item.id} guide escapes the public directory`);
+      } else {
+        await verifyFile(guidePath, item.guide, `${item.id} guide`, problems);
+      }
     }
 
     if (!verifyDropbox) continue;
