@@ -280,8 +280,10 @@
           "posterParity": true
         },
         "website": {
-          "state": "ready_for_deployment",
-          "path": "/shorts/cilantro-basil-pesto-with-broccoli-sprouts/"
+          "state": "published",
+          "path": "/shorts/cilantro-basil-pesto-with-broccoli-sprouts/",
+          "url": "https://drmexperienced.com/shorts/cilantro-basil-pesto-with-broccoli-sprouts/",
+          "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         }
       },
       "variations": [
