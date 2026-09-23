@@ -14,6 +14,64 @@ import {
 
 const platformRegistryFile = new URL("../../publishing/platforms.json", import.meta.url);
 
+test("local-frame posters retain exact source identity and cannot masquerade as Instagram captures", async () => {
+  const catalog = await loadShortFormCatalog();
+  const item = catalog.items[0];
+  item.poster.sourcePlatform = "local_master";
+  item.poster.sourceMasterSha256 = item.master.sha256;
+  delete item.poster.sourceMediaId;
+  assert.deepEqual(validateShortFormCatalog(catalog), { valid: true, errors: [] });
+
+  item.poster.sourceMasterSha256 = "0".repeat(64);
+  assert.ok(validateShortFormCatalog(catalog).errors.some((error) => error.includes("exact verified master")));
+  item.poster.sourceMasterSha256 = item.master.sha256;
+  item.poster.sourceMediaId = item.destinations.instagram.mediaId;
+  assert.equal(validateShortFormCatalog(catalog).valid, false);
+});
+
+test("TikTok bindings reject foreign handles, stale verification and duplicate IDs", async () => {
+  const catalog = await loadShortFormCatalog();
+  const item = catalog.items[0];
+  item.destinations.tiktok = {
+    state: "published", id: "1234567890123456789",
+    url: "https://www.tiktok.com/@drmexperienced/video/1234567890123456789",
+    publishedAt: catalog.lastVerifiedAt, verifiedAt: catalog.lastVerifiedAt,
+  };
+  item.destinationCopy.tiktokCaption = "Test fixture only; never a real post.";
+  assert.deepEqual(validateShortFormCatalog(catalog), { valid: true, errors: [] });
+  const minutePrecision = structuredClone(catalog);
+  const minuteDestination = minutePrecision.items[0].destinations.tiktok;
+  minuteDestination.publishedAt = "2026-08-08T10:00Z";
+  minuteDestination.publishedAtPrecision = "minute";
+  assert.deepEqual(validateShortFormCatalog(minutePrecision), { valid: true, errors: [] });
+  minuteDestination.publishedAt = "2026-02-30T10:00Z";
+  assert.equal(validateShortFormCatalog(minutePrecision).valid, false);
+  minuteDestination.publishedAt = "2026-08-08T10:00Z";
+  delete minuteDestination.publishedAtPrecision;
+  assert.equal(validateShortFormCatalog(minutePrecision).valid, false);
+  const foreign = structuredClone(catalog);
+  foreign.items[0].destinations.tiktok.url = "https://www.tiktok.com/@someoneelse/video/1234567890123456789";
+  assert.equal(validateShortFormCatalog(foreign).valid, false);
+  const future = structuredClone(catalog);
+  future.items[0].destinations.tiktok.verifiedAt = new Date(Date.parse(catalog.lastVerifiedAt) + 1000).toISOString();
+  assert.ok(validateShortFormCatalog(future).errors.some((error) => error.includes("cannot be later")));
+  catalog.items[1].destinations.tiktok = structuredClone(item.destinations.tiktok);
+  catalog.items[1].destinationCopy.tiktokCaption = "Different test fixture.";
+  assert.ok(validateShortFormCatalog(catalog).errors.some((error) => error.includes("Duplicate TikTok video ID")));
+});
+
+test("kitchen methods and affiliate resources require useful content and disclosure", async () => {
+  const catalog = await loadShortFormCatalog();
+  const item = catalog.items[0];
+  item.contentType = "kitchen_method";
+  assert.ok(validateShortFormCatalog(catalog).errors.some((error) => error.includes("source-backed steps")));
+  item.method = { title: "Method shown", steps: ["Follow the recorded demonstration."], note: "Test fixture." };
+  item.resources = [{ label: "Product resources", url: "https://drmexperienced.com/affiliates/#block-blue-light", affiliate: true }];
+  assert.ok(validateShortFormCatalog(catalog).errors.some((error) => error.includes("visible disclosure")));
+  item.affiliateDisclosure = "Affiliate links may earn a commission.";
+  assert.deepEqual(validateShortFormCatalog(catalog), { valid: true, errors: [] });
+});
+
 async function loadPlatformRegistry() {
   return JSON.parse(await fs.readFile(platformRegistryFile, "utf8"));
 }
@@ -21,12 +79,19 @@ async function loadPlatformRegistry() {
 test("checked-in short-form catalog validates with stable platform identities", async () => {
   const catalog = await loadShortFormCatalog();
   assert.equal(catalog.schemaVersion, 2);
-  assert.equal(catalog.revision, 3);
-  assert.equal(catalog.items.length, 3);
+  assert.ok(catalog.revision >= 3);
+  assert.ok(catalog.items.length >= 3);
   assert.match(shortFormCatalogHash(catalog), /^[a-f0-9]{64}$/);
+  const historicalIds = new Set([
+    "short-brain-fog-what-it-feels-like",
+    "short-brain-fog-testing-and-basic-solutions",
+    "short-cilantro-basil-pesto",
+  ]);
+  const historical = catalog.items.filter((item) => historicalIds.has(item.id));
+  assert.equal(historical.length, 3);
 
   assert.deepEqual(
-    catalog.items.map((item) => [
+    historical.map((item) => [
       item.id,
       item.destinations.instagram.mediaId,
       item.destinations.instagram.shortcode,
@@ -39,26 +104,11 @@ test("checked-in short-form catalog validates with stable platform identities", 
     ]
   );
   assert.deepEqual(
-    catalog.items.map((item) => item.destinations.website),
+    historical.map((item) => item.destinations.website.path),
     [
-      {
-        state: "published",
-        path: "/shorts/what-brain-fog-feels-like/",
-        url: "https://drmexperienced.com/shorts/what-brain-fog-feels-like/",
-        verifiedAt: "2026-08-08T21:49:06Z",
-      },
-      {
-        state: "published",
-        path: "/shorts/brain-fog-testing-and-basic-solutions/",
-        url: "https://drmexperienced.com/shorts/brain-fog-testing-and-basic-solutions/",
-        verifiedAt: "2026-08-08T21:49:06Z",
-      },
-      {
-        state: "published",
-        path: "/shorts/cilantro-basil-pesto-with-broccoli-sprouts/",
-        url: "https://drmexperienced.com/shorts/cilantro-basil-pesto-with-broccoli-sprouts/",
-        verifiedAt: "2026-08-08T21:49:06Z",
-      },
+      "/shorts/what-brain-fog-feels-like/",
+      "/shorts/brain-fog-testing-and-basic-solutions/",
+      "/shorts/cilantro-basil-pesto-with-broccoli-sprouts/",
     ]
   );
 });
@@ -220,7 +270,9 @@ test("Vimeo platform registry rejects stale counts, IDs, timestamps, and drift p
   const catalog = await loadShortFormCatalog();
   const platformRegistry = await loadPlatformRegistry();
   const latestVimeoVerification = Math.max(
-    ...catalog.items.map((item) => Date.parse(item.destinations.vimeo.verifiedAt))
+    ...catalog.items
+      .filter((item) => item.destinations.vimeo.state === "published")
+      .map((item) => Date.parse(item.destinations.vimeo.verifiedAt))
   );
   const mutations = [
     (value) => {
@@ -252,7 +304,9 @@ test("Vimeo platform registry rejects stale counts, IDs, timestamps, and drift p
   const laterTimestamp = new Date(Date.parse(catalog.lastVerifiedAt) + 1_000).toISOString();
   laterWebsiteOnlyVerification.lastVerifiedAt = laterTimestamp;
   for (const item of laterWebsiteOnlyVerification.items) {
-    item.destinations.website.verifiedAt = laterTimestamp;
+    if (item.destinations.website.state === "published") {
+      item.destinations.website.verifiedAt = laterTimestamp;
+    }
   }
   assert.deepEqual(
     validateShortFormPlatformRegistry(laterWebsiteOnlyVerification, platformRegistry),

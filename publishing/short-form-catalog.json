@@ -1,8 +1,8 @@
 {
   "$schema": "./short-form-catalog.schema.json",
   "schemaVersion": 2,
-  "revision": 3,
-  "lastVerifiedAt": "2026-08-08T21:49:06Z",
+  "revision": 6,
+  "lastVerifiedAt": "2026-09-23T17:57:17.128091+00:00",
   "authority": {
     "metadata": "publishing/short-form-catalog.json",
     "binaryMaster": "fingerprinted_project_dropbox_asset",
@@ -60,7 +60,7 @@
         "capturedAt": "2026-08-08T20:05:16Z"
       },
       "destinationCopy": {
-        "instagramCaption": "Dr. David Musnick (Dr. M), board-certified in Internal Medicine and Sports Medicine with 35+ years in regenerative and functional medicine, dives straight into one of the most common complaints he sees: brain fog. Discover what brain fog really feels like—slow thinking, low mental energy, word-finding trouble, poor focus, memory slips—and why it's not normal at any age.",
+        "instagramCaption": "Dr. David Musnick (Dr. M), board-certified in Internal Medicine and Sports Medicine with 35+ years in regenerative and functional medicine, dives straight into one of the most common complaints he sees: brain fog. Discover what brain fog really feels like\u2014slow thinking, low mental energy, word-finding trouble, poor focus, memory slips\u2014and why it's not normal at any age.",
         "vimeoTitle": "What Brain Fog Really Feels Like",
         "vimeoDescription": "Dr. David Musnick explains common signs people mean when they describe brain fog. This short excerpt is from Brain Fog, Part 1. Learn more at https://drmexperienced.com/shorts/what-brain-fog-feels-like/. Educational content only; not individualized medical advice."
       },
@@ -146,7 +146,7 @@
         "capturedAt": "2026-08-08T20:05:16Z"
       },
       "destinationCopy": {
-        "instagramCaption": "Dr. David Musnick (Dr. M) picks up where Part 1 left off and gets specific about which tests make sense for brain fog and which basics help almost everyone. He walks through key labs for inflammation, Epstein-Barr reactivation, mold/mycotoxins, and other blood markers—plus how to layer foundational brain-protective steps while root causes are being investigated.",
+        "instagramCaption": "Dr. David Musnick (Dr. M) picks up where Part 1 left off and gets specific about which tests make sense for brain fog and which basics help almost everyone. He walks through key labs for inflammation, Epstein-Barr reactivation, mold/mycotoxins, and other blood markers\u2014plus how to layer foundational brain-protective steps while root causes are being investigated.",
         "vimeoTitle": "Brain Fog: Testing and Foundational Support",
         "vimeoDescription": "Dr. David Musnick discusses evaluation questions and foundational support for persistent brain fog. This short excerpt is from Brain Fog, Part 2. Learn more at https://drmexperienced.com/shorts/brain-fog-testing-and-basic-solutions/. Educational content only; not individualized medical advice."
       },
@@ -252,7 +252,7 @@
         "capturedAt": "2026-08-08T20:05:16Z"
       },
       "destinationCopy": {
-        "instagramCaption": "www.DrMExperienced.com\n\nThe healthiest pesto upgrade 🌿\n\nFresh basil, cilantro, organic olive oil, garlic, Himalayan salt, pine nuts, and pistachios blended into a nutrient-packed, dairy-free pesto you can put on almost anything.\n\nTry it on eggs, vegetables, fish, meat, or as an easy way to add more greens and healthy fats to your meals.\n\nSave this one for your next meal prep. 🌱\n\nHashtags/tags:\n\n#HealthyPesto #PestoRecipe #DairyFreePesto #HomemadePesto #HealthyRecipes #FunctionalMedicine #FoodAsMedicine #AntiInflammatoryFoods #OrganicIngredients #HealthyFats #FreshHerbs #BasilPesto #CilantroPesto #MealPrepIdeas #CleanEating #NutrientDense #WellnessRecipes #HealthyCooking #DrMExperienced #SportsMedicine",
+        "instagramCaption": "www.DrMExperienced.com\n\nThe healthiest pesto upgrade \ud83c\udf3f\n\nFresh basil, cilantro, organic olive oil, garlic, Himalayan salt, pine nuts, and pistachios blended into a nutrient-packed, dairy-free pesto you can put on almost anything.\n\nTry it on eggs, vegetables, fish, meat, or as an easy way to add more greens and healthy fats to your meals.\n\nSave this one for your next meal prep. \ud83c\udf31\n\nHashtags/tags:\n\n#HealthyPesto #PestoRecipe #DairyFreePesto #HomemadePesto #HealthyRecipes #FunctionalMedicine #FoodAsMedicine #AntiInflammatoryFoods #OrganicIngredients #HealthyFats #FreshHerbs #BasilPesto #CilantroPesto #MealPrepIdeas #CleanEating #NutrientDense #WellnessRecipes #HealthyCooking #DrMExperienced #SportsMedicine",
         "vimeoTitle": "Cilantro-Basil Pesto with Broccoli Sprouts",
         "vimeoDescription": "Dr. David Musnick demonstrates a dairy-free pesto made with cilantro, basil, broccoli sprouts, olive oil, pistachios, pine nuts, and simple seasonings. Recipe details and the Instagram Reel are at https://drmexperienced.com/shorts/cilantro-basil-pesto-with-broccoli-sprouts/. Educational content only; adjust ingredients for allergies and individual dietary needs."
       },
@@ -280,10 +280,2088 @@
           "posterParity": true
         },
         "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/cilantro-basil-pesto-with-broccoli-sprouts/"
+        }
+      },
+      "variations": [
+        {
+          "title": "Parsley, cilantro and basil variation",
+          "body": [
+            "In the original demonstration, Dr. Musnick also describes substituting parsley for the broccoli sprouts. Keep the cilantro and basil, olive oil, nuts and seasonings from the base method. This is the parsley variation referenced in his apigenin reel.",
+            "He demonstrates an oil-first method in a small food processor, then combines the herbs, nuts and seasonings. Ingredient weights, a universal oil volume, servings and processing time were not specified. The recipe contains nuts."
+          ]
+        }
+      ],
+      "guide": {
+        "websitePath": "/images/shorts/guides/parsley-chamomile-and-apigenin.png",
+        "sha256": "7689418e4d395167dcd5d2c200b9879725fa504fc8c7306fc4e51775a0b87264",
+        "sizeBytes": 2302526,
+        "width": 941,
+        "height": 1672,
+        "alt": "Parsley-cilantro-basil pesto: herbs; organic olive oil; pistachios or pine nuts; Himalayan salt and garlic salt; oil first; blend, season, serve. Link to existing base recipe via website Media."
+      }
+    },
+    {
+      "id": "short-nrf2-sprouts-turmeric-green-tea",
+      "slug": "nrf2-sprouts-turmeric-green-tea",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "NRF2: What sprouts, turmeric and green tea have in common",
+      "summary": "Dr. David Musnick connects broccoli sprouts, turmeric and green tea with NRF2, a pathway involved in the body\u2019s own cellular defenses. The illustrated enzyme step explains why myrosinase matters when discussing sulforaphane.",
+      "body": [
+        "Dr. David Musnick connects broccoli sprouts, turmeric and green tea with NRF2, a pathway involved in the body\u2019s own cellular defenses. The illustrated enzyme step explains why myrosinase matters when discussing sulforaphane.",
+        "The illustrations follow three ideas: familiar plant foods, NRF2 signaling inside cells, and the enzyme step that converts glucoraphanin to sulforaphane. This is a pathway explanation, not a promise that a particular food or supplement prevents disease."
+      ],
+      "topics": [
+        "nutrition",
+        "brain-health"
+      ],
+      "relatedEpisodeNumbers": [
+        8
+      ],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/healthy-products/2026-07-06_nrf2-activators-broccoli-sprouts-and-biopure-sulforaphane_MOTIV_Video_20260706213687-1.MP4",
+            "sha256": "3a114857923599135967e2a46443ae6e2e203dfcf18eb7dcdd07cc4628e23fa0",
+            "sizeBytes": 49160366,
+            "durationSeconds": 111.5
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S16_REVIEWFIX_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "bc774fd4de6d68e592a0ca25e5f9547011439a8996466b5df9489be3f7ab2d2f",
+        "sizeBytes": 44713609,
+        "container": "mp4",
+        "durationSeconds": 80.63333333333334,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/nrf2-sprouts-turmeric-green-tea.jpg",
+        "sha256": "acd35674d179b0dcc633f3d1c0d6fc73479c399c264ff6509ed56a21ed746014",
+        "sizeBytes": 271674,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "bc774fd4de6d68e592a0ca25e5f9547011439a8996466b5df9489be3f7ab2d2f",
+        "capturedAt": "2026-09-23T16:41:10.543088+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "Three familiar foods. One cellular pathway worth understanding.\n\nDr. David Musnick connects broccoli sprouts, turmeric and green tea with NRF2, a pathway involved in the body\u2019s own cellular defenses. The illustrated enzyme step explains why myrosinase matters when discussing sulforaphane.\n\nExplore the food-and-brain episode for the wider conversation.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #NRF2 #FoodAndTheBrain",
+        "vimeoTitle": "NRF2: What sprouts, turmeric and green tea have in common",
+        "vimeoDescription": "Dr. David Musnick connects broccoli sprouts, turmeric and green tea with NRF2, a pathway involved in the body\u2019s own cellular defenses. The illustrated enzyme step explains why myrosinase matters when discussing sulforaphane.\n\nExplore the food-and-brain episode for the wider conversation.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "Three familiar foods. One cellular pathway worth understanding.\n\nDr. David Musnick connects broccoli sprouts, turmeric and green tea with NRF2, a pathway involved in the body\u2019s own cellular defenses. The illustrated enzyme step explains why myrosinase matters when discussing sulforaphane.\n\nExplore the food-and-brain episode for the wider conversation.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #NRF2 #FoodAndTheBrain"
+      },
+      "resources": [
+        {
+          "label": "Explore the full conversation",
+          "url": "https://drmexperienced.com/episodes/episode-8-food-and-the-brain/",
+          "affiliate": false
+        }
+      ],
+      "destinations": {
+        "instagram": {
           "state": "published",
-          "path": "/shorts/cilantro-basil-pesto-with-broccoli-sprouts/",
+          "publishedAt": "2026-09-23T17:01:57.000Z",
+          "verifiedAt": "2026-09-23T17:07:41.245447+00:00",
+          "mediaId": "3992665862275080626",
+          "shortcode": "DdozHKbvCGy",
+          "url": "https://www.instagram.com/reel/DdozHKbvCGy/",
+          "remoteDurationSeconds": 80.633333,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/nrf2-sprouts-turmeric-green-tea/"
+        },
+        "tiktok": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:10Z",
+          "verifiedAt": "2026-09-23T17:20:24.392192+00:00",
+          "publishedAtPrecision": "minute",
+          "id": "7688779190392425742",
+          "url": "https://www.tiktok.com/@drmexperienced/video/7688779190392425742"
+        }
+      }
+    },
+    {
+      "id": "short-blue-light-glasses-amber-red-fit-over",
+      "slug": "blue-light-glasses-amber-red-fit-over",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "Blue-light glasses: Amber, red and fit-over options",
+      "summary": "Dr. David Musnick demonstrates amber and red BlockBlueLight glasses and discusses how he uses them in an evening routine. The reel shows the difference between the lenses and the fit-over design.",
+      "body": [
+        "Dr. David Musnick demonstrates amber and red BlockBlueLight glasses and discusses how he uses them in an evening routine. The reel shows the difference between the lenses and the fit-over design.",
+        "Compare the fit and the lens tint shown in the demonstration. The fit-over design is shown over prescription glasses; the affiliate guide collects the relevant product resource in one place."
+      ],
+      "topics": [
+        "sleep",
+        "light"
+      ],
+      "relatedEpisodeNumbers": [
+        3
+      ],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/sleep-products/2026-07-06_blockbluelight-amber-and-red-glasses-for-sleep_MOTIV_Video_20260706215637.MP4",
+            "sha256": "75cd953f9692ec337bb27510e5bada362d4bacc8d768b19d2f81ee0b480973c8",
+            "sizeBytes": 42098042,
+            "durationSeconds": 95.433333
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S23_REVIEWFIX_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "abbb5baf9cf5376dfcf355699a7302ccf1480fa51fedee1cc281f6143e9d4ce5",
+        "sizeBytes": 40977617,
+        "container": "mp4",
+        "durationSeconds": 81.2,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/blue-light-glasses-amber-red-fit-over.jpg",
+        "sha256": "d556990e295f7709d7e90af879eadec10055692bc00aa1d6325494414658362d",
+        "sizeBytes": 161197,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "abbb5baf9cf5376dfcf355699a7302ccf1480fa51fedee1cc281f6143e9d4ce5",
+        "capturedAt": "2026-09-23T16:41:10.683386+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you.\n\nKeep your prescription glasses. See how the fit-over option works.\n\nDr. David Musnick demonstrates amber and red BlockBlueLight glasses and discusses how he uses them in an evening routine. The reel shows the difference between the lenses and the fit-over design.\n\nFind BlockBlueLight in Dr. M\u2019s affiliate guide, then explore the insomnia episode.\nhttps://drmexperienced.com/affiliates/#block-blue-light\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #EveningRoutine #BlueLightGlasses",
+        "vimeoTitle": "Blue-light glasses: Amber, red and fit-over options",
+        "vimeoDescription": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you.\n\nDr. David Musnick demonstrates amber and red BlockBlueLight glasses and discusses how he uses them in an evening routine. The reel shows the difference between the lenses and the fit-over design.\n\nFind BlockBlueLight in Dr. M\u2019s affiliate guide, then explore the insomnia episode.\nhttps://drmexperienced.com/affiliates/#block-blue-light\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you.\n\nKeep your prescription glasses. See how the fit-over option works.\n\nDr. David Musnick demonstrates amber and red BlockBlueLight glasses and discusses how he uses them in an evening routine. The reel shows the difference between the lenses and the fit-over design.\n\nFind BlockBlueLight in Dr. M\u2019s affiliate guide, then explore the insomnia episode.\nhttps://drmexperienced.com/affiliates/#block-blue-light\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #EveningRoutine #BlueLightGlasses"
+      },
+      "resources": [
+        {
+          "label": "BlockBlueLight product resources",
+          "url": "https://drmexperienced.com/affiliates/#block-blue-light",
+          "affiliate": true
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:08:00.000Z",
+          "verifiedAt": "2026-09-23T17:09:39.556390+00:00",
+          "mediaId": "3992668931851413630",
+          "shortcode": "Ddozz1Mveh-",
+          "url": "https://www.instagram.com/reel/Ddozz1Mveh-/",
+          "remoteDurationSeconds": 81.2,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/blue-light-glasses-amber-red-fit-over/"
+        }
+      },
+      "affiliateDisclosure": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you."
+    },
+    {
+      "id": "short-amber-reading-light-evening-routine",
+      "slug": "amber-reading-light-evening-routine",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "An amber reading light for your evening routine",
+      "summary": "Dr. David Musnick shows a clip-on amber reading light and explains how it fits into his evening routine. A practical demonstration for anyone comparing bedside lighting and reading setups.",
+      "body": [
+        "Dr. David Musnick shows a clip-on amber reading light and explains how it fits into his evening routine. A practical demonstration for anyone comparing bedside lighting and reading setups.",
+        "The clip-on format directs light toward the page. Watch the demonstration to compare its position and amber light with your own reading setup."
+      ],
+      "topics": [
+        "sleep",
+        "light"
+      ],
+      "relatedEpisodeNumbers": [
+        3
+      ],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/sleep-products/2026-07-06_blockbluelight-amber-reading-light-for-nighttime-books_MOTIV_Video_20260706215968.MP4",
+            "sha256": "12a9d8fe9c9caa7ee08f84c9fb2d9c5bd99fcd9238a0335d2e800dc3bae567ec",
+            "sizeBytes": 42858905,
+            "durationSeconds": 97.166667
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260923-v005/renders/review_mp4/S24_RELEASE_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "2e3a84b690968216daad1e036d25f066853a057f1bbc17a08ca72e2e850bfecb",
+        "sizeBytes": 43548902,
+        "container": "mp4",
+        "durationSeconds": 90.16666666666667,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/amber-reading-light-evening-routine.jpg",
+        "sha256": "0cd140d926718f3ee990b6cb68cb3db30b3cbfccc3fda30e8470d5ecd311a37f",
+        "sizeBytes": 159330,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "2e3a84b690968216daad1e036d25f066853a057f1bbc17a08ca72e2e850bfecb",
+        "capturedAt": "2026-09-23T16:46:15.500495+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you.\n\nLight the page without lighting up the whole room.\n\nDr. David Musnick shows a clip-on amber reading light and explains how it fits into his evening routine. A practical demonstration for anyone comparing bedside lighting and reading setups.\n\nFind BlockBlueLight in Dr. M\u2019s affiliate guide. The insomnia episode adds more context.\nhttps://drmexperienced.com/affiliates/#block-blue-light\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #ReadingLight #EveningRoutine",
+        "vimeoTitle": "An amber reading light for your evening routine",
+        "vimeoDescription": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you.\n\nDr. David Musnick shows a clip-on amber reading light and explains how it fits into his evening routine. A practical demonstration for anyone comparing bedside lighting and reading setups.\n\nFind BlockBlueLight in Dr. M\u2019s affiliate guide. The insomnia episode adds more context.\nhttps://drmexperienced.com/affiliates/#block-blue-light\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you.\n\nLight the page without lighting up the whole room.\n\nDr. David Musnick shows a clip-on amber reading light and explains how it fits into his evening routine. A practical demonstration for anyone comparing bedside lighting and reading setups.\n\nFind BlockBlueLight in Dr. M\u2019s affiliate guide. The insomnia episode adds more context.\nhttps://drmexperienced.com/affiliates/#block-blue-light\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #ReadingLight #EveningRoutine"
+      },
+      "resources": [
+        {
+          "label": "BlockBlueLight product resources",
+          "url": "https://drmexperienced.com/affiliates/#block-blue-light",
+          "affiliate": true
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:12:03.000Z",
+          "verifiedAt": "2026-09-23T17:12:59.104733+00:00",
+          "mediaId": "3992670952977367878",
+          "shortcode": "Ddo0RPhPING",
+          "url": "https://www.instagram.com/reel/Ddo0RPhPING/",
+          "remoteDurationSeconds": 90.166666,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/amber-reading-light-evening-routine/"
+        }
+      },
+      "affiliateDisclosure": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you."
+    },
+    {
+      "id": "short-capers-apples-onions-quercetin",
+      "slug": "capers-apples-onions-quercetin",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "Capers, apples and onions: A food-first look at quercetin",
+      "summary": "Dr. David Musnick introduces quercetin through familiar foods: capers, onions and apples. He also shares simple ways to use capers with eggs, vegetables or chicken.",
+      "body": [
+        "Dr. David Musnick introduces quercetin through familiar foods: capers, onions and apples. He also shares simple ways to use capers with eggs, vegetables or chicken.",
+        "Capers can be added to eggs, vegetables or chicken. Apples and onions offer other ways to include the foods discussed here; the reel does not establish a treatment dose of quercetin."
+      ],
+      "topics": [
+        "nutrition",
+        "brain-health"
+      ],
+      "relatedEpisodeNumbers": [
+        8
+      ],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/albertsons/2026-07-06_albertsons-organic-capers-apples-onions-quercetin_IMG_6549.MOV",
+            "sha256": "fd72923bf55b09a88dccae2355fadd3aea495a0bdb2235a0d9d90a909861cba4",
+            "sizeBytes": 234212887,
+            "durationSeconds": 78.12
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S02_REVIEWFIX_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "27146c705b537cbaaafbb12637423c89b9847993487ec10ef02d4396c8511586",
+        "sizeBytes": 53057871,
+        "container": "mp4",
+        "durationSeconds": 65.7,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/capers-apples-onions-quercetin.jpg",
+        "sha256": "46a24db9659ee106ea4c63d632cfc18ef725214ae53f41bc6eb136093e7b5f0b",
+        "sizeBytes": 277924,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "27146c705b537cbaaafbb12637423c89b9847993487ec10ef02d4396c8511586",
+        "capturedAt": "2026-09-23T16:41:11.070022+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "What do capers and apples have in common?\n\nDr. David Musnick introduces quercetin through familiar foods: capers, onions and apples. He also shares simple ways to use capers with eggs, vegetables or chicken.\n\nSave these food ideas, then explore the food-and-brain episode.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #Quercetin #FoodIdeas",
+        "vimeoTitle": "Capers, apples and onions: A food-first look at quercetin",
+        "vimeoDescription": "Dr. David Musnick introduces quercetin through familiar foods: capers, onions and apples. He also shares simple ways to use capers with eggs, vegetables or chicken.\n\nSave these food ideas, then explore the food-and-brain episode.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "What do capers and apples have in common?\n\nDr. David Musnick introduces quercetin through familiar foods: capers, onions and apples. He also shares simple ways to use capers with eggs, vegetables or chicken.\n\nSave these food ideas, then explore the food-and-brain episode.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #Quercetin #FoodIdeas"
+      },
+      "resources": [
+        {
+          "label": "Explore the full conversation",
+          "url": "https://drmexperienced.com/episodes/episode-8-food-and-the-brain/",
+          "affiliate": false
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:17:04.000Z",
+          "verifiedAt": "2026-09-23T17:18:05.480092+00:00",
+          "mediaId": "3992673489935675027",
+          "shortcode": "Ddo02KPvC6T",
+          "url": "https://www.instagram.com/reel/Ddo02KPvC6T/",
+          "remoteDurationSeconds": 65.7,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/capers-apples-onions-quercetin/"
+        },
+        "tiktok": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:16Z",
+          "verifiedAt": "2026-09-23T17:21:12.235850+00:00",
+          "publishedAtPrecision": "minute",
+          "id": "7688780768801246478",
+          "url": "https://www.tiktok.com/@drmexperienced/video/7688780768801246478"
+        }
+      }
+    },
+    {
+      "id": "short-emf-rf-sources-around-you",
+      "slug": "emf-rf-sources-around-you",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "EMF and RF: Naming the sources around you",
+      "summary": "Dr. David Musnick introduces radiofrequency sources such as phones, Wi-Fi and Bluetooth, then distinguishes them from the fields associated with wiring and appliances. The diagrams help organize a topic that is often discussed too broadly.",
+      "body": [
+        "Dr. David Musnick introduces radiofrequency sources such as phones, Wi-Fi and Bluetooth, then distinguishes them from the fields associated with wiring and appliances. The diagrams help organize a topic that is often discussed too broadly.",
+        "Phones, Wi-Fi and Bluetooth are discussed as radiofrequency sources. Wiring and household appliances belong to a different part of the electromagnetic-field conversation. Naming the source is the first step toward asking a precise question."
+      ],
+      "topics": [
+        "emf"
+      ],
+      "relatedEpisodeNumbers": [
+        4
+      ],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/emf-products/2026-07-06_emf-rf-electrical-fields-sources-explainer_MOTIV_Video_20260706215015.MP4",
+            "sha256": "511c09250124e6125c39c39ccc71c0b6f096d4090db26c2e383f7bf6ee4e6ee2",
+            "sizeBytes": 33604635,
+            "durationSeconds": 76.2
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S10_REVIEWFIX_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "51503d33038b4e5438b85ee5cdd81d797ae92223ae83df0e2496085a4c0b86e7",
+        "sizeBytes": 31646286,
+        "container": "mp4",
+        "durationSeconds": 64.6,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/emf-rf-sources-around-you.jpg",
+        "sha256": "2eb3805dca258352cce2b339acff3f09f44ff308b5e09306209f1b3784201e3c",
+        "sizeBytes": 180681,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "51503d33038b4e5438b85ee5cdd81d797ae92223ae83df0e2496085a4c0b86e7",
+        "capturedAt": "2026-09-23T16:41:11.310769+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "Start by knowing which kind of source you are talking about.\n\nDr. David Musnick introduces radiofrequency sources such as phones, Wi-Fi and Bluetooth, then distinguishes them from the fields associated with wiring and appliances. The diagrams help organize a topic that is often discussed too broadly.\n\nContinue with the full EMF episode on Dr. M Experienced.\nhttps://drmexperienced.com/episodes/episode-4-emf/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #EMF #ScienceExplained",
+        "vimeoTitle": "EMF and RF: Naming the sources around you",
+        "vimeoDescription": "Dr. David Musnick introduces radiofrequency sources such as phones, Wi-Fi and Bluetooth, then distinguishes them from the fields associated with wiring and appliances. The diagrams help organize a topic that is often discussed too broadly.\n\nContinue with the full EMF episode on Dr. M Experienced.\nhttps://drmexperienced.com/episodes/episode-4-emf/\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "Start by knowing which kind of source you are talking about.\n\nDr. David Musnick introduces radiofrequency sources such as phones, Wi-Fi and Bluetooth, then distinguishes them from the fields associated with wiring and appliances. The diagrams help organize a topic that is often discussed too broadly.\n\nContinue with the full EMF episode on Dr. M Experienced.\nhttps://drmexperienced.com/episodes/episode-4-emf/\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #EMF #ScienceExplained"
+      },
+      "resources": [
+        {
+          "label": "Explore the full conversation",
+          "url": "https://drmexperienced.com/episodes/episode-4-emf/",
+          "affiliate": false
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:19:56.000Z",
+          "verifiedAt": "2026-09-23T17:20:52.457763+00:00",
+          "mediaId": "3992674941617945475",
+          "shortcode": "Ddo1LSOvbuD",
+          "url": "https://www.instagram.com/reel/Ddo1LSOvbuD/",
+          "remoteDurationSeconds": 64.599934,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/emf-rf-sources-around-you/"
+        },
+        "tiktok": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:18Z",
+          "verifiedAt": "2026-09-23T17:22:49.787471+00:00",
+          "publishedAtPrecision": "minute",
+          "id": "7688781313964313869",
+          "url": "https://www.tiktok.com/@drmexperienced/video/7688781313964313869"
+        }
+      }
+    },
+    {
+      "id": "short-whole-bean-coffee-shopping-freshness",
+      "slug": "whole-bean-coffee-shopping-freshness",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "Coffee shopping: Whole beans, packaging and freshness",
+      "summary": "Dr. David Musnick walks through his coffee-shopping preferences, including whole beans, organic options and the packaging touching the beans. He explains why he likes grinding close to brewing.",
+      "body": [
+        "Dr. David Musnick walks through his coffee-shopping preferences, including whole beans, organic options and the packaging touching the beans. He explains why he likes grinding close to brewing.",
+        "Keep the buying decision separate from the freshness routine: look at the package and ingredients, then grind the beans close to brewing. An organic label or paper-looking bag does not establish the absence of mold or a plastic lining."
+      ],
+      "topics": [
+        "coffee",
+        "nutrition"
+      ],
+      "relatedEpisodeNumbers": [
+        8
+      ],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/albertsons/2026-07-06_albertsons-organic-coffee-beans-paper-bag-microplastics_IMG_6550.MOV",
+            "sha256": "bc3bf6cf586386ddcb37af9ab739696e96a3714cccc2f6404b725f6ca6f12e45",
+            "sizeBytes": 281243378,
+            "durationSeconds": 93.755
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S03_REVIEWFIX_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "ceb0e82514fdb59beff273716e89da232dc2545226108848636832572392ed28",
+        "sizeBytes": 64487117,
+        "container": "mp4",
+        "durationSeconds": 77.93333333333334,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/whole-bean-coffee-shopping-freshness.jpg",
+        "sha256": "d71775af612759da4aea4b0918ca2a5e2010ced916d683796730e8d4e4a96b8a",
+        "sizeBytes": 212090,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "ceb0e82514fdb59beff273716e89da232dc2545226108848636832572392ed28",
+        "capturedAt": "2026-09-23T16:41:11.473417+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "What does Dr. M look for when he needs a bag of coffee?\n\nDr. David Musnick walks through his coffee-shopping preferences, including whole beans, organic options and the packaging touching the beans. He explains why he likes grinding close to brewing.\n\nSave the checklist for your next coffee run. Explore the food-and-brain episode for more context.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #CoffeeBeans #CoffeeRoutine",
+        "vimeoTitle": "Coffee shopping: Whole beans, packaging and freshness",
+        "vimeoDescription": "Dr. David Musnick walks through his coffee-shopping preferences, including whole beans, organic options and the packaging touching the beans. He explains why he likes grinding close to brewing.\n\nSave the checklist for your next coffee run. Explore the food-and-brain episode for more context.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "What does Dr. M look for when he needs a bag of coffee?\n\nDr. David Musnick walks through his coffee-shopping preferences, including whole beans, organic options and the packaging touching the beans. He explains why he likes grinding close to brewing.\n\nSave the checklist for your next coffee run. Explore the food-and-brain episode for more context.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #CoffeeBeans #CoffeeRoutine"
+      },
+      "resources": [
+        {
+          "label": "Explore the full conversation",
+          "url": "https://drmexperienced.com/episodes/episode-8-food-and-the-brain/",
+          "affiliate": false
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:22:14.000Z",
+          "verifiedAt": "2026-09-23T17:23:08.938568+00:00",
+          "mediaId": "3992676086335731839",
+          "shortcode": "Ddo1b8VPPh_",
+          "url": "https://www.instagram.com/reel/Ddo1b8VPPh_/",
+          "remoteDurationSeconds": 77.933333,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/whole-bean-coffee-shopping-freshness/"
+        },
+        "tiktok": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:21Z",
+          "verifiedAt": "2026-09-23T17:26:55.368714+00:00",
+          "publishedAtPrecision": "minute",
+          "id": "7688782051280997646",
+          "url": "https://www.tiktok.com/@drmexperienced/video/7688782051280997646"
+        }
+      }
+    },
+    {
+      "id": "short-shiitake-mushrooms-and-extracts",
+      "slug": "shiitake-mushrooms-and-extracts",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "Shiitake and mushroom extracts: A list you can save",
+      "summary": "Dr. David Musnick introduces shiitake mushrooms and several extracts while discussing beta-glucans. Pause the on-screen list to note the mushroom names and MyCommunity extract he shows.",
+      "body": [
+        "Dr. David Musnick introduces shiitake mushrooms and several extracts while discussing beta-glucans. Pause the on-screen list to note the mushroom names and MyCommunity extract he shows.",
+        "The names collected here are shiitake, reishi, turkey tail, cordyceps and MyCommunity extract. Culinary mushrooms and concentrated extracts are different product forms; this reference does not give interchangeable quantities or supplement doses."
+      ],
+      "topics": [
+        "mushrooms",
+        "nutrition"
+      ],
+      "relatedEpisodeNumbers": [
+        8
+      ],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/albertsons/2026-07-06_albertsons-shiitake-mushrooms-beta-glucan-tinctures_IMG_6554.MOV",
+            "sha256": "fa63dd7c1974ae6cbb5faeda045bc2886fbf01a7b38e40342ae06ed9f9fddd01",
+            "sizeBytes": 285327639,
+            "durationSeconds": 95.103333
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S04_REVIEWFIX_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "084d3d1ceaef2d974327a3e17a857c1a3c3141531a645278ecdd21cfd57353cd",
+        "sizeBytes": 54089784,
+        "container": "mp4",
+        "durationSeconds": 70.53333333333333,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/shiitake-mushrooms-and-extracts.jpg",
+        "sha256": "adb3ca46bc579f54a105d8c9e85a018196fe15fb76f51bcfe53ed1302d17b536",
+        "sizeBytes": 287132,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "084d3d1ceaef2d974327a3e17a857c1a3c3141531a645278ecdd21cfd57353cd",
+        "capturedAt": "2026-09-23T16:41:56.249767+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "Shiitake, reishi, turkey tail and more\u2014keep the names in one place.\n\nDr. David Musnick introduces shiitake mushrooms and several extracts while discussing beta-glucans. Pause the on-screen list to note the mushroom names and MyCommunity extract he shows.\n\nSave the list, then explore the food-and-brain episode. Review concentrated extracts with your clinician.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #Mushrooms #BetaGlucans",
+        "vimeoTitle": "Shiitake and mushroom extracts: A list you can save",
+        "vimeoDescription": "Dr. David Musnick introduces shiitake mushrooms and several extracts while discussing beta-glucans. Pause the on-screen list to note the mushroom names and MyCommunity extract he shows.\n\nSave the list, then explore the food-and-brain episode. Review concentrated extracts with your clinician.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "Shiitake, reishi, turkey tail and more\u2014keep the names in one place.\n\nDr. David Musnick introduces shiitake mushrooms and several extracts while discussing beta-glucans. Pause the on-screen list to note the mushroom names and MyCommunity extract he shows.\n\nSave the list, then explore the food-and-brain episode. Review concentrated extracts with your clinician.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #Mushrooms #BetaGlucans"
+      },
+      "resources": [
+        {
+          "label": "Explore the full conversation",
+          "url": "https://drmexperienced.com/episodes/episode-8-food-and-the-brain/",
+          "affiliate": false
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:24:53.000Z",
+          "verifiedAt": "2026-09-23T17:25:34.374051+00:00",
+          "mediaId": "3992677393582909581",
+          "shortcode": "Ddo1u9zPeiN",
+          "url": "https://www.instagram.com/reel/Ddo1u9zPeiN/",
+          "remoteDurationSeconds": 70.533333,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/shiitake-mushrooms-and-extracts/"
+        },
+        "tiktok": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:24Z",
+          "verifiedAt": "2026-09-23T17:27:37.665577+00:00",
+          "publishedAtPrecision": "minute",
+          "id": "7688782823938919693",
+          "url": "https://www.tiktok.com/@drmexperienced/video/7688782823938919693"
+        }
+      },
+      "guide": {
+        "websitePath": "/images/shorts/guides/shiitake-mushrooms-and-extracts.png",
+        "sha256": "992bb5e4d2d4abc2726266ff5f17efe55d13111c0080eb7268bea42c7d3d0cb1",
+        "sizeBytes": 2456810,
+        "width": 941,
+        "height": 1672,
+        "alt": "MUSHROOMS TO REMEMBER \u2014 Shiitake; Reishi; Turkey tail; Cordyceps; MyCommunity extract. Pauseable on-screen list."
+      }
+    },
+    {
+      "id": "short-olive-oil-and-polyphenols",
+      "slug": "olive-oil-and-polyphenols",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "Olive oil and polyphenols: A closer look at the bottle",
+      "summary": "Dr. David Musnick shows a Tunisian organic olive oil and explains why he pays attention to plant compounds called polyphenols. He shares everyday uses, including vegetables and salad dressing.",
+      "body": [
+        "Dr. David Musnick shows a Tunisian organic olive oil and explains why he pays attention to plant compounds called polyphenols. He shares everyday uses, including vegetables and salad dressing.",
+        "The reel shows one bottle and some everyday serving ideas. Country of origin alone does not tell you the polyphenol content of every bottle; use product-specific information when comparing oils."
+      ],
+      "topics": [
+        "nutrition"
+      ],
+      "relatedEpisodeNumbers": [
+        8
+      ],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/costco/2026-07-06_costco-terra-delyssa-olive-oil-polyphenols-shorter-take_MOTIV_Video_20260706221147.MP4",
+            "sha256": "20d1611f2e7456b44a152d2c0ce81a070a4363af7b615f0ed78dc5cc8e501249",
+            "sizeBytes": 37747061,
+            "durationSeconds": 85.666667
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S06_REVIEWFIX_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "62afba7a9a0f1d669f1d0d6ea8a97a9b16db435dfe9b9ca18d9c2f1fffad9cfb",
+        "sizeBytes": 31025689,
+        "container": "mp4",
+        "durationSeconds": 59.0,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/olive-oil-and-polyphenols.jpg",
+        "sha256": "b72032abac98a6e00d38c7d67324197c888c39c3ce98346e74c3cf57ba1468d3",
+        "sizeBytes": 207345,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "62afba7a9a0f1d669f1d0d6ea8a97a9b16db435dfe9b9ca18d9c2f1fffad9cfb",
+        "capturedAt": "2026-09-23T16:41:11.923973+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "An olive-oil shopping find starts a useful conversation about polyphenols.\n\nDr. David Musnick shows a Tunisian organic olive oil and explains why he pays attention to plant compounds called polyphenols. He shares everyday uses, including vegetables and salad dressing.\n\nExplore the food-and-brain episode for more ways to think about food choices.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #OliveOil #Polyphenols",
+        "vimeoTitle": "Olive oil and polyphenols: A closer look at the bottle",
+        "vimeoDescription": "Dr. David Musnick shows a Tunisian organic olive oil and explains why he pays attention to plant compounds called polyphenols. He shares everyday uses, including vegetables and salad dressing.\n\nExplore the food-and-brain episode for more ways to think about food choices.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "An olive-oil shopping find starts a useful conversation about polyphenols.\n\nDr. David Musnick shows a Tunisian organic olive oil and explains why he pays attention to plant compounds called polyphenols. He shares everyday uses, including vegetables and salad dressing.\n\nExplore the food-and-brain episode for more ways to think about food choices.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #OliveOil #Polyphenols"
+      },
+      "resources": [
+        {
+          "label": "Explore the full conversation",
+          "url": "https://drmexperienced.com/episodes/episode-8-food-and-the-brain/",
+          "affiliate": false
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:26:52.000Z",
+          "verifiedAt": "2026-09-23T17:27:37.528346+00:00",
+          "mediaId": "3992678434986779695",
+          "shortcode": "Ddo1-Hrv-Qv",
+          "url": "https://www.instagram.com/reel/Ddo1-Hrv-Qv/",
+          "remoteDurationSeconds": 59,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/olive-oil-and-polyphenols/"
+        },
+        "tiktok": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:27Z",
+          "verifiedAt": "2026-09-23T17:30:23.797802+00:00",
+          "publishedAtPrecision": "minute",
+          "id": "7688783530834332942",
+          "url": "https://www.tiktok.com/@drmexperienced/video/7688783530834332942"
+        }
+      }
+    },
+    {
+      "id": "short-kombucha-sugar-caffeine-labels",
+      "slug": "kombucha-sugar-caffeine-labels",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "Choosing kombucha: Read the sugar and caffeine labels",
+      "summary": "Dr. David Musnick compares the sugar, caffeine and ingredients on a kombucha bottle, including the mushroom extracts in the example he shows. The label checklist makes it easier to compare bottles for your own routine.",
+      "body": [
+        "Dr. David Musnick compares the sugar, caffeine and ingredients on a kombucha bottle, including the mushroom extracts in the example he shows. The label checklist makes it easier to compare bottles for your own routine.",
+        "Check the serving size before comparing sugar and caffeine. The example bottle also lists mushroom ingredients. The label shown belongs to that particular product and may differ from other flavors or later formulations."
+      ],
+      "topics": [
+        "nutrition",
+        "label-reading"
+      ],
+      "relatedEpisodeNumbers": [
+        8
+      ],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/healthy-products/2026-07-06_choosing-low-sugar-mushroom-kombucha-with-beta-glucans_IMG_6547.MOV",
+            "sha256": "ce6948a5d890b6f9725bef3f6314c0031b1ea08a6c6c9cb23a643430b8574b93",
+            "sizeBytes": 275633817,
+            "durationSeconds": 91.853333
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S13_REVIEWFIX_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "a782b6aee6b0194cab5b58d39a60bc63ee49104629902b656ae5ce7786ac8526",
+        "sizeBytes": 53665456,
+        "container": "mp4",
+        "durationSeconds": 68.3,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/kombucha-sugar-caffeine-labels.jpg",
+        "sha256": "9e35804e2b0f64c948092b3a32fc75fc1b7d14e59a4b4160dbdb018f63db8783",
+        "sizeBytes": 219165,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "a782b6aee6b0194cab5b58d39a60bc63ee49104629902b656ae5ce7786ac8526",
+        "capturedAt": "2026-09-23T16:41:12.097748+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "Before the flavor, check the label.\n\nDr. David Musnick compares the sugar, caffeine and ingredients on a kombucha bottle, including the mushroom extracts in the example he shows. The label checklist makes it easier to compare bottles for your own routine.\n\nSave the checklist for your next shop. More food conversations at Dr. M Experienced.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #Kombucha #ReadTheLabel",
+        "vimeoTitle": "Choosing kombucha: Read the sugar and caffeine labels",
+        "vimeoDescription": "Dr. David Musnick compares the sugar, caffeine and ingredients on a kombucha bottle, including the mushroom extracts in the example he shows. The label checklist makes it easier to compare bottles for your own routine.\n\nSave the checklist for your next shop. More food conversations at Dr. M Experienced.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "Before the flavor, check the label.\n\nDr. David Musnick compares the sugar, caffeine and ingredients on a kombucha bottle, including the mushroom extracts in the example he shows. The label checklist makes it easier to compare bottles for your own routine.\n\nSave the checklist for your next shop. More food conversations at Dr. M Experienced.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #Kombucha #ReadTheLabel"
+      },
+      "resources": [
+        {
+          "label": "Explore the full conversation",
+          "url": "https://drmexperienced.com/episodes/episode-8-food-and-the-brain/",
+          "affiliate": false
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:28:48.000Z",
+          "verifiedAt": "2026-09-23T17:29:36.073463+00:00",
+          "mediaId": "3992679391187370824",
+          "shortcode": "Ddo2MCNvwNI",
+          "url": "https://www.instagram.com/reel/Ddo2MCNvwNI/",
+          "remoteDurationSeconds": 68.3,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/kombucha-sugar-caffeine-labels/"
+        },
+        "tiktok": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:29Z",
+          "verifiedAt": "2026-09-23T17:34:28.662621+00:00",
+          "publishedAtPrecision": "minute",
+          "id": "7688784135996886286",
+          "url": "https://www.tiktok.com/@drmexperienced/video/7688784135996886286"
+        }
+      }
+    },
+    {
+      "id": "short-whole-bean-french-press-routine",
+      "slug": "whole-bean-french-press-routine",
+      "contentType": "kitchen_method",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "From whole beans to French press: Dr. M\u2019s coffee routine",
+      "summary": "Dr. David Musnick demonstrates his whole-bean French-press routine, including filtered water and a four-to-five-minute wait before pressing. Pause the method card to keep the steps beside your brewer.",
+      "body": [
+        "Dr. David Musnick demonstrates his whole-bean French-press routine, including filtered water and a four-to-five-minute wait before pressing. Pause the method card to keep the steps beside your brewer.",
+        "The method below follows the demonstrated batch. It records the steps Dr. Musnick shows without turning the fill level of his grinder into a universal coffee-to-water ratio."
+      ],
+      "topics": [
+        "coffee",
+        "recipes"
+      ],
+      "relatedEpisodeNumbers": [
+        8
+      ],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/healthy-products/2026-07-06_organic-coffee-beans-grinder-french-press-filtered-water_IMG_6552.MOV",
+            "sha256": "458409f121088ffa3a6f0ccaa624302d637c3e766f14c230faa2d1f786f8074a",
+            "sizeBytes": 403628013,
+            "durationSeconds": 134.49
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S15_REVIEWFIX_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "4539496605405f0138d6f4f23a21b2b551f2a70aeb8cdcfad5179c1137ab65f3",
+        "sizeBytes": 75564467,
+        "container": "mp4",
+        "durationSeconds": 90.06666666666666,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/whole-bean-french-press-routine.jpg",
+        "sha256": "fcac4d4d93d9e212a2ac4f6867d9387b003de62c6da2225ee3b0eeda78a933fd",
+        "sizeBytes": 262615,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "4539496605405f0138d6f4f23a21b2b551f2a70aeb8cdcfad5179c1137ab65f3",
+        "capturedAt": "2026-09-23T16:41:56.462010+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "Grind, add water, stir, wait, press.\n\nDr. David Musnick demonstrates his whole-bean French-press routine, including filtered water and a four-to-five-minute wait before pressing. Pause the method card to keep the steps beside your brewer.\n\nSave the brewing steps. The food-and-brain episode continues the coffee conversation.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #FrenchPress #CoffeeRoutine",
+        "vimeoTitle": "From whole beans to French press: Dr. M\u2019s coffee routine",
+        "vimeoDescription": "Dr. David Musnick demonstrates his whole-bean French-press routine, including filtered water and a four-to-five-minute wait before pressing. Pause the method card to keep the steps beside your brewer.\n\nSave the brewing steps. The food-and-brain episode continues the coffee conversation.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "Grind, add water, stir, wait, press.\n\nDr. David Musnick demonstrates his whole-bean French-press routine, including filtered water and a four-to-five-minute wait before pressing. Pause the method card to keep the steps beside your brewer.\n\nSave the brewing steps. The food-and-brain episode continues the coffee conversation.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #FrenchPress #CoffeeRoutine"
+      },
+      "resources": [
+        {
+          "label": "Explore the full conversation",
+          "url": "https://drmexperienced.com/episodes/episode-8-food-and-the-brain/",
+          "affiliate": false
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:30:51.000Z",
+          "verifiedAt": "2026-09-23T17:31:39.872157+00:00",
+          "mediaId": "3992680414278807937",
+          "shortcode": "Ddo2a7Cv3GB",
+          "url": "https://www.instagram.com/reel/Ddo2a7Cv3GB/",
+          "remoteDurationSeconds": 90.066666,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/whole-bean-french-press-routine/"
+        },
+        "tiktok": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:34Z",
+          "verifiedAt": "2026-09-23T17:36:38.436774+00:00",
+          "publishedAtPrecision": "minute",
+          "id": "7688785231062584589",
+          "url": "https://www.tiktok.com/@drmexperienced/video/7688785231062584589"
+        }
+      },
+      "method": {
+        "title": "French-press method shown",
+        "tools": [
+          "whole coffee beans",
+          "grinder",
+          "French press",
+          "hot filtered water",
+          "stirrer"
+        ],
+        "steps": [
+          "Grind the beans for about four to five seconds in the grinder shown.",
+          "Transfer the ground coffee to the French press.",
+          "Add almost 16 ounces of hot filtered water for the demonstrated batch.",
+          "Stir well and put the lid on.",
+          "Wait four to five minutes, then press and pour."
+        ],
+        "note": "No coffee weight or water temperature was specified. The grinder fill level is equipment-specific and is not a universal brewing ratio."
+      },
+      "ingredients": [
+        "Whole coffee beans",
+        "Filtered water"
+      ],
+      "guide": {
+        "websitePath": "/images/shorts/guides/whole-bean-french-press-routine.png",
+        "sha256": "5ec057183d64bb8b3187a4f194493782f2659f4538115adb0a64e4358827fb8d",
+        "sizeBytes": 2266307,
+        "width": 941,
+        "height": 1672,
+        "alt": "His demonstrated French press method: organic whole beans, grind4\u20135seconds, almost16oz hotfilteredwater, stir/cover, steep4\u20135minutes, press/pour."
+      }
+    },
+    {
+      "id": "short-rosemary-herb-and-tincture",
+      "slug": "rosemary-herb-and-tincture",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "Rosemary: Cooking herb, tincture and the brain conversation",
+      "summary": "Dr. David Musnick discusses rosemary, shows how he uses the herb in food and introduces a tincture. The illustrations explain the plant-compound and brain-cell ideas behind the conversation.",
+      "body": [
+        "Dr. David Musnick discusses rosemary, shows how he uses the herb in food and introduces a tincture. The illustrations explain the plant-compound and brain-cell ideas behind the conversation.",
+        "Culinary rosemary and a concentrated tincture are different forms. The plant-compound illustrations explain the discussion, while the cooking demonstration offers a familiar way to use the herb as food."
+      ],
+      "topics": [
+        "brain-health",
+        "herbs"
+      ],
+      "relatedEpisodeNumbers": [
+        7
+      ],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/healthy-products/2026-07-06_rosemary-tincture-for-brain-inflammation-and-microglial-support_IMG_6544.MOV",
+            "sha256": "d8c86e22c67bcb740185056ed8d095b07c24081ff52f1fe2614352220cbaf9ca",
+            "sizeBytes": 302970456,
+            "durationSeconds": 101.0367
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S11_REVIEWFIX_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "ce7be3d5a0369c1be3925dcd96aa43a9fc61f7587f32f932d0f5063f308a4a21",
+        "sizeBytes": 71105710,
+        "container": "mp4",
+        "durationSeconds": 88.76666666666667,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/rosemary-herb-and-tincture.jpg",
+        "sha256": "d10ab8c157f10c0dff4d362b3909f7870043792701b1732e122d8b7d55109934",
+        "sizeBytes": 215538,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "ce7be3d5a0369c1be3925dcd96aa43a9fc61f7587f32f932d0f5063f308a4a21",
+        "capturedAt": "2026-09-23T16:41:12.603086+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "Two forms of rosemary, with a reason to distinguish them.\n\nDr. David Musnick discusses rosemary, shows how he uses the herb in food and introduces a tincture. The illustrations explain the plant-compound and brain-cell ideas behind the conversation.\n\nGo deeper with The Brain on Fire episode. Concentrated extracts deserve individual guidance.\nhttps://drmexperienced.com/episodes/episode-7-the-brain-on-fire/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #Rosemary #BrainHealth",
+        "vimeoTitle": "Rosemary: Cooking herb, tincture and the brain conversation",
+        "vimeoDescription": "Dr. David Musnick discusses rosemary, shows how he uses the herb in food and introduces a tincture. The illustrations explain the plant-compound and brain-cell ideas behind the conversation.\n\nGo deeper with The Brain on Fire episode. Concentrated extracts deserve individual guidance.\nhttps://drmexperienced.com/episodes/episode-7-the-brain-on-fire/\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "Two forms of rosemary, with a reason to distinguish them.\n\nDr. David Musnick discusses rosemary, shows how he uses the herb in food and introduces a tincture. The illustrations explain the plant-compound and brain-cell ideas behind the conversation.\n\nGo deeper with The Brain on Fire episode. Concentrated extracts deserve individual guidance.\nhttps://drmexperienced.com/episodes/episode-7-the-brain-on-fire/\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #Rosemary #BrainHealth"
+      },
+      "resources": [
+        {
+          "label": "Explore the full conversation",
+          "url": "https://drmexperienced.com/episodes/episode-7-the-brain-on-fire/",
+          "affiliate": false
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:33:38.000Z",
+          "verifiedAt": "2026-09-23T17:34:24.641588+00:00",
+          "mediaId": "3992681811577407893",
+          "shortcode": "Ddo2vQYPAmV",
+          "url": "https://www.instagram.com/reel/Ddo2vQYPAmV/",
+          "remoteDurationSeconds": 88.766666,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/rosemary-herb-and-tincture/"
+        },
+        "tiktok": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:36Z",
+          "verifiedAt": "2026-09-23T17:38:36.909122+00:00",
+          "publishedAtPrecision": "minute",
+          "id": "7688785864440220942",
+          "url": "https://www.tiktok.com/@drmexperienced/video/7688785864440220942"
+        }
+      }
+    },
+    {
+      "id": "short-dishwasher-gel-demonstration",
+      "slug": "dishwasher-gel-demonstration",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "Dishwasher gel: The alternative Dr. M demonstrates",
+      "summary": "Dr. David Musnick shows the dishwasher gel he uses while discussing his wish to reduce contact with plastics. The demonstration makes the product format and dispenser step easy to follow.",
+      "body": [
+        "Dr. David Musnick shows the dishwasher gel he uses while discussing his wish to reduce contact with plastics. The demonstration makes the product format and dispenser step easy to follow.",
+        "The reel shows the gel format and the dishwasher dispenser. Follow the product label and the appliance instructions when choosing and using a detergent."
+      ],
+      "topics": [
+        "household",
+        "label-reading"
+      ],
+      "relatedEpisodeNumbers": [],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/healthy-products/2026-07-06_field-day-dishwasher-gel-avoids-plastic-pods-microplastics_MOTIV_Video_20260706213931.MP4",
+            "sha256": "8591a4d64c654dfccc83048e7a977ffae415f8805df0df7bae831d66c35db8e6",
+            "sizeBytes": 33447796,
+            "durationSeconds": 75.833333
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S17_REVIEWFIX_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "5444cda1de025c028170b98129464dce900aef16e1eb69e283bae8099eda527b",
+        "sizeBytes": 36862064,
+        "container": "mp4",
+        "durationSeconds": 69.46666666666667,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/dishwasher-gel-demonstration.jpg",
+        "sha256": "990757e259f86eda9ed918548d7618b571e4b43ebd08a9822d2715fbc215fc1c",
+        "sizeBytes": 234345,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "5444cda1de025c028170b98129464dce900aef16e1eb69e283bae8099eda527b",
+        "capturedAt": "2026-09-23T16:41:12.797051+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "A simple look at a different way to fill the dishwasher dispenser.\n\nDr. David Musnick shows the dishwasher gel he uses while discussing his wish to reduce contact with plastics. The demonstration makes the product format and dispenser step easy to follow.\n\nFollow your detergent and dishwasher instructions. More practical product conversations at Dr. M Experienced.\nhttps://drmexperienced.com/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #HouseholdChoices #DishwasherGel",
+        "vimeoTitle": "Dishwasher gel: The alternative Dr. M demonstrates",
+        "vimeoDescription": "Dr. David Musnick shows the dishwasher gel he uses while discussing his wish to reduce contact with plastics. The demonstration makes the product format and dispenser step easy to follow.\n\nFollow your detergent and dishwasher instructions. More practical product conversations at Dr. M Experienced.\nhttps://drmexperienced.com/\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "A simple look at a different way to fill the dishwasher dispenser.\n\nDr. David Musnick shows the dishwasher gel he uses while discussing his wish to reduce contact with plastics. The demonstration makes the product format and dispenser step easy to follow.\n\nFollow your detergent and dishwasher instructions. More practical product conversations at Dr. M Experienced.\nhttps://drmexperienced.com/\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #HouseholdChoices #DishwasherGel"
+      },
+      "resources": [
+        {
+          "label": "Explore DR M Experienced",
+          "url": "https://drmexperienced.com/",
+          "affiliate": false
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:35:43.000Z",
+          "verifiedAt": "2026-09-23T17:36:32.357527+00:00",
+          "mediaId": "3992682881234227783",
+          "shortcode": "Ddo2-0kv9JH",
+          "url": "https://www.instagram.com/reel/Ddo2-0kv9JH/",
+          "remoteDurationSeconds": 69.466666,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/dishwasher-gel-demonstration/"
+        },
+        "tiktok": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:38Z",
+          "verifiedAt": "2026-09-23T17:40:48.554010+00:00",
+          "publishedAtPrecision": "minute",
+          "id": "7688786267328285965",
+          "url": "https://www.tiktok.com/@drmexperienced/video/7688786267328285965"
+        }
+      }
+    },
+    {
+      "id": "short-grinding-dried-rosemary-for-cooking",
+      "slug": "grinding-dried-rosemary-for-cooking",
+      "contentType": "kitchen_method",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "Rosemary prep: Grind the herb before you cook",
+      "summary": "Dr. David Musnick demonstrates grinding dried rosemary more finely and shares the foods he adds it to: eggs, poultry, soups and meat. Pause the preparation card to keep the method handy.",
+      "body": [
+        "Dr. David Musnick demonstrates grinding dried rosemary more finely and shares the foods he adds it to: eggs, poultry, soups and meat. Pause the preparation card to keep the method handy.",
+        "A finer texture can make dried rosemary easier to distribute through a meal. The guide records the preparation shown; it does not specify a clinical dose or a grinding time."
+      ],
+      "topics": [
+        "herbs",
+        "recipes"
+      ],
+      "relatedEpisodeNumbers": [
+        8
+      ],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/recipes/2026-07-06_rosemary-grinder-prep-for-brain-anti-inflammatory-cooking_IMG_6543.MOV",
+            "sha256": "6db203a50d58793e8d9db221cea7a0912970878ca702703174a05b9338877587",
+            "sizeBytes": 243082073,
+            "durationSeconds": 81.053333
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S19_REVIEWFIX_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "0791db7b192cd4419a774c616798d4cd844359e623e1832d0cfa6e5516c84e5c",
+        "sizeBytes": 55043540,
+        "container": "mp4",
+        "durationSeconds": 71.06666666666666,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/grinding-dried-rosemary-for-cooking.jpg",
+        "sha256": "c9dcac5b78d7f722e0c8732090d4be20a0fe9cb7ffd9284046dd929b6a1423f3",
+        "sizeBytes": 301010,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "0791db7b192cd4419a774c616798d4cd844359e623e1832d0cfa6e5516c84e5c",
+        "capturedAt": "2026-09-23T16:41:56.684254+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "Make dried rosemary easier to work into everyday meals.\n\nDr. David Musnick demonstrates grinding dried rosemary more finely and shares the foods he adds it to: eggs, poultry, soups and meat. Pause the preparation card to keep the method handy.\n\nSave the kitchen method, then explore the food-and-brain episode.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #Rosemary #KitchenMethods",
+        "vimeoTitle": "Rosemary prep: Grind the herb before you cook",
+        "vimeoDescription": "Dr. David Musnick demonstrates grinding dried rosemary more finely and shares the foods he adds it to: eggs, poultry, soups and meat. Pause the preparation card to keep the method handy.\n\nSave the kitchen method, then explore the food-and-brain episode.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "Make dried rosemary easier to work into everyday meals.\n\nDr. David Musnick demonstrates grinding dried rosemary more finely and shares the foods he adds it to: eggs, poultry, soups and meat. Pause the preparation card to keep the method handy.\n\nSave the kitchen method, then explore the food-and-brain episode.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #Rosemary #KitchenMethods"
+      },
+      "resources": [
+        {
+          "label": "Explore the full conversation",
+          "url": "https://drmexperienced.com/episodes/episode-8-food-and-the-brain/",
+          "affiliate": false
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:37:47.000Z",
+          "verifiedAt": "2026-09-23T17:38:33.577468+00:00",
+          "mediaId": "3992683897186834698",
+          "shortcode": "Ddo3NmwPlkK",
+          "url": "https://www.instagram.com/reel/Ddo3NmwPlkK/",
+          "remoteDurationSeconds": 71.066666,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/grinding-dried-rosemary-for-cooking/"
+        },
+        "tiktok": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:40Z",
+          "verifiedAt": "2026-09-23T17:42:54.940628+00:00",
+          "publishedAtPrecision": "minute",
+          "id": "7688786844099595533",
+          "url": "https://www.tiktok.com/@drmexperienced/video/7688786844099595533"
+        }
+      },
+      "method": {
+        "title": "Prepare the dried rosemary",
+        "tools": [
+          "dried rosemary",
+          "herb grinder"
+        ],
+        "steps": [
+          "Put the dried rosemary into the grinder.",
+          "Grind it into finer pieces, stopping before it gets too hot.",
+          "Add it to foods such as eggs, soups, poultry or meat."
+        ],
+        "note": "No quantity, grinding duration or storage interval was specified. This is a culinary preparation method."
+      },
+      "ingredients": [
+        "Dried rosemary"
+      ],
+      "guide": {
+        "websitePath": "/images/shorts/guides/grinding-dried-rosemary-for-cooking.png",
+        "sha256": "313a6339982429fa3d568abe406897090d0e469445c04e7dbc053fa5efe6786c",
+        "sizeBytes": 2506491,
+        "width": 941,
+        "height": 1672,
+        "alt": "Dried rosemary into herb grinder; grind finer; stop before hot; mix into eggs, soups, poultry or meat."
+      }
+    },
+    {
+      "id": "short-parsley-chamomile-and-apigenin",
+      "slug": "parsley-chamomile-and-apigenin",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "Parsley and chamomile: An introduction to apigenin",
+      "summary": "Dr. David Musnick introduces apigenin, then brings the discussion back to food: parsley pesto and chamomile tea. Pause the pesto card for the ingredients. His parsley variation replaces the broccoli sprouts in the linked cilantro-basil base recipe.",
+      "body": [
+        "Dr. David Musnick introduces apigenin, then brings the discussion back to food: parsley pesto and chamomile tea. Pause the pesto card for the ingredients. His parsley variation replaces the broccoli sprouts in the linked cilantro-basil base recipe.",
+        "The existing cilantro-basil pesto page includes the recorded parsley variation. Chamomile tea is the other food example in this discussion; the reel is not a measured apigenin prescription."
+      ],
+      "topics": [
+        "herbs",
+        "nutrition",
+        "recipes"
+      ],
+      "relatedEpisodeNumbers": [
+        8
+      ],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/healthy-products/2026-07-06_apigenin-from-parsley-and-chamomile-tea-for-microglial-support_IMG_6546.MOV",
+            "sha256": "5ed5e170ade486ab0ec287c018ba98529973839f4327d09ca6e5b47748a5acd9",
+            "sizeBytes": 283907042,
+            "durationSeconds": 94.605
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S12_REVIEWFIX_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "40e0294a5264a45ae49f849fd2cc3bb0e5a96d631e8f5d863d74d1a609e408b6",
+        "sizeBytes": 61936159,
+        "container": "mp4",
+        "durationSeconds": 82.86666666666666,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/parsley-chamomile-and-apigenin.jpg",
+        "sha256": "6e4e1e9e6cd64cc2a4668a1b409eb1301fc183de240475ce605738b37b0c1979",
+        "sizeBytes": 220050,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "40e0294a5264a45ae49f849fd2cc3bb0e5a96d631e8f5d863d74d1a609e408b6",
+        "capturedAt": "2026-09-23T16:41:13.146487+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "What do parsley and chamomile tea have in common?\n\nDr. David Musnick introduces apigenin, then brings the discussion back to food: parsley pesto and chamomile tea. Pause the pesto card for the ingredients. His parsley variation replaces the broccoli sprouts in the linked cilantro-basil base recipe.\n\nSave the ingredient card and find the base pesto recipe on our website.\nhttps://drmexperienced.com/shorts/cilantro-basil-pesto-with-broccoli-sprouts/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #Apigenin #ParsleyPesto",
+        "vimeoTitle": "Parsley and chamomile: An introduction to apigenin",
+        "vimeoDescription": "Dr. David Musnick introduces apigenin, then brings the discussion back to food: parsley pesto and chamomile tea. Pause the pesto card for the ingredients. His parsley variation replaces the broccoli sprouts in the linked cilantro-basil base recipe.\n\nSave the ingredient card and find the base pesto recipe on our website.\nhttps://drmexperienced.com/shorts/cilantro-basil-pesto-with-broccoli-sprouts/\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "What do parsley and chamomile tea have in common?\n\nDr. David Musnick introduces apigenin, then brings the discussion back to food: parsley pesto and chamomile tea. Pause the pesto card for the ingredients. His parsley variation replaces the broccoli sprouts in the linked cilantro-basil base recipe.\n\nSave the ingredient card and find the base pesto recipe on our website.\nhttps://drmexperienced.com/shorts/cilantro-basil-pesto-with-broccoli-sprouts/\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #Apigenin #ParsleyPesto"
+      },
+      "resources": [
+        {
+          "label": "Cilantro-basil pesto and the parsley variation",
           "url": "https://drmexperienced.com/shorts/cilantro-basil-pesto-with-broccoli-sprouts/",
-          "verifiedAt": "2026-08-08T21:49:06Z"
+          "affiliate": false
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:40:04.000Z",
+          "verifiedAt": "2026-09-23T17:40:51.887985+00:00",
+          "mediaId": "3992685023953034540",
+          "shortcode": "Ddo3eAIvh0s",
+          "url": "https://www.instagram.com/reel/Ddo3eAIvh0s/",
+          "remoteDurationSeconds": 82.866666,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/parsley-chamomile-and-apigenin/"
+        },
+        "tiktok": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:42Z",
+          "verifiedAt": "2026-09-23T17:45:50.458192+00:00",
+          "publishedAtPrecision": "minute",
+          "id": "7688787480971169038",
+          "url": "https://www.tiktok.com/@drmexperienced/video/7688787480971169038"
+        }
+      },
+      "guide": {
+        "websitePath": "/images/shorts/guides/parsley-chamomile-and-apigenin.png",
+        "sha256": "7689418e4d395167dcd5d2c200b9879725fa504fc8c7306fc4e51775a0b87264",
+        "sizeBytes": 2302526,
+        "width": 941,
+        "height": 1672,
+        "alt": "Parsley-cilantro-basil pesto: herbs; organic olive oil; pistachios or pine nuts; Himalayan salt and garlic salt; oil first; blend, season, serve. Link to existing base recipe via website Media."
+      }
+    },
+    {
+      "id": "short-clove-coffee-flavor-variation",
+      "slug": "clove-coffee-flavor-variation",
+      "contentType": "kitchen_method",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "Clove coffee: A simple spice variation to save",
+      "summary": "Dr. David Musnick demonstrates adding clove to a cup, pouring in brewed coffee and mixing. The pauseable card keeps the method simple; the footage does not specify a measured clove quantity.",
+      "body": [
+        "Dr. David Musnick demonstrates adding clove to a cup, pouring in brewed coffee and mixing. The pauseable card keeps the method simple; the footage does not specify a measured clove quantity.",
+        "This is a flavor variation using culinary ground clove and brewed coffee. The recording does not specify a teaspoon amount, and adding more spice should not be treated as a health recommendation."
+      ],
+      "topics": [
+        "coffee",
+        "recipes"
+      ],
+      "relatedEpisodeNumbers": [
+        8
+      ],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/recipes/2026-07-06_clove-coffee-super-spice-antioxidant-anti-inflammatory_IMG_6553.MOV",
+            "sha256": "faed57b03bed204defdda6da57350ed8a9f78ab0f2b47e725c5a99eee0b2739c",
+            "sizeBytes": 359237377,
+            "durationSeconds": 119.74
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260923-v005/renders/review_mp4/S21_RELEASE_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "efda65d806c4be08e65b0c7ca974c72d59b609d073203ba564f4c85e10fd5154",
+        "sizeBytes": 75003895,
+        "container": "mp4",
+        "durationSeconds": 91.9,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/clove-coffee-flavor-variation.jpg",
+        "sha256": "450e2ee2fcd79c934e8a1fd5168a6ce0af3d75c76c6523fd8f7ac164c70bc207",
+        "sizeBytes": 227458,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "efda65d806c4be08e65b0c7ca974c72d59b609d073203ba564f4c85e10fd5154",
+        "capturedAt": "2026-09-23T16:46:15.500495+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "One spice changes the flavor of your coffee.\n\nDr. David Musnick demonstrates adding clove to a cup, pouring in brewed coffee and mixing. The pauseable card keeps the method simple; the footage does not specify a measured clove quantity.\n\nSave the method and adjust for taste rather than treating more as better.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #CloveCoffee #CoffeeIdeas",
+        "vimeoTitle": "Clove coffee: A simple spice variation to save",
+        "vimeoDescription": "Dr. David Musnick demonstrates adding clove to a cup, pouring in brewed coffee and mixing. The pauseable card keeps the method simple; the footage does not specify a measured clove quantity.\n\nSave the method and adjust for taste rather than treating more as better.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "One spice changes the flavor of your coffee.\n\nDr. David Musnick demonstrates adding clove to a cup, pouring in brewed coffee and mixing. The pauseable card keeps the method simple; the footage does not specify a measured clove quantity.\n\nSave the method and adjust for taste rather than treating more as better.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #CloveCoffee #CoffeeIdeas"
+      },
+      "resources": [
+        {
+          "label": "Explore the full conversation",
+          "url": "https://drmexperienced.com/episodes/episode-8-food-and-the-brain/",
+          "affiliate": false
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:43:17.000Z",
+          "verifiedAt": "2026-09-23T17:44:10.351767+00:00",
+          "mediaId": "3992686624097607191",
+          "shortcode": "Ddo31SYyp4X",
+          "url": "https://www.instagram.com/reel/Ddo31SYyp4X/",
+          "remoteDurationSeconds": 91.9,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/clove-coffee-flavor-variation/"
+        },
+        "tiktok": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:45Z",
+          "verifiedAt": "2026-09-23T17:50:38.402081+00:00",
+          "publishedAtPrecision": "minute",
+          "id": "7688788210247404813",
+          "url": "https://www.tiktok.com/@drmexperienced/video/7688788210247404813"
+        }
+      },
+      "method": {
+        "title": "Make the clove-coffee variation",
+        "tools": [
+          "ground clove",
+          "brewed coffee",
+          "cup",
+          "spoon"
+        ],
+        "steps": [
+          "Sprinkle ground clove into the bottom of the cup.",
+          "Pour the brewed coffee over the spice.",
+          "Mix together and adjust the flavor to taste."
+        ],
+        "note": "The recording gives no teaspoon amount or serving-specific quantity. Use the culinary spice shown, not clove essential oil."
+      },
+      "ingredients": [
+        "Ground clove",
+        "Brewed coffee"
+      ],
+      "guide": {
+        "websitePath": "/images/shorts/guides/clove-coffee-flavor-variation.png",
+        "sha256": "4304bbdb13b6e773738ecaa4a7799d4e63199926dabc07e8ec08480bbcab0ca7",
+        "sizeBytes": 2124269,
+        "width": 941,
+        "height": 1672,
+        "alt": "Clove coffee: sprinkle ground cloves in the cup, pour French-press coffee, mix and adjust to taste. The illustrated white and purple U.S.S. Enterprise mug matches the demonstrated mug."
+      }
+    },
+    {
+      "id": "short-desbio-emotional-formulas",
+      "slug": "desbio-emotional-formulas",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "DesBio emotional formulas: The products Dr. M discusses",
+      "summary": "Dr. David Musnick discusses DesBio homeopathic products named Focus, Motivation, Elevate, Esteem and Control. Homeopathy has not been established as a treatment for anxiety or depression; product use should not replace appropriate mental-health care.",
+      "body": [
+        "Dr. David Musnick discusses DesBio homeopathic products named Focus, Motivation, Elevate, Esteem and Control. Homeopathy has not been established as a treatment for anxiety or depression; product use should not replace appropriate mental-health care.",
+        "Use the product names to follow the discussion and prepare questions for an appropriate clinician. These homeopathic formulas are not established treatments for anxiety or depression and should not replace mental-health care."
+      ],
+      "topics": [
+        "product-discussion"
+      ],
+      "relatedEpisodeNumbers": [],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/supplements/2026-07-06_desbio-emotional-formulas-for-anxiety-depression-focus_MOTIV_Video_20260706222357.MP4",
+            "sha256": "6c733e098255f968521469057c91726658e7c4551bdbafea081c52ff1b184705",
+            "sizeBytes": 37836849,
+            "durationSeconds": 85.833333
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260923-v005/renders/review_mp4/S26_RELEASE_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "33434243affc0ed4f5130641f87d8da0747f165db74759ea92ff773171eb7377",
+        "sizeBytes": 40287151,
+        "container": "mp4",
+        "durationSeconds": 81.86666666666666,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/desbio-emotional-formulas.jpg",
+        "sha256": "72373c323c251d4f6bffd39a8ada146a4874ac5771325e9e6f491574cd16737e",
+        "sizeBytes": 254220,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "33434243affc0ed4f5130641f87d8da0747f165db74759ea92ff773171eb7377",
+        "capturedAt": "2026-09-23T16:46:15.500495+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you.\n\nFocus, motivation and mood: identify the products in this discussion.\n\nDr. David Musnick discusses DesBio homeopathic products named Focus, Motivation, Elevate, Esteem and Control. Homeopathy has not been established as a treatment for anxiety or depression; product use should not replace appropriate mental-health care.\n\nFor product information, find DesBio / DBscript in our affiliate guide.\nhttps://drmexperienced.com/affiliates/#desbio-dbscript\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #DesBio #ProductDiscussion",
+        "vimeoTitle": "DesBio emotional formulas: The products Dr. M discusses",
+        "vimeoDescription": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you.\n\nDr. David Musnick discusses DesBio homeopathic products named Focus, Motivation, Elevate, Esteem and Control. Homeopathy has not been established as a treatment for anxiety or depression; product use should not replace appropriate mental-health care.\n\nFor product information, find DesBio / DBscript in our affiliate guide.\nhttps://drmexperienced.com/affiliates/#desbio-dbscript\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you.\n\nFocus, motivation and mood: identify the products in this discussion.\n\nDr. David Musnick discusses DesBio homeopathic products named Focus, Motivation, Elevate, Esteem and Control. Homeopathy has not been established as a treatment for anxiety or depression; product use should not replace appropriate mental-health care.\n\nFor product information, find DesBio / DBscript in our affiliate guide.\nhttps://drmexperienced.com/affiliates/#desbio-dbscript\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #DesBio #ProductDiscussion"
+      },
+      "resources": [
+        {
+          "label": "DesBio / DBscript resources",
+          "url": "https://drmexperienced.com/affiliates/#desbio-dbscript",
+          "affiliate": true
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:46:31.000Z",
+          "verifiedAt": "2026-09-23T17:47:35.181232+00:00",
+          "mediaId": "3992688305769436433",
+          "shortcode": "Ddo4NwkPlUR",
+          "url": "https://www.instagram.com/reel/Ddo4NwkPlUR/",
+          "remoteDurationSeconds": 81.866666,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/desbio-emotional-formulas/"
+        }
+      },
+      "affiliateDisclosure": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you."
+    },
+    {
+      "id": "short-desbio-glp-support-discussion",
+      "slug": "desbio-glp-support-discussion",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "GLP Support by DesBio: The product Dr. M names",
+      "summary": "Dr. David Musnick discusses DesBio GLP Support in the context of GLP-1 medication side effects. This homeopathic product is not established treatment for those effects. Severe or persistent abdominal pain needs prompt medical assessment, not an attempt to cover it with a supplement.",
+      "body": [
+        "Dr. David Musnick discusses DesBio GLP Support in the context of GLP-1 medication side effects. This homeopathic product is not established treatment for those effects. Severe or persistent abdominal pain needs prompt medical assessment, not an attempt to cover it with a supplement.",
+        "Keep medication side-effect decisions with the clinician who prescribed the medicine. This product discussion is not evidence that a homeopathic preparation prevents or treats pancreatitis or gallbladder disease."
+      ],
+      "topics": [
+        "product-discussion"
+      ],
+      "relatedEpisodeNumbers": [],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/supplements/2026-07-06_desbio-glp-support-for-glp-side-effects_MOTIV_Video_20260706222543.MP4",
+            "sha256": "662989dac2be938dc570a9a5de32a42f59306edc36e617cca2eb9b018c21e2b2",
+            "sizeBytes": 33714526,
+            "durationSeconds": 76.5
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S27_REVIEWFIX_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "5a32f69c21dd3308010c3db84a36e4da7644cb2b40153ce862723cf2ff002cf8",
+        "sizeBytes": 35163738,
+        "container": "mp4",
+        "durationSeconds": 74.93333333333334,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/desbio-glp-support-discussion.jpg",
+        "sha256": "20ed4c2073e9b1516ae72c3471b1fd9d59a8ba878e1f68139e526f7cc7b3b71d",
+        "sizeBytes": 298383,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "5a32f69c21dd3308010c3db84a36e4da7644cb2b40153ce862723cf2ff002cf8",
+        "capturedAt": "2026-09-23T16:41:13.818473+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you.\n\nKnow the product name\u2014and keep side-effect decisions with your prescriber.\n\nDr. David Musnick discusses DesBio GLP Support in the context of GLP-1 medication side effects. This homeopathic product is not established treatment for those effects. Severe or persistent abdominal pain needs prompt medical assessment, not an attempt to cover it with a supplement.\n\nFor the product Dr. M names, choose DesBio / DBscript in our affiliate guide and search \u201cGLP Support.\u201d\nhttps://drmexperienced.com/affiliates/#desbio-dbscript\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #GLP1 #ProductDiscussion",
+        "vimeoTitle": "GLP Support by DesBio: The product Dr. M names",
+        "vimeoDescription": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you.\n\nDr. David Musnick discusses DesBio GLP Support in the context of GLP-1 medication side effects. This homeopathic product is not established treatment for those effects. Severe or persistent abdominal pain needs prompt medical assessment, not an attempt to cover it with a supplement.\n\nFor the product Dr. M names, choose DesBio / DBscript in our affiliate guide and search \u201cGLP Support.\u201d\nhttps://drmexperienced.com/affiliates/#desbio-dbscript\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you.\n\nKnow the product name\u2014and keep side-effect decisions with your prescriber.\n\nDr. David Musnick discusses DesBio GLP Support in the context of GLP-1 medication side effects. This homeopathic product is not established treatment for those effects. Severe or persistent abdominal pain needs prompt medical assessment, not an attempt to cover it with a supplement.\n\nFor the product Dr. M names, choose DesBio / DBscript in our affiliate guide and search \u201cGLP Support.\u201d\nhttps://drmexperienced.com/affiliates/#desbio-dbscript\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #GLP1 #ProductDiscussion"
+      },
+      "resources": [
+        {
+          "label": "DesBio / DBscript resources",
+          "url": "https://drmexperienced.com/affiliates/#desbio-dbscript",
+          "affiliate": true
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:49:46.000Z",
+          "verifiedAt": "2026-09-23T17:50:53.199255+00:00",
+          "mediaId": "3992689956622182969",
+          "shortcode": "Ddo4lyCvCo5",
+          "url": "https://www.instagram.com/reel/Ddo4lyCvCo5/",
+          "remoteDurationSeconds": 74.933333,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/desbio-glp-support-discussion/"
+        }
+      },
+      "affiliateDisclosure": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you."
+    },
+    {
+      "id": "short-five-extracts-in-water",
+      "slug": "five-extracts-in-water",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "The five extracts Dr. M shows in his water",
+      "summary": "Dr. David Musnick names parsley, turmeric, rosemary, cilantro and green tea extracts in his water. Pause the ingredient card to identify them. Concentrated extracts differ from ordinary servings of food, and the video does not provide a standardized five-ingredient recipe.",
+      "body": [
+        "Dr. David Musnick names parsley, turmeric, rosemary, cilantro and green tea extracts in his water. Pause the ingredient card to identify them. Concentrated extracts differ from ordinary servings of food, and the video does not provide a standardized five-ingredient recipe.",
+        "The five extracts are an ingredient reference, not a standardized recipe. The recording does not provide amounts for all five products, extract strengths or a total water volume, so it should not be used as a mixing or dosing guide."
+      ],
+      "topics": [
+        "herbs",
+        "product-discussion"
+      ],
+      "relatedEpisodeNumbers": [
+        8
+      ],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/supplements/2026-07-06_brain-support-tincture-water-parsley-turmeric-rosemary-cilantro-green-tea_MOTIV_Video_20260706222835.MP4",
+            "sha256": "5cfadcbcb82cae80cd6f282a2c306353d96b8ea129892b039bbd6dfbf30ab069",
+            "sizeBytes": 32433339,
+            "durationSeconds": 73.61
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S28_REVIEWFIX_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "536d560383119dd9aafef21b73e70502b0f57d1c0243acc8bc5c323cc817f4d6",
+        "sizeBytes": 37516963,
+        "container": "mp4",
+        "durationSeconds": 72.83333333333333,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/five-extracts-in-water.jpg",
+        "sha256": "9d4c0c636cae54e7e48c371172ef2bef84b123475eb7125e1065d32369c41c56",
+        "sizeBytes": 269650,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "536d560383119dd9aafef21b73e70502b0f57d1c0243acc8bc5c323cc817f4d6",
+        "capturedAt": "2026-09-23T16:41:56.819945+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "A five-item ingredient reference for the tinctures in this demonstration.\n\nDr. David Musnick names parsley, turmeric, rosemary, cilantro and green tea extracts in his water. Pause the ingredient card to identify them. Concentrated extracts differ from ordinary servings of food, and the video does not provide a standardized five-ingredient recipe.\n\nUse the list to ask informed questions about ingredients and interactions. Explore the food-and-brain episode for context.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #HerbalExtracts #IngredientGuide",
+        "vimeoTitle": "The five extracts Dr. M shows in his water",
+        "vimeoDescription": "Dr. David Musnick names parsley, turmeric, rosemary, cilantro and green tea extracts in his water. Pause the ingredient card to identify them. Concentrated extracts differ from ordinary servings of food, and the video does not provide a standardized five-ingredient recipe.\n\nUse the list to ask informed questions about ingredients and interactions. Explore the food-and-brain episode for context.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "A five-item ingredient reference for the tinctures in this demonstration.\n\nDr. David Musnick names parsley, turmeric, rosemary, cilantro and green tea extracts in his water. Pause the ingredient card to identify them. Concentrated extracts differ from ordinary servings of food, and the video does not provide a standardized five-ingredient recipe.\n\nUse the list to ask informed questions about ingredients and interactions. Explore the food-and-brain episode for context.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #HerbalExtracts #IngredientGuide"
+      },
+      "resources": [
+        {
+          "label": "Explore the full conversation",
+          "url": "https://drmexperienced.com/episodes/episode-8-food-and-the-brain/",
+          "affiliate": false
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:53:02.000Z",
+          "verifiedAt": "2026-09-23T17:54:08.046410+00:00",
+          "mediaId": "3992691597720411208",
+          "shortcode": "Ddo49qbz9xI",
+          "url": "https://www.instagram.com/reel/Ddo49qbz9xI/",
+          "remoteDurationSeconds": 72.833333,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/five-extracts-in-water/"
+        },
+        "tiktok": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:50Z",
+          "verifiedAt": "2026-09-23T17:54:24.912803+00:00",
+          "publishedAtPrecision": "minute",
+          "id": "7688789428956843278",
+          "url": "https://www.tiktok.com/@drmexperienced/video/7688789428956843278"
+        }
+      },
+      "guide": {
+        "websitePath": "/images/shorts/guides/five-extracts-in-water.png",
+        "sha256": "9b9d9161c8ea4556e9153bcd9bacebb29bedeb0175bc3d942302adecd730d646",
+        "sizeBytes": 2360135,
+        "width": 941,
+        "height": 1672,
+        "alt": "His demonstrated ingredients: reverse-osmosis water; parsley extract; turmeric; rosemary; cilantro; green tea extract. Check product directions with clinician. No invented doses."
+      }
+    },
+    {
+      "id": "short-plasmalogens-and-cell-membranes",
+      "slug": "plasmalogens-and-cell-membranes",
+      "contentType": "educational_clip",
+      "publicationState": "published",
+      "recordedOn": "2026-07-06",
+      "title": "Plasmalogens: The membrane fats in Dr. M\u2019s discussion",
+      "summary": "Dr. David Musnick introduces the Prodrome products he discusses in relation to brain lipids, glial cells and neurons. The visual guide shows how these specialized fats fit into normal cell membranes.",
+      "body": [
+        "Dr. David Musnick introduces the Prodrome products he discusses in relation to brain lipids, glial cells and neurons. The visual guide shows how these specialized fats fit into normal cell membranes.",
+        "The images explain where plasmalogens fit within cell membranes. Continue with the full episode for more context on glial cells, neurons and the brain discussion."
+      ],
+      "topics": [
+        "brain-health",
+        "product-discussion"
+      ],
+      "relatedEpisodeNumbers": [
+        7
+      ],
+      "provenance": {
+        "sourceType": "single_take",
+        "sourceAssets": [
+          {
+            "uri": "dropbox:Insta Shorts/renamed/supplements/2026-07-06_prodrome-brain-fats-glia-neuro-plasmalogen-m3_MOTIV_Video_20260706223356.MP4",
+            "sha256": "bfa020cc98ad6aa7ebfc4e41583a33ef78e96cc75b087e7440af5f2147aba032",
+            "sizeBytes": 38426321,
+            "durationSeconds": 87.201667
+          }
+        ]
+      },
+      "master": {
+        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S29_REVIEWFIX_REVIEW_v001.mp4",
+        "status": "verified",
+        "sha256": "e1b673c0ccfd27cc001e88193f3c698f239e80d7c5df3f6ba1a6e246fb47e05b",
+        "sizeBytes": 47541084,
+        "container": "mp4",
+        "durationSeconds": 86.26666666666667,
+        "width": 1080,
+        "height": 1920,
+        "framesPerSecond": 30,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSampleRateHz": 48000,
+        "audioChannels": 2
+      },
+      "poster": {
+        "websitePath": "/images/shorts/plasmalogens-and-cell-membranes.jpg",
+        "sha256": "0df185ded0365aaf392acdafd8e130486ba27a0f3a45d6954cb39eb579b039b9",
+        "sizeBytes": 292506,
+        "width": 720,
+        "height": 1280,
+        "sourcePlatform": "local_master",
+        "sourceMasterSha256": "e1b673c0ccfd27cc001e88193f3c698f239e80d7c5df3f6ba1a6e246fb47e05b",
+        "capturedAt": "2026-09-23T16:41:14.159296+00:00"
+      },
+      "destinationCopy": {
+        "instagramCaption": "Brain cells have membranes. Plasmalogens are part of that story.\n\nDr. David Musnick introduces the Prodrome products he discusses in relation to brain lipids, glial cells and neurons. The visual guide shows how these specialized fats fit into normal cell membranes.\n\nGo deeper with The Brain on Fire episode on our website.\nhttps://drmexperienced.com/episodes/episode-7-the-brain-on-fire/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #Plasmalogens #BrainScience",
+        "vimeoTitle": "Plasmalogens: The membrane fats in Dr. M\u2019s discussion",
+        "vimeoDescription": "Dr. David Musnick introduces the Prodrome products he discusses in relation to brain lipids, glial cells and neurons. The visual guide shows how these specialized fats fit into normal cell membranes.\n\nGo deeper with The Brain on Fire episode on our website.\nhttps://drmexperienced.com/episodes/episode-7-the-brain-on-fire/\n\nEducational content; not individualized medical advice.",
+        "tiktokCaption": "Brain cells have membranes. Plasmalogens are part of that story.\n\nDr. David Musnick introduces the Prodrome products he discusses in relation to brain lipids, glial cells and neurons. The visual guide shows how these specialized fats fit into normal cell membranes.\n\nGo deeper with The Brain on Fire episode on our website.\nhttps://drmexperienced.com/episodes/episode-7-the-brain-on-fire/\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #Plasmalogens #BrainScience"
+      },
+      "resources": [
+        {
+          "label": "Explore the full conversation",
+          "url": "https://drmexperienced.com/episodes/episode-7-the-brain-on-fire/",
+          "affiliate": false
+        }
+      ],
+      "destinations": {
+        "instagram": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:56:09.000Z",
+          "verifiedAt": "2026-09-23T17:57:11.667798+00:00",
+          "mediaId": "3992693161984980282",
+          "shortcode": "Ddo5UbRPvU6",
+          "url": "https://www.instagram.com/reel/Ddo5UbRPvU6/",
+          "remoteDurationSeconds": 86.266666,
+          "remoteWidth": 720,
+          "remoteHeight": 1280
+        },
+        "vimeo": {
+          "state": "not_published_as_short",
+          "id": null,
+          "url": null,
+          "verifiedAt": "2026-09-23T16:30:29.676809+00:00",
+          "observedTitle": null,
+          "observedDescription": null,
+          "metadataParity": false,
+          "selectedThumbnailId": null,
+          "posterParity": false
+        },
+        "website": {
+          "state": "ready_for_deployment",
+          "path": "/shorts/plasmalogens-and-cell-membranes/"
+        },
+        "tiktok": {
+          "state": "published",
+          "publishedAt": "2026-09-23T17:54Z",
+          "verifiedAt": "2026-09-23T17:56:52.825541+00:00",
+          "publishedAtPrecision": "minute",
+          "id": "7688790362596379918",
+          "url": "https://www.tiktok.com/@drmexperienced/video/7688790362596379918"
         }
       }
     }

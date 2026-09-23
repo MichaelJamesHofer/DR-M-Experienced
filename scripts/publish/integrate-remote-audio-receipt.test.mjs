@@ -4,6 +4,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 
 import {
   integrateRemoteAudioReceipt,
@@ -12,7 +13,7 @@ import {
   validateRemoteAudioReceiptData,
 } from "./integrate-remote-audio-receipt.mjs";
 
-const projectRoot = path.resolve(new URL("../..", import.meta.url).pathname);
+const projectRoot = fileURLToPath(new URL("../..", import.meta.url));
 const catalogTemplate = JSON.parse(
   await fs.readFile(path.join(projectRoot, "publishing/master-catalog.json"), "utf8")
 );
