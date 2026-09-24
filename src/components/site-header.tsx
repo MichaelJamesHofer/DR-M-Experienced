@@ -78,7 +78,7 @@ export function SiteHeader() {
       className="sticky top-0 z-50 border-b border-border bg-[var(--header-bg)] backdrop-blur-lg"
     >
       <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-4 lg:px-6">
-        <Link href="/" className="group flex min-h-11 min-w-0 items-center gap-3" aria-label={`${SITE_SHORT_NAME} home`}>
+        <Link href="/" className="group flex min-h-11 min-w-0 items-center gap-3 xl:shrink-0" aria-label={`${SITE_SHORT_NAME} home`}>
           <Image
             src="/icon.svg"
             alt=""
@@ -91,14 +91,14 @@ export function SiteHeader() {
             <p className="truncate text-sm font-bold text-foreground sm:text-caption sm:font-semibold sm:uppercase">
               {SITE_SHORT_NAME}<span className="hidden sm:inline">,</span>
             </p>
-            <p className="hidden text-body-sm font-semibold leading-tight text-foreground-muted sm:block">
+            <p className="hidden whitespace-nowrap text-body-sm font-semibold leading-tight text-foreground-muted sm:block">
               {SITE_HOST_LINE}
             </p>
           </div>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden items-center gap-8 xl:flex">
+        <nav className="hidden shrink-0 items-center gap-4 xl:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -112,8 +112,8 @@ export function SiteHeader() {
         </nav>
 
         {/* Desktop Actions */}
-        <div className="hidden items-center gap-4 xl:flex">
-          <PlatformBadges variant="compact" />
+        <div className="hidden shrink-0 items-center gap-4 xl:flex">
+          <PlatformBadges variant="compact" className="shrink-0" />
           <div className="h-5 w-px bg-border" />
           <ThemeToggle />
         </div>
