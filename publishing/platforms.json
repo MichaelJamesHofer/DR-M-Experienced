@@ -425,6 +425,19 @@
       },
       "notes": "Public profile data independently confirms this is an Instagram Creator professional account and not a Business account, which is the correct classification for Dr. David Musnick as a creator. On September 14, the sole linked Instagram profile name and bio prefix were saved as the exact full show title; anonymous public metadata matched at 21:02 UTC. The @drmexperienced handle, Creator account type, and profile links were preserved. All three cataloged public Reels retain distinct captions and mappings to verified local masters; the profile currently reports four posts. The separate professionalAccountVerified field remains false until the stable authenticated Graph API publishing ID is read back; do not substitute the public profile ID. Complete Meta app authorization before API automation. Meta's local resumable route requires Facebook Login for Business and a linked Page but does not require converting Instagram to Business; direct Instagram Login instead requires temporary public media staging."
     },
+    "tiktok": {
+      "label": "TikTok",
+      "mode": "attended_browser",
+      "channelUrl": "https://www.tiktok.com/@drmexperienced",
+      "publicHandle": "drmexperienced",
+      "publicProfileVerifiedAt": "2026-09-23",
+      "shortFormCatalog": "publishing/short-form-catalog.json",
+      "apiAutomation": {
+        "enabled": false,
+        "policyRevision": 1
+      },
+      "notes": "The existing @drmexperienced profile was verified during the September 23 attended release. The short-form catalog records individually verified video URLs. This profile link is used by the website's shared social badges; adding it does not enable a publishing adapter or authorize new uploads."
+    },
     "rumble": {
       "label": "Rumble",
       "mode": "manual_human_only",
