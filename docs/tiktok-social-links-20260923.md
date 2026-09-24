@@ -2,9 +2,15 @@
 
 Last source verification: September 23, 2026.
 
-The owner requested the existing TikTok profile,
-`https://www.tiktok.com/@drmexperienced`, in the website and platform social
-links. The website uses its shared `PlatformBadges` component for the desktop
+Social profiles should direct viewers to `https://drmexperienced.com/`, with
+`https://drmexperienced.com/affiliates/` as the clearly labeled affiliate-guide
+destination where an additional link is supported. The owner clarified that
+social-to-social links are not the intended conversion path. Preserve canonical
+URLs; this change adds no campaign parameters or analytics instrumentation.
+
+The website may list the show's own social profiles, including the verified
+TikTok profile `https://www.tiktok.com/@drmexperienced`. It uses the shared
+`PlatformBadges` component for the desktop
 header, mobile menu, homepage hero and footer. TikTok joins those existing
 badges with the same monochrome icon, accessible label and 44-pixel target.
 The earlier standalone footer text link is replaced by that shared badge.
@@ -24,15 +30,20 @@ Deployment and readback evidence is retained in the project's additive
 ## Platform profile readbacks
 
 The coordinated profile work is separate from the website badge deployment.
-The following outcomes were verified on September 23 by the agent operating
-the named platform; unchanged channel copy and existing profile links were
-preserved.
+The initial YouTube and Vimeo TikTok cross-links were corrected and publicly
+read back against the website-directed policy above. The earlier
+`Continuation/ubuntu-20260923-v005/social-links-20260923-v001/ROOT_PLATFORM_LINK_READBACK_v001.json`
+records the initial state and must not be treated as the final conversion setup.
 
 | Platform | Result |
 |---|---|
-| YouTube | Added a link labeled `TikTok` to the existing channel. Public readback at `https://www.youtube.com/@drmexperienced` resolves to the exact TikTok profile URL above. |
-| Vimeo | Saved the TikTok link and verified it in the public profile preview. The existing website, email, name and 11 videos were preserved. |
-| Instagram | Desktop Edit Profile disables the website field and explicitly requires the Instagram mobile app to change bio links. The existing website, affiliate-guide and contact links remain unchanged; no TikTok link was added through the web interface. |
+| YouTube | The public channel header points to the website. Its expanded About links are `Dr. M’s Website` and `Dr. M’s Affiliate Guide`, with the exact canonical destinations above. TikTok was removed; channel name, description and videos were preserved. |
+| Vimeo | Public profile preview verifies the website first and affiliate guide second, with zero TikTok cross-links. Vimeo exposes URL-only labels. The existing email, name, biography and 11 videos were preserved. |
+| Instagram | The existing website, affiliate-guide and contact links already meet the clarified direction and remain unchanged. No TikTok link was added. Desktop link editing requires the mobile app, but no Instagram edit is needed for this request. |
+| RSS.com | The existing dashboard requires account sign-in; available profile-link fields remain unverified. No account, show, episode or feed change was made. |
+| Spotify | No social-link field appears in this show's inspected General or On Spotify settings. Existing episode summaries already contain website and affiliate-guide URLs and were preserved. This finding is limited to the inspected settings, not every Spotify product. |
 
-The YouTube and Instagram observations are recorded in the project
-receipt `Continuation/ubuntu-20260923-v005/social-links-20260923-v001/ROOT_PLATFORM_LINK_READBACK_v001.json`.
+Vimeo, RSS.com and Spotify evidence is recorded in
+`Continuation/ubuntu-20260923-v005/social-links-20260923-v001/VIMEO_RSS_SPOTIFY_RESULTS_v002.json`.
+The corrected YouTube and preserved Instagram readbacks are recorded in
+`Continuation/ubuntu-20260923-v005/social-links-20260923-v001/ROOT_PLATFORM_LINK_READBACK_v002.json`.
