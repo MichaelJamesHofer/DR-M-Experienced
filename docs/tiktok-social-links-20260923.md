@@ -40,10 +40,23 @@ records the initial state and must not be treated as the final conversion setup.
 | YouTube | The public channel header points to the website. Its expanded About links are `Dr. M’s Website` and `Dr. M’s Affiliate Guide`, with the exact canonical destinations above. TikTok was removed; channel name, description and videos were preserved. |
 | Vimeo | Public profile preview verifies the website first and affiliate guide second, with zero TikTok cross-links. Vimeo exposes URL-only labels. The existing email, name, biography and 11 videos were preserved. |
 | Instagram | The existing website, affiliate-guide and contact links already meet the clarified direction and remain unchanged. No TikTok link was added. Desktop link editing requires the mobile app, but no Instagram edit is needed for this request. |
-| RSS.com | The existing dashboard requires account sign-in; available profile-link fields remain unverified. No account, show, episode or feed change was made. |
+| RSS.com | The public `Website` anchor already points to `https://drmexperienced.com/` and was verified without login. No mutation is needed for that destination. Dashboard sign-in would only be relevant to an optional additional profile field. |
 | Spotify | No social-link field appears in this show's inspected General or On Spotify settings. Existing episode summaries already contain website and affiliate-guide URLs and were preserved. This finding is limited to the inspected settings, not every Spotify product. |
+| TikTok | The website address remains in the bio. Clickable-link setup is deferred at the owner's request until the account qualifies. No business verification or account-type changes are authorized. |
 
 Vimeo, RSS.com and Spotify evidence is recorded in
-`Continuation/ubuntu-20260923-v005/social-links-20260923-v001/VIMEO_RSS_SPOTIFY_RESULTS_v002.json`.
+`Continuation/ubuntu-20260923-v005/social-links-20260923-v001/VIMEO_RSS_SPOTIFY_RESULTS_v003.json`.
 The corrected YouTube and preserved Instagram readbacks are recorded in
 `Continuation/ubuntu-20260923-v005/social-links-20260923-v001/ROOT_PLATFORM_LINK_READBACK_v002.json`.
+
+## Desktop header fit
+
+Adding the seventh icon exposed a width constraint in the 1152-pixel header:
+the desktop action group wrapped to 92 pixels inside a 72-pixel row, and the
+host line wrapped before `MD`. The header now reserves the desktop brand and
+action widths and uses 16-pixel navigation gaps. The existing 1280-pixel desktop
+breakpoint and mobile menu remain intact, with all seven social icons retained.
+
+Header QA must check that all desktop social targets occupy one row, every
+control stays inside the header, the host line stays unbroken, and adjacent
+groups do not overlap. Page-level overflow alone does not catch this defect.
