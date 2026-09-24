@@ -346,6 +346,12 @@ Mutable profile URLs are stored in `publishing/platforms.json`; they are not a
 substitute for stable IDs. Unknown IDs remain `null` until authenticated evidence
 confirms them.
 
+September 23 social-link addition: the verified TikTok profile is
+`https://www.tiktok.com/@drmexperienced`. Its public handle is registered in
+`publishing/platforms.json` and used by the website's shared social badges.
+This does not enable a TikTok publishing adapter. See
+`docs/tiktok-social-links-20260923.md` for the website scope and verification.
+
 ## 6. Management Contract
 
 The assistant is expected to help operate the ecosystem, not merely explain it.

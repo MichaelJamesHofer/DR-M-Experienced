@@ -45,7 +45,6 @@ export function SiteFooter() {
               {SITE_DESCRIPTION}
             </p>
             <PlatformBadges variant="compact" className="mb-4 justify-center" />
-            <a href="https://www.tiktok.com/@drmexperienced" target="_blank" rel="noopener noreferrer" className="mx-auto mb-2 flex min-h-11 w-fit items-center text-body-sm text-foreground-muted underline underline-offset-4 hover:text-foreground">Follow on TikTok</a>
             <a
               href={PODCAST_FEED_URL}
               target="_blank"
