@@ -8,7 +8,7 @@
   "scripts": {
     "predev": "node scripts/generate-site-brand.mjs",
     "dev": "next dev",
-    "prebuild": "node scripts/generate-site-brand.mjs",
+    "prebuild": "node scripts/generate-site-brand.mjs && node scripts/generate-site-icons.mjs --check",
     "build": "next build",
     "start": "next start",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx --max-warnings=0",
@@ -20,6 +20,8 @@
     "test:apple-republish-canary": "node --test scripts/publish/apple-republish-canary-prototype.test.mjs scripts/publish/apple-authorized-subtree.test.mjs scripts/publish/verify-apple-republish-canary-deployment.test.mjs scripts/publish/apple-show-name-md-v1.test.mjs",
     "test:deploy-workflow": "node --test scripts/publish/deploy-workflow.test.mjs",
     "generate:site-brand": "node scripts/generate-site-brand.mjs",
+    "generate:site-icons": "node scripts/generate-site-icons.mjs",
+    "test:site-icons": "node scripts/generate-site-icons.mjs --check",
     "generate:apple-feed": "node scripts/publish/apple-feed-overlay.mjs",
     "generate:authorized-apple-subtree": "node scripts/publish/apple-authorized-subtree.mjs generate",
     "verify:authorized-apple-subtree": "node scripts/publish/apple-authorized-subtree.mjs verify",

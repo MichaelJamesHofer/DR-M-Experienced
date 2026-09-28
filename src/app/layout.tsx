@@ -25,6 +25,14 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
+  icons: {
+    // A new URL bypasses cached starter-template favicons in returning browsers.
+    icon: [
+      { url: "/favicon.ico?v=drm-mountain-1", type: "image/x-icon", sizes: "16x16 32x32 48x48 64x64" },
+      { url: "/icon.svg?v=drm-mountain-1", type: "image/svg+xml", sizes: "any" },
+    ],
+    apple: [{ url: "/apple-icon.png?v=drm-mountain-1", type: "image/png", sizes: "180x180" }],
+  },
   openGraph: {
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
