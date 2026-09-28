@@ -9,7 +9,7 @@ import {
   type CSSProperties,
   type PointerEvent as ReactPointerEvent,
 } from "react";
-import { ArrowRight, ChevronDown, ExternalLink, Search, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, Copy, ExternalLink, Search, SlidersHorizontal } from "lucide-react";
 import {
   AffiliateCategory,
   AffiliateProduct,
@@ -615,24 +615,18 @@ function ProductCard({
         )}
 
         {(product.couponCode || product.discountNote || product.purchaseNote) && (
-          <details className="group mt-4 border-t border-border">
-            <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 py-3 text-body-sm font-semibold text-foreground transition-colors hover:text-primary [&::-webkit-details-marker]:hidden">
-              Partner details
-              <ChevronDown
-                className="h-4 w-4 shrink-0 text-foreground-subtle transition-transform group-open:rotate-180"
-                aria-hidden="true"
-              />
-            </summary>
-            <div className="space-y-1 border-t border-border py-4 text-left text-body-sm leading-6 text-foreground-muted">
+          <div className="mt-4 space-y-3 rounded-lg border border-primary/25 bg-primary/5 p-4 text-center">
+            <p className="text-caption font-semibold uppercase tracking-wider text-primary">
+              {product.couponCode ? "Discount code" : product.discountNote ? "Listener savings" : "Partner details"}
+            </p>
+            <div className="space-y-2 text-body-sm leading-6 text-foreground-muted">
               {product.couponCode && (
-                <p>
-                  Code: <span className="font-bold text-foreground">{product.couponCode}</span>
-                </p>
+                <CouponCode code={product.couponCode} companyName={companyName} />
               )}
               {product.discountNote && <p>{product.discountNote}</p>}
               {product.purchaseNote && <p>{product.purchaseNote}</p>}
             </div>
-          </details>
+          </div>
         )}
 
         <div className="mt-auto pt-4">
@@ -708,6 +702,39 @@ function ProductCard({
         </div>
       </div>
     </article>
+  );
+}
+
+function CouponCode({ code, companyName }: { code: string; companyName: string }) {
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">("idle");
+
+  async function copyCode() {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopyStatus("copied");
+    } catch {
+      setCopyStatus("failed");
+    }
+  }
+
+  return (
+    <div>
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <code className="min-w-0 select-all break-all text-lg font-bold text-foreground">{code}</code>
+        <button
+          type="button"
+          onClick={copyCode}
+          aria-label={`Copy ${companyName} discount code`}
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-primary/30 bg-background px-3 text-body-sm font-semibold text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+        >
+          {copyStatus === "copied" ? <Check className="h-4 w-4" aria-hidden="true" /> : <Copy className="h-4 w-4" aria-hidden="true" />}
+          {copyStatus === "copied" ? "Copied" : "Copy code"}
+        </button>
+      </div>
+      <p role="status" className={copyStatus === "failed" ? "mt-2 text-caption text-foreground-muted" : "sr-only"}>
+        {copyStatus === "copied" ? `${companyName} code copied.` : copyStatus === "failed" ? "Select the code above to copy it manually." : ""}
+      </p>
+    </div>
   );
 }
 

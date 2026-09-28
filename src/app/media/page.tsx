@@ -10,6 +10,7 @@ import {
   Play,
 } from "lucide-react";
 import { MEDIA_FEATURES } from "@/data/media";
+import { AnimatedDisclosure } from "@/components/animated-disclosure";
 
 export const metadata = {
   title: "Media & Features",
@@ -22,12 +23,6 @@ const podcastMedia = MEDIA_FEATURES.filter((media) => media.type === "Podcast");
 const seriesMedia = MEDIA_FEATURES.filter((media) => media.type === "Series");
 
 const mediaSections = [
-  {
-    id: "shorts-recipes",
-    title: "Shorts & recipes",
-    items: shortRecipeMedia,
-    icon: ChefHat,
-  },
   {
     id: "video-talks",
     title: "Video talks",
@@ -45,6 +40,12 @@ const mediaSections = [
     title: "Educational series",
     items: seriesMedia,
     icon: LibraryBig,
+  },
+  {
+    id: "shorts-recipes",
+    title: "Shorts & recipes",
+    items: shortRecipeMedia,
+    icon: ChefHat,
   },
 ] as const;
 
@@ -86,11 +87,28 @@ export default function MediaPage() {
               </span>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-              {items.map((media) => (
-                <MediaCard key={media.url} media={media} />
-              ))}
-            </div>
+            {id === "shorts-recipes" ? (
+              <AnimatedDisclosure
+                className="rounded-lg border border-border bg-surface"
+                triggerClassName="min-h-16 gap-4 rounded-lg p-4 transition-colors hover:bg-surface-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
+                label={
+                  <span className="block">
+                    <span className="block text-body-sm font-semibold text-foreground">
+                      Browse {items.length} shorts & recipes
+                    </span>
+                    <span className="mt-1 block text-body-sm text-foreground-muted">
+                      Quick clips and kitchen ideas, all in one place.
+                    </span>
+                  </span>
+                }
+              >
+                <div className="border-t border-border p-3 sm:p-5">
+                  <MediaGrid items={items} />
+                </div>
+              </AnimatedDisclosure>
+            ) : (
+              <MediaGrid items={items} />
+            )}
           </section>
         ) : null
       )}
@@ -112,6 +130,16 @@ export default function MediaPage() {
           <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </Link>
       </section>
+    </div>
+  );
+}
+
+function MediaGrid({ items }: { items: typeof MEDIA_FEATURES }) {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+      {items.map((media) => (
+        <MediaCard key={media.url} media={media} />
+      ))}
     </div>
   );
 }
