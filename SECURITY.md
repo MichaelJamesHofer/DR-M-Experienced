@@ -46,10 +46,44 @@ npm run lint
 npm run typecheck
 npm run build
 npm audit --audit-level=high
+npm run test:dependencies
 npm run test:database-security
 ```
 
 The Edge Function must also pass Deno check, lint, and tests using `supabase/functions/deno.json` and `supabase/functions/deno.lock`.
+
+### Temporary braces depth-guard backport
+
+Last verified: October 5, 2026.
+
+Tailwind 3 and Next's lint tooling depend on `braces` through Chokidar and
+Micromatch. [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm)
+affects upstream `braces` through 3.0.3, with no patched release available.
+The root override pins `braces` to the inspected
+`npm:@dieub/braces-depth-guard@3.0.3-pn.0` backport; the lockfile pins the registry
+tarball and SHA-512 integrity. This is a third-party derivative, not an upstream
+release, and its bootstrap release has no GitHub OIDC provenance.
+
+Compared with published `braces@3.0.3`, its runtime changes only add a maximum
+nesting depth of 100 to parsing and recursive AST traversal, based on
+[upstream PR 72](https://github.com/micromatch/braces/pull/72)'s initial guard
+patch. Its entry point, utility functions, MIT license and `fill-range`
+dependency are unchanged; it has no install lifecycle scripts. It preserves
+upstream stringify behavior. It does not claim to bound expansion cardinality,
+AST width, or malformed cyclic parent links; this site's consumers supply glob
+strings, not external ASTs. Keep the exact pin until a replacement is reviewed.
+
+`npm run test:dependencies` resolves the installed packages through their real
+consumers and verifies deep-input rejection, direct AST traversal guards, brace
+syntax compatibility, content-file discovery and Chokidar watching. CI runs it
+alongside the unchanged `npm audit --audit-level=high` gate. A clean audit alone
+is not evidence that a renamed fork fixes a vulnerability.
+
+Remove this override when upstream publishes a release fixing the advisory:
+update within compatible ranges, regenerate the lockfile, and rerun the audit,
+dependency regressions, lint, typecheck, publisher tests and static build. Keep
+the dependency regressions when returning to upstream. Tailwind remains on 3.x;
+this repair requires no CSS migration or change to the Pages deployment gates.
 
 ## Reporting A Vulnerability
 
