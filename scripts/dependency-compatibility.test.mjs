@@ -96,3 +96,40 @@ test("Tailwind: Chokidar still watches brace-pattern content files", { timeout: 
   });
   assert.deepEqual(found.sort(), ["nested/component.ts", "nested/readme.mdx", "page.tsx", "script.js"]);
 });
+
+test("PostCSS nested selectors retain parent lists, attributes and functional pseudos", async () => {
+  const postcss = tailwindRequire("postcss");
+  const nested = tailwindRequire("postcss-nested");
+  const result = await postcss([nested]).process(`
+    .card, .tile {
+      &:hover, &[data-state="open"] { color: cyan; }
+      & > a:is(:hover, :focus-visible) { text-decoration: underline; }
+    }
+  `, { from: undefined });
+  const rules = [];
+  result.root.walkRules((rule) => rules.push([rule.selector, rule.first.prop, rule.first.value]));
+  assert.deepEqual(rules, [
+    ['.card:hover, .card[data-state="open"], .tile:hover, .tile[data-state="open"]', "color", "cyan"],
+    [".card > a:is(:hover, :focus-visible), .tile > a:is(:hover, :focus-visible)", "text-decoration", "underline"],
+  ]);
+});
+
+test("Tailwind 3 retains hover, group, arbitrary and responsive variants with the patched selector parser", async () => {
+  const postcss = tailwindRequire("postcss");
+  const tailwind = require("tailwindcss");
+  const result = await postcss([tailwind({
+    content: [{ raw: '<div class="hover:text-cyan-400 group-hover:underline [&>a]:underline md:grid-cols-3 motion-reduce:transition-none"></div>' }],
+    corePlugins: { preflight: false },
+  })]).process("@tailwind utilities;", { from: undefined });
+  const rules = new Map();
+  result.root.walkRules((rule) => rules.set(rule.selector, rule));
+  assert.equal(rules.get(".hover\\:text-cyan-400:hover").nodes.find((node) => node.prop === "color").value, "rgb(34 211 238 / var(--tw-text-opacity, 1))");
+  assert.equal(rules.get(".group:hover .group-hover\\:underline").first.value, "underline");
+  assert.equal(rules.get(".\\[\\&\\>a\\]\\:underline>a").first.value, "underline");
+  const grid = rules.get(".md\\:grid-cols-3");
+  assert.equal(grid.first.value, "repeat(3, minmax(0, 1fr))");
+  assert.equal(grid.parent.params, "(min-width: 768px)");
+  const motion = rules.get(".motion-reduce\\:transition-none");
+  assert.equal(motion.first.value, "none");
+  assert.equal(motion.parent.params, "(prefers-reduced-motion: reduce)");
+});
