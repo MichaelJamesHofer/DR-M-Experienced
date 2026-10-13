@@ -85,6 +85,29 @@ dependency regressions, lint, typecheck, publisher tests and static build. Keep
 the dependency regressions when returning to upstream. Tailwind remains on 3.x;
 this repair requires no CSS migration or change to the Pages deployment gates.
 
+### October 12 dependency audit repair
+
+Last verified: October 12, 2026.
+
+Scheduled Pages builds stopped at `npm audit --audit-level=high` after new
+advisories affected the locked dependency tree. The repair pins Next and its
+lint configuration to `15.5.27`, Sharp to `0.35.5`, and `source-map-js` to
+`1.2.2`, the patched releases for
+[Next cache poisoning](https://github.com/advisories/GHSA-4jqv-mc3x-m676),
+[the related Next cache issue](https://github.com/advisories/GHSA-mcj8-r9mp-w47p),
+[Sharp's librsvg vulnerability](https://github.com/advisories/GHSA-wq5f-xc86-pv6w),
+and [source-map offset handling](https://github.com/advisories/GHSA-68fv-2mgg-jv7q).
+
+Tailwind 3 and `postcss-nested` receive `postcss-selector-parser@7.1.6` through
+an override for the
+[flat-selector complexity advisory](https://github.com/advisories/GHSA-rj75-hqrm-r3gf).
+This crosses the consumers' declared parser major range; dependency compatibility
+tests exercise nested parent/attribute/pseudo selectors and Tailwind's hover,
+group, arbitrary, responsive and reduced-motion variants. The complete static
+build checks the actual site's styles. The existing braces backport and audit
+threshold remain in place. Review this parser override when Tailwind 3's
+dependencies adopt the patched parser upstream.
+
 ## Reporting A Vulnerability
 
 Do not disclose suspected credentials or exploitable details in a public issue. Use GitHub's private vulnerability-reporting flow when available, or contact the repository owner privately through GitHub.
