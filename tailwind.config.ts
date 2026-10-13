@@ -1,5 +1,11 @@
 import type { Config } from "tailwindcss";
 
+// Tailwind 3 cannot apply opacity modifiers to bare CSS-variable colors.
+// Preserve the theme values while generating the intended /5, /30, etc. rules.
+function themeColor(variable: string) {
+  return `color-mix(in srgb, var(${variable}) calc(<alpha-value> * 100%), transparent)`;
+}
+
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,21 +15,21 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--color-background)",
-        surface: "var(--color-surface)",
-        "surface-elevated": "var(--color-surface-elevated)",
-        primary: "var(--color-primary)",
-        "primary-hover": "var(--color-primary-hover)",
-        accent: "var(--color-accent)",
-        "accent-hover": "var(--color-accent-hover)",
-        foreground: "var(--color-foreground)",
-        "foreground-muted": "var(--color-foreground-muted)",
-        "foreground-subtle": "var(--color-foreground-subtle)",
-        border: "var(--color-border)",
-        "border-strong": "var(--color-border-strong)",
-        success: "var(--color-success)",
-        warning: "var(--color-warning)",
-        error: "var(--color-error)",
+        background: themeColor("--color-background"),
+        surface: themeColor("--color-surface"),
+        "surface-elevated": themeColor("--color-surface-elevated"),
+        primary: themeColor("--color-primary"),
+        "primary-hover": themeColor("--color-primary-hover"),
+        accent: themeColor("--color-accent"),
+        "accent-hover": themeColor("--color-accent-hover"),
+        foreground: themeColor("--color-foreground"),
+        "foreground-muted": themeColor("--color-foreground-muted"),
+        "foreground-subtle": themeColor("--color-foreground-subtle"),
+        border: themeColor("--color-border"),
+        "border-strong": themeColor("--color-border-strong"),
+        success: themeColor("--color-success"),
+        warning: themeColor("--color-warning"),
+        error: themeColor("--color-error"),
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)", "system-ui", "-apple-system", "sans-serif"],

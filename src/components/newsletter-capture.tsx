@@ -51,7 +51,7 @@ export function NewsletterCapture({
     }
 
     return {
-      page_url: window.location.href.slice(0, 1000),
+      page_url: `${window.location.origin}${window.location.pathname}`.slice(0, 1000),
       user_agent: window.navigator.userAgent.slice(0, 500),
     };
   }

@@ -352,7 +352,7 @@ export function AffiliateBrowser({ products, categories, episodes }: AffiliateBr
                   {category.description}
                 </p>
               </div>
-              <div className="grid items-stretch gap-4 xl:grid-cols-2">
+              <div className="affiliate-card-grid grid items-stretch gap-4 xl:grid-cols-2">
                 {groupProducts.map((product) => (
                   <ProductCard
                     key={product.slug}
@@ -365,7 +365,7 @@ export function AffiliateBrowser({ products, categories, episodes }: AffiliateBr
           ))}
         </div>
       ) : (
-        <div className="grid items-stretch gap-4 xl:grid-cols-2">
+        <div className="affiliate-card-grid grid items-stretch gap-4 xl:grid-cols-2">
           {filteredProducts.map((product) => (
             <ProductCard
               key={product.slug}
@@ -471,7 +471,7 @@ function MobileCommandBar({
         <select
           value={sortKey}
           onChange={(event) => onSortChange(event.target.value as SortKey)}
-          className="h-11 w-full appearance-none rounded-lg border-0 bg-background px-2 py-2 text-center text-caption font-bold text-foreground-muted focus:outline-none focus:ring-2 focus:ring-primary/30"
+          className="h-11 w-full appearance-none rounded-lg border-0 bg-background px-2 py-2 text-center text-caption font-bold text-foreground-muted focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="recommended">Recommended</option>
           <option value="name">Name A-Z</option>
@@ -527,14 +527,14 @@ function ProductCard({
       onPointerMove={(event) => updateBrandDepth(event, cardRef.current)}
       onPointerLeave={() => resetBrandDepth(cardRef.current)}
       style={cardStyle}
-      className="relative flex h-full scroll-mt-28 overflow-hidden rounded-lg border bg-surface"
+      className="affiliate-card relative flex h-full scroll-mt-28 overflow-hidden rounded-lg border bg-surface p-4 pl-5 sm:p-5 sm:pl-6"
     >
       <span
         aria-hidden="true"
         className="absolute inset-y-0 left-0 w-1"
         style={{ backgroundColor: accent }}
       />
-      <div className="flex min-w-0 flex-1 flex-col p-4 pl-5 sm:p-5 sm:pl-6">
+      <div className="affiliate-card-body flex min-w-0 flex-1 flex-col">
         <div className="grid min-h-[15rem] items-center gap-4 sm:min-h-36 sm:grid-cols-[8.5rem_minmax(0,1fr)]">
           <div
             className="relative mx-auto flex h-28 w-full max-w-[13rem] items-center justify-center overflow-hidden rounded-lg border p-3 transition-transform duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none sm:max-w-none"
@@ -591,45 +591,49 @@ function ProductCard({
           </p>
         </div>
 
-        {(product.featuredProducts?.length ?? 0) > 0 && (
-          <div className="mt-4 min-w-0 border-t border-border pt-3 text-left">
-            <p className="mb-2 text-caption font-semibold uppercase text-foreground-subtle">
-              Products Dr. M mentioned
-            </p>
-            <div
-              className="flex gap-2 overflow-x-auto pb-2 [scrollbar-color:var(--color-border-strong)_transparent] [scrollbar-width:thin] focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45 focus-visible:ring-offset-2 focus-visible:ring-offset-surface [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border-strong [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5"
-              role="region"
-              aria-label={`${companyName} recommended products`}
-              tabIndex={0}
-            >
-              {product.featuredProducts!.map((item) => (
-                <span
-                  key={item}
-                  className="shrink-0 rounded-lg border border-border bg-background px-2.5 py-1 text-caption font-medium text-foreground-muted"
-                >
-                  {item}
-                </span>
-              ))}
+        <div className="affiliate-card-products min-w-0">
+          {(product.featuredProducts?.length ?? 0) > 0 && (
+            <div className="mt-4 border-t border-border pt-3 text-left">
+              <p className="mb-2 text-caption font-semibold uppercase text-foreground-subtle">
+                Products Dr. M mentioned
+              </p>
+              <div
+                className="flex gap-2 overflow-x-auto pb-2 [scrollbar-color:var(--color-border-strong)_transparent] [scrollbar-width:thin] focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border-strong [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5"
+                role="region"
+                aria-label={`${companyName} recommended products`}
+                tabIndex={0}
+              >
+                {product.featuredProducts!.map((item) => (
+                  <span
+                    key={item}
+                    className="shrink-0 rounded-lg border border-border bg-background px-2.5 py-1 text-caption font-medium text-foreground-muted"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
-        {(product.couponCode || product.discountNote || product.purchaseNote) && (
-          <div className="mt-4 space-y-3 rounded-lg border border-primary/25 bg-primary/5 p-4 text-center">
-            <p className="text-caption font-semibold uppercase tracking-wider text-primary">
-              {product.couponCode ? "Discount code" : product.discountNote ? "Listener savings" : "Partner details"}
-            </p>
-            <div className="space-y-2 text-body-sm leading-6 text-foreground-muted">
-              {product.couponCode && (
-                <CouponCode code={product.couponCode} companyName={companyName} />
-              )}
-              {product.discountNote && <p>{product.discountNote}</p>}
-              {product.purchaseNote && <p>{product.purchaseNote}</p>}
+        <div className="affiliate-card-partner flex min-w-0">
+          {(product.couponCode || product.discountNote || product.purchaseNote) && (
+            <div className="mt-4 flex w-full flex-col justify-center gap-3 rounded-lg border border-primary/25 bg-primary/5 p-4 text-center">
+              <p className="text-caption font-semibold uppercase tracking-wider text-primary">
+                {product.couponCode ? "Discount code" : product.discountNote ? "Listener savings" : "Partner details"}
+              </p>
+              <div className="space-y-2 text-body-sm leading-6 text-foreground-muted">
+                {product.couponCode && (
+                  <CouponCode code={product.couponCode} companyName={companyName} />
+                )}
+                {product.discountNote && <p>{product.discountNote}</p>}
+                {product.purchaseNote && <p>{product.purchaseNote}</p>}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
-        <div className="mt-auto pt-4">
+        <div className="affiliate-card-references mt-auto pt-4">
           {relatedEpisodes.length > 0 && (
             <details className="group border-t border-border">
               <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 py-3 text-body-sm font-semibold text-foreground transition-colors hover:text-primary [&::-webkit-details-marker]:hidden">
@@ -656,7 +660,9 @@ function ProductCard({
               </div>
             </details>
           )}
+        </div>
 
+        <div className="affiliate-card-reasons">
           <details className="group border-t border-border">
             <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 py-3 text-body-sm font-semibold text-foreground transition-colors hover:text-primary [&::-webkit-details-marker]:hidden">
               Why Dr. M references this
@@ -684,7 +690,9 @@ function ProductCard({
               )}
             </div>
           </details>
+        </div>
 
+        <div className="affiliate-card-action">
           {productUrl && (
             <div className="border-t border-border pt-4 sm:flex sm:justify-end">
               <a
