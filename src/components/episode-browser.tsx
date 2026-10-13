@@ -206,7 +206,7 @@ export function EpisodeBrowser({
                   type="button"
                   onClick={() => setViewMode(mode)}
                   aria-pressed={viewMode === mode}
-                  className={`flex items-center justify-center gap-1.5 rounded-md px-2 text-caption font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 ${
+                  className={`flex items-center justify-center gap-1.5 rounded-md px-2 text-caption font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                     viewMode === mode
                       ? "bg-primary text-background"
                       : "text-foreground-muted hover:text-foreground"
@@ -379,7 +379,7 @@ function MobileEpisodeCommandBar({
         onClick={onToggleView}
         aria-label={viewMode === "cards" ? "Switch to list view" : "Switch to card view"}
         title={viewMode === "cards" ? "List view" : "Card view"}
-        className="flex h-12 w-12 items-center justify-center rounded-md border border-border bg-background text-foreground-muted transition-colors duration-200 hover:border-primary/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+        className="flex h-12 w-12 items-center justify-center rounded-md border border-border bg-background text-foreground-muted transition-colors duration-200 hover:border-primary/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
       >
         {viewMode === "cards" ? (
           <List aria-hidden="true" className="h-5 w-5" />
@@ -438,7 +438,7 @@ function EpisodeCard({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-surface/80 via-transparent to-transparent" />
           {!hasEmbeddableVideo && (
-            <div className="absolute inset-0 bg-gradient-to-t from-surface/90 via-surface/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent" />
           )}
           {!hasEmbeddableVideo ? (
             <div className="absolute inset-0 flex items-center justify-center">
@@ -447,7 +447,7 @@ function EpisodeCard({
                   <Clock3 aria-hidden="true" className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
                 <p
-                  className={`text-center text-caption font-semibold text-background drop-shadow-lg ${
+                  className={`text-center text-caption font-semibold text-white drop-shadow-lg ${
                     variant === "list" ? "hidden sm:block" : ""
                   }`}
                 >
@@ -456,7 +456,7 @@ function EpisodeCard({
               </div>
             </div>
           ) : (
-            <div className="absolute bottom-2 right-2 flex items-center gap-1.5 rounded-md bg-black/60 px-2 py-1 text-caption text-background backdrop-blur sm:bottom-4 sm:right-4 sm:px-3 sm:py-1.5">
+            <div className="absolute bottom-2 right-2 flex items-center gap-1.5 rounded-md bg-black/60 px-2 py-1 text-caption text-white backdrop-blur sm:bottom-4 sm:right-4 sm:px-3 sm:py-1.5">
               {episode.durationMinutes && (
                 <>
                   <Play aria-hidden="true" className="h-3 w-3 fill-current" />

@@ -104,7 +104,7 @@ export function SiteHeader() {
               key={link.href}
               href={link.href}
               aria-current={pathname === link.href || pathname.startsWith(`${link.href}/`) ? "page" : undefined}
-              className="inline-flex min-h-11 items-center px-1 text-body-sm font-medium text-foreground-muted transition-colors duration-200 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+              className="inline-flex min-h-11 items-center px-1 text-body-sm font-medium text-foreground-muted transition-colors duration-200 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               {link.label}
             </Link>
@@ -123,7 +123,7 @@ export function SiteHeader() {
           ref={menuButtonRef}
           type="button"
           onClick={() => setMobileMenuOpen((isOpen) => !isOpen)}
-          className="flex h-11 w-11 items-center justify-center rounded-lg text-foreground-muted transition-colors duration-200 hover:bg-surface hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 xl:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-lg text-foreground-muted transition-colors duration-200 hover:bg-surface hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary xl:hidden"
           aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={mobileMenuOpen}
           aria-controls="mobile-navigation"
@@ -161,13 +161,13 @@ export function SiteHeader() {
               href={link.href}
               onClick={() => setMobileMenuOpen(false)}
               aria-current={pathname === link.href || pathname.startsWith(`${link.href}/`) ? "page" : undefined}
-              className="flex min-h-12 items-center rounded-sm text-body font-medium text-foreground-muted transition-colors duration-200 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+              className="flex min-h-12 items-center rounded-sm text-body font-medium text-foreground-muted transition-colors duration-200 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               {link.label}
             </Link>
           ))}
         </nav>
-        <div className="flex items-center justify-between py-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 py-3">
           <PlatformBadges variant="compact" />
           <ThemeToggle />
         </div>

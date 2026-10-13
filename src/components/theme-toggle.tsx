@@ -11,7 +11,7 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={() => setTheme(next)}
-      className="flex h-11 w-11 items-center justify-center rounded-lg border border-border bg-surface text-foreground-muted transition-colors duration-200 hover:border-primary hover:text-primary"
+      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-border bg-surface text-foreground-muted transition-colors duration-200 hover:border-primary hover:text-primary"
       aria-label={`Switch to ${next} mode`}
     >
       {theme === "light" ? (

@@ -156,14 +156,14 @@ export function EpisodeTopicRail({ topics }: EpisodeTopicRailProps) {
           tabIndex={0}
           aria-label="Scrollable episode topics"
           onKeyDown={handleRailKeyDown}
-          className="overflow-x-auto overscroll-x-contain px-4 pb-2 pt-1 outline-none [scrollbar-width:thin] focus-visible:ring-2 focus-visible:ring-primary/40 motion-reduce:scroll-auto sm:px-0 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5"
+          className="overflow-x-auto overscroll-x-contain px-4 pb-2 pt-1 outline-none [scrollbar-width:thin] focus-visible:ring-2 focus-visible:ring-primary motion-reduce:scroll-auto sm:px-0 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5"
         >
           <div className="flex w-max snap-x snap-mandatory gap-2 pr-4 sm:pr-0">
             {topics.map((topic) => (
               <Link
                 key={topic}
                 href={`/episodes?topic=${encodeURIComponent(topic.toLowerCase())}`}
-                className="inline-flex min-h-11 shrink-0 snap-start items-center whitespace-nowrap rounded-md border border-border bg-surface px-4 py-2 text-body-sm capitalize text-foreground-muted transition-all duration-200 hover:-translate-y-0.5 hover:border-primary hover:text-primary focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 motion-reduce:transform-none motion-reduce:transition-none"
+                className="inline-flex min-h-11 shrink-0 snap-start items-center whitespace-nowrap rounded-md border border-border bg-surface px-4 py-2 text-body-sm capitalize text-foreground-muted transition-all duration-200 hover:-translate-y-0.5 hover:border-primary hover:text-primary focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-reduce:transform-none motion-reduce:transition-none"
               >
                 {topic.replaceAll("-", " ")}
               </Link>
