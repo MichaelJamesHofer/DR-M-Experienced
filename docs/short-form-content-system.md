@@ -1,6 +1,6 @@
 # Short-form content system
 
-Last verified: August 8, 2026.
+Last verified: October 13, 2026 (America/Boise).
 
 This runbook covers Instagram Reels, recipe clips, educational excerpts, their
 local masters, Vimeo hosting, and website projection. Short-form items are not
@@ -131,3 +131,26 @@ published item.
 ## September 23 verified release
 
 See [the scoped release runbook](reels-release-20260923.md) for the published 19-reel primary batch, 15 verified TikTok links, local-master poster provenance and recipe/method view. The current catalog contains 22 verified website routes and six illustrated guides. The historical inventory above preserves the original three entries; the existing mushroom-coffee post remains a separate website-backfill candidate and must not be reuploaded to Instagram.
+
+## October 13 profile-cover relaunch
+
+The owner approved replacing the 19 current Instagram reels one every other day,
+starting with S29, to correct their cropped profile-grid covers. S29's replacement
+is verified at `https://www.instagram.com/reel/DedZm1qj_MA/`; its recorded footage,
+86.266666-second playback, exact caption and AI disclosure are retained, and its
+new cover is readable in the actual 3:4 profile crop. Its website ID remains
+`short-plasmalogens-and-cell-membranes` and its route remains
+`/shorts/plasmalogens-and-cell-membranes/`. Catalog revision 8 changes only this
+Instagram destination and the catalog header timestamps/revision. The local
+master, website poster, website content, TikTok and all other short records stay
+unchanged.
+
+The replacement's public media primary key is `4007471863554896640`, decoded from
+its observed shortcode using the same base64url integer mapping verified against
+all 22 existing catalog bindings. Meta Business Suite's separately observed media
+ID `18137545942729601` is a different namespace; neither is an account ID. The
+replacement publication time is `2026-10-14T03:18:52Z`, October 13 locally. Preserve
+the original September release receipts and the old-to-new crosswalk in the
+project-local relaunch packet. Verify the deployed website link before removing
+the superseded Instagram post. Future replacements must use their own actual
+verified IDs and timestamps; no planned post is recorded as published.
