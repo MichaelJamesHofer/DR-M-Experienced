@@ -21,7 +21,7 @@ export default function RecipesPage() {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {recipes.map((item) => (
           <Link key={item.id} href={item.websitePath} className="group overflow-hidden rounded-lg border border-border bg-surface transition-colors hover:border-primary focus-visible:border-primary">
-            <div className="relative aspect-[4/3] overflow-hidden bg-surface-elevated"><Image src={item.posterUrl} alt="" fill className="object-contain" /></div>
+            <div className="relative aspect-[4/3] overflow-hidden bg-surface-elevated"><Image src={item.shareImage.url} alt="" fill className="object-contain" /></div>
             <div className="p-5">
               <p className="mb-2 text-caption text-foreground-muted">{shortTypeLabel(item.contentType)} · {shortDurationLabel(item.durationSeconds)}</p>
               <h2 className="text-heading font-semibold text-foreground group-hover:text-primary">{item.title}</h2>

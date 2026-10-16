@@ -14,6 +14,39 @@ import {
 
 const platformRegistryFile = new URL("../../publishing/platforms.json", import.meta.url);
 
+test("generated artwork has explicit source provenance and cannot masquerade as a captured frame", async () => {
+  const catalog = await loadShortFormCatalog();
+  const item = catalog.items.find((entry) => entry.poster.sourcePlatform === "generated_artwork");
+  assert.ok(item, "the revised cover family must retain generated-source provenance");
+  assert.deepEqual(validateShortFormCatalog(catalog), { valid: true, errors: [] });
+
+  for (const field of ["sourceArtworkUri", "sourceArtworkSha256", "sourceArtworkSizeBytes", "preparedAt"]) {
+    const missing = structuredClone(catalog);
+    delete missing.items.find((entry) => entry.id === item.id).poster[field];
+    assert.equal(validateShortFormCatalog(missing).valid, false, field);
+  }
+  for (const [field, value] of [["sourceMediaId", item.destinations.instagram.mediaId], ["sourceMasterSha256", item.master.sha256], ["capturedAt", catalog.lastVerifiedAt]]) {
+    const misleading = structuredClone(catalog);
+    misleading.items.find((entry) => entry.id === item.id).poster[field] = value;
+    assert.equal(validateShortFormCatalog(misleading).valid, false, field);
+  }
+});
+
+test("dedicated share images must be landscape and their checked-in bytes must match", async () => {
+  const catalog = await loadShortFormCatalog();
+  const item = catalog.items.find((entry) => entry.shareImage);
+  assert.ok(item, "revised covers need a separate wide share image");
+  item.shareImage.height = item.shareImage.width;
+  assert.ok(validateShortFormCatalog(catalog).errors.some((error) => error.includes("dedicated landscape")));
+
+  const corrupt = await loadShortFormCatalog();
+  const corruptItem = corrupt.items.find((entry) => entry.shareImage);
+  corruptItem.shareImage.sha256 = "0".repeat(64);
+  const files = await verifyShortFormCatalogFiles({ catalog: corrupt, dropboxRoot: "/not-used", verifyDropbox: false });
+  assert.equal(files.valid, false);
+  assert.ok(files.problems.some((problem) => problem.includes(`${corruptItem.id} share image SHA-256 mismatch`)));
+});
+
 test("local-frame posters retain exact source identity and cannot masquerade as Instagram captures", async () => {
   const catalog = await loadShortFormCatalog();
   const item = catalog.items[0];

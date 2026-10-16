@@ -38,13 +38,13 @@ export async function generateMetadata({
       description: item.summary,
       url: item.websitePath,
       type: "video.other",
-      images: [{ url: item.posterUrl, width: item.posterWidth, height: item.posterHeight, alt: item.title }],
+      images: [{ url: item.shareImage.url, width: item.shareImage.width, height: item.shareImage.height, alt: item.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: item.title,
       description: item.summary,
-      images: [item.posterUrl],
+      images: [item.shareImage.url],
     },
   };
 }
