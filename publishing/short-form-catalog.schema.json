@@ -173,8 +173,7 @@
         "sizeBytes",
         "width",
         "height",
-        "sourcePlatform",
-        "capturedAt"
+        "sourcePlatform"
       ],
       "properties": {
         "websitePath": {
@@ -199,7 +198,8 @@
         "sourcePlatform": {
           "enum": [
             "instagram",
-            "local_master"
+            "local_master",
+            "generated_artwork"
           ]
         },
         "sourceMediaId": {
@@ -212,6 +212,20 @@
         },
         "sourceMasterSha256": {
           "$ref": "#/$defs/sha256"
+        },
+        "sourceArtworkUri": {
+          "$ref": "#/$defs/logicalAssetUri"
+        },
+        "sourceArtworkSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "preparedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "sourceArtworkSizeBytes": {
+          "type": "integer",
+          "minimum": 1
         }
       },
       "allOf": [
@@ -228,20 +242,73 @@
           },
           "then": {
             "required": [
-              "sourceMediaId"
+              "sourceMediaId",
+              "capturedAt"
             ],
             "properties": {
               "sourceMasterSha256": false,
-              "sourceMediaId": true
+              "sourceArtworkUri": false,
+              "sourceArtworkSha256": false,
+              "preparedAt": false,
+              "sourceArtworkSizeBytes": false,
+              "sourceMediaId": true,
+              "capturedAt": true
             }
-          },
-          "else": {
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "sourcePlatform": {
+                "const": "local_master"
+              }
+            },
             "required": [
-              "sourceMasterSha256"
+              "sourcePlatform"
+            ]
+          },
+          "then": {
+            "required": [
+              "sourceMasterSha256",
+              "capturedAt"
             ],
             "properties": {
               "sourceMediaId": false,
-              "sourceMasterSha256": true
+              "sourceArtworkUri": false,
+              "sourceArtworkSha256": false,
+              "preparedAt": false,
+              "sourceArtworkSizeBytes": false,
+              "sourceMasterSha256": true,
+              "capturedAt": true
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "sourcePlatform": {
+                "const": "generated_artwork"
+              }
+            },
+            "required": [
+              "sourcePlatform"
+            ]
+          },
+          "then": {
+            "required": [
+              "sourceArtworkUri",
+              "sourceArtworkSha256",
+              "preparedAt",
+              "sourceArtworkSizeBytes"
+            ],
+            "properties": {
+              "sourceMediaId": false,
+              "sourceMasterSha256": false,
+              "capturedAt": false,
+              "sourceArtworkUri": true,
+              "sourceArtworkSha256": true,
+              "preparedAt": true,
+              "sourceArtworkSizeBytes": true
             }
           }
         }
@@ -800,6 +867,9 @@
               "minLength": 1
             }
           }
+        },
+        "shareImage": {
+          "$ref": "#/$defs/posterAsset"
         }
       }
     }

@@ -47,7 +47,7 @@ export const MEDIA_FEATURES: MediaFeature[] = [
       item.contentType === "recipe" ? "Recipe" : "Short",
       item.summary,
       item.websitePath,
-      item.posterUrl
+      item.shareImage.url
     )
   ),
   createMediaFeature(

@@ -1,8 +1,8 @@
 {
   "$schema": "./short-form-catalog.schema.json",
   "schemaVersion": 2,
-  "revision": 8,
-  "lastVerifiedAt": "2026-10-14T03:22:57.706724+00:00",
+  "revision": 10,
+  "lastVerifiedAt": "2026-10-18T03:39:01.549Z",
   "authority": {
     "metadata": "publishing/short-form-catalog.json",
     "binaryMaster": "fingerprinted_project_dropbox_asset",
@@ -350,14 +350,16 @@
         "audioChannels": 2
       },
       "poster": {
-        "websitePath": "/images/shorts/nrf2-sprouts-turmeric-green-tea.jpg",
-        "sha256": "acd35674d179b0dcc633f3d1c0d6fc73479c399c264ff6509ed56a21ed746014",
-        "sizeBytes": 271674,
-        "width": 720,
-        "height": 1280,
-        "sourcePlatform": "local_master",
-        "sourceMasterSha256": "bc774fd4de6d68e592a0ca25e5f9547011439a8996466b5df9489be3f7ab2d2f",
-        "capturedAt": "2026-09-23T16:41:10.543088+00:00"
+        "websitePath": "/images/shorts/nrf2-sprouts-turmeric-green-tea-cover-20261014-v002.webp",
+        "sha256": "46f6f07b8089754c08b6edf24bdda3fc1d8b630d889862739399091ac34f1d45",
+        "sizeBytes": 442916,
+        "width": 941,
+        "height": 1672,
+        "sourcePlatform": "generated_artwork",
+        "sourceArtworkUri": "dropbox:Production/Short-form Current Release/publishing/cover_revision_20261014_v001/portraits/S16_COVER_CROP_SAFE_v003.png",
+        "sourceArtworkSha256": "d551359a456764f9f4c17bedabf9ad593e02f7faa5902a6f9b03b3eec41754d9",
+        "sourceArtworkSizeBytes": 2523949,
+        "preparedAt": "2026-10-14T20:28:01.025663+00:00"
       },
       "destinationCopy": {
         "instagramCaption": "Three familiar foods. One cellular pathway worth understanding.\n\nDr. David Musnick connects broccoli sprouts, turmeric and green tea with NRF2, a pathway involved in the body\u2019s own cellular defenses. The illustrated enzyme step explains why myrosinase matters when discussing sulforaphane.\n\nExplore the food-and-brain episode for the wider conversation.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #NRF2 #FoodAndTheBrain",
@@ -375,11 +377,11 @@
       "destinations": {
         "instagram": {
           "state": "published",
-          "publishedAt": "2026-09-23T17:01:57.000Z",
-          "verifiedAt": "2026-09-23T17:07:41.245447+00:00",
-          "mediaId": "3992665862275080626",
-          "shortcode": "DdozHKbvCGy",
-          "url": "https://www.instagram.com/reel/DdozHKbvCGy/",
+          "publishedAt": "2026-10-18T03:38:00.000Z",
+          "verifiedAt": "2026-10-18T03:39:01.549Z",
+          "mediaId": "4010380401552894107",
+          "shortcode": "Denu7owv6ib",
+          "url": "https://www.instagram.com/reel/Denu7owv6ib/",
           "remoteDurationSeconds": 80.633333,
           "remoteWidth": 720,
           "remoteHeight": 1280
@@ -409,6 +411,18 @@
           "id": "7688779190392425742",
           "url": "https://www.tiktok.com/@drmexperienced/video/7688779190392425742"
         }
+      },
+      "shareImage": {
+        "websitePath": "/images/shorts/nrf2-sprouts-turmeric-green-tea-share-20261014-v001.webp",
+        "sha256": "86a6163de1b246b09a07bdadaf6eb0f34e18b1a723c9ad22e32e5396479e8e6d",
+        "sizeBytes": 440052,
+        "width": 1672,
+        "height": 941,
+        "sourcePlatform": "generated_artwork",
+        "sourceArtworkUri": "dropbox:Production/Short-form Current Release/publishing/cover_revision_20261014_v001/share/S16_WEBSITE_SHARE_v001.png",
+        "sourceArtworkSha256": "87941823c542361f936f377bc4c1d51e210c217b04c68495e216de3c3203d57d",
+        "sourceArtworkSizeBytes": 2552091,
+        "preparedAt": "2026-10-14T19:57:20.978958+00:00"
       }
     },
     {

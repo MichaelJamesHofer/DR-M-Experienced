@@ -193,6 +193,9 @@ export function validateShortFormCatalog(catalog) {
     if (item.poster?.sourcePlatform === "local_master" && item.poster.sourceMasterSha256 !== item.master?.sha256) {
       errors.push(`${prefix} local poster must reference the exact verified master`);
     }
+    if (item.shareImage && item.shareImage.width <= item.shareImage.height) {
+      errors.push(`${prefix} share image must use a dedicated landscape composition`);
+    }
     const tiktok = item.destinations?.tiktok;
     if (tiktok?.publishedAtPrecision === "minute" &&
         (typeof tiktok.publishedAt !== "string" ||
@@ -409,7 +412,27 @@ export async function verifyShortFormCatalogFiles({
       }
     }
 
+    if (item.shareImage) {
+      const sharePath = path.resolve(publicRoot, item.shareImage.websitePath.replace(/^\//, ""));
+      const shareRelative = path.relative(path.resolve(publicRoot), sharePath);
+      if (shareRelative.startsWith("..") || path.isAbsolute(shareRelative)) {
+        problems.push(`${item.id} share image escapes the public directory`);
+      } else {
+        await verifyFile(sharePath, item.shareImage, `${item.id} share image`, problems);
+      }
+    }
+
     if (!verifyDropbox) continue;
+    for (const [role, artwork] of [["poster", item.poster], ["share image", item.shareImage]]) {
+      if (artwork?.sourcePlatform === "generated_artwork") {
+        await verifyFile(
+          resolveLogicalAsset(artwork.sourceArtworkUri, dropboxRoot),
+          { sha256: artwork.sourceArtworkSha256, sizeBytes: artwork.sourceArtworkSizeBytes },
+          `${item.id} ${role} generated source`,
+          problems
+        );
+      }
+    }
     await verifyFile(
       resolveLogicalAsset(item.master.uri, dropboxRoot),
       item.master,

@@ -6,6 +6,7 @@ type ShortMethod = { title: string; steps: string[]; tools?: string[]; note: str
 type ShortResource = { label: string; url: string; affiliate: boolean };
 type ShortVariation = { title: string; body: string[] };
 type ShortGuide = { websitePath: string; width: number; height: number; alt: string };
+type ShortShareImage = { url: string; width: number; height: number };
 
 export type ShortFormContent = {
   id: string;
@@ -27,6 +28,7 @@ export type ShortFormContent = {
   posterUrl: string;
   posterWidth: number;
   posterHeight: number;
+  shareImage: ShortShareImage;
   instagram: {
     mediaId: string;
     shortcode: string;
@@ -59,6 +61,7 @@ type CatalogItem = {
   guide?: ShortGuide;
   master: { durationSeconds: number };
   poster: { websitePath: string; width: number; height: number };
+  shareImage?: { websitePath: string; width: number; height: number };
   destinations: {
     instagram: {
       mediaId: string;
@@ -104,6 +107,11 @@ function projectShort(item: CatalogItem): ShortFormContent {
     posterUrl: item.poster.websitePath,
     posterWidth: item.poster.width,
     posterHeight: item.poster.height,
+    shareImage: {
+      url: (item.shareImage ?? item.poster).websitePath,
+      width: (item.shareImage ?? item.poster).width,
+      height: (item.shareImage ?? item.poster).height,
+    },
     instagram: item.destinations.instagram,
     vimeo,
     tiktok: item.destinations.tiktok,
