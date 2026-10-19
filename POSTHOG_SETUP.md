@@ -85,3 +85,19 @@ project masking preset set to Total privacy. Replay retention remains 30 days.
 Official references: [JavaScript SDK](https://posthog.com/docs/libraries/js),
 [session replay](https://posthog.com/docs/session-replay),
 [reverse proxy](https://posthog.com/docs/advanced/proxy).
+
+## Production verification receipt — October 19, 2026
+
+Repair PR #56 merged as `f39a88b0bd6ac62a97e2ab3d44fe39f4a326faf5`. Production run
+`39306905592` passed build, deployment and independent Apple-feed verification. The public
+bundle was independently checked for enabled replay/remote config, bundled recording settings,
+tab-scoped storage, safe events and the revised privacy notice.
+
+The signed-in project received a fresh pageview and `platform outbound clicked` from the
+controlled production visit, and recording `01a15589-2f9c-76f6-b756-b30dcb6eb3c0` appeared
+with five clicks and at least 2:10 duration. The first view also had a default greater-than-five
+active-seconds filter; short test recordings were inspected using greater-than-zero total duration.
+The embedded PostHog player then reported that its frame could not load in this Chrome session.
+A standalone request for the public player-frame URL succeeded. Actual replay rendering, masking
+of that received recording and raw snapshot export remain unverified; do not claim these passed.
+See `publishing/posthog-status.json` for the machine-readable receipt.
