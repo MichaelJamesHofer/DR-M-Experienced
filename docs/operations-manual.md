@@ -1142,47 +1142,26 @@ or a `NEXT_PUBLIC_*` variable.
 
 ### PostHog Production Verification
 
-The site sends privacy-sanitized `$pageview` events from its route tracker and
-explicitly enables `$pageleave`; autocapture, session recording, persistent
-identity, person profiles, and query-string collection remain disabled. The
-non-pull-request deployment runs `npm run verify:production-env` and fails before
-the production build when both `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` and legacy
-`NEXT_PUBLIC_POSTHOG_API_KEY` are absent or blank. Local and pull-request builds
-may remain keyless.
+The October 19, 2026 owner-requested repair enables masked replay with a bundled recorder,
+JSON remote configuration, tab-scoped anonymous sessionStorage and explicit episode, platform
+and partner-link events. The prior client disabled replay, remote config and recorder loading;
+PostHog project `294319` had recording enabled but no received sessions. Before repair its
+last-seven-days view showed 95 page views, 72 sessions and 71 temporary visitor identifiers.
+Ingestion was active. Cross-visit unique people and retention remain unsupported by tab-scoped
+identity. Do not treat those dashboard tiles as verified audience metrics.
 
-The approved low-cardinality conversion events are `newsletter subscribed`,
-`contact form submitted`, and `episode player opened`. Form events are emitted
-only after the backend accepts the submission. `episode player opened` means the
-visitor activated the poster and the lazy Vimeo iframe was requested; it is not
-evidence that video playback started. Event properties must remain within the
-privacy contract in `POSTHOG_SETUP.md` and the event plan in
-`docs/mobile-ux-and-analytics-study.md`.
+Follow `POSTHOG_SETUP.md` for the event contract, source-label allowlist, replay masking and
+verification steps. Keep `src/app/legal/privacy/page.tsx` consistent. The client blocks forms,
+inputs, editable areas and iframes in replay, masks text, strips snapshot URL queries and sensitive
+attributes, and excludes console/network-body/header/canvas capture. Person profiles, broad
+autocapture, surveys, experiments and remote dependency scripts remain disabled. Respect Do
+Not Track and preserve the project-level Discard client IP data setting.
 
-The authenticated Installation Health check on August 6, 2026 initially
-reported no events, an incomplete `$pageview` check, and no authorized URLs.
-The Actions project key was then configured and the apex plus `www` origins were
-authorized. Authenticated readback on August 7 confirmed the US project region
-and enabled `Discard client IP data`; cookieless server hash mode stays disabled
-because the client already uses memory-only identity. The deployed production
-probe sent a POST to `https://us.i.posthog.com/e/` and received HTTP 200. The
-refreshed Installation Health view now passes Event tracking 3/3: `$pageview`,
-`$pageleave`, and scroll depth. Authorized URLs also pass. Reverse proxy remains
-the only explicit configuration recommendation and is not configured. Production
-ingestion is verified. Authenticated readback also confirms dashboard `1086989`
-is named `Dr. M Growth Dashboard`, has its privacy-safe description, and contains
-DAU, WAU, growth accounting, retention, referring-domain, and pageview-funnel
-tiles.
-
-1. Confirm the Actions secret still exists without displaying its value.
-2. Confirm `https://drmexperienced.com` and `https://www.drmexperienced.com`
-   remain authorized in the PostHog project.
-3. Confirm a current production probe still returns HTTP 200 from the US
-   ingestion host and Installation Health remains green for all three events.
-4. Confirm the IP-discard setting remains enabled.
-5. Decide separately whether to implement the reverse proxy; do not mark it
-   configured until its production path is deployed and verified.
-6. Confirm dashboard `1086989` retains its six verified tiles and privacy-safe
-   description after future analytics changes.
+Production builds require either the preferred `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` or legacy
+`NEXT_PUBLIC_POSTHOG_API_KEY`; local/PR builds may remain keyless. Verify real new events and
+a playable recording in the signed-in project after deployment. A script request or a successful
+Pages build alone does not prove either. The reverse proxy remains unconfigured; this static
+GitHub Pages host requires managed-proxy DNS or an independently deployed edge proxy.
 
 ### Change And Deploy
 

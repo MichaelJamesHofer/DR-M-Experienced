@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "projectId": 294319,
+  "site": "https://drmexperienced.com",
+  "lastVerifiedAt": "2026-10-19",
+  "repairBranch": "codex/posthog-repair-20261019",
+  "status": "repair_ready_for_ci",
+  "baseline": {
+    "window": "last_7_days",
+    "pageviews": 95,
+    "sessions": 72,
+    "temporaryVisitorIds": 71,
+    "recordings": 0,
+    "allSourcesUnknown": true
+  },
+  "accountReadback": {
+    "recordingEnabled": true,
+    "samplingPercent": 100,
+    "minimumDuration": null,
+    "triggersConfigured": false,
+    "consoleCapture": false,
+    "networkCapture": false,
+    "headerCapture": false,
+    "bodyCapture": false,
+    "canvasCapture": false,
+    "maskingPreset": "total_privacy",
+    "retentionDays": 30,
+    "discardClientIpData": true
+  },
+  "clientRepair": {
+    "bundledRecorder": true,
+    "replayEnabled": true,
+    "remoteConfigEnabled": true,
+    "externalScriptLoading": false,
+    "anonymousPersistence": "sessionStorage",
+    "personProfiles": "never",
+    "respectDnt": true,
+    "sourceAttribution": "known_origins_and_fixed_labels_only"
+  },
+  "productionVerification": {
+    "deployedCommit": null,
+    "freshEventsVerified": false,
+    "playableRecordingVerified": false,
+    "reverseProxyConfigured": false
+  }
+}
