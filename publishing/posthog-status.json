@@ -4,7 +4,7 @@
   "site": "https://drmexperienced.com",
   "lastVerifiedAt": "2026-10-19",
   "repairBranch": "codex/posthog-repair-20261019",
-  "status": "repair_ready_for_ci",
+  "status": "production_collection_verified_playback_check_pending",
   "baseline": {
     "window": "last_7_days",
     "pageviews": 95,
@@ -38,9 +38,19 @@
     "sourceAttribution": "known_origins_and_fixed_labels_only"
   },
   "productionVerification": {
-    "deployedCommit": null,
-    "freshEventsVerified": false,
+    "deployedCommit": "f39a88b0bd6ac62a97e2ab3d44fe39f4a326faf5",
+    "freshEventsVerified": true,
     "playableRecordingVerified": false,
-    "reverseProxyConfigured": false
+    "reverseProxyConfigured": false,
+    "deploymentRun": "https://github.com/MichaelJamesHofer/DR-M-Experienced/actions/runs/39306905592",
+    "verifiedEventNames": [
+      "$pageview",
+      "platform outbound clicked"
+    ],
+    "recordingReceived": true,
+    "sessionRecordingId": "01a15589-2f9c-76f6-b756-b30dcb6eb3c0",
+    "recordingDurationSecondsObserved": 130,
+    "recordingClicksObserved": 5,
+    "playbackLimitation": "PostHog embedded replay player frame failed to initialize in the attended Chrome session; the standalone frame URL returned HTTP 200. Collection and the recording row are verified; visual replay and raw snapshot export are not yet verified."
   }
 }
