@@ -45,7 +45,81 @@ const REFERRER_PROPERTIES = new Set([
   "referrer",
   "referring_domain",
 ]);
-const URL_PROPERTY = /url/i;
+const URL_PROPERTY = /url|^(?:href|src|srcset)$/i;
+const KNOWN_REFERRERS = new Set([
+  "google.com",
+  "bing.com",
+  "duckduckgo.com",
+  "search.yahoo.com",
+  "youtube.com",
+  "youtu.be",
+  "instagram.com",
+  "l.instagram.com",
+  "facebook.com",
+  "l.facebook.com",
+  "lm.facebook.com",
+  "m.facebook.com",
+  "tiktok.com",
+  "t.co",
+  "x.com",
+  "twitter.com",
+  "vimeo.com",
+  "open.spotify.com",
+  "podcasts.apple.com",
+  "rumble.com",
+  "drmexperienced.com",
+]);
+const SAFE_CAMPAIGNS: Record<string, Set<string>> = {
+  utm_source: new Set([
+    "google",
+    "bing",
+    "youtube",
+    "instagram",
+    "facebook",
+    "tiktok",
+    "spotify",
+    "apple",
+    "vimeo",
+    "rumble",
+    "newsletter",
+    "email",
+    "x",
+    "twitter",
+  ]),
+  utm_medium: new Set([
+    "organic",
+    "social",
+    "paid_social",
+    "email",
+    "referral",
+    "video",
+    "cpc",
+    "paid",
+  ]),
+};
+
+function safeAttribution(key: string, value: unknown): string | undefined {
+  if (typeof value !== "string") return;
+  const normalized = normalizedPropertyKey(key);
+  if (SAFE_CAMPAIGNS[normalized]) {
+    const label = value.toLowerCase();
+    return SAFE_CAMPAIGNS[normalized].has(label) ? label : undefined;
+  }
+  if (!isReferrerProperty(key)) return;
+  if (value === "$direct") return value;
+  try {
+    const url = new URL(
+      normalized === "referring_domain" ? `https://${value}` : value,
+    );
+    if (
+      !/^https?:$/.test(url.protocol) ||
+      !KNOWN_REFERRERS.has(url.hostname.replace(/^www\./, ""))
+    ) return;
+    return normalized === "referring_domain" ? url.hostname : `${url.origin}/`;
+  } catch {
+    return;
+  }
+}
 
 function normalizedPropertyKey(key: string): string {
   return key
@@ -90,13 +164,47 @@ export function sanitizeAnalyticsProperties(
   const sanitized: AnalyticsProperties = {};
 
   for (const [key, value] of Object.entries(properties)) {
-    if (
-      isReferrerProperty(key) ||
-      isQueryDerivedProperty(key) ||
-      isSensitiveValueProperty(key)
-    ) continue;
-    sanitized[key] = sanitizeAnalyticsValue(value, key);
+    if (isReferrerProperty(key) || isQueryDerivedProperty(key)) {
+      const attribution = safeAttribution(key, value);
+      if (attribution !== undefined) sanitized[key] = attribution;
+      continue;
+    }
+    if (isSensitiveValueProperty(key)) continue;
+    sanitized[key] = key === "$snapshot_data"
+      ? sanitizeReplaySnapshot(value)
+      : sanitizeAnalyticsValue(value, key);
   }
 
   return sanitized;
+}
+
+// rrweb snapshots need their own guard: DOM URL attributes do not use SDK property names.
+export function sanitizeReplaySnapshot(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(sanitizeReplaySnapshot);
+  if (!isRecord(value)) return value;
+  const result: AnalyticsProperties = {};
+  for (const [key, item] of Object.entries(value)) {
+    if (key === "attributes" && isRecord(item)) {
+      const attributes: AnalyticsProperties = {};
+      for (const [attribute, content] of Object.entries(item)) {
+        if (
+          /^(?:value|placeholder|title|alt|aria-label|aria-valuetext|data-)/i
+            .test(attribute)
+        ) continue;
+        if (
+          /^(?:href|xlink:href|src|srcset|action|formaction)$/i.test(
+            attribute,
+          ) &&
+          typeof content === "string"
+        ) {
+          if (/^(?:mailto|tel|data|javascript):/i.test(content)) continue;
+          attributes[attribute] = content.replace(/[?#].*$/, "");
+        } else attributes[attribute] = content;
+      }
+      result[key] = attributes;
+    } else if (key === "href" && typeof item === "string") {
+      result[key] = item.replace(/[?#].*$/, "");
+    } else result[key] = sanitizeReplaySnapshot(item);
+  }
+  return result;
 }

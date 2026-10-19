@@ -8,6 +8,7 @@ import {
   type AnalyticsProperties,
 } from '@/lib/analytics-privacy';
 import type { CaptureAnalyticsEvent } from '@/lib/analytics-events';
+import { getNavigationAnalyticsEvent } from '@/lib/analytics-navigation';
 import {
   buildPathOnlyPageviewUrl,
   POSTHOG_PRIVACY_OPTIONS,
@@ -60,6 +61,32 @@ function PostHogTracker({ client }: { client: PostHogClient }) {
     }
   }, [client, pathname]);
 
+  useEffect(() => {
+    function trackLink(event: MouseEvent) {
+      if (event.type === 'auxclick' && event.button !== 1) return;
+      if (!(event.target instanceof Element)) return;
+      const anchor = event.target.closest('a[href]');
+      if (!(anchor instanceof HTMLAnchorElement)) return;
+      if (anchor.closest('form, [data-private]')) return;
+      const placement = anchor.closest('header') ? 'header'
+        : anchor.closest('footer') ? 'footer' : 'content';
+      const tracked = getNavigationAnalyticsEvent({
+        href: anchor.href,
+        origin: window.location.origin,
+        placement,
+        productSlug: anchor.dataset.analyticsProduct,
+        brandSlug: anchor.dataset.analyticsBrand,
+      });
+      if (tracked) client.capture(tracked.event, tracked.properties);
+    }
+    document.addEventListener('click', trackLink, true);
+    document.addEventListener('auxclick', trackLink, true);
+    return () => {
+      document.removeEventListener('click', trackLink, true);
+      document.removeEventListener('auxclick', trackLink, true);
+    };
+  }, [client]);
+
   return null;
 }
 
@@ -75,7 +102,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
     if (!runtimeConfig || typeof window === 'undefined') return;
 
     let active = true;
-    void import('posthog-js')
+    void import('posthog-js/dist/module.full.no-external')
       .then(({ default: posthog }) => {
         if (!active) return;
         if (posthog.__loaded) {

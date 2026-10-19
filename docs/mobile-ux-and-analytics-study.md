@@ -123,7 +123,8 @@ to merchant, newsletter completion, contact completion, and mobile menu traversa
 
 Event properties are deliberately low-cardinality and non-personal. Never emit
 form values, search text, health terms, emails, names, messages, full outbound
-URLs, external referrers, query strings, fragments, or campaign IDs.
+URLs, referrer paths, arbitrary referrers/campaigns, query strings, fragments, or click IDs.
+The October 19 repair allows only known source origins and fixed source/medium labels.
 
 | Event | Status | Trigger | Safe properties |
 | --- | --- | --- | --- |
@@ -132,9 +133,9 @@ URLs, external referrers, query strings, fragments, or campaign IDs.
 | `newsletter subscribed` | Implemented | Backend accepts form | `placement` |
 | `contact form submitted` | Implemented | Backend accepts form | fixed `subject` enum |
 | `episode player opened` | Implemented | Poster activated and Vimeo iframe requested | `video_id` |
-| `episode opened` | Planned | Episode detail navigation | `episode_slug`, `placement` |
-| `platform outbound clicked` | Planned | Platform link activation | `platform`, `placement` |
-| `affiliate product clicked` | Planned | Merchant link activation | product/brand slugs, `placement` |
+| `episode opened` | Implemented | Episode detail navigation | `episode_slug`, `placement` |
+| `platform outbound clicked` | Implemented | Platform link activation | `platform`, `placement` |
+| `affiliate product clicked` | Implemented | Merchant link activation | product/brand slugs, `placement` |
 | `media item opened` | Implemented | Short/media poster activated and Vimeo iframe requested | `media_type`, `platform` |
 | `content search used` | Planned | Debounced search commitment | content type, `has_results` only |
 | `content filter applied` | Planned | Filter state committed | content type, facet count only |
@@ -165,8 +166,9 @@ platform outbound clicks, newsletter conversion, contact conversion by subject,
 and affiliate click-through by product. Compare mobile and desktop viewport
 classes only after the property is intentionally added and documented.
 
-The current memory-only PostHog identity does not support reliable unique-user,
-returning-visitor, cross-session retention, or campaign-attribution reporting.
+The current tab-scoped PostHog sessionStorage identity does not support reliable cross-visit
+unique-user, returning-visitor or retention reporting. Known source origins and allowlisted
+campaign source/medium labels are retained; arbitrary attribution remains excluded.
 Use event counts and within-session funnels. Any persistence or attribution
 change requires owner approval and a privacy-notice update.
 
@@ -180,8 +182,8 @@ Before calling analytics operational:
 2. Confirm `NEXT_PUBLIC_POSTHOG_HOST` matches the actual PostHog region.
 3. Deploy, then verify sanitized events in Live events using a controlled test.
 4. Confirm project-level client IP capture is set to discard.
-5. Confirm autocapture, session replay, person profiles, surveys, and experiments
-   remain disabled in code and are not relied on by a dashboard.
+5. Confirm masked session replay and JSON remote configuration work, while broad autocapture,
+   person profiles, surveys, experiments and external script loading remain disabled.
 6. Record dashboard links and the last verification date in this document or the
    operations manual without recording tokens.
 

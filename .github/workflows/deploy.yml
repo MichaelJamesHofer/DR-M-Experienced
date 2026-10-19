@@ -66,8 +66,8 @@ jobs:
       - name: Check Edge Function
         run: |
           deno check --config supabase/functions/deno.json --lock supabase/functions/deno.lock supabase/functions/form-submit/index.ts
-          deno lint --config supabase/functions/deno.json supabase/functions/form-submit src/lib/analytics-privacy.ts src/lib/analytics-privacy_test.ts src/lib/posthog-runtime.ts src/lib/posthog-runtime_test.ts
-          deno test --config supabase/functions/deno.json --lock supabase/functions/deno.lock supabase/functions/form-submit src/lib/analytics-privacy_test.ts src/lib/posthog-runtime_test.ts
+          deno lint --config supabase/functions/deno.json supabase/functions/form-submit src/lib/analytics-privacy.ts src/lib/analytics-privacy_test.ts src/lib/posthog-runtime.ts src/lib/posthog-runtime_test.ts src/lib/analytics-navigation.ts src/lib/analytics-navigation_test.ts
+          deno test --config supabase/functions/deno.json --lock supabase/functions/deno.lock supabase/functions/form-submit src/lib/analytics-privacy_test.ts src/lib/posthog-runtime_test.ts src/lib/analytics-navigation.ts src/lib/analytics-navigation_test.ts
 
       - name: Test database security
         run: npm run test:database-security

@@ -697,6 +697,8 @@ function ProductCard({
             <div className="border-t border-border pt-4 sm:flex sm:justify-end">
               <a
                 href={productUrl}
+                data-analytics-product={product.slug}
+                data-analytics-brand={product.slug}
                 target="_blank"
                 rel="sponsored noopener noreferrer"
                 aria-label={`Visit ${companyName}`}

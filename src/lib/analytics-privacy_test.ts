@@ -9,10 +9,10 @@ Deno.test("removes URL queries, fragments, and campaign properties", () => {
     $current_url:
       "https://drmexperienced.com/episodes/example/?email=test#details",
     $initial_current_url: "https://drmexperienced.com/?utm_source=newsletter",
-    $utm_source: "newsletter",
+    $utm_source: "private-person",
     $initial_utm_campaign: "launch",
-    $session_entry_utm_source: "newsletter",
-    $initial_session_entry_utm_medium: "email",
+    $session_entry_utm_source: "private-person",
+    $initial_session_entry_utm_medium: "private-person",
     gclid: "tracking-id",
     $initial_fbclid: "tracking-id",
     $session_entry_gclid: "tracking-id",
@@ -128,7 +128,10 @@ Deno.test("removes common personal and free-text property values", () => {
   });
 
   assert(!("email" in sanitized), "email was retained");
-  assert(!("$initial_email_address" in sanitized), "initial email was retained");
+  assert(
+    !("$initial_email_address" in sanitized),
+    "initial email was retained",
+  );
   assert(!("full_name" in sanitized), "full name was retained");
   assert(!("message" in sanitized), "message was retained");
   assert(!("search_query" in sanitized), "search query was retained");
@@ -136,6 +139,64 @@ Deno.test("removes common personal and free-text property values", () => {
   const nested = sanitized.nested as Record<string, unknown>;
   assert(!("phone_number" in nested), "nested phone number was retained");
   assert(!("query" in nested), "nested query was retained");
-  assert(nested.product_slug === "example-product", "safe nested slug was removed");
+  assert(
+    nested.product_slug === "example-product",
+    "safe nested slug was removed",
+  );
   assert(sanitized.subject === "podcast", "safe subject enum was removed");
+});
+
+Deno.test("preserves only fixed campaign labels and known source origins", () => {
+  const sanitized = sanitizeAnalyticsProperties({
+    $referrer:
+      "https://www.instagram.com/private-profile/?token=secret#private",
+    $session_entry_referring_domain: "www.instagram.com",
+    $utm_source: "instagram",
+    $utm_medium: "social",
+    $utm_campaign: "private-health-topic",
+    $initial_referrer: "https://private-person.example/health-record",
+  });
+  assert(
+    sanitized.$referrer === "https://www.instagram.com/",
+    "source path was retained",
+  );
+  assert(
+    sanitized.$utm_source === "instagram" && sanitized.$utm_medium === "social",
+    "safe labels were discarded",
+  );
+  assert(
+    !("$utm_campaign" in sanitized) && !("$initial_referrer" in sanitized),
+    "unapproved attribution was retained",
+  );
+});
+
+Deno.test("replay snapshots remove form and URL attributes recursively", () => {
+  const sanitized = sanitizeAnalyticsProperties({
+    $snapshot_data: [{
+      type: 2,
+      data: {
+        href: "https://drmexperienced.com/?email=private#notes",
+        node: {
+          attributes: {
+            href: "/episodes/example/?token=secret#note",
+            value: "private email",
+            "aria-label": "private name",
+            "data-email": "private",
+            class: "card",
+            src: "data:image/png;base64,private",
+          },
+          childNodes: [],
+        },
+      },
+    }],
+  });
+  const serialized = JSON.stringify(sanitized);
+  assert(
+    !serialized.includes("private") && !serialized.includes("secret"),
+    "snapshot leaked private attributes",
+  );
+  assert(
+    serialized.includes("/episodes/example/") && serialized.includes("card"),
+    "snapshot structure was lost",
+  );
 });
