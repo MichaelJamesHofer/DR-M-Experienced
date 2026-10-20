@@ -1,8 +1,8 @@
 {
   "$schema": "./short-form-catalog.schema.json",
   "schemaVersion": 2,
-  "revision": 10,
-  "lastVerifiedAt": "2026-10-18T03:39:01.549Z",
+  "revision": 11,
+  "lastVerifiedAt": "2026-10-20T16:42:48.797045+00:00",
   "authority": {
     "metadata": "publishing/short-form-catalog.json",
     "binaryMaster": "fingerprinted_project_dropbox_asset",
@@ -498,12 +498,12 @@
       "destinations": {
         "instagram": {
           "state": "published",
-          "publishedAt": "2026-09-23T17:08:00.000Z",
-          "verifiedAt": "2026-09-23T17:09:39.556390+00:00",
-          "mediaId": "3992668931851413630",
-          "shortcode": "Ddozz1Mveh-",
-          "url": "https://www.instagram.com/reel/Ddozz1Mveh-/",
-          "remoteDurationSeconds": 81.2,
+          "publishedAt": "2026-10-20T16:39:44.000Z",
+          "verifiedAt": "2026-10-20T16:42:48.797045+00:00",
+          "mediaId": "4012223412284793808",
+          "shortcode": "DeuR--QvaPQ",
+          "url": "https://www.instagram.com/reel/DeuR--QvaPQ/",
+          "remoteDurationSeconds": 81.216,
           "remoteWidth": 720,
           "remoteHeight": 1280
         },
