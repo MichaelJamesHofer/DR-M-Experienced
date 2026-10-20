@@ -1,8 +1,8 @@
 {
   "$schema": "./short-form-catalog.schema.json",
   "schemaVersion": 2,
-  "revision": 10,
-  "lastVerifiedAt": "2026-10-18T03:39:01.549Z",
+  "revision": 11,
+  "lastVerifiedAt": "2026-10-20T16:42:48.797045+00:00",
   "authority": {
     "metadata": "publishing/short-form-catalog.json",
     "binaryMaster": "fingerprinted_project_dropbox_asset",
@@ -471,14 +471,16 @@
         "audioChannels": 2
       },
       "poster": {
-        "websitePath": "/images/shorts/blue-light-glasses-amber-red-fit-over.jpg",
-        "sha256": "d556990e295f7709d7e90af879eadec10055692bc00aa1d6325494414658362d",
-        "sizeBytes": 161197,
-        "width": 720,
-        "height": 1280,
-        "sourcePlatform": "local_master",
-        "sourceMasterSha256": "abbb5baf9cf5376dfcf355699a7302ccf1480fa51fedee1cc281f6143e9d4ce5",
-        "capturedAt": "2026-09-23T16:41:10.683386+00:00"
+        "websitePath": "/images/shorts/blue-light-glasses-amber-red-fit-over-cover-20261014-v001.webp",
+        "sha256": "ceb222dc7394b79b2d0ad4e535e3d44631dc755362520a70465fdfbda360f6d3",
+        "sizeBytes": 219790,
+        "width": 941,
+        "height": 1672,
+        "sourcePlatform": "generated_artwork",
+        "sourceArtworkUri": "dropbox:Production/Short-form Current Release/publishing/cover_revision_20261014_v001/portraits/S23_COVER_CROP_SAFE_v001.png",
+        "sourceArtworkSha256": "cab0f3e0742e50fdfb5725ee0bfab9afef90b1b775b42d152ed9aace9b1e784e",
+        "sourceArtworkSizeBytes": 1911021,
+        "preparedAt": "2026-10-14T19:57:20.978958+00:00"
       },
       "destinationCopy": {
         "instagramCaption": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you.\n\nKeep your prescription glasses. See how the fit-over option works.\n\nDr. David Musnick demonstrates amber and red BlockBlueLight glasses and discusses how he uses them in an evening routine. The reel shows the difference between the lenses and the fit-over design.\n\nFind BlockBlueLight in Dr. M\u2019s affiliate guide, then explore the insomnia episode.\nhttps://drmexperienced.com/affiliates/#block-blue-light\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #EveningRoutine #BlueLightGlasses",
@@ -496,12 +498,12 @@
       "destinations": {
         "instagram": {
           "state": "published",
-          "publishedAt": "2026-09-23T17:08:00.000Z",
-          "verifiedAt": "2026-09-23T17:09:39.556390+00:00",
-          "mediaId": "3992668931851413630",
-          "shortcode": "Ddozz1Mveh-",
-          "url": "https://www.instagram.com/reel/Ddozz1Mveh-/",
-          "remoteDurationSeconds": 81.2,
+          "publishedAt": "2026-10-20T16:39:44.000Z",
+          "verifiedAt": "2026-10-20T16:42:48.797045+00:00",
+          "mediaId": "4012223412284793808",
+          "shortcode": "DeuR--QvaPQ",
+          "url": "https://www.instagram.com/reel/DeuR--QvaPQ/",
+          "remoteDurationSeconds": 81.216,
           "remoteWidth": 720,
           "remoteHeight": 1280
         },
@@ -523,7 +525,19 @@
           "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         }
       },
-      "affiliateDisclosure": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you."
+      "affiliateDisclosure": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you.",
+      "shareImage": {
+        "websitePath": "/images/shorts/blue-light-glasses-amber-red-fit-over-share-20261014-v001.webp",
+        "sha256": "c2cae6bb65684c99c8522872033248ce45d27f5fa1029eb117fb587f42fdbb05",
+        "sizeBytes": 245896,
+        "width": 1672,
+        "height": 941,
+        "sourcePlatform": "generated_artwork",
+        "sourceArtworkUri": "dropbox:Production/Short-form Current Release/publishing/cover_revision_20261014_v001/share/S23_WEBSITE_SHARE_v001.png",
+        "sourceArtworkSha256": "bee52c4d2e5a11fd358bb79b038b8f6e0aeb382c5ab6a601aed80a274facf9e7",
+        "sourceArtworkSizeBytes": 1988018,
+        "preparedAt": "2026-10-14T19:57:20.978958+00:00"
+      }
     },
     {
       "id": "short-amber-reading-light-evening-routine",
