@@ -41,27 +41,28 @@
   "dependencies": {
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
-    "fast-xml-parser": "^5.10.1",
-    "lucide-react": "^0.468.0",
-    "next": "15.5.27",
-    "posthog-js": "^1.331.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "fast-xml-parser": "^5.11.2",
+    "lucide-react": "^1.61.0",
+    "next": "15.5.28",
+    "posthog-js": "^1.438.16",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
-    "eslint-config-next": "15.5.27",
-    "postcss": "8.5.25",
-    "tailwindcss": "^3.4.1",
+    "eslint-config-next": "15.5.28",
+    "postcss": "8.5.31",
+    "tailwindcss": "^3.4.19",
     "typescript": "^5"
   },
   "overrides": {
     "braces": "npm:@dieub/braces-depth-guard@3.0.3-pn.0",
-    "postcss": "8.5.25",
-    "postcss-selector-parser": "7.1.6",
+    "dompurify": "3.4.17",
+    "postcss": "8.5.31",
+    "postcss-selector-parser": "7.1.7",
     "sharp": "0.35.5",
     "source-map-js": "1.2.2"
   }

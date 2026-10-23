@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import assert from "node:assert/strict";
 import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
@@ -132,4 +133,19 @@ test("Tailwind 3 retains hover, group, arbitrary and responsive variants with th
   const motion = rules.get(".motion-reduce\\:transition-none");
   assert.equal(motion.first.value, "none");
   assert.equal(motion.parent.params, "(prefers-reduced-motion: reduce)");
+});
+
+test("Patched security versions are installed across Next, PostHog DOMPurify, PostCSS and selector parser", async () => {
+  const nextPkg = require("next/package.json");
+  const postcssPkg = tailwindRequire("postcss/package.json");
+  const selectorParserPkg = tailwindRequire("postcss-selector-parser/package.json");
+  const posthogRequire = createRequire(require.resolve("posthog-js/package.json"));
+  const dompurifyEntry = posthogRequire.resolve("dompurify");
+  const dompurifyPkgPath = path.join(path.dirname(dompurifyEntry), "..", "package.json");
+  const dompurifyPkg = JSON.parse(await fs.promises.readFile(dompurifyPkgPath, "utf8"));
+
+  assert.equal(nextPkg.version, "15.5.28");
+  assert.equal(postcssPkg.version, "8.5.31");
+  assert.equal(selectorParserPkg.version, "7.1.7");
+  assert.equal(dompurifyPkg.version, "3.4.17");
 });
