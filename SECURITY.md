@@ -108,6 +108,24 @@ build checks the actual site's styles. The existing braces backport and audit
 threshold remain in place. Review this parser override when Tailwind 3's
 dependencies adopt the patched parser upstream.
 
+### October 22 dependency and security update
+
+Last verified: October 22, 2026.
+
+Update Next and its lint configuration to `15.5.28` for the
+[Image Optimization SVG advisory](https://github.com/advisories/GHSA-2464-fhr4-w9xw)
+and [App Router Server Actions DoS advisory](https://github.com/advisories/GHSA-p3m5-59mp-jv5r).
+Update `posthog-js` to `^1.438.16` and pin `dompurify` to `3.4.17` for the
+[DOMPurify shadow-root template bypass](https://github.com/advisories/GHSA-cg2g-xh64-v4q7),
+[detached-subtree `IN_PLACE` hook handler advisory](https://github.com/advisories/GHSA-mrv2-3pqr-j5jr),
+and [XHTML SMIL `href` guard advisory](https://github.com/advisories/GHSA-c6gr-qvv4-5v3f).
+
+Compatible dependencies are updated in lockstep without changing major framework
+contracts: `postcss@8.5.31`, `postcss-selector-parser@7.1.7`, `tailwindcss@^3.4.19`,
+`fast-xml-parser@^5.11.2`, `lucide-react@^1.61.0`, `react@18.3.1`, `react-dom@18.3.1`,
+`@types/node@20.19.43`, `@types/react@18.3.31`, and Edge Function
+`jsr:@supabase/supabase-js@2.118.0`.
+
 ## Reporting A Vulnerability
 
 Do not disclose suspected credentials or exploitable details in a public issue. Use GitHub's private vulnerability-reporting flow when available, or contact the repository owner privately through GitHub.
