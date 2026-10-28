@@ -135,17 +135,19 @@ test("Tailwind 3 retains hover, group, arbitrary and responsive variants with th
   assert.equal(motion.parent.params, "(prefers-reduced-motion: reduce)");
 });
 
-test("Patched security versions are installed across Next, PostHog DOMPurify, PostCSS and selector parser", async () => {
+test("Patched security versions are installed across Next, PostHog DOMPurify, PostCSS, selector parser and fast-uri", async () => {
   const nextPkg = require("next/package.json");
   const postcssPkg = tailwindRequire("postcss/package.json");
   const selectorParserPkg = tailwindRequire("postcss-selector-parser/package.json");
+  const fastUriPkg = require("fast-uri/package.json");
   const posthogRequire = createRequire(require.resolve("posthog-js/package.json"));
   const dompurifyEntry = posthogRequire.resolve("dompurify");
   const dompurifyPkgPath = path.join(path.dirname(dompurifyEntry), "..", "package.json");
   const dompurifyPkg = JSON.parse(await fs.promises.readFile(dompurifyPkgPath, "utf8"));
 
   assert.equal(nextPkg.version, "15.5.28");
-  assert.equal(postcssPkg.version, "8.5.31");
+  assert.equal(postcssPkg.version, "8.5.32");
   assert.equal(selectorParserPkg.version, "7.1.7");
   assert.equal(dompurifyPkg.version, "3.4.17");
+  assert.equal(fastUriPkg.version, "3.1.9");
 });
