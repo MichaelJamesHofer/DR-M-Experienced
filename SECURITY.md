@@ -126,6 +126,25 @@ contracts: `postcss@8.5.31`, `postcss-selector-parser@7.1.7`, `tailwindcss@^3.4.
 `@types/node@20.19.43`, `@types/react@18.3.31`, and Edge Function
 `jsr:@supabase/supabase-js@2.118.0`.
 
+### October 28 dependency and CVE review
+
+Last verified: October 28, 2026.
+
+Verified that `fast-uri@3.1.9` covers the October 23 URI validation advisories
+([GHSA-w74x-v6f9-j3xg](https://github.com/advisories/GHSA-w74x-v6f9-j3xg),
+[GHSA-xhq7-xmqj-769h](https://github.com/advisories/GHSA-xhq7-xmqj-769h),
+[GHSA-wjr9-j795-jxcr](https://github.com/advisories/GHSA-wjr9-j795-jxcr), and
+[GHSA-333x-w4r6-6crp](https://github.com/advisories/GHSA-333x-w4r6-6crp)).
+Although [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm)
+was withdrawn on October 23, 2026, upstream `braces` remains at `3.0.3` without
+a nesting depth guard; the `npm:@dieub/braces-depth-guard@3.0.3-pn.0` override
+and depth-guard regression tests remain in place until an upstream release
+supersedes `3.0.3`.
+
+Compatible packages are updated to `postcss@8.5.32`, `posthog-js@^1.441.2`,
+`lucide-react@^1.63.0`, `@typescript-eslint/*@8.72.1`, `ignore@7.0.14`, and
+`@napi-rs/wasm-runtime@1.2.6`.
+
 ## Reporting A Vulnerability
 
 Do not disclose suspected credentials or exploitable details in a public issue. Use GitHub's private vulnerability-reporting flow when available, or contact the repository owner privately through GitHub.
