@@ -585,14 +585,16 @@
         "audioChannels": 2
       },
       "poster": {
-        "websitePath": "/images/shorts/amber-reading-light-evening-routine.jpg",
-        "sha256": "0cd140d926718f3ee990b6cb68cb3db30b3cbfccc3fda30e8470d5ecd311a37f",
-        "sizeBytes": 159330,
-        "width": 720,
-        "height": 1280,
-        "sourcePlatform": "local_master",
-        "sourceMasterSha256": "2e3a84b690968216daad1e036d25f066853a057f1bbc17a08ca72e2e850bfecb",
-        "capturedAt": "2026-09-23T16:46:15.500495+00:00"
+        "websitePath": "/images/shorts/amber-reading-light-evening-routine-cover-20261014-v002.webp",
+        "sha256": "be6db688abeece17a12c0ff2605980d25513bbd8051c717e900be3719385ad1c",
+        "sizeBytes": 201462,
+        "width": 941,
+        "height": 1672,
+        "sourcePlatform": "generated_artwork",
+        "sourceArtworkUri": "dropbox:Production/Short-form Current Release/publishing/cover_revision_20261014_v001/portraits/S24_COVER_CROP_SAFE_v003.png",
+        "sourceArtworkSha256": "ef50b5a8b63c370d52c6898a687766be1c68889687e8b1ba86577e6c9c3778a3",
+        "sourceArtworkSizeBytes": 1796753,
+        "preparedAt": "2026-11-02T18:44:41.190593+00:00"
       },
       "destinationCopy": {
         "instagramCaption": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you.\n\nLight the page without lighting up the whole room.\n\nDr. David Musnick shows a clip-on amber reading light and explains how it fits into his evening routine. A practical demonstration for anyone comparing bedside lighting and reading setups.\n\nFind BlockBlueLight in Dr. M\u2019s affiliate guide. The insomnia episode adds more context.\nhttps://drmexperienced.com/affiliates/#block-blue-light\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #ReadingLight #EveningRoutine",
@@ -637,7 +639,19 @@
           "verifiedAt": "2026-09-23T18:12:03.286915+00:00"
         }
       },
-      "affiliateDisclosure": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you."
+      "affiliateDisclosure": "Affiliate links: Dr. M Experienced may earn a commission if you purchase through our links, at no extra cost to you.",
+      "shareImage": {
+        "websitePath": "/images/shorts/amber-reading-light-evening-routine-share-20261014-v001.webp",
+        "sha256": "356f8bbc34fa2239d5326b059a864a453613483b3eb95e1df223f2fefdf7d009",
+        "sizeBytes": 250534,
+        "width": 1672,
+        "height": 941,
+        "sourcePlatform": "generated_artwork",
+        "sourceArtworkUri": "dropbox:Production/Short-form Current Release/publishing/cover_revision_20261014_v001/share/S24_WEBSITE_SHARE_v001.png",
+        "sourceArtworkSha256": "7026ad662749d4d0ac3d4487804eb69a0aab1ba7fa915b6990e6ba59bc8c5f6b",
+        "sourceArtworkSizeBytes": 1939159,
+        "preparedAt": "2026-11-02T18:44:41.190887+00:00"
+      }
     },
     {
       "id": "short-capers-apples-onions-quercetin",
