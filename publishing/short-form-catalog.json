@@ -1,8 +1,8 @@
 {
   "$schema": "./short-form-catalog.schema.json",
   "schemaVersion": 2,
-  "revision": 11,
-  "lastVerifiedAt": "2026-10-20T16:42:48.797045+00:00",
+  "revision": 12,
+  "lastVerifiedAt": "2026-11-05T04:48:56.367163+00:00",
   "authority": {
     "metadata": "publishing/short-form-catalog.json",
     "binaryMaster": "fingerprinted_project_dropbox_asset",
@@ -612,14 +612,14 @@
       "destinations": {
         "instagram": {
           "state": "published",
-          "publishedAt": "2026-09-23T17:12:03.000Z",
-          "verifiedAt": "2026-09-23T17:12:59.104733+00:00",
-          "mediaId": "3992670952977367878",
-          "shortcode": "Ddo0RPhPING",
-          "url": "https://www.instagram.com/reel/Ddo0RPhPING/",
+          "publishedAt": "2026-11-05T04:45:34.000Z",
+          "verifiedAt": "2026-11-05T04:48:56.367163+00:00",
+          "shortcode": "DfWNAb-vFSV",
+          "url": "https://www.instagram.com/reel/DfWNAb-vFSV/",
           "remoteDurationSeconds": 90.166666,
           "remoteWidth": 720,
-          "remoteHeight": 1280
+          "remoteHeight": 1280,
+          "mediaId": "4023460521750320277"
         },
         "vimeo": {
           "state": "not_published_as_short",
