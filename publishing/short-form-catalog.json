@@ -1,7 +1,7 @@
 {
   "$schema": "./short-form-catalog.schema.json",
   "schemaVersion": 2,
-  "revision": 12,
+  "revision": 13,
   "lastVerifiedAt": "2026-11-05T04:48:56.367163+00:00",
   "authority": {
     "metadata": "publishing/short-form-catalog.json",
@@ -699,14 +699,16 @@
         "audioChannels": 2
       },
       "poster": {
-        "websitePath": "/images/shorts/capers-apples-onions-quercetin.jpg",
-        "sha256": "46a24db9659ee106ea4c63d632cfc18ef725214ae53f41bc6eb136093e7b5f0b",
-        "sizeBytes": 277924,
-        "width": 720,
-        "height": 1280,
-        "sourcePlatform": "local_master",
-        "sourceMasterSha256": "27146c705b537cbaaafbb12637423c89b9847993487ec10ef02d4396c8511586",
-        "capturedAt": "2026-09-23T16:41:11.070022+00:00"
+        "websitePath": "/images/shorts/capers-apples-onions-quercetin-cover-20261014-v001.webp",
+        "sha256": "a64d1197b789cb9a50f8d83a7308c2affb0e22350c903a44c77f4070790ea84c",
+        "sizeBytes": 402302,
+        "width": 941,
+        "height": 1672,
+        "sourcePlatform": "generated_artwork",
+        "sourceArtworkUri": "dropbox:Production/Short-form Current Release/publishing/cover_revision_20261014_v001/portraits/S02_COVER_CROP_SAFE_v001.png",
+        "sourceArtworkSha256": "4a80010d9849690e98319fc8f17aaa174ca5d2b8c8590bdbde8a6e0f09702d66",
+        "sourceArtworkSizeBytes": 2506928,
+        "preparedAt": "2026-10-14T19:57:20.978958+00:00"
       },
       "destinationCopy": {
         "instagramCaption": "What do capers and apples have in common?\n\nDr. David Musnick introduces quercetin through familiar foods: capers, onions and apples. He also shares simple ways to use capers with eggs, vegetables or chicken.\n\nSave these food ideas, then explore the food-and-brain episode.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #Quercetin #FoodIdeas",
@@ -758,6 +760,18 @@
           "id": "7688780768801246478",
           "url": "https://www.tiktok.com/@drmexperienced/video/7688780768801246478"
         }
+      },
+      "shareImage": {
+        "websitePath": "/images/shorts/capers-apples-onions-quercetin-share-20261014-v001.webp",
+        "sha256": "fd150066b3e3a56001df782a94483b1a2ee6cf9dcf996b1bc3c9449734e16f8e",
+        "sizeBytes": 411956,
+        "width": 1672,
+        "height": 941,
+        "sourcePlatform": "generated_artwork",
+        "sourceArtworkUri": "dropbox:Production/Short-form Current Release/publishing/cover_revision_20261014_v001/share/S02_WEBSITE_SHARE_16x9_v001.png",
+        "sourceArtworkSha256": "f610617ca92069efa9a997127997bb03b45b30c6d68edce22dfd01d784fb9b18",
+        "sourceArtworkSizeBytes": 2579524,
+        "preparedAt": "2026-10-14T19:57:20.978958+00:00"
       }
     },
     {
