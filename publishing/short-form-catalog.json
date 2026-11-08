@@ -1,7 +1,7 @@
 {
   "$schema": "./short-form-catalog.schema.json",
   "schemaVersion": 2,
-  "revision": 14,
+  "revision": 15,
   "lastVerifiedAt": "2026-11-07T04:51:00.813575+00:00",
   "authority": {
     "metadata": "publishing/short-form-catalog.json",
@@ -819,14 +819,16 @@
         "audioChannels": 2
       },
       "poster": {
-        "websitePath": "/images/shorts/emf-rf-sources-around-you.jpg",
-        "sha256": "2eb3805dca258352cce2b339acff3f09f44ff308b5e09306209f1b3784201e3c",
-        "sizeBytes": 180681,
-        "width": 720,
-        "height": 1280,
-        "sourcePlatform": "local_master",
-        "sourceMasterSha256": "51503d33038b4e5438b85ee5cdd81d797ae92223ae83df0e2496085a4c0b86e7",
-        "capturedAt": "2026-09-23T16:41:11.310769+00:00"
+        "websitePath": "/images/shorts/emf-rf-sources-around-you-cover-20261014-v001.webp",
+        "sha256": "7e262b2dc9e3dcf626a23ab795e7165166dba0ac16579e6b6b1d7dd2a66f8545",
+        "sizeBytes": 247888,
+        "width": 941,
+        "height": 1672,
+        "sourcePlatform": "generated_artwork",
+        "sourceArtworkUri": "dropbox:Production/Short-form Current Release/publishing/cover_revision_20261014_v001/portraits/S10_COVER_CROP_SAFE_v001.png",
+        "sourceArtworkSha256": "10793334b26b5a9e2ff774043a27917558687b3f2dd24a95333758ab832d9c4c",
+        "sourceArtworkSizeBytes": 2019107,
+        "preparedAt": "2026-10-14T19:57:20.978958+00:00"
       },
       "destinationCopy": {
         "instagramCaption": "Start by knowing which kind of source you are talking about.\n\nDr. David Musnick introduces radiofrequency sources such as phones, Wi-Fi and Bluetooth, then distinguishes them from the fields associated with wiring and appliances. The diagrams help organize a topic that is often discussed too broadly.\n\nContinue with the full EMF episode on Dr. M Experienced.\nhttps://drmexperienced.com/episodes/episode-4-emf/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #EMF #ScienceExplained",
@@ -878,6 +880,18 @@
           "id": "7688781313964313869",
           "url": "https://www.tiktok.com/@drmexperienced/video/7688781313964313869"
         }
+      },
+      "shareImage": {
+        "websitePath": "/images/shorts/emf-rf-sources-around-you-share-20261014-v001.webp",
+        "sha256": "b3e212e4a9817ddcf9c1a11a31ac4f09f11ded3d424f9b26ed5172a302e220dd",
+        "sizeBytes": 309914,
+        "width": 1672,
+        "height": 941,
+        "sourcePlatform": "generated_artwork",
+        "sourceArtworkUri": "dropbox:Production/Short-form Current Release/publishing/cover_revision_20261014_v001/share/S10_WEBSITE_SHARE_16x9_v001.png",
+        "sourceArtworkSha256": "b68afd78e28d4f0b38bbbf3a6a3f2063cded0b7832f1da334009c5e081b7593d",
+        "sourceArtworkSizeBytes": 2207138,
+        "preparedAt": "2026-10-14T19:57:20.978958+00:00"
       }
     },
     {
