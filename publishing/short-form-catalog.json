@@ -1,7 +1,7 @@
 {
   "$schema": "./short-form-catalog.schema.json",
   "schemaVersion": 2,
-  "revision": 16,
+  "revision": 17,
   "lastVerifiedAt": "2026-11-09T04:52:43.089021+00:00",
   "authority": {
     "metadata": "publishing/short-form-catalog.json",
@@ -940,14 +940,16 @@
         "audioChannels": 2
       },
       "poster": {
-        "websitePath": "/images/shorts/whole-bean-coffee-shopping-freshness.jpg",
-        "sha256": "d71775af612759da4aea4b0918ca2a5e2010ced916d683796730e8d4e4a96b8a",
-        "sizeBytes": 212090,
-        "width": 720,
-        "height": 1280,
-        "sourcePlatform": "local_master",
-        "sourceMasterSha256": "ceb0e82514fdb59beff273716e89da232dc2545226108848636832572392ed28",
-        "capturedAt": "2026-09-23T16:41:11.473417+00:00"
+        "websitePath": "/images/shorts/whole-bean-coffee-shopping-freshness-cover-20261014-v002.webp",
+        "sha256": "49509b669c9e86bb14eec025d98eae6ad5004016476cd2022dbb992a1c2b1e7c",
+        "sizeBytes": 286346,
+        "width": 941,
+        "height": 1672,
+        "sourcePlatform": "generated_artwork",
+        "sourceArtworkUri": "dropbox:Production/Short-form Current Release/publishing/cover_revision_20261014_v001/portraits/S03_COVER_CROP_SAFE_v003.png",
+        "sourceArtworkSha256": "575b91fa0e10e8f159ff29d2eec76b84683d49badb0d5dfec15f256c8f2c5081",
+        "sourceArtworkSizeBytes": 2066381,
+        "preparedAt": "2026-10-14T20:28:01.025663+00:00"
       },
       "destinationCopy": {
         "instagramCaption": "What does Dr. M look for when he needs a bag of coffee?\n\nDr. David Musnick walks through his coffee-shopping preferences, including whole beans, organic options and the packaging touching the beans. He explains why he likes grinding close to brewing.\n\nSave the checklist for your next coffee run. Explore the food-and-brain episode for more context.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #CoffeeBeans #CoffeeRoutine",
@@ -999,6 +1001,18 @@
           "id": "7688782051280997646",
           "url": "https://www.tiktok.com/@drmexperienced/video/7688782051280997646"
         }
+      },
+      "shareImage": {
+        "websitePath": "/images/shorts/whole-bean-coffee-shopping-freshness-share-20261014-v001.webp",
+        "sha256": "7d96a3ea3a3fc2d38e1ddd4aaa3c2a9b813940848651c9ee5a1a9e6b62a5a668",
+        "sizeBytes": 350940,
+        "width": 1672,
+        "height": 941,
+        "sourcePlatform": "generated_artwork",
+        "sourceArtworkUri": "dropbox:Production/Short-form Current Release/publishing/cover_revision_20261014_v001/share/S03_WEBSITE_SHARE_16x9_v001.png",
+        "sourceArtworkSha256": "91ba7f833f2cac54cf41763eb4f825b7c0ed59307463c96d9ebfd99c66e8e650",
+        "sourceArtworkSizeBytes": 2329143,
+        "preparedAt": "2026-10-14T19:57:20.978958+00:00"
       }
     },
     {
