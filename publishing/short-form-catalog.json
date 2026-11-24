@@ -1,8 +1,8 @@
 {
   "$schema": "./short-form-catalog.schema.json",
   "schemaVersion": 2,
-  "revision": 16,
-  "lastVerifiedAt": "2026-11-09T04:52:43.089021+00:00",
+  "revision": 17,
+  "lastVerifiedAt": "2026-11-24T23:53:03.089114+00:00",
   "authority": {
     "metadata": "publishing/short-form-catalog.json",
     "binaryMaster": "fingerprinted_project_dropbox_asset",
@@ -925,10 +925,10 @@
         ]
       },
       "master": {
-        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S03_REVIEWFIX_REVIEW_v001.mp4",
+        "uri": "dropbox:Production/Short-form Current Release/publishing/rolodex_reconciliation_20261014_v001/runs/20261118_S03_NATIVE_PRESENTATION_v001/review/S03_INFORMATION_AND_TOPIC_REVIEW_v003.mp4",
         "status": "verified",
-        "sha256": "ceb0e82514fdb59beff273716e89da232dc2545226108848636832572392ed28",
-        "sizeBytes": 64487117,
+        "sha256": "0665f15246f6d0713bb23e11b152ba9631ebaba2fbf90a77f25230e8af1e319b",
+        "sizeBytes": 93773075,
         "container": "mp4",
         "durationSeconds": 77.93333333333334,
         "width": 1080,
@@ -940,14 +940,16 @@
         "audioChannels": 2
       },
       "poster": {
-        "websitePath": "/images/shorts/whole-bean-coffee-shopping-freshness.jpg",
-        "sha256": "d71775af612759da4aea4b0918ca2a5e2010ced916d683796730e8d4e4a96b8a",
-        "sizeBytes": 212090,
-        "width": 720,
-        "height": 1280,
-        "sourcePlatform": "local_master",
-        "sourceMasterSha256": "ceb0e82514fdb59beff273716e89da232dc2545226108848636832572392ed28",
-        "capturedAt": "2026-09-23T16:41:11.473417+00:00"
+        "websitePath": "/images/shorts/whole-bean-coffee-shopping-freshness-cover-20261110-v001.webp",
+        "sha256": "3d8836d2f0c5ead38dd6b2499e7e4d1a32b0f437c04c00030a6993afe7bc75fc",
+        "sizeBytes": 179896,
+        "width": 1080,
+        "height": 1920,
+        "sourcePlatform": "generated_artwork",
+        "sourceArtworkUri": "dropbox:Production/Short-form Current Release/publishing/rolodex_reconciliation_20261014_v001/runs/20261110_S03_PRESENTATION_v001/media/S03_FAITHFUL_INFORMATION_COVER_v001.png",
+        "sourceArtworkSha256": "2318c250be1ded02ad2178dd309c0123dc846c6c6f5c04667c1d170ee7925137",
+        "sourceArtworkSizeBytes": 1521894,
+        "preparedAt": "2026-11-11T04:37:53.773027+00:00"
       },
       "destinationCopy": {
         "instagramCaption": "What does Dr. M look for when he needs a bag of coffee?\n\nDr. David Musnick walks through his coffee-shopping preferences, including whole beans, organic options and the packaging touching the beans. He explains why he likes grinding close to brewing.\n\nSave the checklist for your next coffee run. Explore the food-and-brain episode for more context.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #CoffeeBeans #CoffeeRoutine",
@@ -965,11 +967,11 @@
       "destinations": {
         "instagram": {
           "state": "published",
-          "publishedAt": "2026-09-23T17:22:14.000Z",
-          "verifiedAt": "2026-09-23T17:23:08.938568+00:00",
-          "mediaId": "3992676086335731839",
-          "shortcode": "Ddo1b8VPPh_",
-          "url": "https://www.instagram.com/reel/Ddo1b8VPPh_/",
+          "publishedAt": "2026-11-24T23:47:48+00:00",
+          "verifiedAt": "2026-11-24T23:53:03.089114+00:00",
+          "mediaId": "4037806107194574919",
+          "shortcode": "DgJK0LjPEhH",
+          "url": "https://www.instagram.com/reel/DgJK0LjPEhH/",
           "remoteDurationSeconds": 77.933333,
           "remoteWidth": 720,
           "remoteHeight": 1280
@@ -999,6 +1001,18 @@
           "id": "7688782051280997646",
           "url": "https://www.tiktok.com/@drmexperienced/video/7688782051280997646"
         }
+      },
+      "shareImage": {
+        "websitePath": "/images/shorts/whole-bean-coffee-shopping-freshness-share-20261110-v002.webp",
+        "sha256": "17590be141916d0212d60ec6c612a613ec0302343e47e4f02d70e23fc55dadea",
+        "sizeBytes": 148782,
+        "width": 1920,
+        "height": 1080,
+        "sourcePlatform": "generated_artwork",
+        "sourceArtworkUri": "dropbox:Production/Short-form Current Release/publishing/rolodex_reconciliation_20261014_v001/runs/20261110_S03_PRESENTATION_v001/media/S03_FAITHFUL_INFORMATION_WIDE_v002.png",
+        "sourceArtworkSha256": "f6cf757e54c4843d6e539112f5a971f024108c614270b2e2e86a619b284a325f",
+        "sourceArtworkSizeBytes": 1098246,
+        "preparedAt": "2026-11-11T04:37:53.773027+00:00"
       }
     },
     {
