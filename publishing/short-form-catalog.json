@@ -1,7 +1,7 @@
 {
   "$schema": "./short-form-catalog.schema.json",
   "schemaVersion": 2,
-  "revision": 17,
+  "revision": 18,
   "lastVerifiedAt": "2026-11-24T23:53:03.089114+00:00",
   "authority": {
     "metadata": "publishing/short-form-catalog.json",
@@ -1046,10 +1046,10 @@
         ]
       },
       "master": {
-        "uri": "dropbox:Continuation/ubuntu-20260922-v004/renders/review_mp4/S04_REVIEWFIX_REVIEW_v001.mp4",
+        "uri": "dropbox:Production/Short-form Current Release/publishing/rolodex_reconciliation_20261014_v001/runs/20261124_S04_NATIVE_PRESENTATION_v001/review/S04_INFORMATION_AND_TOPIC_REVIEW_v001.mp4",
         "status": "verified",
-        "sha256": "084d3d1ceaef2d974327a3e17a857c1a3c3141531a645278ecdd21cfd57353cd",
-        "sizeBytes": 54089784,
+        "sha256": "fdbf2d34e874dbf51fec98765288d2665635519f2596892b19a679e1e45e8bd4",
+        "sizeBytes": 76759974,
         "container": "mp4",
         "durationSeconds": 70.53333333333333,
         "width": 1080,
@@ -1061,14 +1061,16 @@
         "audioChannels": 2
       },
       "poster": {
-        "websitePath": "/images/shorts/shiitake-mushrooms-and-extracts.jpg",
-        "sha256": "adb3ca46bc579f54a105d8c9e85a018196fe15fb76f51bcfe53ed1302d17b536",
-        "sizeBytes": 287132,
-        "width": 720,
-        "height": 1280,
-        "sourcePlatform": "local_master",
-        "sourceMasterSha256": "084d3d1ceaef2d974327a3e17a857c1a3c3141531a645278ecdd21cfd57353cd",
-        "capturedAt": "2026-09-23T16:41:56.249767+00:00"
+        "websitePath": "/images/shorts/shiitake-mushrooms-and-extracts-cover-20261125-v003.webp",
+        "sha256": "1054c58abe8925bed901995fe0e9432b056fb293c3fd5ad76a26afef91cf6f28",
+        "sizeBytes": 206094,
+        "width": 1080,
+        "height": 1920,
+        "sourcePlatform": "generated_artwork",
+        "sourceArtworkUri": "dropbox:Production/Short-form Current Release/publishing/rolodex_reconciliation_20261014_v001/runs/20261125_S04_FAITHFUL_ART_v001/media/S04_FAITHFUL_INFORMATION_COVER_v003.png",
+        "sourceArtworkSha256": "04a29fb4630d364d8afe837de1058dbb1aba1730086fcb0e8f2f72987da1f626",
+        "sourceArtworkSizeBytes": 1339150,
+        "preparedAt": "2026-11-25T04:34:09.962626+00:00"
       },
       "destinationCopy": {
         "instagramCaption": "Shiitake, reishi, turkey tail and more\u2014keep the names in one place.\n\nDr. David Musnick introduces shiitake mushrooms and several extracts while discussing beta-glucans. Pause the on-screen list to note the mushroom names and MyCommunity extract he shows.\n\nSave the list, then explore the food-and-brain episode. Review concentrated extracts with your clinician.\nhttps://drmexperienced.com/episodes/episode-8-food-and-the-brain/\n\nEducational content; not individualized medical advice.\n\nAI-generated educational illustrations; original recorded voice and footage.\n\n#DrMExperienced #Mushrooms #BetaGlucans",
@@ -1128,6 +1130,18 @@
         "width": 941,
         "height": 1672,
         "alt": "MUSHROOMS TO REMEMBER \u2014 Shiitake; Reishi; Turkey tail; Cordyceps; MyCommunity extract. Pauseable on-screen list."
+      },
+      "shareImage": {
+        "websitePath": "/images/shorts/shiitake-mushrooms-and-extracts-share-20261125-v003.webp",
+        "sha256": "22f41bb771b57a7ad682a248a5c1527bfc90d966524e77061ffb13bfd076c05b",
+        "sizeBytes": 290910,
+        "width": 1920,
+        "height": 1080,
+        "sourcePlatform": "generated_artwork",
+        "sourceArtworkUri": "dropbox:Production/Short-form Current Release/publishing/rolodex_reconciliation_20261014_v001/runs/20261125_S04_FAITHFUL_ART_v001/media/S04_FAITHFUL_INFORMATION_WIDE_v003.png",
+        "sourceArtworkSha256": "3b95dc72540ca0453e5bcc5f143323c938142cdd924012453fdeddcf7c7ad602",
+        "sourceArtworkSizeBytes": 2001846,
+        "preparedAt": "2026-11-25T04:34:09.962626+00:00"
       }
     },
     {
